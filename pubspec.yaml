@@ -42,7 +42,6 @@ dependencies:
   intl_utils: ^2.8.5
   intl_phone_number_input: ^0.7.4
   shared_preferences: ^2.5.3
-  flutter_lints: null
   flutter_bloc: ^8.1.5
   equatable: ^2.0.5
   flutter_localizations:
@@ -74,6 +73,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.7
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -85,9 +86,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/splash_and_auth/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see
@@ -119,3 +119,22 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 flutter_intl:
   enabled: true
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/splash_and_auth/native_splash_logo.png
+
+  android: true
+  ios: true
+
+  android_12:
+    color: "#FFFFFF"
+    image: assets/images/splash_and_auth/native_splash_logo.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/splash_and_auth/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/splash_and_auth/app_icon.png"
