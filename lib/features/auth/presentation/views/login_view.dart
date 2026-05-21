@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/auth/presentation/views/widgets/widgets/login_body.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/login_widgets/login_body.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatelessWidget {
@@ -7,6 +7,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      resizeToAvoidBottomInset: false,
       body: LoginBody(),
     );
   }

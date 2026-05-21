@@ -1,0 +1,82 @@
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:flutter/material.dart';
+
+class CustomAuthTextField extends StatelessWidget {
+  const CustomAuthTextField({
+    super.key,
+    required this.label,
+    required this.hintText,
+    this.controller,
+    this.keyboardType,
+    this.obscureText = false,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.isRequired = false,
+  });
+
+  final String label;
+  final String hintText;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final bool isRequired;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: StylesManager.styleBold14(
+                context,
+              ).copyWith(color: ColorManager.mainColor15),
+            ),
+            if (isRequired)
+              const Text(
+                '*',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 40,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: StylesManager.styleLight12(context),
+              prefixIcon: prefixIcon,
+              suffixIcon: suffixIcon,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 13,
+              ),
+              enabledBorder: _border(),
+              focusedBorder: _border(ColorManager.secondaryColor),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  OutlineInputBorder _border([Color color = ColorManager.borderColor]) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: color),
+    );
+  }
+}
