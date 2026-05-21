@@ -12,6 +12,11 @@
     "errorNotFound": "Item not found.",
     "errorInternalServer": "Internal server error.",
     "errorUnknownStatusCode": "Unknown status code: {statusCode}",
+    "@errorUnknownStatusCode": {
+        "placeholders": {
+            "statusCode": {}
+        }
+    },
     "nameCannotBeEmpty": "Name cannot be empty.",
     "nameMinLength": "Name must be at least 3 characters.",
     "emailCannotBeEmpty": "Email cannot be empty.",
@@ -21,5 +26,143 @@
     "passwordMustHaveUpperCase": "Password must contain at least one uppercase letter.",
     "passwordMustHaveNumber": "Password must contain at least one number.",
     "confirmPasswordCannotBeEmpty": "Confirm password cannot be empty.",
-    "passwordsDoNotMatch": "Passwords do not match."
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordSubtitle": "Enter your email and we will send you a reset link",
+    "email": "Email",
+    "sendResetLink": "Send reset link",
+    "resetPasswordSuccessTitle": "Sent successfully",
+    "resetPasswordSuccessSubtitle": "Check your email {email} and follow the instructions to reset your password.",
+    "@resetPasswordSuccessSubtitle": {
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "backToLogin": "Back to login",
+    "checkYourEmailPrefix": "Check your email ",
+    "resetPasswordInstructions": " and follow the instructions to reset your password.",
+    "loginWelcomeTitle": "Welcome",
+    "loginWelcomeSubtitle": "Log in to access your dashboard",
+    "password": "Password",
+    "passwordHint": "At least 6 characters",
+    "forgotPassword": "Forgot password?",
+    "login": "Login",
+    "doNotHaveAccount": "Don't have an account? ",
+    "createAccount": "Create account",
+    "createNewAccount": "Create New Account",
+    "chooseAccountType": "Choose account type to continue",
+    "registerAsStudent": "Register as Student",
+    "registerAsStudentSubtitle": "Join classes and start your learning journey",
+    "registerAsParent": "Register as Parent",
+    "registerAsParentSubtitle": "Track your children’s progress and contact teachers",
+    "applyAsTeacher": "Apply as Teacher",
+    "applyAsTeacherSubtitle": "Share your expertise and join our teaching team",
+    "alreadyHaveAccount": "Already have an account? ",
+    "loginNow": "Login",
+    "curricula": "Curricula",
+    "studyCurriculaTitle": "Study Curricula ",
+    "available": "Available",
+    "chooseCurriculum": "Choose the suitable curriculum for your children and start the learning journey with us",
+    "saudiCurriculum": "Saudi Curriculum",
+    "saudiCurriculumDesc": "We provide all subjects for primary, middle, and secondary stages according to the approved curriculum.",
+    "egyptianCurriculum": "Egyptian Curriculum",
+    "egyptianCurriculumDesc": "Integrated education for primary, preparatory, and secondary grades according to the modern Egyptian curriculum.",
+    "qatariCurriculum": "Qatari Curriculum",
+    "qatariCurriculumDesc": "A curriculum approved by the Ministry of Education in Qatar, covering basic stages up to secondary school.",
+    "browseSection": "Browse section",
+    "packages": "Packages",
+    "subscription": "Subscription",
+    "Packages": "Packages",
+    "canChangeCurrency": "You can change the currency from the list",
+    "currency": "Currency:",
+    "sarCurrency": "Saudi Riyal (SAR)",
+    "trainingHours": "{hours} training hours",
+    "@trainingHours": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "weeklyLessons": "{count} weekly lessons",
+    "@weeklyLessons": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "oldPrice": "SAR {price}",
+    "@oldPrice": {
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "currentPrice": "SAR {price}",
+    "@currentPrice": {
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "saveAmount": "Save SAR {amount}",
+    "@saveAmount": {
+        "placeholders": {
+            "amount": {}
+        }
+    },
+    "subscribeNow": "Subscribe now",
+    "mostPopular": "Most popular",
+    "eightHoursPlan": "8-hour package",
+    "fourHoursPlan": "4-hour package",
+    "twentyHoursPlan": "20-hour package",
+    "twelveHoursPlan": "12-hour package",
+    "egpCurrency": "Egyptian Pound (EGP)",
+    "qarCurrency": "Qatari Riyal (QAR)",
+    "studentRegistrationForm": "Student Registration Form",
+    "pleaseFillRequiredInfo": "Please fill in all required fields",
+    "parentInfo": "Parent Information",
+    "parentName": "Parent name",
+    "phoneNumber": "Phone number",
+    "whatsappNumber": "WhatsApp number",
+    "studentPassword": "Student platform password",
+    "passwordWillBeUsed": "You will use it to log in with your email after completing payment.",
+    "curriculumSelection": "Curriculum Selection",
+    "curriculum": "Curriculum",
+    "studentInfo": "Student Information",
+    "studentName": "Student name",
+    "grade": "Grade",
+    "selectGrade": "Select grade",
+    "subjects": "Subjects",
+    "math": "Math",
+    "science": "Science",
+    "arabicLanguage": "Arabic Language",
+    "physics": "Physics",
+    "chemistry": "Chemistry",
+    "socialStudies": "Social Studies",
+    "quran": "Quran",
+    "studentUsername": "Student username",
+    "studentPasswordField": "Student password",
+    "preferredDays": "Preferred student schedule",
+    "preferredDaysHint": "Select preferred days and times",
+    "notes": "Additional notes or details",
+    "notesHint": "Example: every Monday and Wednesday at 5 PM",
+    "availableDay": "Available day",
+    "from": "From",
+    "to": "To",
+    "paymentMethod": "Payment Method",
+    "package4Hours": "4-hour package",
+    "packagePrice": "{price} SAR",
+    "@packagePrice": {
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "applePay": "Apple Pay",
+    "creditCard": "Credit Card",
+    "tabbyTamara": "Pay with Tamara",
+    "goToPayment": "Go to payment",
+    "paymentInfo": "Payment Information",
+    "cardNumber": "Card number",
+    "cardHolderName": "Cardholder name",
+    "expiryDate": "Expiry date",
+    "cvv": "CVV",
+    "confirm": "Confirm",
+    "next": "Next",
+    "previous": "Previous"
 }

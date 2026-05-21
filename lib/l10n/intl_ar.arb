@@ -12,6 +12,11 @@
     "errorNotFound": "العنصر غير موجود.",
     "errorInternalServer": "خطأ داخلي في الخادم.",
     "errorUnknownStatusCode": "خطأ غير معروف: {statusCode}",
+    "@errorUnknownStatusCode": {
+        "placeholders": {
+            "statusCode": {}
+        }
+    },
     "nameCannotBeEmpty": "الاسم لا يمكن أن يكون فارغًا.",
     "nameMinLength": "يجب أن يحتوي الاسم على 3 أحرف على الأقل.",
     "emailCannotBeEmpty": "البريد الإلكتروني لا يمكن أن يكون فارغًا.",
@@ -21,5 +26,143 @@
     "passwordMustHaveUpperCase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
     "passwordMustHaveNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
     "confirmPasswordCannotBeEmpty": "تأكيد كلمة المرور لا يمكن أن يكون فارغًا.",
-    "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين."
+    "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
+    "forgotPasswordTitle": "استعادة كلمة المرور",
+    "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
+    "email": "البريد الإلكتروني",
+    "sendResetLink": "إرسال رابط الاستعادة",
+    "resetPasswordSuccessTitle": "تم الإرسال بنجاح",
+    "resetPasswordSuccessSubtitle": "تحقق من بريدك الإلكتروني {email} واتبع التعليمات لإعادة تعيين كلمة المرور.",
+    "@resetPasswordSuccessSubtitle": {
+        "placeholders": {
+            "email": {}
+        }
+    },
+    "backToLogin": "العودة لتسجيل الدخول",
+    "checkYourEmailPrefix": "تحقق من بريدك الإلكتروني ",
+    "resetPasswordInstructions": " واتبع التعليمات لإعادة تعيين كلمة المرور.",
+    "loginWelcomeTitle": "مرحباً بك",
+    "loginWelcomeSubtitle": "سجل دخولك للوصول إلى لوحة التحكم",
+    "password": "كلمة المرور",
+    "passwordHint": "6 أحرف علي الأقل",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "login": "تسجيل دخول",
+    "doNotHaveAccount": "ليس لديك حساب؟ ",
+    "createAccount": "إنشاء حساب",
+    "createNewAccount": "إنشاء حساب جديد",
+    "chooseAccountType": "اختر نوع الحساب للمتابعة",
+    "registerAsStudent": "التسجيل كطالب",
+    "registerAsStudentSubtitle": "انضم للفصول الدراسية وابدأ رحلتك التعليمية",
+    "registerAsParent": "التسجيل كولي أمر",
+    "registerAsParentSubtitle": "تابع تقدم أبنائك وتواصل مع المعلمين",
+    "applyAsTeacher": "التقديم كمعلم",
+    "applyAsTeacherSubtitle": "شارك خبراتك وانضم إلى فريقنا التعليمي",
+    "alreadyHaveAccount": "لديك حساب؟ ",
+    "loginNow": "تسجيل الدخول",
+    "curricula": "المناهج",
+    "studyCurriculaTitle": "المناهج الدراسية ",
+    "available": "المتاحة",
+    "chooseCurriculum": "اختر المنهج الدراسي المناسب لأبنائك وابدأ رحلة التعليم معنا",
+    "saudiCurriculum": "المنهج السعودي",
+    "saudiCurriculumDesc": "نقدم جميع المواد الدراسية للمرحلة الابتدائية، المتوسطة، والثانوية وفق المنهج المعتمد.",
+    "egyptianCurriculum": "المنهج المصري",
+    "egyptianCurriculumDesc": "تعليم متكامل للصفوف الابتدائية والإعدادية والثانوية وفق المنهج المصري الحديث.",
+    "qatariCurriculum": "المنهج القطري",
+    "qatariCurriculumDesc": "منهج معتمد من وزارة التربية والتعليم في قطر، ويشمل المراحل الأساسية حتى الثانوية.",
+    "browseSection": "تصفح القسم",
+    "packages": "الباقات",
+    "subscription": "الاشتراك",
+    "Packages": "باقات",
+    "canChangeCurrency": "يمكنك تغيير العملة من القائمة",
+    "currency": "العملة:",
+    "sarCurrency": "ريال سعودي (ر.س)",
+    "trainingHours": "{hours} ساعة تدريبية",
+    "@trainingHours": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "weeklyLessons": "{count} محاضرة أسبوعية",
+    "@weeklyLessons": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "oldPrice": "{price} ر.س",
+    "@oldPrice": {
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "currentPrice": "{price} ر.س",
+    "@currentPrice": {
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "saveAmount": "وفر {amount} ر.س",
+    "@saveAmount": {
+        "placeholders": {
+            "amount": {}
+        }
+    },
+    "subscribeNow": "اشترك الآن",
+    "mostPopular": "الأكثر طلباً",
+    "eightHoursPlan": "باقة الـ 8 ساعات",
+    "fourHoursPlan": "باقة الـ 4 ساعات",
+    "twentyHoursPlan": "باقة الـ 20 ساعة",
+    "twelveHoursPlan": "باقة الـ 12 ساعة",
+    "egpCurrency": "جنيه مصري (ج.م)",
+    "qarCurrency": "ريال قطري (ر.ق)",
+    "studentRegistrationForm": "نموذج تسجيل الطالب",
+    "pleaseFillRequiredInfo": "يرجى ملء جميع الحقول المطلوبة",
+    "parentInfo": "معلومات ولي الأمر",
+    "parentName": "اسم ولي الأمر",
+    "phoneNumber": "رقم الهاتف",
+    "whatsappNumber": "رقم الواتساب",
+    "studentPassword": "كلمة المرور للدخول على المنصة",
+    "passwordWillBeUsed": "ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع",
+    "curriculumSelection": "اختيار المنهج",
+    "curriculum": "المنهج",
+    "studentInfo": "معلومات الطالب",
+    "studentName": "اسم الطالب",
+    "grade": "الصف",
+    "selectGrade": "اختر الصف",
+    "subjects": "المواد",
+    "math": "الرياضيات",
+    "science": "العلوم",
+    "arabicLanguage": "اللغة العربية",
+    "physics": "الفيزياء",
+    "chemistry": "الكيمياء",
+    "socialStudies": "الاجتماعيات",
+    "quran": "القرآن الكريم",
+    "studentUsername": "اسم المستخدم للطالب",
+    "studentPasswordField": "كلمة المرور للطالب",
+    "preferredDays": "مواعيد الطالب المفضلة",
+    "preferredDaysHint": "حدد الأيام والأوقات المفضلة للحضور",
+    "notes": "ملاحظات إضافية أو تفاصيل تريد مشاركتها معنا",
+    "notesHint": "مثال: كل يوم اثنين وأربعاء الساعة 5 مساءً",
+    "availableDay": "اليوم المتاح",
+    "from": "من",
+    "to": "إلى",
+    "paymentMethod": "طريقة الدفع",
+    "package4Hours": "باقة 4 ساعات",
+    "packagePrice": "{price} ريال",
+    "@packagePrice": {
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "applePay": "أبل باي",
+    "creditCard": "بطاقة ائتمانية",
+    "tabbyTamara": "ادفع فاتورتك مع تمارا",
+    "goToPayment": "الانتقال للدفع",
+    "paymentInfo": "معلومات الدفع",
+    "cardNumber": "رقم الكارت",
+    "cardHolderName": "اسم حامل البطاقة",
+    "expiryDate": "تاريخ الانتهاء",
+    "cvv": "رمز التحقق CVV",
+    "confirm": "تأكيد",
+    "next": "التالي",
+    "previous": "السابق"
 }

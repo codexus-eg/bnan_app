@@ -40,7 +40,6 @@ class DioConsumer extends ApiConsumer {
 
           if (isProtected && !isGuest) {
             options.headers['token'] = 'flora $token';
-            // تأكدي إن المسافة موجودة بعد كلمة flora
             options.headers['token'] = 'flora $token';
             print('✅ Header Token: flora $token');
           }
