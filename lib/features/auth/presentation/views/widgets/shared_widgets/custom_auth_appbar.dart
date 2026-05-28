@@ -10,7 +10,7 @@ class CustomAuthAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRtl = Directionality.of(context) == TextDirection.ltr;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return AppBar(
       backgroundColor: Colors.transparent,
@@ -19,10 +19,10 @@ class CustomAuthAppbar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       titleSpacing: 0,
       title: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const SizedBox(width: 16),
-
+          Text(title, style: StylesManager.styleMedium16(context)),
           IconButton(
             icon: Icon(
               isRtl ? Icons.arrow_forward : Icons.arrow_back,
@@ -30,8 +30,8 @@ class CustomAuthAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
             onPressed: onBackTap ?? () => MyNavigator.pop(context),
           ),
-          const SizedBox(width: 4),
-          Text(title, style: StylesManager.styleMedium16(context)),
+                    const SizedBox(width: 16),
+
         ],
       ),
     );

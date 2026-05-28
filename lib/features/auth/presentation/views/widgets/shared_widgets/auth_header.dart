@@ -6,12 +6,12 @@ class AuthHeader extends StatelessWidget {
   const AuthHeader({
     super.key,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     this.subtitleStyle,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final TextStyle? subtitleStyle;
 
   @override
@@ -30,12 +30,14 @@ class AuthHeader extends StatelessWidget {
           textAlign: TextAlign.center,
           style: StylesManager.styleBold20(context),
         ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-          style: subtitleStyle ?? StylesManager.styleBold12(context),
-        ),
+        subtitle != null ? const SizedBox(height: 8) : const SizedBox.shrink(),
+        subtitle != null
+            ? Text(
+                subtitle!,
+                textAlign: TextAlign.center,
+                style: subtitleStyle ?? StylesManager.styleBold12(context),
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }

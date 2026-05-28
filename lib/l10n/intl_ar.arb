@@ -27,10 +27,7 @@
     "passwordMustHaveNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
     "confirmPasswordCannotBeEmpty": "تأكيد كلمة المرور لا يمكن أن يكون فارغًا.",
     "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
-    "forgotPasswordTitle": "استعادة كلمة المرور",
-    "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
-    "email": "البريد الإلكتروني",
-    "sendResetLink": "إرسال رابط الاستعادة",
+    "sendResetLink": "إرسال كود الاستعادة",
     "resetPasswordSuccessTitle": "تم الإرسال بنجاح",
     "resetPasswordSuccessSubtitle": "تحقق من بريدك الإلكتروني {email} واتبع التعليمات لإعادة تعيين كلمة المرور.",
     "@resetPasswordSuccessSubtitle": {
@@ -146,17 +143,20 @@
     "from": "من",
     "to": "إلى",
     "paymentMethod": "طريقة الدفع",
+    "selectedPackage": "الباقة المختارة",
     "package4Hours": "باقة 4 ساعات",
-    "packagePrice": "{price} ريال",
-    "@packagePrice": {
+    "packageCalculation": "{price} ريال × {studentsCount} طالب = {total} ريال",
+    "applePay": "أبل باي",
+    "creditCard": "بطاقة إئتمانية",
+    "tabbyTamara": "قسم فاتورتك مع تمارا",
+    "goToPayment": "الإنتقال للدفع",
+    "@packageCalculation": {
         "placeholders": {
-            "price": {}
+            "price": {},
+            "studentsCount": {},
+            "total": {}
         }
     },
-    "applePay": "أبل باي",
-    "creditCard": "بطاقة ائتمانية",
-    "tabbyTamara": "ادفع فاتورتك مع تمارا",
-    "goToPayment": "الانتقال للدفع",
     "paymentInfo": "معلومات الدفع",
     "cardNumber": "رقم الكارت",
     "cardHolderName": "اسم حامل البطاقة",
@@ -164,5 +164,74 @@
     "cvv": "رمز التحقق CVV",
     "confirm": "تأكيد",
     "next": "التالي",
-    "previous": "السابق"
+    "previous": "السابق",
+    "studentNotesAndSchedule": "ملاحظات الطالب وتفضيلات المواعيد",
+    "optional": "اختياري",
+    "studentNotesAndScheduleHint": "ملاحظات (الدروس التي تحتاج شرحها، الأهداف، أي ملاحظات أخرى)",
+    "studentNotesExample": "مثال: يحتاج شرح درس الكسور والقسمة المطولة ...",
+    "studentUsesItForDashboard": "يستخدمه الطالب للدخول على الداشبورد",
+    "sarShort": "ريال",
+    "student": "طالب",
+    "forgotPasswordTitle": "استعادة كلمة المرور",
+    "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك كود إعادة التعيين",
+    "email": "البريد الإلكتروني",
+    "sendResetCode": "إرسال كود الاستعادة",
+    "resetCodeSubtitle": "تحقق من بريدك الإلكتروني وأدخل الكود المرسل إليك",
+    "verify": "تحقق",
+    "resendCode": "إعادة الإرسال؟",
+    "changePassword": "تغيير كلمة المرور",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmNewPassword": "تأكيد كلمة المرور",
+    "skip": "تخطي",
+    "onboardingTitle1": "ابدأ رحلتك التعليمية بسهولة",
+    "onboardingSubtitle1": "منصة تعليمية تساعدك على تطوير مهاراتك",
+    "onboardingTitle2": "دروس تفاعلية ومحتوى ممتع",
+    "onboardingSubtitle2": "استمتع بتجربة تعليمية مرنة تناسب يومك وأسلوبك",
+    "onboardingTitle3": "النجاح يبدأ هنا",
+    "onboardingSubtitle3": "محتوى تفاعلي يساعدك على التعلم بطريقة أكثر متعة",
+    "startNow": "ابدأ الآن",
+    "home": "الرئيسية",
+    "schedule": "الجدول",
+    "assignments": "الواجبات",
+    "services": "الخدمات",
+    "myAccount": "حسابي",
+    "welcomeYou": "أهلاً بك",
+    "dashboard": "الرئيسية",
+    "studyMaterials": "المواد الدراسية",
+    "requestNewLesson": "طلب درس جديد",
+    "myGroups": "مجموعاتي",
+    "certificates": "الشهادات",
+    "PackagesandSubscriptions": "الباقات والاشتراكات",
+    "subscriptions": "الاشتراكات",
+    "reviews": "التقييمات",
+    "logout": "تسجيل الخروج",
+    "primaryGradeFive": "الصف الخامس الابتدائي",
+    "notifications": "الإشعارات",
+    "packageDetails": "تفاصيل الباقة",
+    "active": "نشطة",
+    "hoursPackage": "{hours} ساعة",
+    "remainingHours": "{hours} ساعات متبقية",
+    "usedHours": "تم استخدام {used} من {total}",
+    "packageExpiryText": "ينتهي خلال 18 يوم . تجديد تلقائي",
+    "upgradePackage": "ترقية الباقة",
+    "@hoursPackage": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "@remainingHours": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "@usedHours": {
+        "placeholders": {
+            "used": {},
+            "total": {}
+        }
+    },
+    "upcomingLesson": "الحصة القادمة",
+    "today": "اليوم",
+    "withTeacher": "مع أ/ سارة عبدالله",
+    "startLessonViaZoom": "ابدأ الحصة عبر Zoom"
 }

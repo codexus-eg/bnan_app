@@ -15,10 +15,15 @@ class RegistrationNavigationButtons extends StatelessWidget {
     return Column(
       children: [
         CustomAppButton(
-          text: step == 5 ? S.of(context).confirm : S.of(context).next,
+          backgroundColor: step == 4 ?ColorManager.orangeED:null,
+          text:step == 5
+              ? S.of(context).confirm
+              : step == 4
+                  ? S.of(context).goToPayment
+                  : S.of(context).next,
           onPressed: () => context.read<StudentRegistrationCubit>().nextStep(),
         ),
-        if (step > 1) ...[
+        if (step > 1 && step < 5) ...[
           const SizedBox(height: 16),
           CustomAppButton(
             text: S.of(context).previous,

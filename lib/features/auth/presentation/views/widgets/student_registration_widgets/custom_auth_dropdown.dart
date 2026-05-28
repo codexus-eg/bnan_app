@@ -6,14 +6,16 @@ class CustomAuthDropdown extends StatelessWidget {
   const CustomAuthDropdown({
     super.key,
     required this.label,
-    required this.value,
     required this.items,
     required this.onChanged,
+    this.value,
+    this.hint,
     this.isRequired = false,
   });
 
   final String label;
-  final String value;
+  final String? value;
+  final String? hint;
   final List<String> items;
   final ValueChanged<String?> onChanged;
   final bool isRequired;
@@ -28,12 +30,15 @@ class CustomAuthDropdown extends StatelessWidget {
           children: [
             Text(
               label,
-              style: StylesManager.styleBold14(
-                context,
-              ).copyWith(color: ColorManager.mainColor15),
+              style: StylesManager.styleBold14(context).copyWith(
+                color: ColorManager.mainColor15,
+              ),
             ),
             if (isRequired)
-              const Text('*', style: TextStyle(color: Colors.red)),
+              const Text(
+                '*',
+                style: TextStyle(color: Colors.red),
+              ),
           ],
         ),
         const SizedBox(height: 8),
@@ -49,27 +54,12 @@ class CustomAuthDropdown extends StatelessWidget {
               value: value,
               isExpanded: true,
               icon: const SizedBox.shrink(),
+              hint: _DropdownDisplayedText(
+                text: hint ?? '',
+              ),
               selectedItemBuilder: (context) {
                 return items.map((item) {
-                  return Row(
-                    children: [
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: ColorManager.greyA8AF,
-                        size: 22,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          item,
-                          textAlign: TextAlign.start,
-                          style: StylesManager.styleRegular16(
-                            context,
-                          )
-                        ),
-                      ),
-                    ],
-                  );
+                  return _DropdownDisplayedText(text: item);
                 }).toList();
               },
               items: items.map((item) {
@@ -77,13 +67,44 @@ class CustomAuthDropdown extends StatelessWidget {
                   value: item,
                   child: Text(
                     item,
-                    style: StylesManager.styleRegular16(
-                      context,
-                    ).copyWith(color: ColorManager.mainColor15),
+                    style: StylesManager.styleRegular16(context).copyWith(
+                      color: ColorManager.mainColor15,
+                    ),
                   ),
                 );
               }).toList(),
               onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DropdownDisplayedText extends StatelessWidget {
+  const _DropdownDisplayedText({
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(
+          Icons.keyboard_arrow_down,
+          color: ColorManager.greyA8AF,
+          size: 22,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            textAlign: TextAlign.start,
+            style: StylesManager.styleRegular16(context).copyWith(
+              color: ColorManager.mainColor15,
             ),
           ),
         ),

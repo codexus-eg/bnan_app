@@ -58,6 +58,13 @@ abstract class StylesManager {
       fontWeight: FontWeight.w500,
     );
   }
+   static TextStyle styleMedium32(BuildContext context) {
+    return TextStyle(
+      fontSize: 32,
+      color: ColorManager.black,
+      fontWeight: FontWeight.w500,
+    );
+  }
    static TextStyle styleBold8(BuildContext context) {
     return TextStyle(
       fontSize: 8,
@@ -107,6 +114,13 @@ abstract class StylesManager {
     return TextStyle(
       fontSize: 24,
       color: ColorManager.black,
+      fontWeight: FontWeight.bold,
+    );
+  }
+  static TextStyle styleBold28(BuildContext context) {
+    return TextStyle(
+      fontSize: 28,
+      color: ColorManager.mainColor04,
       fontWeight: FontWeight.bold,
     );
   }

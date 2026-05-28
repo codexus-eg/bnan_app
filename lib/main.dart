@@ -36,7 +36,17 @@ class BnanApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      builder: DevicePreview.appBuilder,
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(context);
+        final screenWidth = mediaQuery.size.width;
+
+        final scale = (screenWidth / 375).clamp(0.85, 1.05);
+
+        return MediaQuery(
+          data: mediaQuery.copyWith(textScaler: TextScaler.linear(scale)),
+          child: child!,
+        );
+      },
       localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,

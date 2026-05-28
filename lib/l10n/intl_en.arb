@@ -27,10 +27,7 @@
     "passwordMustHaveNumber": "Password must contain at least one number.",
     "confirmPasswordCannotBeEmpty": "Confirm password cannot be empty.",
     "passwordsDoNotMatch": "Passwords do not match.",
-    "forgotPasswordTitle": "Forgot Password",
-    "forgotPasswordSubtitle": "Enter your email and we will send you a reset link",
-    "email": "Email",
-    "sendResetLink": "Send reset link",
+    "sendResetLink": "Send reset Code",
     "resetPasswordSuccessTitle": "Sent successfully",
     "resetPasswordSuccessSubtitle": "Check your email {email} and follow the instructions to reset your password.",
     "@resetPasswordSuccessSubtitle": {
@@ -146,17 +143,20 @@
     "from": "From",
     "to": "To",
     "paymentMethod": "Payment Method",
+    "selectedPackage": "Selected Package",
     "package4Hours": "4-hour package",
-    "packagePrice": "{price} SAR",
-    "@packagePrice": {
-        "placeholders": {
-            "price": {}
-        }
-    },
+    "packageCalculation": "{price} SAR × {studentsCount} student = {total} SAR",
     "applePay": "Apple Pay",
     "creditCard": "Credit Card",
-    "tabbyTamara": "Pay with Tamara",
-    "goToPayment": "Go to payment",
+    "tabbyTamara": "Split your bill with Tamara",
+    "goToPayment": "Proceed to Payment",
+    "@packageCalculation": {
+        "placeholders": {
+            "price": {},
+            "studentsCount": {},
+            "total": {}
+        }
+    },
     "paymentInfo": "Payment Information",
     "cardNumber": "Card number",
     "cardHolderName": "Cardholder name",
@@ -164,5 +164,74 @@
     "cvv": "CVV",
     "confirm": "Confirm",
     "next": "Next",
-    "previous": "Previous"
+    "previous": "Previous",
+    "studentNotesAndSchedule": "Student notes and schedule preferences",
+    "optional": "Optional",
+    "studentNotesAndScheduleHint": "Notes about lessons that need explanation, goals, or any other comments",
+    "studentNotesExample": "Example: Needs explanation for fractions and long division ...",
+    "studentUsesItForDashboard": "The student will use it to log in to the dashboard",
+    "sarShort": "SAR",
+    "student": "student",
+    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordSubtitle": "Enter your email and we will send you a reset code",
+    "email": "Email",
+    "sendResetCode": "Send reset code",
+    "resetCodeSubtitle": "Check your email and enter the code sent to you",
+    "verify": "Verify",
+    "resendCode": "Resend code?",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm Password",
+    "skip": "Skip",
+    "onboardingTitle1": "Start your learning journey easily",
+    "onboardingSubtitle1": "An educational platform that helps you develop your skills",
+    "onboardingTitle2": "Interactive lessons and engaging content",
+    "onboardingSubtitle2": "Enjoy a flexible learning experience that fits your day and style",
+    "onboardingTitle3": "Success starts here",
+    "onboardingSubtitle3": "Interactive content that helps you learn in a more enjoyable way",
+    "startNow": "Start now",
+    "home": "Home",
+    "schedule": "Schedule",
+    "assignments": "Assignments",
+    "services": "Services",
+    "myAccount": "My Account",
+    "welcomeYou": "Welcome",
+    "dashboard": "Home",
+    "studyMaterials": "Study Materials",
+    "requestNewLesson": "Request New Lesson",
+    "myGroups": "My Groups",
+    "certificates": "Certificates",
+    "PackagesandSubscriptions": "Packages and Subscriptions",
+    "subscriptions": "Subscriptions",
+    "reviews": "Reviews",
+    "logout": "Logout",
+    "primaryGradeFive": "Grade 5 Primary",
+    "notifications": "Notifications",
+    "packageDetails": "Package Details",
+    "active": "Active",
+    "hoursPackage": "{hours} Hours",
+    "remainingHours": "{hours} hours remaining",
+    "usedHours": "{used} of {total} used",
+    "packageExpiryText": "Expires in 18 days. Auto renewal",
+    "upgradePackage": "Upgrade Package",
+    "@hoursPackage": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "@remainingHours": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "@usedHours": {
+        "placeholders": {
+            "used": {},
+            "total": {}
+        }
+    },
+    "upcomingLesson": "Upcoming Lesson",
+    "today": "Today",
+    "withTeacher": "With Ms. Sarah Abdullah",
+    "startLessonViaZoom": "Start lesson via Zoom"
 }
