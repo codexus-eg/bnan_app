@@ -10,4 +10,8 @@ abstract class Routes {
   static const String studentRegistration = '/student-registration';
   static const String changePassword = '/change-password';
   static const String home = '/home';
+  static const String notification = '/notification';
+  static const String chat = '/chat';
+  static const String groups = '/groups';
+  static const String requestLesson = '/requestLesson';
 }

@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 abstract class ColorManager {
+  static const Color red = Colors.red;
   static const Color white = Color(0xffFFFFFF);
   static const Color black = Color(0xff000000);
   static const Color black21 = Color(0xff212121);
@@ -10,7 +11,8 @@ abstract class ColorManager {
   static const Color mainColor04 = Color(0xff040D28);
   static const Color purple703C = Color(0xff703C6D);
   static const Color greyA8AF = Color(0xffA8AFBB);
-  static const Color greyE8E9 = Color(0xffA8AFBB);
+  static const Color greyE8E9 = Color(0xffE8E9EA);
+  static const Color greyD9D9 = Color(0xffD9D9D9);
   static const Color secondaryColor = Color(0xff7ED0F1);
   static const Color borderColor = Color(0xffD0DEF5);
   static const Color greyF8F9 = Color(0xffF8F9FA);
@@ -22,9 +24,11 @@ abstract class ColorManager {
   static const Color orangeFFE = Color(0xffFFEAC9);
   static const Color orangeFF7 = Color(0xffFF774E);
   static const Color orangeED = Color(0xffED5C0E);
+  static const Color orangeE6 = Color(0xffE6AC3D);
   static const Color beigeEDC = Color(0xffEDCB89);
   static const Color blueE3 = Color(0xffE3EBF9);
   static const Color blue6E9F = Color(0xff6E9FD1);
   static const Color blue73B9 = Color(0xff73B9D6);
   static const Color blue4260 = Color(0xff42609B);
+  static const Color blueD0DE = Color(0xffD0DEF5);
 }

@@ -2,137 +2,99 @@ import 'package:bnan_app/core/cache/cache_data.dart';
 import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-
 class DioConsumer extends ApiConsumer {
-  final Dio dio;
-
   DioConsumer({required this.dio}) {
-    dio.options.baseUrl = EndPoints.baseUrl;
-
-    dio.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: false,
-        responseBody: true,
-      ),
+    dio.options = BaseOptions(
+      baseUrl: EndPoints.baseUrl,
+      connectTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 20),
+      sendTimeout: const Duration(seconds: 20),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     );
 
+    _addHeadersInterceptor();
+    _addDebugLogger();
+  }
+
+  final Dio dio;
+
+  void _addHeadersInterceptor() {
     dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
-          final isProtected = options.extra['isProtected'] ?? false;
-          final token = CacheData.token;
-          final isGuest = token == null || token.isEmpty;
+        onRequest: (options, handler) async {
+          final isProtected = options.extra['isProtected'] == true;
 
-          if (isProtected && isGuest) {
+          options.headers['lang'] = CacheData.language ?? 'ar';
+
+          if (!isProtected) {
+            return handler.next(options);
+          }
+
+          final token = await SessionManager.instance.getAccessToken();
+
+          if (token == null || token.isEmpty) {
             return handler.reject(
               DioException(
                 requestOptions: options,
                 type: DioExceptionType.cancel,
-                error: 'Guest cannot access protected endpoints',
+                error: 'Unauthorized request',
               ),
             );
           }
 
-          if (isProtected && !isGuest) {
-            options.headers['token'] = 'flora $token';
-            options.headers['token'] = 'flora $token';
-            print('✅ Header Token: flora $token');
-          }
+          options.headers['token'] = 'Bearer $token';
 
-          handler.next(options);
+          return handler.next(options);
         },
       ),
     );
   }
 
-  Map<String, dynamic>? _headers(bool isProtected) {
-    if (!isProtected) return null;
-    final token = CacheData.token;
-    return {if (token != null && token.isNotEmpty) 'token': 'flora $token'};
+  void _addDebugLogger() {
+    if (!kDebugMode) return;
+
+    dio.interceptors.add(
+      PrettyDioLogger(
+        requestHeader: false,
+        requestBody: true,
+        responseHeader: false,
+        responseBody: true,
+        compact: true,
+      ),
+    );
   }
 
   @override
-  Future delete(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameter,
-    bool isFormData = false,
-    required bool isProtected,
-  }) async {
-    try {
-      final res = await dio.delete(
-        path,
-        data: data,
-        queryParameters: queryParameter,
-        options: Options(
-          headers: _headers(isProtected),
-          extra: {'isProtected': isProtected},
-        ),
-      );
-      return res.data;
-    } on DioException catch (e) {
-      handleDioExceptions(e);
-    }
-  }
-
-  @override
-  Future get(
+  Future<dynamic> get(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameter,
     bool isProtected = false,
   }) async {
     try {
-      final res = await dio.get(
+      final response = await dio.get(
         path,
         data: data,
         queryParameters: queryParameter,
-        options: Options(
-          headers: _headers(isProtected),
-          extra: {'isProtected': isProtected},
-        ),
+        options: _options(isProtected),
       );
-      return res.data;
-    } on DioException catch (e) {
-      handleDioExceptions(e);
+
+      return response.data;
+    } on DioException catch (error) {
+      _handleDioException(error);
     }
   }
 
   @override
-  Future patch(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameter,
-    bool isFormData = false,
-    bool isProtected = false,
-  }) async {
-    try {
-      final body = (isFormData && data is! FormData)
-          ? FormData.fromMap(data as Map<String, dynamic>)
-          : data;
-
-      final res = await dio.patch(
-        path,
-        data: body,
-        queryParameters: queryParameter,
-        options: Options(
-          headers: _headers(isProtected),
-          extra: {'isProtected': isProtected},
-        ),
-      );
-      return res.data;
-    } on DioException catch (e) {
-      handleDioExceptions(e);
-    }
-  }
-
-  @override
-  Future post(
+  Future<dynamic> post(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameter,
@@ -140,55 +102,106 @@ class DioConsumer extends ApiConsumer {
     bool isProtected = false,
   }) async {
     try {
-      final body = (isFormData && data is! FormData)
-          ? FormData.fromMap(data as Map<String, dynamic>)
-          : data;
-
-      final res = await dio.post(
+      final response = await dio.post(
         path,
-        data: body,
+        data: _body(data, isFormData),
         queryParameters: queryParameter,
-        options: Options(
-          headers: _headers(isProtected),
-          extra: {'isProtected': isProtected},
-        ),
+        options: _options(isProtected),
       );
-      return res.data;
-    } on DioException catch (e) {
-      handleDioExceptions(e);
+
+      return response.data;
+    } on DioException catch (error) {
+      _handleDioException(error);
     }
   }
 
   @override
-  Future put(
+  Future<dynamic> put(
     String path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameter,
     bool isFormData = false,
     bool isProtected = false,
   }) async {
     try {
-      final body = (isFormData && data is! FormData)
-          ? FormData.fromMap(data as Map<String, dynamic>)
-          : data;
-
-      final res = await dio.put(
+      final response = await dio.put(
         path,
-        data: body,
+        data: _body(data, isFormData),
         queryParameters: queryParameter,
-        options: Options(
-          headers: _headers(isProtected),
-          extra: {'isProtected': isProtected},
-        ),
+        options: _options(isProtected),
       );
-      return res.data;
-    } on DioException catch (e) {
-      handleDioExceptions(e);
+
+      return response.data;
+    } on DioException catch (error) {
+      _handleDioException(error);
     }
   }
 
-  void handleDioExceptions(DioException e) {
-    final error = AppException.fromDio(e);
-    throw error;
+  @override
+  Future<dynamic> patch(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameter,
+    bool isFormData = false,
+    bool isProtected = false,
+  }) async {
+    try {
+      final response = await dio.patch(
+        path,
+        data: _body(data, isFormData),
+        queryParameters: queryParameter,
+        options: _options(isProtected),
+      );
+
+      return response.data;
+    } on DioException catch (error) {
+      _handleDioException(error);
+    }
+  }
+
+  @override
+  Future<dynamic> delete(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameter,
+    bool isFormData = false,
+    bool isProtected = false,
+  }) async {
+    try {
+      final response = await dio.delete(
+        path,
+        data: _body(data, isFormData),
+        queryParameters: queryParameter,
+        options: _options(isProtected),
+      );
+
+      return response.data;
+    } on DioException catch (error) {
+      _handleDioException(error);
+    }
+  }
+
+  Options _options(bool isProtected) {
+    return Options(
+      extra: {
+        'isProtected': isProtected,
+      },
+    );
+  }
+
+  Object? _body(Object? data, bool isFormData) {
+    if (!isFormData || data == null || data is FormData) {
+      return data;
+    }
+
+    if (data is Map<String, dynamic>) {
+      return FormData.fromMap(data);
+    }
+
+    throw ArgumentError('FormData body must be Map<String, dynamic>');
+  }
+
+  Never _handleDioException(DioException error) {
+    throw AppException.fromDio(error);
   }
 }

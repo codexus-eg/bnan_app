@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -82,7 +84,12 @@ class SubscriptionPlanCard extends StatelessWidget {
               const SizedBox(height: 9),
               Text(plan.save, style: StylesManager.styleBold8(context)),
               const SizedBox(height: 9),
-              SubscribeButton(text: S.of(context).subscribeNow, onTap: () {}),
+              SubscribeButton(
+                text: S.of(context).subscribeNow,
+                onTap: () {
+                  MyNavigator.goTo(context, Routes.studentRegistration);
+                },
+              ),
             ],
           ),
         ),

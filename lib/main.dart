@@ -6,6 +6,7 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,13 +15,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
   await CacheHelper.init();
-  CacheData.init();
+  await CacheData.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: ColorManager.white),
   );
   runApp(
     DevicePreview(
-      // enabled: !kReleaseMode,
+      enabled: !kReleaseMode,
       storage: DevicePreviewStorage.none(),
       builder: (_) {
         return const BnanApp();

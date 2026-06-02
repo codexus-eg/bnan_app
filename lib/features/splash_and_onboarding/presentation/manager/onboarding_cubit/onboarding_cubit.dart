@@ -1,7 +1,4 @@
-import 'dart:developer';
 import 'package:bnan_app/core/app_routes/routes.dart';
-import 'package:bnan_app/core/cache/cache_helper.dart';
-import 'package:bnan_app/core/cache/cache_key.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/splash_and_onboarding/data/models/onboarding_model.dart';
@@ -54,7 +51,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   }
 
   void finishOnboarding(BuildContext context) {
-    log('tokkkken :${CacheHelper.getData(key: CacheKey.token)}');
     MyNavigator.goToOff(context, Routes.logIn);
   }
 }

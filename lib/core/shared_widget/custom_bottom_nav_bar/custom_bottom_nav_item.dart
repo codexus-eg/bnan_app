@@ -20,7 +20,6 @@ class CustomBottomNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isSelected ? ColorManager.mainColor14 : ColorManager.grey7D7D;
-
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,

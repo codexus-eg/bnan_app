@@ -2,7 +2,8 @@ class ImageManager {
   static const String _basePath = 'assets/images/';
   static const String _splashFeature = '${_basePath}splash_and_auth/';
   static const String _homeFeature = '${_basePath}home/';
-
+  static const String _scheduleFeature = '${_basePath}schedule/';
+  static const String _groupsFeature = '${_basePath}groups/';
   ImageManager._();
 
   // Splash & Onboarding
@@ -62,4 +63,17 @@ class ImageManager {
   static const String logout = '${_homeFeature}logout.svg';
   static const String upload = '${_homeFeature}upload.svg';
   static const String subscription = '${_homeFeature}subscriptions.svg';
+
+  // Schedule
+  static const String microphoneIcon = '${_scheduleFeature}microphone-01.svg';
+  static const String attachmentLineIcon =
+      '${_scheduleFeature}si_attachment-line.svg';
+  static const String tablerSendIcon = '${_scheduleFeature}tabler_send.svg';
+  // Groups
+  static const String celebrationOutlineIcon =
+      '${_groupsFeature}celebration-outline.svg';
+  static const String chatIcon = '${_groupsFeature}chat.svg';
+  static const String checkIcon = '${_groupsFeature}Check.svg';
+    static const String plusIcon = '${_groupsFeature}plus.svg';
+
 }

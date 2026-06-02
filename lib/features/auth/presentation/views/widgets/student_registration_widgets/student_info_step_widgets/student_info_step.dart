@@ -55,7 +55,7 @@ class _StudentInfoStepState extends State<StudentInfoStep> {
           children: [
             Expanded(
               child: CustomAuthTextField(
-                label: S.of(context).studentUsername,
+                label: S.of(context).studentEmail,
                 hintText: '',
                 isRequired: true,
               ),

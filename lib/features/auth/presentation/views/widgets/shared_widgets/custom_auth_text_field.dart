@@ -16,6 +16,7 @@ class CustomAuthTextField extends StatelessWidget {
     this.maxLine,
     this.readOnly = false,
     this.onTap,
+    this.validator,
   });
 
   final String? label;
@@ -29,6 +30,7 @@ class CustomAuthTextField extends StatelessWidget {
   final int? maxLine;
   final bool readOnly;
   final VoidCallback? onTap;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +46,9 @@ class CustomAuthTextField extends StatelessWidget {
             children: [
               Text(
                 label!,
-                style: StylesManager.styleBold14(
-                  context,
-                ).copyWith(color: ColorManager.mainColor15),
+                style: StylesManager.styleBold14(context).copyWith(
+                  color: ColorManager.mainColor15,
+                ),
               ),
               if (isRequired)
                 const Text(
@@ -60,9 +62,12 @@ class CustomAuthTextField extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
-        SizedBox(
-          height: isMultiLine ? null : 40,
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: isMultiLine ? 0 : 40,
+          ),
           child: TextFormField(
+            validator: validator,
             readOnly: readOnly,
             onTap: onTap,
             maxLines: effectiveMaxLines,
@@ -78,8 +83,15 @@ class CustomAuthTextField extends StatelessWidget {
                 horizontal: 8,
                 vertical: 13,
               ),
+              border: _border(),
               enabledBorder: _border(),
               focusedBorder: _border(ColorManager.secondaryColor),
+              errorBorder: _border(ColorManager.red),
+              focusedErrorBorder: _border(ColorManager.red),
+              disabledBorder: _border(),
+              errorStyle: StylesManager.styleLight12(context).copyWith(
+                color: ColorManager.red,
+              ),
             ),
           ),
         ),

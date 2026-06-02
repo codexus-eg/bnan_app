@@ -15,7 +15,7 @@ class ForgetPasswordBody extends StatefulWidget {
 
 class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
   bool isCodeSent = false;
-  String email = '';
+  String email = 'bnan@gmail.com';
 
   void showVerification(String userEmail) {
     setState(() {
@@ -48,7 +48,7 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
                   ),
                   const SizedBox(height: 28),
                   isCodeSent
-                      ? const ForgetPasswordVerificationForm()
+                      ?  ForgetPasswordVerificationForm(onSuccess:showVerification,)
                       : ForgetPasswordForm(onSuccess: showVerification),
                   const Spacer(),
                   const AuthFooter(),

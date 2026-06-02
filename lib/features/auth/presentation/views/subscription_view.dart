@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/custom_auth_appbar.dart';
+import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/subscription_widgets/subscription_body.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ class SubscriptionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: CustomAuthAppbar(title: S.of(context).packages),
+      appBar: CustomAppbar(headerText: S.of(context).packages),
       body: SubscriptionBody(),
     );
   }
