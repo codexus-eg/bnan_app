@@ -7,6 +7,7 @@
     "errorNoInternet": "No internet connection.",
     "errorUnknown": "An unexpected error occurred.",
     "errorBadRequest": "Bad request.",
+    "errorValidation": "Please check the entered data and try again.",
     "errorUnauthorized": "Session expired.",
     "errorForbidden": "Access denied.",
     "errorNotFound": "Item not found.",
@@ -27,10 +28,7 @@
     "passwordMustHaveNumber": "Password must contain at least one number.",
     "confirmPasswordCannotBeEmpty": "Confirm password cannot be empty.",
     "passwordsDoNotMatch": "Passwords do not match.",
-    "forgotPasswordTitle": "Forgot Password",
-    "forgotPasswordSubtitle": "Enter your email and we will send you a reset link",
-    "email": "Email",
-    "sendResetLink": "Send reset link",
+    "sendResetLink": "Send reset Code",
     "resetPasswordSuccessTitle": "Sent successfully",
     "resetPasswordSuccessSubtitle": "Check your email {email} and follow the instructions to reset your password.",
     "@resetPasswordSuccessSubtitle": {
@@ -136,7 +134,7 @@
     "chemistry": "Chemistry",
     "socialStudies": "Social Studies",
     "quran": "Quran",
-    "studentUsername": "Student username",
+    "studentEmail": "Student Email",
     "studentPasswordField": "Student password",
     "preferredDays": "Preferred student schedule",
     "preferredDaysHint": "Select preferred days and times",
@@ -146,17 +144,20 @@
     "from": "From",
     "to": "To",
     "paymentMethod": "Payment Method",
+    "selectedPackage": "Selected Package",
     "package4Hours": "4-hour package",
-    "packagePrice": "{price} SAR",
-    "@packagePrice": {
-        "placeholders": {
-            "price": {}
-        }
-    },
+    "packageCalculation": "{price} SAR × {studentsCount} student = {total} SAR",
     "applePay": "Apple Pay",
     "creditCard": "Credit Card",
-    "tabbyTamara": "Pay with Tamara",
-    "goToPayment": "Go to payment",
+    "tabbyTamara": "Split your bill with Tamara",
+    "goToPayment": "Proceed to Payment",
+    "@packageCalculation": {
+        "placeholders": {
+            "price": {},
+            "studentsCount": {},
+            "total": {}
+        }
+    },
     "paymentInfo": "Payment Information",
     "cardNumber": "Card number",
     "cardHolderName": "Cardholder name",
@@ -164,5 +165,236 @@
     "cvv": "CVV",
     "confirm": "Confirm",
     "next": "Next",
-    "previous": "Previous"
+    "previous": "Previous",
+    "studentNotesAndSchedule": "Student notes and schedule preferences",
+    "optional": "Optional",
+    "studentNotesAndScheduleHint": "Notes about lessons that need explanation, goals, or any other comments",
+    "studentNotesExample": "Example: Needs explanation for fractions and long division ...",
+    "studentUsesItForDashboard": "The student will use it to log in to the dashboard",
+    "sarShort": "SAR",
+    "student": "student",
+    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordSubtitle": "Enter your email and we will send you a reset code",
+    "email": "Email",
+    "sendResetCode": "Send reset code",
+    "resetCodeSubtitle": "Check your email and enter the code sent to you",
+    "verify": "Verify",
+    "resendCode": "Resend code?",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm Password",
+    "skip": "Skip",
+    "onboardingTitle1": "Start your learning journey easily",
+    "onboardingSubtitle1": "An educational platform that helps you develop your skills",
+    "onboardingTitle2": "Interactive lessons and engaging content",
+    "onboardingSubtitle2": "Enjoy a flexible learning experience that fits your day and style",
+    "onboardingTitle3": "Success starts here",
+    "onboardingSubtitle3": "Interactive content that helps you learn in a more enjoyable way",
+    "startNow": "Start now",
+    "home": "Home",
+    "schedule": "Schedule",
+    "assignments": "Assignments",
+    "services": "Services",
+    "myAccount": "My Account",
+    "welcomeYou": "Welcome",
+    "dashboard": "Home",
+    "studyMaterials": "Study Materials",
+    "requestNewLesson": "Request New Lesson",
+    "myGroups": "My Groups",
+    "certificates": "Certificates",
+    "PackagesandSubscriptions": "Packages and Subscriptions",
+    "subscriptions": "Subscriptions",
+    "reviews": "Reviews",
+    "logout": "Logout",
+    "primaryGradeFive": "Grade 5 Primary",
+    "notifications": "Notifications",
+    "packageDetails": "Package Details",
+    "active": "Active",
+    "hoursPackage": "{hours} Hours",
+    "remainingHours": "{hours} hours remaining",
+    "usedHours": "{used} of {total} used",
+    "packageExpiryText": "Expires in 18 days. Auto renewal",
+    "upgradePackage": "Upgrade Package",
+    "@hoursPackage": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "@remainingHours": {
+        "placeholders": {
+            "hours": {}
+        }
+    },
+    "@usedHours": {
+        "placeholders": {
+            "used": {},
+            "total": {}
+        }
+    },
+    "upcomingLesson": "Upcoming Lesson",
+    "today": "Today",
+    "withTeacher": "With Ms. Sarah Abdullah",
+    "startLessonViaZoom": "Start lesson via Zoom",
+    "interaction": "Interaction",
+    "attendance": "Attendance",
+    "attendancePercent": "95%",
+    "interactionRate": "4.8",
+    "certificatesCount": "12",
+    "weeklyEvaluation": "Weekly evaluation",
+    "attendanceRate": "Attendance Rate",
+    "interactionLevel": "Interaction Level",
+    "assignmentsEvaluation": "Assignments Evaluation",
+    "teacherNote": "Teacher Note",
+    "teacherNoteText": "Excellent work on solving the assignments this time.",
+    "viewAll": "View all",
+    "teacherSarahShort": "Ms. Sarah",
+    "gradeLabel": "Grade: {grade}",
+    "@gradeLabel": {
+        "placeholders": {
+            "grade": {}
+        }
+    },
+    "download": "Download",
+    "submitAssignment": "Submit Assignment",
+    "newBadge": "New",
+    "submittedBadge": "Submitted",
+    "thirdTermExercises": "Third Term Exercises",
+    "dueFriday": "Due Friday",
+    "dueSunday": "Due Sunday",
+    "mayCertificate": "May Certificate",
+    "averagePercent": "Average {percent}%",
+    "@averagePercent": {
+        "placeholders": {
+            "percent": {}
+        }
+    },
+    "markAsRead": "Mark as read",
+    "lessonStartsSoon": "Math lesson starts in 15 min",
+    "newRating": "New weekly rating for Ahmed",
+    "certificateReceived": "You received May certificate",
+    "newMessage": "New message from Ms. Sarah",
+    "subscriptionEndsSoon": "Your subscription ends in 5 days",
+    "scheduleUpdated": "Next week schedule was updated",
+    "newAssignmentUploaded": "A new assignment was uploaded",
+    "todayAtTime": "Today, {time}",
+    "yesterday": "Yesterday",
+    "twoDaysAgo": "2 days ago",
+    "threeDaysAgo": "3 days ago",
+    "fourDaysAgo": "4 days ago",
+    "@todayAtTime": {
+        "placeholders": {
+            "time": {}
+        }
+    },
+    "all": "All",
+    "pending": "In Progress",
+    "completed": "Completed",
+    "lightAndShadowExperiment": "Light and Shadow Experiment",
+    "poemAnalysis": "Poem Analysis",
+    "noSubmission": "Submitted",
+    "algebraCourseCertificate": "Algebra Course Completion Certificate",
+    "interactionAppreciationCertificate": "Appreciation Certificate - Interaction",
+    "april2026": "April 2026",
+    "march2026": "March 2026",
+    "congratsThisMonth": "This Month Achievement",
+    "newCertificate": "Certificate of Appreciation",
+    "academicPerformanceMessage": "For excellence in academic performance",
+    "studySchedule": "Study Schedule",
+    "time": "Time",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "arabic": "Arabic",
+    "mathShort": "Math",
+    "subject": "Subject",
+    "participation": "Participation",
+    "excellent": "Excellent",
+    "absent": "Absent",
+    "english": "English",
+    "onlineNow": "Online now",
+    "typeMessage": "Type message.....",
+    "teacherSarahName": "Ms. Sarah Abdullah",
+    "chatMsg1": "Hi Ahmed, how is the new assignment going?",
+    "chatMsg2": "Great, Ms. Sarah. Thanks for the explanation.",
+    "chatMsg3": "Excellent. Don’t forget to review chapter three before the lesson.",
+    "chatMsg4": "Okay, I’ll start now",
+    "requestAccepted": "Your request has been accepted!",
+    "readyGroupSubtitle": "Math - Ready group",
+    "pendingRequests": "Pending Requests",
+    "pendingMathSubtitle": "Fractions lesson, waiting for a teacher",
+    "pendingScienceSubtitle": "Light lesson, waiting for a teacher",
+    "activeGroups": "Active Groups",
+    "mathTeacherSarah": "Math . Ms. Sarah Abdullah",
+    "groupCreatedByYou": "Group created, start now",
+    "teacherAhmedFouad": "Mr. Ahmed Fouad",
+    "congrats": "Congrats!",
+    "chooseGrade": "Choose grade",
+    "studentNotes": "Student Notes",
+    "confirmRequest": "Confirm Request",
+    "biology": "Biology",
+    "myRequests": "My requests",
+    "chooseNewCurriculum": "Choose curriculum",
+    "theRequiredLesson": "The required lesson",
+    "resetCodeRequired": "Please enter the verification code",
+    "passwordAndConfirmRequired": "Please enter and confirm your password",
+    "emailRequired": "Please enter your email",
+    "passwordChangedSuccessfully": "Password changed successfully",
+    "personalProfile": "Personal Profile",
+    "studentProfileGrade": "الصف الثاني الإعدادي",
+    "studentProfileClass": "القسم المصري",
+    "contactInfo": "معلومات الاتصال",
+    "userName": "اسم المستخدم",
+    "privacy": "الخصوصية",
+    "changePhoneTitle": "Edit Phone Number",
+    "changeUsernameTitle": "Edit Username",
+    "changePasswordTitle": "Change Password",
+    "oldPasswordLabel": "Old Password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "unexpectedError": "An unexpected error occurred",
+    "noSubjectsAvailable": "No subjects available for this grade",
+    "uploadAssignment": "Upload Assignment",
+    "assignmentSubmittedSuccessfully": "Assignment submitted successfully",
+    "fileDownloadStarted": "Assignment file opened",
+    "pleaseSelectFile": "Please select a file first",
+    "noAssignmentsYet": "No assignments yet",
+    "noAssignmentsYetSubtitle": "New assignments will appear here once they are added.",
+    "noPendingAssignments": "No pending assignments",
+    "noPendingAssignmentsSubtitle": "All current assignments are completed or there are no new assignments yet.",
+    "noCompletedAssignments": "No completed assignments",
+    "noCompletedAssignmentsSubtitle": "Completed assignments will appear here.",
+    "inactive": "InActive",
+    "noGroupsYet": "No groups yet",
+    "noGroupsYetSubtitle": "Your groups and pending requests will appear here.",
+    "waitingForTeacherApproval": "Waiting for teacher approval",
+    "daysPackage": "{days} Days Package",
+    "@daysPackage": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "usedDays": "Used {used} of {total} days",
+    "@usedDays": {
+        "placeholders": {
+            "used": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "remainingDays": "{days} days remaining",
+    "@remainingDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "logoutSuccess": "Logged out successfully"
 }

@@ -1,0 +1,4 @@
+enum ChatSenderType {
+  me,
+  other,
+}

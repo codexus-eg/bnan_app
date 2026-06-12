@@ -1,7 +1,13 @@
-
 import 'package:bnan_app/generated/l10n.dart';
 
 abstract class MyValidator {
+  static String? requiredValidator(String? value, String message) {
+  if (value == null || value.trim().isEmpty) {
+    return message;
+  }
+  return null;
+}
+
   static String? validateName(String? value) {
     if (value == null || value.isEmpty) {
       return S.current.nameCannotBeEmpty;
@@ -17,8 +23,8 @@ abstract class MyValidator {
       return S.current.emailCannotBeEmpty;
     }
     final bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(value);
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    ).hasMatch(value);
     if (!emailValid) {
       return S.current.invalidEmail;
     }

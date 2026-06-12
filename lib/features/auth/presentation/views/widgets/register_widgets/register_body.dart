@@ -1,8 +1,8 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/register_widgets/register_account_types_list.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_footer.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_header.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +32,7 @@ class RegisterBody extends StatelessWidget {
                   const SizedBox(height: 16),
                   const RegisterAccountTypesList(),
                   const Spacer(),
-                  const AuthFooter(),
+                  const BnanFooter(),
                   const SizedBox(height: 20),
                 ],
               ),

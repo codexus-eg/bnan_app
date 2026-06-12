@@ -1,7 +1,8 @@
 import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_form.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_success_card.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_footer.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_subtitle.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_verification_form.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_header.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -13,13 +14,13 @@ class ForgetPasswordBody extends StatefulWidget {
 }
 
 class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
-  bool isLinkSent = false;
-  String email = '';
+  bool isCodeSent = false;
+  String email = 'bnan@gmail.com';
 
-  void showSuccess(String userEmail) {
+  void showVerification(String userEmail) {
     setState(() {
       email = userEmail;
-      isLinkSent = true;
+      isCodeSent = true;
     });
   }
 
@@ -32,20 +33,25 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
           SliverFillRemaining(
             hasScrollBody: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   const SizedBox(height: 16),
                   AuthHeader(
                     title: S.of(context).forgotPasswordTitle,
-                    subtitle: S.of(context).forgotPasswordSubtitle,
+                    subtitle: null,
                   ),
-                  const SizedBox(height: 22),
-                  isLinkSent
-                      ? ForgetPasswordSuccessCard(email: 'bnan@gmail.com')
-                      : ForgetPasswordForm(onSuccess: showSuccess),
+                  const SizedBox(height: 8),
+                  ForgetPasswordSubtitle(
+                    isCodeSent: isCodeSent,
+                    email: email,
+                  ),
+                  const SizedBox(height: 28),
+                  isCodeSent
+                      ?  ForgetPasswordVerificationForm()
+                      : ForgetPasswordForm(onSuccess: showVerification),
                   const Spacer(),
-                  const AuthFooter(),
+                  const BnanFooter(),
                   const SizedBox(height: 20),
                 ],
               ),

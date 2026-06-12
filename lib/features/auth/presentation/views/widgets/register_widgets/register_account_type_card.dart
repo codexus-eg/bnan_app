@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/custom_back_icon.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
@@ -69,13 +70,7 @@ class RegisterAccountTypeCard extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
-              Directionality.of(context) == TextDirection.ltr
-                  ? Icons.arrow_back
-                  : Icons.arrow_forward,
-              size: 18,
-              color: ColorManager.greyA8AF,
-            ),
+            CustomBackIcon(size: 18, color: ColorManager.greyA8AF),
           ],
         ),
       ),

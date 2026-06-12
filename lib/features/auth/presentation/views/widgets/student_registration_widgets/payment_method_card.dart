@@ -1,38 +1,68 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PaymentMethodCard extends StatelessWidget {
   const PaymentMethodCard({
     super.key,
-    required this.title,
-    required this.icon,
-    this.subtitle,
+    required this.packageName,
+    required this.price,
+    required this.studentsCount,
+    required this.total,
   });
 
-  final String title;
-  final String? subtitle;
-  final IconData icon;
+  final String packageName;
+  final String price;
+  final String studentsCount;
+  final String total;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      width: double.infinity,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: ColorManager.greyA8AF.withAlpha(90)),
-        borderRadius: BorderRadius.circular(8),
+        color: ColorManager.white,
+        border: Border.all(color: ColorManager.mainColor14),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 22, color: ColorManager.mainColor14),
-          const Spacer(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(title),
-              if (subtitle != null) Text(subtitle!),
-            ],
+          Text(
+            S.of(context).selectedPackage,
+            style: StylesManager.styleRegular14(context).copyWith(
+              color: ColorManager.greyA8AF,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            packageName,
+            style: StylesManager.styleBold16(context).copyWith(
+              color: ColorManager.mainColor15,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '$price ${S.of(context).sarShort} * '
+                      '$studentsCount ${S.of(context).student} = ',
+                  style: StylesManager.styleRegular14(context).copyWith(
+                    color: ColorManager.greyA8AF,
+                  ),
+                ),
+                TextSpan(
+                  text: '$total ${S.of(context).sarShort}',
+                  style: StylesManager.styleBold16(context).copyWith(
+                    color: ColorManager.mainColor15,
+                  ),
+                ),
+              ],
+            ),
+            textAlign: TextAlign.start,
           ),
         ],
       ),

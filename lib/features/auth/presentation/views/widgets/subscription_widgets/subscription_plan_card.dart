@@ -1,7 +1,10 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/auth/data/models/subscription_plan_model.dart';
+import 'package:bnan_app/features/auth/data/models/package_card_model.dart';
+import 'package:bnan_app/features/auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/subscription_widgets/popular_badge.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/subscription_widgets/subscribe_button.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -9,10 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SubscriptionPlanCard extends StatelessWidget {
-  const SubscriptionPlanCard({super.key, required this.plan});
+  const SubscriptionPlanCard({
+    super.key,
+    required this.plan,
+    required this.curriculumId, required this.curriculumName,
+  });
 
-  final SubscriptionPlanModel plan;
-
+  final PackageCardModel plan;
+  final String curriculumId;
+  final String curriculumName;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -65,24 +73,39 @@ class SubscriptionPlanCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
-                  plan.hours,
+                  plan.hoursText,
                   style: StylesManager.styleBold8(context),
                 ),
               ),
               const SizedBox(height: 14),
               Text(
-                plan.oldPrice,
+                plan.oldPriceText,
                 style: StylesManager.styleRegular12(context).copyWith(
                   decoration: TextDecoration.lineThrough,
                   color: ColorManager.greyA8AF,
                 ),
               ),
               const SizedBox(height: 9),
-              Text(plan.price, style: StylesManager.styleBold24(context)),
+              Text(plan.priceText, style: StylesManager.styleBold24(context)),
               const SizedBox(height: 9),
-              Text(plan.save, style: StylesManager.styleBold8(context)),
+              Text(plan.saveText, style: StylesManager.styleBold8(context)),
               const SizedBox(height: 9),
-              SubscribeButton(text: S.of(context).subscribeNow, onTap: () {}),
+              SubscribeButton(
+                text: S.of(context).subscribeNow,
+                onTap: () {
+                  MyNavigator.goTo(
+                    context,
+                    Routes.studentRegistration,
+                    extra: RegisterFlowArgsModel(
+                      curriculumId: curriculumId,
+                      curriculumName: curriculumName,
+                      packageId: plan.id,
+                      packageName: plan.title,
+                      packagePrice: plan.priceText,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

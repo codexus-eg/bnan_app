@@ -1,0 +1,4 @@
+enum AssignmentStatus {
+  pending,
+  completed,
+}

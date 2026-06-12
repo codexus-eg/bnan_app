@@ -1,5 +1,5 @@
+import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/curricula_widgets/curricula_body.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/custom_auth_appbar.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class CurriculaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAuthAppbar(title: S.of(context).curricula),
+      appBar: CustomAppbar(headerText: S.of(context).curricula),
       body: CurriculaBody(),
     );
   }

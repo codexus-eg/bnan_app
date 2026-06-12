@@ -1,50 +1,35 @@
 abstract class EndPoints {
-  static const String baseUrl = 'https://backend-5xnh.vercel.app/';
+  static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1/';
 
-  static const String authUrl = '${baseUrl}auth/';
-  static const String userUrl = '${baseUrl}users/';
-  static const String chatUrl = '${baseUrl}ai/';
-  static const String encyclopediaBase = '${baseUrl}plants/';
-  static const String marketUrl = '${baseUrl}market/';
-  static const String ordersUrl = '${baseUrl}orders/';
-  static const String wishListUrl = '${baseUrl}wishlist/';
+  static const String register = '/auth/register';
+  static const String login = '/auth/login';
+  static const String forgotPassword = '/auth/forgotPassword';
+  static const String verifyResetCode = '/auth/verifyResetCode';
+  static const String resetPassword = '/auth/resetPassword';
+  static const String updatePassword = '/auth/updatePassword';
 
-  // Auth
-  static const String login = '${authUrl}logIn';
-  static const String signUp = '${authUrl}signUp';
-  static const String verify = '${authUrl}verify';
-  static const String resentCode = '${authUrl}resend-code';
-  static const String forgetPassword = '${authUrl}forgetPassword';
-  static const String resetPassword = '${authUrl}resetPassword';
+  static const String getLoggedUser = '/users/me';
+  static const String updateLoggedUserName = '/users/me/name';
+  static const String updateLoggedUserPhone = '/users/me/phone';
+  static const String myAssignments = '/students/me/assignments';
+  static const String curriculums = '/curriculums';
+  static const String studentSubscription = '/students/me/subscription';
+static const String myEnrollments = '/students/me/enrollments';
+  static String curriculumPackages(String curriculumId) {
+    return '/packages/curriculum/$curriculumId';
+  }
 
-  //user
-  static const String editPersonalData = '${userUrl}edit';
-  static const String deleteUser = '${userUrl}delete';
-  static const String getProfile = '${userUrl}myprofile';
+  static String curriculumGrades(String curriculumId) {
+    return '/grades?curriculum=$curriculumId';
+  }
 
-  //chatbot
-  static const String chatbot = '${chatUrl}Chat';
+  static String curriculumSubjects({
+    required String curriculumId,
+    required String gradeId,
+  }) {
+    return '/subjects/curriculum/$curriculumId?grade=$gradeId';
+  }
 
-  // Encyclopedia
-  static const String getAllPlants = encyclopediaBase;
-  static String getPlantyId(String id) => '$encyclopediaBase$id';
-
-  // Market
-  static const String getPlantsMarket = marketUrl;
-  static const String addPlantForSale = marketUrl;
-  static String getPlantDetailsById(String id) => '$getPlantsMarket$id';
-  static String updatePlantMarket(String id) => '$getPlantsMarket$id';
-  static String deletePlantMarket(String id) => '$getPlantsMarket$id';
-
-  //orders
-  static String getAllOrders = '${ordersUrl}my-orders';
-  static String getAllRequests = '${ordersUrl}my-requests';
-  static String getOrderDetails(String id) => '$ordersUrl$id';
-  static String getRequestDetails(String id) => '${ordersUrl}request/$id';
-
-  //wishList
-  static String addToWishList = '${wishListUrl}add';
-  static String userWishList = wishListUrl;
-  static String removeFromWishList = '${wishListUrl}remove';
-  static String moveToCart = '${wishListUrl}move-to-cart';
-}
+static String submitAssignment(String assignmentId) {
+  return '/assignments/$assignmentId/submit';
+}}

@@ -20,26 +20,55 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(price) => "SAR ${price}";
+  static String m0(percent) => "Average ${percent}%";
 
-  static String m1(statusCode) => "Unknown status code: ${statusCode}";
+  static String m1(price) => "SAR ${price}";
 
-  static String m2(price) => "SAR ${price}";
+  static String m2(days) => "${days} Days Package";
 
-  static String m3(price) => "${price} SAR";
+  static String m3(statusCode) => "Unknown status code: ${statusCode}";
 
-  static String m4(email) =>
+  static String m4(grade) => "Grade: ${grade}";
+
+  static String m5(hours) => "${hours} Hours";
+
+  static String m6(price) => "SAR ${price}";
+
+  static String m7(price, studentsCount, total) =>
+      "${price} SAR × ${studentsCount} student = ${total} SAR";
+
+  static String m8(days) => "${days} days remaining";
+
+  static String m9(hours) => "${hours} hours remaining";
+
+  static String m10(email) =>
       "Check your email ${email} and follow the instructions to reset your password.";
 
-  static String m5(amount) => "Save SAR ${amount}";
+  static String m11(amount) => "Save SAR ${amount}";
 
-  static String m6(hours) => "${hours} training hours";
+  static String m12(time) => "Today, ${time}";
 
-  static String m7(count) => "${count} weekly lessons";
+  static String m13(hours) => "${hours} training hours";
+
+  static String m14(used, total) => "Used ${used} of ${total} days";
+
+  static String m15(used, total) => "${used} of ${total} used";
+
+  static String m16(count) => "${count} weekly lessons";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Packages": MessageLookupByLibrary.simpleMessage("Packages"),
+        "PackagesandSubscriptions":
+            MessageLookupByLibrary.simpleMessage("Packages and Subscriptions"),
+        "absent": MessageLookupByLibrary.simpleMessage("Absent"),
+        "academicPerformanceMessage": MessageLookupByLibrary.simpleMessage(
+            "For excellence in academic performance"),
+        "active": MessageLookupByLibrary.simpleMessage("Active"),
+        "activeGroups": MessageLookupByLibrary.simpleMessage("Active Groups"),
+        "algebraCourseCertificate": MessageLookupByLibrary.simpleMessage(
+            "Algebra Course Completion Certificate"),
+        "all": MessageLookupByLibrary.simpleMessage("All"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "applePay": MessageLookupByLibrary.simpleMessage("Apple Pay"),
@@ -47,17 +76,50 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Apply as Teacher"),
         "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
             "Share your expertise and join our teaching team"),
+        "april2026": MessageLookupByLibrary.simpleMessage("April 2026"),
+        "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "arabicLanguage":
             MessageLookupByLibrary.simpleMessage("Arabic Language"),
+        "assignmentSubmittedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Assignment submitted successfully"),
+        "assignments": MessageLookupByLibrary.simpleMessage("Assignments"),
+        "assignmentsEvaluation":
+            MessageLookupByLibrary.simpleMessage("Assignments Evaluation"),
+        "attendance": MessageLookupByLibrary.simpleMessage("Attendance"),
+        "attendancePercent": MessageLookupByLibrary.simpleMessage("95%"),
+        "attendanceRate":
+            MessageLookupByLibrary.simpleMessage("Attendance Rate"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
         "availableDay": MessageLookupByLibrary.simpleMessage("Available day"),
+        "averagePercent": m0,
         "backToLogin": MessageLookupByLibrary.simpleMessage("Back to login"),
+        "biology": MessageLookupByLibrary.simpleMessage("Biology"),
         "browseSection": MessageLookupByLibrary.simpleMessage("Browse section"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "You can change the currency from the list"),
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("Cardholder name"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("Card number"),
+        "certificateReceived": MessageLookupByLibrary.simpleMessage(
+            "You received May certificate"),
+        "certificates": MessageLookupByLibrary.simpleMessage("Certificates"),
+        "certificatesCount": MessageLookupByLibrary.simpleMessage("12"),
+        "changePassword":
+            MessageLookupByLibrary.simpleMessage("Change Password"),
+        "changePasswordTitle":
+            MessageLookupByLibrary.simpleMessage("Change Password"),
+        "changePhoneTitle":
+            MessageLookupByLibrary.simpleMessage("Edit Phone Number"),
+        "changeUsernameTitle":
+            MessageLookupByLibrary.simpleMessage("Edit Username"),
+        "chatMsg1": MessageLookupByLibrary.simpleMessage(
+            "Hi Ahmed, how is the new assignment going?"),
+        "chatMsg2": MessageLookupByLibrary.simpleMessage(
+            "Great, Ms. Sarah. Thanks for the explanation."),
+        "chatMsg3": MessageLookupByLibrary.simpleMessage(
+            "Excellent. Don’t forget to review chapter three before the lesson."),
+        "chatMsg4":
+            MessageLookupByLibrary.simpleMessage("Okay, I’ll start now"),
         "checkYourEmailPrefix":
             MessageLookupByLibrary.simpleMessage("Check your email "),
         "chemistry": MessageLookupByLibrary.simpleMessage("Chemistry"),
@@ -65,22 +127,41 @@ class MessageLookup extends MessageLookupByLibrary {
             "Choose account type to continue"),
         "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
             "Choose the suitable curriculum for your children and start the learning journey with us"),
+        "chooseGrade": MessageLookupByLibrary.simpleMessage("Choose grade"),
+        "chooseNewCurriculum":
+            MessageLookupByLibrary.simpleMessage("Choose curriculum"),
+        "completed": MessageLookupByLibrary.simpleMessage("Completed"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "confirmNewPassword":
+            MessageLookupByLibrary.simpleMessage("Confirm Password"),
         "confirmPasswordCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
             "Confirm password cannot be empty."),
+        "confirmPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("Confirm Password"),
+        "confirmRequest":
+            MessageLookupByLibrary.simpleMessage("Confirm Request"),
+        "congrats": MessageLookupByLibrary.simpleMessage("Congrats!"),
+        "congratsThisMonth":
+            MessageLookupByLibrary.simpleMessage("This Month Achievement"),
+        "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
         "createNewAccount":
             MessageLookupByLibrary.simpleMessage("Create New Account"),
         "creditCard": MessageLookupByLibrary.simpleMessage("Credit Card"),
         "currency": MessageLookupByLibrary.simpleMessage("Currency:"),
-        "currentPrice": m0,
+        "currentPrice": m1,
         "curricula": MessageLookupByLibrary.simpleMessage("Curricula"),
         "curriculum": MessageLookupByLibrary.simpleMessage("Curriculum"),
         "curriculumSelection":
             MessageLookupByLibrary.simpleMessage("Curriculum Selection"),
         "cvv": MessageLookupByLibrary.simpleMessage("CVV"),
+        "dashboard": MessageLookupByLibrary.simpleMessage("Home"),
+        "daysPackage": m2,
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
+        "download": MessageLookupByLibrary.simpleMessage("Download"),
+        "dueFriday": MessageLookupByLibrary.simpleMessage("Due Friday"),
+        "dueSunday": MessageLookupByLibrary.simpleMessage("Due Sunday"),
         "egpCurrency":
             MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
         "egyptianCurriculum":
@@ -92,6 +173,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "emailCannotBeEmpty":
             MessageLookupByLibrary.simpleMessage("Email cannot be empty."),
+        "emailRequired":
+            MessageLookupByLibrary.simpleMessage("Please enter your email"),
+        "english": MessageLookupByLibrary.simpleMessage("English"),
         "errorBadCertificate":
             MessageLookupByLibrary.simpleMessage("Untrusted SSL certificate."),
         "errorBadRequest": MessageLookupByLibrary.simpleMessage("Bad request."),
@@ -115,46 +199,140 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Session expired."),
         "errorUnknown": MessageLookupByLibrary.simpleMessage(
             "An unexpected error occurred."),
-        "errorUnknownStatusCode": m1,
+        "errorUnknownStatusCode": m3,
+        "errorValidation": MessageLookupByLibrary.simpleMessage(
+            "Please check the entered data and try again."),
+        "excellent": MessageLookupByLibrary.simpleMessage("Excellent"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("Expiry date"),
+        "fileDownloadStarted":
+            MessageLookupByLibrary.simpleMessage("Assignment file opened"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "forgotPasswordSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Enter your email and we will send you a reset link"),
+            "Enter your email and we will send you a reset code"),
         "forgotPasswordTitle":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "fourDaysAgo": MessageLookupByLibrary.simpleMessage("4 days ago"),
         "fourHoursPlan": MessageLookupByLibrary.simpleMessage("4-hour package"),
         "from": MessageLookupByLibrary.simpleMessage("From"),
-        "goToPayment": MessageLookupByLibrary.simpleMessage("Go to payment"),
+        "goToPayment":
+            MessageLookupByLibrary.simpleMessage("Proceed to Payment"),
         "grade": MessageLookupByLibrary.simpleMessage("Grade"),
+        "gradeLabel": m4,
+        "groupCreatedByYou":
+            MessageLookupByLibrary.simpleMessage("Group created, start now"),
+        "home": MessageLookupByLibrary.simpleMessage("Home"),
+        "hoursPackage": m5,
+        "inactive": MessageLookupByLibrary.simpleMessage("InActive"),
+        "interaction": MessageLookupByLibrary.simpleMessage("Interaction"),
+        "interactionAppreciationCertificate":
+            MessageLookupByLibrary.simpleMessage(
+                "Appreciation Certificate - Interaction"),
+        "interactionLevel":
+            MessageLookupByLibrary.simpleMessage("Interaction Level"),
+        "interactionRate": MessageLookupByLibrary.simpleMessage("4.8"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid email address."),
+        "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
+            "Math lesson starts in 15 min"),
+        "lightAndShadowExperiment":
+            MessageLookupByLibrary.simpleMessage("Light and Shadow Experiment"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginNow": MessageLookupByLibrary.simpleMessage("Login"),
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
             "Log in to access your dashboard"),
         "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("Welcome"),
+        "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "logoutSuccess":
+            MessageLookupByLibrary.simpleMessage("Logged out successfully"),
+        "march2026": MessageLookupByLibrary.simpleMessage("March 2026"),
+        "markAsRead": MessageLookupByLibrary.simpleMessage("Mark as read"),
         "math": MessageLookupByLibrary.simpleMessage("Math"),
+        "mathShort": MessageLookupByLibrary.simpleMessage("Math"),
+        "mathTeacherSarah":
+            MessageLookupByLibrary.simpleMessage("Math . Ms. Sarah Abdullah"),
+        "mayCertificate":
+            MessageLookupByLibrary.simpleMessage("May Certificate"),
+        "monday": MessageLookupByLibrary.simpleMessage("Monday"),
         "mostPopular": MessageLookupByLibrary.simpleMessage("Most popular"),
+        "myAccount": MessageLookupByLibrary.simpleMessage("My Account"),
+        "myGroups": MessageLookupByLibrary.simpleMessage("My Groups"),
+        "myRequests": MessageLookupByLibrary.simpleMessage("My requests"),
         "nameCannotBeEmpty":
             MessageLookupByLibrary.simpleMessage("Name cannot be empty."),
         "nameMinLength": MessageLookupByLibrary.simpleMessage(
             "Name must be at least 3 characters."),
+        "newAssignmentUploaded": MessageLookupByLibrary.simpleMessage(
+            "A new assignment was uploaded"),
+        "newBadge": MessageLookupByLibrary.simpleMessage("New"),
+        "newCertificate":
+            MessageLookupByLibrary.simpleMessage("Certificate of Appreciation"),
+        "newMessage":
+            MessageLookupByLibrary.simpleMessage("New message from Ms. Sarah"),
+        "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
+        "newPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("New Password"),
+        "newRating":
+            MessageLookupByLibrary.simpleMessage("New weekly rating for Ahmed"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
+        "noAssignmentsYet":
+            MessageLookupByLibrary.simpleMessage("No assignments yet"),
+        "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
+            "New assignments will appear here once they are added."),
+        "noCompletedAssignments":
+            MessageLookupByLibrary.simpleMessage("No completed assignments"),
+        "noCompletedAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Completed assignments will appear here."),
+        "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
+        "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Your groups and pending requests will appear here."),
+        "noPendingAssignments":
+            MessageLookupByLibrary.simpleMessage("No pending assignments"),
+        "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "All current assignments are completed or there are no new assignments yet."),
+        "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
+            "No subjects available for this grade"),
+        "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
         "notes":
             MessageLookupByLibrary.simpleMessage("Additional notes or details"),
         "notesHint": MessageLookupByLibrary.simpleMessage(
             "Example: every Monday and Wednesday at 5 PM"),
-        "oldPrice": m2,
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "oldPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("Old Password"),
+        "oldPrice": m6,
+        "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
+            "An educational platform that helps you develop your skills"),
+        "onboardingSubtitle2": MessageLookupByLibrary.simpleMessage(
+            "Enjoy a flexible learning experience that fits your day and style"),
+        "onboardingSubtitle3": MessageLookupByLibrary.simpleMessage(
+            "Interactive content that helps you learn in a more enjoyable way"),
+        "onboardingTitle1": MessageLookupByLibrary.simpleMessage(
+            "Start your learning journey easily"),
+        "onboardingTitle2": MessageLookupByLibrary.simpleMessage(
+            "Interactive lessons and engaging content"),
+        "onboardingTitle3":
+            MessageLookupByLibrary.simpleMessage("Success starts here"),
+        "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
+        "optional": MessageLookupByLibrary.simpleMessage("Optional"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("4-hour package"),
-        "packagePrice": m3,
+        "packageCalculation": m7,
+        "packageDetails":
+            MessageLookupByLibrary.simpleMessage("Package Details"),
+        "packageExpiryText": MessageLookupByLibrary.simpleMessage(
+            "Expires in 18 days. Auto renewal"),
         "packages": MessageLookupByLibrary.simpleMessage("Packages"),
         "parentInfo":
             MessageLookupByLibrary.simpleMessage("Parent Information"),
         "parentName": MessageLookupByLibrary.simpleMessage("Parent name"),
+        "participation": MessageLookupByLibrary.simpleMessage("Participation"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "passwordAndConfirmRequired": MessageLookupByLibrary.simpleMessage(
+            "Please enter and confirm your password"),
         "passwordCannotBeEmpty":
             MessageLookupByLibrary.simpleMessage("Password cannot be empty."),
+        "passwordChangedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Password changed successfully"),
         "passwordHint":
             MessageLookupByLibrary.simpleMessage("At least 6 characters"),
         "passwordMinLength": MessageLookupByLibrary.simpleMessage(
@@ -170,15 +348,30 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentInfo":
             MessageLookupByLibrary.simpleMessage("Payment Information"),
         "paymentMethod": MessageLookupByLibrary.simpleMessage("Payment Method"),
+        "pending": MessageLookupByLibrary.simpleMessage("In Progress"),
+        "pendingMathSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Fractions lesson, waiting for a teacher"),
+        "pendingRequests":
+            MessageLookupByLibrary.simpleMessage("Pending Requests"),
+        "pendingScienceSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Light lesson, waiting for a teacher"),
+        "personalProfile":
+            MessageLookupByLibrary.simpleMessage("Personal Profile"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone number"),
         "physics": MessageLookupByLibrary.simpleMessage("Physics"),
         "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
             "Please fill in all required fields"),
+        "pleaseSelectFile":
+            MessageLookupByLibrary.simpleMessage("Please select a file first"),
+        "poemAnalysis": MessageLookupByLibrary.simpleMessage("Poem Analysis"),
         "preferredDays":
             MessageLookupByLibrary.simpleMessage("Preferred student schedule"),
         "preferredDaysHint": MessageLookupByLibrary.simpleMessage(
             "Select preferred days and times"),
         "previous": MessageLookupByLibrary.simpleMessage("Previous"),
+        "primaryGradeFive":
+            MessageLookupByLibrary.simpleMessage("Grade 5 Primary"),
+        "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
         "qarCurrency":
             MessageLookupByLibrary.simpleMessage("Qatari Riyal (QAR)"),
         "qatariCurriculum":
@@ -186,6 +379,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "qatariCurriculumDesc": MessageLookupByLibrary.simpleMessage(
             "A curriculum approved by the Ministry of Education in Qatar, covering basic stages up to secondary school."),
         "quran": MessageLookupByLibrary.simpleMessage("Quran"),
+        "readyGroupSubtitle":
+            MessageLookupByLibrary.simpleMessage("Math - Ready group"),
         "registerAsParent":
             MessageLookupByLibrary.simpleMessage("Register as Parent"),
         "registerAsParentSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -194,48 +389,141 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register as Student"),
         "registerAsStudentSubtitle": MessageLookupByLibrary.simpleMessage(
             "Join classes and start your learning journey"),
+        "remainingDays": m8,
+        "remainingHours": m9,
+        "requestAccepted": MessageLookupByLibrary.simpleMessage(
+            "Your request has been accepted!"),
+        "requestNewLesson":
+            MessageLookupByLibrary.simpleMessage("Request New Lesson"),
+        "resendCode": MessageLookupByLibrary.simpleMessage("Resend code?"),
+        "resetCodeRequired": MessageLookupByLibrary.simpleMessage(
+            "Please enter the verification code"),
+        "resetCodeSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Check your email and enter the code sent to you"),
         "resetPasswordInstructions": MessageLookupByLibrary.simpleMessage(
             " and follow the instructions to reset your password."),
-        "resetPasswordSuccessSubtitle": m4,
+        "resetPasswordSuccessSubtitle": m10,
         "resetPasswordSuccessTitle":
             MessageLookupByLibrary.simpleMessage("Sent successfully"),
+        "reviews": MessageLookupByLibrary.simpleMessage("Reviews"),
         "sarCurrency":
             MessageLookupByLibrary.simpleMessage("Saudi Riyal (SAR)"),
+        "sarShort": MessageLookupByLibrary.simpleMessage("SAR"),
         "saudiCurriculum":
             MessageLookupByLibrary.simpleMessage("Saudi Curriculum"),
         "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
             "We provide all subjects for primary, middle, and secondary stages according to the approved curriculum."),
-        "saveAmount": m5,
+        "saveAmount": m11,
+        "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
+        "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
+            "Next week schedule was updated"),
         "science": MessageLookupByLibrary.simpleMessage("Science"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
+        "selectedPackage":
+            MessageLookupByLibrary.simpleMessage("Selected Package"),
+        "sendResetCode":
+            MessageLookupByLibrary.simpleMessage("Send reset code"),
         "sendResetLink":
-            MessageLookupByLibrary.simpleMessage("Send reset link"),
+            MessageLookupByLibrary.simpleMessage("Send reset Code"),
+        "services": MessageLookupByLibrary.simpleMessage("Services"),
+        "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("Social Studies"),
+        "startLessonViaZoom":
+            MessageLookupByLibrary.simpleMessage("Start lesson via Zoom"),
+        "startNow": MessageLookupByLibrary.simpleMessage("Start now"),
+        "student": MessageLookupByLibrary.simpleMessage("student"),
+        "studentEmail": MessageLookupByLibrary.simpleMessage("Student Email"),
         "studentInfo":
             MessageLookupByLibrary.simpleMessage("Student Information"),
         "studentName": MessageLookupByLibrary.simpleMessage("Student name"),
+        "studentNotes": MessageLookupByLibrary.simpleMessage("Student Notes"),
+        "studentNotesAndSchedule": MessageLookupByLibrary.simpleMessage(
+            "Student notes and schedule preferences"),
+        "studentNotesAndScheduleHint": MessageLookupByLibrary.simpleMessage(
+            "Notes about lessons that need explanation, goals, or any other comments"),
+        "studentNotesExample": MessageLookupByLibrary.simpleMessage(
+            "Example: Needs explanation for fractions and long division ..."),
         "studentPassword":
             MessageLookupByLibrary.simpleMessage("Student platform password"),
         "studentPasswordField":
             MessageLookupByLibrary.simpleMessage("Student password"),
+        "studentProfileClass":
+            MessageLookupByLibrary.simpleMessage("القسم المصري"),
+        "studentProfileGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("Student Registration Form"),
-        "studentUsername":
-            MessageLookupByLibrary.simpleMessage("Student username"),
+        "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
+            "The student will use it to log in to the dashboard"),
         "studyCurriculaTitle":
             MessageLookupByLibrary.simpleMessage("Study Curricula "),
+        "studyMaterials":
+            MessageLookupByLibrary.simpleMessage("Study Materials"),
+        "studySchedule": MessageLookupByLibrary.simpleMessage("Study Schedule"),
+        "subject": MessageLookupByLibrary.simpleMessage("Subject"),
         "subjects": MessageLookupByLibrary.simpleMessage("Subjects"),
+        "submitAssignment":
+            MessageLookupByLibrary.simpleMessage("Submit Assignment"),
+        "submittedBadge": MessageLookupByLibrary.simpleMessage("Submitted"),
         "subscribeNow": MessageLookupByLibrary.simpleMessage("Subscribe now"),
         "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
-        "tabbyTamara": MessageLookupByLibrary.simpleMessage("Pay with Tamara"),
+        "subscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
+            "Your subscription ends in 5 days"),
+        "subscriptions": MessageLookupByLibrary.simpleMessage("Subscriptions"),
+        "sunday": MessageLookupByLibrary.simpleMessage("Sunday"),
+        "tabbyTamara":
+            MessageLookupByLibrary.simpleMessage("Split your bill with Tamara"),
+        "teacherAhmedFouad":
+            MessageLookupByLibrary.simpleMessage("Mr. Ahmed Fouad"),
+        "teacherNote": MessageLookupByLibrary.simpleMessage("Teacher Note"),
+        "teacherNoteText": MessageLookupByLibrary.simpleMessage(
+            "Excellent work on solving the assignments this time."),
+        "teacherSarahName":
+            MessageLookupByLibrary.simpleMessage("Ms. Sarah Abdullah"),
+        "teacherSarahShort": MessageLookupByLibrary.simpleMessage("Ms. Sarah"),
+        "theRequiredLesson":
+            MessageLookupByLibrary.simpleMessage("The required lesson"),
+        "thirdTermExercises":
+            MessageLookupByLibrary.simpleMessage("Third Term Exercises"),
+        "threeDaysAgo": MessageLookupByLibrary.simpleMessage("3 days ago"),
+        "thursday": MessageLookupByLibrary.simpleMessage("Thursday"),
+        "time": MessageLookupByLibrary.simpleMessage("Time"),
         "to": MessageLookupByLibrary.simpleMessage("To"),
-        "trainingHours": m6,
+        "today": MessageLookupByLibrary.simpleMessage("Today"),
+        "todayAtTime": m12,
+        "trainingHours": m13,
+        "tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
         "twelveHoursPlan":
             MessageLookupByLibrary.simpleMessage("12-hour package"),
         "twentyHoursPlan":
             MessageLookupByLibrary.simpleMessage("20-hour package"),
-        "weeklyLessons": m7,
+        "twoDaysAgo": MessageLookupByLibrary.simpleMessage("2 days ago"),
+        "typeMessage":
+            MessageLookupByLibrary.simpleMessage("Type message....."),
+        "unexpectedError": MessageLookupByLibrary.simpleMessage(
+            "An unexpected error occurred"),
+        "upcomingLesson":
+            MessageLookupByLibrary.simpleMessage("Upcoming Lesson"),
+        "upgradePackage":
+            MessageLookupByLibrary.simpleMessage("Upgrade Package"),
+        "uploadAssignment":
+            MessageLookupByLibrary.simpleMessage("Upload Assignment"),
+        "usedDays": m14,
+        "usedHours": m15,
+        "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
+        "verify": MessageLookupByLibrary.simpleMessage("Verify"),
+        "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
+        "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
+            "Waiting for teacher approval"),
+        "wednesday": MessageLookupByLibrary.simpleMessage("Wednesday"),
+        "weeklyEvaluation":
+            MessageLookupByLibrary.simpleMessage("Weekly evaluation"),
+        "weeklyLessons": m16,
+        "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),
         "whatsappNumber":
-            MessageLookupByLibrary.simpleMessage("WhatsApp number")
+            MessageLookupByLibrary.simpleMessage("WhatsApp number"),
+        "withTeacher":
+            MessageLookupByLibrary.simpleMessage("With Ms. Sarah Abdullah"),
+        "yesterday": MessageLookupByLibrary.simpleMessage("Yesterday")
       };
 }

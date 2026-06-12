@@ -130,6 +130,16 @@ class S {
     );
   }
 
+  /// `Please check the entered data and try again.`
+  String get errorValidation {
+    return Intl.message(
+      'Please check the entered data and try again.',
+      name: 'errorValidation',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Session expired.`
   String get errorUnauthorized {
     return Intl.message(
@@ -280,40 +290,10 @@ class S {
     );
   }
 
-  /// `Forgot Password`
-  String get forgotPasswordTitle {
-    return Intl.message(
-      'Forgot Password',
-      name: 'forgotPasswordTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter your email and we will send you a reset link`
-  String get forgotPasswordSubtitle {
-    return Intl.message(
-      'Enter your email and we will send you a reset link',
-      name: 'forgotPasswordSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Email`
-  String get email {
-    return Intl.message(
-      'Email',
-      name: 'email',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send reset link`
+  /// `Send reset Code`
   String get sendResetLink {
     return Intl.message(
-      'Send reset link',
+      'Send reset Code',
       name: 'sendResetLink',
       desc: '',
       args: [],
@@ -1070,11 +1050,11 @@ class S {
     );
   }
 
-  /// `Student username`
-  String get studentUsername {
+  /// `Student Email`
+  String get studentEmail {
     return Intl.message(
-      'Student username',
-      name: 'studentUsername',
+      'Student Email',
+      name: 'studentEmail',
       desc: '',
       args: [],
     );
@@ -1170,6 +1150,16 @@ class S {
     );
   }
 
+  /// `Selected Package`
+  String get selectedPackage {
+    return Intl.message(
+      'Selected Package',
+      name: 'selectedPackage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `4-hour package`
   String get package4Hours {
     return Intl.message(
@@ -1180,13 +1170,13 @@ class S {
     );
   }
 
-  /// `{price} SAR`
-  String packagePrice(Object price) {
+  /// `{price} SAR × {studentsCount} student = {total} SAR`
+  String packageCalculation(Object price, Object studentsCount, Object total) {
     return Intl.message(
-      '$price SAR',
-      name: 'packagePrice',
+      '$price SAR × $studentsCount student = $total SAR',
+      name: 'packageCalculation',
       desc: '',
-      args: [price],
+      args: [price, studentsCount, total],
     );
   }
 
@@ -1210,20 +1200,20 @@ class S {
     );
   }
 
-  /// `Pay with Tamara`
+  /// `Split your bill with Tamara`
   String get tabbyTamara {
     return Intl.message(
-      'Pay with Tamara',
+      'Split your bill with Tamara',
       name: 'tabbyTamara',
       desc: '',
       args: [],
     );
   }
 
-  /// `Go to payment`
+  /// `Proceed to Payment`
   String get goToPayment {
     return Intl.message(
-      'Go to payment',
+      'Proceed to Payment',
       name: 'goToPayment',
       desc: '',
       args: [],
@@ -1305,6 +1295,1766 @@ class S {
     return Intl.message(
       'Previous',
       name: 'previous',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Student notes and schedule preferences`
+  String get studentNotesAndSchedule {
+    return Intl.message(
+      'Student notes and schedule preferences',
+      name: 'studentNotesAndSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Optional`
+  String get optional {
+    return Intl.message(
+      'Optional',
+      name: 'optional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notes about lessons that need explanation, goals, or any other comments`
+  String get studentNotesAndScheduleHint {
+    return Intl.message(
+      'Notes about lessons that need explanation, goals, or any other comments',
+      name: 'studentNotesAndScheduleHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Example: Needs explanation for fractions and long division ...`
+  String get studentNotesExample {
+    return Intl.message(
+      'Example: Needs explanation for fractions and long division ...',
+      name: 'studentNotesExample',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The student will use it to log in to the dashboard`
+  String get studentUsesItForDashboard {
+    return Intl.message(
+      'The student will use it to log in to the dashboard',
+      name: 'studentUsesItForDashboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SAR`
+  String get sarShort {
+    return Intl.message(
+      'SAR',
+      name: 'sarShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `student`
+  String get student {
+    return Intl.message(
+      'student',
+      name: 'student',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot Password`
+  String get forgotPasswordTitle {
+    return Intl.message(
+      'Forgot Password',
+      name: 'forgotPasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email and we will send you a reset code`
+  String get forgotPasswordSubtitle {
+    return Intl.message(
+      'Enter your email and we will send you a reset code',
+      name: 'forgotPasswordSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message(
+      'Email',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send reset code`
+  String get sendResetCode {
+    return Intl.message(
+      'Send reset code',
+      name: 'sendResetCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your email and enter the code sent to you`
+  String get resetCodeSubtitle {
+    return Intl.message(
+      'Check your email and enter the code sent to you',
+      name: 'resetCodeSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify`
+  String get verify {
+    return Intl.message(
+      'Verify',
+      name: 'verify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resend code?`
+  String get resendCode {
+    return Intl.message(
+      'Resend code?',
+      name: 'resendCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Password`
+  String get changePassword {
+    return Intl.message(
+      'Change Password',
+      name: 'changePassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get newPassword {
+    return Intl.message(
+      'New Password',
+      name: 'newPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get confirmNewPassword {
+    return Intl.message(
+      'Confirm Password',
+      name: 'confirmNewPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get skip {
+    return Intl.message(
+      'Skip',
+      name: 'skip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start your learning journey easily`
+  String get onboardingTitle1 {
+    return Intl.message(
+      'Start your learning journey easily',
+      name: 'onboardingTitle1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An educational platform that helps you develop your skills`
+  String get onboardingSubtitle1 {
+    return Intl.message(
+      'An educational platform that helps you develop your skills',
+      name: 'onboardingSubtitle1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interactive lessons and engaging content`
+  String get onboardingTitle2 {
+    return Intl.message(
+      'Interactive lessons and engaging content',
+      name: 'onboardingTitle2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enjoy a flexible learning experience that fits your day and style`
+  String get onboardingSubtitle2 {
+    return Intl.message(
+      'Enjoy a flexible learning experience that fits your day and style',
+      name: 'onboardingSubtitle2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success starts here`
+  String get onboardingTitle3 {
+    return Intl.message(
+      'Success starts here',
+      name: 'onboardingTitle3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interactive content that helps you learn in a more enjoyable way`
+  String get onboardingSubtitle3 {
+    return Intl.message(
+      'Interactive content that helps you learn in a more enjoyable way',
+      name: 'onboardingSubtitle3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start now`
+  String get startNow {
+    return Intl.message(
+      'Start now',
+      name: 'startNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get home {
+    return Intl.message(
+      'Home',
+      name: 'home',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule`
+  String get schedule {
+    return Intl.message(
+      'Schedule',
+      name: 'schedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignments`
+  String get assignments {
+    return Intl.message(
+      'Assignments',
+      name: 'assignments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Services`
+  String get services {
+    return Intl.message(
+      'Services',
+      name: 'services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Account`
+  String get myAccount {
+    return Intl.message(
+      'My Account',
+      name: 'myAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome`
+  String get welcomeYou {
+    return Intl.message(
+      'Welcome',
+      name: 'welcomeYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get dashboard {
+    return Intl.message(
+      'Home',
+      name: 'dashboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Study Materials`
+  String get studyMaterials {
+    return Intl.message(
+      'Study Materials',
+      name: 'studyMaterials',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request New Lesson`
+  String get requestNewLesson {
+    return Intl.message(
+      'Request New Lesson',
+      name: 'requestNewLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Groups`
+  String get myGroups {
+    return Intl.message(
+      'My Groups',
+      name: 'myGroups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificates`
+  String get certificates {
+    return Intl.message(
+      'Certificates',
+      name: 'certificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Packages and Subscriptions`
+  String get PackagesandSubscriptions {
+    return Intl.message(
+      'Packages and Subscriptions',
+      name: 'PackagesandSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscriptions`
+  String get subscriptions {
+    return Intl.message(
+      'Subscriptions',
+      name: 'subscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reviews`
+  String get reviews {
+    return Intl.message(
+      'Reviews',
+      name: 'reviews',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get logout {
+    return Intl.message(
+      'Logout',
+      name: 'logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade 5 Primary`
+  String get primaryGradeFive {
+    return Intl.message(
+      'Grade 5 Primary',
+      name: 'primaryGradeFive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get notifications {
+    return Intl.message(
+      'Notifications',
+      name: 'notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package Details`
+  String get packageDetails {
+    return Intl.message(
+      'Package Details',
+      name: 'packageDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get active {
+    return Intl.message(
+      'Active',
+      name: 'active',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{hours} Hours`
+  String hoursPackage(Object hours) {
+    return Intl.message(
+      '$hours Hours',
+      name: 'hoursPackage',
+      desc: '',
+      args: [hours],
+    );
+  }
+
+  /// `{hours} hours remaining`
+  String remainingHours(Object hours) {
+    return Intl.message(
+      '$hours hours remaining',
+      name: 'remainingHours',
+      desc: '',
+      args: [hours],
+    );
+  }
+
+  /// `{used} of {total} used`
+  String usedHours(Object used, Object total) {
+    return Intl.message(
+      '$used of $total used',
+      name: 'usedHours',
+      desc: '',
+      args: [used, total],
+    );
+  }
+
+  /// `Expires in 18 days. Auto renewal`
+  String get packageExpiryText {
+    return Intl.message(
+      'Expires in 18 days. Auto renewal',
+      name: 'packageExpiryText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upgrade Package`
+  String get upgradePackage {
+    return Intl.message(
+      'Upgrade Package',
+      name: 'upgradePackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upcoming Lesson`
+  String get upcomingLesson {
+    return Intl.message(
+      'Upcoming Lesson',
+      name: 'upcomingLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get today {
+    return Intl.message(
+      'Today',
+      name: 'today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `With Ms. Sarah Abdullah`
+  String get withTeacher {
+    return Intl.message(
+      'With Ms. Sarah Abdullah',
+      name: 'withTeacher',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start lesson via Zoom`
+  String get startLessonViaZoom {
+    return Intl.message(
+      'Start lesson via Zoom',
+      name: 'startLessonViaZoom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interaction`
+  String get interaction {
+    return Intl.message(
+      'Interaction',
+      name: 'interaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attendance`
+  String get attendance {
+    return Intl.message(
+      'Attendance',
+      name: 'attendance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `95%`
+  String get attendancePercent {
+    return Intl.message(
+      '95%',
+      name: 'attendancePercent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `4.8`
+  String get interactionRate {
+    return Intl.message(
+      '4.8',
+      name: 'interactionRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `12`
+  String get certificatesCount {
+    return Intl.message(
+      '12',
+      name: 'certificatesCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly evaluation`
+  String get weeklyEvaluation {
+    return Intl.message(
+      'Weekly evaluation',
+      name: 'weeklyEvaluation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attendance Rate`
+  String get attendanceRate {
+    return Intl.message(
+      'Attendance Rate',
+      name: 'attendanceRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interaction Level`
+  String get interactionLevel {
+    return Intl.message(
+      'Interaction Level',
+      name: 'interactionLevel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignments Evaluation`
+  String get assignmentsEvaluation {
+    return Intl.message(
+      'Assignments Evaluation',
+      name: 'assignmentsEvaluation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher Note`
+  String get teacherNote {
+    return Intl.message(
+      'Teacher Note',
+      name: 'teacherNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excellent work on solving the assignments this time.`
+  String get teacherNoteText {
+    return Intl.message(
+      'Excellent work on solving the assignments this time.',
+      name: 'teacherNoteText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View all`
+  String get viewAll {
+    return Intl.message(
+      'View all',
+      name: 'viewAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ms. Sarah`
+  String get teacherSarahShort {
+    return Intl.message(
+      'Ms. Sarah',
+      name: 'teacherSarahShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade: {grade}`
+  String gradeLabel(Object grade) {
+    return Intl.message(
+      'Grade: $grade',
+      name: 'gradeLabel',
+      desc: '',
+      args: [grade],
+    );
+  }
+
+  /// `Download`
+  String get download {
+    return Intl.message(
+      'Download',
+      name: 'download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit Assignment`
+  String get submitAssignment {
+    return Intl.message(
+      'Submit Assignment',
+      name: 'submitAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New`
+  String get newBadge {
+    return Intl.message(
+      'New',
+      name: 'newBadge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitted`
+  String get submittedBadge {
+    return Intl.message(
+      'Submitted',
+      name: 'submittedBadge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Third Term Exercises`
+  String get thirdTermExercises {
+    return Intl.message(
+      'Third Term Exercises',
+      name: 'thirdTermExercises',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Due Friday`
+  String get dueFriday {
+    return Intl.message(
+      'Due Friday',
+      name: 'dueFriday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Due Sunday`
+  String get dueSunday {
+    return Intl.message(
+      'Due Sunday',
+      name: 'dueSunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `May Certificate`
+  String get mayCertificate {
+    return Intl.message(
+      'May Certificate',
+      name: 'mayCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Average {percent}%`
+  String averagePercent(Object percent) {
+    return Intl.message(
+      'Average $percent%',
+      name: 'averagePercent',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `Mark as read`
+  String get markAsRead {
+    return Intl.message(
+      'Mark as read',
+      name: 'markAsRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Math lesson starts in 15 min`
+  String get lessonStartsSoon {
+    return Intl.message(
+      'Math lesson starts in 15 min',
+      name: 'lessonStartsSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New weekly rating for Ahmed`
+  String get newRating {
+    return Intl.message(
+      'New weekly rating for Ahmed',
+      name: 'newRating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You received May certificate`
+  String get certificateReceived {
+    return Intl.message(
+      'You received May certificate',
+      name: 'certificateReceived',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New message from Ms. Sarah`
+  String get newMessage {
+    return Intl.message(
+      'New message from Ms. Sarah',
+      name: 'newMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your subscription ends in 5 days`
+  String get subscriptionEndsSoon {
+    return Intl.message(
+      'Your subscription ends in 5 days',
+      name: 'subscriptionEndsSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next week schedule was updated`
+  String get scheduleUpdated {
+    return Intl.message(
+      'Next week schedule was updated',
+      name: 'scheduleUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A new assignment was uploaded`
+  String get newAssignmentUploaded {
+    return Intl.message(
+      'A new assignment was uploaded',
+      name: 'newAssignmentUploaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today, {time}`
+  String todayAtTime(Object time) {
+    return Intl.message(
+      'Today, $time',
+      name: 'todayAtTime',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Yesterday`
+  String get yesterday {
+    return Intl.message(
+      'Yesterday',
+      name: 'yesterday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `2 days ago`
+  String get twoDaysAgo {
+    return Intl.message(
+      '2 days ago',
+      name: 'twoDaysAgo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `3 days ago`
+  String get threeDaysAgo {
+    return Intl.message(
+      '3 days ago',
+      name: 'threeDaysAgo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `4 days ago`
+  String get fourDaysAgo {
+    return Intl.message(
+      '4 days ago',
+      name: 'fourDaysAgo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get all {
+    return Intl.message(
+      'All',
+      name: 'all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In Progress`
+  String get pending {
+    return Intl.message(
+      'In Progress',
+      name: 'pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completed`
+  String get completed {
+    return Intl.message(
+      'Completed',
+      name: 'completed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light and Shadow Experiment`
+  String get lightAndShadowExperiment {
+    return Intl.message(
+      'Light and Shadow Experiment',
+      name: 'lightAndShadowExperiment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Poem Analysis`
+  String get poemAnalysis {
+    return Intl.message(
+      'Poem Analysis',
+      name: 'poemAnalysis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitted`
+  String get noSubmission {
+    return Intl.message(
+      'Submitted',
+      name: 'noSubmission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Algebra Course Completion Certificate`
+  String get algebraCourseCertificate {
+    return Intl.message(
+      'Algebra Course Completion Certificate',
+      name: 'algebraCourseCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appreciation Certificate - Interaction`
+  String get interactionAppreciationCertificate {
+    return Intl.message(
+      'Appreciation Certificate - Interaction',
+      name: 'interactionAppreciationCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `April 2026`
+  String get april2026 {
+    return Intl.message(
+      'April 2026',
+      name: 'april2026',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `March 2026`
+  String get march2026 {
+    return Intl.message(
+      'March 2026',
+      name: 'march2026',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This Month Achievement`
+  String get congratsThisMonth {
+    return Intl.message(
+      'This Month Achievement',
+      name: 'congratsThisMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate of Appreciation`
+  String get newCertificate {
+    return Intl.message(
+      'Certificate of Appreciation',
+      name: 'newCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For excellence in academic performance`
+  String get academicPerformanceMessage {
+    return Intl.message(
+      'For excellence in academic performance',
+      name: 'academicPerformanceMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Study Schedule`
+  String get studySchedule {
+    return Intl.message(
+      'Study Schedule',
+      name: 'studySchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time`
+  String get time {
+    return Intl.message(
+      'Time',
+      name: 'time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sunday`
+  String get sunday {
+    return Intl.message(
+      'Sunday',
+      name: 'sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monday`
+  String get monday {
+    return Intl.message(
+      'Monday',
+      name: 'monday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tuesday`
+  String get tuesday {
+    return Intl.message(
+      'Tuesday',
+      name: 'tuesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wednesday`
+  String get wednesday {
+    return Intl.message(
+      'Wednesday',
+      name: 'wednesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thursday`
+  String get thursday {
+    return Intl.message(
+      'Thursday',
+      name: 'thursday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Arabic`
+  String get arabic {
+    return Intl.message(
+      'Arabic',
+      name: 'arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Math`
+  String get mathShort {
+    return Intl.message(
+      'Math',
+      name: 'mathShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject`
+  String get subject {
+    return Intl.message(
+      'Subject',
+      name: 'subject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Participation`
+  String get participation {
+    return Intl.message(
+      'Participation',
+      name: 'participation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excellent`
+  String get excellent {
+    return Intl.message(
+      'Excellent',
+      name: 'excellent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Absent`
+  String get absent {
+    return Intl.message(
+      'Absent',
+      name: 'absent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get english {
+    return Intl.message(
+      'English',
+      name: 'english',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Online now`
+  String get onlineNow {
+    return Intl.message(
+      'Online now',
+      name: 'onlineNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type message.....`
+  String get typeMessage {
+    return Intl.message(
+      'Type message.....',
+      name: 'typeMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ms. Sarah Abdullah`
+  String get teacherSarahName {
+    return Intl.message(
+      'Ms. Sarah Abdullah',
+      name: 'teacherSarahName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hi Ahmed, how is the new assignment going?`
+  String get chatMsg1 {
+    return Intl.message(
+      'Hi Ahmed, how is the new assignment going?',
+      name: 'chatMsg1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Great, Ms. Sarah. Thanks for the explanation.`
+  String get chatMsg2 {
+    return Intl.message(
+      'Great, Ms. Sarah. Thanks for the explanation.',
+      name: 'chatMsg2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excellent. Don’t forget to review chapter three before the lesson.`
+  String get chatMsg3 {
+    return Intl.message(
+      'Excellent. Don’t forget to review chapter three before the lesson.',
+      name: 'chatMsg3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Okay, I’ll start now`
+  String get chatMsg4 {
+    return Intl.message(
+      'Okay, I’ll start now',
+      name: 'chatMsg4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your request has been accepted!`
+  String get requestAccepted {
+    return Intl.message(
+      'Your request has been accepted!',
+      name: 'requestAccepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Math - Ready group`
+  String get readyGroupSubtitle {
+    return Intl.message(
+      'Math - Ready group',
+      name: 'readyGroupSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending Requests`
+  String get pendingRequests {
+    return Intl.message(
+      'Pending Requests',
+      name: 'pendingRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fractions lesson, waiting for a teacher`
+  String get pendingMathSubtitle {
+    return Intl.message(
+      'Fractions lesson, waiting for a teacher',
+      name: 'pendingMathSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light lesson, waiting for a teacher`
+  String get pendingScienceSubtitle {
+    return Intl.message(
+      'Light lesson, waiting for a teacher',
+      name: 'pendingScienceSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active Groups`
+  String get activeGroups {
+    return Intl.message(
+      'Active Groups',
+      name: 'activeGroups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Math . Ms. Sarah Abdullah`
+  String get mathTeacherSarah {
+    return Intl.message(
+      'Math . Ms. Sarah Abdullah',
+      name: 'mathTeacherSarah',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group created, start now`
+  String get groupCreatedByYou {
+    return Intl.message(
+      'Group created, start now',
+      name: 'groupCreatedByYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mr. Ahmed Fouad`
+  String get teacherAhmedFouad {
+    return Intl.message(
+      'Mr. Ahmed Fouad',
+      name: 'teacherAhmedFouad',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Congrats!`
+  String get congrats {
+    return Intl.message(
+      'Congrats!',
+      name: 'congrats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose grade`
+  String get chooseGrade {
+    return Intl.message(
+      'Choose grade',
+      name: 'chooseGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Student Notes`
+  String get studentNotes {
+    return Intl.message(
+      'Student Notes',
+      name: 'studentNotes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Request`
+  String get confirmRequest {
+    return Intl.message(
+      'Confirm Request',
+      name: 'confirmRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biology`
+  String get biology {
+    return Intl.message(
+      'Biology',
+      name: 'biology',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My requests`
+  String get myRequests {
+    return Intl.message(
+      'My requests',
+      name: 'myRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose curriculum`
+  String get chooseNewCurriculum {
+    return Intl.message(
+      'Choose curriculum',
+      name: 'chooseNewCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The required lesson`
+  String get theRequiredLesson {
+    return Intl.message(
+      'The required lesson',
+      name: 'theRequiredLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the verification code`
+  String get resetCodeRequired {
+    return Intl.message(
+      'Please enter the verification code',
+      name: 'resetCodeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter and confirm your password`
+  String get passwordAndConfirmRequired {
+    return Intl.message(
+      'Please enter and confirm your password',
+      name: 'passwordAndConfirmRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your email`
+  String get emailRequired {
+    return Intl.message(
+      'Please enter your email',
+      name: 'emailRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password changed successfully`
+  String get passwordChangedSuccessfully {
+    return Intl.message(
+      'Password changed successfully',
+      name: 'passwordChangedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personal Profile`
+  String get personalProfile {
+    return Intl.message(
+      'Personal Profile',
+      name: 'personalProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصف الثاني الإعدادي`
+  String get studentProfileGrade {
+    return Intl.message(
+      'الصف الثاني الإعدادي',
+      name: 'studentProfileGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `القسم المصري`
+  String get studentProfileClass {
+    return Intl.message(
+      'القسم المصري',
+      name: 'studentProfileClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معلومات الاتصال`
+  String get contactInfo {
+    return Intl.message(
+      'معلومات الاتصال',
+      name: 'contactInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسم المستخدم`
+  String get userName {
+    return Intl.message(
+      'اسم المستخدم',
+      name: 'userName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الخصوصية`
+  String get privacy {
+    return Intl.message(
+      'الخصوصية',
+      name: 'privacy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Phone Number`
+  String get changePhoneTitle {
+    return Intl.message(
+      'Edit Phone Number',
+      name: 'changePhoneTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Username`
+  String get changeUsernameTitle {
+    return Intl.message(
+      'Edit Username',
+      name: 'changeUsernameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Password`
+  String get changePasswordTitle {
+    return Intl.message(
+      'Change Password',
+      name: 'changePasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Old Password`
+  String get oldPasswordLabel {
+    return Intl.message(
+      'Old Password',
+      name: 'oldPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get newPasswordLabel {
+    return Intl.message(
+      'New Password',
+      name: 'newPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get confirmPasswordLabel {
+    return Intl.message(
+      'Confirm Password',
+      name: 'confirmPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An unexpected error occurred`
+  String get unexpectedError {
+    return Intl.message(
+      'An unexpected error occurred',
+      name: 'unexpectedError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects available for this grade`
+  String get noSubjectsAvailable {
+    return Intl.message(
+      'No subjects available for this grade',
+      name: 'noSubjectsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload Assignment`
+  String get uploadAssignment {
+    return Intl.message(
+      'Upload Assignment',
+      name: 'uploadAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignment submitted successfully`
+  String get assignmentSubmittedSuccessfully {
+    return Intl.message(
+      'Assignment submitted successfully',
+      name: 'assignmentSubmittedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignment file opened`
+  String get fileDownloadStarted {
+    return Intl.message(
+      'Assignment file opened',
+      name: 'fileDownloadStarted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a file first`
+  String get pleaseSelectFile {
+    return Intl.message(
+      'Please select a file first',
+      name: 'pleaseSelectFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No assignments yet`
+  String get noAssignmentsYet {
+    return Intl.message(
+      'No assignments yet',
+      name: 'noAssignmentsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New assignments will appear here once they are added.`
+  String get noAssignmentsYetSubtitle {
+    return Intl.message(
+      'New assignments will appear here once they are added.',
+      name: 'noAssignmentsYetSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No pending assignments`
+  String get noPendingAssignments {
+    return Intl.message(
+      'No pending assignments',
+      name: 'noPendingAssignments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All current assignments are completed or there are no new assignments yet.`
+  String get noPendingAssignmentsSubtitle {
+    return Intl.message(
+      'All current assignments are completed or there are no new assignments yet.',
+      name: 'noPendingAssignmentsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No completed assignments`
+  String get noCompletedAssignments {
+    return Intl.message(
+      'No completed assignments',
+      name: 'noCompletedAssignments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completed assignments will appear here.`
+  String get noCompletedAssignmentsSubtitle {
+    return Intl.message(
+      'Completed assignments will appear here.',
+      name: 'noCompletedAssignmentsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `InActive`
+  String get inactive {
+    return Intl.message(
+      'InActive',
+      name: 'inactive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No groups yet`
+  String get noGroupsYet {
+    return Intl.message(
+      'No groups yet',
+      name: 'noGroupsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your groups and pending requests will appear here.`
+  String get noGroupsYetSubtitle {
+    return Intl.message(
+      'Your groups and pending requests will appear here.',
+      name: 'noGroupsYetSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting for teacher approval`
+  String get waitingForTeacherApproval {
+    return Intl.message(
+      'Waiting for teacher approval',
+      name: 'waitingForTeacherApproval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{days} Days Package`
+  String daysPackage(int days) {
+    return Intl.message(
+      '$days Days Package',
+      name: 'daysPackage',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Used {used} of {total} days`
+  String usedDays(int used, int total) {
+    return Intl.message(
+      'Used $used of $total days',
+      name: 'usedDays',
+      desc: '',
+      args: [used, total],
+    );
+  }
+
+  /// `{days} days remaining`
+  String remainingDays(int days) {
+    return Intl.message(
+      '$days days remaining',
+      name: 'remainingDays',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Logged out successfully`
+  String get logoutSuccess {
+    return Intl.message(
+      'Logged out successfully',
+      name: 'logoutSuccess',
       desc: '',
       args: [],
     );
