@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/features/auth/data/models/curriculum_card_model.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/curricula_widgets/curriculum_browse_button.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +8,11 @@ import 'package:flutter/material.dart';
 class CurriculumCard extends StatelessWidget {
   const CurriculumCard({
     super.key,
-    required this.title,
-    required this.description,
-    required this.flag,
+    required this.curriculumCard,
     required this.onTap,
   });
 
-  final String title;
-  final String description;
-  final String flag;
+  final CurriculumCardModel curriculumCard;
   final VoidCallback onTap;
 
   @override
@@ -35,15 +32,15 @@ class CurriculumCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Image.asset(flag),
+              _buildIcon(),
               const SizedBox(width: 41),
               Expanded(
                 child: Text(
-                  title,
+                  curriculumCard.title,
                   style: StylesManager.styleBold18(context),
                 ),
               ),
@@ -51,7 +48,7 @@ class CurriculumCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            description,
+            curriculumCard.description,
             textAlign: TextAlign.center,
             style: StylesManager.styleRegular14(context),
           ),
@@ -67,4 +64,18 @@ class CurriculumCard extends StatelessWidget {
       ),
     );
   }
+  Widget _buildIcon() {
+  if (curriculumCard.iconUrl.isEmpty) {
+    return const Icon(Icons.image_outlined, size: 28);
+  }
+
+  return Image.network(
+    curriculumCard.iconUrl,
+    width: 53,
+    height: 36,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(Icons.image_not_supported_outlined, size: 28);
+    },
+  );
+}
 }

@@ -1,8 +1,8 @@
 import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_form.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_subtitle.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/forget_password_widgets/forget_password_verification_form.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_footer.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_header.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -48,10 +48,10 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
                   ),
                   const SizedBox(height: 28),
                   isCodeSent
-                      ?  ForgetPasswordVerificationForm(onSuccess:showVerification,)
+                      ?  ForgetPasswordVerificationForm()
                       : ForgetPasswordForm(onSuccess: showVerification),
                   const Spacer(),
-                  const AuthFooter(),
+                  const BnanFooter(),
                   const SizedBox(height: 20),
                 ],
               ),

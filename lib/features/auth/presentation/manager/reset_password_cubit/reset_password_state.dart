@@ -4,6 +4,8 @@ final class ResetPasswordInitial extends ResetPasswordState {}
 
 final class ResetPasswordLoading extends ResetPasswordState {}
 
+final class ResetPasswordVisibilityChanged extends ResetPasswordState {}
+
 final class VerifyResetCodeSuccess extends ResetPasswordState {
   VerifyResetCodeSuccess({required this.message});
 

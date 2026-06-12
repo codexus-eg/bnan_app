@@ -2,7 +2,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/assignments_and_certificate/data/certificate_model.dart';
 import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/certificates/certificate_download_icon.dart';
 import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/certificates/certificate_icon_box.dart';
-import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/certification/certificate_info.dart';
+import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/certificates/certificate_info.dart';
 import 'package:flutter/material.dart';
 
 class CertificateCard extends StatelessWidget {

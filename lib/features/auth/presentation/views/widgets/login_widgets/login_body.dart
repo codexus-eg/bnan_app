@@ -1,9 +1,8 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/login_widgets/login_form.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_footer.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_header.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/login_widgets/login_form.dart';import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_header.dart';
 import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/auth_switch_text.dart';
+import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +37,7 @@ class LoginBody extends StatelessWidget {
                     },
                   ),
                   const Spacer(),
-                  const AuthFooter(),
+                  const BnanFooter(),
                   const SizedBox(height: 20),
                 ],
               ),

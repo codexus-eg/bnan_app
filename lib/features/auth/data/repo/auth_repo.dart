@@ -1,7 +1,11 @@
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/auth/data/models/auth_response_model.dart';
+import 'package:bnan_app/features/auth/data/models/curriculum_model.dart';
+import 'package:bnan_app/features/auth/data/models/grade_model.dart';
+import 'package:bnan_app/features/auth/data/models/package_model.dart';
 import 'package:bnan_app/features/auth/data/models/register_request_model.dart';
 import 'package:bnan_app/features/auth/data/models/simple_response_model.dart';
+import 'package:bnan_app/features/auth/data/models/subject_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class AuthRepo {
@@ -27,8 +31,16 @@ abstract class AuthRepo {
     required String newPassword,
   });
 
-  Future<Either<Failure, SimpleResponseModel>> updatePassword({
-    required String currentPassword,
-    required String updatedPassword,
+  Future<Either<Failure, CurriculumsResponseModel>> getAllCurriculums();
+  Future<Either<Failure, PackagesResponseModel>> getCurriculumPackages({
+    required String curriculumId,
+  });
+  Future<Either<Failure, GradesResponseModel>> getCurriculumGrades({
+    required String curriculumId,
+  });
+
+  Future<Either<Failure, SubjectsResponseModel>> getCurriculumSubjects({
+    required String curriculumId,
+    required String gradeId,
   });
 }

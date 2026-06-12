@@ -4,7 +4,9 @@ import 'package:bnan_app/features/auth/presentation/views/widgets/subscription_w
 import 'package:flutter/material.dart';
 
 class SubscriptionBody extends StatelessWidget {
-  const SubscriptionBody({super.key});
+  const SubscriptionBody({super.key, required this.curriculumId, required this.curriculumName});
+  final String curriculumId;
+  final String curriculumName;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,9 @@ class SubscriptionBody extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           const SliverToBoxAdapter(child: CurrencySelector()),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
-          const SliverPadding(
+          SliverPadding(
             padding: EdgeInsetsDirectional.only(start: 14, end: 18),
-            sliver: SubscriptionGrid(),
+            sliver: SubscriptionGrid(curriculumId: curriculumId, curriculumName: curriculumName),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],

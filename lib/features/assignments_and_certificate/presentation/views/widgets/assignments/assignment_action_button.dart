@@ -8,13 +8,13 @@ class AssignmentActionButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.icon,
-    required this.onTap,
+     this.onTap,
     this.isFilled = false,
   });
 
   final String text;
   final String icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool isFilled;
 
   @override

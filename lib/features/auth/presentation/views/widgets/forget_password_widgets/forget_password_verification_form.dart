@@ -14,35 +14,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ForgetPasswordVerificationForm extends StatelessWidget {
-  const ForgetPasswordVerificationForm({super.key, required this.onSuccess});
-  final void Function(String email) onSuccess;
+  const ForgetPasswordVerificationForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     final resetCubit = ResetPasswordCubit.get(context);
     final forgotCubit = ForgotPasswordCubit.get(context);
 
-    return BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
-      listener: (context, state) {
-        if (state is ForgotPasswordSuccess) {
-          showCustomSnackBar(context, state.message, true);
-          onSuccess(forgotCubit.emailController.text.trim());
-        }
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
+          listener: (context, state) {
+            if (state is ForgotPasswordSuccess) {
+              showCustomSnackBar(context, state.message, true);
+            }
 
-        if (state is ForgotPasswordFailure) {
-          showCustomSnackBar(context, state.errorMessage, false);
-        }
-      },
-      child: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
-        listener: (context, state) {
-          if (state is VerifyResetCodeSuccess) {
-            MyNavigator.goToOffAll(context, Routes.changePassword);
-          }
+            if (state is ForgotPasswordFailure) {
+              showCustomSnackBar(context, state.errorMessage, false);
+            }
+          },
+        ),
+        BlocListener<ResetPasswordCubit, ResetPasswordState>(
+          listener: (context, state) {
+            if (state is VerifyResetCodeSuccess) {
+              MyNavigator.goToOffAll(
+                context,
+                Routes.changePassword,
+                extra: ForgotPasswordCubit.get(
+                  context,
+                ).emailController.text.trim(),
+              );
+            }
 
-          if (state is ResetPasswordFailure) {
-            showCustomSnackBar(context, state.errorMessage, false);
-          }
-        },
+            if (state is ResetPasswordFailure) {
+              showCustomSnackBar(context, state.errorMessage, false);
+            }
+          },
+        ),
+      ],
+      child: BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
         builder: (context, resetState) {
           return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
             builder: (context, forgotState) {

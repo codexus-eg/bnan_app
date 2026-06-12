@@ -134,7 +134,7 @@
     "chemistry": "الكيمياء",
     "socialStudies": "الاجتماعيات",
     "quran": "القرآن الكريم",
-    "studentEmail": "الايميل المستخدم للطالب",
+    "studentEmail": "ايميل الطالب",
     "studentPasswordField": "كلمة المرور للطالب",
     "preferredDays": "مواعيد الطالب المفضلة",
     "preferredDaysHint": "حدد الأيام والأوقات المفضلة للحضور",
@@ -210,6 +210,7 @@
     "notifications": "الإشعارات",
     "packageDetails": "تفاصيل الباقة",
     "active": "نشطة",
+    "inactive": "غير نشطة",
     "hoursPackage": "{hours} ساعة",
     "remainingHours": "{hours} ساعات متبقية",
     "usedHours": "تم استخدام {used} من {total}",
@@ -287,7 +288,7 @@
         }
     },
     "all": "الكل",
-    "pending": "قيد التنفيذ",
+    "pending": "معلق",
     "completed": "مكتمل",
     "lightAndShadowExperiment": "تجربة الضوء والظل",
     "poemAnalysis": "تحليل القصيدة",
@@ -339,5 +340,61 @@
     "theRequiredLesson": "الدرس المطلوب",
     "resetCodeRequired": "يرجى إدخال كود التحقق",
     "passwordAndConfirmRequired": "يرجى إدخال كلمة المرور وتأكيدها",
-    "emailRequired": "يرجى إدخال البريد الإلكتروني"
+    "emailRequired": "يرجى إدخال البريد الإلكتروني",
+    "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
+    "personalProfile": "الملف الشخصي",
+    "studentProfileGrade": "الصف الثاني الإعدادي",
+    "studentProfileClass": "القسم المصري",
+    "contactInfo": "معلومات الاتصال",
+    "userName": "اسم المستخدم",
+    "privacy": "الخصوصية",
+    "changePhoneTitle": "تعديل رقم الهاتف",
+    "changeUsernameTitle": "تعديل اسم المستخدم",
+    "changePasswordTitle": "تعديل كلمة المرور",
+    "oldPasswordLabel": "كلمة المرور القديمة",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "confirmPasswordLabel": "تأكيد كلمة المرور",
+    "unexpectedError": "حدث خطأ غير متوقع",
+    "noSubjectsAvailable": "لا توجد مواد متاحة لهذا الصف",
+    "uploadAssignment": "رفع الواجب",
+    "assignmentSubmittedSuccessfully": "تم رفع الواجب بنجاح",
+    "fileDownloadStarted": "تم فتح ملف الواجب",
+    "pleaseSelectFile": "من فضلك اختاري ملفًا أولًا",
+    "noAssignmentsYet": "لا توجد واجبات حالياً",
+    "noAssignmentsYetSubtitle": "عند إضافة واجبات جديدة ستظهر في هذه الصفحة.",
+    "noPendingAssignments": "لا توجد واجبات قيد الانتظار",
+    "noPendingAssignmentsSubtitle": "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد.",
+    "noCompletedAssignments": "لا توجد واجبات مكتملة",
+    "noCompletedAssignmentsSubtitle": "عند حل الواجبات ستظهر هنا.",
+    "noGroupsYet": "لا توجد مجموعات حالياً",
+    "noGroupsYetSubtitle": "عند الانضمام إلى مجموعة أو إرسال طلب جديد ستظهر هنا.",
+    "waitingForTeacherApproval": "بانتظار موافقة المعلم",
+    "daysPackage": "باقة {days} أيام",
+    "@daysPackage": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "usedDays": "تم استخدام {used} من {total} أيام",
+    "@usedDays": {
+        "placeholders": {
+            "used": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "remainingDays": "{days} أيام متبقية",
+    "@remainingDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "logoutSuccess": "تم تسجيل الخروج بنجاح"
 }

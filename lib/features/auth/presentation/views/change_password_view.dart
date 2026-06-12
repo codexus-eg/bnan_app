@@ -4,14 +4,16 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordView extends StatelessWidget {
-  const ChangePasswordView({super.key});
+  const ChangePasswordView({super.key, required this.email});
+    final String email;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppbar(headerText: S.of(context).changePassword,iconNeeded: false),
-      body: ChangePasswordBody(),
+      body: ChangePasswordBody(email:email),
     );
   }
 }

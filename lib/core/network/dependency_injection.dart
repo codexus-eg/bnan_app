@@ -1,15 +1,4 @@
-import 'package:bnan_app/core/network/api_consumer.dart';
-import 'package:bnan_app/core/network/dio_consumer.dart';
-import 'package:bnan_app/features/auth/data/repo/auth_repo.dart';
-import 'package:bnan_app/features/auth/data/repo/auth_repo_impl.dart';
-import 'package:bnan_app/features/auth/presentation/manager/forgot_password_cubit/forgot_password_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/login_cubit/login_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/register_cubit/register_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/reset_password_cubit/reset_password_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/update_password_cubit/update_password_cubit.dart';
-import 'package:bnan_app/features/splash_and_onboarding/presentation/manager/onboarding_cubit/onboarding_cubit.dart';
-import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
+import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,7 +14,24 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AuthRepo>(
     () => AuthRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
-
+  getIt.registerLazySingleton<StudentProfileRepo>(
+    () => StudentProfileRepoImpl(
+      apiConsumer: getIt<ApiConsumer>(),
+      localDataSource: getIt<StudentProfileLocalDataSource>(),
+    ),
+  );
+  getIt.registerLazySingleton<StudentProfileLocalDataSource>(
+    () => StudentProfileLocalDataSourceImpl(),
+  );
+  getIt.registerLazySingleton<StudentAssignmentsRepo>(
+    () => StudentAssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<HomeStudentRepo>(
+    () => HomeStudentRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<StudentGroupsRepo>(
+    () => StudentGroupsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
   // Cubits
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
@@ -43,6 +49,40 @@ void setupServiceLocator() {
   );
 
   getIt.registerFactory<UpdatePasswordCubit>(
-    () => UpdatePasswordCubit(getIt<AuthRepo>()),
+    () => UpdatePasswordCubit(getIt<StudentProfileRepo>()),
+  );
+  getIt.registerFactory<GetLoggedUserCubit>(
+    () => GetLoggedUserCubit(getIt<StudentProfileRepo>()),
+  );
+  getIt.registerFactory<UpdateNameCubit>(
+    () => UpdateNameCubit(getIt<StudentProfileRepo>()),
+  );
+  getIt.registerFactory<UpdatePhoneCubit>(
+    () => UpdatePhoneCubit(getIt<StudentProfileRepo>()),
+  );
+  getIt.registerFactory<GetCurriculumsCubit>(
+    () => GetCurriculumsCubit(getIt<AuthRepo>()),
+  );
+  getIt.registerFactory<GetPackagesCubit>(
+    () => GetPackagesCubit(getIt<AuthRepo>()),
+  );
+  getIt.registerFactory<GetGradesCubit>(
+    () => GetGradesCubit(getIt<AuthRepo>()),
+  );
+
+  getIt.registerFactory<GetSubjectsCubit>(
+    () => GetSubjectsCubit(getIt<AuthRepo>()),
+  );
+  getIt.registerFactory<GetAssignmentsCubit>(
+    () => GetAssignmentsCubit(getIt<StudentAssignmentsRepo>()),
+  );
+  getIt.registerFactory<SubmitAssignmentCubit>(
+    () => SubmitAssignmentCubit(getIt<StudentAssignmentsRepo>()),
+  );
+  getIt.registerFactory<GetStudentSubscriptionCubit>(
+    () => GetStudentSubscriptionCubit(getIt<HomeStudentRepo>()),
+  );
+  getIt.registerFactory<GetMyEnrollmentsCubit>(
+    () => GetMyEnrollmentsCubit(getIt<StudentGroupsRepo>()),
   );
 }

@@ -9,39 +9,48 @@ class ProgressInfo extends StatelessWidget {
     required this.remainingHours,
     required this.usedHours,
     required this.totalHours,
+    required this.isDaysPackage,
   });
 
   final int remainingHours;
   final int usedHours;
   final int totalHours;
+  final bool isDaysPackage;
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).hoursPackage(totalHours),
-          style: StylesManager.styleBold16(
-            context,
-          ).copyWith(color: ColorManager.white),
+          isDaysPackage
+              ? s.daysPackage(totalHours)
+              : s.hoursPackage(totalHours),
+          style: StylesManager.styleBold16(context).copyWith(
+            color: ColorManager.white,
+          ),
         ),
         const SizedBox(height: 8),
         Row(
           children: [
             Text(
-              S.of(context).usedHours(usedHours, totalHours),
-              style: StylesManager.styleRegular12(
-                context,
-              ).copyWith(color: ColorManager.white),
+              isDaysPackage
+                  ? s.usedDays(usedHours, totalHours)
+                  : s.usedHours(usedHours, totalHours),
+              style: StylesManager.styleRegular12(context).copyWith(
+                color: ColorManager.white,
+              ),
             ),
             const Spacer(),
-
             Text(
-              S.of(context).remainingHours(remainingHours),
-              style: StylesManager.styleBold12(
-                context,
-              ).copyWith(color: ColorManager.white),
+              isDaysPackage
+                  ? s.remainingDays(remainingHours)
+                  : s.remainingHours(remainingHours),
+              style: StylesManager.styleBold12(context).copyWith(
+                color: ColorManager.white,
+              ),
             ),
           ],
         ),

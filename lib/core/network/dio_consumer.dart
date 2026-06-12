@@ -50,7 +50,7 @@ class DioConsumer extends ApiConsumer {
             );
           }
 
-          options.headers['token'] = 'Bearer $token';
+          options.headers['Authorization'] = 'Bearer $token';
 
           return handler.next(options);
         },

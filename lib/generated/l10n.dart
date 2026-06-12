@@ -2729,6 +2729,336 @@ class S {
       args: [],
     );
   }
+
+  /// `Password changed successfully`
+  String get passwordChangedSuccessfully {
+    return Intl.message(
+      'Password changed successfully',
+      name: 'passwordChangedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personal Profile`
+  String get personalProfile {
+    return Intl.message(
+      'Personal Profile',
+      name: 'personalProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصف الثاني الإعدادي`
+  String get studentProfileGrade {
+    return Intl.message(
+      'الصف الثاني الإعدادي',
+      name: 'studentProfileGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `القسم المصري`
+  String get studentProfileClass {
+    return Intl.message(
+      'القسم المصري',
+      name: 'studentProfileClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معلومات الاتصال`
+  String get contactInfo {
+    return Intl.message(
+      'معلومات الاتصال',
+      name: 'contactInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسم المستخدم`
+  String get userName {
+    return Intl.message(
+      'اسم المستخدم',
+      name: 'userName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الخصوصية`
+  String get privacy {
+    return Intl.message(
+      'الخصوصية',
+      name: 'privacy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Phone Number`
+  String get changePhoneTitle {
+    return Intl.message(
+      'Edit Phone Number',
+      name: 'changePhoneTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Username`
+  String get changeUsernameTitle {
+    return Intl.message(
+      'Edit Username',
+      name: 'changeUsernameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Password`
+  String get changePasswordTitle {
+    return Intl.message(
+      'Change Password',
+      name: 'changePasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Old Password`
+  String get oldPasswordLabel {
+    return Intl.message(
+      'Old Password',
+      name: 'oldPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get newPasswordLabel {
+    return Intl.message(
+      'New Password',
+      name: 'newPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get confirmPasswordLabel {
+    return Intl.message(
+      'Confirm Password',
+      name: 'confirmPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An unexpected error occurred`
+  String get unexpectedError {
+    return Intl.message(
+      'An unexpected error occurred',
+      name: 'unexpectedError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects available for this grade`
+  String get noSubjectsAvailable {
+    return Intl.message(
+      'No subjects available for this grade',
+      name: 'noSubjectsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload Assignment`
+  String get uploadAssignment {
+    return Intl.message(
+      'Upload Assignment',
+      name: 'uploadAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignment submitted successfully`
+  String get assignmentSubmittedSuccessfully {
+    return Intl.message(
+      'Assignment submitted successfully',
+      name: 'assignmentSubmittedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignment file opened`
+  String get fileDownloadStarted {
+    return Intl.message(
+      'Assignment file opened',
+      name: 'fileDownloadStarted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a file first`
+  String get pleaseSelectFile {
+    return Intl.message(
+      'Please select a file first',
+      name: 'pleaseSelectFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No assignments yet`
+  String get noAssignmentsYet {
+    return Intl.message(
+      'No assignments yet',
+      name: 'noAssignmentsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New assignments will appear here once they are added.`
+  String get noAssignmentsYetSubtitle {
+    return Intl.message(
+      'New assignments will appear here once they are added.',
+      name: 'noAssignmentsYetSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No pending assignments`
+  String get noPendingAssignments {
+    return Intl.message(
+      'No pending assignments',
+      name: 'noPendingAssignments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All current assignments are completed or there are no new assignments yet.`
+  String get noPendingAssignmentsSubtitle {
+    return Intl.message(
+      'All current assignments are completed or there are no new assignments yet.',
+      name: 'noPendingAssignmentsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No completed assignments`
+  String get noCompletedAssignments {
+    return Intl.message(
+      'No completed assignments',
+      name: 'noCompletedAssignments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completed assignments will appear here.`
+  String get noCompletedAssignmentsSubtitle {
+    return Intl.message(
+      'Completed assignments will appear here.',
+      name: 'noCompletedAssignmentsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `InActive`
+  String get inactive {
+    return Intl.message(
+      'InActive',
+      name: 'inactive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No groups yet`
+  String get noGroupsYet {
+    return Intl.message(
+      'No groups yet',
+      name: 'noGroupsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your groups and pending requests will appear here.`
+  String get noGroupsYetSubtitle {
+    return Intl.message(
+      'Your groups and pending requests will appear here.',
+      name: 'noGroupsYetSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting for teacher approval`
+  String get waitingForTeacherApproval {
+    return Intl.message(
+      'Waiting for teacher approval',
+      name: 'waitingForTeacherApproval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{days} Days Package`
+  String daysPackage(int days) {
+    return Intl.message(
+      '$days Days Package',
+      name: 'daysPackage',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Used {used} of {total} days`
+  String usedDays(int used, int total) {
+    return Intl.message(
+      'Used $used of $total days',
+      name: 'usedDays',
+      desc: '',
+      args: [used, total],
+    );
+  }
+
+  /// `{days} days remaining`
+  String remainingDays(int days) {
+    return Intl.message(
+      '$days days remaining',
+      name: 'remainingDays',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `Logged out successfully`
+  String get logoutSuccess {
+    return Intl.message(
+      'Logged out successfully',
+      name: 'logoutSuccess',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

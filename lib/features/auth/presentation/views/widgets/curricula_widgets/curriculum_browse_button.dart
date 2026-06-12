@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/custom_back_icon.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ class CurriculumBrowseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRtl = Directionality.of(context) == TextDirection.ltr;
     return SizedBox(
       height: 30,
       child: ElevatedButton(
@@ -37,11 +37,7 @@ class CurriculumBrowseButton extends StatelessWidget {
               ).copyWith(color: ColorManager.white),
             ),
             const SizedBox(width: 15),
-            Icon(
-              isRtl ? Icons.arrow_back : Icons.arrow_forward,
-              size: 20,
-              color: ColorManager.white,
-            ),
+            CustomBackIcon(size: 20, color: ColorManager.white),
           ],
         ),
       ),

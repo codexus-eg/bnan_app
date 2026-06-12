@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/assignments_and_certificate/data/assignments_filter_type.dart';
 import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/assignments/assignments_filter_chip.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -21,18 +22,23 @@ class AssignmentsFilterTabs extends StatelessWidget {
       AssignmentsFilterType.completed: S.of(context).completed,
     };
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: filters.entries.map((entry) {
-        return Padding(
-          padding: const EdgeInsetsDirectional.only(end: 16),
-          child: AssignmentsFilterChip(
+    return Container(
+      height: 49,
+      width: double.infinity,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: ColorManager.greyF8F9,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        children: filters.entries.map((entry) {
+          return AssignmentsFilterChip(
             title: entry.value,
             isSelected: selectedFilter == entry.key,
             onTap: () => onChanged(entry.key),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 }

@@ -16,7 +16,7 @@ class SplashView extends StatelessWidget {
         if (state is SplashNavigateToOnboarding) {
           GoRouter.of(context).go(Routes.onboarding);
         } else if (state is SplashNavigateToHome) {
-          GoRouter.of(context).go(Routes.logIn);
+          GoRouter.of(context).go(Routes.home);
         }
       },
       child: const Scaffold(body: SplashBody()),

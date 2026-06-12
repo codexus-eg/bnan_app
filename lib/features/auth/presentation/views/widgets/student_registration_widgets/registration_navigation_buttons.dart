@@ -25,7 +25,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
                   : S.of(context).next,
           onPressed: () {
             if (step == 5) {
-              MyNavigator.goToOffAll(context, Routes.home);
+              MyNavigator.goToOffAll(context, Routes.logIn);
               return;
             }
 

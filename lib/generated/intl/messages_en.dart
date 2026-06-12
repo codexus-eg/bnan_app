@@ -24,31 +24,37 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(price) => "SAR ${price}";
 
-  static String m2(statusCode) => "Unknown status code: ${statusCode}";
+  static String m2(days) => "${days} Days Package";
 
-  static String m3(grade) => "Grade: ${grade}";
+  static String m3(statusCode) => "Unknown status code: ${statusCode}";
 
-  static String m4(hours) => "${hours} Hours";
+  static String m4(grade) => "Grade: ${grade}";
 
-  static String m5(price) => "SAR ${price}";
+  static String m5(hours) => "${hours} Hours";
 
-  static String m6(price, studentsCount, total) =>
+  static String m6(price) => "SAR ${price}";
+
+  static String m7(price, studentsCount, total) =>
       "${price} SAR × ${studentsCount} student = ${total} SAR";
 
-  static String m7(hours) => "${hours} hours remaining";
+  static String m8(days) => "${days} days remaining";
 
-  static String m8(email) =>
+  static String m9(hours) => "${hours} hours remaining";
+
+  static String m10(email) =>
       "Check your email ${email} and follow the instructions to reset your password.";
 
-  static String m9(amount) => "Save SAR ${amount}";
+  static String m11(amount) => "Save SAR ${amount}";
 
-  static String m10(time) => "Today, ${time}";
+  static String m12(time) => "Today, ${time}";
 
-  static String m11(hours) => "${hours} training hours";
+  static String m13(hours) => "${hours} training hours";
 
-  static String m12(used, total) => "${used} of ${total} used";
+  static String m14(used, total) => "Used ${used} of ${total} days";
 
-  static String m13(count) => "${count} weekly lessons";
+  static String m15(used, total) => "${used} of ${total} used";
+
+  static String m16(count) => "${count} weekly lessons";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -74,6 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "arabicLanguage":
             MessageLookupByLibrary.simpleMessage("Arabic Language"),
+        "assignmentSubmittedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Assignment submitted successfully"),
         "assignments": MessageLookupByLibrary.simpleMessage("Assignments"),
         "assignmentsEvaluation":
             MessageLookupByLibrary.simpleMessage("Assignments Evaluation"),
@@ -98,6 +106,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "certificatesCount": MessageLookupByLibrary.simpleMessage("12"),
         "changePassword":
             MessageLookupByLibrary.simpleMessage("Change Password"),
+        "changePasswordTitle":
+            MessageLookupByLibrary.simpleMessage("Change Password"),
+        "changePhoneTitle":
+            MessageLookupByLibrary.simpleMessage("Edit Phone Number"),
+        "changeUsernameTitle":
+            MessageLookupByLibrary.simpleMessage("Edit Username"),
         "chatMsg1": MessageLookupByLibrary.simpleMessage(
             "Hi Ahmed, how is the new assignment going?"),
         "chatMsg2": MessageLookupByLibrary.simpleMessage(
@@ -122,11 +136,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Confirm Password"),
         "confirmPasswordCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
             "Confirm password cannot be empty."),
+        "confirmPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("Confirm Password"),
         "confirmRequest":
             MessageLookupByLibrary.simpleMessage("Confirm Request"),
         "congrats": MessageLookupByLibrary.simpleMessage("Congrats!"),
         "congratsThisMonth":
             MessageLookupByLibrary.simpleMessage("This Month Achievement"),
+        "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
         "createNewAccount":
             MessageLookupByLibrary.simpleMessage("Create New Account"),
@@ -139,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Curriculum Selection"),
         "cvv": MessageLookupByLibrary.simpleMessage("CVV"),
         "dashboard": MessageLookupByLibrary.simpleMessage("Home"),
+        "daysPackage": m2,
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
@@ -181,11 +199,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Session expired."),
         "errorUnknown": MessageLookupByLibrary.simpleMessage(
             "An unexpected error occurred."),
-        "errorUnknownStatusCode": m2,
+        "errorUnknownStatusCode": m3,
         "errorValidation": MessageLookupByLibrary.simpleMessage(
             "Please check the entered data and try again."),
         "excellent": MessageLookupByLibrary.simpleMessage("Excellent"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("Expiry date"),
+        "fileDownloadStarted":
+            MessageLookupByLibrary.simpleMessage("Assignment file opened"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "forgotPasswordSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -198,11 +218,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "goToPayment":
             MessageLookupByLibrary.simpleMessage("Proceed to Payment"),
         "grade": MessageLookupByLibrary.simpleMessage("Grade"),
-        "gradeLabel": m3,
+        "gradeLabel": m4,
         "groupCreatedByYou":
             MessageLookupByLibrary.simpleMessage("Group created, start now"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
-        "hoursPackage": m4,
+        "hoursPackage": m5,
+        "inactive": MessageLookupByLibrary.simpleMessage("InActive"),
         "interaction": MessageLookupByLibrary.simpleMessage("Interaction"),
         "interactionAppreciationCertificate":
             MessageLookupByLibrary.simpleMessage(
@@ -222,6 +243,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Log in to access your dashboard"),
         "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("Welcome"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "logoutSuccess":
+            MessageLookupByLibrary.simpleMessage("Logged out successfully"),
         "march2026": MessageLookupByLibrary.simpleMessage("March 2026"),
         "markAsRead": MessageLookupByLibrary.simpleMessage("Mark as read"),
         "math": MessageLookupByLibrary.simpleMessage("Math"),
@@ -247,16 +270,37 @@ class MessageLookup extends MessageLookupByLibrary {
         "newMessage":
             MessageLookupByLibrary.simpleMessage("New message from Ms. Sarah"),
         "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
+        "newPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("New Password"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("New weekly rating for Ahmed"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
+        "noAssignmentsYet":
+            MessageLookupByLibrary.simpleMessage("No assignments yet"),
+        "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
+            "New assignments will appear here once they are added."),
+        "noCompletedAssignments":
+            MessageLookupByLibrary.simpleMessage("No completed assignments"),
+        "noCompletedAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Completed assignments will appear here."),
+        "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
+        "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Your groups and pending requests will appear here."),
+        "noPendingAssignments":
+            MessageLookupByLibrary.simpleMessage("No pending assignments"),
+        "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "All current assignments are completed or there are no new assignments yet."),
+        "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
+            "No subjects available for this grade"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
         "notes":
             MessageLookupByLibrary.simpleMessage("Additional notes or details"),
         "notesHint": MessageLookupByLibrary.simpleMessage(
             "Example: every Monday and Wednesday at 5 PM"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
-        "oldPrice": m5,
+        "oldPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("Old Password"),
+        "oldPrice": m6,
         "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "An educational platform that helps you develop your skills"),
         "onboardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -272,7 +316,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
         "optional": MessageLookupByLibrary.simpleMessage("Optional"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("4-hour package"),
-        "packageCalculation": m6,
+        "packageCalculation": m7,
         "packageDetails":
             MessageLookupByLibrary.simpleMessage("Package Details"),
         "packageExpiryText": MessageLookupByLibrary.simpleMessage(
@@ -287,6 +331,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter and confirm your password"),
         "passwordCannotBeEmpty":
             MessageLookupByLibrary.simpleMessage("Password cannot be empty."),
+        "passwordChangedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Password changed successfully"),
         "passwordHint":
             MessageLookupByLibrary.simpleMessage("At least 6 characters"),
         "passwordMinLength": MessageLookupByLibrary.simpleMessage(
@@ -309,10 +355,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Pending Requests"),
         "pendingScienceSubtitle": MessageLookupByLibrary.simpleMessage(
             "Light lesson, waiting for a teacher"),
+        "personalProfile":
+            MessageLookupByLibrary.simpleMessage("Personal Profile"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone number"),
         "physics": MessageLookupByLibrary.simpleMessage("Physics"),
         "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
             "Please fill in all required fields"),
+        "pleaseSelectFile":
+            MessageLookupByLibrary.simpleMessage("Please select a file first"),
         "poemAnalysis": MessageLookupByLibrary.simpleMessage("Poem Analysis"),
         "preferredDays":
             MessageLookupByLibrary.simpleMessage("Preferred student schedule"),
@@ -321,6 +371,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "previous": MessageLookupByLibrary.simpleMessage("Previous"),
         "primaryGradeFive":
             MessageLookupByLibrary.simpleMessage("Grade 5 Primary"),
+        "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
         "qarCurrency":
             MessageLookupByLibrary.simpleMessage("Qatari Riyal (QAR)"),
         "qatariCurriculum":
@@ -338,7 +389,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register as Student"),
         "registerAsStudentSubtitle": MessageLookupByLibrary.simpleMessage(
             "Join classes and start your learning journey"),
-        "remainingHours": m7,
+        "remainingDays": m8,
+        "remainingHours": m9,
         "requestAccepted": MessageLookupByLibrary.simpleMessage(
             "Your request has been accepted!"),
         "requestNewLesson":
@@ -350,7 +402,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Check your email and enter the code sent to you"),
         "resetPasswordInstructions": MessageLookupByLibrary.simpleMessage(
             " and follow the instructions to reset your password."),
-        "resetPasswordSuccessSubtitle": m8,
+        "resetPasswordSuccessSubtitle": m10,
         "resetPasswordSuccessTitle":
             MessageLookupByLibrary.simpleMessage("Sent successfully"),
         "reviews": MessageLookupByLibrary.simpleMessage("Reviews"),
@@ -361,7 +413,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Saudi Curriculum"),
         "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
             "We provide all subjects for primary, middle, and secondary stages according to the approved curriculum."),
-        "saveAmount": m9,
+        "saveAmount": m11,
         "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "Next week schedule was updated"),
@@ -395,6 +447,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Student platform password"),
         "studentPasswordField":
             MessageLookupByLibrary.simpleMessage("Student password"),
+        "studentProfileClass":
+            MessageLookupByLibrary.simpleMessage("القسم المصري"),
+        "studentProfileGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("Student Registration Form"),
         "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
@@ -434,8 +490,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "to": MessageLookupByLibrary.simpleMessage("To"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
-        "todayAtTime": m10,
-        "trainingHours": m11,
+        "todayAtTime": m12,
+        "trainingHours": m13,
         "tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
         "twelveHoursPlan":
             MessageLookupByLibrary.simpleMessage("12-hour package"),
@@ -444,17 +500,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "twoDaysAgo": MessageLookupByLibrary.simpleMessage("2 days ago"),
         "typeMessage":
             MessageLookupByLibrary.simpleMessage("Type message....."),
+        "unexpectedError": MessageLookupByLibrary.simpleMessage(
+            "An unexpected error occurred"),
         "upcomingLesson":
             MessageLookupByLibrary.simpleMessage("Upcoming Lesson"),
         "upgradePackage":
             MessageLookupByLibrary.simpleMessage("Upgrade Package"),
-        "usedHours": m12,
+        "uploadAssignment":
+            MessageLookupByLibrary.simpleMessage("Upload Assignment"),
+        "usedDays": m14,
+        "usedHours": m15,
+        "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
         "verify": MessageLookupByLibrary.simpleMessage("Verify"),
         "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
+        "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
+            "Waiting for teacher approval"),
         "wednesday": MessageLookupByLibrary.simpleMessage("Wednesday"),
         "weeklyEvaluation":
             MessageLookupByLibrary.simpleMessage("Weekly evaluation"),
-        "weeklyLessons": m13,
+        "weeklyLessons": m16,
         "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),
         "whatsappNumber":
             MessageLookupByLibrary.simpleMessage("WhatsApp number"),

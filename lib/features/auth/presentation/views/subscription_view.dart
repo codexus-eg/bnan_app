@@ -4,13 +4,15 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SubscriptionView extends StatelessWidget {
-  const SubscriptionView({super.key});
+  const SubscriptionView({super.key, required this.curriculumId, required this.curriculumName});
+  final String curriculumId;
+  final String curriculumName;
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: CustomAppbar(headerText: S.of(context).packages),
-      body: SubscriptionBody(),
+      body: SubscriptionBody( curriculumId: curriculumId, curriculumName: curriculumName),
     );
   }
 }

@@ -1,11 +1,18 @@
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
-import 'package:bnan_app/features/assignments_and_certificate/data/assignment_model.dart';
-import 'package:bnan_app/features/assignments_and_certificate/data/assignment_status.dart';
 import 'package:bnan_app/features/assignments_and_certificate/data/assignments_filter_type.dart';
+import 'package:bnan_app/features/assignments_and_certificate/data/models/assignment_model.dart';
+import 'package:bnan_app/features/assignments_and_certificate/data/models/assignment_status.dart';
+import 'package:bnan_app/features/assignments_and_certificate/presentation/manager/get_assignment/get_assignments_cubit.dart';
+import 'package:bnan_app/features/assignments_and_certificate/presentation/manager/get_assignment/get_assignments_state.dart';
+import 'package:bnan_app/features/assignments_and_certificate/presentation/manager/submit_assignment/submit_assignment_cubit.dart';
 import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/assignments/assignment_card.dart';
+import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/assignments/assignments_empty_state.dart';
 import 'package:bnan_app/features/assignments_and_certificate/presentation/views/widgets/assignments/assignments_filter_tabs.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AssignmentsBody extends StatefulWidget {
   const AssignmentsBody({super.key});
@@ -19,44 +26,72 @@ class _AssignmentsBodyState extends State<AssignmentsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final assignments = _assignments(context);
-    final filteredAssignments = _filteredAssignments(assignments);
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<GetAssignmentsCubit>()..getMyAssignments(),
+        ),
+        BlocProvider(create: (_) => getIt<SubmitAssignmentCubit>()),
+      ],
+      child: Column(
+        children: [
+          CustomAppbar(
+            headerText: S.of(context).assignments,
+            iconNeeded: false,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+              child: BlocBuilder<GetAssignmentsCubit, GetAssignmentsState>(
+                builder: (context, state) {
+                  final isLoading = state is GetAssignmentsLoading;
 
-    return Column(
-      children: [
-        CustomAppbar(headerText: S.of(context).assignments,iconNeeded: false,),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                const SizedBox(height: 16),
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: AssignmentsFilterTabs(
-                    selectedFilter: selectedFilter,
-                    onChanged: (value) {
-                      setState(() => selectedFilter = value);
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: filteredAssignments.length,
-                    itemBuilder: (_, index) {
-                      return AssignmentCard(
-                        assignment: filteredAssignments[index],
-                      );
-                    },
-                  ),
-                ),
-              ],
+                  if (state is GetAssignmentsFailure) {
+                    return Center(child: Text(state.errorMessage));
+                  }
+
+                  final assignments = state is GetAssignmentsSuccess
+                      ? state.assignments
+                      : AssignmentModel.placeholderList();
+
+                  final filteredAssignments = _filteredAssignments(assignments);
+
+                  return AppSkeletonizer(
+                    isLoading: isLoading,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        AssignmentsFilterTabs(
+                          selectedFilter: selectedFilter,
+                          onChanged: (value) {
+                            setState(() => selectedFilter = value);
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Expanded(
+                          child: filteredAssignments.isEmpty && !isLoading
+                              ? AssignmentsEmptyState(
+                                  selectedFilter: selectedFilter,
+                                )
+                              : ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  itemCount: filteredAssignments.length,
+                                  itemBuilder: (_, index) {
+                                    return AssignmentCard(
+                                      assignment: filteredAssignments[index],
+                                    );
+                                  },
+                                ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -70,34 +105,5 @@ class _AssignmentsBodyState extends State<AssignmentsBody> {
 
       return item.status == AssignmentStatus.completed;
     }).toList();
-  }
-
-  List<AssignmentModel> _assignments(BuildContext context) {
-    return [
-      AssignmentModel(
-        subject: S.of(context).math,
-        title: S.of(context).thirdTermExercises,
-        dueDate: S.of(context).dueFriday,
-        badgeText: S.of(context).newBadge,
-        status: AssignmentStatus.pending,
-        canSubmit: true,
-      ),
-      AssignmentModel(
-        subject: S.of(context).science,
-        title: S.of(context).lightAndShadowExperiment,
-        dueDate: S.of(context).dueSunday,
-        badgeText: S.of(context).submittedBadge,
-        status: AssignmentStatus.pending,
-        canSubmit: false,
-      ),
-      AssignmentModel(
-        subject: S.of(context).arabicLanguage,
-        title: S.of(context).poemAnalysis,
-        dueDate: S.of(context).noSubmission,
-        badgeText: '9/10',
-        status: AssignmentStatus.completed,
-        canSubmit: false,
-      ),
-    ];
   }
 }

@@ -4,17 +4,19 @@ class ImageManager {
   static const String _homeFeature = '${_basePath}home/';
   static const String _scheduleFeature = '${_basePath}schedule/';
   static const String _groupsFeature = '${_basePath}groups/';
+  static const String _profileFeature = '${_basePath}profile/';
+
   ImageManager._();
 
   // Splash & Onboarding
-  static const String appLogoPng = '${_splashFeature}bnan_logo.png';
+  static const String appLogoPng = '${_splashFeature}Bnanacademy.png';
   static const String onboarding1 = '${_splashFeature}onboarding1.svg';
   static const String onboarding2 = '${_splashFeature}onboarding2.svg';
   static const String onboarding3 = '${_splashFeature}onboarding3.svg';
 
   static const String appLogoSvg = '${_splashFeature}bnan_logo.svg';
-  static const String nativeSplashLogo =
-      '${_splashFeature}native_splash_logo.png';
+  // static const String nativeSplashLogo =
+  //     '${_splashFeature}Bnanacademy.png';
 
   // Login & Sign up
   static const String studentIcon = '${_splashFeature}student_icon.png';
@@ -74,6 +76,12 @@ class ImageManager {
       '${_groupsFeature}celebration-outline.svg';
   static const String chatIcon = '${_groupsFeature}chat.svg';
   static const String checkIcon = '${_groupsFeature}Check.svg';
-    static const String plusIcon = '${_groupsFeature}plus.svg';
+  static const String plusIcon = '${_groupsFeature}plus.svg';
 
+  //profile
+  static const String annotationTyping =
+      '${_profileFeature}annotation-typing.svg';
+  static const String emailIcon = '${_profileFeature}email.svg';
+  static const String phoneIcon = '${_profileFeature}phone.svg';
+  static const String edit = '${_profileFeature}edit.svg';
 }

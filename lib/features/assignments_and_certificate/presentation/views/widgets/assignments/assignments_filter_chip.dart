@@ -16,20 +16,24 @@ class AssignmentsFilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsetsDirectional.all(8),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? ColorManager.mainColor14 : ColorManager.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: ColorManager.mainColor14),
-        ),
-        child: Text(
-          title,
-          style: StylesManager.styleBold16(context).copyWith(
-            color: isSelected ? ColorManager.white : ColorManager.mainColor14,
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          height: 41,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isSelected ? ColorManager.mainColor14 : Colors.transparent,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Text(
+            title,
+            style: StylesManager.styleBold14(context).copyWith(
+              color: isSelected
+                  ? ColorManager.white
+                  : ColorManager.mainColor14,
+            ),
           ),
         ),
       ),

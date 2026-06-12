@@ -14,4 +14,7 @@ abstract class Routes {
   static const String chat = '/chat';
   static const String groups = '/groups';
   static const String requestLesson = '/requestLesson';
+  static const String updatePhone = '/updatePhone';
+  static const String updateUserName = '/updateUserName';
+  static const String updatePassword = '/updatePassword';
 }

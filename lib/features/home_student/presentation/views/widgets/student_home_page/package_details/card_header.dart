@@ -5,7 +5,8 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CardHeader extends StatelessWidget {
-  const CardHeader({super.key});
+  const CardHeader({super.key, required this.isActive});
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class CardHeader extends StatelessWidget {
             ),
           ],
         ),
-        PackageStatusBadge(text: S.of(context).active),
+        PackageStatusBadge(text: isActive ? S.of(context).active : S.of(context).inactive),
       ],
     );
   }

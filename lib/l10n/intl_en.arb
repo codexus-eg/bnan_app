@@ -339,5 +339,62 @@
     "theRequiredLesson": "The required lesson",
     "resetCodeRequired": "Please enter the verification code",
     "passwordAndConfirmRequired": "Please enter and confirm your password",
-    "emailRequired": "Please enter your email"
+    "emailRequired": "Please enter your email",
+    "passwordChangedSuccessfully": "Password changed successfully",
+    "personalProfile": "Personal Profile",
+    "studentProfileGrade": "الصف الثاني الإعدادي",
+    "studentProfileClass": "القسم المصري",
+    "contactInfo": "معلومات الاتصال",
+    "userName": "اسم المستخدم",
+    "privacy": "الخصوصية",
+    "changePhoneTitle": "Edit Phone Number",
+    "changeUsernameTitle": "Edit Username",
+    "changePasswordTitle": "Change Password",
+    "oldPasswordLabel": "Old Password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "unexpectedError": "An unexpected error occurred",
+    "noSubjectsAvailable": "No subjects available for this grade",
+    "uploadAssignment": "Upload Assignment",
+    "assignmentSubmittedSuccessfully": "Assignment submitted successfully",
+    "fileDownloadStarted": "Assignment file opened",
+    "pleaseSelectFile": "Please select a file first",
+    "noAssignmentsYet": "No assignments yet",
+    "noAssignmentsYetSubtitle": "New assignments will appear here once they are added.",
+    "noPendingAssignments": "No pending assignments",
+    "noPendingAssignmentsSubtitle": "All current assignments are completed or there are no new assignments yet.",
+    "noCompletedAssignments": "No completed assignments",
+    "noCompletedAssignmentsSubtitle": "Completed assignments will appear here.",
+    "inactive": "InActive",
+    "noGroupsYet": "No groups yet",
+    "noGroupsYetSubtitle": "Your groups and pending requests will appear here.",
+    "waitingForTeacherApproval": "Waiting for teacher approval",
+    "daysPackage": "{days} Days Package",
+    "@daysPackage": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "usedDays": "Used {used} of {total} days",
+    "@usedDays": {
+        "placeholders": {
+            "used": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "remainingDays": "{days} days remaining",
+    "@remainingDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "logoutSuccess": "Logged out successfully"
 }

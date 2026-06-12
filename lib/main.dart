@@ -10,12 +10,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
   await CacheHelper.init();
   await CacheData.init();
+  await Hive.initFlutter();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: ColorManager.white),
   );
@@ -40,9 +42,7 @@ class BnanApp extends StatelessWidget {
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(context);
         final screenWidth = mediaQuery.size.width;
-
         final scale = (screenWidth / 375).clamp(0.85, 1.05);
-
         return MediaQuery(
           data: mediaQuery.copyWith(textScaler: TextScaler.linear(scale)),
           child: child!,

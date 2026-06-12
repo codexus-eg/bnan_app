@@ -12,8 +12,22 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   static ResetPasswordCubit get(context) => BlocProvider.of(context);
 
   final otpController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+
+  bool isNewPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
+
+  void toggleNewPasswordVisibility() {
+    isNewPasswordVisible = !isNewPasswordVisible;
+    emit(ResetPasswordVisibilityChanged());
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    isConfirmPasswordVisible = !isConfirmPasswordVisible;
+    emit(ResetPasswordVisibilityChanged());
+  }
 
   Future<void> verifyResetCode() async {
     final resetCode = otpController.text.trim();
@@ -28,29 +42,15 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     final result = await authRepo.verifyResetCode(resetCode: resetCode);
 
     result.fold(
-      (failure) {
-        emit(ResetPasswordFailure(errorMessage: failure.message));
-      },
-      (response) {
-        emit(VerifyResetCodeSuccess(message: response.message));
-      },
+      (failure) => emit(ResetPasswordFailure(errorMessage: failure.message)),
+      (response) => emit(VerifyResetCodeSuccess(message: response.message)),
     );
   }
 
   Future<void> resetPassword({required String email}) async {
-    final newPassword = newPasswordController.text;
-    final confirmPassword = confirmPasswordController.text;
+    if (!(formKey.currentState?.validate() ?? false)) return;
 
-    if (newPassword.isEmpty || confirmPassword.isEmpty) {
-      emit(
-        ResetPasswordFailure(
-          errorMessage: S.current.passwordAndConfirmRequired,
-        ),
-      );
-      return;
-    }
-
-    if (newPassword != confirmPassword) {
+    if (newPasswordController.text != confirmPasswordController.text) {
       emit(ResetPasswordFailure(errorMessage: S.current.passwordsDoNotMatch));
       return;
     }
@@ -59,16 +59,12 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
 
     final result = await authRepo.resetPassword(
       email: email.trim(),
-      newPassword: newPassword,
+      newPassword: newPasswordController.text,
     );
 
     result.fold(
-      (failure) {
-        emit(ResetPasswordFailure(errorMessage: failure.message));
-      },
-      (response) {
-        emit(ResetPasswordSuccess(message: response.message));
-      },
+      (failure) => emit(ResetPasswordFailure(errorMessage: failure.message)),
+      (response) => emit(ResetPasswordSuccess(message: response.message)),
     );
   }
 

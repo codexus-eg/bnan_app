@@ -4,9 +4,14 @@ import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/auth/data/models/auth_response_model.dart';
+import 'package:bnan_app/features/auth/data/models/curriculum_model.dart';
+import 'package:bnan_app/features/auth/data/models/grade_model.dart';
+import 'package:bnan_app/features/auth/data/models/package_model.dart';
 import 'package:bnan_app/features/auth/data/models/register_request_model.dart';
 import 'package:bnan_app/features/auth/data/models/simple_response_model.dart';
+import 'package:bnan_app/features/auth/data/models/subject_model.dart';
 import 'package:bnan_app/features/auth/data/repo/auth_repo.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 
 class AuthRepoImpl implements AuthRepo {
@@ -31,7 +36,7 @@ class AuthRepoImpl implements AuthRepo {
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(Failure(message: 'حدث خطأ غير متوقع'));
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -43,10 +48,7 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final response = await apiConsumer.post(
         EndPoints.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password},
       );
 
       final authResponse = AuthResponseModel.fromJson(response);
@@ -56,7 +58,7 @@ class AuthRepoImpl implements AuthRepo {
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(Failure(message: 'حدث خطأ غير متوقع'));
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -74,7 +76,7 @@ class AuthRepoImpl implements AuthRepo {
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(Failure(message: 'حدث خطأ غير متوقع'));
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -92,7 +94,7 @@ class AuthRepoImpl implements AuthRepo {
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(Failure(message: 'حدث خطأ غير متوقع'));
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -104,40 +106,84 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final response = await apiConsumer.post(
         EndPoints.resetPassword,
-        data: {
-          'email': email,
-          'newPassword': newPassword,
-        },
+        data: {'email': email, 'newPassword': newPassword},
       );
 
       return Right(SimpleResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(Failure(message: 'حدث خطأ غير متوقع'));
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
   @override
-  Future<Either<Failure, SimpleResponseModel>> updatePassword({
-    required String currentPassword,
-    required String updatedPassword,
-  }) async {
+  Future<Either<Failure, CurriculumsResponseModel>> getAllCurriculums() async {
     try {
-      final response = await apiConsumer.patch(
-        EndPoints.updatePassword,
-        isProtected: true,
-        data: {
-          'currentPassword': currentPassword,
-          'updatedPassword': updatedPassword,
-        },
-      );
+      final response = await apiConsumer.get(EndPoints.curriculums);
 
-      return Right(SimpleResponseModel.fromJson(response));
+      return Right(CurriculumsResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(Failure(message: 'حدث خطأ غير متوقع'));
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PackagesResponseModel>> getCurriculumPackages({
+    required String curriculumId,
+  }) async {
+    try {
+      final response = await apiConsumer.get(
+        EndPoints.curriculumPackages(curriculumId),
+      );
+
+      return Right(PackagesResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GradesResponseModel>> getCurriculumGrades({
+    required String curriculumId,
+  }) async {
+    try {
+      final response = await apiConsumer.get(
+        //TODO
+        EndPoints.curriculumGrades('6a1b56274fdcd300239c9877'),
+      );
+
+      return Right(GradesResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SubjectsResponseModel>> getCurriculumSubjects({
+    required String curriculumId,
+    required String gradeId,
+  }) async {
+    try {
+      final response = await apiConsumer.get(
+        // TODO HERE
+        EndPoints.curriculumSubjects(
+          curriculumId: '6a1b56274fdcd300239c9877',
+          gradeId: gradeId,
+        ),
+      );
+
+      return Right(SubjectsResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 

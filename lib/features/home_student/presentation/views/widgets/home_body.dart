@@ -6,13 +6,19 @@ class HomeStudentBody extends StatelessWidget {
     super.key,
     required this.index,
     required this.onMenuTap,
+    required this.userName,
   });
 
   final int index;
   final VoidCallback onMenuTap;
+  final String userName;
 
   @override
   Widget build(BuildContext context) {
-    return HomePageContent(index: index, onMenuTap: onMenuTap);
+    return HomePageContent(
+      index: index,
+      onMenuTap: onMenuTap,
+      userName: userName,
+    );
   }
 }

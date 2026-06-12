@@ -20,7 +20,7 @@ class CustomAppDrawerHeader extends StatelessWidget {
           radius: 25,
           backgroundColor: ColorManager.beigeEDC,
           child: Text(
-            'ف',
+           userName.substring(0,1),
             style: StylesManager.styleBold14(context).copyWith(
               color: ColorManager.mainColor15
             )

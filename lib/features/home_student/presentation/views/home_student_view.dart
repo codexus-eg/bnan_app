@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/bottom_nav_item_model.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/custom_bottom_nav_bar.dart';
@@ -7,9 +8,13 @@ import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_body.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/student_drawer_items.dart';
+import 'package:bnan_app/features/student_profile/data/models/logged_user_model.dart';
+import 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_cubit.dart';
+import 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeStudentView extends StatefulWidget {
   const HomeStudentView({super.key});
@@ -22,12 +27,12 @@ class _HomeStudentViewState extends State<HomeStudentView> {
   int currentIndex = 0;
   int drawerIndex = 0;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-final Map<int, int> drawerToBottomNavIndex = {
+  final Map<int, int> drawerToBottomNavIndex = {
     0: 0, // الرئيسية
     5: 1, // الجدول
     9: 2, // الواجبات
     4: 3, // الشهادات
-    8 :1,
+    8: 1,
     10: 4, // حسابي
   };
   void changeIndex(int index) {
@@ -48,7 +53,6 @@ final Map<int, int> drawerToBottomNavIndex = {
     if (index == 2) MyNavigator.goTo(context, Routes.requestLesson);
     if (index == 3) MyNavigator.goTo(context, Routes.groups);
     if (index == 7) MyNavigator.goTo(context, Routes.notification);
-
   }
 
   List<BottomNavItemModel> _items(BuildContext context) {
@@ -68,7 +72,6 @@ final Map<int, int> drawerToBottomNavIndex = {
       BottomNavItemModel(
         icon: ImageManager.certificateBadgeIcon,
         title: S.of(context).certificates,
-
       ),
       BottomNavItemModel(
         icon: ImageManager.userProfileIcon,
@@ -79,34 +82,56 @@ final Map<int, int> drawerToBottomNavIndex = {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: ColorManager.mainColor14,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
-      child: Scaffold(
-        key: scaffoldKey,
-        drawer:currentIndex == 0 ? CustomAppDrawer(
-          userName: 'فهد ناصر',
-          userSubtitle: S.of(context).primaryGradeFive,
-          items: studentDrawerItems(context),
-          selectedIndex: drawerIndex,
-          onItemTap: changeDrawerIndex,
-          onLogoutTap: () {},
-        ) :null,
-        body: HomeStudentBody(
-          index: currentIndex,
-          onMenuTap: () {
-            scaffoldKey.currentState?.openDrawer();
-          },
-        ),
-        bottomNavigationBar: CustomBottomNavBar(
-          items: _items(context),
-          currentIndex: currentIndex,
-          onTap: changeIndex,
-        ),
-      ),
+    return BlocSelector<
+      GetLoggedUserCubit,
+      GetLoggedUserState,
+      LoggedUserModel
+    >(
+      selector: (state) {
+        if (state is GetLoggedUserSuccess) {
+          return state.loggedUser;
+        }
+        return LoggedUserModel.placeholder();
+      },
+      builder: (context, loggedUser) {
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarColor: ColorManager.mainColor14,
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.dark,
+          ),
+          child: Scaffold(
+            key: scaffoldKey,
+            drawer: currentIndex == 0
+                ? CustomAppDrawer(
+                    userName: loggedUser.firstTwoNames,
+                    userSubtitle: loggedUser.gradeName,
+                    items: studentDrawerItems(context),
+                    selectedIndex: drawerIndex,
+                    onItemTap: changeDrawerIndex,
+                    onLogoutTap: () async {
+                      await GetLoggedUserCubit.get(context).logout();
+                      if (!context.mounted) return;
+                      MyNavigator.goToOffAll(context, Routes.logIn);
+                      showCustomSnackBar(context, S.of(context).logoutSuccess, true);
+                    },
+                  )
+                : null,
+            body: HomeStudentBody(
+              index: currentIndex,
+              userName: loggedUser.firstTwoNames,
+              onMenuTap: () {
+                scaffoldKey.currentState?.openDrawer();
+              },
+            ),
+            bottomNavigationBar: CustomBottomNavBar(
+              items: _items(context),
+              currentIndex: currentIndex,
+              onTap: changeIndex,
+            ),
+          ),
+        );
+      },
     );
   }
 }

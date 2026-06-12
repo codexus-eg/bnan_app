@@ -6,7 +6,7 @@ class CustomAuthDropdown extends StatelessWidget {
   const CustomAuthDropdown({
     super.key,
     required this.label,
-    required this.items,
+    this.items,
     required this.onChanged,
     this.value,
     this.hint,
@@ -16,12 +16,15 @@ class CustomAuthDropdown extends StatelessWidget {
   final String label;
   final String? value;
   final String? hint;
-  final List<String> items;
+  final List<String>? items;
   final ValueChanged<String?> onChanged;
   final bool isRequired;
 
   @override
   Widget build(BuildContext context) {
+    final bool isDisabled = items == null || items!.isEmpty;
+    final List<String> dropdownItems = items ?? [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,23 +49,28 @@ class CustomAuthDropdown extends StatelessWidget {
           height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
+            color: isDisabled ? ColorManager.greyF4F6 : Colors.transparent,
             border: Border.all(color: ColorManager.borderColor),
             borderRadius: BorderRadius.circular(10),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: value,
+              value: dropdownItems.contains(value) ? value : null,
               isExpanded: true,
               icon: const SizedBox.shrink(),
               hint: _DropdownDisplayedText(
                 text: hint ?? '',
+                isDisabled: isDisabled,
               ),
               selectedItemBuilder: (context) {
-                return items.map((item) {
-                  return _DropdownDisplayedText(text: item);
+                return dropdownItems.map((item) {
+                  return _DropdownDisplayedText(
+                    text: item,
+                    isDisabled: isDisabled,
+                  );
                 }).toList();
               },
-              items: items.map((item) {
+              items: dropdownItems.map((item) {
                 return DropdownMenuItem<String>(
                   value: item,
                   child: Text(
@@ -73,7 +81,7 @@ class CustomAuthDropdown extends StatelessWidget {
                   ),
                 );
               }).toList(),
-              onChanged: onChanged,
+              onChanged: isDisabled ? null : onChanged,
             ),
           ),
         ),
@@ -85,17 +93,23 @@ class CustomAuthDropdown extends StatelessWidget {
 class _DropdownDisplayedText extends StatelessWidget {
   const _DropdownDisplayedText({
     required this.text,
+    required this.isDisabled,
   });
 
   final String text;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
+    final color = isDisabled
+        ? ColorManager.greyA8AF
+        : ColorManager.mainColor15;
+
     return Row(
       children: [
-        const Icon(
+        Icon(
           Icons.keyboard_arrow_down,
-          color: ColorManager.greyA8AF,
+          color: isDisabled ? ColorManager.greyA8AF : ColorManager.greyA8AF,
           size: 22,
         ),
         const SizedBox(width: 8),
@@ -104,7 +118,7 @@ class _DropdownDisplayedText extends StatelessWidget {
             text,
             textAlign: TextAlign.start,
             style: StylesManager.styleRegular16(context).copyWith(
-              color: ColorManager.mainColor15,
+              color: color,
             ),
           ),
         ),

@@ -9,11 +9,13 @@ class AssignmentActionButtons extends StatelessWidget {
     required this.showSubmit,
     required this.onDownload,
     required this.onSubmit,
+    required this.isLoading,
   });
 
   final bool showSubmit;
   final VoidCallback onDownload;
   final VoidCallback onSubmit;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AssignmentActionButtons extends StatelessWidget {
           child: AssignmentActionButton(
             text: S.of(context).download,
             icon: ImageManager.downloadIcon,
-            onTap: onDownload,
+            onTap: isLoading ? null : onDownload,
           ),
         ),
         if (showSubmit) ...[
@@ -31,9 +33,9 @@ class AssignmentActionButtons extends StatelessWidget {
           Expanded(
             child: AssignmentActionButton(
               text: S.of(context).submitAssignment,
-              icon:ImageManager.upload,
+              icon: ImageManager.upload,
               isFilled: true,
-              onTap: onSubmit,
+              onTap: isLoading ? null : onSubmit,
             ),
           ),
         ],
