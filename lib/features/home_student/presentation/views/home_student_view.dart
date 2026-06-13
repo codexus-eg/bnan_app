@@ -39,17 +39,28 @@ class _HomeStudentViewState extends State<HomeStudentView> {
     setState(() => currentIndex = index);
   }
 
+  void _goHomeTab() {
+    setState(() {
+      currentIndex = 0;
+      drawerIndex = 0;
+    });
+  }
+
   void changeDrawerIndex(int index) {
     final bottomIndex = drawerToBottomNavIndex[index];
-
-    setState(() => drawerIndex = index);
 
     scaffoldKey.currentState?.closeDrawer();
 
     if (bottomIndex != null) {
-      setState(() => currentIndex = bottomIndex);
+      setState(() {
+        drawerIndex = index;
+        currentIndex = bottomIndex;
+      });
       return;
     }
+
+    _goHomeTab();
+
     if (index == 2) MyNavigator.goTo(context, Routes.requestLesson);
     if (index == 3) MyNavigator.goTo(context, Routes.groups);
     if (index == 7) MyNavigator.goTo(context, Routes.notification);
@@ -100,34 +111,49 @@ class _HomeStudentViewState extends State<HomeStudentView> {
             statusBarIconBrightness: Brightness.light,
             statusBarBrightness: Brightness.dark,
           ),
-          child: Scaffold(
-            key: scaffoldKey,
-            drawer: currentIndex == 0
-                ? CustomAppDrawer(
-                    userName: loggedUser.firstTwoNames,
-                    userSubtitle: loggedUser.gradeName,
-                    items: studentDrawerItems(context),
-                    selectedIndex: drawerIndex,
-                    onItemTap: changeDrawerIndex,
-                    onLogoutTap: () async {
-                      await GetLoggedUserCubit.get(context).logout();
-                      if (!context.mounted) return;
-                      MyNavigator.goToOffAll(context, Routes.logIn);
-                      showCustomSnackBar(context, S.of(context).logoutSuccess, true);
-                    },
-                  )
-                : null,
-            body: HomeStudentBody(
-              index: currentIndex,
-              userName: loggedUser.firstTwoNames,
-              onMenuTap: () {
-                scaffoldKey.currentState?.openDrawer();
-              },
-            ),
-            bottomNavigationBar: CustomBottomNavBar(
-              items: _items(context),
-              currentIndex: currentIndex,
-              onTap: changeIndex,
+          child: PopScope(
+            canPop: currentIndex == 0,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop) return;
+
+              if (currentIndex != 0) {
+                _goHomeTab();
+              }
+            },
+            child: Scaffold(
+              key: scaffoldKey,
+              drawer: currentIndex == 0
+                  ? CustomAppDrawer(
+                      userName: loggedUser.firstTwoNames,
+                      userSubtitle: loggedUser.gradeName,
+                      items: studentDrawerItems(context),
+                      //TODO edit this
+                      selectedIndex: 0,
+                      onItemTap: changeDrawerIndex,
+                      onLogoutTap: () async {
+                        await GetLoggedUserCubit.get(context).logout();
+                        if (!context.mounted) return;
+                        MyNavigator.goToOffAll(context, Routes.logIn);
+                        showCustomSnackBar(
+                          context,
+                          S.of(context).logoutSuccess,
+                          true,
+                        );
+                      },
+                    )
+                  : null,
+              body: HomeStudentBody(
+                index: currentIndex,
+                userName: loggedUser.firstTwoNames,
+                onMenuTap: () {
+                  scaffoldKey.currentState?.openDrawer();
+                },
+              ),
+              bottomNavigationBar: CustomBottomNavBar(
+                items: _items(context),
+                currentIndex: currentIndex,
+                onTap: changeIndex,
+              ),
             ),
           ),
         );
