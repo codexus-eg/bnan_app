@@ -237,9 +237,6 @@
     "startLessonViaZoom": "Start lesson via Zoom",
     "interaction": "Interaction",
     "attendance": "Attendance",
-    "attendancePercent": "95%",
-    "interactionRate": "4.8",
-    "certificatesCount": "12",
     "weeklyEvaluation": "Weekly evaluation",
     "attendanceRate": "Attendance Rate",
     "interactionLevel": "Interaction Level",
@@ -396,5 +393,57 @@
             }
         }
     },
-    "logoutSuccess": "Logged out successfully"
+    "logoutSuccess": "Logged out successfully",
+    "excellentTeacher": "Excellent Teacher",
+    "excellencePoints": "Excellence Points",
+    "pointsCount": "points",
+    "nextLevelPointsText": "Next rank after {teachers} teachers, {points} points to the next level",
+    "@nextLevelPointsText": {
+        "placeholders": {
+            "teachers": {
+                "type": "int"
+            },
+            "points": {
+                "type": "int"
+            }
+        }
+    },
+    "students": "Students",
+    "classes": "Classes",
+    "upcomingLessons": "Upcoming Lessons",
+    "start": "Start",
+    "dues": "Dues",
+    "classesManagement": "Classes Management",
+    "evaluations": "Evaluations",
+    "registrationRequests": "Registration Requests",
+    "performance": "Performance",
+    "weeklyPlans": "Weekly Plans",
+    "quotaReport": "Quota report",
+    "active2": "Active",
+    "submitted": "Submitted",
+    "notSubmitted": "Not submitted",
+    "finished": "Finished",
+    "createNewAssignment": "Create New Assignment",
+    "assignmentTitle": "Title",
+    "assignmentDescription": "Description",
+    "classRoom": "Classroom",
+    "chooseClassRoom": "Choose classroom",
+    "chooseSubject": "Choose subject",
+    "deliveryDate": "Delivery date",
+    "attachmentFile": "Attachment file",
+    "chooseFile": "Choose file",
+    "createAssignment": "Create Assignment",
+    "correctAssignment": "Grade Assignment",
+    "submitAssignmentCorrection": "Grade Submission",
+    "graded": "Graded",
+    "waitingForCorrection": "Waiting for Grading",
+    "submissionDate": "Submitted:",
+    "editGrade": "Edit Grade",
+    "gradeAndAssignScore": "Grade & Assign Score",
+    "assignmentNotSubmittedYet": "Assignment Not Submitted Yet",
+    "degree": "Degree",
+    "sendCorrection": "Submit Grade",
+    "sections": "Sections",
+    "classR": "Class"
+
 }

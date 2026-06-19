@@ -17,4 +17,6 @@ abstract class Routes {
   static const String updatePhone = '/updatePhone';
   static const String updateUserName = '/updateUserName';
   static const String updatePassword = '/updatePassword';
+  static const String teacherHome = '/teacherHome';
+  static const String teacherSections = '/teacherSections';
 }

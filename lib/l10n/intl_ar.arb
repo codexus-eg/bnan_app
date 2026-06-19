@@ -238,9 +238,6 @@
     "startLessonViaZoom": "ابدأ الحصة عبر Zoom",
     "interaction": "التفاعل",
     "attendance": "الحضور",
-    "attendancePercent": "95%",
-    "interactionRate": "4.8",
-    "certificatesCount": "12",
     "weeklyEvaluation": "التقييم الأسبوعي",
     "attendanceRate": "نسبة الحضور",
     "interactionLevel": "مستوى التفاعل",
@@ -396,5 +393,57 @@
             }
         }
     },
-    "logoutSuccess": "تم تسجيل الخروج بنجاح"
+    "logoutSuccess": "تم تسجيل الخروج بنجاح",
+    "excellentTeacher": "المعلم المثالي",
+    "excellencePoints": "نقاط التميز",
+    "pointsCount": "نقطة",
+    "nextLevelPointsText": "المرتبة التالية بعد {teachers} معلماً، {points} نقطة للمستوى التالي",
+    "@nextLevelPointsText": {
+        "placeholders": {
+            "teachers": {
+                "type": "int"
+            },
+            "points": {
+                "type": "int"
+            }
+        }
+    },
+    "students": "الطلاب",
+    "classes": "الصفوف",
+    "upcomingLessons": "الحصص القادمة",
+    "start": "ابدأ",
+    "dues": "المستحقات",
+    "classesManagement": "إدارة الفصول",
+    "evaluations": "التقييمات",
+    "registrationRequests": "طلبات التسجيل",
+    "performance": "أدائي",
+    "weeklyPlans": "الخطط الأسبوعية",
+    "quotaReport": "تقرير الحصص",
+    "active2": "نشط",
+    "submitted": "مسلم",
+    "notSubmitted": "لم يسلم",
+    "finished": "منتهي",
+    "createNewAssignment": "إنشاء واجب جديد",
+    "assignmentTitle": "العنوان",
+    "assignmentDescription": "الوصف",
+    "classRoom": "الفصل",
+    "chooseClassRoom": "اختر الفصل",
+    "chooseSubject": "اختر المادة",
+    "deliveryDate": "موعد التسليم",
+    "attachmentFile": "ملف مرفق",
+    "chooseFile": "اختر ملف",
+    "createAssignment": "إنشاء الواجب",
+    "correctAssignment": "تصحيح الواجب",
+    "submitAssignmentCorrection": "تصحيح تسليم",
+    "graded": "مصحح",
+    "waitingForCorrection": "بانتظار التصحيح",
+    "submissionDate": "تم التسليم:",
+    "editGrade": "تعديل الدرجة",
+    "gradeAndAssignScore": "تصحيح ووضع الدرجة",
+    "assignmentNotSubmittedYet": "لم يسلم الواجب بعد",
+    "degree": "الدرجة",
+    "sendCorrection": "إرسال التصحيح",
+    "sections": "الفصول",
+    "classR": "فصل"
+
 }

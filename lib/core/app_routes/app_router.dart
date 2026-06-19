@@ -1,22 +1,12 @@
-import 'package:bnan_app/features/auth/data/models/curriculum_card_model.dart';
-import 'package:bnan_app/features/auth/data/models/register_flow_args_model.dart';
-import 'package:bnan_app/features/auth/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
-import 'package:bnan_app/features/auth/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
-import 'package:bnan_app/features/student_groups/presentation/manager/get_my_enrollments/get_my_enrollments_cubit.dart';
-import 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_cubit.dart';
-import 'package:bnan_app/features/student_profile/presentation/manager/update_name_cubit/update_name_cubit.dart';
-import 'package:bnan_app/features/student_profile/presentation/manager/update_phone_cubit/update_phone_cubit.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/edit_name_view.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/edit_phone_view.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/update_password_view.dart';
+
+import 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
+import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
 
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.splash,
+    initialLocation: Routes.teacherHome,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -220,6 +210,21 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
+       GoRoute(
+        path: Routes.teacherHome,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const TeacherHomeView(),
+          key: state.pageKey,
+        ),
+      ),
+       GoRoute(
+        path: Routes.teacherSections,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const TeacherSectionsView(),
+          key: state.pageKey,
+        ),
+      ),
+       
     ],
   );
 }

@@ -16,6 +16,13 @@ abstract class StylesManager {
       fontWeight: FontWeight.w400,
     );
   }
+   static TextStyle styleRegular15(BuildContext context) {
+    return TextStyle(
+      fontSize: 15,
+      color: ColorManager.greyA8AF,
+      fontWeight: FontWeight.w400,
+    );
+  }
   static TextStyle styleRegular16(BuildContext context) {
     return TextStyle(
       fontSize: 16,
@@ -72,6 +79,14 @@ abstract class StylesManager {
       fontWeight: FontWeight.bold,
     );
   }
+  static TextStyle styleBold10(BuildContext context) {
+    return TextStyle(
+      fontSize: 10,
+      color: ColorManager.greyA8AF,
+      fontWeight: FontWeight.bold,
+    );
+  }
+
 
   static TextStyle styleBold12(BuildContext context) {
     return TextStyle(

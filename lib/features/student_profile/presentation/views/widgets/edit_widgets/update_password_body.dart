@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
 import 'package:bnan_app/features/student_profile/presentation/manager/update_password_cubit/update_password_cubit.dart';
 import 'package:bnan_app/features/student_profile/presentation/manager/update_password_cubit/update_password_state.dart';
 import 'package:bnan_app/generated/l10n.dart';

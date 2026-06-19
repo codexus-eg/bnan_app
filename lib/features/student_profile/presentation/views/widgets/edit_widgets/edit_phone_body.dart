@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/custom_auth_text_field.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/shared_widgets/bnan_footer.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/student_profile/presentation/manager/update_phone_cubit/update_phone_cubit.dart';
 import 'package:bnan_app/features/student_profile/presentation/manager/update_phone_cubit/update_phone_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -33,7 +33,7 @@ Navigator.pop(context, true);        }
             child: Column(
               children: [
                 const SizedBox(height: 16),
-                CustomAuthTextField(
+                CustomTextField(
                   controller: cubit.phoneController,
                   label: S.of(context).changePhoneTitle,
                   keyboardType: TextInputType.phone,

@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/custom_auth_text_field.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/student_registration_widgets/custom_auth_dropdown.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/features/student_groups/presentation/views/widgets/request_lesson/request_lesson_subjects_section.dart.dart';
 import 'package:bnan_app/features/student_groups/presentation/views/widgets/shared_widgets/shared_group_header.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -53,7 +53,7 @@ class _RequestLessonBodyState extends State<RequestLessonBody> {
                 },
               ),
               const SizedBox(height: 16),
-              CustomAuthDropdown(
+              CustomDropdown(
                 label: s.grade,
                 value: selectedGrade,
                 items: grades,
@@ -62,7 +62,7 @@ class _RequestLessonBodyState extends State<RequestLessonBody> {
                 },
               ),
               const SizedBox(height: 16),
-              CustomAuthDropdown(
+              CustomDropdown(
                 label: s.saudiCurriculum,
                 value: selectedCurriculum,
                 items: curriculums,
@@ -73,7 +73,7 @@ class _RequestLessonBodyState extends State<RequestLessonBody> {
                 },
               ),
               const SizedBox(height: 16),
-              CustomAuthTextField(
+              CustomTextField(
                 label: s.theRequiredLesson,
                 hintText: s.studentNotesExample,
                 maxLine: 4,

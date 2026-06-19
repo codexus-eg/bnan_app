@@ -31,4 +31,18 @@ abstract class ColorManager {
   static const Color blue73B9 = Color(0xff73B9D6);
   static const Color blue4260 = Color(0xff42609B);
   static const Color blueD0DE = Color(0xffD0DEF5);
+  static const Color blueDEE = Color(0xffDEECF9);
+  static const Color blueC8E = Color(0xffC8E0F7);
+  static const Color blue007 = Color(0xff0071DF);
+  static const Color greyEA = Color(0xffEAEFF5);
+  static const Color greyC9 = Color(0xffC9CACC);
+  static const Color redF2 = Color(0xffF2E1E6);
+  static const Color redFFF = Color(0xffFFF1F2);
+  static const Color redEE = Color(0xffEECBD3);
+  static const Color redD8 = Color(0xffD82135);
+  static const Color redC7 = Color(0xffC70036);
+  static const Color redFFD = Color(0xffFFDBDF);
+  static const Color greenE1 = Color(0xffE1F3EF);
+  static const Color greenCEE = Color(0xffCEEDE4);
+  static const Color green33B = Color(0xff33BA7D);
 }

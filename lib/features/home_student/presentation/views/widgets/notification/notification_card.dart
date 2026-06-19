@@ -32,7 +32,7 @@ class NotificationCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CustomIconBox(iconPath: ImageManager.bellIcon),
+          CustomIconBox(imagePath: ImageManager.bellIcon),
           const SizedBox(width: 8),
           Expanded(child: NotificationInfo(notification: notification)),
           if (notification.isUnread) const SizedBox(width: 8),

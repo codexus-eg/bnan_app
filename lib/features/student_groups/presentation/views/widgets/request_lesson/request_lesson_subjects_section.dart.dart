@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/student_registration_widgets/subject_option_tile.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/subject_option_tile.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
