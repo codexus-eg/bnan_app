@@ -67,6 +67,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "absent": MessageLookupByLibrary.simpleMessage("غياب"),
         "academicPerformanceMessage":
             MessageLookupByLibrary.simpleMessage("للتميز في الأداء الأكاديمي"),
+        "accept": MessageLookupByLibrary.simpleMessage("قبول"),
+        "acceptRequest": MessageLookupByLibrary.simpleMessage("قبول الطلب"),
+        "acceptStudentRequest":
+            MessageLookupByLibrary.simpleMessage("قبول طلب الطالب"),
         "active": MessageLookupByLibrary.simpleMessage("نشطة"),
         "active2": MessageLookupByLibrary.simpleMessage("نشط"),
         "activeGroups":
@@ -104,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "يمكنك تغيير العملة من القائمة"),
+        "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
@@ -175,6 +180,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("اختيار المنهج"),
         "cvv": MessageLookupByLibrary.simpleMessage("رمز التحقق CVV"),
         "dashboard": MessageLookupByLibrary.simpleMessage("الرئيسية"),
+        "day": MessageLookupByLibrary.simpleMessage("يوم"),
+        "days": MessageLookupByLibrary.simpleMessage("أيام"),
         "daysPackage": m2,
         "degree": MessageLookupByLibrary.simpleMessage("الدرجة"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
@@ -494,6 +501,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("نموذج تسجيل الطالب"),
+        "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(
+            "سيتم إرسال مجموعة الدراسة وتحويل الطالب إليك مباشرة"),
         "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
             "يستخدمه الطالب للدخول على الداشبورد"),
         "students": MessageLookupByLibrary.simpleMessage("الطلاب"),

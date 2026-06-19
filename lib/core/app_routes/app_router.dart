@@ -2,12 +2,13 @@
 import 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
+import 'package:bnan_app/features/teacher_registration_requests/presentation/views/teacher_registration_requests_view.dart';
 
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.teacherCertificates,
+    initialLocation: Routes.teacherRegistrationRequest,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -229,6 +230,13 @@ GoRouter buildRouter() {
         path: Routes.teacherCertificates,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherCertificatesView(),
+          key: state.pageKey,
+        ),
+      ),
+       GoRoute(
+        path: Routes.teacherRegistrationRequest,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const TeacherRegistrationRequestsView(),
           key: state.pageKey,
         ),
       ),

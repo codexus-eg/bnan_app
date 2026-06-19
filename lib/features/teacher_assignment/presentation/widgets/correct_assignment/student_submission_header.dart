@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_wigets/custom_avatar.dart';
+import 'package:bnan_app/core/shared_widget/custom_avatar.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'student_submission_card.dart';

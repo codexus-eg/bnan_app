@@ -3549,6 +3549,76 @@ class S {
       args: [],
     );
   }
+
+  /// `Accept Request`
+  String get acceptRequest {
+    return Intl.message(
+      'Accept Request',
+      name: 'acceptRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accept Student Request`
+  String get acceptStudentRequest {
+    return Intl.message(
+      'Accept Student Request',
+      name: 'acceptStudentRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The study group will be sent and the student will be assigned to you directly.`
+  String get studentRequestAccepted {
+    return Intl.message(
+      'The study group will be sent and the student will be assigned to you directly.',
+      name: 'studentRequestAccepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accept`
+  String get accept {
+    return Intl.message(
+      'Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Day`
+  String get day {
+    return Intl.message(
+      'Day',
+      name: 'day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Days`
+  String get days {
+    return Intl.message(
+      'Days',
+      name: 'days',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

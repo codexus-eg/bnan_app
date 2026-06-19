@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_wigets/profile_blue_background.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_wigets/profile_content.dart';
+import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_widgets/profile_blue_background.dart';
+import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_widgets/profile_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
