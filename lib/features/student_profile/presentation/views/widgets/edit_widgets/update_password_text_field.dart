@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/auth/presentation/views/widgets/shared_widgets/custom_auth_text_field.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
 class UpdatePasswordTextField extends StatelessWidget {
@@ -22,7 +22,7 @@ class UpdatePasswordTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomAuthTextField(
+    return CustomTextField(
       controller: controller,
       label: label,
       hintText: hintText,

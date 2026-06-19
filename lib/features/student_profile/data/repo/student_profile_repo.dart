@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/error/failure.dart';
-import 'package:bnan_app/features/auth/data/models/simple_response_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/simple_response_model.dart';
 import 'package:bnan_app/features/student_profile/data/models/logged_user_response_model.dart';
 import 'package:bnan_app/features/student_profile/data/models/update_profile_response_model.dart';
 import 'package:dartz/dartz.dart';

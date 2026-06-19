@@ -21,7 +21,7 @@ class PendingRequestCard extends StatelessWidget {
     return BaseGroupCard(
       child: Row(
         children: [
-          CustomIconBox(iconPath: ImageManager.bookIcon),
+          CustomIconBox(imagePath: ImageManager.bookIcon),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

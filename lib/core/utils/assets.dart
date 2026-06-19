@@ -5,6 +5,9 @@ class ImageManager {
   static const String _scheduleFeature = '${_basePath}schedule/';
   static const String _groupsFeature = '${_basePath}groups/';
   static const String _profileFeature = '${_basePath}profile/';
+  static const String _teacherHomeFeature = '${_basePath}teacher_home/';
+  static const String _teacherAssignmentFeature =
+      '${_basePath}teacher_assignment/';
 
   ImageManager._();
 
@@ -84,4 +87,31 @@ class ImageManager {
   static const String emailIcon = '${_profileFeature}email.svg';
   static const String phoneIcon = '${_profileFeature}phone.svg';
   static const String edit = '${_profileFeature}edit.svg';
+
+  // Teacher Home
+  static const String teacherBarChartIcon =
+      '${_teacherHomeFeature}bar-chart-04.svg';
+  static const String teacherBookOneIcon = '${_teacherHomeFeature}book-01.svg';
+  static const String teacherBookTwoIcon = '${_teacherHomeFeature}book-02.svg';
+  static const String teacherFileEditIcon =
+      '${_teacherHomeFeature}file-edit-02.svg';
+  static const String teacherGraduationCapIcon =
+      '${_teacherHomeFeature}graduation-cap-02.svg';
+  static const String teacherMeetingIcon = '${_teacherHomeFeature}meeting.svg';
+  static const String teacherUserProfileGroupIcon =
+      '${_teacherHomeFeature}user-profile-group.svg';
+  static const String wallet = '${_teacherHomeFeature}Wallet.svg';
+  static const String teacherTraining = '${_teacherHomeFeature}training.png';
+  static const String teacherClassRoom = '${_teacherHomeFeature}classroom.png';
+  // Teacher Assignment
+  static const String teacherAssignmentCheckContainedIcon =
+      '${_teacherAssignmentFeature}check-contained.svg';
+  static const String teacherAssignmentCircleWarningIcon =
+      '${_teacherAssignmentFeature}Circle_Warning.svg';
+  static const String teacherAssignmentClockIcon =
+      '${_teacherAssignmentFeature}Clock.svg';
+  static const String teacherAssignmentPaperclipIcon =
+      '${_teacherAssignmentFeature}paperclip-01.svg';
+  static const String teacherAssignmentDateIcon =
+      '${_teacherAssignmentFeature}stash_data-date-duotone.svg';
 }

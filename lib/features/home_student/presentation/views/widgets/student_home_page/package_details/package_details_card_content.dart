@@ -1,38 +1,21 @@
+import 'package:bnan_app/core/shared_widget/home_card_widget.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/home_student/data/models/student_subscription_model.dart';
-import 'package:bnan_app/features/home_student/presentation/views/widgets/shared_widgets/progress_line.dart';
+import 'package:bnan_app/core/shared_widget/progress_line.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/package_details/card_header.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/package_details/progress_info.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PackageDetailsCardContent extends StatelessWidget {
-  const PackageDetailsCardContent({
-    super.key,
-    required this.subscription,
-  });
+  const PackageDetailsCardContent({super.key, required this.subscription});
 
   final StudentSubscriptionModel subscription;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsetsDirectional.all(8),
-      margin: const EdgeInsetsDirectional.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: const [0.2, 1.0],
-          colors: [
-            ColorManager.mainColor14.withAlpha((255 * .8).round()),
-            ColorManager.mainColor14,
-          ],
-        ),
-      ),
+    return HomeCardWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,9 +32,9 @@ class PackageDetailsCardContent extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             S.of(context).packageExpiryText,
-            style: StylesManager.styleRegular12(context).copyWith(
-              color: ColorManager.white,
-            ),
+            style: StylesManager.styleRegular12(
+              context,
+            ).copyWith(color: ColorManager.white),
           ),
           const SizedBox(height: 8),
           Text(

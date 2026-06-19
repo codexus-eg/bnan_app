@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_profile/data/models/logged_user_model.dart';
-import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_wigets/student_avatar.dart';
+import 'package:bnan_app/features/student_profile/presentation/views/widgets/student_wigets/custom_avatar.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class StudentInfoCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-           StudentAvatar(firstName :loggedUser.user.fullName),
+           CustomAvatar(firstName :loggedUser.user.fullName),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

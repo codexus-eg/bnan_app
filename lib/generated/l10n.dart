@@ -1850,36 +1850,6 @@ class S {
     );
   }
 
-  /// `95%`
-  String get attendancePercent {
-    return Intl.message(
-      '95%',
-      name: 'attendancePercent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `4.8`
-  String get interactionRate {
-    return Intl.message(
-      '4.8',
-      name: 'interactionRate',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `12`
-  String get certificatesCount {
-    return Intl.message(
-      '12',
-      name: 'certificatesCount',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Weekly evaluation`
   String get weeklyEvaluation {
     return Intl.message(
@@ -3055,6 +3025,416 @@ class S {
     return Intl.message(
       'Logged out successfully',
       name: 'logoutSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excellent Teacher`
+  String get excellentTeacher {
+    return Intl.message(
+      'Excellent Teacher',
+      name: 'excellentTeacher',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Excellence Points`
+  String get excellencePoints {
+    return Intl.message(
+      'Excellence Points',
+      name: 'excellencePoints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `points`
+  String get pointsCount {
+    return Intl.message(
+      'points',
+      name: 'pointsCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next rank after {teachers} teachers, {points} points to the next level`
+  String nextLevelPointsText(int teachers, int points) {
+    return Intl.message(
+      'Next rank after $teachers teachers, $points points to the next level',
+      name: 'nextLevelPointsText',
+      desc: '',
+      args: [teachers, points],
+    );
+  }
+
+  /// `Students`
+  String get students {
+    return Intl.message(
+      'Students',
+      name: 'students',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classes`
+  String get classes {
+    return Intl.message(
+      'Classes',
+      name: 'classes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upcoming Lessons`
+  String get upcomingLessons {
+    return Intl.message(
+      'Upcoming Lessons',
+      name: 'upcomingLessons',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get start {
+    return Intl.message(
+      'Start',
+      name: 'start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dues`
+  String get dues {
+    return Intl.message(
+      'Dues',
+      name: 'dues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classes Management`
+  String get classesManagement {
+    return Intl.message(
+      'Classes Management',
+      name: 'classesManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Evaluations`
+  String get evaluations {
+    return Intl.message(
+      'Evaluations',
+      name: 'evaluations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration Requests`
+  String get registrationRequests {
+    return Intl.message(
+      'Registration Requests',
+      name: 'registrationRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Performance`
+  String get performance {
+    return Intl.message(
+      'Performance',
+      name: 'performance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly Plans`
+  String get weeklyPlans {
+    return Intl.message(
+      'Weekly Plans',
+      name: 'weeklyPlans',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quota report`
+  String get quotaReport {
+    return Intl.message(
+      'Quota report',
+      name: 'quotaReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get active2 {
+    return Intl.message(
+      'Active',
+      name: 'active2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitted`
+  String get submitted {
+    return Intl.message(
+      'Submitted',
+      name: 'submitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not submitted`
+  String get notSubmitted {
+    return Intl.message(
+      'Not submitted',
+      name: 'notSubmitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Finished`
+  String get finished {
+    return Intl.message(
+      'Finished',
+      name: 'finished',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create New Assignment`
+  String get createNewAssignment {
+    return Intl.message(
+      'Create New Assignment',
+      name: 'createNewAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title`
+  String get assignmentTitle {
+    return Intl.message(
+      'Title',
+      name: 'assignmentTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description`
+  String get assignmentDescription {
+    return Intl.message(
+      'Description',
+      name: 'assignmentDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classroom`
+  String get classRoom {
+    return Intl.message(
+      'Classroom',
+      name: 'classRoom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose classroom`
+  String get chooseClassRoom {
+    return Intl.message(
+      'Choose classroom',
+      name: 'chooseClassRoom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose subject`
+  String get chooseSubject {
+    return Intl.message(
+      'Choose subject',
+      name: 'chooseSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delivery date`
+  String get deliveryDate {
+    return Intl.message(
+      'Delivery date',
+      name: 'deliveryDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attachment file`
+  String get attachmentFile {
+    return Intl.message(
+      'Attachment file',
+      name: 'attachmentFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose file`
+  String get chooseFile {
+    return Intl.message(
+      'Choose file',
+      name: 'chooseFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Assignment`
+  String get createAssignment {
+    return Intl.message(
+      'Create Assignment',
+      name: 'createAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade Assignment`
+  String get correctAssignment {
+    return Intl.message(
+      'Grade Assignment',
+      name: 'correctAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade Submission`
+  String get submitAssignmentCorrection {
+    return Intl.message(
+      'Grade Submission',
+      name: 'submitAssignmentCorrection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Graded`
+  String get graded {
+    return Intl.message(
+      'Graded',
+      name: 'graded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting for Grading`
+  String get waitingForCorrection {
+    return Intl.message(
+      'Waiting for Grading',
+      name: 'waitingForCorrection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitted:`
+  String get submissionDate {
+    return Intl.message(
+      'Submitted:',
+      name: 'submissionDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Grade`
+  String get editGrade {
+    return Intl.message(
+      'Edit Grade',
+      name: 'editGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade & Assign Score`
+  String get gradeAndAssignScore {
+    return Intl.message(
+      'Grade & Assign Score',
+      name: 'gradeAndAssignScore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assignment Not Submitted Yet`
+  String get assignmentNotSubmittedYet {
+    return Intl.message(
+      'Assignment Not Submitted Yet',
+      name: 'assignmentNotSubmittedYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Degree`
+  String get degree {
+    return Intl.message(
+      'Degree',
+      name: 'degree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit Grade`
+  String get sendCorrection {
+    return Intl.message(
+      'Submit Grade',
+      name: 'sendCorrection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sections`
+  String get sections {
+    return Intl.message(
+      'Sections',
+      name: 'sections',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Class`
+  String get classR {
+    return Intl.message(
+      'Class',
+      name: 'classR',
       desc: '',
       args: [],
     );

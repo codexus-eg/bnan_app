@@ -8,10 +8,14 @@ class CustomAppButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.padding = 0, this.backgroundColor, this.textColor,
+    this.padding = 0,
+    this.backgroundColor,
+    this.textColor,
+    this.style,
   });
 
   final String text;
+  final TextStyle? style;
   final VoidCallback onPressed;
   final bool isLoading;
   final double? padding;
@@ -28,7 +32,7 @@ class CustomAppButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor:backgroundColor?? ColorManager.mainColor14,
+          backgroundColor: backgroundColor ?? ColorManager.mainColor14,
           disabledBackgroundColor: ColorManager.greyA8AF,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -43,9 +47,14 @@ class CustomAppButton extends StatelessWidget {
                   color: Colors.white,
                 ),
               )
-            : Text(text, style: StylesManager.styleBold16(context).copyWith(
-              color: textColor
-            )),
+            : Text(
+                text,
+                style:
+                    style ??
+                    StylesManager.styleBold16(
+                      context,
+                    ).copyWith(color: textColor),
+              ),
       ),
     );
   }
