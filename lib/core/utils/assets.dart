@@ -103,6 +103,8 @@ class ImageManager {
   static const String wallet = '${_teacherHomeFeature}Wallet.svg';
   static const String teacherTraining = '${_teacherHomeFeature}training.png';
   static const String teacherClassRoom = '${_teacherHomeFeature}classroom.png';
+    static const String trash = '${_teacherHomeFeature}trash.svg';
+
   // Teacher Assignment
   static const String teacherAssignmentCheckContainedIcon =
       '${_teacherAssignmentFeature}check-contained.svg';
@@ -114,4 +116,5 @@ class ImageManager {
       '${_teacherAssignmentFeature}paperclip-01.svg';
   static const String teacherAssignmentDateIcon =
       '${_teacherAssignmentFeature}stash_data-date-duotone.svg';
+
 }

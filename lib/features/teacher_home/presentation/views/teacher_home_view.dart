@@ -62,6 +62,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     }
+    if (index == 9) {
+      MyNavigator.goTo(context, Routes.teacherCertificates);
+    }
   }
 
   void _logout() {

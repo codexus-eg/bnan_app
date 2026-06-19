@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/teacher_assignment/presentation/widgets/dialogs/custom_app_dialog.dart';
+import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'create_assignment_form.dart';
 

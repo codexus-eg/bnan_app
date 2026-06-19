@@ -10,7 +10,9 @@ class CustomDropdown extends StatelessWidget {
     required this.onChanged,
     this.value,
     this.hint,
-    this.isRequired = false, this.hintStyle,
+    this.isRequired = false,
+    this.hintStyle,
+    this.backgroundColor,
   });
 
   final String label;
@@ -20,6 +22,7 @@ class CustomDropdown extends StatelessWidget {
   final List<String>? items;
   final ValueChanged<String?> onChanged;
   final bool isRequired;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +37,12 @@ class CustomDropdown extends StatelessWidget {
           children: [
             Text(
               label,
-              style: StylesManager.styleBold14(context).copyWith(
-                color: ColorManager.mainColor15,
-              ),
+              style: StylesManager.styleBold14(
+                context,
+              ).copyWith(color: ColorManager.mainColor15),
             ),
             if (isRequired)
-              const Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
+              const Text('*', style: TextStyle(color: Colors.red)),
           ],
         ),
         const SizedBox(height: 8),
@@ -50,7 +50,9 @@ class CustomDropdown extends StatelessWidget {
           height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: isDisabled ? ColorManager.greyF4F6 : Colors.transparent,
+            color: isDisabled
+                ? ColorManager.greyF4F6
+                : backgroundColor ?? Colors.transparent,
             border: Border.all(color: ColorManager.borderColor),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -77,9 +79,9 @@ class CustomDropdown extends StatelessWidget {
                   value: item,
                   child: Text(
                     item,
-                    style: StylesManager.styleRegular16(context).copyWith(
-                      color: ColorManager.mainColor15,
-                    ),
+                    style: StylesManager.styleRegular16(
+                      context,
+                    ).copyWith(color: ColorManager.mainColor15),
                   ),
                 );
               }).toList(),
@@ -95,7 +97,8 @@ class CustomDropdown extends StatelessWidget {
 class _DropdownDisplayedText extends StatelessWidget {
   const _DropdownDisplayedText({
     required this.text,
-    required this.isDisabled, this.hintStyle,
+    required this.isDisabled,
+    this.hintStyle,
   });
 
   final String text;
@@ -104,9 +107,7 @@ class _DropdownDisplayedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDisabled
-        ? ColorManager.greyA8AF
-        : ColorManager.mainColor15;
+    final color = isDisabled ? ColorManager.greyA8AF : ColorManager.mainColor15;
 
     return Row(
       children: [
@@ -120,9 +121,9 @@ class _DropdownDisplayedText extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.start,
-            style:hintStyle?? StylesManager.styleRegular16(context).copyWith(
-              color: color,
-            ),
+            style:
+                hintStyle ??
+                StylesManager.styleRegular16(context).copyWith(color: color),
           ),
         ),
       ],

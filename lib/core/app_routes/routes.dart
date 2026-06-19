@@ -19,4 +19,5 @@ abstract class Routes {
   static const String updatePassword = '/updatePassword';
   static const String teacherHome = '/teacherHome';
   static const String teacherSections = '/teacherSections';
+  static const String teacherCertificates = '/teacherCertificates';
 }

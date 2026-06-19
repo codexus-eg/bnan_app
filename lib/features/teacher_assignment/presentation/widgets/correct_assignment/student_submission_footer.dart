@@ -2,7 +2,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/widgets/dialogs/teacher_assignment_dialogs.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/widgets/teacher_assignment_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

@@ -444,6 +444,16 @@
     "degree": "الدرجة",
     "sendCorrection": "إرسال التصحيح",
     "sections": "الفصول",
-    "classR": "فصل"
-
+    "classR": "فصل",
+    "issueNewCertificate": "إصدار شهادة جديدة",
+    "preview": "معاينة",
+    "edit": "تعديل",
+    "send": "أرسلت",
+    "total": "المجموع",
+    "subjectsGrades": "درجات المواد",
+    "selectStudent": "اختر الطالب",
+    "save": "حفظ",
+    "downloadPdf": "تحميل PDF",
+    "editCertificate": "تعديل الشهادة",
+    "close": "إغلاق"
 }

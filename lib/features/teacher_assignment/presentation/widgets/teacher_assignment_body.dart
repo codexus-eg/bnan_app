@@ -1,8 +1,9 @@
+import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/shared_widget/filter_chip/custom_filter_tabs.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/assignment_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/teacher_assignment_filter_type.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/widgets/add_new_assignment_button.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/widgets/teacher_assignment_dialogs.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/widgets/teacher_assignment_card.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _TeacherAssignmentBodyState extends State<TeacherAssignmentBody> {
             },
           ),
           const SizedBox(height: 16),
-          const AddNewAssignmentButton(),
+           AddNewTopicButton(title: S.of(context).createNewAssignment,onTap: () => TeacherAssignmentDialogs.showCreateAssignment(context)),
           const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(

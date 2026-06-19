@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/widgets/dialogs/custom_dialog_header.dart';
+import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'create_assignment_fields.dart';

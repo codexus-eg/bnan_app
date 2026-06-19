@@ -444,6 +444,16 @@
     "degree": "Degree",
     "sendCorrection": "Submit Grade",
     "sections": "Sections",
-    "classR": "Class"
-
+    "classR": "Class",
+    "issueNewCertificate": "Issue New Certificate",
+    "preview": "Preview",
+    "edit": "Edit",
+    "send": "Sent",
+    "total": "Total",
+    "subjectsGrades": "Subjects Grades",
+    "selectStudent": "Select Student",
+    "save": "Save",
+    "close": "Close",
+    "downloadPdf": "Download PDF",
+    "editCertificate": "Edit Certificate"
 }
