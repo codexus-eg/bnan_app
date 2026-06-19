@@ -67,6 +67,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "absent": MessageLookupByLibrary.simpleMessage("Absent"),
         "academicPerformanceMessage": MessageLookupByLibrary.simpleMessage(
             "For excellence in academic performance"),
+        "accept": MessageLookupByLibrary.simpleMessage("Accept"),
+        "acceptRequest": MessageLookupByLibrary.simpleMessage("Accept Request"),
+        "acceptStudentRequest":
+            MessageLookupByLibrary.simpleMessage("Accept Student Request"),
         "active": MessageLookupByLibrary.simpleMessage("Active"),
         "active2": MessageLookupByLibrary.simpleMessage("Active"),
         "activeGroups": MessageLookupByLibrary.simpleMessage("Active Groups"),
@@ -107,6 +111,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "browseSection": MessageLookupByLibrary.simpleMessage("Browse section"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "You can change the currency from the list"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("Cardholder name"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("Card number"),
@@ -181,6 +186,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Curriculum Selection"),
         "cvv": MessageLookupByLibrary.simpleMessage("CVV"),
         "dashboard": MessageLookupByLibrary.simpleMessage("Home"),
+        "day": MessageLookupByLibrary.simpleMessage("Day"),
+        "days": MessageLookupByLibrary.simpleMessage("Days"),
         "daysPackage": m2,
         "degree": MessageLookupByLibrary.simpleMessage("Degree"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("Delivery date"),
@@ -510,6 +517,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("Student Registration Form"),
+        "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(
+            "The study group will be sent and the student will be assigned to you directly."),
         "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
             "The student will use it to log in to the dashboard"),
         "students": MessageLookupByLibrary.simpleMessage("Students"),

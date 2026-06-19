@@ -455,5 +455,12 @@
     "save": "Save",
     "close": "Close",
     "downloadPdf": "Download PDF",
-    "editCertificate": "Edit Certificate"
+    "editCertificate": "Edit Certificate",
+    "acceptRequest": "Accept Request",
+    "acceptStudentRequest": "Accept Student Request",
+    "studentRequestAccepted": "The study group will be sent and the student will be assigned to you directly.",
+    "accept": "Accept",
+    "cancel": "Cancel",
+    "day": "Day",
+    "days": "Days"
 }

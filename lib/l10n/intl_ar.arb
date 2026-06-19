@@ -455,5 +455,12 @@
     "save": "حفظ",
     "downloadPdf": "تحميل PDF",
     "editCertificate": "تعديل الشهادة",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "acceptRequest": "قبول الطلب",
+    "acceptStudentRequest": "قبول طلب الطالب",
+    "studentRequestAccepted": "سيتم إرسال مجموعة الدراسة وتحويل الطالب إليك مباشرة",
+    "accept": "قبول",
+    "cancel": "إلغاء",
+    "day": "يوم",
+    "days": "أيام"
 }
