@@ -148,6 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classes": MessageLookupByLibrary.simpleMessage("Classes"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("Classes Management"),
+        "close": MessageLookupByLibrary.simpleMessage("Close"),
         "completed": MessageLookupByLibrary.simpleMessage("Completed"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "confirmNewPassword":
@@ -186,9 +187,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
+        "downloadPdf": MessageLookupByLibrary.simpleMessage("Download PDF"),
         "dueFriday": MessageLookupByLibrary.simpleMessage("Due Friday"),
         "dueSunday": MessageLookupByLibrary.simpleMessage("Due Sunday"),
         "dues": MessageLookupByLibrary.simpleMessage("Dues"),
+        "edit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "editCertificate":
+            MessageLookupByLibrary.simpleMessage("Edit Certificate"),
         "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
         "egpCurrency":
             MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
@@ -269,6 +274,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Interaction Level"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid email address."),
+        "issueNewCertificate":
+            MessageLookupByLibrary.simpleMessage("Issue New Certificate"),
         "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
             "Math lesson starts in 15 min"),
         "lightAndShadowExperiment":
@@ -408,6 +415,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Preferred student schedule"),
         "preferredDaysHint": MessageLookupByLibrary.simpleMessage(
             "Select preferred days and times"),
+        "preview": MessageLookupByLibrary.simpleMessage("Preview"),
         "previous": MessageLookupByLibrary.simpleMessage("Previous"),
         "primaryGradeFive":
             MessageLookupByLibrary.simpleMessage("Grade 5 Primary"),
@@ -456,6 +464,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Saudi Curriculum"),
         "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
             "We provide all subjects for primary, middle, and secondary stages according to the approved curriculum."),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "saveAmount": m12,
         "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
@@ -463,8 +472,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "science": MessageLookupByLibrary.simpleMessage("Science"),
         "sections": MessageLookupByLibrary.simpleMessage("Sections"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
+        "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("Selected Package"),
+        "send": MessageLookupByLibrary.simpleMessage("Sent"),
         "sendCorrection": MessageLookupByLibrary.simpleMessage("Submit Grade"),
         "sendResetCode":
             MessageLookupByLibrary.simpleMessage("Send reset code"),
@@ -509,6 +520,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "studySchedule": MessageLookupByLibrary.simpleMessage("Study Schedule"),
         "subject": MessageLookupByLibrary.simpleMessage("Subject"),
         "subjects": MessageLookupByLibrary.simpleMessage("Subjects"),
+        "subjectsGrades":
+            MessageLookupByLibrary.simpleMessage("Subjects Grades"),
         "submissionDate": MessageLookupByLibrary.simpleMessage("Submitted:"),
         "submitAssignment":
             MessageLookupByLibrary.simpleMessage("Submit Assignment"),
@@ -542,6 +555,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "to": MessageLookupByLibrary.simpleMessage("To"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
         "todayAtTime": m13,
+        "total": MessageLookupByLibrary.simpleMessage("Total"),
         "trainingHours": m14,
         "tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
         "twelveHoursPlan":

@@ -3,7 +3,7 @@ import 'package:bnan_app/features/teacher_assignment/data/teacher_assignment_fil
 import 'package:bnan_app/features/teacher_assignment/presentation/widgets/assignment_colors.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/widgets/assignment_texts.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/widgets/assignments_footer.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/widgets/dialogs/teacher_assignment_dialogs.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/widgets/teacher_assignment_dialogs.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/widgets/teacher_status_badge.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';

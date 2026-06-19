@@ -1,16 +1,16 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/widgets/dialogs/teacher_assignment_dialogs.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-class AddNewAssignmentButton extends StatelessWidget {
-  const AddNewAssignmentButton({super.key});
+class AddNewTopicButton extends StatelessWidget {
+  const AddNewTopicButton({super.key, required this.title, this.onTap});
+  final String title;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => TeacherAssignmentDialogs.showCreateAssignment(context),
+      onTap: onTap,
       child: Container(
         padding: EdgeInsetsDirectional.only(
           start: 25,
@@ -28,7 +28,7 @@ class AddNewAssignmentButton extends StatelessWidget {
             Icon(Icons.add,color: ColorManager.white,),
             const SizedBox(width: 12),
             Text(
-              S.of(context).createNewAssignment,
+              title,
               style: StylesManager.styleBold12(
                 context,
               ).copyWith(color: ColorManager.white),

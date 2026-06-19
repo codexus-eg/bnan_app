@@ -34,6 +34,7 @@ abstract class ColorManager {
   static const Color blueDEE = Color(0xffDEECF9);
   static const Color blueC8E = Color(0xffC8E0F7);
   static const Color blue007 = Color(0xff0071DF);
+  static const Color blue7ED = Color(0xff7ED0F1);
   static const Color greyEA = Color(0xffEAEFF5);
   static const Color greyC9 = Color(0xffC9CACC);
   static const Color redF2 = Color(0xffF2E1E6);

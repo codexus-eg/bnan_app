@@ -3439,6 +3439,116 @@ class S {
       args: [],
     );
   }
+
+  /// `Issue New Certificate`
+  String get issueNewCertificate {
+    return Intl.message(
+      'Issue New Certificate',
+      name: 'issueNewCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preview`
+  String get preview {
+    return Intl.message(
+      'Preview',
+      name: 'preview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get edit {
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sent`
+  String get send {
+    return Intl.message(
+      'Sent',
+      name: 'send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get total {
+    return Intl.message(
+      'Total',
+      name: 'total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subjects Grades`
+  String get subjectsGrades {
+    return Intl.message(
+      'Subjects Grades',
+      name: 'subjectsGrades',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Student`
+  String get selectStudent {
+    return Intl.message(
+      'Select Student',
+      name: 'selectStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close`
+  String get close {
+    return Intl.message(
+      'Close',
+      name: 'close',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download PDF`
+  String get downloadPdf {
+    return Intl.message(
+      'Download PDF',
+      name: 'downloadPdf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Certificate`
+  String get editCertificate {
+    return Intl.message(
+      'Edit Certificate',
+      name: 'editCertificate',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

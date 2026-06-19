@@ -143,6 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classes": MessageLookupByLibrary.simpleMessage("الصفوف"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
+        "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
         "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
         "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
         "confirmNewPassword":
@@ -180,9 +181,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "download": MessageLookupByLibrary.simpleMessage("تحميل"),
+        "downloadPdf": MessageLookupByLibrary.simpleMessage("تحميل PDF"),
         "dueFriday": MessageLookupByLibrary.simpleMessage("حتى الجمعة"),
         "dueSunday": MessageLookupByLibrary.simpleMessage("حتى الأحد"),
         "dues": MessageLookupByLibrary.simpleMessage("المستحقات"),
+        "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
+        "editCertificate":
+            MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
         "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
         "egyptianCurriculum":
@@ -260,6 +265,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "الرجاء إدخال عنوان بريد إلكتروني صالح."),
+        "issueNewCertificate":
+            MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
         "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
             "حصة الرياضيات تبدأ خلال 15 د"),
         "lightAndShadowExperiment":
@@ -395,6 +402,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("مواعيد الطالب المفضلة"),
         "preferredDaysHint": MessageLookupByLibrary.simpleMessage(
             "حدد الأيام والأوقات المفضلة للحضور"),
+        "preview": MessageLookupByLibrary.simpleMessage("معاينة"),
         "previous": MessageLookupByLibrary.simpleMessage("السابق"),
         "primaryGradeFive":
             MessageLookupByLibrary.simpleMessage("الصف الخامس الابتدائي"),
@@ -441,6 +449,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المنهج السعودي"),
         "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
             "نقدم جميع المواد الدراسية للمرحلة الابتدائية، المتوسطة، والثانوية وفق المنهج المعتمد."),
+        "save": MessageLookupByLibrary.simpleMessage("حفظ"),
         "saveAmount": m12,
         "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
@@ -448,8 +457,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "science": MessageLookupByLibrary.simpleMessage("العلوم"),
         "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
+        "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
+        "send": MessageLookupByLibrary.simpleMessage("أرسلت"),
         "sendCorrection": MessageLookupByLibrary.simpleMessage("إرسال التصحيح"),
         "sendResetCode":
             MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
@@ -493,6 +504,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "studySchedule": MessageLookupByLibrary.simpleMessage("الجدول الدراسي"),
         "subject": MessageLookupByLibrary.simpleMessage("المادة"),
         "subjects": MessageLookupByLibrary.simpleMessage("المواد"),
+        "subjectsGrades": MessageLookupByLibrary.simpleMessage("درجات المواد"),
         "submissionDate": MessageLookupByLibrary.simpleMessage("تم التسليم:"),
         "submitAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
         "submitAssignmentCorrection":
@@ -525,6 +537,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "to": MessageLookupByLibrary.simpleMessage("إلى"),
         "today": MessageLookupByLibrary.simpleMessage("اليوم"),
         "todayAtTime": m13,
+        "total": MessageLookupByLibrary.simpleMessage("المجموع"),
         "trainingHours": m14,
         "tuesday": MessageLookupByLibrary.simpleMessage("الثلاثاء"),
         "twelveHoursPlan":
