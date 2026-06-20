@@ -3560,20 +3560,20 @@ class S {
     );
   }
 
-  /// `Accept Student Request`
+  /// `Accept Request`
   String get acceptStudentRequest {
     return Intl.message(
-      'Accept Student Request',
+      'Accept Request',
       name: 'acceptStudentRequest',
       desc: '',
       args: [],
     );
   }
 
-  /// `The study group will be sent and the student will be assigned to you directly.`
+  /// `A study group will be created and the student will be transferred directly to you.`
   String get studentRequestAccepted {
     return Intl.message(
-      'The study group will be sent and the student will be assigned to you directly.',
+      'A study group will be created and the student will be transferred directly to you.',
       name: 'studentRequestAccepted',
       desc: '',
       args: [],
@@ -3615,6 +3615,16 @@ class S {
     return Intl.message(
       'Days',
       name: 'days',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Groups`
+  String get groups {
+    return Intl.message(
+      'Groups',
+      name: 'groups',
       desc: '',
       args: [],
     );

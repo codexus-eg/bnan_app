@@ -70,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "accept": MessageLookupByLibrary.simpleMessage("Accept"),
         "acceptRequest": MessageLookupByLibrary.simpleMessage("Accept Request"),
         "acceptStudentRequest":
-            MessageLookupByLibrary.simpleMessage("Accept Student Request"),
+            MessageLookupByLibrary.simpleMessage("Accept Request"),
         "active": MessageLookupByLibrary.simpleMessage("Active"),
         "active2": MessageLookupByLibrary.simpleMessage("Active"),
         "activeGroups": MessageLookupByLibrary.simpleMessage("Active Groups"),
@@ -270,6 +270,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "graded": MessageLookupByLibrary.simpleMessage("Graded"),
         "groupCreatedByYou":
             MessageLookupByLibrary.simpleMessage("Group created, start now"),
+        "groups": MessageLookupByLibrary.simpleMessage("Groups"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "hoursPackage": m5,
         "inactive": MessageLookupByLibrary.simpleMessage("InActive"),
@@ -518,7 +519,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("Student Registration Form"),
         "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(
-            "The study group will be sent and the student will be assigned to you directly."),
+            "A study group will be created and the student will be transferred directly to you."),
         "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
             "The student will use it to log in to the dashboard"),
         "students": MessageLookupByLibrary.simpleMessage("Students"),

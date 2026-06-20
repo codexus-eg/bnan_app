@@ -70,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "accept": MessageLookupByLibrary.simpleMessage("قبول"),
         "acceptRequest": MessageLookupByLibrary.simpleMessage("قبول الطلب"),
         "acceptStudentRequest":
-            MessageLookupByLibrary.simpleMessage("قبول طلب الطالب"),
+            MessageLookupByLibrary.simpleMessage("قبول طلب"),
         "active": MessageLookupByLibrary.simpleMessage("نشطة"),
         "active2": MessageLookupByLibrary.simpleMessage("نشط"),
         "activeGroups":
@@ -262,6 +262,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "graded": MessageLookupByLibrary.simpleMessage("مصحح"),
         "groupCreatedByYou":
             MessageLookupByLibrary.simpleMessage("تم إنشاء المجموعة، ابدأ بكم"),
+        "groups": MessageLookupByLibrary.simpleMessage("المجموعات"),
         "home": MessageLookupByLibrary.simpleMessage("الرئيسية"),
         "hoursPackage": m5,
         "inactive": MessageLookupByLibrary.simpleMessage("غير نشطة"),
@@ -502,7 +503,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("نموذج تسجيل الطالب"),
         "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(
-            "سيتم إرسال مجموعة الدراسة وتحويل الطالب إليك مباشرة"),
+            "سيتم إنشاء مجموعة دراسية وتحويل الطالب إليك مباشرة"),
         "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
             "يستخدمه الطالب للدخول على الداشبورد"),
         "students": MessageLookupByLibrary.simpleMessage("الطلاب"),

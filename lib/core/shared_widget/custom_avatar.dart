@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/characters.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class CustomAvatar extends StatelessWidget {
       radius: radius ?? 28,
       backgroundColor: backgroundColor ?? const Color(0xffE9C77B),
       child: Text(
-        firstName.substring(0, 2),
+        getInitials(firstName),
         style: StylesManager.styleBold14(
           context,
         ).copyWith(color: textColor ?? ColorManager.mainColor14),
@@ -28,3 +29,4 @@ class CustomAvatar extends StatelessWidget {
     );
   }
 }
+

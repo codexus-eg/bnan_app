@@ -1,8 +1,8 @@
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/teacher_registration_requests/data/models/registration_request_model.dart';
-import 'package:bnan_app/features/teacher_registration_requests/presentation/views/widgets/name_and_time.dart';
-import 'package:bnan_app/features/teacher_registration_requests/presentation/views/widgets/registration_request_info_row.dart';
+import 'package:bnan_app/features/teacher_request_groups/data/models/registration_request_model.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/name_and_time.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/registration_request_info_row.dart';
 import 'package:flutter/material.dart';
 
 class RequestDetails extends StatelessWidget {
