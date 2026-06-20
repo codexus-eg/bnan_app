@@ -1,5 +1,5 @@
-import 'package:bnan_app/features/teacher_registration_requests/data/models/registration_request_model.dart';
-import 'package:bnan_app/features/teacher_registration_requests/presentation/views/widgets/registration_request_card.dart';
+import 'package:bnan_app/features/teacher_request_groups/data/models/registration_request_model.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/registration_request_card.dart';
 import 'package:flutter/material.dart';
 
 class TeacherRegistrationRequestsBody extends StatelessWidget {

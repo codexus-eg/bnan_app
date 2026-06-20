@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/teacher_registration_requests/data/models/registration_request_model.dart';
+import 'package:bnan_app/features/teacher_request_groups/data/models/registration_request_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

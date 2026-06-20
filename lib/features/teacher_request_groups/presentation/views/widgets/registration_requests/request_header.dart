@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_avatar.dart';
-import 'package:bnan_app/features/teacher_registration_requests/data/models/registration_request_model.dart';
-import 'package:bnan_app/features/teacher_registration_requests/presentation/views/widgets/request_details.dart';
+import 'package:bnan_app/features/teacher_request_groups/data/models/registration_request_model.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/request_details.dart';
 import 'package:flutter/material.dart';
 
 class RequestHeader extends StatelessWidget {

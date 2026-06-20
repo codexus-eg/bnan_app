@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/teacher_certificates/data/models/teacher_certificate_model.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/widgets/certificate_actions.dart';
@@ -11,24 +12,15 @@ class CertificateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: ColorManager.greyF8F9,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha((255 * .25).round()),
-            blurRadius: 4,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          CertificateImage(imageUrl: certificate.imageUrl),
-          CertificateActions(certificate: certificate),
-        ],
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(bottom: 16),
+      child: CustomDetailsWidgetBackground(
+        child: Column(
+          children: [
+            CertificateImage(imageUrl: certificate.imageUrl),
+            CertificateActions(certificate: certificate),
+          ],
+        ),
       ),
     );
   }

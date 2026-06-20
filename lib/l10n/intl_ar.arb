@@ -457,10 +457,11 @@
     "editCertificate": "تعديل الشهادة",
     "close": "إغلاق",
     "acceptRequest": "قبول الطلب",
-    "acceptStudentRequest": "قبول طلب الطالب",
-    "studentRequestAccepted": "سيتم إرسال مجموعة الدراسة وتحويل الطالب إليك مباشرة",
+    "acceptStudentRequest": "قبول طلب",
+    "studentRequestAccepted": "سيتم إنشاء مجموعة دراسية وتحويل الطالب إليك مباشرة",
     "accept": "قبول",
     "cancel": "إلغاء",
     "day": "يوم",
-    "days": "أيام"
+    "days": "أيام",
+    "groups":"المجموعات"
 }
