@@ -6,26 +6,30 @@ class CustomAppButton extends StatelessWidget {
   const CustomAppButton({
     super.key,
     required this.text,
-    required this.onPressed,
+     this.onPressed,
     this.isLoading = false,
     this.padding = 0,
     this.backgroundColor,
     this.textColor,
     this.style,
+    this.borderColor,
+    this.height,
   });
 
   final String text;
   final TextStyle? style;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
   final double? padding;
   final Color? backgroundColor;
   final Color? textColor;
+  final Color? borderColor;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: height ?? 50,
       width: double.infinity,
       padding: EdgeInsetsDirectional.symmetric(horizontal: padding ?? 0),
       child: ElevatedButton(
@@ -33,10 +37,11 @@ class CustomAppButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           backgroundColor: backgroundColor ?? ColorManager.mainColor14,
-          disabledBackgroundColor: ColorManager.greyA8AF,
+          disabledBackgroundColor: ColorManager.grey7A7C,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
+          side: BorderSide(color: borderColor ?? Colors.transparent),
         ),
         child: isLoading
             ? const SizedBox(

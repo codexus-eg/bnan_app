@@ -7,14 +7,14 @@ class SchedulePickerField extends StatelessWidget {
   const SchedulePickerField({
     super.key,
     required this.label,
-    required this.hintText,
+     this.hintText,
     required this.value,
     required this.icon,
     required this.onTap,
   });
 
   final String label;
-  final String hintText;
+  final String? hintText;
   final String? value;
   final String icon;
   final VoidCallback onTap;
@@ -47,7 +47,7 @@ class SchedulePickerField extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    value ?? hintText,
+                    value ?? hintText??'',
                     style: StylesManager.styleLight12(context).copyWith(
                       color: value == null
                           ? ColorManager.greyA8AF

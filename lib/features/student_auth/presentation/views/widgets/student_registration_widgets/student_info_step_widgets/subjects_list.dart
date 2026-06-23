@@ -6,7 +6,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/get_subjects
 import 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/subject_option_tile.dart';
+import 'package:bnan_app/core/shared_widget/custom_option_tile.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,7 +83,7 @@ class SubjectsList extends StatelessWidget {
                     final isSelected = registerCubit.selectedSubjectIds
                         .contains(subject.id);
 
-                    return SubjectOptionTile(
+                    return CustomOptionTile(
                       title: subject.name,
                       isSelected: isSelected,
                       onTap: () {

@@ -1,4 +1,7 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
+import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo_impl.dart';
+import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -31,6 +34,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<StudentGroupsRepo>(
     () => StudentGroupsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+   getIt.registerLazySingleton<TeacherRegistrationRepo>(
+    () => TeacherRegistrationRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
   // Cubits
 
@@ -84,5 +90,8 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<GetMyEnrollmentsCubit>(
     () => GetMyEnrollmentsCubit(getIt<StudentGroupsRepo>()),
+  );
+   getIt.registerFactory<TeacherRegistrationCubit>(
+    () => TeacherRegistrationCubit(getIt<TeacherRegistrationRepo>()),
   );
 }

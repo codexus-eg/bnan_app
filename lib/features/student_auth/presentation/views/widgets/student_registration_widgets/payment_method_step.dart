@@ -1,5 +1,3 @@
-import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_methods_options.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -13,13 +11,13 @@ class PaymentMethodStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          S.of(context).paymentMethod,
-          style: StylesManager.styleBold16(
-            context,
-          ).copyWith(color: ColorManager.mainColor15),
-        ),
-        const SizedBox(height: 16),
+        // Text(
+        //   S.of(context).paymentMethod,
+        //   style: StylesManager.styleBold16(
+        //     context,
+        //   ).copyWith(color: ColorManager.mainColor15),
+        // ),
+        // const SizedBox(height: 16),
         PaymentMethodCard(
           packageName: S.of(context).package4Hours,
           price: '160',
