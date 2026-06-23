@@ -2,29 +2,53 @@ import 'package:bnan_app/generated/l10n.dart';
 
 abstract class MyValidator {
   static String? requiredValidator(String? value, String message) {
-  if (value == null || value.trim().isEmpty) {
-    return message;
+    if (value == null || value.trim().isEmpty) {
+      return message;
+    }
+    return null;
   }
-  return null;
-}
+
+  static String? requiredField(String? value, String fieldName) {
+    if (value == null || value.trim().isEmpty) {
+      return S.current.fieldIsRequired(fieldName);
+    }
+    return null;
+  }
+
+  static String? minLengthValidator({
+    required String? value,
+    required int minLength,
+    required String emptyMessage,
+    required String minMessage,
+  }) {
+    if (value == null || value.trim().isEmpty) {
+      return emptyMessage;
+    }
+    if (value.trim().length < minLength) {
+      return minMessage;
+    }
+    return null;
+  }
 
   static String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return S.current.nameCannotBeEmpty;
     }
-    if (value.length < 3) {
+    if (value.trim().length < 3) {
       return S.current.nameMinLength;
     }
     return null;
   }
 
   static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return S.current.emailCannotBeEmpty;
     }
-    final bool emailValid = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-    ).hasMatch(value);
+
+    final emailValid = RegExp(
+      r"^[\w\.\-]+@([\w\-]+\.)+[\w\-]{2,4}$",
+    ).hasMatch(value.trim());
+
     if (!emailValid) {
       return S.current.invalidEmail;
     }
@@ -32,10 +56,20 @@ abstract class MyValidator {
   }
 
   static String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return S.current.passwordCannotBeEmpty;
     }
-    if (value.length < 8) {
+    if (value.trim().length < 8) {
+      return S.current.passwordMinLength;
+    }
+    return null;
+  }
+
+  static String? validateStrongPassword(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return S.current.passwordCannotBeEmpty;
+    }
+    if (value.trim().length < 8) {
       return S.current.passwordMinLength;
     }
     if (!value.contains(RegExp(r'[A-Z]'))) {
@@ -48,7 +82,7 @@ abstract class MyValidator {
   }
 
   static String? validateConfirmPassword(String? value, String passwordValue) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return S.current.confirmPasswordCannotBeEmpty;
     }
     if (value != passwordValue) {

@@ -1,4 +1,3 @@
-import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
@@ -23,17 +22,16 @@ class StudentInfoStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          S.of(context).studentInfo,
-          style: StylesManager.styleBold16(context).copyWith(
-            color: ColorManager.mainColor15,
-          ),
-        ),
-        const SizedBox(height: 16),
+        // Text(
+        //   S.of(context).studentInfo,
+        //   style: StylesManager.styleBold16(context).copyWith(
+        //     color: ColorManager.mainColor15,
+        //   ),
+        // ),
+        // const SizedBox(height: 16),
         CustomTextField(
           controller: registerCubit.studentNameController,
           label: S.of(context).studentName,
-          hintText: '',
           isRequired: true,
         ),
         const SizedBox(height: 16),

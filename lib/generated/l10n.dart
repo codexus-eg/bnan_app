@@ -1220,6 +1220,16 @@ class S {
     );
   }
 
+  /// `Please enter {fieldName}`
+  String fieldIsRequired(Object fieldName) {
+    return Intl.message(
+      'Please enter $fieldName',
+      name: 'fieldIsRequired',
+      desc: '',
+      args: [fieldName],
+    );
+  }
+
   /// `Payment Information`
   String get paymentInfo {
     return Intl.message(
@@ -3625,6 +3635,476 @@ class S {
     return Intl.message(
       'Groups',
       name: 'groups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit Request`
+  String get submitRequest {
+    return Intl.message(
+      'Submit Request',
+      name: 'submitRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply as a Teacher at Banan Academy`
+  String get teacherApplyTitle {
+    return Intl.message(
+      'Apply as a Teacher at Banan Academy',
+      name: 'teacherApplyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your application will be reviewed and we will reply to you soon`
+  String get teacherApplySubtitle {
+    return Intl.message(
+      'Your application will be reviewed and we will reply to you soon',
+      name: 'teacherApplySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personal Information`
+  String get teacherStepPersonalInfo {
+    return Intl.message(
+      'Personal Information',
+      name: 'teacherStepPersonalInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Academic Qualification`
+  String get teacherStepQualification {
+    return Intl.message(
+      'Academic Qualification',
+      name: 'teacherStepQualification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Work Experience`
+  String get teacherStepExperience {
+    return Intl.message(
+      'Work Experience',
+      name: 'teacherStepExperience',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teaching Details`
+  String get teacherStepTeachingDetails {
+    return Intl.message(
+      'Teaching Details',
+      name: 'teacherStepTeachingDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Technical Skills`
+  String get teacherStepTechnicalSkills {
+    return Intl.message(
+      'Technical Skills',
+      name: 'teacherStepTechnicalSkills',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Evaluation`
+  String get teacherStepEvaluation {
+    return Intl.message(
+      'Evaluation',
+      name: 'teacherStepEvaluation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attachments and Declaration`
+  String get teacherStepAttachments {
+    return Intl.message(
+      'Attachments and Declaration',
+      name: 'teacherStepAttachments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Name`
+  String get fullName {
+    return Intl.message(
+      'Full Name',
+      name: 'fullName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nationality`
+  String get nationality {
+    return Intl.message(
+      'Nationality',
+      name: 'nationality',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country`
+  String get country {
+    return Intl.message(
+      'Country',
+      name: 'country',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `City`
+  String get city {
+    return Intl.message(
+      'City',
+      name: 'city',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Qualification`
+  String get qualification {
+    return Intl.message(
+      'Qualification',
+      name: 'qualification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Specialization`
+  String get specialization {
+    return Intl.message(
+      'Specialization',
+      name: 'specialization',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `University / Institution Name`
+  String get universityOrInstitutionName {
+    return Intl.message(
+      'University / Institution Name',
+      name: 'universityOrInstitutionName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Graduation Year`
+  String get graduationYear {
+    return Intl.message(
+      'Graduation Year',
+      name: 'graduationYear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade`
+  String get graduationGrade {
+    return Intl.message(
+      'Grade',
+      name: 'graduationGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you have teaching experience?`
+  String get hasTeachingExperience {
+    return Intl.message(
+      'Do you have teaching experience?',
+      name: 'hasTeachingExperience',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Have you taught online before?`
+  String get taughtOnlineBefore {
+    return Intl.message(
+      'Have you taught online before?',
+      name: 'taughtOnlineBefore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get yes {
+    return Intl.message(
+      'Yes',
+      name: 'yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get no {
+    return Intl.message(
+      'No',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose the curriculum you teach`
+  String get pleaseChooseTeachingCurriculum {
+    return Intl.message(
+      'Please choose the curriculum you teach',
+      name: 'pleaseChooseTeachingCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kuwaiti Curriculum`
+  String get kuwaitiCurriculum {
+    return Intl.message(
+      'Kuwaiti Curriculum',
+      name: 'kuwaitiCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Emirati Curriculum`
+  String get emiratiCurriculum {
+    return Intl.message(
+      'Emirati Curriculum',
+      name: 'emiratiCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose the grades for the {curriculum}`
+  String pleaseChooseCurriculumGrades(Object curriculum) {
+    return Intl.message(
+      'Please choose the grades for the $curriculum',
+      name: 'pleaseChooseCurriculumGrades',
+      desc: '',
+      args: [curriculum],
+    );
+  }
+
+  /// `Please choose the Subjects for the {curriculum}`
+  String pleaseChooseCurriculumSubjects(Object curriculum) {
+    return Intl.message(
+      'Please choose the Subjects for the $curriculum',
+      name: 'pleaseChooseCurriculumSubjects',
+      desc: '',
+      args: [curriculum],
+    );
+  }
+
+  /// `What is your level of using Computer?`
+  String get technicalAppsLevel {
+    return Intl.message(
+      'What is your level of using Computer?',
+      name: 'technicalAppsLevel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Good`
+  String get good {
+    return Intl.message(
+      'Good',
+      name: 'good',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Very Good`
+  String get veryGood {
+    return Intl.message(
+      'Very Good',
+      name: 'veryGood',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you have a laptop or computer?`
+  String get hasLaptopOrComputer {
+    return Intl.message(
+      'Do you have a laptop or computer?',
+      name: 'hasLaptopOrComputer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you have a stable internet connection?`
+  String get hasStableInternet {
+    return Intl.message(
+      'Do you have a stable internet connection?',
+      name: 'hasStableInternet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you have a good camera?`
+  String get hasGoodCamera {
+    return Intl.message(
+      'Do you have a good camera?',
+      name: 'hasGoodCamera',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you have a clear microphone?`
+  String get hasClearMic {
+    return Intl.message(
+      'Do you have a clear microphone?',
+      name: 'hasClearMic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Can you provide a trial lesson?`
+  String get canProvideTrialLesson {
+    return Intl.message(
+      'Can you provide a trial lesson?',
+      name: 'canProvideTrialLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Short video link (optional)`
+  String get shortVideoLinkOptional {
+    return Intl.message(
+      'Short video link (optional)',
+      name: 'shortVideoLinkOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Why do you want to join Banan Academy?`
+  String get whyJoinBananAcademy {
+    return Intl.message(
+      'Why do you want to join Banan Academy?',
+      name: 'whyJoinBananAcademy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How do you deal with a weak student?`
+  String get howHandleWeakStudent {
+    return Intl.message(
+      'How do you deal with a weak student?',
+      name: 'howHandleWeakStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload CV (pdf)`
+  String get uploadCvFile {
+    return Intl.message(
+      'Upload CV (pdf)',
+      name: 'uploadCvFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload certificate or qualification image (image/pdf)`
+  String get uploadCertificateFile {
+    return Intl.message(
+      'Upload certificate or qualification image (image/pdf)',
+      name: 'uploadCertificateFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload national ID / identity image (image/pdf)`
+  String get uploadNationalIdFile {
+    return Intl.message(
+      'Upload national ID / identity image (image/pdf)',
+      name: 'uploadNationalIdFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I confirm that all the information mentioned above is correct, and I agree to follow Banan Academy rules and policies`
+  String get teacherDeclarationAgreement {
+    return Intl.message(
+      'I confirm that all the information mentioned above is correct, and I agree to follow Banan Academy rules and policies',
+      name: 'teacherDeclarationAgreement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please answer all questions`
+  String get pleaseAnswerAllQuestions {
+    return Intl.message(
+      'Please answer all questions',
+      name: 'pleaseAnswerAllQuestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose at least one grade`
+  String get pleaseChooseAtLeastOneGrade {
+    return Intl.message(
+      'Please choose at least one grade',
+      name: 'pleaseChooseAtLeastOneGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose at least one subject for each grade`
+  String get pleaseChooseAtLeastOneSubjectForEachGrade {
+    return Intl.message(
+      'Please choose at least one subject for each grade',
+      name: 'pleaseChooseAtLeastOneSubjectForEachGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your request has been submitted and is now under review.`
+  String get requestSubmittedUnderReview {
+    return Intl.message(
+      'Your request has been submitted and is now under review.',
+      name: 'requestSubmittedUnderReview',
       desc: '',
       args: [],
     );

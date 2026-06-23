@@ -17,13 +17,13 @@ class ParentInfoStep extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            S.of(context).parentInfo,
-            style: StylesManager.styleBold16(context).copyWith(
-              color: ColorManager.mainColor15,
-            ),
-          ),
-          const SizedBox(height: 16),
+          // Text(
+          //   S.of(context).parentInfo,
+          //   style: StylesManager.styleBold16(context).copyWith(
+          //     color: ColorManager.mainColor15,
+          //   ),
+          // ),
+          // const SizedBox(height: 16),
           CustomTextField(
             controller: cubit.parentNameController,
             label: S.of(context).parentName,

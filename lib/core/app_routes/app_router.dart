@@ -1,14 +1,17 @@
+import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
 import 'package:bnan_app/features/teacher_chats/presentation/views/teacher_chats_view.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
+import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
+import 'package:bnan_app/features/teacher_registration/presentation/views/teacher_registration_view.dart';
 import 'package:bnan_app/features/teacher_request_groups/presentation/views/teacher_registration_requests_view.dart';
 
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.teacherChats,
+    initialLocation: Routes.teacherRegistration,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -240,10 +243,32 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
-       GoRoute(
+      GoRoute(
         path: Routes.teacherChats,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherChatsView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherRegistration,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TeacherRegistrationCubit>()),
+              BlocProvider(
+                create: (_) =>
+                    getIt<GetCurriculumsCubit>()..getAllCurriculums(),
+              ),
+              BlocProvider(
+                create: (context) => GetGradesCubit(getIt<AuthRepo>()),
+              ),
+              BlocProvider(
+                create: (context) => GetSubjectsCubit(getIt<AuthRepo>()),
+              ),
+            ],
+            child: const TeacherRegistrationView(),
+          ),
           key: state.pageKey,
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
-import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/teacher_certificates/data/models/teacher_certificate_model.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/widgets/certificate_actions.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/widgets/certificate_image.dart';

@@ -1,6 +1,4 @@
 import 'package:bnan_app/core/app_routes/routes_export.dart';
-import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +12,10 @@ class CurriculumSelectionStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(S.of(context).curriculumSelection,style: StylesManager.styleBold16(context).copyWith(
-          color: ColorManager.mainColor15
-        ),),
-        const SizedBox(height: 16),
+        // Text(S.of(context).curriculumSelection,style: StylesManager.styleBold16(context).copyWith(
+        //   color: ColorManager.mainColor15
+        // ),),
+        // const SizedBox(height: 16),
         CustomDropdown(
           label: S.of(context).curriculum,
          value: registerCubit.curriculumName,

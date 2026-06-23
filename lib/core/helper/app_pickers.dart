@@ -74,6 +74,70 @@ class AppPickers {
     );
   }
 
+  static Future<int?> pickYear({
+    required BuildContext context,
+    required String title,
+    int? selectedYear,
+    int firstYear = 1970,
+    int? lastYear,
+  }) {
+    final endYear = lastYear ?? DateTime.now().year;
+
+    return showModalBottomSheet<int>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(title),
+              const SizedBox(height: 16),
+              Expanded(
+                child: GridView.builder(
+                  itemCount: endYear - firstYear + 1,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 1.8,
+                  ),
+                  itemBuilder: (context, index) {
+                    final year = endYear - index;
+                    final isSelected = year == selectedYear;
+
+                    return InkWell(
+                      onTap: () => Navigator.pop(context, year),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? ColorManager.mainColor15
+                              : ColorManager.greyF4F6,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          year.toString(),
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   static TimePickerThemeData _timePickerTheme() {
     return TimePickerThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

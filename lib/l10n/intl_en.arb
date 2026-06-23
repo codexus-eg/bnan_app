@@ -158,6 +158,12 @@
             "total": {}
         }
     },
+    "fieldIsRequired": "Please enter {fieldName}",
+    "@fieldIsRequired": {
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
     "paymentInfo": "Payment Information",
     "cardNumber": "Card number",
     "cardHolderName": "Cardholder name",
@@ -463,5 +469,62 @@
     "cancel": "Cancel",
     "day": "Day",
     "days": "Days",
-    "groups": "Groups"
+    "groups": "Groups",
+    "submitRequest": "Submit Request",
+    "teacherApplyTitle": "Apply as a Teacher at Banan Academy",
+    "teacherApplySubtitle": "Your application will be reviewed and we will reply to you soon",
+    "teacherStepPersonalInfo": "Personal Information",
+    "teacherStepQualification": "Academic Qualification",
+    "teacherStepExperience": "Work Experience",
+    "teacherStepTeachingDetails": "Teaching Details",
+    "teacherStepTechnicalSkills": "Technical Skills",
+    "teacherStepEvaluation": "Evaluation",
+    "teacherStepAttachments": "Attachments and Declaration",
+    "fullName": "Full Name",
+    "nationality": "Nationality",
+    "country": "Country",
+    "city": "City",
+    "qualification": "Qualification",
+    "specialization": "Specialization",
+    "universityOrInstitutionName": "University / Institution Name",
+    "graduationYear": "Graduation Year",
+    "graduationGrade": "Grade",
+    "hasTeachingExperience": "Do you have teaching experience?",
+    "taughtOnlineBefore": "Have you taught online before?",
+    "yes": "Yes",
+    "no": "No",
+    "pleaseChooseTeachingCurriculum": "Please choose the curriculum you teach",
+    "kuwaitiCurriculum": "Kuwaiti Curriculum",
+    "emiratiCurriculum": "Emirati Curriculum",
+    "pleaseChooseCurriculumGrades": "Please choose the grades for the {curriculum}",
+    "@pleaseChooseCurriculumGrades": {
+        "placeholders": {
+            "curriculum": {}
+        }
+    },
+    "pleaseChooseCurriculumSubjects": "Please choose the Subjects for the {curriculum}",
+    "@pleaseChooseCurriculumSubjects": {
+        "placeholders": {
+            "curriculum": {}
+        }
+    },
+    "technicalAppsLevel": "What is your level of using Computer?",
+    "good": "Good",
+    "veryGood": "Very Good",
+    "hasLaptopOrComputer": "Do you have a laptop or computer?",
+    "hasStableInternet": "Do you have a stable internet connection?",
+    "hasGoodCamera": "Do you have a good camera?",
+    "hasClearMic": "Do you have a clear microphone?",
+    "canProvideTrialLesson": "Can you provide a trial lesson?",
+    "shortVideoLinkOptional": "Short video link (optional)",
+    "whyJoinBananAcademy": "Why do you want to join Banan Academy?",
+    "howHandleWeakStudent": "How do you deal with a weak student?",
+    "uploadCvFile": "Upload CV (pdf)",
+    "uploadCertificateFile": "Upload certificate or qualification image (image/pdf)",
+    "uploadNationalIdFile": "Upload national ID / identity image (image/pdf)",
+    "teacherDeclarationAgreement": "I confirm that all the information mentioned above is correct, and I agree to follow Banan Academy rules and policies",
+    "pleaseAnswerAllQuestions": "Please answer all questions",
+    "pleaseChooseAtLeastOneGrade": "Please choose at least one grade",
+    "pleaseChooseAtLeastOneSubjectForEachGrade": "Please choose at least one subject for each grade",
+    "requestSubmittedUnderReview": "Your request has been submitted and is now under review."
 }

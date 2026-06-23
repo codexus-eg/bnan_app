@@ -7,14 +7,14 @@ abstract class EndPoints {
   static const String verifyResetCode = '/auth/verifyResetCode';
   static const String resetPassword = '/auth/resetPassword';
   static const String updatePassword = '/auth/updatePassword';
-
+  static const String registerTeacher = '/auth/register-teacher';
   static const String getLoggedUser = '/users/me';
   static const String updateLoggedUserName = '/users/me/name';
   static const String updateLoggedUserPhone = '/users/me/phone';
   static const String myAssignments = '/students/me/assignments';
   static const String curriculums = '/curriculums';
   static const String studentSubscription = '/students/me/subscription';
-static const String myEnrollments = '/students/me/enrollments';
+  static const String myEnrollments = '/students/me/enrollments';
   static String curriculumPackages(String curriculumId) {
     return '/packages/curriculum/$curriculumId';
   }
@@ -30,6 +30,7 @@ static const String myEnrollments = '/students/me/enrollments';
     return '/subjects/curriculum/$curriculumId?grade=$gradeId';
   }
 
-static String submitAssignment(String assignmentId) {
-  return '/assignments/$assignmentId/submit';
-}}
+  static String submitAssignment(String assignmentId) {
+    return '/assignments/$assignmentId/submit';
+  }
+}

@@ -47,4 +47,15 @@ class CurriculumModel {
       updatedAt: json['updatedAt'] ?? '',
     );
   }
+ factory CurriculumModel.mock(Map<String, dynamic> json) {
+  return const CurriculumModel(
+    id: '',
+    name: 'Curriculum Name',
+    baseCurriculum: '',
+    icon: '',
+    description: '',
+    createdAt: '',
+    updatedAt: '',
+  );
+}
 }

@@ -1,0 +1,276 @@
+// const mongoose = require('mongoose');
+
+// const teacherSchema = new mongoose.Schema(
+//     {
+//         user: {
+//             type: mongoose.Schema.ObjectId,
+//             ref: 'User',
+//             required: true,
+//             unique: true
+//         },
+//         phone: {
+//             type: String,
+//             required: [true, 'PHONE_REQUIRED'],
+//             trim: true
+//         },
+//         whatsapp: {
+//             type: String,
+//             required: [true, 'WHATSAPP_PHONE_REQUIRED'],
+//             trim: true
+//         },
+//         nationality: {
+//             type: String,
+//             required: [true, 'NATIONALITY_REQUIRED'],
+//             trim: true
+
+//         },
+//         country: {
+//             type: String,
+//             required: [true, 'COUNTRY_REQUIRED'],
+//             trim: true
+//         },
+
+//         city: {
+//             type: String,
+//             required: [true, 'CITY_REQUIRED'],
+//             trim: true
+//         },
+//         degree: {
+//             type: String,
+//             required: [true, 'DEGREE_REQUIRED'],
+//             trim: true
+//         },
+
+//         specialization: {
+//             type: String,
+//             required: [true, 'SPECIALIZATION_REQUIRED'],
+//             trim: true
+//         },
+
+//         institutionName: {
+//             type: String,
+//             required: [true, 'INSTITUTION_REQUIRED'],
+//             trim: true
+//         },
+
+
+//         graduationYear: {
+//             type: Number,
+//             required: [true, 'GRADUATION_YEAR_REQUIRED']
+//         },
+
+//         graduationGrade: {
+//             type: String,
+//             required: [true, 'GRADUATION_GRADE_REQUIRED'],
+//             enum: {
+//                 values: [
+//                     'excellent',
+//                     'very-good',
+//                     'good',
+//                     'pass'
+//                 ],
+//                 message: 'INVALID_GRADUATION_GRADE'
+//             }
+//         },
+//         hasTeachingExperience: {
+//             type: Boolean,
+//             required: [true, 'TEACHING_EXPERIENCE_REQUIRED']
+//         },
+//         hasOnlineTeachingExperience: {
+//             type: Boolean,
+//             required: [true, 'ONLINE_EXPERIENCE_REQUIRED']
+//         },
+//         curriculums: [{
+//             type: mongoose.Schema.ObjectId,
+//             ref: 'Curriculum',
+//             required: [true, 'CURRICULUM_REQUIRED']
+//         }],
+//         availableHoursPerWeek: {
+//             type: Number,
+//             required: [true, 'AVAILABLE_HOURS_REQUIRED'],
+//             min: [1, 'INVALID_AVAILABLE_HOURS']
+//         },
+
+//         // availabilitySchedule: [
+//         //     {
+//         //         day: {
+//         //             type: String,
+//         //             enum: {
+//         //                 values: [
+//         //                     'saturday',
+//         //                     'sunday',
+//         //                     'monday',
+//         //                     'tuesday',
+//         //                     'wednesday',
+//         //                     'thursday',
+//         //                     'friday'
+//         //                 ],
+//         //                 message: 'INVALID_DAY'
+//         //             }
+//         //         },
+
+//         //         from: {
+//         //             type: String,
+//         //             required: [true, 'FROM_TIME_REQUIRED']
+//         //         },
+
+//         //         to: {
+//         //             type: String,
+//         //             required: [true, 'TO_TIME_REQUIRED']
+//         //         }
+//         //     }
+//         // ],
+
+//         computerSkillLevel: {
+//             type: String,
+//             required: [true, 'COMPUTER_LEVEL_REQUIRED'],
+//             enum: {
+//                 values: [
+//                     'excellent',
+//                     'very-good',
+//                     'good'
+//                 ],
+//                 message:
+//                     'INVALID_COMPUTER_LEVEL'
+//             }
+//         },
+
+//         hasLaptop: {
+//             type: Boolean,
+//             required: [true, 'LAPTOP_REQUIRED']
+//         },
+
+//         hasStableInternet: {
+//             type: Boolean,
+//             required: [true, 'INTERNET_REQUIRED']
+//         },
+
+//         hasGoodCamera: {
+//             type: Boolean,
+//             required: [true, 'CAMERA_REQUIRED']
+//         },
+
+//         hasMicrophone: {
+//             type: Boolean,
+//             required: [true, 'MICROPHONE_REQUIRED']
+//         },
+
+//         canProvideDemoSession: {
+//             type: Boolean,
+//             required: [
+//                 true,
+//                 'DEMO_SESSION_REQUIRED'
+//             ]
+//         },
+
+//         introVideoUrl: {
+//             type: String,
+//             trim: true
+//         },
+
+//         joiningReason: {
+//             type: String,
+//             required: [
+//                 true,
+//                 'JOIN_REASON_REQUIRED'
+//             ],
+//             trim: true
+//         },
+
+//         weakStudentHandling: {
+//             type: String,
+//             required: [
+//                 true,
+//                 'WEAK_STUDENT_REQUIRED'
+//             ],
+//             trim: true
+//         },
+//         cv: {
+//             type: String,
+//             required: [
+//                 true,
+//                 'CV_REQUIRED'
+//             ]
+//         },
+
+//         certificate: {
+//             type: String,
+//             required: [
+//                 true,
+//                 'CERTIFICATE_REQUIRED'
+//             ]
+//         },
+
+//         identityDocument: {
+//             type: String,
+//             required: [
+//                 true,
+//                 'IDENTITY_REQUIRED'
+//             ]
+//         },
+
+//         termsAccepted: {
+//             type: Boolean,
+//             required: [
+//                 true,
+//                 'TERMS_REQUIRED'
+//             ],
+//             validate: {
+//                 validator:
+//                     value => value === true,
+
+//                 message:
+//                     'TERMS_MUST_BE_ACCEPTED'
+//             }
+//         },
+//         pricePerSession: {
+//             type: Number,
+//             default: 0,
+//             min: [0, 'INVALID_PRICE']
+//         },
+//         excellencePoints: {
+//             type: Number,
+//             default: 0,
+//             min: [0, 'INVALID_POINTS']
+//         },
+//         totalSessions: {
+//             type: Number,
+//             default: 0
+//         },
+//         isAvailable: {
+//             type: Boolean,
+//             default: true,
+//         },
+//         status: {
+//             type: String,
+//             enum: {
+//                 values: ['pending', 'approved', 'rejected'],
+//                  message: "INVALID_STATUS",
+//             },
+//             default: 'pending'
+//         }
+//     }, {
+//     timestamps: true
+// }
+// )
+
+// teacherSchema.virtual('classrooms', {
+//     ref: "Classroom",
+//     foreignField: 'teacher',
+//     localField: '_id'
+// })
+// // teacherSchema.pre(/^find/, function () {
+// //     this.populate({
+// //         path: 'subjects',
+// //         select: 'name'
+// //     })
+// // })
+
+
+// teacherSchema.virtual('teacherGrades', {
+//     ref: 'teacherGrades',
+//     foreignField: 'Teacher',
+//     localField: '_id'
+// })
+
+// module.exports = mongoose.model('Teacher', teacherSchema)

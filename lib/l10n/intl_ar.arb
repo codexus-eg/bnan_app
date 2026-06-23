@@ -18,6 +18,12 @@
             "statusCode": {}
         }
     },
+    "fieldIsRequired": "برجاء إدخال {fieldName}",
+    "@fieldIsRequired": {
+        "placeholders": {
+            "fieldName": {}
+        }
+    },
     "nameCannotBeEmpty": "الاسم لا يمكن أن يكون فارغًا.",
     "nameMinLength": "يجب أن يحتوي الاسم على 3 أحرف على الأقل.",
     "emailCannotBeEmpty": "البريد الإلكتروني لا يمكن أن يكون فارغًا.",
@@ -463,5 +469,62 @@
     "cancel": "إلغاء",
     "day": "يوم",
     "days": "أيام",
-    "groups":"المجموعات"
+    "groups": "المجموعات",
+    "submitRequest": "إرسال الطلب",
+    "teacherApplyTitle": "التقديم كمعلم في أكاديمية بنان",
+    "teacherApplySubtitle": "سيتم مراجعة طلبك والرد عليك قريبًا",
+    "teacherStepPersonalInfo": "البيانات الشخصية",
+    "teacherStepQualification": "المؤهل العلمي",
+    "teacherStepExperience": "الخبرة العملية",
+    "teacherStepTeachingDetails": "تفاصيل التدريس",
+    "teacherStepTechnicalSkills": "المهارات التقنية",
+    "teacherStepEvaluation": "التقييم",
+    "teacherStepAttachments": "المرفقات والإقرار",
+    "fullName": "الاسم بالكامل",
+    "nationality": "الجنسية",
+    "country": "الدولة",
+    "city": "المدينة",
+    "qualification": "المؤهل",
+    "specialization": "التخصص",
+    "universityOrInstitutionName": "اسم الجامعة/المؤهل",
+    "graduationYear": "سنة التخرج",
+    "graduationGrade": "التقدير",
+    "hasTeachingExperience": "هل لديك خبرة في التدريس؟",
+    "taughtOnlineBefore": "هل سبق لك التدريس أونلاين؟",
+    "yes": "نعم",
+    "no": "لا",
+    "pleaseChooseTeachingCurriculum": "برجاء اختيار المنهج الذي تدرسه",
+    "kuwaitiCurriculum": "المنهج الكويتي",
+    "emiratiCurriculum": "المنهج الإماراتي",
+    "pleaseChooseCurriculumGrades": "برجاء اختيار صفوف المنهج {curriculum}",
+    "@pleaseChooseCurriculumGrades": {
+        "placeholders": {
+            "curriculum": {}
+        }
+    },
+    "pleaseChooseCurriculumSubjects": "برجاء اختيار مواد المنهج {curriculum}",
+    "@pleaseChooseCurriculumSubjects": {
+        "placeholders": {
+            "curriculum": {}
+        }
+    },
+    "technicalAppsLevel": "مستوى استخدام الكمبيوتر",
+    "good": "جيد",
+    "veryGood": "جيد جدًا",
+    "hasLaptopOrComputer": "هل لديك لاب توب أو كمبيوتر؟",
+    "hasStableInternet": "هل لديك إنترنت مستقر؟",
+    "hasGoodCamera": "هل لديك كاميرا جيدة؟",
+    "hasClearMic": "هل لديك مايك واضح؟",
+    "canProvideTrialLesson": "هل يمكنك تقديم حصة تجريبية؟",
+    "shortVideoLinkOptional": "رابط فيديو قصير (اختياري)",
+    "whyJoinBananAcademy": "لماذا ترغب في الانضمام لأكاديمية بنان؟",
+    "howHandleWeakStudent": "كيف تتعامل مع طالب ضعيف المستوى؟",
+    "uploadCvFile": "رفع السيرة الذاتية (pdf)",
+    "uploadCertificateFile": "صورة من الشهادة أو المؤهل (صورة/pdf)",
+    "uploadNationalIdFile": "صورة بطاقة الرقم القومي/الهوية (صورة/pdf)",
+    "teacherDeclarationAgreement": "أقر بصحة جميع البيانات المذكورة أعلاه، وأتعهد بالالتزام بقواعد وسياسات أكاديمية بنان",
+    "pleaseAnswerAllQuestions": "برجاء الإجابة على جميع الأسئلة",
+    "pleaseChooseAtLeastOneGrade": "برجاء اختيار صف واحد على الأقل",
+    "pleaseChooseAtLeastOneSubjectForEachGrade": "برجاء اختيار مادة واحدة على الأقل لكل صف",
+    "requestSubmittedUnderReview": "تم إرسال طلبك وهو الآن قيد المراجعة."
 }

@@ -1,6 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/shared_widget/custom_icon_box.dart';
-import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/widgets/card_content.dart';
 import 'package:flutter/material.dart';
 

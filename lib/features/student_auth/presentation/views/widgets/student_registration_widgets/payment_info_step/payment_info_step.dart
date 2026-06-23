@@ -1,7 +1,6 @@
 import 'package:bnan_app/core/helper/app_pickers.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_info_step/credit_card_preview.dart';
 import 'package:bnan_app/core/shared_widget/schedule_picker_field.dart';
@@ -42,13 +41,13 @@ class _PaymentInfoStepState extends State<PaymentInfoStep> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          S.of(context).paymentInfo,
-          style: StylesManager.styleBold16(context).copyWith(
-            color: ColorManager.mainColor15,
-          ),
-        ),
-        const SizedBox(height: 16),
+        // Text(
+        //   S.of(context).paymentInfo,
+        //   style: StylesManager.styleBold16(context).copyWith(
+        //     color: ColorManager.mainColor15,
+        //   ),
+        // ),
+        // const SizedBox(height: 16),
         const CreditCardPreview(),
         const SizedBox(height: 16),
         CustomTextField(label: S.of(context).cardNumber, isRequired: true),
