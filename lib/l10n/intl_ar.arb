@@ -569,5 +569,17 @@
     "classesCount": "الحصص",
     "salary": "الراتب",
     "points": "النقاط",
-    "ranking": "الترتيب"
+    "ranking": "الترتيب",
+    "weeklyIdealStudent": "الطالب المثالي للأسبوع",
+    "weeklyIdealStudentsRanking": "ترتيب الطلاب المثاليين هذا الأسبوع",
+    "weeklyEvaluations": "التقييمات الأسبوعية",
+    "addNewEvaluation": "إضافة تقييم جديد",
+    "newWeeklyEvaluation": "تقييم أسبوعي جديد",
+    "editEvaluation": "تعديل التقييم",
+    "weekStart": "بداية الأسبوع",
+    "behavior": "السلوك",
+    "notesText":"ملاحظات",
+    "classSchedulesManagement": "إدارة جداول الصفوف",
+    "addNewSchedule": "إضافة جدول جديد",
+    "uploadSchedule": "رفع الجدول"
 }

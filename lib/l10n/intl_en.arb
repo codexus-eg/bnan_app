@@ -569,5 +569,17 @@
     "month": "Month",
     "salary": "Salary",
     "points": "Points",
-    "ranking": "Ranking"
+    "ranking": "Ranking",
+    "weeklyIdealStudent": "Weekly Ideal Student",
+    "weeklyIdealStudentsRanking": "Weekly Ideal Students Ranking",
+    "weeklyEvaluations": "Weekly Evaluations",
+    "addNewEvaluation": "Add New Evaluation",
+    "newWeeklyEvaluation": "New Weekly Evaluation",
+    "editEvaluation": "Edit Evaluation",
+    "weekStart": "Week Start",
+    "behavior": "Behavior",
+    "notesText": "Notes",
+    "classSchedulesManagement": "Class Schedules Management",
+    "addNewSchedule": "Add New Schedule",
+    "uploadSchedule": "Upload Schedule"
 }

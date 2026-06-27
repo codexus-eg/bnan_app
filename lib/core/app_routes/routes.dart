@@ -25,4 +25,7 @@ abstract class Routes {
       '/teacherRegistrationRequest';
   static const String teacherChats = '/teacherChats';
   static const String teacherPerformance = '/teacherPerformance';
+  static const String weeklyIdealStudents = '/weeklyIdealStudents';
+  static const String weeklyEvaluations = '/weeklyEvaluations';
+  static const String classSchedules = '/classSchedules';
 }

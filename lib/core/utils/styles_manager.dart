@@ -2,6 +2,13 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:flutter/material.dart';
 
 abstract class StylesManager {
+  static TextStyle styleRegular10(BuildContext context) {
+    return TextStyle(
+      fontSize: 10,
+      color: ColorManager.mainColor14,
+      fontWeight: FontWeight.w400,
+    );
+  }
    static TextStyle styleRegular12(BuildContext context) {
     return TextStyle(
       fontSize: 12,

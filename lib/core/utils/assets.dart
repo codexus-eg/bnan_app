@@ -123,4 +123,8 @@ class ImageManager {
       '${_teacherAssignmentFeature}check2-circle.svg';
   static const String arrowGrowthDownIcon =
       '${_teacherAssignmentFeature}arrow-growth-down.svg';
+       static const String crownSimple =
+      '${_teacherAssignmentFeature}CrownSimple.svg';
+      static const String stPlaceMedal1 =
+      '${_teacherAssignmentFeature}1stPlaceMedal.svg'; 
 }

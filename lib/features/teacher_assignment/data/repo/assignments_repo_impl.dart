@@ -1,6 +1,5 @@
 import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/error/failure.dart';
-import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
