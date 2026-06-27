@@ -21,7 +21,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         headerText,
         style: StylesManager.styleBold18(context).copyWith(
-          color: ColorManager.mainColor14,
+          color: ColorManager.black,
         ),
       ),
     );

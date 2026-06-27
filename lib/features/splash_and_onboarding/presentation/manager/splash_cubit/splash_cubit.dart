@@ -15,7 +15,16 @@ class SplashCubit extends Cubit<SplashState> {
     if (isClosed) return;
 
     if (token != null && token.isNotEmpty) {
-      emit(SplashNavigateToHome());
+      final role = await SessionManager.instance.getUserRole();
+      if (role == 'student') {
+        emit(SplashNavigateToStudentHome());
+      } else if (role == 'teacher') {
+        emit(SplashNavigateToTeacherHome());
+      } else if (role == 'parent') {
+        emit(SplashNavigateToParentHome());
+      } else {
+        emit(SplashNavigateToOnboarding());
+      }
     } else {
       emit(SplashNavigateToOnboarding());
     }

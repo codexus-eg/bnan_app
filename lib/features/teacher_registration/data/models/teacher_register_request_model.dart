@@ -103,7 +103,7 @@ class TeacherRegisterRequestModel {
       'joiningReason': joiningReason,
       'weakStudentHandling': weakStudentHandling,
       'termsAccepted': termsAccepted.toString(),
-      'curriculums': curriculum,
+      'curriculums': [curriculum],
       'teacherAssignments': jsonEncode(teacherAssignments),
       'cv': await MultipartFile.fromFile(cv.path),
       'certificate': await MultipartFile.fromFile(certificate.path),

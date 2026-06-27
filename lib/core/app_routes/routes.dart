@@ -24,4 +24,5 @@ abstract class Routes {
   static const String teacherRegistrationRequest =
       '/teacherRegistrationRequest';
   static const String teacherChats = '/teacherChats';
+  static const String teacherPerformance = '/teacherPerformance';
 }

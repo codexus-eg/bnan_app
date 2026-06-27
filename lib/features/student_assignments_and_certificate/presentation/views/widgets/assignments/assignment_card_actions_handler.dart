@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
-import 'package:bnan_app/features/student_assignments_and_certificate/data/models/assignment_model.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_assignment/get_assignments_cubit.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/submit_assignment/submit_assignment_cubit.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/submit_assignment/submit_assignment_state.dart';

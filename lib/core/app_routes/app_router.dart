@@ -3,15 +3,15 @@ import 'package:bnan_app/features/teacher_certificates/presentation/views/teache
 import 'package:bnan_app/features/teacher_chats/presentation/views/teacher_chats_view.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
+import 'package:bnan_app/features/teacher_performance/presentation/views/teacher_performance_view.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/views/teacher_registration_view.dart';
 import 'package:bnan_app/features/teacher_request_groups/presentation/views/teacher_registration_requests_view.dart';
-
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.teacherRegistration,
+    initialLocation: Routes.teacherPerformance,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -74,7 +74,6 @@ GoRouter buildRouter() {
         path: Routes.subscription,
         pageBuilder: (context, state) {
           final curriculum = state.extra as CurriculumCardModel;
-
           return buildTransitionPages(
             child: BlocProvider(
               create: (_) =>
@@ -93,7 +92,6 @@ GoRouter buildRouter() {
         path: Routes.studentRegistration,
         pageBuilder: (context, state) {
           final args = state.extra as RegisterFlowArgsModel;
-
           return buildTransitionPages(
             child: MultiBlocProvider(
               providers: [
@@ -145,7 +143,7 @@ GoRouter buildRouter() {
         path: Routes.home,
         pageBuilder: (context, state) => buildTransitionPages(
           child: BlocProvider(
-            create: (context) => getIt<GetLoggedUserCubit>()..getLoggedUser(),
+            create: (context) => getIt<StudentProfileCubit>()..getLoggedUser(),
             child: const HomeStudentView(),
           ),
           key: state.pageKey,
@@ -272,6 +270,14 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
+      GoRoute(
+        path: Routes.teacherPerformance,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const TeacherPerformanceView(),
+          key: state.pageKey,
+        ),
+      ),
     ],
   );
+  
 }

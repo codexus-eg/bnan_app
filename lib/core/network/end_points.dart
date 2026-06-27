@@ -1,5 +1,5 @@
 abstract class EndPoints {
-  static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1/';
+  static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
 
   static const String register = '/auth/register';
   static const String login = '/auth/login';
@@ -15,6 +15,11 @@ abstract class EndPoints {
   static const String curriculums = '/curriculums';
   static const String studentSubscription = '/students/me/subscription';
   static const String myEnrollments = '/students/me/enrollments';
+  static const String teacherCurriculums = '/teachers/mycurriculums';
+  static const String teacherProfile = '/users/teacherProfile';
+  static const String assignments = '/assignments';
+  static const String teacherClassrooms = '/teachers/myclassrooms';
+
   static String curriculumPackages(String curriculumId) {
     return '/packages/curriculum/$curriculumId';
   }
@@ -32,5 +37,36 @@ abstract class EndPoints {
 
   static String submitAssignment(String assignmentId) {
     return '/assignments/$assignmentId/submit';
+  }
+
+  static String teacherGradesByCurriculum(String curriculumId) {
+    return '/teachers/$curriculumId/grades';
+  }
+
+  static String teacherClassroomStudents(String classroomId) {
+    return '/teachers/$classroomId/students';
+  }
+
+  static String teacherGrades(String curriculumId) {
+    return '/teachers/$curriculumId/grades';
+  }
+
+  static String assignmentById(String assignmentId) {
+    return '/assignments/$assignmentId';
+  }
+
+  static String reviewSubmission({
+    required String assignmentId,
+    required String submissionId,
+  }) {
+    return '/assignments/$assignmentId/submissions/$submissionId/review';
+  }
+
+  static String classroomSubjects(String classroomId) {
+    return '/classroomsubjects?classroom=$classroomId';
+  }
+
+  static String subjectDetails(String subjectId) {
+    return '/subjects/$subjectId';
   }
 }

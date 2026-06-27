@@ -1,7 +1,11 @@
-abstract class SplashState {}
+sealed class SplashState {}
 
-class SplashInitial extends SplashState {}
+final class SplashInitial extends SplashState {}
 
-class SplashNavigateToOnboarding extends SplashState {}
+final class SplashNavigateToOnboarding extends SplashState {}
 
-class SplashNavigateToHome extends SplashState {}
+final class SplashNavigateToStudentHome extends SplashState {}
+
+final class SplashNavigateToTeacherHome extends SplashState {}
+
+final class SplashNavigateToParentHome extends SplashState {}

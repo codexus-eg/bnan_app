@@ -26,7 +26,11 @@ class LoginForm extends StatelessWidget {
             '${S.of(context).loginWelcomeTitle} ${state.user.fullName}',
             true,
           );
-          MyNavigator.goToOffAll(context, Routes.home);
+          if (state.user.role == 'student') {
+            MyNavigator.goToOffAll(context, Routes.home);
+          } else if (state.user.role == 'teacher') {
+            MyNavigator.goToOffAll(context, Routes.teacherHome);
+          }
         }
         if (state is LoginFailure) {
           showCustomSnackBar(context, state.errorMessage, false);
@@ -75,9 +79,9 @@ class LoginForm extends StatelessWidget {
                   ).copyWith(color: ColorManager.secondaryColor),
                 ),
               ),
-             CustomAppButton(
-              isLoading: isLoading,
-                text:  S.of(context).login,
+              CustomAppButton(
+                isLoading: isLoading,
+                text: S.of(context).login,
                 onPressed: cubit.login,
               ),
             ],

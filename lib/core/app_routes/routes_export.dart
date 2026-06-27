@@ -6,7 +6,7 @@ export 'package:bnan_app/features/student_auth/presentation/manager/forgot_passw
 export 'package:bnan_app/features/student_auth/presentation/manager/login_cubit/login_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/reset_password_cubit/reset_password_cubit.dart';
-export 'package:bnan_app/features/student_profile/presentation/manager/update_password_cubit/update_password_cubit.dart';
+export 'package:bnan_app/features/shared_profile/presentation/manager/update_password_cubit/update_password_cubit.dart';
 
 export 'package:bnan_app/features/student_auth/presentation/views/change_password_view.dart';
 export 'package:bnan_app/features/student_auth/presentation/views/curricula_view.dart';
@@ -39,9 +39,9 @@ export 'package:bnan_app/features/student_auth/presentation/manager/get_grades_c
 export 'package:bnan_app/features/student_auth/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
 export 'package:bnan_app/features/student_groups/presentation/manager/get_my_enrollments/get_my_enrollments_cubit.dart';
-export 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_cubit.dart';
-export 'package:bnan_app/features/student_profile/presentation/manager/update_name_cubit/update_name_cubit.dart';
-export 'package:bnan_app/features/student_profile/presentation/manager/update_phone_cubit/update_phone_cubit.dart';
-export 'package:bnan_app/features/student_profile/presentation/views/edit_name_view.dart';
-export 'package:bnan_app/features/student_profile/presentation/views/edit_phone_view.dart';
-export 'package:bnan_app/features/student_profile/presentation/views/update_password_view.dart';
+export 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
+export 'package:bnan_app/features/shared_profile/presentation/manager/update_name_cubit/update_name_cubit.dart';
+export 'package:bnan_app/features/shared_profile/presentation/manager/update_phone_cubit/update_phone_cubit.dart';
+export 'package:bnan_app/features/shared_profile/presentation/views/edit_name_view.dart';
+export 'package:bnan_app/features/shared_profile/presentation/views/edit_phone_view.dart';
+export 'package:bnan_app/features/shared_profile/presentation/views/update_password_view.dart';

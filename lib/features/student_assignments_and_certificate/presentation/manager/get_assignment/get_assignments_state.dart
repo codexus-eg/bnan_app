@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/student_assignments_and_certificate/data/models/assignment_model.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
 
 abstract class GetAssignmentsState {}
 

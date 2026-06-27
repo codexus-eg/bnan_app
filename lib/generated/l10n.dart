@@ -4109,6 +4109,436 @@ class S {
       args: [],
     );
   }
+
+  /// `Current Month`
+  String get currentMonth {
+    return Intl.message(
+      'Current Month',
+      name: 'currentMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current Earnings`
+  String get currentProfits {
+    return Intl.message(
+      'Current Earnings',
+      name: 'currentProfits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expected`
+  String get expected {
+    return Intl.message(
+      'Expected',
+      name: 'expected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completed Sessions`
+  String get completedSessions {
+    return Intl.message(
+      'Completed Sessions',
+      name: 'completedSessions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remaining`
+  String get remainingSessions {
+    return Intl.message(
+      'Remaining',
+      name: 'remainingSessions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session Price`
+  String get packagePrice {
+    return Intl.message(
+      'Session Price',
+      name: 'packagePrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sessions This Month`
+  String get sessionsThisMonth {
+    return Intl.message(
+      'Sessions This Month',
+      name: 'sessionsThisMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reward Points`
+  String get rewardPoints {
+    return Intl.message(
+      'Reward Points',
+      name: 'rewardPoints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paid`
+  String get paymentCompleted {
+    return Intl.message(
+      'Paid',
+      name: 'paymentCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Under Processing`
+  String get underProcessing {
+    return Intl.message(
+      'Under Processing',
+      name: 'underProcessing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending`
+  String get pendingWaiting {
+    return Intl.message(
+      'Pending',
+      name: 'pendingWaiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sessions`
+  String get sessions {
+    return Intl.message(
+      'Sessions',
+      name: 'sessions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Sessions`
+  String get totalSessions {
+    return Intl.message(
+      'Total Sessions',
+      name: 'totalSessions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewards`
+  String get rewards {
+    return Intl.message(
+      'Rewards',
+      name: 'rewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deductions`
+  String get discounts {
+    return Intl.message(
+      'Deductions',
+      name: 'discounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Net Amount`
+  String get netAmount {
+    return Intl.message(
+      'Net Amount',
+      name: 'netAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paid On`
+  String get paymentDoneOn {
+    return Intl.message(
+      'Paid On',
+      name: 'paymentDoneOn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Salary Calculation Method`
+  String get salaryCalculationMethod {
+    return Intl.message(
+      'Salary Calculation Method',
+      name: 'salaryCalculationMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number of Sessions * Session Price`
+  String get salaryCalculationFormula {
+    return Intl.message(
+      'Number of Sessions * Session Price',
+      name: 'salaryCalculationFormula',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Base salary is calculated`
+  String get salaryCalculationFormulaDesc {
+    return Intl.message(
+      'Base salary is calculated',
+      name: 'salaryCalculationFormulaDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Excellence Points`
+  String get addRewardPointsTitle {
+    return Intl.message(
+      'Add Excellence Points',
+      name: 'addRewardPointsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewards are calculated based on performance`
+  String get addRewardPointsDesc {
+    return Intl.message(
+      'Rewards are calculated based on performance',
+      name: 'addRewardPointsDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deduct Any Deductions`
+  String get deductionsTitle {
+    return Intl.message(
+      'Deduct Any Deductions',
+      name: 'deductionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Absence or lateness`
+  String get deductionsDesc {
+    return Intl.message(
+      'Absence or lateness',
+      name: 'deductionsDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please fill in all required fields.`
+  String get fillAllRequiredFields {
+    return Intl.message(
+      'Please fill in all required fields.',
+      name: 'fillAllRequiredFields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading...`
+  String get loading {
+    return Intl.message(
+      'Loading...',
+      name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete assignment`
+  String get deleteAssignment {
+    return Intl.message(
+      'Delete assignment',
+      name: 'deleteAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this assignment?`
+  String get deleteAssignmentConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this assignment?',
+      name: 'deleteAssignmentConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Performance`
+  String get myPerformance {
+    return Intl.message(
+      'My Performance',
+      name: 'myPerformance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lessons`
+  String get lessons {
+    return Intl.message(
+      'Lessons',
+      name: 'lessons',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Absence`
+  String get absence {
+    return Intl.message(
+      'Absence',
+      name: 'absence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rating`
+  String get rating {
+    return Intl.message(
+      'Rating',
+      name: 'rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Point`
+  String get point {
+    return Intl.message(
+      'Point',
+      name: 'point',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last 6 Months`
+  String get lastSixMonths {
+    return Intl.message(
+      'Last 6 Months',
+      name: 'lastSixMonths',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classes`
+  String get classesCount {
+    return Intl.message(
+      'Classes',
+      name: 'classesCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Latest Earned Points`
+  String get latestEarnedPoints {
+    return Intl.message(
+      'Latest Earned Points',
+      name: 'latestEarnedPoints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tip to Increase Points`
+  String get tipToIncreasePoints {
+    return Intl.message(
+      'Tip to Increase Points',
+      name: 'tipToIncreasePoints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Make sure to submit weekly evaluations on time to earn 20 extra points weekly`
+  String get pointsTipDescription {
+    return Intl.message(
+      'Make sure to submit weekly evaluations on time to earn 20 extra points weekly',
+      name: 'pointsTipDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Month`
+  String get month {
+    return Intl.message(
+      'Month',
+      name: 'month',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Salary`
+  String get salary {
+    return Intl.message(
+      'Salary',
+      name: 'salary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Points`
+  String get points {
+    return Intl.message(
+      'Points',
+      name: 'points',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ranking`
+  String get ranking {
+    return Intl.message(
+      'Ranking',
+      name: 'ranking',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

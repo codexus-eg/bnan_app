@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/student_drawer_items.dart';
-import 'package:bnan_app/features/student_profile/data/models/logged_user_model.dart';
+import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
 import 'package:flutter/material.dart';
 
 class HomeStudentDrawer extends StatelessWidget {

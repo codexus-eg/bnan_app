@@ -24,8 +24,10 @@ abstract class ColorManager {
   static const Color orangeFFE = Color(0xffFFEAC9);
   static const Color orangeFF7 = Color(0xffFF774E);
   static const Color orangeED = Color(0xffED5C0E);
+  static const Color orangeE462 = Color(0xffE46212);
   static const Color orangeE6 = Color(0xffE6AC3D);
   static const Color beigeEDC = Color(0xffEDCB89);
+  static const Color beigeDAA = Color(0xffDAA514);
   static const Color blueE3 = Color(0xffE3EBF9);
   static const Color blue6E9F = Color(0xff6E9FD1);
   static const Color blue73B9 = Color(0xff73B9D6);
@@ -34,6 +36,8 @@ abstract class ColorManager {
   static const Color blueDEE = Color(0xffDEECF9);
   static const Color blueC8E = Color(0xffC8E0F7);
   static const Color blue007 = Color(0xff0071DF);
+  static const Color blue3A = Color(0xff3A6BCC);
+  static const Color blueE5 = Color(0xffE5F1FC);
   static const Color blue7ED = Color(0xff7ED0F1);
   static const Color greyEA = Color(0xffEAEFF5);
   static const Color greyC9 = Color(0xffC9CACC);
@@ -42,8 +46,22 @@ abstract class ColorManager {
   static const Color redEE = Color(0xffEECBD3);
   static const Color redD8 = Color(0xffD82135);
   static const Color redC7 = Color(0xffC70036);
+  static const Color redD4 = Color(0xffD40924);
+  static const Color redE0 = Color(0xffE03324);
   static const Color redFFD = Color(0xffFFDBDF);
   static const Color greenE1 = Color(0xffE1F3EF);
   static const Color greenCEE = Color(0xffCEEDE4);
+  static const Color greenE0 = Color(0xffE0F5ED);
   static const Color green33B = Color(0xff33BA7D);
+  static const Color blueD3 = Color(0xffD3E2F3);
+  static const Color blue4A = Color(0xff4A71DF);
+  static const Color greenD6 = Color(0xffD6EAE9);
+  static const Color greenF4 = Color(0xffF4FBF8);
+  static const Color green23 = Color(0xff23BA7D);
+  static const Color greenE9 = Color(0xffE9F8F2);
+  static const Color pinkE9E1 = Color(0xffE9E1DE);
+  static const Color pinkFB = Color(0xffFBF5E7);
+  static const Color pinkFD = Color(0xffFDF2F4);
+  static const Color pinkF9D = Color(0xffF9DBE0);
+  static const Color orangeE4 = Color(0xffE46212);
 }
