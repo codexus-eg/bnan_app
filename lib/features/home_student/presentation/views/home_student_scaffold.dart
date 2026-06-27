@@ -5,8 +5,8 @@ import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_body.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_student_bottom_nav_bar.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_student_drawer.dart';
-import 'package:bnan_app/features/student_profile/data/models/logged_user_model.dart';
-import 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_cubit.dart';
+import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -78,7 +78,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   }
 
   Future<void> _logout() async {
-    await GetLoggedUserCubit.get(context).logout();
+    await StudentProfileCubit.get(context).logout();
 
     if (!mounted) return;
 

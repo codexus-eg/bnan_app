@@ -1,7 +1,7 @@
 import 'package:bnan_app/features/home_student/presentation/views/home_student_scaffold.dart';
-import 'package:bnan_app/features/student_profile/data/models/logged_user_model.dart';
-import 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_cubit.dart';
-import 'package:bnan_app/features/student_profile/presentation/manager/get_logged_user_cubit/get_logged_user_state.dart';
+import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,12 +11,12 @@ class HomeStudentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocSelector<
-        GetLoggedUserCubit,
-        GetLoggedUserState,
+        StudentProfileCubit,
+        StudentProfileState,
         LoggedUserModel
     >(
       selector: (state) {
-        if (state is GetLoggedUserSuccess) {
+        if (state is StudentProfileStateSuccess) {
           return state.loggedUser;
         }
 

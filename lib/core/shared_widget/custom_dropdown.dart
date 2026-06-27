@@ -7,6 +7,7 @@ class CustomDropdown extends StatelessWidget {
     super.key,
     required this.label,
     this.items,
+    this.itemsLabels,
     required this.onChanged,
     this.value,
     this.hint,
@@ -20,9 +21,12 @@ class CustomDropdown extends StatelessWidget {
   final TextStyle? hintStyle;
   final String? hint;
   final List<String>? items;
-  final ValueChanged<String?> onChanged;
+  final Map<String, String>? itemsLabels;
+  final ValueChanged<String?>? onChanged;
   final bool isRequired;
   final Color? backgroundColor;
+
+  String _labelOf(String item) => itemsLabels?[item] ?? item;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +62,6 @@ class CustomDropdown extends StatelessWidget {
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              
               value: dropdownItems.contains(value) ? value : null,
               isExpanded: true,
               icon: const SizedBox.shrink(),
@@ -70,17 +73,16 @@ class CustomDropdown extends StatelessWidget {
               selectedItemBuilder: (context) {
                 return dropdownItems.map((item) {
                   return _DropdownDisplayedText(
-                    text: item,
+                    text: _labelOf(item),
                     isDisabled: isDisabled,
                   );
                 }).toList();
               },
               items: dropdownItems.map((item) {
                 return DropdownMenuItem<String>(
-                  
                   value: item,
                   child: Text(
-                    item,
+                    _labelOf(item),
                     style: StylesManager.styleRegular16(
                       context,
                     ).copyWith(color: ColorManager.mainColor15),

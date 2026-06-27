@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/error/failure.dart';
-import 'package:bnan_app/features/student_assignments_and_certificate/data/models/assignment_model.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/submit_assignment_response_model.dart';
 import 'package:dartz/dartz.dart';
 

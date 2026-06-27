@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_subject_details/get_subject_details_cubit.dart';
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo_impl.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
@@ -14,17 +16,14 @@ void setupServiceLocator() {
   );
 
   // Repositories
+  getIt.registerLazySingleton<AssignmentsRepo>(
+    () => AssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<AuthRepo>(
     () => AuthRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<StudentProfileRepo>(
-    () => StudentProfileRepoImpl(
-      apiConsumer: getIt<ApiConsumer>(),
-      localDataSource: getIt<StudentProfileLocalDataSource>(),
-    ),
-  );
-  getIt.registerLazySingleton<StudentProfileLocalDataSource>(
-    () => StudentProfileLocalDataSourceImpl(),
+    () => StudentProfileRepoImpl(apiConsumer: getIt()),
   );
   getIt.registerLazySingleton<StudentAssignmentsRepo>(
     () => StudentAssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
@@ -35,7 +34,7 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<StudentGroupsRepo>(
     () => StudentGroupsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
-   getIt.registerLazySingleton<TeacherRegistrationRepo>(
+  getIt.registerLazySingleton<TeacherRegistrationRepo>(
     () => TeacherRegistrationRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
   // Cubits
@@ -57,8 +56,8 @@ void setupServiceLocator() {
   getIt.registerFactory<UpdatePasswordCubit>(
     () => UpdatePasswordCubit(getIt<StudentProfileRepo>()),
   );
-  getIt.registerFactory<GetLoggedUserCubit>(
-    () => GetLoggedUserCubit(getIt<StudentProfileRepo>()),
+  getIt.registerFactory<StudentProfileCubit>(
+    () => StudentProfileCubit(getIt<StudentProfileRepo>()),
   );
   getIt.registerFactory<UpdateNameCubit>(
     () => UpdateNameCubit(getIt<StudentProfileRepo>()),
@@ -91,7 +90,40 @@ void setupServiceLocator() {
   getIt.registerFactory<GetMyEnrollmentsCubit>(
     () => GetMyEnrollmentsCubit(getIt<StudentGroupsRepo>()),
   );
-   getIt.registerFactory<TeacherRegistrationCubit>(
+  getIt.registerFactory<TeacherRegistrationCubit>(
     () => TeacherRegistrationCubit(getIt<TeacherRegistrationRepo>()),
   );
+  getIt.registerFactory<GetTeacherAssignmentsCubit>(
+    () => GetTeacherAssignmentsCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<CreateAssignmentCubit>(
+    () => CreateAssignmentCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<UpdateAssignmentCubit>(
+    () => UpdateAssignmentCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<DeleteAssignmentCubit>(
+    () => DeleteAssignmentCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<GetTeacherClassroomsCubit>(
+    () => GetTeacherClassroomsCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<GetTeacherCurriculumsCubit>(
+    () => GetTeacherCurriculumsCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<GetTeacherGradesCubit>(
+    () => GetTeacherGradesCubit(getIt<AssignmentsRepo>()),
+  );
+  getIt.registerFactory<GetClassroomSubjectsCubit>(
+  () => GetClassroomSubjectsCubit(getIt<AssignmentsRepo>()),
+);
+getIt.registerFactory<GetSubjectDetailsCubit>(
+  () => GetSubjectDetailsCubit(getIt<AssignmentsRepo>()),
+);
 }

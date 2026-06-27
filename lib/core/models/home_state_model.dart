@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:flutter/material.dart';
 
 class HomeStateModel {
   const HomeStateModel({
@@ -12,7 +13,7 @@ class HomeStateModel {
   final String icon;
   final String value;
   final String title;
-  final int? iconColor;
+  final Color? iconColor;
 }
 
 final studentHomeState = [
@@ -20,19 +21,19 @@ final studentHomeState = [
     icon: ImageManager.arrowGrowthIcon,
     value: '95%',
     title: S.current.attendance,
-    iconColor: 0xff75C8EE,
+    iconColor: Color(0xff75C8EE),
   ),
   HomeStateModel(
     icon: ImageManager.starIcon,
     value:'4.8',
     title: S.current.interaction,
-    iconColor: 0xffE6A72A,
+    iconColor: Color(0xffE6A72A),
   ),
   HomeStateModel(
     icon: ImageManager.trophyIcon,
     value: '12',
     title: S.current.certificates,
-    iconColor: 0xff3E7BD9,
+    iconColor: Color(0xff3E7BD9),
   ),
 ];
 final teacherHomeState = [

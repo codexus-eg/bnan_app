@@ -3,7 +3,7 @@ import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/shared_widget/filter_chip/custom_filter_tabs.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/assignments_filter_type.dart';
-import 'package:bnan_app/features/student_assignments_and_certificate/data/models/assignment_model.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/assignment_status.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_assignment/get_assignments_cubit.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_assignment/get_assignments_state.dart';

@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Packages": MessageLookupByLibrary.simpleMessage("باقات"),
         "PackagesandSubscriptions":
             MessageLookupByLibrary.simpleMessage("الباقات والاشتراكات"),
+        "absence": MessageLookupByLibrary.simpleMessage("غياب"),
         "absent": MessageLookupByLibrary.simpleMessage("غياب"),
         "academicPerformanceMessage":
             MessageLookupByLibrary.simpleMessage("للتميز في الأداء الأكاديمي"),
@@ -81,6 +82,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "active2": MessageLookupByLibrary.simpleMessage("نشط"),
         "activeGroups":
             MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
+        "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
+            "يتم احتساب المكافآت بناءً على الأداء"),
+        "addRewardPointsTitle":
+            MessageLookupByLibrary.simpleMessage("إضافة نقاط التميز"),
         "algebraCourseCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة إتمام دورة الجبر"),
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
@@ -155,10 +160,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "classR": MessageLookupByLibrary.simpleMessage("فصل"),
         "classRoom": MessageLookupByLibrary.simpleMessage("الفصل"),
         "classes": MessageLookupByLibrary.simpleMessage("الصفوف"),
+        "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
         "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
         "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
+        "completedSessions":
+            MessageLookupByLibrary.simpleMessage("الحصص المكتملة"),
         "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
         "confirmNewPassword":
             MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
@@ -183,7 +191,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إنشاء واجب جديد"),
         "creditCard": MessageLookupByLibrary.simpleMessage("بطاقة إئتمانية"),
         "currency": MessageLookupByLibrary.simpleMessage("العملة:"),
+        "currentMonth": MessageLookupByLibrary.simpleMessage("الشهر الحالي"),
         "currentPrice": m1,
+        "currentProfits":
+            MessageLookupByLibrary.simpleMessage("الأرباح الحالية"),
         "curricula": MessageLookupByLibrary.simpleMessage("المناهج"),
         "curriculum": MessageLookupByLibrary.simpleMessage("المنهج"),
         "curriculumSelection":
@@ -193,8 +204,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "day": MessageLookupByLibrary.simpleMessage("يوم"),
         "days": MessageLookupByLibrary.simpleMessage("أيام"),
         "daysPackage": m2,
+        "deductionsDesc":
+            MessageLookupByLibrary.simpleMessage("الغياب أو التأخير"),
+        "deductionsTitle":
+            MessageLookupByLibrary.simpleMessage("خصم أي استقطاعات"),
         "degree": MessageLookupByLibrary.simpleMessage("الدرجة"),
+        "delete": MessageLookupByLibrary.simpleMessage("حذف"),
+        "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
+        "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف هذا الواجب؟"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
+        "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "download": MessageLookupByLibrary.simpleMessage("تحميل"),
@@ -252,10 +272,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "excellent": MessageLookupByLibrary.simpleMessage("ممتاز"),
         "excellentTeacher":
             MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
+        "expected": MessageLookupByLibrary.simpleMessage("المتوقع"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
         "fieldIsRequired": m4,
         "fileDownloadStarted":
             MessageLookupByLibrary.simpleMessage("تم فتح ملف الواجب"),
+        "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
+            "يرجى ملء جميع الحقول المطلوبة."),
         "finished": MessageLookupByLibrary.simpleMessage("منتهي"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
@@ -306,10 +329,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
         "kuwaitiCurriculum":
             MessageLookupByLibrary.simpleMessage("المنهج الكويتي"),
+        "lastSixMonths": MessageLookupByLibrary.simpleMessage("آخر ٦ شهور"),
+        "latestEarnedPoints":
+            MessageLookupByLibrary.simpleMessage("آخر النقاط المكتسبة"),
         "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
             "حصة الرياضيات تبدأ خلال 15 د"),
+        "lessons": MessageLookupByLibrary.simpleMessage("حصة"),
         "lightAndShadowExperiment":
             MessageLookupByLibrary.simpleMessage("تجربة الضوء والظل"),
+        "loading": MessageLookupByLibrary.simpleMessage("جاري التحميل..."),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل دخول"),
         "loginNow": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -327,15 +355,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "mayCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة شهر مايو"),
         "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
+        "month": MessageLookupByLibrary.simpleMessage("الشهر"),
         "mostPopular": MessageLookupByLibrary.simpleMessage("الأكثر طلباً"),
         "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
         "myGroups": MessageLookupByLibrary.simpleMessage("مجموعاتي"),
+        "myPerformance": MessageLookupByLibrary.simpleMessage("أدائي"),
         "myRequests": MessageLookupByLibrary.simpleMessage("طلباتي"),
         "nameCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
             "الاسم لا يمكن أن يكون فارغًا."),
         "nameMinLength": MessageLookupByLibrary.simpleMessage(
             "يجب أن يحتوي الاسم على 3 أحرف على الأقل."),
         "nationality": MessageLookupByLibrary.simpleMessage("الجنسية"),
+        "netAmount": MessageLookupByLibrary.simpleMessage("الصافي"),
         "newAssignmentUploaded":
             MessageLookupByLibrary.simpleMessage("تم رفع واجب جديد"),
         "newBadge": MessageLookupByLibrary.simpleMessage("جديد"),
@@ -398,6 +429,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "packageDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الباقة"),
         "packageExpiryText": MessageLookupByLibrary.simpleMessage(
             "ينتهي خلال 18 يوم . تجديد تلقائي"),
+        "packagePrice": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
         "packages": MessageLookupByLibrary.simpleMessage("الباقات"),
         "parentInfo": MessageLookupByLibrary.simpleMessage("معلومات ولي الأمر"),
         "parentName": MessageLookupByLibrary.simpleMessage("اسم ولي الأمر"),
@@ -421,6 +453,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع"),
         "passwordsDoNotMatch":
             MessageLookupByLibrary.simpleMessage("كلمتا المرور غير متطابقتين."),
+        "paymentCompleted": MessageLookupByLibrary.simpleMessage("تم الدفع"),
+        "paymentDoneOn": MessageLookupByLibrary.simpleMessage("تم الدفع في"),
         "paymentInfo": MessageLookupByLibrary.simpleMessage("معلومات الدفع"),
         "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
         "pending": MessageLookupByLibrary.simpleMessage("معلق"),
@@ -429,6 +463,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pendingRequests": MessageLookupByLibrary.simpleMessage("طلبات معلقة"),
         "pendingScienceSubtitle": MessageLookupByLibrary.simpleMessage(
             "درس بناء الضوء، بانتظار أي معلم"),
+        "pendingWaiting": MessageLookupByLibrary.simpleMessage("قيد الانتظار"),
         "performance": MessageLookupByLibrary.simpleMessage("أدائي"),
         "personalProfile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
@@ -449,7 +484,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseSelectFile":
             MessageLookupByLibrary.simpleMessage("من فضلك اختاري ملفًا أولًا"),
         "poemAnalysis": MessageLookupByLibrary.simpleMessage("تحليل القصيدة"),
+        "point": MessageLookupByLibrary.simpleMessage("نقطة"),
+        "points": MessageLookupByLibrary.simpleMessage("النقاط"),
         "pointsCount": MessageLookupByLibrary.simpleMessage("نقطة"),
+        "pointsTipDescription": MessageLookupByLibrary.simpleMessage(
+            "احرص على تسليم التقييمات الأسبوعية في موعدها لكسب ٢٠ نقطة إضافية أسبوعيًا"),
         "preferredDays":
             MessageLookupByLibrary.simpleMessage("مواعيد الطالب المفضلة"),
         "preferredDaysHint": MessageLookupByLibrary.simpleMessage(
@@ -467,6 +506,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "qualification": MessageLookupByLibrary.simpleMessage("المؤهل"),
         "quotaReport": MessageLookupByLibrary.simpleMessage("تقرير الحصص"),
         "quran": MessageLookupByLibrary.simpleMessage("القرآن الكريم"),
+        "ranking": MessageLookupByLibrary.simpleMessage("الترتيب"),
+        "rating": MessageLookupByLibrary.simpleMessage("تقييم"),
         "readyGroupSubtitle":
             MessageLookupByLibrary.simpleMessage("الرياضيات - مجموعة جاهزة"),
         "registerAsParent":
@@ -481,6 +522,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("طلبات التسجيل"),
         "remainingDays": m12,
         "remainingHours": m13,
+        "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
         "requestAccepted":
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
         "requestNewLesson":
@@ -498,6 +540,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "resetPasswordSuccessTitle":
             MessageLookupByLibrary.simpleMessage("تم الإرسال بنجاح"),
         "reviews": MessageLookupByLibrary.simpleMessage("التقييمات"),
+        "rewardPoints": MessageLookupByLibrary.simpleMessage("نقاط المكافآت"),
+        "rewards": MessageLookupByLibrary.simpleMessage("مكافآت"),
+        "salary": MessageLookupByLibrary.simpleMessage("الراتب"),
+        "salaryCalculationFormula":
+            MessageLookupByLibrary.simpleMessage("عدد الحصص * سعر الحصة"),
+        "salaryCalculationFormulaDesc":
+            MessageLookupByLibrary.simpleMessage("يتم احتساب الراتب الأساسي"),
+        "salaryCalculationMethod":
+            MessageLookupByLibrary.simpleMessage("طريقة احتساب الراتب"),
         "sarCurrency": MessageLookupByLibrary.simpleMessage("ريال سعودي (ر.س)"),
         "sarShort": MessageLookupByLibrary.simpleMessage("ريال"),
         "saudiCurriculum":
@@ -522,6 +573,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "sendResetLink":
             MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
         "services": MessageLookupByLibrary.simpleMessage("الخدمات"),
+        "sessions": MessageLookupByLibrary.simpleMessage("حصة"),
+        "sessionsThisMonth":
+            MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
         "shortVideoLinkOptional":
             MessageLookupByLibrary.simpleMessage("رابط فيديو قصير (اختياري)"),
         "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
@@ -619,10 +673,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "threeDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 3 أيام"),
         "thursday": MessageLookupByLibrary.simpleMessage("الخميس"),
         "time": MessageLookupByLibrary.simpleMessage("الوقت"),
+        "tipToIncreasePoints":
+            MessageLookupByLibrary.simpleMessage("نصيحة لزيادة النقاط"),
         "to": MessageLookupByLibrary.simpleMessage("إلى"),
         "today": MessageLookupByLibrary.simpleMessage("اليوم"),
         "todayAtTime": m16,
         "total": MessageLookupByLibrary.simpleMessage("المجموع"),
+        "totalSessions": MessageLookupByLibrary.simpleMessage("إجمالي الحصص"),
         "trainingHours": m17,
         "tuesday": MessageLookupByLibrary.simpleMessage("الثلاثاء"),
         "twelveHoursPlan":
@@ -631,6 +688,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("باقة الـ 20 ساعة"),
         "twoDaysAgo": MessageLookupByLibrary.simpleMessage("منذ يومين"),
         "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة....."),
+        "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
         "unexpectedError":
             MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع"),
         "universityOrInstitutionName":
