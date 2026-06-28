@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/class_schedules/presentation/views/class_schedules_view.dart';
+import 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
 import 'package:bnan_app/features/teacher_chats/presentation/views/teacher_chats_view.dart';
@@ -14,7 +15,7 @@ import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.classSchedules,
+    initialLocation: Routes.parentHome,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -224,6 +225,13 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.parentHome,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const ParentHomeView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.teacherSections,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherSectionsView(),
@@ -294,7 +302,7 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
-        GoRoute(
+      GoRoute(
         path: Routes.classSchedules,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const ClassSchedulesView(),

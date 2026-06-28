@@ -8,7 +8,7 @@ class ImageManager {
   static const String _teacherHomeFeature = '${_basePath}teacher_home/';
   static const String _teacherAssignmentFeature =
       '${_basePath}teacher_assignment/';
-
+  static const String _parentHomeFeature = '${_basePath}parent_home/';
   ImageManager._();
 
   // Splash & Onboarding
@@ -123,8 +123,18 @@ class ImageManager {
       '${_teacherAssignmentFeature}check2-circle.svg';
   static const String arrowGrowthDownIcon =
       '${_teacherAssignmentFeature}arrow-growth-down.svg';
-       static const String crownSimple =
+  static const String crownSimple =
       '${_teacherAssignmentFeature}CrownSimple.svg';
-      static const String stPlaceMedal1 =
-      '${_teacherAssignmentFeature}1stPlaceMedal.svg'; 
+  static const String stPlaceMedal1 =
+      '${_teacherAssignmentFeature}1stPlaceMedal.svg';
+
+  // Parent Home
+  static const String parentCalendarIcon =
+      '${_parentHomeFeature}calendar-06.svg';
+  static const String parentChatConversationCircleIcon =
+      '${_parentHomeFeature}Chat_Conversation_Circle.svg';
+
+  static const String parentCircleWarningIcon =
+      '${_parentHomeFeature}Circle_Warning.svg';
+  static const String children = '${_parentHomeFeature}Users.svg';
 }

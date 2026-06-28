@@ -18,10 +18,8 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(
-      _current != null,
-      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
-    );
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
@@ -43,10 +41,8 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(
-      instance != null,
-      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
-    );
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -376,7 +372,12 @@ class S {
 
   /// `Password`
   String get password {
-    return Intl.message('Password', name: 'password', desc: '', args: []);
+    return Intl.message(
+      'Password',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `At least 6 characters`
@@ -401,7 +402,12 @@ class S {
 
   /// `Login`
   String get login {
-    return Intl.message('Login', name: 'login', desc: '', args: []);
+    return Intl.message(
+      'Login',
+      name: 'login',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Don't have an account? `
@@ -516,12 +522,22 @@ class S {
 
   /// `Login`
   String get loginNow {
-    return Intl.message('Login', name: 'loginNow', desc: '', args: []);
+    return Intl.message(
+      'Login',
+      name: 'loginNow',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Curricula`
   String get curricula {
-    return Intl.message('Curricula', name: 'curricula', desc: '', args: []);
+    return Intl.message(
+      'Curricula',
+      name: 'curricula',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Study Curricula `
@@ -536,7 +552,12 @@ class S {
 
   /// `Available`
   String get available {
-    return Intl.message('Available', name: 'available', desc: '', args: []);
+    return Intl.message(
+      'Available',
+      name: 'available',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Choose the suitable curriculum for your children and start the learning journey with us`
@@ -621,7 +642,12 @@ class S {
 
   /// `Packages`
   String get packages {
-    return Intl.message('Packages', name: 'packages', desc: '', args: []);
+    return Intl.message(
+      'Packages',
+      name: 'packages',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Subscription`
@@ -636,7 +662,12 @@ class S {
 
   /// `Packages`
   String get Packages {
-    return Intl.message('Packages', name: 'Packages', desc: '', args: []);
+    return Intl.message(
+      'Packages',
+      name: 'Packages',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `You can change the currency from the list`
@@ -651,7 +682,12 @@ class S {
 
   /// `Currency:`
   String get currency {
-    return Intl.message('Currency:', name: 'currency', desc: '', args: []);
+    return Intl.message(
+      'Currency:',
+      name: 'currency',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Saudi Riyal (SAR)`
@@ -826,7 +862,12 @@ class S {
 
   /// `Parent name`
   String get parentName {
-    return Intl.message('Parent name', name: 'parentName', desc: '', args: []);
+    return Intl.message(
+      'Parent name',
+      name: 'parentName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Phone number`
@@ -881,7 +922,12 @@ class S {
 
   /// `Curriculum`
   String get curriculum {
-    return Intl.message('Curriculum', name: 'curriculum', desc: '', args: []);
+    return Intl.message(
+      'Curriculum',
+      name: 'curriculum',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Student Information`
@@ -906,7 +952,12 @@ class S {
 
   /// `Grade`
   String get grade {
-    return Intl.message('Grade', name: 'grade', desc: '', args: []);
+    return Intl.message(
+      'Grade',
+      name: 'grade',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Select grade`
@@ -921,17 +972,32 @@ class S {
 
   /// `Subjects`
   String get subjects {
-    return Intl.message('Subjects', name: 'subjects', desc: '', args: []);
+    return Intl.message(
+      'Subjects',
+      name: 'subjects',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Math`
   String get math {
-    return Intl.message('Math', name: 'math', desc: '', args: []);
+    return Intl.message(
+      'Math',
+      name: 'math',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Science`
   String get science {
-    return Intl.message('Science', name: 'science', desc: '', args: []);
+    return Intl.message(
+      'Science',
+      name: 'science',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Arabic Language`
@@ -946,12 +1012,22 @@ class S {
 
   /// `Physics`
   String get physics {
-    return Intl.message('Physics', name: 'physics', desc: '', args: []);
+    return Intl.message(
+      'Physics',
+      name: 'physics',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Chemistry`
   String get chemistry {
-    return Intl.message('Chemistry', name: 'chemistry', desc: '', args: []);
+    return Intl.message(
+      'Chemistry',
+      name: 'chemistry',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Social Studies`
@@ -966,7 +1042,12 @@ class S {
 
   /// `Quran`
   String get quran {
-    return Intl.message('Quran', name: 'quran', desc: '', args: []);
+    return Intl.message(
+      'Quran',
+      name: 'quran',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Student Email`
@@ -1041,12 +1122,22 @@ class S {
 
   /// `From`
   String get from {
-    return Intl.message('From', name: 'from', desc: '', args: []);
+    return Intl.message(
+      'From',
+      name: 'from',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `To`
   String get to {
-    return Intl.message('To', name: 'to', desc: '', args: []);
+    return Intl.message(
+      'To',
+      name: 'to',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Payment Method`
@@ -1091,12 +1182,22 @@ class S {
 
   /// `Apple Pay`
   String get applePay {
-    return Intl.message('Apple Pay', name: 'applePay', desc: '', args: []);
+    return Intl.message(
+      'Apple Pay',
+      name: 'applePay',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Credit Card`
   String get creditCard {
-    return Intl.message('Credit Card', name: 'creditCard', desc: '', args: []);
+    return Intl.message(
+      'Credit Card',
+      name: 'creditCard',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Split your bill with Tamara`
@@ -1141,7 +1242,12 @@ class S {
 
   /// `Card number`
   String get cardNumber {
-    return Intl.message('Card number', name: 'cardNumber', desc: '', args: []);
+    return Intl.message(
+      'Card number',
+      name: 'cardNumber',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Cardholder name`
@@ -1156,27 +1262,52 @@ class S {
 
   /// `Expiry date`
   String get expiryDate {
-    return Intl.message('Expiry date', name: 'expiryDate', desc: '', args: []);
+    return Intl.message(
+      'Expiry date',
+      name: 'expiryDate',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `CVV`
   String get cvv {
-    return Intl.message('CVV', name: 'cvv', desc: '', args: []);
+    return Intl.message(
+      'CVV',
+      name: 'cvv',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Confirm`
   String get confirm {
-    return Intl.message('Confirm', name: 'confirm', desc: '', args: []);
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Next`
   String get next {
-    return Intl.message('Next', name: 'next', desc: '', args: []);
+    return Intl.message(
+      'Next',
+      name: 'next',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Previous`
   String get previous {
-    return Intl.message('Previous', name: 'previous', desc: '', args: []);
+    return Intl.message(
+      'Previous',
+      name: 'previous',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Student notes and schedule preferences`
@@ -1191,7 +1322,12 @@ class S {
 
   /// `Optional`
   String get optional {
-    return Intl.message('Optional', name: 'optional', desc: '', args: []);
+    return Intl.message(
+      'Optional',
+      name: 'optional',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Notes about lessons that need explanation, goals, or any other comments`
@@ -1226,12 +1362,22 @@ class S {
 
   /// `SAR`
   String get sarShort {
-    return Intl.message('SAR', name: 'sarShort', desc: '', args: []);
+    return Intl.message(
+      'SAR',
+      name: 'sarShort',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `student`
   String get student {
-    return Intl.message('student', name: 'student', desc: '', args: []);
+    return Intl.message(
+      'student',
+      name: 'student',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Forgot Password`
@@ -1256,7 +1402,12 @@ class S {
 
   /// `Email`
   String get email {
-    return Intl.message('Email', name: 'email', desc: '', args: []);
+    return Intl.message(
+      'Email',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Send reset code`
@@ -1281,12 +1432,22 @@ class S {
 
   /// `Verify`
   String get verify {
-    return Intl.message('Verify', name: 'verify', desc: '', args: []);
+    return Intl.message(
+      'Verify',
+      name: 'verify',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Resend code?`
   String get resendCode {
-    return Intl.message('Resend code?', name: 'resendCode', desc: '', args: []);
+    return Intl.message(
+      'Resend code?',
+      name: 'resendCode',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Change Password`
@@ -1321,7 +1482,12 @@ class S {
 
   /// `Skip`
   String get skip {
-    return Intl.message('Skip', name: 'skip', desc: '', args: []);
+    return Intl.message(
+      'Skip',
+      name: 'skip',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Start your learning journey easily`
@@ -1386,42 +1552,82 @@ class S {
 
   /// `Start now`
   String get startNow {
-    return Intl.message('Start now', name: 'startNow', desc: '', args: []);
+    return Intl.message(
+      'Start now',
+      name: 'startNow',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Home`
   String get home {
-    return Intl.message('Home', name: 'home', desc: '', args: []);
+    return Intl.message(
+      'Home',
+      name: 'home',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Schedule`
   String get schedule {
-    return Intl.message('Schedule', name: 'schedule', desc: '', args: []);
+    return Intl.message(
+      'Schedule',
+      name: 'schedule',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Assignments`
   String get assignments {
-    return Intl.message('Assignments', name: 'assignments', desc: '', args: []);
+    return Intl.message(
+      'Assignments',
+      name: 'assignments',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Services`
   String get services {
-    return Intl.message('Services', name: 'services', desc: '', args: []);
+    return Intl.message(
+      'Services',
+      name: 'services',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `My Account`
   String get myAccount {
-    return Intl.message('My Account', name: 'myAccount', desc: '', args: []);
+    return Intl.message(
+      'My Account',
+      name: 'myAccount',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Welcome`
   String get welcomeYou {
-    return Intl.message('Welcome', name: 'welcomeYou', desc: '', args: []);
+    return Intl.message(
+      'Welcome',
+      name: 'welcomeYou',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Home`
   String get dashboard {
-    return Intl.message('Home', name: 'dashboard', desc: '', args: []);
+    return Intl.message(
+      'Home',
+      name: 'dashboard',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Study Materials`
@@ -1446,7 +1652,12 @@ class S {
 
   /// `My Groups`
   String get myGroups {
-    return Intl.message('My Groups', name: 'myGroups', desc: '', args: []);
+    return Intl.message(
+      'My Groups',
+      name: 'myGroups',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Certificates`
@@ -1481,12 +1692,22 @@ class S {
 
   /// `Reviews`
   String get reviews {
-    return Intl.message('Reviews', name: 'reviews', desc: '', args: []);
+    return Intl.message(
+      'Reviews',
+      name: 'reviews',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Logout`
   String get logout {
-    return Intl.message('Logout', name: 'logout', desc: '', args: []);
+    return Intl.message(
+      'Logout',
+      name: 'logout',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Grade 5 Primary`
@@ -1521,7 +1742,12 @@ class S {
 
   /// `Active`
   String get active {
-    return Intl.message('Active', name: 'active', desc: '', args: []);
+    return Intl.message(
+      'Active',
+      name: 'active',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `{hours} Hours`
@@ -1586,7 +1812,12 @@ class S {
 
   /// `Today`
   String get today {
-    return Intl.message('Today', name: 'today', desc: '', args: []);
+    return Intl.message(
+      'Today',
+      name: 'today',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `With Ms. Sarah Abdullah`
@@ -1611,12 +1842,22 @@ class S {
 
   /// `Interaction`
   String get interaction {
-    return Intl.message('Interaction', name: 'interaction', desc: '', args: []);
+    return Intl.message(
+      'Interaction',
+      name: 'interaction',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Attendance`
   String get attendance {
-    return Intl.message('Attendance', name: 'attendance', desc: '', args: []);
+    return Intl.message(
+      'Attendance',
+      name: 'attendance',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Weekly evaluation`
@@ -1681,7 +1922,12 @@ class S {
 
   /// `View all`
   String get viewAll {
-    return Intl.message('View all', name: 'viewAll', desc: '', args: []);
+    return Intl.message(
+      'View all',
+      name: 'viewAll',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Ms. Sarah`
@@ -1706,7 +1952,12 @@ class S {
 
   /// `Download`
   String get download {
-    return Intl.message('Download', name: 'download', desc: '', args: []);
+    return Intl.message(
+      'Download',
+      name: 'download',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Submit Assignment`
@@ -1721,7 +1972,12 @@ class S {
 
   /// `New`
   String get newBadge {
-    return Intl.message('New', name: 'newBadge', desc: '', args: []);
+    return Intl.message(
+      'New',
+      name: 'newBadge',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Submitted`
@@ -1746,12 +2002,22 @@ class S {
 
   /// `Due Friday`
   String get dueFriday {
-    return Intl.message('Due Friday', name: 'dueFriday', desc: '', args: []);
+    return Intl.message(
+      'Due Friday',
+      name: 'dueFriday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Due Sunday`
   String get dueSunday {
-    return Intl.message('Due Sunday', name: 'dueSunday', desc: '', args: []);
+    return Intl.message(
+      'Due Sunday',
+      name: 'dueSunday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `May Certificate`
@@ -1776,7 +2042,12 @@ class S {
 
   /// `Mark as read`
   String get markAsRead {
-    return Intl.message('Mark as read', name: 'markAsRead', desc: '', args: []);
+    return Intl.message(
+      'Mark as read',
+      name: 'markAsRead',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Math lesson starts in 15 min`
@@ -1861,37 +2132,72 @@ class S {
 
   /// `Yesterday`
   String get yesterday {
-    return Intl.message('Yesterday', name: 'yesterday', desc: '', args: []);
+    return Intl.message(
+      'Yesterday',
+      name: 'yesterday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `2 days ago`
   String get twoDaysAgo {
-    return Intl.message('2 days ago', name: 'twoDaysAgo', desc: '', args: []);
+    return Intl.message(
+      '2 days ago',
+      name: 'twoDaysAgo',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `3 days ago`
   String get threeDaysAgo {
-    return Intl.message('3 days ago', name: 'threeDaysAgo', desc: '', args: []);
+    return Intl.message(
+      '3 days ago',
+      name: 'threeDaysAgo',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `4 days ago`
   String get fourDaysAgo {
-    return Intl.message('4 days ago', name: 'fourDaysAgo', desc: '', args: []);
+    return Intl.message(
+      '4 days ago',
+      name: 'fourDaysAgo',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `All`
   String get all {
-    return Intl.message('All', name: 'all', desc: '', args: []);
+    return Intl.message(
+      'All',
+      name: 'all',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `In Progress`
   String get pending {
-    return Intl.message('In Progress', name: 'pending', desc: '', args: []);
+    return Intl.message(
+      'In Progress',
+      name: 'pending',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Completed`
   String get completed {
-    return Intl.message('Completed', name: 'completed', desc: '', args: []);
+    return Intl.message(
+      'Completed',
+      name: 'completed',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Light and Shadow Experiment`
@@ -1916,7 +2222,12 @@ class S {
 
   /// `Submitted`
   String get noSubmission {
-    return Intl.message('Submitted', name: 'noSubmission', desc: '', args: []);
+    return Intl.message(
+      'Submitted',
+      name: 'noSubmission',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Algebra Course Completion Certificate`
@@ -1941,12 +2252,22 @@ class S {
 
   /// `April 2026`
   String get april2026 {
-    return Intl.message('April 2026', name: 'april2026', desc: '', args: []);
+    return Intl.message(
+      'April 2026',
+      name: 'april2026',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `March 2026`
   String get march2026 {
-    return Intl.message('March 2026', name: 'march2026', desc: '', args: []);
+    return Intl.message(
+      'March 2026',
+      name: 'march2026',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `This Month Achievement`
@@ -1991,47 +2312,92 @@ class S {
 
   /// `Time`
   String get time {
-    return Intl.message('Time', name: 'time', desc: '', args: []);
+    return Intl.message(
+      'Time',
+      name: 'time',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Sunday`
   String get sunday {
-    return Intl.message('Sunday', name: 'sunday', desc: '', args: []);
+    return Intl.message(
+      'Sunday',
+      name: 'sunday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Monday`
   String get monday {
-    return Intl.message('Monday', name: 'monday', desc: '', args: []);
+    return Intl.message(
+      'Monday',
+      name: 'monday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Tuesday`
   String get tuesday {
-    return Intl.message('Tuesday', name: 'tuesday', desc: '', args: []);
+    return Intl.message(
+      'Tuesday',
+      name: 'tuesday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Wednesday`
   String get wednesday {
-    return Intl.message('Wednesday', name: 'wednesday', desc: '', args: []);
+    return Intl.message(
+      'Wednesday',
+      name: 'wednesday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Thursday`
   String get thursday {
-    return Intl.message('Thursday', name: 'thursday', desc: '', args: []);
+    return Intl.message(
+      'Thursday',
+      name: 'thursday',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Arabic`
   String get arabic {
-    return Intl.message('Arabic', name: 'arabic', desc: '', args: []);
+    return Intl.message(
+      'Arabic',
+      name: 'arabic',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Math`
   String get mathShort {
-    return Intl.message('Math', name: 'mathShort', desc: '', args: []);
+    return Intl.message(
+      'Math',
+      name: 'mathShort',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Subject`
   String get subject {
-    return Intl.message('Subject', name: 'subject', desc: '', args: []);
+    return Intl.message(
+      'Subject',
+      name: 'subject',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Participation`
@@ -2046,22 +2412,42 @@ class S {
 
   /// `Excellent`
   String get excellent {
-    return Intl.message('Excellent', name: 'excellent', desc: '', args: []);
+    return Intl.message(
+      'Excellent',
+      name: 'excellent',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Absent`
   String get absent {
-    return Intl.message('Absent', name: 'absent', desc: '', args: []);
+    return Intl.message(
+      'Absent',
+      name: 'absent',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `English`
   String get english {
-    return Intl.message('English', name: 'english', desc: '', args: []);
+    return Intl.message(
+      'English',
+      name: 'english',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Online now`
   String get onlineNow {
-    return Intl.message('Online now', name: 'onlineNow', desc: '', args: []);
+    return Intl.message(
+      'Online now',
+      name: 'onlineNow',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Type message.....`
@@ -2216,7 +2602,12 @@ class S {
 
   /// `Congrats!`
   String get congrats {
-    return Intl.message('Congrats!', name: 'congrats', desc: '', args: []);
+    return Intl.message(
+      'Congrats!',
+      name: 'congrats',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Choose grade`
@@ -2251,12 +2642,22 @@ class S {
 
   /// `Biology`
   String get biology {
-    return Intl.message('Biology', name: 'biology', desc: '', args: []);
+    return Intl.message(
+      'Biology',
+      name: 'biology',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `My requests`
   String get myRequests {
-    return Intl.message('My requests', name: 'myRequests', desc: '', args: []);
+    return Intl.message(
+      'My requests',
+      name: 'myRequests',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Choose curriculum`
@@ -2361,12 +2762,22 @@ class S {
 
   /// `اسم المستخدم`
   String get userName {
-    return Intl.message('اسم المستخدم', name: 'userName', desc: '', args: []);
+    return Intl.message(
+      'اسم المستخدم',
+      name: 'userName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `الخصوصية`
   String get privacy {
-    return Intl.message('الخصوصية', name: 'privacy', desc: '', args: []);
+    return Intl.message(
+      'الخصوصية',
+      name: 'privacy',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit Phone Number`
@@ -2551,7 +2962,12 @@ class S {
 
   /// `InActive`
   String get inactive {
-    return Intl.message('InActive', name: 'inactive', desc: '', args: []);
+    return Intl.message(
+      'InActive',
+      name: 'inactive',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `No groups yet`
@@ -2646,7 +3062,12 @@ class S {
 
   /// `points`
   String get pointsCount {
-    return Intl.message('points', name: 'pointsCount', desc: '', args: []);
+    return Intl.message(
+      'points',
+      name: 'pointsCount',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Next rank after {teachers} teachers, {points} points to the next level`
@@ -2661,12 +3082,22 @@ class S {
 
   /// `Students`
   String get students {
-    return Intl.message('Students', name: 'students', desc: '', args: []);
+    return Intl.message(
+      'Students',
+      name: 'students',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Classes`
   String get classes {
-    return Intl.message('Classes', name: 'classes', desc: '', args: []);
+    return Intl.message(
+      'Classes',
+      name: 'classes',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Upcoming Lessons`
@@ -2681,12 +3112,22 @@ class S {
 
   /// `Start`
   String get start {
-    return Intl.message('Start', name: 'start', desc: '', args: []);
+    return Intl.message(
+      'Start',
+      name: 'start',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Dues`
   String get dues {
-    return Intl.message('Dues', name: 'dues', desc: '', args: []);
+    return Intl.message(
+      'Dues',
+      name: 'dues',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Classes Management`
@@ -2701,7 +3142,12 @@ class S {
 
   /// `Evaluations`
   String get evaluations {
-    return Intl.message('Evaluations', name: 'evaluations', desc: '', args: []);
+    return Intl.message(
+      'Evaluations',
+      name: 'evaluations',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Registration Requests`
@@ -2716,7 +3162,12 @@ class S {
 
   /// `Performance`
   String get performance {
-    return Intl.message('Performance', name: 'performance', desc: '', args: []);
+    return Intl.message(
+      'Performance',
+      name: 'performance',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Weekly Plans`
@@ -2741,12 +3192,22 @@ class S {
 
   /// `Active`
   String get active2 {
-    return Intl.message('Active', name: 'active2', desc: '', args: []);
+    return Intl.message(
+      'Active',
+      name: 'active2',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Submitted`
   String get submitted {
-    return Intl.message('Submitted', name: 'submitted', desc: '', args: []);
+    return Intl.message(
+      'Submitted',
+      name: 'submitted',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Not submitted`
@@ -2761,7 +3222,12 @@ class S {
 
   /// `Finished`
   String get finished {
-    return Intl.message('Finished', name: 'finished', desc: '', args: []);
+    return Intl.message(
+      'Finished',
+      name: 'finished',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Create New Assignment`
@@ -2776,7 +3242,12 @@ class S {
 
   /// `Title`
   String get assignmentTitle {
-    return Intl.message('Title', name: 'assignmentTitle', desc: '', args: []);
+    return Intl.message(
+      'Title',
+      name: 'assignmentTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Description`
@@ -2791,7 +3262,12 @@ class S {
 
   /// `Classroom`
   String get classRoom {
-    return Intl.message('Classroom', name: 'classRoom', desc: '', args: []);
+    return Intl.message(
+      'Classroom',
+      name: 'classRoom',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Choose classroom`
@@ -2836,7 +3312,12 @@ class S {
 
   /// `Choose file`
   String get chooseFile {
-    return Intl.message('Choose file', name: 'chooseFile', desc: '', args: []);
+    return Intl.message(
+      'Choose file',
+      name: 'chooseFile',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Create Assignment`
@@ -2871,7 +3352,12 @@ class S {
 
   /// `Graded`
   String get graded {
-    return Intl.message('Graded', name: 'graded', desc: '', args: []);
+    return Intl.message(
+      'Graded',
+      name: 'graded',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Waiting for Grading`
@@ -2896,7 +3382,12 @@ class S {
 
   /// `Edit Grade`
   String get editGrade {
-    return Intl.message('Edit Grade', name: 'editGrade', desc: '', args: []);
+    return Intl.message(
+      'Edit Grade',
+      name: 'editGrade',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Grade & Assign Score`
@@ -2921,7 +3412,12 @@ class S {
 
   /// `Degree`
   String get degree {
-    return Intl.message('Degree', name: 'degree', desc: '', args: []);
+    return Intl.message(
+      'Degree',
+      name: 'degree',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Submit Grade`
@@ -2936,12 +3432,22 @@ class S {
 
   /// `Sections`
   String get sections {
-    return Intl.message('Sections', name: 'sections', desc: '', args: []);
+    return Intl.message(
+      'Sections',
+      name: 'sections',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Class`
   String get classR {
-    return Intl.message('Class', name: 'classR', desc: '', args: []);
+    return Intl.message(
+      'Class',
+      name: 'classR',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Issue New Certificate`
@@ -2956,22 +3462,42 @@ class S {
 
   /// `Preview`
   String get preview {
-    return Intl.message('Preview', name: 'preview', desc: '', args: []);
+    return Intl.message(
+      'Preview',
+      name: 'preview',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit`
   String get edit {
-    return Intl.message('Edit', name: 'edit', desc: '', args: []);
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Sent`
   String get send {
-    return Intl.message('Sent', name: 'send', desc: '', args: []);
+    return Intl.message(
+      'Sent',
+      name: 'send',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Total`
   String get total {
-    return Intl.message('Total', name: 'total', desc: '', args: []);
+    return Intl.message(
+      'Total',
+      name: 'total',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Subjects Grades`
@@ -2996,12 +3522,22 @@ class S {
 
   /// `Save`
   String get save {
-    return Intl.message('Save', name: 'save', desc: '', args: []);
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Close`
   String get close {
-    return Intl.message('Close', name: 'close', desc: '', args: []);
+    return Intl.message(
+      'Close',
+      name: 'close',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Download PDF`
@@ -3056,27 +3592,52 @@ class S {
 
   /// `Accept`
   String get accept {
-    return Intl.message('Accept', name: 'accept', desc: '', args: []);
+    return Intl.message(
+      'Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Cancel`
   String get cancel {
-    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Day`
   String get day {
-    return Intl.message('Day', name: 'day', desc: '', args: []);
+    return Intl.message(
+      'Day',
+      name: 'day',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Days`
   String get days {
-    return Intl.message('Days', name: 'days', desc: '', args: []);
+    return Intl.message(
+      'Days',
+      name: 'days',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Groups`
   String get groups {
-    return Intl.message('Groups', name: 'groups', desc: '', args: []);
+    return Intl.message(
+      'Groups',
+      name: 'groups',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Submit Request`
@@ -3181,22 +3742,42 @@ class S {
 
   /// `Full Name`
   String get fullName {
-    return Intl.message('Full Name', name: 'fullName', desc: '', args: []);
+    return Intl.message(
+      'Full Name',
+      name: 'fullName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Nationality`
   String get nationality {
-    return Intl.message('Nationality', name: 'nationality', desc: '', args: []);
+    return Intl.message(
+      'Nationality',
+      name: 'nationality',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Country`
   String get country {
-    return Intl.message('Country', name: 'country', desc: '', args: []);
+    return Intl.message(
+      'Country',
+      name: 'country',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `City`
   String get city {
-    return Intl.message('City', name: 'city', desc: '', args: []);
+    return Intl.message(
+      'City',
+      name: 'city',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Qualification`
@@ -3241,7 +3822,12 @@ class S {
 
   /// `Grade`
   String get graduationGrade {
-    return Intl.message('Grade', name: 'graduationGrade', desc: '', args: []);
+    return Intl.message(
+      'Grade',
+      name: 'graduationGrade',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Do you have teaching experience?`
@@ -3266,12 +3852,22 @@ class S {
 
   /// `Yes`
   String get yes {
-    return Intl.message('Yes', name: 'yes', desc: '', args: []);
+    return Intl.message(
+      'Yes',
+      name: 'yes',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `No`
   String get no {
-    return Intl.message('No', name: 'no', desc: '', args: []);
+    return Intl.message(
+      'No',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Please choose the curriculum you teach`
@@ -3336,12 +3932,22 @@ class S {
 
   /// `Good`
   String get good {
-    return Intl.message('Good', name: 'good', desc: '', args: []);
+    return Intl.message(
+      'Good',
+      name: 'good',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Very Good`
   String get veryGood {
-    return Intl.message('Very Good', name: 'veryGood', desc: '', args: []);
+    return Intl.message(
+      'Very Good',
+      name: 'veryGood',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Do you have a laptop or computer?`
@@ -3526,7 +4132,12 @@ class S {
 
   /// `Expected`
   String get expected {
-    return Intl.message('Expected', name: 'expected', desc: '', args: []);
+    return Intl.message(
+      'Expected',
+      name: 'expected',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Completed Sessions`
@@ -3581,7 +4192,12 @@ class S {
 
   /// `Paid`
   String get paymentCompleted {
-    return Intl.message('Paid', name: 'paymentCompleted', desc: '', args: []);
+    return Intl.message(
+      'Paid',
+      name: 'paymentCompleted',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Under Processing`
@@ -3596,12 +4212,22 @@ class S {
 
   /// `Pending`
   String get pendingWaiting {
-    return Intl.message('Pending', name: 'pendingWaiting', desc: '', args: []);
+    return Intl.message(
+      'Pending',
+      name: 'pendingWaiting',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Sessions`
   String get sessions {
-    return Intl.message('Sessions', name: 'sessions', desc: '', args: []);
+    return Intl.message(
+      'Sessions',
+      name: 'sessions',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Total Sessions`
@@ -3616,22 +4242,42 @@ class S {
 
   /// `Rewards`
   String get rewards {
-    return Intl.message('Rewards', name: 'rewards', desc: '', args: []);
+    return Intl.message(
+      'Rewards',
+      name: 'rewards',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Deductions`
   String get discounts {
-    return Intl.message('Deductions', name: 'discounts', desc: '', args: []);
+    return Intl.message(
+      'Deductions',
+      name: 'discounts',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Net Amount`
   String get netAmount {
-    return Intl.message('Net Amount', name: 'netAmount', desc: '', args: []);
+    return Intl.message(
+      'Net Amount',
+      name: 'netAmount',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Paid On`
   String get paymentDoneOn {
-    return Intl.message('Paid On', name: 'paymentDoneOn', desc: '', args: []);
+    return Intl.message(
+      'Paid On',
+      name: 'paymentDoneOn',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Salary Calculation Method`
@@ -3716,7 +4362,12 @@ class S {
 
   /// `Loading...`
   String get loading {
-    return Intl.message('Loading...', name: 'loading', desc: '', args: []);
+    return Intl.message(
+      'Loading...',
+      name: 'loading',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Delete assignment`
@@ -3741,7 +4392,12 @@ class S {
 
   /// `Delete`
   String get delete {
-    return Intl.message('Delete', name: 'delete', desc: '', args: []);
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `My Performance`
@@ -3756,22 +4412,42 @@ class S {
 
   /// `Lessons`
   String get lessons {
-    return Intl.message('Lessons', name: 'lessons', desc: '', args: []);
+    return Intl.message(
+      'Lessons',
+      name: 'lessons',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Absence`
   String get absence {
-    return Intl.message('Absence', name: 'absence', desc: '', args: []);
+    return Intl.message(
+      'Absence',
+      name: 'absence',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Rating`
   String get rating {
-    return Intl.message('Rating', name: 'rating', desc: '', args: []);
+    return Intl.message(
+      'Rating',
+      name: 'rating',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Point`
   String get point {
-    return Intl.message('Point', name: 'point', desc: '', args: []);
+    return Intl.message(
+      'Point',
+      name: 'point',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Last 6 Months`
@@ -3786,7 +4462,12 @@ class S {
 
   /// `Classes`
   String get classesCount {
-    return Intl.message('Classes', name: 'classesCount', desc: '', args: []);
+    return Intl.message(
+      'Classes',
+      name: 'classesCount',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Latest Earned Points`
@@ -3821,22 +4502,42 @@ class S {
 
   /// `Month`
   String get month {
-    return Intl.message('Month', name: 'month', desc: '', args: []);
+    return Intl.message(
+      'Month',
+      name: 'month',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Salary`
   String get salary {
-    return Intl.message('Salary', name: 'salary', desc: '', args: []);
+    return Intl.message(
+      'Salary',
+      name: 'salary',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Points`
   String get points {
-    return Intl.message('Points', name: 'points', desc: '', args: []);
+    return Intl.message(
+      'Points',
+      name: 'points',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Ranking`
   String get ranking {
-    return Intl.message('Ranking', name: 'ranking', desc: '', args: []);
+    return Intl.message(
+      'Ranking',
+      name: 'ranking',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Weekly Ideal Student`
@@ -3901,17 +4602,32 @@ class S {
 
   /// `Week Start`
   String get weekStart {
-    return Intl.message('Week Start', name: 'weekStart', desc: '', args: []);
+    return Intl.message(
+      'Week Start',
+      name: 'weekStart',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Behavior`
   String get behavior {
-    return Intl.message('Behavior', name: 'behavior', desc: '', args: []);
+    return Intl.message(
+      'Behavior',
+      name: 'behavior',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Notes`
   String get notesText {
-    return Intl.message('Notes', name: 'notesText', desc: '', args: []);
+    return Intl.message(
+      'Notes',
+      name: 'notesText',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Class Schedules Management`

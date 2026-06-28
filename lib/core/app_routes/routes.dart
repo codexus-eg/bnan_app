@@ -19,6 +19,7 @@ abstract class Routes {
   static const String updatePassword = '/updatePassword';
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
+  static const String parentHome = '/parentHome';
   static const String teacherSections = '/teacherSections';
   static const String teacherCertificates = '/teacherCertificates';
   static const String teacherRegistrationRequest =
