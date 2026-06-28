@@ -62,6 +62,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     }
+     if (index == 4) {
+      MyNavigator.goTo(context, Routes.parentCertificates);
+    }
   }
 
   void _logout() {

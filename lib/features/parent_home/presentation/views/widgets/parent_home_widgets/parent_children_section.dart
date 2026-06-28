@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_child_card.dart';
+import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
+import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_child_card.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ParentChildrenSection extends StatelessWidget {
@@ -8,39 +10,35 @@ class ParentChildrenSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+
     return Column(
       children: [
         Row(
           children: [
             Text(
-              'أبناؤك',
-              style: StylesManager.styleBold14(context).copyWith(
-                color: ColorManager.black,
-              ),
+              s.parentYourChildren,
+              style: StylesManager.styleBold14(
+                context,
+              ).copyWith(color: ColorManager.black),
             ),
             const Spacer(),
             GestureDetector(
               onTap: () {},
               behavior: HitTestBehavior.opaque,
               child: Text(
-                'عرض الكل',
-                style: StylesManager.styleBold12(context).copyWith(
-                  color: ColorManager.mainColor14,
-                ),
+                s.parentShowAll,
+                style: StylesManager.styleBold12(
+                  context,
+                ).copyWith(color: ColorManager.mainColor14),
               ),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        const ParentChildCard(
-          name: 'ليلى خالد',
-          grade: 'الصف الأول الإعدادي',
-        ),
+        ParentChildCard(parentChildModel: children[0]),
         const SizedBox(height: 8),
-        const ParentChildCard(
-          name: 'أحمد خالد',
-          grade: 'الصف الثاني الإعدادي',
-        ),
+        ParentChildCard(parentChildModel: children[1]),
       ],
     );
   }

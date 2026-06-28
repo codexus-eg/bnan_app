@@ -3,13 +3,12 @@ import 'package:bnan_app/core/shared_widget/custom_icon_box.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
 import 'package:flutter/material.dart';
 
 class ParentChildCard extends StatelessWidget {
-  const ParentChildCard({super.key, required this.name, required this.grade});
-
-  final String name;
-  final String grade;
+  const ParentChildCard({super.key,required this.parentChildModel});
+final ParentChildModel parentChildModel;
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +22,18 @@ class ParentChildCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                 parentChildModel.name,
                   style: StylesManager.styleBold16(
                     context,
                   ).copyWith(color: ColorManager.mainColor14),
                 ),
                 const SizedBox(height: 6),
-                Text(grade, style: StylesManager.styleRegular14(context)),
+                Text(
+                  parentChildModel.grade,
+                  style: StylesManager.styleRegular14(
+                    context,
+                  ).copyWith(color: ColorManager.greyA8AF),
+                ),
               ],
             ),
           ),

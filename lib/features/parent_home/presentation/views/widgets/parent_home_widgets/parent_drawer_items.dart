@@ -1,45 +1,36 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/drawer_item_model.dart';
 import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/generated/l10n.dart';
+import 'package:flutter/material.dart';
 
-const List<DrawerItemModel> parentDrawerItems = [
-  DrawerItemModel(
-    title: 'الرئيسية',
-    icon: ImageManager.homeIcon,
-  ),
-  DrawerItemModel(
-    title: 'أبناؤك',
-    icon: ImageManager.children,
-  ),
-  DrawerItemModel(
-    title: 'التقييمات',
-    icon: ImageManager.starOutlinedIcon,
-  ),
-  DrawerItemModel(
-    title: 'الجدول',
-    icon: ImageManager.parentCalendarIcon,
-  ),
-  DrawerItemModel(
-    title: 'الشهادات',
-    icon: ImageManager.certificateBadgeIcon,
-  ),
-  DrawerItemModel(
-    title: 'الإشعارات',
-    icon: ImageManager.bellIcon,
-  ),
-  DrawerItemModel(
-    title: 'الباقات والاشتراك',
-    icon: ImageManager.subscription,
-  ),
-  DrawerItemModel(
-    title: 'الرسائل',
-    icon: ImageManager.parentChatConversationCircleIcon,
-  ),
-  DrawerItemModel(
-    title: 'الخطط اليومية',
-    icon: ImageManager.fileIcon,
-  ),
-  DrawerItemModel(
-    title: 'حسابي',
-    icon: ImageManager.userProfileIcon,
-  ),
-];
+List<DrawerItemModel> parentDrawerItems(BuildContext context) {
+  final s = S.of(context);
+
+  return [
+    DrawerItemModel(title: s.parentHomeTitle, icon: ImageManager.homeIcon),
+    DrawerItemModel(title: s.parentYourChildren, icon: ImageManager.children),
+    DrawerItemModel(
+      title: s.parentEvaluations,
+      icon: ImageManager.starOutlinedIcon,
+    ),
+    DrawerItemModel(
+      title: s.parentSchedule,
+      icon: ImageManager.parentCalendarIcon,
+    ),
+    DrawerItemModel(
+      title: s.parentCertificates,
+      icon: ImageManager.certificateBadgeIcon,
+    ),
+    DrawerItemModel(title: s.parentNotifications, icon: ImageManager.bellIcon),
+    DrawerItemModel(
+      title: s.parentPackagesAndSubscription,
+      icon: ImageManager.subscription,
+    ),
+    DrawerItemModel(
+      title: s.parentMessages,
+      icon: ImageManager.parentChatConversationCircleIcon,
+    ),
+    DrawerItemModel(title: s.parentDailyPlans, icon: ImageManager.fileIcon),
+    DrawerItemModel(title: s.parentAccount, icon: ImageManager.userProfileIcon),
+  ];
+}

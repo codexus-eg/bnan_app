@@ -7,14 +7,16 @@ class ParentHomeStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final stats = parentHomeStats(context);
+
     return Row(
-      children: List.generate(parentHomeStats.length, (index) {
+      children: List.generate(stats.length, (index) {
         return Expanded(
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-              end: index == parentHomeStats.length - 1 ? 0 : 20,
+              end: index == stats.length - 1 ? 0 : 20,
             ),
-            child: HomeStatCard(state: parentHomeStats[index]),
+            child: HomeStatCard(state: stats[index]),
           ),
         );
       }),

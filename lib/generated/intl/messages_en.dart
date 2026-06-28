@@ -456,9 +456,41 @@ class MessageLookup extends MessageLookupByLibrary {
             "Expires in 18 days. Auto renewal"),
         "packagePrice": MessageLookupByLibrary.simpleMessage("Session Price"),
         "packages": MessageLookupByLibrary.simpleMessage("Packages"),
+        "parentAccount": MessageLookupByLibrary.simpleMessage("My Account"),
+        "parentCertificates":
+            MessageLookupByLibrary.simpleMessage("Certificates"),
+        "parentChildren": MessageLookupByLibrary.simpleMessage("Children"),
+        "parentDailyPlans": MessageLookupByLibrary.simpleMessage("Daily Plans"),
+        "parentEvaluations":
+            MessageLookupByLibrary.simpleMessage("Evaluations"),
+        "parentFirstPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("First Preparatory Grade"),
+        "parentGuardian": MessageLookupByLibrary.simpleMessage("Parent"),
+        "parentHomeTitle": MessageLookupByLibrary.simpleMessage("Home"),
         "parentInfo":
             MessageLookupByLibrary.simpleMessage("Parent Information"),
+        "parentMessages": MessageLookupByLibrary.simpleMessage("Messages"),
         "parentName": MessageLookupByLibrary.simpleMessage("Parent name"),
+        "parentNotifications":
+            MessageLookupByLibrary.simpleMessage("Notifications"),
+        "parentPackagesAndSubscription":
+            MessageLookupByLibrary.simpleMessage("Packages and Subscription"),
+        "parentRenew": MessageLookupByLibrary.simpleMessage("Renew"),
+        "parentSchedule": MessageLookupByLibrary.simpleMessage("Schedule"),
+        "parentSecondPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("Second Preparatory Grade"),
+        "parentShowAll": MessageLookupByLibrary.simpleMessage("Show All"),
+        "parentSubscription":
+            MessageLookupByLibrary.simpleMessage("Subscription"),
+        "parentSubscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
+            "Laila\'s subscription will end in 5 days"),
+        "parentSubscriptionRenewHint": MessageLookupByLibrary.simpleMessage(
+            "Renew it now to avoid suspension"),
+        "parentSubscriptions":
+            MessageLookupByLibrary.simpleMessage("Subscriptions"),
+        "parentWelcome": MessageLookupByLibrary.simpleMessage("Welcome"),
+        "parentYourChildren":
+            MessageLookupByLibrary.simpleMessage("Your Children"),
         "participation": MessageLookupByLibrary.simpleMessage("Participation"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "passwordAndConfirmRequired": MessageLookupByLibrary.simpleMessage(

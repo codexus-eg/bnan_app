@@ -442,8 +442,37 @@ class MessageLookup extends MessageLookupByLibrary {
             "ينتهي خلال 18 يوم . تجديد تلقائي"),
         "packagePrice": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
         "packages": MessageLookupByLibrary.simpleMessage("الباقات"),
+        "parentAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
+        "parentCertificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
+        "parentChildren": MessageLookupByLibrary.simpleMessage("الأبناء"),
+        "parentDailyPlans":
+            MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
+        "parentEvaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
+        "parentFirstPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الأول الإعدادي"),
+        "parentGuardian": MessageLookupByLibrary.simpleMessage("ولي أمر"),
+        "parentHomeTitle": MessageLookupByLibrary.simpleMessage("الرئيسية"),
         "parentInfo": MessageLookupByLibrary.simpleMessage("معلومات ولي الأمر"),
+        "parentMessages": MessageLookupByLibrary.simpleMessage("الرسائل"),
         "parentName": MessageLookupByLibrary.simpleMessage("اسم ولي الأمر"),
+        "parentNotifications":
+            MessageLookupByLibrary.simpleMessage("الإشعارات"),
+        "parentPackagesAndSubscription":
+            MessageLookupByLibrary.simpleMessage("الباقات والاشتراك"),
+        "parentRenew": MessageLookupByLibrary.simpleMessage("جدد"),
+        "parentSchedule": MessageLookupByLibrary.simpleMessage("الجدول"),
+        "parentSecondPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
+        "parentShowAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "parentSubscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
+        "parentSubscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
+            "اشتراك ليلى سينتهي خلال 5 أيام"),
+        "parentSubscriptionRenewHint":
+            MessageLookupByLibrary.simpleMessage("جدده الآن لتجنب التعليق"),
+        "parentSubscriptions":
+            MessageLookupByLibrary.simpleMessage("الاشتراكات"),
+        "parentWelcome": MessageLookupByLibrary.simpleMessage("أهلًا بك"),
+        "parentYourChildren": MessageLookupByLibrary.simpleMessage("أبناؤك"),
         "participation": MessageLookupByLibrary.simpleMessage("المشاركة"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "passwordAndConfirmRequired": MessageLookupByLibrary.simpleMessage(

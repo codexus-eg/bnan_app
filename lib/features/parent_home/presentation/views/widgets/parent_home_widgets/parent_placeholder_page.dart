@@ -14,9 +14,9 @@ class ParentPlaceholderPage extends StatelessWidget {
       child: Center(
         child: Text(
           title,
-          style: StylesManager.styleBold20(context).copyWith(
-            color: ColorManager.mainColor14,
-          ),
+          style: StylesManager.styleBold20(
+            context,
+          ).copyWith(color: ColorManager.mainColor14),
         ),
       ),
     );
