@@ -39,8 +39,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveMaxLines = obscureText ? 1 : maxLine;
-    final isMultiLine = (effectiveMaxLines ?? 1) > 1;
+    final effectiveMaxLines = obscureText ? 1 : (maxLine ?? 1);
+    final isMultiLine = (effectiveMaxLines) > 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,9 +73,12 @@ class CustomTextField extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
-        ConstrainedBox(
-          constraints: BoxConstraints(minHeight: isMultiLine ? 0 : 40),
+        SizedBox(
+          height: isMultiLine ? null : 40,
           child: TextFormField(
+            textInputAction: isMultiLine
+                ? TextInputAction.newline
+                : TextInputAction.done,
             validator: validator,
             readOnly: readOnly,
             onTap: onTap,

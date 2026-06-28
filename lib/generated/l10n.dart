@@ -4539,6 +4539,126 @@ class S {
       args: [],
     );
   }
+
+  /// `Weekly Ideal Student`
+  String get weeklyIdealStudent {
+    return Intl.message(
+      'Weekly Ideal Student',
+      name: 'weeklyIdealStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly Ideal Students Ranking`
+  String get weeklyIdealStudentsRanking {
+    return Intl.message(
+      'Weekly Ideal Students Ranking',
+      name: 'weeklyIdealStudentsRanking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly Evaluations`
+  String get weeklyEvaluations {
+    return Intl.message(
+      'Weekly Evaluations',
+      name: 'weeklyEvaluations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Evaluation`
+  String get addNewEvaluation {
+    return Intl.message(
+      'Add New Evaluation',
+      name: 'addNewEvaluation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Weekly Evaluation`
+  String get newWeeklyEvaluation {
+    return Intl.message(
+      'New Weekly Evaluation',
+      name: 'newWeeklyEvaluation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Evaluation`
+  String get editEvaluation {
+    return Intl.message(
+      'Edit Evaluation',
+      name: 'editEvaluation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Week Start`
+  String get weekStart {
+    return Intl.message(
+      'Week Start',
+      name: 'weekStart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Behavior`
+  String get behavior {
+    return Intl.message(
+      'Behavior',
+      name: 'behavior',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notes`
+  String get notesText {
+    return Intl.message(
+      'Notes',
+      name: 'notesText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Class Schedules Management`
+  String get classSchedulesManagement {
+    return Intl.message(
+      'Class Schedules Management',
+      name: 'classSchedulesManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Schedule`
+  String get addNewSchedule {
+    return Intl.message(
+      'Add New Schedule',
+      name: 'addNewSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload Schedule`
+  String get uploadSchedule {
+    return Intl.message(
+      'Upload Schedule',
+      name: 'uploadSchedule',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

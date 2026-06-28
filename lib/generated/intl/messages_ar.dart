@@ -82,6 +82,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "active2": MessageLookupByLibrary.simpleMessage("نشط"),
         "activeGroups":
             MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
+        "addNewEvaluation":
+            MessageLookupByLibrary.simpleMessage("إضافة تقييم جديد"),
+        "addNewSchedule":
+            MessageLookupByLibrary.simpleMessage("إضافة جدول جديد"),
         "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
             "يتم احتساب المكافآت بناءً على الأداء"),
         "addRewardPointsTitle":
@@ -115,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "averagePercent": m0,
         "backToLogin":
             MessageLookupByLibrary.simpleMessage("العودة لتسجيل الدخول"),
+        "behavior": MessageLookupByLibrary.simpleMessage("السلوك"),
         "biology": MessageLookupByLibrary.simpleMessage("الأحياء"),
         "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
@@ -159,6 +164,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "city": MessageLookupByLibrary.simpleMessage("المدينة"),
         "classR": MessageLookupByLibrary.simpleMessage("فصل"),
         "classRoom": MessageLookupByLibrary.simpleMessage("الفصل"),
+        "classSchedulesManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة جداول الصفوف"),
         "classes": MessageLookupByLibrary.simpleMessage("الصفوف"),
         "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
         "classesManagement":
@@ -225,6 +232,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
         "editCertificate":
             MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
+        "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
         "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
         "egyptianCurriculum":
@@ -379,6 +387,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("تقييم أسبوعي جديد لأحمد"),
+        "newWeeklyEvaluation":
+            MessageLookupByLibrary.simpleMessage("تقييم أسبوعي جديد"),
         "next": MessageLookupByLibrary.simpleMessage("التالي"),
         "nextLevelPointsText": m7,
         "no": MessageLookupByLibrary.simpleMessage("لا"),
@@ -406,6 +416,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "ملاحظات إضافية أو تفاصيل تريد مشاركتها معنا"),
         "notesHint": MessageLookupByLibrary.simpleMessage(
             "مثال: كل يوم اثنين وأربعاء الساعة 5 مساءً"),
+        "notesText": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("كلمة المرور القديمة"),
@@ -704,6 +715,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("رفع السيرة الذاتية (pdf)"),
         "uploadNationalIdFile": MessageLookupByLibrary.simpleMessage(
             "صورة بطاقة الرقم القومي/الهوية (صورة/pdf)"),
+        "uploadSchedule": MessageLookupByLibrary.simpleMessage("رفع الجدول"),
         "usedDays": m18,
         "usedHours": m19,
         "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
@@ -715,8 +727,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "waitingForTeacherApproval":
             MessageLookupByLibrary.simpleMessage("بانتظار موافقة المعلم"),
         "wednesday": MessageLookupByLibrary.simpleMessage("الأربعاء"),
+        "weekStart": MessageLookupByLibrary.simpleMessage("بداية الأسبوع"),
         "weeklyEvaluation":
             MessageLookupByLibrary.simpleMessage("التقييم الأسبوعي"),
+        "weeklyEvaluations":
+            MessageLookupByLibrary.simpleMessage("التقييمات الأسبوعية"),
+        "weeklyIdealStudent":
+            MessageLookupByLibrary.simpleMessage("الطالب المثالي للأسبوع"),
+        "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
+            "ترتيب الطلاب المثاليين هذا الأسبوع"),
         "weeklyLessons": m20,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),

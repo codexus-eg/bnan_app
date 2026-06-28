@@ -19,10 +19,14 @@ abstract class Routes {
   static const String updatePassword = '/updatePassword';
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
+  static const String parentHome = '/parentHome';
   static const String teacherSections = '/teacherSections';
   static const String teacherCertificates = '/teacherCertificates';
   static const String teacherRegistrationRequest =
       '/teacherRegistrationRequest';
   static const String teacherChats = '/teacherChats';
   static const String teacherPerformance = '/teacherPerformance';
+  static const String weeklyIdealStudents = '/weeklyIdealStudents';
+  static const String weeklyEvaluations = '/weeklyEvaluations';
+  static const String classSchedules = '/classSchedules';
 }

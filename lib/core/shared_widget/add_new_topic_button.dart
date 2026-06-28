@@ -13,8 +13,8 @@ class AddNewTopicButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsetsDirectional.only(
-          start: 25,
-          end: 18,
+          start: 11.5,
+          end: 10.5,
           top: 8,
           bottom: 8,
         ),
@@ -25,7 +25,7 @@ class AddNewTopicButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.add,color: ColorManager.white,),
+            Icon(Icons.add,color: ColorManager.white,size: 16),
             const SizedBox(width: 12),
             Text(
               title,

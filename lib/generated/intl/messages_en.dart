@@ -83,6 +83,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "active": MessageLookupByLibrary.simpleMessage("Active"),
         "active2": MessageLookupByLibrary.simpleMessage("Active"),
         "activeGroups": MessageLookupByLibrary.simpleMessage("Active Groups"),
+        "addNewEvaluation":
+            MessageLookupByLibrary.simpleMessage("Add New Evaluation"),
+        "addNewSchedule":
+            MessageLookupByLibrary.simpleMessage("Add New Schedule"),
         "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
             "Rewards are calculated based on performance"),
         "addRewardPointsTitle":
@@ -120,6 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "availableDay": MessageLookupByLibrary.simpleMessage("Available day"),
         "averagePercent": m0,
         "backToLogin": MessageLookupByLibrary.simpleMessage("Back to login"),
+        "behavior": MessageLookupByLibrary.simpleMessage("Behavior"),
         "biology": MessageLookupByLibrary.simpleMessage("Biology"),
         "browseSection": MessageLookupByLibrary.simpleMessage("Browse section"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
@@ -166,6 +171,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "city": MessageLookupByLibrary.simpleMessage("City"),
         "classR": MessageLookupByLibrary.simpleMessage("Class"),
         "classRoom": MessageLookupByLibrary.simpleMessage("Classroom"),
+        "classSchedulesManagement":
+            MessageLookupByLibrary.simpleMessage("Class Schedules Management"),
         "classes": MessageLookupByLibrary.simpleMessage("Classes"),
         "classesCount": MessageLookupByLibrary.simpleMessage("Classes"),
         "classesManagement":
@@ -234,6 +241,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editCertificate":
             MessageLookupByLibrary.simpleMessage("Edit Certificate"),
+        "editEvaluation":
+            MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
         "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
         "egpCurrency":
             MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
@@ -392,6 +401,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("New Password"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("New weekly rating for Ahmed"),
+        "newWeeklyEvaluation":
+            MessageLookupByLibrary.simpleMessage("New Weekly Evaluation"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
         "nextLevelPointsText": m7,
         "no": MessageLookupByLibrary.simpleMessage("No"),
@@ -418,6 +429,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Additional notes or details"),
         "notesHint": MessageLookupByLibrary.simpleMessage(
             "Example: every Monday and Wednesday at 5 PM"),
+        "notesText": MessageLookupByLibrary.simpleMessage("Notes"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("Old Password"),
@@ -731,6 +743,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploadCvFile": MessageLookupByLibrary.simpleMessage("Upload CV (pdf)"),
         "uploadNationalIdFile": MessageLookupByLibrary.simpleMessage(
             "Upload national ID / identity image (image/pdf)"),
+        "uploadSchedule":
+            MessageLookupByLibrary.simpleMessage("Upload Schedule"),
         "usedDays": m18,
         "usedHours": m19,
         "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
@@ -742,8 +756,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
             "Waiting for teacher approval"),
         "wednesday": MessageLookupByLibrary.simpleMessage("Wednesday"),
+        "weekStart": MessageLookupByLibrary.simpleMessage("Week Start"),
         "weeklyEvaluation":
             MessageLookupByLibrary.simpleMessage("Weekly evaluation"),
+        "weeklyEvaluations":
+            MessageLookupByLibrary.simpleMessage("Weekly Evaluations"),
+        "weeklyIdealStudent":
+            MessageLookupByLibrary.simpleMessage("Weekly Ideal Student"),
+        "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
+            "Weekly Ideal Students Ranking"),
         "weeklyLessons": m20,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("Weekly Plans"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),

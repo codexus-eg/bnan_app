@@ -40,17 +40,19 @@ class CertificateActions extends StatelessWidget {
               ),
             ],
           ),
+          Spacer(),
           CertificateActionButton(
             title: S.of(context).preview,
             onTap: () {
               showDialog(
                 context: context,
-                barrierColor: Colors.black.withAlpha((255*.72).round()),
+                barrierColor: Colors.black.withAlpha((255 * .72).round()),
                 builder: (_) =>
                     CertificatePreviewDialog(imageUrl: certificate.imageUrl),
               );
             },
           ),
+          const SizedBox(width: 17),
           CertificateActionButton(
             title: S.of(context).edit,
             onTap: () {
@@ -60,7 +62,7 @@ class CertificateActions extends StatelessWidget {
               );
             },
           ),
-          CertificateActionButton(title: S.of(context).send, onTap: () {}),
+          const SizedBox(width: 17),
           SvgPicture.asset(ImageManager.trash),
         ],
       ),
