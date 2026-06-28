@@ -1,34 +1,37 @@
 import 'package:bnan_app/core/models/home_state_model.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
 import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/teacher_profile_info.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomTeacherExtraWidget extends StatelessWidget {
-  const CustomTeacherExtraWidget({super.key});
+  const CustomTeacherExtraWidget({super.key, required this.profile});
+
+  final TeacherProfileModel profile;
 
   @override
   Widget build(BuildContext context) {
     List<HomeStateModel> states = [
       HomeStateModel(
         icon: ImageManager.userProfileGroupIcon,
-        value: '12',
+        value: profile.students.toString(),
         title: S.of(context).student,
       ),
       HomeStateModel(
         icon: ImageManager.teacherBookTwoIcon,
-        value: '8',
+        value: profile.classrooms.toString(),
         title: S.of(context).sections,
       ),
       HomeStateModel(
         icon: ImageManager.teacherGraduationCapIcon,
-        value: '4',
+        value: profile.grades.toString(),
         title: S.of(context).classes,
       ),
       HomeStateModel(
         icon: ImageManager.teacherBookOneIcon,
-        value: '4',
+        value: profile.subjects.length.toString(),
         title: S.of(context).subjects,
       ),
     ];

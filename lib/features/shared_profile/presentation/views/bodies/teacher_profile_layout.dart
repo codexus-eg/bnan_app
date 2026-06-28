@@ -1,0 +1,58 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_cubit.dart';
+import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/custom_teacher_extra_widget.dart';
+import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/profile_layout.dart';
+import 'package:bnan_app/generated/l10n.dart';
+import 'package:flutter/material.dart';
+
+class TeacherProfileLayout extends StatelessWidget {
+  const TeacherProfileLayout({super.key, required this.profile});
+
+  final TeacherProfileModel profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return ProfileLayout(
+      fullName: profile.user.fullName,
+      email: profile.user.email,
+      phone: profile.phone,
+      roleLabel: S.of(context).teacher,
+      subtitle: _subtitle(context),
+      extraWidget: CustomTeacherExtraWidget(profile: profile),
+      onRefresh: () => TeacherProfileCubit.get(context).getTeacherProfile(),
+      onLogout: () => _logout(context),
+    );
+  }
+
+  String _subtitle(BuildContext context) {
+    final subjects = _joinNames(profile.subjects);
+    final curriculums = _joinNames(profile.curriculums);
+
+    if (subjects.isEmpty && curriculums.isEmpty) {
+      return profile.specialization.isEmpty
+          ? S.of(context).specialization
+          : profile.specialization;
+    }
+
+    if (subjects.isEmpty) return curriculums;
+    if (curriculums.isEmpty) return subjects;
+
+    return '$subjects\n$curriculums';
+  }
+
+  String _joinNames(List<TeacherProfileItemModel> items) {
+    return items
+        .map((item) => item.name.trim())
+        .where((name) => name.isNotEmpty)
+        .join(' - ');
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    await SessionManager.instance.clearSession();
+    if (!context.mounted) return;
+    MyNavigator.goToOffAll(context, Routes.logIn);
+  }
+}

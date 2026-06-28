@@ -676,6 +676,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
         "taughtOnlineBefore":
             MessageLookupByLibrary.simpleMessage("هل سبق لك التدريس أونلاين؟"),
+        "teacher": MessageLookupByLibrary.simpleMessage("معلم"),
         "teacherAhmedFouad":
             MessageLookupByLibrary.simpleMessage("أ/ أحمد فؤاد"),
         "teacherApplySubtitle": MessageLookupByLibrary.simpleMessage(

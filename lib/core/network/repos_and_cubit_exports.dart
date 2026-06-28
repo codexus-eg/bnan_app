@@ -3,6 +3,8 @@ export 'package:bnan_app/features/student_auth/data/repo/auth_repo_impl.dart';
 
 export 'package:bnan_app/features/shared_profile/data/repo/student_profile_repo/student_profile_repo.dart';
 export 'package:bnan_app/features/shared_profile/data/repo/student_profile_repo/student_profile_repo_impl.dart';
+export 'package:bnan_app/features/shared_profile/data/repo/teacher_profile_repo/teacher_profile_repo.dart';
+export 'package:bnan_app/features/shared_profile/data/repo/teacher_profile_repo/teacher_profile_repo_impl.dart';
 
 export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_assignments_repo.dart';
 export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_assignments_repo_impl.dart';
@@ -21,6 +23,7 @@ export 'package:bnan_app/features/student_auth/presentation/manager/get_grades_c
 export 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
 
 export 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
+export 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_cubit.dart';
 export 'package:bnan_app/features/shared_profile/presentation/manager/update_name_cubit/update_name_cubit.dart';
 export 'package:bnan_app/features/shared_profile/presentation/manager/update_phone_cubit/update_phone_cubit.dart';
 export 'package:bnan_app/features/shared_profile/presentation/manager/update_password_cubit/update_password_cubit.dart';

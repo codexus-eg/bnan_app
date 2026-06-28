@@ -602,5 +602,6 @@
     "parentSubscriptionEndsSoon": "Laila's subscription will end in 5 days",
     "parentSubscriptionRenewHint": "Renew it now to avoid suspension",
     "parentFirstPreparatoryGrade": "First Preparatory Grade",
-    "parentSecondPreparatoryGrade": "Second Preparatory Grade"
+    "parentSecondPreparatoryGrade": "Second Preparatory Grade",
+    "teacher":"teacher"
 }

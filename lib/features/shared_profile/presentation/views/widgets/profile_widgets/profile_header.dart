@@ -40,8 +40,8 @@ class ProfileHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsetsDirectional.only(
             top: 4,
-            end: 7,
-            start: 7,
+            end: 7.5,
+            start: 7.5,
             bottom: 3,
           ),
           decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class ProfileHeader extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 role,
-                style: StylesManager.styleBold12(
+                style: StylesManager.styleRegular12(
                   context,
                 ).copyWith(color: ColorManager.mainColor14),
               ),

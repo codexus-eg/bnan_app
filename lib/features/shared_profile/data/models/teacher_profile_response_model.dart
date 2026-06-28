@@ -38,6 +38,20 @@ class TeacherProfileModel {
     required this.students,
   });
 
+  factory TeacherProfileModel.placeholder() {
+    return TeacherProfileModel(
+      id: '',
+      user: TeacherProfileUserModel.placeholder(),
+      phone: '+20 101 655 789',
+      specialization: 'معلمة الرياضيات',
+      curriculums: const [],
+      grades: 4,
+      subjects: const [],
+      classrooms: 8,
+      students: 12,
+    );
+  }
+
   factory TeacherProfileModel.fromJson(Map<String, dynamic> json) {
     return TeacherProfileModel(
       id: json['_id'] ?? '',
@@ -67,6 +81,14 @@ class TeacherProfileUserModel {
     required this.fullName,
     required this.email,
   });
+
+  factory TeacherProfileUserModel.placeholder() {
+    return TeacherProfileUserModel(
+      id: '',
+      fullName: 'أ/ سارة عبدالله',
+      email: 'sara@gmail.com',
+    );
+  }
 
   factory TeacherProfileUserModel.fromJson(Map<String, dynamic> json) {
     return TeacherProfileUserModel(

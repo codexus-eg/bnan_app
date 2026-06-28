@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/shared_profile/presentation/views/bodies/teacher_profile_body.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/views/teacher_asignment_view.dart';
 import 'package:bnan_app/features/teacher_dues/presentation/widgets/teacher_dues_body.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/widgets/teacher_groups_body.dart';
@@ -21,7 +22,7 @@ class TeacherHomeContent extends StatelessWidget {
       TeacherGroupsBody(),
       TeacherAssignmentsView(),
       TeacherDuesBody(),
-      const Center(child: Text('حسابي')),
+      const TeacherProfileBody(),
     ];
 
     return pages[index];
