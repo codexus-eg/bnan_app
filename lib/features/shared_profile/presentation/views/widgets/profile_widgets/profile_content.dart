@@ -1,17 +1,13 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_state.dart';
-import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/contact_info_card.dart';
-import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/custom_teacher_extra_widget.dart';
-import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/logout_button.dart';
-import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/privacy_card.dart';
-import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/profile_header.dart';
-import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/profile_info_card.dart';
+import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/profile_layout.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfileContent extends StatelessWidget {
   const ProfileContent({super.key});
@@ -30,41 +26,30 @@ class ProfileContent extends StatelessWidget {
           return Center(child: Text(state.errorMessage));
         }
 
-        return Skeletonizer(
-          enabled: isLoading,
-          child: Column(
-            children: [
-              ProfileHeader(role: loggedUser.user.role),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 20),
-                  children: [
-                    ProfileInfoCard(loggedUser: loggedUser),
-                    const SizedBox(height: 16),
-                    //TODO
-                    CustomTeacherExtraWidget(),
-                    const SizedBox(height: 16),
-
-                    ContactInfoCard(loggedUser: loggedUser),
-                    const SizedBox(height: 16),
-                    const PrivacyCard(),
-                    const SizedBox(height: 16),
-                    LogoutButton(
-                      onTap: () async {
-                        await StudentProfileCubit.get(context).logout();
-
-                        if (!context.mounted) return;
-
-                        MyNavigator.goToOffAll(context, Routes.logIn);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
+        return AppSkeletonizer(
+          isLoading: isLoading,
+          child: ProfileLayout(
+            fullName: loggedUser.user.fullName,
+            email: loggedUser.user.email,
+            phone: loggedUser.parent?.phone ?? '',
+            roleLabel: loggedUser.user.role,
+            subtitle: _studentSubtitle(context, loggedUser),
+            onRefresh: () {
+              StudentProfileCubit.get(context).getLoggedUser();
+            },
+            onLogout: () async {
+              await StudentProfileCubit.get(context).logout();
+              if (!context.mounted) return;
+              MyNavigator.goToOffAll(context, Routes.logIn);
+            },
           ),
         );
       },
     );
+  }
+
+  String _studentSubtitle(BuildContext context, LoggedUserModel loggedUser) {
+    final grade = loggedUser.grade?.name ?? S.of(context).studentProfileGrade;
+    return '$grade\n${S.of(context).studentProfileClass}';
   }
 }

@@ -7,7 +7,9 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PrivacyCard extends StatelessWidget {
-  const PrivacyCard({super.key});
+  const PrivacyCard({super.key, required this.onRefresh});
+
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +20,15 @@ class PrivacyCard extends StatelessWidget {
           label: S.of(context).password,
           value: '**********',
           icon: ImageManager.emailIcon,
-          onEdit: () {
-            MyNavigator.goTo(context, Routes.updatePassword);
+          onEdit: () async {
+            final result = await MyNavigator.goTo<bool>(
+              context,
+              Routes.updatePassword,
+            );
+
+            if (result == true && context.mounted) {
+              onRefresh();
+            }
           },
         ),
       ],

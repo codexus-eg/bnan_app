@@ -703,6 +703,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Split your bill with Tamara"),
         "taughtOnlineBefore": MessageLookupByLibrary.simpleMessage(
             "Have you taught online before?"),
+        "teacher": MessageLookupByLibrary.simpleMessage("teacher"),
         "teacherAhmedFouad":
             MessageLookupByLibrary.simpleMessage("Mr. Ahmed Fouad"),
         "teacherApplySubtitle": MessageLookupByLibrary.simpleMessage(
