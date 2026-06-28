@@ -4659,6 +4659,216 @@ class S {
       args: [],
     );
   }
+
+  /// `Home`
+  String get parentHomeTitle {
+    return Intl.message(
+      'Home',
+      name: 'parentHomeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome`
+  String get parentWelcome {
+    return Intl.message(
+      'Welcome',
+      name: 'parentWelcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parent`
+  String get parentGuardian {
+    return Intl.message(
+      'Parent',
+      name: 'parentGuardian',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Children`
+  String get parentChildren {
+    return Intl.message(
+      'Children',
+      name: 'parentChildren',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Children`
+  String get parentYourChildren {
+    return Intl.message(
+      'Your Children',
+      name: 'parentYourChildren',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Evaluations`
+  String get parentEvaluations {
+    return Intl.message(
+      'Evaluations',
+      name: 'parentEvaluations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule`
+  String get parentSchedule {
+    return Intl.message(
+      'Schedule',
+      name: 'parentSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificates`
+  String get parentCertificates {
+    return Intl.message(
+      'Certificates',
+      name: 'parentCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get parentNotifications {
+    return Intl.message(
+      'Notifications',
+      name: 'parentNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription`
+  String get parentSubscription {
+    return Intl.message(
+      'Subscription',
+      name: 'parentSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscriptions`
+  String get parentSubscriptions {
+    return Intl.message(
+      'Subscriptions',
+      name: 'parentSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Packages and Subscription`
+  String get parentPackagesAndSubscription {
+    return Intl.message(
+      'Packages and Subscription',
+      name: 'parentPackagesAndSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Messages`
+  String get parentMessages {
+    return Intl.message(
+      'Messages',
+      name: 'parentMessages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily Plans`
+  String get parentDailyPlans {
+    return Intl.message(
+      'Daily Plans',
+      name: 'parentDailyPlans',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Account`
+  String get parentAccount {
+    return Intl.message(
+      'My Account',
+      name: 'parentAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew`
+  String get parentRenew {
+    return Intl.message(
+      'Renew',
+      name: 'parentRenew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show All`
+  String get parentShowAll {
+    return Intl.message(
+      'Show All',
+      name: 'parentShowAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Laila's subscription will end in 5 days`
+  String get parentSubscriptionEndsSoon {
+    return Intl.message(
+      'Laila\'s subscription will end in 5 days',
+      name: 'parentSubscriptionEndsSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew it now to avoid suspension`
+  String get parentSubscriptionRenewHint {
+    return Intl.message(
+      'Renew it now to avoid suspension',
+      name: 'parentSubscriptionRenewHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First Preparatory Grade`
+  String get parentFirstPreparatoryGrade {
+    return Intl.message(
+      'First Preparatory Grade',
+      name: 'parentFirstPreparatoryGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Second Preparatory Grade`
+  String get parentSecondPreparatoryGrade {
+    return Intl.message(
+      'Second Preparatory Grade',
+      name: 'parentSecondPreparatoryGrade',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
