@@ -1,11 +1,20 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AddNewTopicButton extends StatelessWidget {
-  const AddNewTopicButton({super.key, required this.title, this.onTap});
-  final String title;
+  const AddNewTopicButton({
+    super.key,
+    required this.title,
+    this.onTap,
+    this.backgroundColor,
+    this.secondColor,
+    required this.path,
+  });
+  final String title, path;
   final Function()? onTap;
+  final Color? backgroundColor, secondColor;
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +28,28 @@ class AddNewTopicButton extends StatelessWidget {
           bottom: 8,
         ),
         decoration: BoxDecoration(
-          color: ColorManager.mainColor14,
+          color: backgroundColor ?? ColorManager.mainColor14,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add,color: ColorManager.white,size: 16),
+            SvgPicture.asset(
+              path,
+              colorFilter: ColorFilter.mode(
+                secondColor ?? ColorManager.white,
+                BlendMode.srcIn,
+              ),
+              width: 16,
+              height: 16,
+            ),
             const SizedBox(width: 12),
             Text(
               title,
               style: StylesManager.styleBold12(
                 context,
-              ).copyWith(color: ColorManager.white),
+              ).copyWith(color: secondColor ?? ColorManager.white),
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
+import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/teacher_certificates/data/models/teacher_certificate_model.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/dialogs/certificate_dialog.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/widgets/certificate_card.dart';
@@ -35,7 +36,7 @@ class TeacherCertificatesBody extends StatelessWidget {
                 context: context,
                 builder: (_) => const CertificateDialog(),
               );
-            },
+            }, path: ImageManager.plus,
           ),
         ),
         Expanded(

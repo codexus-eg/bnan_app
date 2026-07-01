@@ -22,6 +22,8 @@ class SplashCubit extends Cubit<SplashState> {
         emit(SplashNavigateToTeacherHome());
       } else if (role == 'parent') {
         emit(SplashNavigateToParentHome());
+      }else if (role == 'admin') {
+        emit(SplashNavigateToAdminHome());
       } else {
         emit(SplashNavigateToOnboarding());
       }

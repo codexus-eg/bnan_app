@@ -12,6 +12,7 @@ class CustomDropdownFormField extends StatelessWidget {
     this.hint,
     this.isRequired = false,
     this.validator,
+    this.backgroundColor,
   });
 
   final String label;
@@ -21,6 +22,7 @@ class CustomDropdownFormField extends StatelessWidget {
   final ValueChanged<String?> onChanged;
   final bool isRequired;
   final String? Function(String?)? validator;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class CustomDropdownFormField extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomDropdown(
+              backgroundColor: backgroundColor,
               label: label,
               value: field.value,
               hint: hint,
@@ -46,9 +49,9 @@ class CustomDropdownFormField extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 field.errorText ?? '',
-                style: StylesManager.styleRegular12(context).copyWith(
-                  color: Colors.red,
-                ),
+                style: StylesManager.styleRegular12(
+                  context,
+                ).copyWith(color: Colors.red),
               ),
             ],
           ],

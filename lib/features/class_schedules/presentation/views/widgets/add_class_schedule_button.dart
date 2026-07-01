@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
+import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/class_schedules/presentation/views/dialogs/class_schedule_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class AddClassScheduleButton extends StatelessWidget {
         onTap: () => showDialog(
           context: context,
           builder: (_) => const ClassScheduleDialog(),
-        ),
+        ), path: ImageManager.plus,
       ),
     );
   }

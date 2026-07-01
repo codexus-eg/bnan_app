@@ -9,3 +9,5 @@ final class SplashNavigateToStudentHome extends SplashState {}
 final class SplashNavigateToTeacherHome extends SplashState {}
 
 final class SplashNavigateToParentHome extends SplashState {}
+
+final class SplashNavigateToAdminHome extends SplashState {}

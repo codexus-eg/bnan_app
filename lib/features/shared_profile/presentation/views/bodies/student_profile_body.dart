@@ -10,7 +10,6 @@ import 'package:bnan_app/features/shared_profile/presentation/views/widgets/prof
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class StudentProfileBody extends StatelessWidget {
   const StudentProfileBody({super.key});

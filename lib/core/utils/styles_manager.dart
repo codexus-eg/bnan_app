@@ -58,6 +58,13 @@ abstract class StylesManager {
       fontWeight: FontWeight.w300,
     );
   }
+   static TextStyle styleMedium10(BuildContext context) {
+    return TextStyle(
+      fontSize: 10,
+      color: ColorManager.grey7D7D,
+      fontWeight: FontWeight.w500,
+    );
+  }
    static TextStyle styleMedium14(BuildContext context) {
     return TextStyle(
       fontSize: 14,

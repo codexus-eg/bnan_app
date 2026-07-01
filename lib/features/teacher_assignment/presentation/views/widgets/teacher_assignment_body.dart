@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
+import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/teacher_assignment/data/teacher_assignment_filter_type.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assignments/get_teacher_assignments_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/views/widgets/teacher_assignment_dialogs.dart';
@@ -52,7 +53,7 @@ class _TeacherAssignmentBodyState extends State<TeacherAssignmentBody> {
                   status: selectedStatus,
                 );
               }
-            },
+            }, path:  ImageManager.plus,
           ),
           const SizedBox(height: 16),
           const Expanded(child: TeacherAssignmentListBlocBuilder()),

@@ -17,6 +17,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      
       leading: iconNeeded ? const CustomBackIcon() : null,
       title: Text(
         headerText,

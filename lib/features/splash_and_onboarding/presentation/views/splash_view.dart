@@ -21,6 +21,8 @@ class SplashView extends StatelessWidget {
           GoRouter.of(context).go(Routes.teacherHome);
         } else if (state is SplashNavigateToParentHome) {
           // GoRouter.of(context).go(Routes.parentHome);
+        } else if (state is SplashNavigateToAdminHome) {
+          GoRouter.of(context).go(Routes.adminHome);
         }
       },
       child: const Scaffold(body: SplashBody()),

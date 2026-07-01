@@ -4879,6 +4879,556 @@ class S {
       args: [],
     );
   }
+
+  /// `Admin`
+  String get admin {
+    return Intl.message(
+      'Admin',
+      name: 'admin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly Revenue`
+  String get monthlyRevenue {
+    return Intl.message(
+      'Monthly Revenue',
+      name: 'monthlyRevenue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Requests Pending`
+  String get pendingRegisterRequests {
+    return Intl.message(
+      'Register Requests Pending',
+      name: 'pendingRegisterRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Students`
+  String get totalStudents {
+    return Intl.message(
+      'Total Students',
+      name: 'totalStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today's Classes`
+  String get todayClasses {
+    return Intl.message(
+      'Today\'s Classes',
+      name: 'todayClasses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active Subscriptions`
+  String get activeSubscriptions {
+    return Intl.message(
+      'Active Subscriptions',
+      name: 'activeSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teachers`
+  String get teachers {
+    return Intl.message(
+      'Teachers',
+      name: 'teachers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily Profits`
+  String get dailyProfits {
+    return Intl.message(
+      'Daily Profits',
+      name: 'dailyProfits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly Profits`
+  String get monthlyProfits {
+    return Intl.message(
+      'Monthly Profits',
+      name: 'monthlyProfits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `EGP`
+  String get egpShort {
+    return Intl.message(
+      'EGP',
+      name: 'egpShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revenues`
+  String get revenues {
+    return Intl.message(
+      'Revenues',
+      name: 'revenues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expenses`
+  String get expenses {
+    return Intl.message(
+      'Expenses',
+      name: 'expenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Net`
+  String get net {
+    return Intl.message(
+      'Net',
+      name: 'net',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Egyptian Pound`
+  String get egyptianPound {
+    return Intl.message(
+      'Egyptian Pound',
+      name: 'egyptianPound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saudi Riyal`
+  String get saudiRiyal {
+    return Intl.message(
+      'Saudi Riyal',
+      name: 'saudiRiyal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Egyptian Department`
+  String get egyptianDepartment {
+    return Intl.message(
+      'Egyptian Department',
+      name: 'egyptianDepartment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saudi Department`
+  String get saudiDepartment {
+    return Intl.message(
+      'Saudi Department',
+      name: 'saudiDepartment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending Payments`
+  String get pendingPayments {
+    return Intl.message(
+      'Pending Payments',
+      name: 'pendingPayments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Review paid requests`
+  String get reviewPaidRequests {
+    return Intl.message(
+      'Review paid requests',
+      name: 'reviewPaidRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Review new students`
+  String get reviewNewStudents {
+    return Intl.message(
+      'Review new students',
+      name: 'reviewNewStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage classes and students`
+  String get manageStudentsAndClasses {
+    return Intl.message(
+      'Manage classes and students',
+      name: 'manageStudentsAndClasses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Users Management`
+  String get usersManagement {
+    return Intl.message(
+      'Users Management',
+      name: 'usersManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hire Teachers`
+  String get hireTeachers {
+    return Intl.message(
+      'Hire Teachers',
+      name: 'hireTeachers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher Applications`
+  String get teacherApplications {
+    return Intl.message(
+      'Teacher Applications',
+      name: 'teacherApplications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Materials Management`
+  String get materialsManagement {
+    return Intl.message(
+      'Materials Management',
+      name: 'materialsManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Messages`
+  String get messages {
+    return Intl.message(
+      'Messages',
+      name: 'messages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Students By Department`
+  String get studentsByDepartment {
+    return Intl.message(
+      'Students By Department',
+      name: 'studentsByDepartment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending Receipts`
+  String get pendingReceipts {
+    return Intl.message(
+      'Pending Receipts',
+      name: 'pendingReceipts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expired Subscriptions`
+  String get expiredSubscriptions {
+    return Intl.message(
+      'Expired Subscriptions',
+      name: 'expiredSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Users`
+  String get adminUsers {
+    return Intl.message(
+      'Users',
+      name: 'adminUsers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervisors`
+  String get adminSupervisors {
+    return Intl.message(
+      'Supervisors',
+      name: 'adminSupervisors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} users`
+  String usersCount(Object count) {
+    return Intl.message(
+      '$count users',
+      name: 'usersCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Add User`
+  String get addUser {
+    return Intl.message(
+      'Add User',
+      name: 'addUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search by name or phone`
+  String get searchByNameOrPhone {
+    return Intl.message(
+      'Search by name or phone',
+      name: 'searchByNameOrPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User Details`
+  String get userDetails {
+    return Intl.message(
+      'User Details',
+      name: 'userDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New User`
+  String get addNewUser {
+    return Intl.message(
+      'Add New User',
+      name: 'addNewUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Data`
+  String get editData {
+    return Intl.message(
+      'Edit Data',
+      name: 'editData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Password`
+  String get resetPassword {
+    return Intl.message(
+      'Reset Password',
+      name: 'resetPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Final Delete User`
+  String get finalDeleteUser {
+    return Intl.message(
+      'Final Delete User',
+      name: 'finalDeleteUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User Role`
+  String get userRole {
+    return Intl.message(
+      'User Role',
+      name: 'userRole',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration Date`
+  String get registrationDate {
+    return Intl.message(
+      'Registration Date',
+      name: 'registrationDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parent`
+  String get parent {
+    return Intl.message(
+      'Parent',
+      name: 'parent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Relationships`
+  String get relationships {
+    return Intl.message(
+      'Relationships',
+      name: 'relationships',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Role`
+  String get role {
+    return Intl.message(
+      'Role',
+      name: 'role',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parent`
+  String get parentRole {
+    return Intl.message(
+      'Parent',
+      name: 'parentRole',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervisor`
+  String get supervisor {
+    return Intl.message(
+      'Supervisor',
+      name: 'supervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At least 6 characters`
+  String get atLeastSixChars {
+    return Intl.message(
+      'At least 6 characters',
+      name: 'atLeastSixChars',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View`
+  String get view {
+    return Intl.message(
+      'View',
+      name: 'view',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disable`
+  String get disable {
+    return Intl.message(
+      'Disable',
+      name: 'disable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Final Delete`
+  String get finalDelete {
+    return Intl.message(
+      'Final Delete',
+      name: 'finalDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Permanently delete from system`
+  String get permanentlyDeleteFromSystem {
+    return Intl.message(
+      'Permanently delete from system',
+      name: 'permanentlyDeleteFromSystem',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This account will be permanently deleted from the system, including its login account and related profile data. This action cannot be undone.`
+  String get finalDeleteDescription {
+    return Intl.message(
+      'This account will be permanently deleted from the system, including its login account and related profile data. This action cannot be undone.',
+      name: 'finalDeleteDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to disable {name}'s account?`
+  String disableUserQuestion(Object name) {
+    return Intl.message(
+      'Do you want to disable $name\'s account?',
+      name: 'disableUserQuestion',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `They will not be able to log in until you reactivate them.`
+  String get disableUserDescription {
+    return Intl.message(
+      'They will not be able to log in until you reactivate them.',
+      name: 'disableUserDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not available`
+  String get notAvailable {
+    return Intl.message(
+      'Not available',
+      name: 'notAvailable',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
