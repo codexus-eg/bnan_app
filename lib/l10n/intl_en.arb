@@ -603,7 +603,7 @@
     "parentSubscriptionRenewHint": "Renew it now to avoid suspension",
     "parentFirstPreparatoryGrade": "First Preparatory Grade",
     "parentSecondPreparatoryGrade": "Second Preparatory Grade",
-    "teacher":"teacher",
+    "teacher": "teacher",
     "admin": "Admin",
     "monthlyRevenue": "Monthly Revenue",
     "pendingRegisterRequests": "Register Requests Pending",
@@ -668,5 +668,14 @@
         }
     },
     "disableUserDescription": "They will not be able to log in until you reactivate them.",
-    "notAvailable": "Not available"
+    "notAvailable": "Not available",
+    "assignSubject": "Assign to Subject",
+    "assignTeacherInSubject": "Assign {teacherName} to Subject",
+    "hourlyRate": "Hourly Rate (SAR)",
+    "cancelAssignment": "Cancel Assignment",
+    "cancelAssignmentMessage": "Do you want to cancel assigning this teacher to {gradeName} - {subjectName}?",
+    "curriculumRequired": "Curriculum is required",
+    "subjectRequired": "Subject is required",
+    "hourlyRateRequired": "Hourly rate is required",
+    "hourlyRateMustBeNumber": "Hourly rate must be a number"
 }

@@ -603,8 +603,7 @@
     "parentSubscriptionRenewHint": "جدده الآن لتجنب التعليق",
     "parentFirstPreparatoryGrade": "الصف الأول الإعدادي",
     "parentSecondPreparatoryGrade": "الصف الثاني الإعدادي",
-    "teacher": "معلم"
-,
+    "teacher": "معلم",
     "admin": "أدمن",
     "monthlyRevenue": "إيرادات الشهر",
     "pendingRegisterRequests": "طلبات تسجيل معلقة",
@@ -669,5 +668,14 @@
         }
     },
     "disableUserDescription": "لن يستطيع الدخول حتى تقوم بتفعيله.",
-    "notAvailable": "غير متاحة"
+    "notAvailable": "غير متاحة",
+    "assignSubject": "توظيف في مادة",
+    "assignTeacherInSubject": "توظيف {teacherName} في مادة",
+    "hourlyRate": "سعر الساعة(ر.س)",
+    "cancelAssignment": "إلغاء توظيف",
+    "cancelAssignmentMessage": "هل تريد إلغاء توظيف هذا المعلم من {gradeName} - {subjectName} ؟",
+    "curriculumRequired": "المنهج مطلوب",
+    "subjectRequired": "المادة مطلوبة",
+    "hourlyRateRequired": "سعر الساعة مطلوب",
+    "hourlyRateMustBeNumber": "سعر الساعة يجب أن يكون رقم"
 }

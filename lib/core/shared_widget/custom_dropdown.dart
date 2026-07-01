@@ -13,7 +13,7 @@ class CustomDropdown extends StatelessWidget {
     this.hint,
     this.isRequired = false,
     this.hintStyle,
-    this.backgroundColor,
+    this.backgroundColor, this.labelColor,
   });
 
   final String label;
@@ -24,7 +24,7 @@ class CustomDropdown extends StatelessWidget {
   final Map<String, String>? itemsLabels;
   final ValueChanged<String?>? onChanged;
   final bool isRequired;
-  final Color? backgroundColor;
+  final Color? backgroundColor,labelColor;
 
   String _labelOf(String item) => itemsLabels?[item] ?? item;
 
@@ -43,7 +43,7 @@ class CustomDropdown extends StatelessWidget {
               label,
               style: StylesManager.styleBold14(
                 context,
-              ).copyWith(color: ColorManager.mainColor15),
+              ).copyWith(color:labelColor?? ColorManager.mainColor15),
             ),
             if (isRequired)
               const Text('*', style: TextStyle(color: Colors.red)),

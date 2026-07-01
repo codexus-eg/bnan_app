@@ -10,18 +10,19 @@ class AddNewTopicButton extends StatelessWidget {
     this.onTap,
     this.backgroundColor,
     this.secondColor,
-    required this.path,
+    required this.path, this.padding,
   });
   final String title, path;
   final Function()? onTap;
   final Color? backgroundColor, secondColor;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsetsDirectional.only(
+        padding:padding?? EdgeInsetsDirectional.only(
           start: 11.5,
           end: 10.5,
           top: 8,
