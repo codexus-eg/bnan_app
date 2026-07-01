@@ -19,7 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.backgroundColor,
     this.hintStyle,
-    this.addLabel,
+    this.addLabel, this.labelColor,
   });
 
   final String? label, addLabel;
@@ -35,7 +35,7 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final String? Function(String?)? validator;
-  final Color? backgroundColor;
+  final Color? backgroundColor,labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class CustomTextField extends StatelessWidget {
                 label!,
                 style: StylesManager.styleBold14(
                   context,
-                ).copyWith(color: ColorManager.mainColor15),
+                ).copyWith(color:labelColor?? ColorManager.mainColor15),
               ),
               if (isRequired)
                 const Text(

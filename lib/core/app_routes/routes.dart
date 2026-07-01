@@ -31,4 +31,5 @@ abstract class Routes {
   static const String weeklyEvaluations = '/weeklyEvaluations';
   static const String classSchedules = '/classSchedules';
   static const String parentCertificates = '/parentCertificates';
+  static const String teacherSubjectAssignmentView = '/teacherSubjectAssignmentView';
 }

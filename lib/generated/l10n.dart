@@ -5429,6 +5429,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Assign to Subject`
+  String get assignSubject {
+    return Intl.message(
+      'Assign to Subject',
+      name: 'assignSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assign {teacherName} to Subject`
+  String assignTeacherInSubject(Object teacherName) {
+    return Intl.message(
+      'Assign $teacherName to Subject',
+      name: 'assignTeacherInSubject',
+      desc: '',
+      args: [teacherName],
+    );
+  }
+
+  /// `Hourly Rate (SAR)`
+  String get hourlyRate {
+    return Intl.message(
+      'Hourly Rate (SAR)',
+      name: 'hourlyRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel Assignment`
+  String get cancelAssignment {
+    return Intl.message(
+      'Cancel Assignment',
+      name: 'cancelAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to cancel assigning this teacher to {gradeName} - {subjectName}?`
+  String cancelAssignmentMessage(Object gradeName, Object subjectName) {
+    return Intl.message(
+      'Do you want to cancel assigning this teacher to $gradeName - $subjectName?',
+      name: 'cancelAssignmentMessage',
+      desc: '',
+      args: [gradeName, subjectName],
+    );
+  }
+
+  /// `Curriculum is required`
+  String get curriculumRequired {
+    return Intl.message(
+      'Curriculum is required',
+      name: 'curriculumRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject is required`
+  String get subjectRequired {
+    return Intl.message(
+      'Subject is required',
+      name: 'subjectRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hourly rate is required`
+  String get hourlyRateRequired {
+    return Intl.message(
+      'Hourly rate is required',
+      name: 'hourlyRateRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hourly rate must be a number`
+  String get hourlyRateMustBeNumber {
+    return Intl.message(
+      'Hourly rate must be a number',
+      name: 'hourlyRateMustBeNumber',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

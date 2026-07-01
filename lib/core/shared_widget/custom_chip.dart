@@ -2,8 +2,8 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
 
-class RoleChip extends StatelessWidget {
-  const RoleChip(this.title, {super.key, this.padding,  this.style});
+class Customship extends StatelessWidget {
+  const Customship(this.title, {super.key, this.padding,  this.style});
 
   final String title;
   final EdgeInsetsGeometry? padding;
