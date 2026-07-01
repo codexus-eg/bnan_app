@@ -19,6 +19,7 @@ abstract class Routes {
   static const String updatePassword = '/updatePassword';
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
+  static const String adminHome = '/adminHome';
   static const String parentHome = '/parentHome';
   static const String teacherSections = '/teacherSections';
   static const String teacherCertificates = '/teacherCertificates';
@@ -29,6 +30,5 @@ abstract class Routes {
   static const String weeklyIdealStudents = '/weeklyIdealStudents';
   static const String weeklyEvaluations = '/weeklyEvaluations';
   static const String classSchedules = '/classSchedules';
-    static const String parentCertificates = '/parentCertificates';
-
+  static const String parentCertificates = '/parentCertificates';
 }

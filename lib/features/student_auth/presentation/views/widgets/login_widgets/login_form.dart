@@ -30,6 +30,8 @@ class LoginForm extends StatelessWidget {
             MyNavigator.goToOffAll(context, Routes.home);
           } else if (state.user.role == 'teacher') {
             MyNavigator.goToOffAll(context, Routes.teacherHome);
+          } else if (state.user.role == 'admin') {
+            MyNavigator.goToOffAll(context, Routes.adminHome);
           }
         }
         if (state is LoginFailure) {

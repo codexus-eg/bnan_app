@@ -100,6 +100,8 @@ flutter:
     - assets/images/teacher_home/
     - assets/images/teacher_assignment/
     - assets/images/parent_home/
+    - assets/images/admin/
+    - assets/images/user-management/
 
 
 

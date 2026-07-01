@@ -9,6 +9,8 @@ class ImageManager {
   static const String _teacherAssignmentFeature =
       '${_basePath}teacher_assignment/';
   static const String _parentHomeFeature = '${_basePath}parent_home/';
+  static const String _adminFeature = '${_basePath}admin/';
+  static const String _usersManagementFeature = '${_basePath}user-management/';
   ImageManager._();
 
   // Splash & Onboarding
@@ -137,4 +139,37 @@ class ImageManager {
   static const String parentCircleWarningIcon =
       '${_parentHomeFeature}Circle_Warning.svg';
   static const String children = '${_parentHomeFeature}Users.svg';
+
+  // Admin
+  static const String adminDollarSignIcon = '${_adminFeature}dollar-sign.svg';
+  static const String adminWindowBulletListAddIcon =
+      '${_adminFeature}fluent_window-bullet-list-add-20-regular.svg';
+  static const String adminShieldCheckIcon = '${_adminFeature}Shield_Check.svg';
+  // Users Management
+  static const String usersManagementCalendarIcon =
+      '${_usersManagementFeature}calendar-alt.svg';
+  static const String usersManagementCopyIcon =
+      '${_usersManagementFeature}copy-alt.svg';
+  static const String usersManagementEditIcon =
+      '${_usersManagementFeature}edit-02.svg';
+  static const String usersManagementEmailIcon =
+      '${_usersManagementFeature}email.svg';
+  static const String usersManagementEyeOpenIcon =
+      '${_usersManagementFeature}Eye.svg';
+  static const String usersManagementFilterIcon =
+      '${_usersManagementFeature}filter.svg';
+  static const String usersManagementKeyIcon =
+      '${_usersManagementFeature}key.svg';
+  static const String usersManagementPhoneIcon =
+      '${_usersManagementFeature}phone.svg';
+  static const String usersManagementSearchIcon =
+      '${_usersManagementFeature}search-icon.svg';
+  static const String usersManagementShieldIcon =
+      '${_usersManagementFeature}shield.svg';
+  static const String usersManagementStopSignIcon =
+      '${_usersManagementFeature}Stop_Sign.svg';
+  static const String usersManagementUserIcon =
+      '${_usersManagementFeature}User_02.svg';
+  static const String userAdd = '${_usersManagementFeature}User_Add.svg';
+  static const String plus = '${_usersManagementFeature}plus-01.svg';
 }
