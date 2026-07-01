@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/users_management/data/user_mock_data.dart';
-import 'package:bnan_app/features/users_management/presentation/widgets/card/action_chip.dart';
+import 'package:bnan_app/core/shared_widget/action_chip.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/dialogs.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';

@@ -677,5 +677,6 @@
     "curriculumRequired": "Curriculum is required",
     "subjectRequired": "Subject is required",
     "hourlyRateRequired": "Hourly rate is required",
-    "hourlyRateMustBeNumber": "Hourly rate must be a number"
+    "hourlyRateMustBeNumber": "Hourly rate must be a number",
+    "addNewChapter": "Add New Chapter"
 }

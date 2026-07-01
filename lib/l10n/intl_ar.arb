@@ -677,5 +677,6 @@
     "curriculumRequired": "المنهج مطلوب",
     "subjectRequired": "المادة مطلوبة",
     "hourlyRateRequired": "سعر الساعة مطلوب",
-    "hourlyRateMustBeNumber": "سعر الساعة يجب أن يكون رقم"
+    "hourlyRateMustBeNumber": "سعر الساعة يجب أن يكون رقم",
+    "addNewChapter": "إضافة فصل جديد"
 }
