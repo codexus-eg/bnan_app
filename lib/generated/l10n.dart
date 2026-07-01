@@ -5340,6 +5340,16 @@ class S {
     );
   }
 
+  /// `The SuperVisor`
+  String get theSupervisor {
+    return Intl.message(
+      'The SuperVisor',
+      name: 'theSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `At least 6 characters`
   String get atLeastSixChars {
     return Intl.message(
@@ -5525,6 +5535,66 @@ class S {
     return Intl.message(
       'Add New Chapter',
       name: 'addNewChapter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Class`
+  String get editClass {
+    return Intl.message(
+      'Edit Class',
+      name: 'editClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Class Details`
+  String get classDetails {
+    return Intl.message(
+      'Class Details',
+      name: 'classDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Class Name`
+  String get className {
+    return Intl.message(
+      'Class Name',
+      name: 'className',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Class name is required`
+  String get classNameRequired {
+    return Intl.message(
+      'Class name is required',
+      name: 'classNameRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade is required`
+  String get gradeRequired {
+    return Intl.message(
+      'Grade is required',
+      name: 'gradeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervisor is required`
+  String get supervisorRequired {
+    return Intl.message(
+      'Supervisor is required',
+      name: 'supervisorRequired',
       desc: '',
       args: [],
     );
