@@ -1,5 +1,6 @@
 import 'package:bnan_app/features/class_schedules/presentation/views/class_schedules_view.dart';
 import 'package:bnan_app/features/admin/presentation/views/admin_home_view.dart';
+import 'package:bnan_app/features/classes_management/presentation/views/classes_management_view.dart';
 import 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
@@ -18,7 +19,7 @@ import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.teacherSubjectAssignmentView,
+    initialLocation: Routes.classesManagement,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -330,6 +331,13 @@ GoRouter buildRouter() {
         path: Routes.teacherSubjectAssignmentView,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherSubjectAssignmentView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.classesManagement,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const ClassesManagementView(),
           key: state.pageKey,
         ),
       ),

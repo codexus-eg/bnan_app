@@ -5519,6 +5519,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Add New Chapter`
+  String get addNewChapter {
+    return Intl.message(
+      'Add New Chapter',
+      name: 'addNewChapter',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

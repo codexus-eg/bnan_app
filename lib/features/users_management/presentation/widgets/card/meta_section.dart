@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/users_management/data/user_mock_data.dart';
@@ -27,36 +28,8 @@ class MetaSection extends StatelessWidget {
                 ).copyWith(color: ColorManager.mainColor14),
               ),
               const SizedBox(height: 4),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '${s.parent}: ',
-                      style: StylesManager.styleMedium10(
-                        context,
-                      )
-                    ),
-                    TextSpan(
-                      text: '${user.parentName}\n',
-                      style: StylesManager.styleRegular10(
-                        context,
-                      ).copyWith(color: ColorManager.greyA8AF),
-                    ),
-                    TextSpan(
-                      text: '${s.classes}: ',
-                     style: StylesManager.styleMedium10(
-                        context,
-                      )
-                    ),
-                    TextSpan(
-                      text: user.classes,
-                      style: StylesManager.styleRegular10(
-                        context,
-                      ).copyWith(color: ColorManager.greyA8AF),
-                    ),
-                  ],
-                ),
-              ),
+              ClassMetaRow(label: '${s.parent}: ', value: user.parentName),
+              ClassMetaRow(label: '${s.classes}: ', value: user.classes),
             ],
           ),
         ),

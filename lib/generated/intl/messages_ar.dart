@@ -93,6 +93,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
         "activeSubscriptions":
             MessageLookupByLibrary.simpleMessage("اشتراكات نشطة"),
+        "addNewChapter": MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
         "addNewEvaluation":
             MessageLookupByLibrary.simpleMessage("إضافة تقييم جديد"),
         "addNewSchedule":

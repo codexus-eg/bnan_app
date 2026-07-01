@@ -94,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "activeGroups": MessageLookupByLibrary.simpleMessage("Active Groups"),
         "activeSubscriptions":
             MessageLookupByLibrary.simpleMessage("Active Subscriptions"),
+        "addNewChapter":
+            MessageLookupByLibrary.simpleMessage("Add New Chapter"),
         "addNewEvaluation":
             MessageLookupByLibrary.simpleMessage("Add New Evaluation"),
         "addNewSchedule":
