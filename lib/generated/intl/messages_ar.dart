@@ -185,6 +185,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("اختر المنهج"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "city": MessageLookupByLibrary.simpleMessage("المدينة"),
+        "classDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الفصل"),
+        "className": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
+        "classNameRequired":
+            MessageLookupByLibrary.simpleMessage("اسم الفصل مطلوب"),
         "classR": MessageLookupByLibrary.simpleMessage("فصل"),
         "classRoom": MessageLookupByLibrary.simpleMessage("الفصل"),
         "classSchedulesManagement":
@@ -262,6 +266,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
         "editCertificate":
             MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
+        "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
         "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
@@ -348,6 +353,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "gradeAndAssignScore":
             MessageLookupByLibrary.simpleMessage("تصحيح ووضع الدرجة"),
         "gradeLabel": m8,
+        "gradeRequired": MessageLookupByLibrary.simpleMessage("الصف مطلوب"),
         "graded": MessageLookupByLibrary.simpleMessage("مصحح"),
         "graduationGrade": MessageLookupByLibrary.simpleMessage("التقدير"),
         "graduationYear": MessageLookupByLibrary.simpleMessage("سنة التخرج"),
@@ -762,6 +768,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
         "sunday": MessageLookupByLibrary.simpleMessage("الأحد"),
         "supervisor": MessageLookupByLibrary.simpleMessage("مشرف"),
+        "supervisorRequired":
+            MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
         "taughtOnlineBefore":
@@ -802,6 +810,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("مستوى استخدام الكمبيوتر"),
         "theRequiredLesson":
             MessageLookupByLibrary.simpleMessage("الدرس المطلوب"),
+        "theSupervisor": MessageLookupByLibrary.simpleMessage("المشرف"),
         "thirdTermExercises":
             MessageLookupByLibrary.simpleMessage("تمارين الفصل الثالث"),
         "threeDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 3 أيام"),

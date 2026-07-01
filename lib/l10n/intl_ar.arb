@@ -655,6 +655,7 @@
     "role": "دور",
     "parentRole": "ولي أمر",
     "supervisor": "مشرف",
+    "theSupervisor": "المشرف",
     "atLeastSixChars": "6 أحرف على الأقل",
     "view": "عرض",
     "disable": "تعطيل",
@@ -678,5 +679,11 @@
     "subjectRequired": "المادة مطلوبة",
     "hourlyRateRequired": "سعر الساعة مطلوب",
     "hourlyRateMustBeNumber": "سعر الساعة يجب أن يكون رقم",
-    "addNewChapter": "إضافة فصل جديد"
+    "addNewChapter": "إضافة فصل جديد",
+    "editClass": "تعديل الفصل",
+    "classDetails": "تفاصيل الفصل",
+    "className": "اسم الفصل",
+    "classNameRequired": "اسم الفصل مطلوب",
+    "gradeRequired": "الصف مطلوب",
+    "supervisorRequired": "المشرف مطلوب"
 }

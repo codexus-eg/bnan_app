@@ -195,6 +195,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Choose curriculum"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("Choose subject"),
         "city": MessageLookupByLibrary.simpleMessage("City"),
+        "classDetails": MessageLookupByLibrary.simpleMessage("Class Details"),
+        "className": MessageLookupByLibrary.simpleMessage("Class Name"),
+        "classNameRequired":
+            MessageLookupByLibrary.simpleMessage("Class name is required"),
         "classR": MessageLookupByLibrary.simpleMessage("Class"),
         "classRoom": MessageLookupByLibrary.simpleMessage("Classroom"),
         "classSchedulesManagement":
@@ -274,6 +278,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editCertificate":
             MessageLookupByLibrary.simpleMessage("Edit Certificate"),
+        "editClass": MessageLookupByLibrary.simpleMessage("Edit Class"),
         "editData": MessageLookupByLibrary.simpleMessage("Edit Data"),
         "editEvaluation":
             MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
@@ -363,6 +368,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "gradeAndAssignScore":
             MessageLookupByLibrary.simpleMessage("Grade & Assign Score"),
         "gradeLabel": m8,
+        "gradeRequired":
+            MessageLookupByLibrary.simpleMessage("Grade is required"),
         "graded": MessageLookupByLibrary.simpleMessage("Graded"),
         "graduationGrade": MessageLookupByLibrary.simpleMessage("Grade"),
         "graduationYear":
@@ -792,6 +799,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptions": MessageLookupByLibrary.simpleMessage("Subscriptions"),
         "sunday": MessageLookupByLibrary.simpleMessage("Sunday"),
         "supervisor": MessageLookupByLibrary.simpleMessage("Supervisor"),
+        "supervisorRequired":
+            MessageLookupByLibrary.simpleMessage("Supervisor is required"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("Split your bill with Tamara"),
         "taughtOnlineBefore": MessageLookupByLibrary.simpleMessage(
@@ -832,6 +841,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "What is your level of using Computer?"),
         "theRequiredLesson":
             MessageLookupByLibrary.simpleMessage("The required lesson"),
+        "theSupervisor": MessageLookupByLibrary.simpleMessage("The SuperVisor"),
         "thirdTermExercises":
             MessageLookupByLibrary.simpleMessage("Third Term Exercises"),
         "threeDaysAgo": MessageLookupByLibrary.simpleMessage("3 days ago"),

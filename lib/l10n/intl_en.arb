@@ -655,6 +655,7 @@
     "role": "Role",
     "parentRole": "Parent",
     "supervisor": "Supervisor",
+    "theSupervisor": "The SuperVisor",
     "atLeastSixChars": "At least 6 characters",
     "view": "View",
     "disable": "Disable",
@@ -678,5 +679,11 @@
     "subjectRequired": "Subject is required",
     "hourlyRateRequired": "Hourly rate is required",
     "hourlyRateMustBeNumber": "Hourly rate must be a number",
-    "addNewChapter": "Add New Chapter"
+    "addNewChapter": "Add New Chapter",
+    "editClass": "Edit Class",
+    "classDetails": "Class Details",
+    "className": "Class Name",
+    "classNameRequired": "Class name is required",
+    "gradeRequired": "Grade is required",
+    "supervisorRequired": "Supervisor is required"
 }
