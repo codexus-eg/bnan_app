@@ -685,5 +685,10 @@
     "className": "اسم الفصل",
     "classNameRequired": "اسم الفصل مطلوب",
     "gradeRequired": "الصف مطلوب",
-    "supervisorRequired": "المشرف مطلوب"
+    "supervisorRequired": "المشرف مطلوب",
+    "subjectsManagement": "إدارة المواد الدراسية",
+    "addSubject": "إضافة مادة",
+    "addNewSubject": "إضافة مادة جديد",
+    "editSubject": "تعديل المادة",
+    "subjectName": "اسم المادة"
 }

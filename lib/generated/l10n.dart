@@ -5599,6 +5599,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Subjects Management`
+  String get subjectsManagement {
+    return Intl.message(
+      'Subjects Management',
+      name: 'subjectsManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Subject`
+  String get addSubject {
+    return Intl.message(
+      'Add Subject',
+      name: 'addSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Subject`
+  String get addNewSubject {
+    return Intl.message(
+      'Add New Subject',
+      name: 'addNewSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Subject`
+  String get editSubject {
+    return Intl.message(
+      'Edit Subject',
+      name: 'editSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject Name`
+  String get subjectName {
+    return Intl.message(
+      'Subject Name',
+      name: 'subjectName',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
