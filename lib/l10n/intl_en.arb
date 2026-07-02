@@ -685,5 +685,10 @@
     "className": "Class Name",
     "classNameRequired": "Class name is required",
     "gradeRequired": "Grade is required",
-    "supervisorRequired": "Supervisor is required"
+    "supervisorRequired": "Supervisor is required",
+    "subjectsManagement": "Subjects Management",
+    "addSubject": "Add Subject",
+    "addNewSubject": "Add New Subject",
+    "editSubject": "Edit Subject",
+    "subjectName": "Subject Name"
 }

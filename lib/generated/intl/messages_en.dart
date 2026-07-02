@@ -100,11 +100,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Add New Evaluation"),
         "addNewSchedule":
             MessageLookupByLibrary.simpleMessage("Add New Schedule"),
+        "addNewSubject":
+            MessageLookupByLibrary.simpleMessage("Add New Subject"),
         "addNewUser": MessageLookupByLibrary.simpleMessage("Add New User"),
         "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
             "Rewards are calculated based on performance"),
         "addRewardPointsTitle":
             MessageLookupByLibrary.simpleMessage("Add Excellence Points"),
+        "addSubject": MessageLookupByLibrary.simpleMessage("Add Subject"),
         "addUser": MessageLookupByLibrary.simpleMessage("Add User"),
         "admin": MessageLookupByLibrary.simpleMessage("Admin"),
         "adminSupervisors": MessageLookupByLibrary.simpleMessage("Supervisors"),
@@ -283,6 +286,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "editEvaluation":
             MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
         "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
+        "editSubject": MessageLookupByLibrary.simpleMessage("Edit Subject"),
         "egpCurrency":
             MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
         "egpShort": MessageLookupByLibrary.simpleMessage("EGP"),
@@ -779,11 +783,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Study Materials"),
         "studySchedule": MessageLookupByLibrary.simpleMessage("Study Schedule"),
         "subject": MessageLookupByLibrary.simpleMessage("Subject"),
+        "subjectName": MessageLookupByLibrary.simpleMessage("Subject Name"),
         "subjectRequired":
             MessageLookupByLibrary.simpleMessage("Subject is required"),
         "subjects": MessageLookupByLibrary.simpleMessage("Subjects"),
         "subjectsGrades":
             MessageLookupByLibrary.simpleMessage("Subjects Grades"),
+        "subjectsManagement":
+            MessageLookupByLibrary.simpleMessage("Subjects Management"),
         "submissionDate": MessageLookupByLibrary.simpleMessage("Submitted:"),
         "submitAssignment":
             MessageLookupByLibrary.simpleMessage("Submit Assignment"),

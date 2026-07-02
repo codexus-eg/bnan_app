@@ -98,11 +98,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إضافة تقييم جديد"),
         "addNewSchedule":
             MessageLookupByLibrary.simpleMessage("إضافة جدول جديد"),
+        "addNewSubject":
+            MessageLookupByLibrary.simpleMessage("إضافة مادة جديد"),
         "addNewUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم جديد"),
         "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
             "يتم احتساب المكافآت بناءً على الأداء"),
         "addRewardPointsTitle":
             MessageLookupByLibrary.simpleMessage("إضافة نقاط التميز"),
+        "addSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة"),
         "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
         "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
         "adminSupervisors": MessageLookupByLibrary.simpleMessage("مشرفين"),
@@ -270,6 +273,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
         "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
+        "editSubject": MessageLookupByLibrary.simpleMessage("تعديل المادة"),
         "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
         "egpShort": MessageLookupByLibrary.simpleMessage("ج.م"),
         "egyptianCurriculum":
@@ -750,10 +754,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
         "studySchedule": MessageLookupByLibrary.simpleMessage("الجدول الدراسي"),
         "subject": MessageLookupByLibrary.simpleMessage("المادة"),
+        "subjectName": MessageLookupByLibrary.simpleMessage("اسم المادة"),
         "subjectRequired":
             MessageLookupByLibrary.simpleMessage("المادة مطلوبة"),
         "subjects": MessageLookupByLibrary.simpleMessage("المواد"),
         "subjectsGrades": MessageLookupByLibrary.simpleMessage("درجات المواد"),
+        "subjectsManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة المواد الدراسية"),
         "submissionDate": MessageLookupByLibrary.simpleMessage("تم التسليم:"),
         "submitAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
         "submitAssignmentCorrection":
