@@ -135,6 +135,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تقييم الواجبات"),
         "atLeastSixChars":
             MessageLookupByLibrary.simpleMessage("6 أحرف على الأقل"),
+        "attachedFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
         "attachmentFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
         "attendance": MessageLookupByLibrary.simpleMessage("الحضور"),
         "attendanceRate": MessageLookupByLibrary.simpleMessage("نسبة الحضور"),
@@ -697,8 +698,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
         "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
+        "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
+        "selectSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
         "send": MessageLookupByLibrary.simpleMessage("أرسلت"),

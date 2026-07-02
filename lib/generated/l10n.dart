@@ -5649,6 +5649,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Attached File`
+  String get attachedFile {
+    return Intl.message(
+      'Attached File',
+      name: 'attachedFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Subject`
+  String get selectSubject {
+    return Intl.message(
+      'Select Subject',
+      name: 'selectSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select File`
+  String get selectFile {
+    return Intl.message(
+      'Select File',
+      name: 'selectFile',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

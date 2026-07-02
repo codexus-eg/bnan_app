@@ -34,4 +34,5 @@ abstract class Routes {
   static const String teacherSubjectAssignmentView =
       '/teacherSubjectAssignmentView';
   static const String classesManagement = '/classesManagement';
+  static const String tablesManagement = '/tablesManagement';
 }

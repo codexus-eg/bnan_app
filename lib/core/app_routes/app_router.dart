@@ -4,6 +4,7 @@ import 'package:bnan_app/features/classes_management/presentation/views/classes_
 import 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
+import 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
 import 'package:bnan_app/features/teacher_chats/presentation/views/teacher_chats_view.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
@@ -19,7 +20,7 @@ import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.adminHome,
+    initialLocation: Routes.tablesManagement,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -338,6 +339,13 @@ GoRouter buildRouter() {
         path: Routes.classesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const ClassesManagementView(),
+          key: state.pageKey,
+        ),
+      ),
+        GoRoute(
+        path: Routes.tablesManagement,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const TablesManagementView(),
           key: state.pageKey,
         ),
       ),
