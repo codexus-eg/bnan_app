@@ -141,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Assignments Evaluation"),
         "atLeastSixChars":
             MessageLookupByLibrary.simpleMessage("At least 6 characters"),
+        "attachedFile": MessageLookupByLibrary.simpleMessage("Attached File"),
         "attachmentFile":
             MessageLookupByLibrary.simpleMessage("Attachment file"),
         "attendance": MessageLookupByLibrary.simpleMessage("Attendance"),
@@ -724,8 +725,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("Search by name or phone"),
         "sections": MessageLookupByLibrary.simpleMessage("Sections"),
+        "selectFile": MessageLookupByLibrary.simpleMessage("Select File"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),
+        "selectSubject": MessageLookupByLibrary.simpleMessage("Select Subject"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("Selected Package"),
         "send": MessageLookupByLibrary.simpleMessage("Sent"),

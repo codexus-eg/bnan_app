@@ -690,5 +690,8 @@
     "addSubject": "Add Subject",
     "addNewSubject": "Add New Subject",
     "editSubject": "Edit Subject",
-    "subjectName": "Subject Name"
+    "subjectName": "Subject Name",
+    "attachedFile": "Attached File",
+    "selectSubject": "Select Subject",
+    "selectFile": "Select File"
 }

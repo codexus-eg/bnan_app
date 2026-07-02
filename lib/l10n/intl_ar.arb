@@ -690,5 +690,8 @@
     "addSubject": "إضافة مادة",
     "addNewSubject": "إضافة مادة جديد",
     "editSubject": "تعديل المادة",
-    "subjectName": "اسم المادة"
+    "subjectName": "اسم المادة",
+    "attachedFile": "ملف مرفق",
+    "selectSubject": "اختر المادة",
+    "selectFile": "اختر ملف"
 }
