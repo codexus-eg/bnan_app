@@ -5,7 +5,7 @@ typedef UserItem = ({
   String registrationDate,
   String parentName,
   String classes,
-  List<String> roles,
+  String roles,
 });
 
 const usersMock = <UserItem>[
@@ -16,7 +16,7 @@ const usersMock = <UserItem>[
     registrationDate: '2026/06/20',
     parentName: 'أحمد',
     classes: 'الصف الأول الابتدائي',
-    roles: ['طالب'],
+    roles: 'طالب',
   ),
   (
     name: 'منة أحمد',
@@ -25,7 +25,7 @@ const usersMock = <UserItem>[
     registrationDate: '2026/06/20',
     parentName: 'أحمد',
     classes: 'الصف الخامس الابتدائي',
-    roles: ['طالب', 'ولي أمر'],
+    roles: 'طالب',
   ),
   (
     name: 'سارة أحمد',
@@ -34,6 +34,6 @@ const usersMock = <UserItem>[
     registrationDate: '2026/06/20',
     parentName: 'أحمد',
     classes: 'الصف الأول الابتدائي',
-    roles: ['مشرف'],
+    roles: 'ولى أمر',
   ),
 ];

@@ -5,6 +5,7 @@ import 'package:bnan_app/features/parent_certificates/presentation/views/parent_
 import 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
+import 'package:bnan_app/features/teacher_application/presentation/views/teacher_application_view.dart';
 import 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
 import 'package:bnan_app/features/teacher_chats/presentation/views/teacher_chats_view.dart';
 import 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
@@ -20,7 +21,7 @@ import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.tablesManagement,
+    initialLocation: Routes.teacherApplication,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -321,14 +322,14 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
-       GoRoute(
+      GoRoute(
         path: Routes.parentCertificates,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const ParentCertificationView(),
           key: state.pageKey,
         ),
       ),
-       GoRoute(
+      GoRoute(
         path: Routes.teacherSubjectAssignmentView,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherSubjectAssignmentView(),
@@ -342,10 +343,17 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
-        GoRoute(
+      GoRoute(
         path: Routes.tablesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TablesManagementView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherApplication,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const TeacherApplicationView(),
           key: state.pageKey,
         ),
       ),

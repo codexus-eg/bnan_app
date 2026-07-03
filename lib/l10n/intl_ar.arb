@@ -488,6 +488,23 @@
     "universityOrInstitutionName": "اسم الجامعة/المؤهل",
     "graduationYear": "سنة التخرج",
     "graduationGrade": "التقدير",
+    "teacherApplicationDetailsTitle": "تفاصيل الطلب - {name}",
+    "@teacherApplicationDetailsTitle": {
+        "placeholders": {
+            "name": {}
+        }
+    },
+    "birthDate": "تاريخ الميلاد",
+    "major": "التخصص العلمي",
+    "gradeLevel": "المرحلة الدراسية",
+    "platformsUsed": "المنصات المستخدمة",
+    "taughtSubjects": "المواد التي درّسها",
+    "weeklyHours": "الساعات الأسبوعية",
+    "desiredSubjects": "المواد المرغوبة",
+    "availability": "الأوقات المتاحة",
+    "teachableGrades": "الصفوف الممكن تدريسها",
+    "teachingInBnan": "التدريس في بنان",
+    "canDemo": "هل يمكن تقديم درس تجريبي؟",
     "hasTeachingExperience": "هل لديك خبرة في التدريس؟",
     "taughtOnlineBefore": "هل سبق لك التدريس أونلاين؟",
     "yes": "نعم",
@@ -693,5 +710,11 @@
     "subjectName": "اسم المادة",
     "attachedFile": "ملف مرفق",
     "selectSubject": "اختر المادة",
-    "selectFile": "اختر ملف"
+    "selectFile": "اختر ملف",
+    "pendingReview": "قيد المراجعة",
+    "details": "التفاصيل",
+    "cv": "CV",
+    "reject": "رفض",
+    "experience": "الخبرة",
+    "years": "سنوات"
 }

@@ -39,7 +39,15 @@ class ActionChipButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(icon, height: height ?? 12, width: width ?? 12),
+            SvgPicture.asset(
+              icon,
+              height: height ?? 12,
+              width: width ?? 12,
+              colorFilter: ColorFilter.mode(
+                ColorManager.greyA8AF,
+                BlendMode.srcIn,
+              ),
+            ),
             const SizedBox(width: 4),
             Text(
               title,

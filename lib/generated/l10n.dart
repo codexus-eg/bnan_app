@@ -3830,6 +3830,126 @@ class S {
     );
   }
 
+  /// `Application details - {name}`
+  String teacherApplicationDetailsTitle(Object name) {
+    return Intl.message(
+      'Application details - $name',
+      name: 'teacherApplicationDetailsTitle',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `Birth date`
+  String get birthDate {
+    return Intl.message(
+      'Birth date',
+      name: 'birthDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Major`
+  String get major {
+    return Intl.message(
+      'Major',
+      name: 'major',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade level`
+  String get gradeLevel {
+    return Intl.message(
+      'Grade level',
+      name: 'gradeLevel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Platforms used`
+  String get platformsUsed {
+    return Intl.message(
+      'Platforms used',
+      name: 'platformsUsed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Taught subjects`
+  String get taughtSubjects {
+    return Intl.message(
+      'Taught subjects',
+      name: 'taughtSubjects',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly hours`
+  String get weeklyHours {
+    return Intl.message(
+      'Weekly hours',
+      name: 'weeklyHours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Desired subjects`
+  String get desiredSubjects {
+    return Intl.message(
+      'Desired subjects',
+      name: 'desiredSubjects',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Availability`
+  String get availability {
+    return Intl.message(
+      'Availability',
+      name: 'availability',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teachable grades`
+  String get teachableGrades {
+    return Intl.message(
+      'Teachable grades',
+      name: 'teachableGrades',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teaching in Bnan`
+  String get teachingInBnan {
+    return Intl.message(
+      'Teaching in Bnan',
+      name: 'teachingInBnan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Can provide demo lesson?`
+  String get canDemo {
+    return Intl.message(
+      'Can provide demo lesson?',
+      name: 'canDemo',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Do you have teaching experience?`
   String get hasTeachingExperience {
     return Intl.message(
@@ -5675,6 +5795,66 @@ class S {
     return Intl.message(
       'Select File',
       name: 'selectFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending Review`
+  String get pendingReview {
+    return Intl.message(
+      'Pending Review',
+      name: 'pendingReview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Details`
+  String get details {
+    return Intl.message(
+      'Details',
+      name: 'details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CV`
+  String get cv {
+    return Intl.message(
+      'CV',
+      name: 'cv',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reject`
+  String get reject {
+    return Intl.message(
+      'Reject',
+      name: 'reject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experience`
+  String get experience {
+    return Intl.message(
+      'Experience',
+      name: 'experience',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Years`
+  String get years {
+    return Intl.message(
+      'Years',
+      name: 'years',
       desc: '',
       args: [],
     );
