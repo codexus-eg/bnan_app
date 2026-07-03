@@ -2,7 +2,7 @@ import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/users_management/data/user_mock_data.dart';
-import 'package:bnan_app/features/users_management/presentation/widgets/card/info_text.dart';
+import 'package:bnan_app/core/shared_widget/info_text.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 

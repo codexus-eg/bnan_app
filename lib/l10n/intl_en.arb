@@ -489,6 +489,23 @@
     "universityOrInstitutionName": "University / Institution Name",
     "graduationYear": "Graduation Year",
     "graduationGrade": "Grade",
+    "teacherApplicationDetailsTitle": "Application details - {name}",
+    "@teacherApplicationDetailsTitle": {
+        "placeholders": {
+            "name": {}
+        }
+    },
+    "birthDate": "Birth date",
+    "major": "Major",
+    "gradeLevel": "Grade level",
+    "platformsUsed": "Platforms used",
+    "taughtSubjects": "Taught subjects",
+    "weeklyHours": "Weekly hours",
+    "desiredSubjects": "Desired subjects",
+    "availability": "Availability",
+    "teachableGrades": "Teachable grades",
+    "teachingInBnan": "Teaching in Bnan",
+    "canDemo": "Can provide demo lesson?",
     "hasTeachingExperience": "Do you have teaching experience?",
     "taughtOnlineBefore": "Have you taught online before?",
     "yes": "Yes",
@@ -693,5 +710,11 @@
     "subjectName": "Subject Name",
     "attachedFile": "Attached File",
     "selectSubject": "Select Subject",
-    "selectFile": "Select File"
+    "selectFile": "Select File",
+    "pendingReview": "Pending Review",
+    "details": "Details",
+    "cv": "CV",
+    "reject": "Reject",
+    "experience": "Experience",
+    "years": "Years"
 }

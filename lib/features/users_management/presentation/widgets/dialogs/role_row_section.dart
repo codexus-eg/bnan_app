@@ -23,7 +23,7 @@ class RoleRowSection extends StatelessWidget {
           icon: ImageManager.usersManagementShieldIcon,
         ),
         Customship(
-          user.roles.first,
+          user.roles,
           padding: EdgeInsetsDirectional.symmetric(horizontal: 16, vertical: 3),
           style: StylesManager.styleRegular10(
             context,
