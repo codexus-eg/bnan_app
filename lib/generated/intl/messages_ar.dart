@@ -277,12 +277,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("خصم أي استقطاعات"),
         "degree": MessageLookupByLibrary.simpleMessage("الدرجة"),
         "delete": MessageLookupByLibrary.simpleMessage("حذف"),
-        "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
-        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
-            "هل أنت متأكد أنك تريد حذف الصف"),
         "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد من حذف هذا الواجب؟"),
+        "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
+        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد أنك تريد حذف الصف"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
         "desiredSubjects":
             MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
@@ -514,10 +514,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات مكتملة"),
         "noCompletedAssignmentsSubtitle":
             MessageLookupByLibrary.simpleMessage("عند حل الواجبات ستظهر هنا."),
+        "noDataAvailable":
+            MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
         "noGroupsYet":
             MessageLookupByLibrary.simpleMessage("لا توجد مجموعات حالياً"),
         "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
             "عند الانضمام إلى مجموعة أو إرسال طلب جديد ستظهر هنا."),
+        "noInternetConnection":
+            MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت"),
         "noPendingAssignments":
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات قيد الانتظار"),
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(

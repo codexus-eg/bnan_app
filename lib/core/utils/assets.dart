@@ -11,6 +11,7 @@ class ImageManager {
   static const String _parentHomeFeature = '${_basePath}parent_home/';
   static const String _adminFeature = '${_basePath}admin/';
   static const String _usersManagementFeature = '${_basePath}user-management/';
+ static const String _sharedFeature = '${_basePath}shared/';
   ImageManager._();
 
   // Splash & Onboarding
@@ -172,4 +173,8 @@ class ImageManager {
       '${_usersManagementFeature}User_02.svg';
   static const String userAdd = '${_usersManagementFeature}User_Add.svg';
   static const String plus = '${_usersManagementFeature}plus-01.svg';
+
+// Shared
+static const String noData = '${_sharedFeature}NDA.svg';
+static const String noInternet = '${_sharedFeature}no_internet.svg';
 }

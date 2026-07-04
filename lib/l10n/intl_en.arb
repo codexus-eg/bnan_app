@@ -749,6 +749,7 @@
     "deleteGrade": "Delete grade",
     "deleteGradeConfirmation": "Are you sure you want to delete this grade?",
     "parentThirdPreparatoryGrade": "Third Preparatory Grade",
-    "classRoomManagement":"ClassRoom Management"
-
+    "classRoomManagement": "ClassRoom Management",
+    "noInternetConnection": "No internet connection",
+    "noDataAvailable": "No information available now"
 }

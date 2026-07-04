@@ -102,6 +102,7 @@ flutter:
     - assets/images/parent_home/
     - assets/images/admin/
     - assets/images/user-management/
+    - assets/images/shared/
 
 
 
