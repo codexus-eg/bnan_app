@@ -727,5 +727,24 @@
 "moveToReview": "نقل للمراجعة",
 "contactWhatsApp": "تواصل واتساب",
 "approveAccountActivation": "موافقة تفعيل الحساب",
-"reject": "رفض"
+"reject": "رفض",
+"curriculums": "المناهج",
+"addNewCurriculum": "إضافة منهج جديد",
+"curriculumName": "اسم المنهج",
+"addNewGrade": "إضافة صف جديد",
+"gradeName": "اسم الصف",
+"addNewSemester": "إضافة فصل جديد",
+"semesterName": "اسم الفصل",
+"gradesCount": "{count} صف دراسي",
+"@gradesCount": {
+    "placeholders": {
+        "count": {}
+    }
+},
+"semesterOne": "فصل ١",
+"semesterTwo": "فصل ٢",
+"semesterThree": "فصل ٣",
+"fieldRequired": "هذا الحقل مطلوب",
+"confirmDelete": "هل أنت متأكد أنك تريد الحذف؟",
+"parentThirdPreparatoryGrade": "الصف الثالث الإعدادي"
 }

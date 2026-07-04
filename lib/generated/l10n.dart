@@ -5969,6 +5969,146 @@ class S {
       args: [],
     );
   }
+
+  /// `Curriculums`
+  String get curriculums {
+    return Intl.message(
+      'Curriculums',
+      name: 'curriculums',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Curriculum`
+  String get addNewCurriculum {
+    return Intl.message(
+      'Add New Curriculum',
+      name: 'addNewCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculum Name`
+  String get curriculumName {
+    return Intl.message(
+      'Curriculum Name',
+      name: 'curriculumName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Grade`
+  String get addNewGrade {
+    return Intl.message(
+      'Add New Grade',
+      name: 'addNewGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade Name`
+  String get gradeName {
+    return Intl.message(
+      'Grade Name',
+      name: 'gradeName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Semester`
+  String get addNewSemester {
+    return Intl.message(
+      'Add New Semester',
+      name: 'addNewSemester',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester Name`
+  String get semesterName {
+    return Intl.message(
+      'Semester Name',
+      name: 'semesterName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} Grades`
+  String gradesCount(Object count) {
+    return Intl.message(
+      '$count Grades',
+      name: 'gradesCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Semester 1`
+  String get semesterOne {
+    return Intl.message(
+      'Semester 1',
+      name: 'semesterOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester 2`
+  String get semesterTwo {
+    return Intl.message(
+      'Semester 2',
+      name: 'semesterTwo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester 3`
+  String get semesterThree {
+    return Intl.message(
+      'Semester 3',
+      name: 'semesterThree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field is required`
+  String get fieldRequired {
+    return Intl.message(
+      'This field is required',
+      name: 'fieldRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete?`
+  String get confirmDelete {
+    return Intl.message(
+      'Are you sure you want to delete?',
+      name: 'confirmDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Third Preparatory Grade`
+  String get parentThirdPreparatoryGrade {
+    return Intl.message(
+      'Third Preparatory Grade',
+      name: 'parentThirdPreparatoryGrade',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
