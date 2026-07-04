@@ -749,5 +749,7 @@
 "deleteGrade": "حذف الصف",
 "deleteGradeConfirmation": "هل أنت متأكد أنك تريد حذف الصف",
 "parentThirdPreparatoryGrade": "الصف الثالث الإعدادي",
-"classRoomManagement":"إدراة الصفوف"
+"classRoomManagement":"إدراة الصفوف",
+"noInternetConnection": "لا يوجد اتصال بالإنترنت",
+"noDataAvailable": "لا يوجد معلومات حاليا"
 }

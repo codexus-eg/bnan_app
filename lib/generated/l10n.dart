@@ -4520,26 +4520,6 @@ class S {
     );
   }
 
-  /// `Delete grade`
-  String get deleteGrade {
-    return Intl.message(
-      'Delete grade',
-      name: 'deleteGrade',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Are you sure you want to delete this grade?`
-  String get deleteGradeConfirmation {
-    return Intl.message(
-      'Are you sure you want to delete this grade?',
-      name: 'deleteGradeConfirmation',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `My Performance`
   String get myPerformance {
     return Intl.message(
@@ -6120,6 +6100,26 @@ class S {
     );
   }
 
+  /// `Delete grade`
+  String get deleteGrade {
+    return Intl.message(
+      'Delete grade',
+      name: 'deleteGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this grade?`
+  String get deleteGradeConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this grade?',
+      name: 'deleteGradeConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Third Preparatory Grade`
   String get parentThirdPreparatoryGrade {
     return Intl.message(
@@ -6135,6 +6135,26 @@ class S {
     return Intl.message(
       'ClassRoom Management',
       name: 'classRoomManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No internet connection`
+  String get noInternetConnection {
+    return Intl.message(
+      'No internet connection',
+      name: 'noInternetConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No information available now`
+  String get noDataAvailable {
+    return Intl.message(
+      'No information available now',
+      name: 'noDataAvailable',
       desc: '',
       args: [],
     );

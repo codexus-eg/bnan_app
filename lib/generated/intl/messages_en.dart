@@ -290,13 +290,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Deduct Any Deductions"),
         "degree": MessageLookupByLibrary.simpleMessage("Degree"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
-        "deleteGrade": MessageLookupByLibrary.simpleMessage("Delete grade"),
-        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to delete this grade?"),
         "deleteAssignment":
             MessageLookupByLibrary.simpleMessage("Delete assignment"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this assignment?"),
+        "deleteGrade": MessageLookupByLibrary.simpleMessage("Delete grade"),
+        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this grade?"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("Delivery date"),
         "desiredSubjects":
             MessageLookupByLibrary.simpleMessage("Desired subjects"),
@@ -535,9 +535,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No completed assignments"),
         "noCompletedAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "Completed assignments will appear here."),
+        "noDataAvailable": MessageLookupByLibrary.simpleMessage(
+            "No information available now"),
         "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
         "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
             "Your groups and pending requests will appear here."),
+        "noInternetConnection":
+            MessageLookupByLibrary.simpleMessage("No internet connection"),
         "noPendingAssignments":
             MessageLookupByLibrary.simpleMessage("No pending assignments"),
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
