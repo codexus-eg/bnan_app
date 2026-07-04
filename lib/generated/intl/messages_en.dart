@@ -223,6 +223,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Class name is required"),
         "classR": MessageLookupByLibrary.simpleMessage("Class"),
         "classRoom": MessageLookupByLibrary.simpleMessage("Classroom"),
+        "classRoomManagement":
+            MessageLookupByLibrary.simpleMessage("ClassRoom Management"),
         "classSchedulesManagement":
             MessageLookupByLibrary.simpleMessage("Class Schedules Management"),
         "classes": MessageLookupByLibrary.simpleMessage("Classes"),
@@ -288,6 +290,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Deduct Any Deductions"),
         "degree": MessageLookupByLibrary.simpleMessage("Degree"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "deleteGrade": MessageLookupByLibrary.simpleMessage("Delete grade"),
+        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this grade?"),
         "deleteAssignment":
             MessageLookupByLibrary.simpleMessage("Delete assignment"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(

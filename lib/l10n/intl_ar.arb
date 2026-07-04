@@ -746,5 +746,8 @@
 "semesterThree": "فصل ٣",
 "fieldRequired": "هذا الحقل مطلوب",
 "confirmDelete": "هل أنت متأكد أنك تريد الحذف؟",
-"parentThirdPreparatoryGrade": "الصف الثالث الإعدادي"
+"deleteGrade": "حذف الصف",
+"deleteGradeConfirmation": "هل أنت متأكد أنك تريد حذف الصف",
+"parentThirdPreparatoryGrade": "الصف الثالث الإعدادي",
+"classRoomManagement":"إدراة الصفوف"
 }

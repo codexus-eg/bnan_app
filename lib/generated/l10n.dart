@@ -4520,6 +4520,26 @@ class S {
     );
   }
 
+  /// `Delete grade`
+  String get deleteGrade {
+    return Intl.message(
+      'Delete grade',
+      name: 'deleteGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this grade?`
+  String get deleteGradeConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this grade?',
+      name: 'deleteGradeConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `My Performance`
   String get myPerformance {
     return Intl.message(
@@ -6105,6 +6125,16 @@ class S {
     return Intl.message(
       'Third Preparatory Grade',
       name: 'parentThirdPreparatoryGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ClassRoom Management`
+  String get classRoomManagement {
+    return Intl.message(
+      'ClassRoom Management',
+      name: 'classRoomManagement',
       desc: '',
       args: [],
     );

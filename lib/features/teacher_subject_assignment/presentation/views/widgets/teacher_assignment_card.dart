@@ -5,7 +5,8 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/data/teacher_subject_mock_data.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/dialogs/assign_subject_dialog.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/subject_assignment_row.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/dialogs/delete_assignment_dialog.dart';
+import 'package:bnan_app/core/shared_widget/details_row_section.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -37,9 +38,8 @@ class TeacherAssignmentCard extends StatelessWidget {
                 path: ImageManager.plus,
                 onTap: () => showDialog(
                   context: context,
-                  builder: (_) => AssignSubjectDialog(
-                    teacherName: item.teacherName,
-                  ),
+                  builder: (_) =>
+                      AssignSubjectDialog(teacherName: item.teacherName),
                 ),
                 padding: EdgeInsetsDirectional.symmetric(
                   horizontal: 22,
@@ -50,7 +50,15 @@ class TeacherAssignmentCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           ...item.assignments.map(
-            (assignment) => SubjectAssignmentRow(assignment: assignment),
+            (assignment) => DetailsRowSection(
+              iconPath: ImageManager.teacherBookTwoIcon,
+              title: '${assignment.subjectName} - ${assignment.gradeName}',
+              subtitle: assignment.curriculumName,
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) => DeleteAssignmentDialog(assignment: assignment),
+              ),
+            ),
           ),
         ],
       ),

@@ -746,5 +746,9 @@
     "semesterThree": "Semester 3",
     "fieldRequired": "This field is required",
     "confirmDelete": "Are you sure you want to delete?",
-    "parentThirdPreparatoryGrade": "Third Preparatory Grade"
+    "deleteGrade": "Delete grade",
+    "deleteGradeConfirmation": "Are you sure you want to delete this grade?",
+    "parentThirdPreparatoryGrade": "Third Preparatory Grade",
+    "classRoomManagement":"ClassRoom Management"
+
 }

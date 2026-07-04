@@ -213,6 +213,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("اسم الفصل مطلوب"),
         "classR": MessageLookupByLibrary.simpleMessage("فصل"),
         "classRoom": MessageLookupByLibrary.simpleMessage("الفصل"),
+        "classRoomManagement":
+            MessageLookupByLibrary.simpleMessage("إدراة الصفوف"),
         "classSchedulesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة جداول الصفوف"),
         "classes": MessageLookupByLibrary.simpleMessage("الصفوف"),
@@ -275,6 +277,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("خصم أي استقطاعات"),
         "degree": MessageLookupByLibrary.simpleMessage("الدرجة"),
         "delete": MessageLookupByLibrary.simpleMessage("حذف"),
+        "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
+        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد أنك تريد حذف الصف"),
         "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد من حذف هذا الواجب؟"),
