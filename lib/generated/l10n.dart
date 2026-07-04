@@ -5830,16 +5830,6 @@ class S {
     );
   }
 
-  /// `Reject`
-  String get reject {
-    return Intl.message(
-      'Reject',
-      name: 'reject',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Experience`
   String get experience {
     return Intl.message(
@@ -5855,6 +5845,126 @@ class S {
     return Intl.message(
       'Years',
       name: 'years',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Customer`
+  String get newCustomer {
+    return Intl.message(
+      'New Customer',
+      name: 'newCustomer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Children`
+  String get children {
+    return Intl.message(
+      'Children',
+      name: 'children',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classes`
+  String get classLabel {
+    return Intl.message(
+      'Classes',
+      name: 'classLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject`
+  String get subjectLabel {
+    return Intl.message(
+      'Subject',
+      name: 'subjectLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment Status`
+  String get paymentStatus {
+    return Intl.message(
+      'Payment Status',
+      name: 'paymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get amount {
+    return Intl.message(
+      'Amount',
+      name: 'amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending manual receipt review`
+  String get manualTransferReviewPending {
+    return Intl.message(
+      'Pending manual receipt review',
+      name: 'manualTransferReviewPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm manual payment`
+  String get manualPaymentConfirmation {
+    return Intl.message(
+      'Confirm manual payment',
+      name: 'manualPaymentConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Move to review`
+  String get moveToReview {
+    return Intl.message(
+      'Move to review',
+      name: 'moveToReview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact WhatsApp`
+  String get contactWhatsApp {
+    return Intl.message(
+      'Contact WhatsApp',
+      name: 'contactWhatsApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve account activation`
+  String get approveAccountActivation {
+    return Intl.message(
+      'Approve account activation',
+      name: 'approveAccountActivation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reject`
+  String get reject {
+    return Intl.message(
+      'Reject',
+      name: 'reject',
       desc: '',
       args: [],
     );

@@ -119,11 +119,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
+        "amount": MessageLookupByLibrary.simpleMessage("Amount"),
         "applePay": MessageLookupByLibrary.simpleMessage("Apple Pay"),
         "applyAsTeacher":
             MessageLookupByLibrary.simpleMessage("Apply as Teacher"),
         "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
             "Share your expertise and join our teaching team"),
+        "approveAccountActivation":
+            MessageLookupByLibrary.simpleMessage("Approve account activation"),
         "april2026": MessageLookupByLibrary.simpleMessage("April 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "arabicLanguage":
@@ -193,6 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "checkYourEmailPrefix":
             MessageLookupByLibrary.simpleMessage("Check your email "),
         "chemistry": MessageLookupByLibrary.simpleMessage("Chemistry"),
+        "children": MessageLookupByLibrary.simpleMessage("Children"),
         "chooseAccountType": MessageLookupByLibrary.simpleMessage(
             "Choose account type to continue"),
         "chooseClassRoom":
@@ -206,6 +210,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseSubject": MessageLookupByLibrary.simpleMessage("Choose subject"),
         "city": MessageLookupByLibrary.simpleMessage("City"),
         "classDetails": MessageLookupByLibrary.simpleMessage("Class Details"),
+        "classLabel": MessageLookupByLibrary.simpleMessage("Classes"),
         "className": MessageLookupByLibrary.simpleMessage("Class Name"),
         "classNameRequired":
             MessageLookupByLibrary.simpleMessage("Class name is required"),
@@ -234,6 +239,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "congratsThisMonth":
             MessageLookupByLibrary.simpleMessage("This Month Achievement"),
         "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
+        "contactWhatsApp":
+            MessageLookupByLibrary.simpleMessage("Contact WhatsApp"),
         "correctAssignment":
             MessageLookupByLibrary.simpleMessage("Grade Assignment"),
         "country": MessageLookupByLibrary.simpleMessage("Country"),
@@ -447,6 +454,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "major": MessageLookupByLibrary.simpleMessage("Major"),
         "manageStudentsAndClasses":
             MessageLookupByLibrary.simpleMessage("Manage classes and students"),
+        "manualPaymentConfirmation":
+            MessageLookupByLibrary.simpleMessage("Confirm manual payment"),
+        "manualTransferReviewPending": MessageLookupByLibrary.simpleMessage(
+            "Pending manual receipt review"),
         "march2026": MessageLookupByLibrary.simpleMessage("March 2026"),
         "markAsRead": MessageLookupByLibrary.simpleMessage("Mark as read"),
         "materialsManagement":
@@ -465,6 +476,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "monthlyRevenue":
             MessageLookupByLibrary.simpleMessage("Monthly Revenue"),
         "mostPopular": MessageLookupByLibrary.simpleMessage("Most popular"),
+        "moveToReview": MessageLookupByLibrary.simpleMessage("Move to review"),
         "myAccount": MessageLookupByLibrary.simpleMessage("My Account"),
         "myGroups": MessageLookupByLibrary.simpleMessage("My Groups"),
         "myPerformance": MessageLookupByLibrary.simpleMessage("My Performance"),
@@ -481,6 +493,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newBadge": MessageLookupByLibrary.simpleMessage("New"),
         "newCertificate":
             MessageLookupByLibrary.simpleMessage("Certificate of Appreciation"),
+        "newCustomer": MessageLookupByLibrary.simpleMessage("New Customer"),
         "newMessage":
             MessageLookupByLibrary.simpleMessage("New message from Ms. Sarah"),
         "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
@@ -606,6 +619,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentInfo":
             MessageLookupByLibrary.simpleMessage("Payment Information"),
         "paymentMethod": MessageLookupByLibrary.simpleMessage("Payment Method"),
+        "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
         "pending": MessageLookupByLibrary.simpleMessage("In Progress"),
         "pendingMathSubtitle": MessageLookupByLibrary.simpleMessage(
             "Fractions lesson, waiting for a teacher"),
@@ -802,6 +816,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Study Materials"),
         "studySchedule": MessageLookupByLibrary.simpleMessage("Study Schedule"),
         "subject": MessageLookupByLibrary.simpleMessage("Subject"),
+        "subjectLabel": MessageLookupByLibrary.simpleMessage("Subject"),
         "subjectName": MessageLookupByLibrary.simpleMessage("Subject Name"),
         "subjectRequired":
             MessageLookupByLibrary.simpleMessage("Subject is required"),

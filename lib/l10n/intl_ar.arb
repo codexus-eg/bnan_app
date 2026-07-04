@@ -714,7 +714,18 @@
     "pendingReview": "قيد المراجعة",
     "details": "التفاصيل",
     "cv": "CV",
-    "reject": "رفض",
     "experience": "الخبرة",
-    "years": "سنوات"
+    "years": "سنوات",
+"newCustomer": "عميل جديد",
+"children": "الأبناء",
+"classLabel": "الفصول",
+"subjectLabel": "المادة",
+"paymentStatus": "حالة الدفع",
+"amount": "المبلغ",
+"manualTransferReviewPending": "بانتظار مراجعة الإيصال يدوي",
+"manualPaymentConfirmation": "تأكيد الدفع يدوياً",
+"moveToReview": "نقل للمراجعة",
+"contactWhatsApp": "تواصل واتساب",
+"approveAccountActivation": "موافقة تفعيل الحساب",
+"reject": "رفض"
 }

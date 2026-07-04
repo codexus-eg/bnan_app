@@ -3,7 +3,7 @@ import 'package:bnan_app/core/shared_widget/card_header.dart';
 import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/shared_widget/info_text.dart';
-import 'package:bnan_app/core/shared_widget/reject_button.dart';
+import 'package:bnan_app/core/shared_widget/status_action_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/teacher_application/data/models/teacher_application_details_mock_data.dart';

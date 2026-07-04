@@ -3,6 +3,7 @@ import 'package:bnan_app/features/admin/presentation/views/admin_home_view.dart'
 import 'package:bnan_app/features/classes_management/presentation/views/classes_management_view.dart';
 import 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
+import 'package:bnan_app/features/registration_requests/presentation/view/registration_requests_view.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/teacher_application_view.dart';
@@ -21,7 +22,7 @@ import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.teacherApplication,
+    initialLocation: Routes.registrationRequests,
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -354,6 +355,13 @@ GoRouter buildRouter() {
         path: Routes.teacherApplication,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherApplicationView(),
+          key: state.pageKey,
+        ),
+      ),
+       GoRoute(
+        path: Routes.registrationRequests,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const RegistrationRequestsView(),
           key: state.pageKey,
         ),
       ),

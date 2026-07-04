@@ -714,7 +714,18 @@
     "pendingReview": "Pending Review",
     "details": "Details",
     "cv": "CV",
-    "reject": "Reject",
     "experience": "Experience",
-    "years": "Years"
+    "years": "Years",
+    "newCustomer": "New Customer",
+    "children": "Children",
+    "classLabel": "Classes",
+    "subjectLabel": "Subject",
+    "paymentStatus": "Payment Status",
+    "amount": "Amount",
+    "manualTransferReviewPending": "Pending manual receipt review",
+    "manualPaymentConfirmation": "Confirm manual payment",
+    "moveToReview": "Move to review",
+    "contactWhatsApp": "Contact WhatsApp",
+    "approveAccountActivation": "Approve account activation",
+    "reject": "Reject"
 }

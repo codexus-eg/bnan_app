@@ -117,10 +117,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
+        "amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
         "applePay": MessageLookupByLibrary.simpleMessage("أبل باي"),
         "applyAsTeacher": MessageLookupByLibrary.simpleMessage("التقديم كمعلم"),
         "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
             "شارك خبراتك وانضم إلى فريقنا التعليمي"),
+        "approveAccountActivation":
+            MessageLookupByLibrary.simpleMessage("موافقة تفعيل الحساب"),
         "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
         "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
@@ -184,6 +187,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "checkYourEmailPrefix":
             MessageLookupByLibrary.simpleMessage("تحقق من بريدك الإلكتروني "),
         "chemistry": MessageLookupByLibrary.simpleMessage("الكيمياء"),
+        "children": MessageLookupByLibrary.simpleMessage("الأبناء"),
         "chooseAccountType":
             MessageLookupByLibrary.simpleMessage("اختر نوع الحساب للمتابعة"),
         "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
@@ -196,6 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "city": MessageLookupByLibrary.simpleMessage("المدينة"),
         "classDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الفصل"),
+        "classLabel": MessageLookupByLibrary.simpleMessage("الفصول"),
         "className": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
         "classNameRequired":
             MessageLookupByLibrary.simpleMessage("اسم الفصل مطلوب"),
@@ -223,6 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "congratsThisMonth":
             MessageLookupByLibrary.simpleMessage("إتقان هذا الشهر"),
         "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
+        "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
         "correctAssignment":
             MessageLookupByLibrary.simpleMessage("تصحيح الواجب"),
         "country": MessageLookupByLibrary.simpleMessage("الدولة"),
@@ -429,6 +435,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "major": MessageLookupByLibrary.simpleMessage("التخصص العلمي"),
         "manageStudentsAndClasses":
             MessageLookupByLibrary.simpleMessage("إدارة الفصول والطلاب"),
+        "manualPaymentConfirmation":
+            MessageLookupByLibrary.simpleMessage("تأكيد الدفع يدوياً"),
+        "manualTransferReviewPending":
+            MessageLookupByLibrary.simpleMessage("بانتظار مراجعة الإيصال يدوي"),
         "march2026": MessageLookupByLibrary.simpleMessage("مارس 2026"),
         "markAsRead": MessageLookupByLibrary.simpleMessage("تمييز كمقروءة"),
         "materialsManagement":
@@ -446,6 +456,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الأرباح الشهرية"),
         "monthlyRevenue": MessageLookupByLibrary.simpleMessage("إيرادات الشهر"),
         "mostPopular": MessageLookupByLibrary.simpleMessage("الأكثر طلباً"),
+        "moveToReview": MessageLookupByLibrary.simpleMessage("نقل للمراجعة"),
         "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
         "myGroups": MessageLookupByLibrary.simpleMessage("مجموعاتي"),
         "myPerformance": MessageLookupByLibrary.simpleMessage("أدائي"),
@@ -461,6 +472,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم رفع واجب جديد"),
         "newBadge": MessageLookupByLibrary.simpleMessage("جديد"),
         "newCertificate": MessageLookupByLibrary.simpleMessage("شهادة تقدير"),
+        "newCustomer": MessageLookupByLibrary.simpleMessage("عميل جديد"),
         "newMessage":
             MessageLookupByLibrary.simpleMessage("رسالة جديدة من أ/ سارة"),
         "newPassword":
@@ -582,6 +594,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentDoneOn": MessageLookupByLibrary.simpleMessage("تم الدفع في"),
         "paymentInfo": MessageLookupByLibrary.simpleMessage("معلومات الدفع"),
         "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
+        "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
         "pending": MessageLookupByLibrary.simpleMessage("معلق"),
         "pendingMathSubtitle":
             MessageLookupByLibrary.simpleMessage("درس الكسور، بانتظار أي معلم"),
@@ -774,6 +787,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
         "studySchedule": MessageLookupByLibrary.simpleMessage("الجدول الدراسي"),
         "subject": MessageLookupByLibrary.simpleMessage("المادة"),
+        "subjectLabel": MessageLookupByLibrary.simpleMessage("المادة"),
         "subjectName": MessageLookupByLibrary.simpleMessage("اسم المادة"),
         "subjectRequired":
             MessageLookupByLibrary.simpleMessage("المادة مطلوبة"),
