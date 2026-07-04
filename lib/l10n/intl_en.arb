@@ -714,7 +714,41 @@
     "pendingReview": "Pending Review",
     "details": "Details",
     "cv": "CV",
-    "reject": "Reject",
     "experience": "Experience",
-    "years": "Years"
+    "years": "Years",
+    "newCustomer": "New Customer",
+    "children": "Children",
+    "classLabel": "Classes",
+    "subjectLabel": "Subject",
+    "paymentStatus": "Payment Status",
+    "amount": "Amount",
+    "manualTransferReviewPending": "Pending manual receipt review",
+    "manualPaymentConfirmation": "Confirm manual payment",
+    "moveToReview": "Move to review",
+    "contactWhatsApp": "Contact WhatsApp",
+    "approveAccountActivation": "Approve account activation",
+    "reject": "Reject",
+    "curriculums": "Curriculums",
+    "addNewCurriculum": "Add New Curriculum",
+    "curriculumName": "Curriculum Name",
+    "addNewGrade": "Add New Grade",
+    "gradeName": "Grade Name",
+    "addNewSemester": "Add New Semester",
+    "semesterName": "Semester Name",
+    "gradesCount": "{count} Grades",
+    "@gradesCount": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "semesterOne": "Semester 1",
+    "semesterTwo": "Semester 2",
+    "semesterThree": "Semester 3",
+    "fieldRequired": "This field is required",
+    "confirmDelete": "Are you sure you want to delete?",
+    "deleteGrade": "Delete grade",
+    "deleteGradeConfirmation": "Are you sure you want to delete this grade?",
+    "parentThirdPreparatoryGrade": "Third Preparatory Grade",
+    "classRoomManagement":"ClassRoom Management"
+
 }

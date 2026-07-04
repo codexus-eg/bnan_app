@@ -4520,6 +4520,26 @@ class S {
     );
   }
 
+  /// `Delete grade`
+  String get deleteGrade {
+    return Intl.message(
+      'Delete grade',
+      name: 'deleteGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this grade?`
+  String get deleteGradeConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this grade?',
+      name: 'deleteGradeConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `My Performance`
   String get myPerformance {
     return Intl.message(
@@ -5830,16 +5850,6 @@ class S {
     );
   }
 
-  /// `Reject`
-  String get reject {
-    return Intl.message(
-      'Reject',
-      name: 'reject',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Experience`
   String get experience {
     return Intl.message(
@@ -5855,6 +5865,276 @@ class S {
     return Intl.message(
       'Years',
       name: 'years',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Customer`
+  String get newCustomer {
+    return Intl.message(
+      'New Customer',
+      name: 'newCustomer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Children`
+  String get children {
+    return Intl.message(
+      'Children',
+      name: 'children',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classes`
+  String get classLabel {
+    return Intl.message(
+      'Classes',
+      name: 'classLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject`
+  String get subjectLabel {
+    return Intl.message(
+      'Subject',
+      name: 'subjectLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment Status`
+  String get paymentStatus {
+    return Intl.message(
+      'Payment Status',
+      name: 'paymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get amount {
+    return Intl.message(
+      'Amount',
+      name: 'amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending manual receipt review`
+  String get manualTransferReviewPending {
+    return Intl.message(
+      'Pending manual receipt review',
+      name: 'manualTransferReviewPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm manual payment`
+  String get manualPaymentConfirmation {
+    return Intl.message(
+      'Confirm manual payment',
+      name: 'manualPaymentConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Move to review`
+  String get moveToReview {
+    return Intl.message(
+      'Move to review',
+      name: 'moveToReview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact WhatsApp`
+  String get contactWhatsApp {
+    return Intl.message(
+      'Contact WhatsApp',
+      name: 'contactWhatsApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve account activation`
+  String get approveAccountActivation {
+    return Intl.message(
+      'Approve account activation',
+      name: 'approveAccountActivation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reject`
+  String get reject {
+    return Intl.message(
+      'Reject',
+      name: 'reject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculums`
+  String get curriculums {
+    return Intl.message(
+      'Curriculums',
+      name: 'curriculums',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Curriculum`
+  String get addNewCurriculum {
+    return Intl.message(
+      'Add New Curriculum',
+      name: 'addNewCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculum Name`
+  String get curriculumName {
+    return Intl.message(
+      'Curriculum Name',
+      name: 'curriculumName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Grade`
+  String get addNewGrade {
+    return Intl.message(
+      'Add New Grade',
+      name: 'addNewGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade Name`
+  String get gradeName {
+    return Intl.message(
+      'Grade Name',
+      name: 'gradeName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Semester`
+  String get addNewSemester {
+    return Intl.message(
+      'Add New Semester',
+      name: 'addNewSemester',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester Name`
+  String get semesterName {
+    return Intl.message(
+      'Semester Name',
+      name: 'semesterName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} Grades`
+  String gradesCount(Object count) {
+    return Intl.message(
+      '$count Grades',
+      name: 'gradesCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Semester 1`
+  String get semesterOne {
+    return Intl.message(
+      'Semester 1',
+      name: 'semesterOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester 2`
+  String get semesterTwo {
+    return Intl.message(
+      'Semester 2',
+      name: 'semesterTwo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Semester 3`
+  String get semesterThree {
+    return Intl.message(
+      'Semester 3',
+      name: 'semesterThree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field is required`
+  String get fieldRequired {
+    return Intl.message(
+      'This field is required',
+      name: 'fieldRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete?`
+  String get confirmDelete {
+    return Intl.message(
+      'Are you sure you want to delete?',
+      name: 'confirmDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Third Preparatory Grade`
+  String get parentThirdPreparatoryGrade {
+    return Intl.message(
+      'Third Preparatory Grade',
+      name: 'parentThirdPreparatoryGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ClassRoom Management`
+  String get classRoomManagement {
+    return Intl.message(
+      'ClassRoom Management',
+      name: 'classRoomManagement',
       desc: '',
       args: [],
     );

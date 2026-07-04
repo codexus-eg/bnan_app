@@ -714,7 +714,40 @@
     "pendingReview": "قيد المراجعة",
     "details": "التفاصيل",
     "cv": "CV",
-    "reject": "رفض",
     "experience": "الخبرة",
-    "years": "سنوات"
+    "years": "سنوات",
+"newCustomer": "عميل جديد",
+"children": "الأبناء",
+"classLabel": "الفصول",
+"subjectLabel": "المادة",
+"paymentStatus": "حالة الدفع",
+"amount": "المبلغ",
+"manualTransferReviewPending": "بانتظار مراجعة الإيصال يدوي",
+"manualPaymentConfirmation": "تأكيد الدفع يدوياً",
+"moveToReview": "نقل للمراجعة",
+"contactWhatsApp": "تواصل واتساب",
+"approveAccountActivation": "موافقة تفعيل الحساب",
+"reject": "رفض",
+"curriculums": "المناهج",
+"addNewCurriculum": "إضافة منهج جديد",
+"curriculumName": "اسم المنهج",
+"addNewGrade": "إضافة صف جديد",
+"gradeName": "اسم الصف",
+"addNewSemester": "إضافة فصل جديد",
+"semesterName": "اسم الفصل",
+"gradesCount": "{count} صف دراسي",
+"@gradesCount": {
+    "placeholders": {
+        "count": {}
+    }
+},
+"semesterOne": "فصل ١",
+"semesterTwo": "فصل ٢",
+"semesterThree": "فصل ٣",
+"fieldRequired": "هذا الحقل مطلوب",
+"confirmDelete": "هل أنت متأكد أنك تريد الحذف؟",
+"deleteGrade": "حذف الصف",
+"deleteGradeConfirmation": "هل أنت متأكد أنك تريد حذف الصف",
+"parentThirdPreparatoryGrade": "الصف الثالث الإعدادي",
+"classRoomManagement":"إدراة الصفوف"
 }
