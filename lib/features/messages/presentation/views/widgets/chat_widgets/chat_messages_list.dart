@@ -1,5 +1,5 @@
 import 'package:bnan_app/features/student_schedule/data/models/chat_message_model.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/chat_widgets/chat_bubble.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/chat_widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 
 class ChatMessagesList extends StatelessWidget {

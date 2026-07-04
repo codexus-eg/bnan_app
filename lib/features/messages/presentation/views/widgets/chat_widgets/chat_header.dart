@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/chat_widgets/teacher_info.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/chat_widgets/teacher_info.dart';
 import 'package:flutter/material.dart';
 
 class ChatHeader extends StatelessWidget {

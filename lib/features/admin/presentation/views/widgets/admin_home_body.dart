@@ -22,7 +22,7 @@ class AdminHomeBody extends StatelessWidget {
       AdminHomeLayout(onMenuTap: onMenuTap),
       UsersManagementBody(),
       AdminPlaceholderTab(title: s.adminSupervisors, onMenuTap: onMenuTap),
-     SubjectManagementBody(),
+      SubjectManagementBody(),
       AdminPlaceholderTab(title: s.packages, onMenuTap: onMenuTap),
     ];
 

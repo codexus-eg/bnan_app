@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/chat_widgets/chat_body.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/chat_widgets/chat_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

@@ -11,13 +11,14 @@ class HomeStatCard extends StatelessWidget {
     required this.state,
     this.showIcon = true,
     this.titleTextAlign,
-    this.titleOverflow,
+    this.titleOverflow, this.titleColor,
   });
 
   final HomeStateModel state;
   final bool showIcon;
   final TextAlign? titleTextAlign;
   final TextOverflow? titleOverflow;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class HomeStatCard extends StatelessWidget {
               overflow: titleOverflow ?? TextOverflow.ellipsis,
               style: StylesManager.styleRegular14(
                 context,
-              ).copyWith(color: ColorManager.greyA8AF, height: 1.1),
+              ).copyWith(color:titleColor?? ColorManager.greyA8AF, height: 1.1),
             ),
           ),
         ],

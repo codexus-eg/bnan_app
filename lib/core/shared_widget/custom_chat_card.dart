@@ -3,14 +3,15 @@ import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dar
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/teacher_chats/data/models/teacher_chat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class TeacherChatCard extends StatelessWidget {
-  const TeacherChatCard({super.key, required this.chatModel});
+class CustomChatCard extends StatelessWidget {
+  const CustomChatCard({super.key,required this.title, required this.subtitle, this.subtitleStyle});
 
-  final TeacherChatModel chatModel;
+  final String title,subtitle;
+  final TextStyle? subtitleStyle;
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +20,21 @@ class TeacherChatCard extends StatelessWidget {
       child: CustomDetailsWidgetBackground(
         child: Row(
           children: [
-            CustomAvatar(firstName: chatModel.name, radius: 25),
+            CustomAvatar(firstName: title, radius: 25),
             const SizedBox(width: 7),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  chatModel.name,
+                  title,
                   style: StylesManager.styleBold16(
                     context,
                   ).copyWith(color: ColorManager.mainColor14),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  chatModel.grade,
-                  style: StylesManager.styleRegular14(
+                  subtitle,
+                  style:subtitleStyle ?? StylesManager.styleRegular14(
                     context,
                   ).copyWith(color: ColorManager.greyA8AF),
                 ),

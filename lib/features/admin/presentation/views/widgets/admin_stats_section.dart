@@ -14,7 +14,7 @@ class AdminStatsSection extends StatelessWidget {
       crossAxisCount: 2,
       crossAxisSpacing: 20,
       mainAxisSpacing: 16,
-      // childAspectRatio: 101 / 87,
+      childAspectRatio: 1.6,
       titleTextAlign: TextAlign.center,
       titleOverflow: TextOverflow.ellipsis,
     );

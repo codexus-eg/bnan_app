@@ -8,22 +8,24 @@ List<HomeStateModel> adminSubscriptionStats(BuildContext context) {
   final s = S.of(context);
   return [
     HomeStateModel(
-      icon: ImageManager.adminDollarSignIcon,
-      value: '-',
-      title: s.pendingReceipts,
-      iconColor: ColorManager.secondaryColor,
-    ),
-    HomeStateModel(
-      icon: ImageManager.adminDollarSignIcon,
-      value: '-',
-      title: s.expiredSubscriptions,
-      iconColor: ColorManager.redD8,
-    ),
-    HomeStateModel(
       icon: ImageManager.adminShieldCheckIcon,
       value: '-',
       title: s.activeSubscriptions,
       iconColor: ColorManager.orangeE4,
+    ),
+
+    HomeStateModel(
+      icon: ImageManager.adminDollarSignIcon,
+      value: '-',
+      title: s.expiredSubscriptions,
+      iconColor: ColorManager.redD5,
+    ),
+
+    HomeStateModel(
+      icon: ImageManager.adminDollarSignIcon,
+      value: '-',
+      title: s.pendingReceipts,
+      iconColor: ColorManager.secondaryColor,
     ),
   ];
 }

@@ -1,8 +1,8 @@
 import 'package:bnan_app/features/student_schedule/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/student_schedule/data/models/chat_sender_type.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/chat_widgets/chat_header.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/chat_widgets/chat_input_bar.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/chat_widgets/chat_messages_list.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/chat_widgets/chat_header.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/chat_widgets/chat_input_bar.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/chat_widgets/chat_messages_list.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 

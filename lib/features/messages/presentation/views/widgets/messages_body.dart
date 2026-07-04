@@ -1,9 +1,9 @@
-import 'package:bnan_app/features/teacher_chats/data/models/teacher_chat_model.dart';
-import 'package:bnan_app/features/teacher_chats/presentation/views/widgets/teacher_chat_card.dart';
+import 'package:bnan_app/features/messages/data/models/teacher_chat_model.dart';
+import 'package:bnan_app/core/shared_widget/custom_chat_card.dart';
 import 'package:flutter/material.dart';
 
-class TeacherChatsBody extends StatelessWidget {
-  const TeacherChatsBody({super.key});
+class MessagesBody extends StatelessWidget {
+  const MessagesBody({super.key});
 
   static const chats = [
     TeacherChatModel(name: 'أحمد محمد', grade: 'الثاني الإعدادي'),
@@ -18,7 +18,10 @@ class TeacherChatsBody extends StatelessWidget {
       padding: const EdgeInsetsDirectional.all(16),
       itemCount: chats.length,
       itemBuilder: (context, index) {
-        return TeacherChatCard(chatModel: chats[index]);
+        return CustomChatCard(
+          title: chats[index].name,
+          subtitle: chats[index].grade,
+        );
       },
     );
   }

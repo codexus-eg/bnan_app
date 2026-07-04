@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
-import 'package:bnan_app/features/teacher_chats/presentation/views/widgets/teacher_chats_body.dart';
+import 'package:bnan_app/features/messages/presentation/views/widgets/messages_body.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,7 @@ class TeacherChatsView extends StatelessWidget {
         headerText: S.of(context).groups,
         iconNeeded: true,
       ),
-      body: TeacherChatsBody(),
+      body: MessagesBody(),
     );
   }
 }

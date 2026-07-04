@@ -14,12 +14,8 @@ class AdminDepartmentProgressItem extends StatelessWidget {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              '($percent%)${department.current}',
-              style: StylesManager.styleRegular10(context),
-            ),
-            const Spacer(),
             Flexible(
               child: Text(
                 department.title,
@@ -29,15 +25,22 @@ class AdminDepartmentProgressItem extends StatelessWidget {
                 ).copyWith(color: ColorManager.mainColor14),
               ),
             ),
+            Text(
+              '${department.current}($percent%)',
+              style: StylesManager.styleRegular12(
+                context,
+              ).copyWith(color: ColorManager.mainColor14),
+            ),
           ],
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 4),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(6),
           child: LinearProgressIndicator(
             value: department.progress,
-            minHeight: 5,
+            minHeight: 6.5,
             color: department.color,
+            borderRadius:  BorderRadius.circular(6),
             backgroundColor: ColorManager.greyE8E9,
           ),
         ),

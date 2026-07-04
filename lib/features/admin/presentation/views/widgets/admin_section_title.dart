@@ -24,10 +24,10 @@ class AdminSectionTitle extends StatelessWidget {
           if (showTrendIcon)
             SvgPicture.asset(
               ImageManager.arrowGrowthIcon,
-              width: 16,
-              height: 16,
+              width: 24,
+              height: 24,
               colorFilter: const ColorFilter.mode(
-                ColorManager.green33B,
+                ColorManager.green23,
                 BlendMode.srcIn,
               ),
             ),
@@ -36,7 +36,7 @@ class AdminSectionTitle extends StatelessWidget {
             title,
             style: StylesManager.styleBold14(
               context,
-            ).copyWith(color: ColorManager.mainColor14),
+            ).copyWith(color: ColorManager.mainColor15),
           ),
         ],
       ),
