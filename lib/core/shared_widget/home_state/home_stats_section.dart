@@ -13,6 +13,7 @@ class HomeStatsSection extends StatelessWidget {
     this.showIcon = true,
     this.titleTextAlign,
     this.titleOverflow,
+    this.titleColorBuilder,
   });
 
   final List<HomeStateModel> states;
@@ -23,7 +24,7 @@ class HomeStatsSection extends StatelessWidget {
   final bool showIcon;
   final TextAlign? titleTextAlign;
   final TextOverflow? titleOverflow;
-
+  final Color? Function(int index)? titleColorBuilder;
   @override
   Widget build(BuildContext context) {
     if (crossAxisCount != null) {
@@ -44,6 +45,7 @@ class HomeStatsSection extends StatelessWidget {
             showIcon: showIcon,
             titleTextAlign: titleTextAlign,
             titleOverflow: titleOverflow,
+            titleColor:titleColorBuilder?.call(index) ,
           );
         },
       );
@@ -57,6 +59,7 @@ class HomeStatsSection extends StatelessWidget {
         final itemIndex = index ~/ 2;
         return Expanded(
           child: HomeStatCard(
+            titleColor: titleColorBuilder?.call(index),
             state: states[itemIndex],
             showIcon: showIcon,
             titleTextAlign: titleTextAlign,

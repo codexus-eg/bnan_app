@@ -16,14 +16,14 @@ List<HomeStateModel> _profitStats(S s) {
   return [
     HomeStateModel(
       icon: ImageManager.adminDollarSignIcon,
-      value: '1900',
-      title: s.egpShort,
+      value: '500',
+      title: s.sarShort,
       iconColor: ColorManager.green33B,
     ),
     HomeStateModel(
       icon: ImageManager.adminDollarSignIcon,
-      value: '500',
-      title: s.sarShort,
+      value: '1900',
+      title: s.egpShort,
       iconColor: ColorManager.green33B,
     ),
   ];

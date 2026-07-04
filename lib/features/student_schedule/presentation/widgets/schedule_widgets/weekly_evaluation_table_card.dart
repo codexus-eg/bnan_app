@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/student_schedule/presentation/views/widgets/schedule_widgets/weekly_evaluation_grid.dart';
+import 'package:bnan_app/features/student_schedule/presentation/widgets/schedule_widgets/weekly_evaluation_grid.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 

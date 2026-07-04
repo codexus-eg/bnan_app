@@ -13,7 +13,7 @@ List<AdminDepartmentProgressModel> adminDepartmentProgress(
       current: 18,
       total: 29,
       progress: .62,
-      color: ColorManager.orangeED,
+      color: ColorManager.orangeE4,
     ),
     AdminDepartmentProgressModel(
       title: s.saudiDepartment,
