@@ -314,7 +314,18 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.teacherSubjectAssignmentView,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TeacherSubjectAssignmentView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<TeacherSubjectAssignmentsCubit>()
+                  ..getTeacherTeachingAssignments(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<TeacherSubjectAssignmentActionsCubit>(),
+              ),
+            ],
+            child: const TeacherSubjectAssignmentView(),
+          ),
           key: state.pageKey,
         ),
       ),

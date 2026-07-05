@@ -3,16 +3,16 @@ import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dar
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/data/teacher_subject_mock_data.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/dialogs/assign_subject_dialog.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/dialogs/delete_assignment_dialog.dart';
 import 'package:bnan_app/core/shared_widget/details_row_section.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/teacher_subject_assignment_card_item.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TeacherAssignmentCard extends StatelessWidget {
   const TeacherAssignmentCard({super.key, required this.item});
-  final TeacherSubjectAssignmentItem item;
+  final TeacherSubjectAssignmentCardItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,14 @@ class TeacherAssignmentCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          ...item.assignments.map(
-            (assignment) => DetailsRowSection(
+          ...item.rows.map(
+            (row) => DetailsRowSection(
               iconPath: ImageManager.teacherBookTwoIcon,
-              title: '${assignment.subjectName} - ${assignment.gradeName}',
-              subtitle: assignment.curriculumName,
+              title: '${row.gradeName} - ${row.subjectName}',
+              subtitle: row.curriculumName,
               onTap: () => showDialog(
                 context: context,
-                builder: (_) => DeleteAssignmentDialog(assignment: assignment),
+                builder: (_) => DeleteAssignmentDialog(row: row),
               ),
             ),
           ),

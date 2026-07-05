@@ -3,14 +3,14 @@ import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/data/teacher_subject_mock_data.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/data/models/assignment_row_item.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/confirm_choices.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DeleteAssignmentDialog extends StatelessWidget {
-  const DeleteAssignmentDialog({super.key, required this.assignment});
-  final SubjectAssignmentItem assignment;
+  const DeleteAssignmentDialog({super.key, required this.row});
+  final AssignmentRowItem row;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class DeleteAssignmentDialog extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               s.cancelAssignmentMessage(
-                assignment.gradeName,
-                assignment.subjectName,
+                row.gradeName,
+                row.subjectName,
               ),
               textAlign: TextAlign.center,
               style: StylesManager.styleBold14(

@@ -63,6 +63,8 @@ export 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_v
 export 'package:bnan_app/features/teacher_performance/presentation/views/teacher_performance_view.dart';
 export 'package:bnan_app/features/teacher_performance/presentation/views/weekly_ideal_student_view.dart';
 export 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
+export 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignments_cubit/teacher_subject_assignments_cubit.dart';
+export 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignment_actions_cubit/teacher_subject_assignment_actions_cubit.dart';
 export 'package:bnan_app/features/teacher_registration/presentation/views/teacher_registration_view.dart';
 export 'package:bnan_app/features/teacher_request_groups/presentation/views/teacher_registration_requests_view.dart';
 export 'package:bnan_app/features/teacher_subject_assignment/presentation/views/teacher_subject_assignment_view.dart';
