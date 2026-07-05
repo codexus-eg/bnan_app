@@ -3,7 +3,7 @@ import 'routes_export.dart';
 
 GoRouter buildRouter() {
   return GoRouter(
-    initialLocation: Routes.adminHome,
+    initialLocation: Routes.splash,
     routes: [
       GoRoute(
         path: Routes.splash,

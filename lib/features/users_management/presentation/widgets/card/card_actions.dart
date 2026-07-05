@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/utils/assets.dart';
-import 'package:bnan_app/features/users_management/data/user_mock_data.dart';
 import 'package:bnan_app/core/shared_widget/action_chip.dart';
+import 'package:bnan_app/features/users_management/data/models/user_model.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/dialogs.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class CardActions extends StatelessWidget {
             onTap: () => UserDialogs.showEdit(context, user),
           ),
           ActionChipButton(
-            title: s.disable,
+            title: _statusActionText(s),
             icon: ImageManager.usersManagementStopSignIcon,
             onTap: () => UserDialogs.showDisable(context, user),
           ),
@@ -40,17 +40,23 @@ class CardActions extends StatelessWidget {
             title: s.delete,
             width: 11,
             icon: ImageManager.trash,
-            onTap: () => UserDialogs.showDelete(context),
+            onTap: () => UserDialogs.showDelete(context, user),
           ),
           ActionChipButton(
             title: s.password,
             height: 9,
             width: 17.25,
             icon: ImageManager.usersManagementKeyIcon,
-            onTap: () => UserDialogs.showResetPassword(context),
+            onTap: () => UserDialogs.showResetPassword(context, user),
           ),
         ],
       ),
     );
+  }
+
+  String _statusActionText(S s) {
+    return user.status.toLowerCase() == 'active'
+        ? s.disableAccount
+        : s.enableAccount;
   }
 }

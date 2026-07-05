@@ -1,9 +1,12 @@
+import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_layout.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_placeholder_tab.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_management_body.dart';
+import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/users_management_body.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminHomeBody extends StatelessWidget {
   const AdminHomeBody({
@@ -20,7 +23,10 @@ class AdminHomeBody extends StatelessWidget {
     final s = S.of(context);
     final pages = [
       AdminHomeLayout(onMenuTap: onMenuTap),
-      UsersManagementBody(),
+      BlocProvider(
+        create: (_) => getIt<UsersManagementCubit>()..getUsers(),
+        child: const UsersManagementBody(),
+      ),
       AdminPlaceholderTab(title: s.adminSupervisors, onMenuTap: onMenuTap),
       SubjectManagementBody(),
       AdminPlaceholderTab(title: s.packages, onMenuTap: onMenuTap),

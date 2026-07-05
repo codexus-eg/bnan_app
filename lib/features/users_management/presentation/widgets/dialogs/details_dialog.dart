@@ -2,7 +2,7 @@ import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/users_management/data/user_mock_data.dart';
+import 'package:bnan_app/features/users_management/data/models/user_model.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/custom_user_avatar.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/dialog_details_body.dart';
 import 'package:bnan_app/generated/l10n.dart';

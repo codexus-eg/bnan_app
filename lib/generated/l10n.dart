@@ -4230,6 +4230,56 @@ class S {
     );
   }
 
+  /// `User created successfully`
+  String get userCreatedSuccessfully {
+    return Intl.message(
+      'User created successfully',
+      name: 'userCreatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User updated successfully`
+  String get userUpdatedSuccessfully {
+    return Intl.message(
+      'User updated successfully',
+      name: 'userUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User password updated successfully`
+  String get userPasswordUpdatedSuccessfully {
+    return Intl.message(
+      'User password updated successfully',
+      name: 'userPasswordUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User status updated successfully`
+  String get userStatusUpdatedSuccessfully {
+    return Intl.message(
+      'User status updated successfully',
+      name: 'userStatusUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User deleted successfully`
+  String get userDeletedSuccessfully {
+    return Intl.message(
+      'User deleted successfully',
+      name: 'userDeletedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Current Month`
   String get currentMonth {
     return Intl.message(
@@ -5460,6 +5510,16 @@ class S {
     );
   }
 
+  /// `Supervised classes`
+  String get supervisedClasses {
+    return Intl.message(
+      'Supervised classes',
+      name: 'supervisedClasses',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The SuperVisor`
   String get theSupervisor {
     return Intl.message(
@@ -5495,6 +5555,46 @@ class S {
     return Intl.message(
       'Disable',
       name: 'disable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disable account`
+  String get disableAccount {
+    return Intl.message(
+      'Disable account',
+      name: 'disableAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable account`
+  String get enableAccount {
+    return Intl.message(
+      'Enable account',
+      name: 'enableAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to disable this account?`
+  String get disableAccountConfirmation {
+    return Intl.message(
+      'Do you want to disable this account?',
+      name: 'disableAccountConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to enable this account?`
+  String get enableAccountConfirmation {
+    return Intl.message(
+      'Do you want to enable this account?',
+      name: 'enableAccountConfirmation',
       desc: '',
       args: [],
     );

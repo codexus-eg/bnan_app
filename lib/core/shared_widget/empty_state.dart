@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class EmptyStateWidget extends StatelessWidget {
   const EmptyStateWidget({
@@ -24,7 +25,7 @@ class EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(image, height: imageHeight, fit: BoxFit.contain),
+            SvgPicture.asset(image, height: imageHeight, fit: BoxFit.contain),
             const SizedBox(height: 30),
             Text(
               title,
