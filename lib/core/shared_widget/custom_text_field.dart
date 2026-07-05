@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLine,
     this.readOnly = false,
     this.onTap,
+    this.onChanged,
     this.validator,
     this.backgroundColor,
     this.hintStyle,
@@ -35,6 +36,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLine;
   final bool readOnly;
   final VoidCallback? onTap;
+  final ValueChanged<String>? onChanged;
   final String? Function(String?)? validator;
   final Color? backgroundColor, labelColor;
 
@@ -81,8 +83,8 @@ class CustomTextField extends StatelessWidget {
                 ? TextInputAction.newline
                 : TextInputAction.done,
             validator: validator,
+            onChanged: onChanged,
             readOnly: readOnly,
-            onTap: onTap,
             maxLines: effectiveMaxLines,
             controller: controller,
             keyboardType: keyboardType,

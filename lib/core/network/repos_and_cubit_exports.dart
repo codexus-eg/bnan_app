@@ -48,3 +48,7 @@ export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_te
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_curriculums/get_teacher_curriculums_cubit.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_grades/get_teacher_grades_cubit.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/update_assignment/update_assignment_cubit.dart';
+export 'package:bnan_app/features/teacher_subject_assignment/data/repo/teacher_subject_assignment_repo.dart';
+export 'package:bnan_app/features/teacher_subject_assignment/data/repo/teacher_subject_assignment_repo_impl.dart';
+export 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignments_cubit/teacher_subject_assignments_cubit.dart';
+export 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignment_actions_cubit/teacher_subject_assignment_actions_cubit.dart';

@@ -4,6 +4,9 @@ import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_su
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo_impl.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
+import 'package:bnan_app/features/users_management/data/repo/users_management_repo.dart';
+import 'package:bnan_app/features/users_management/data/repo/users_management_repo_impl.dart';
+import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -39,6 +42,12 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<TeacherRegistrationRepo>(
     () => TeacherRegistrationRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<UsersManagementRepo>(
+    () => UsersManagementRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<TeacherSubjectAssignmentRepo>(
+    () => TeacherSubjectAssignmentRepoImpl(getIt<ApiConsumer>()),
   );
   // Cubits
 
@@ -99,6 +108,9 @@ void setupServiceLocator() {
   getIt.registerFactory<TeacherRegistrationCubit>(
     () => TeacherRegistrationCubit(getIt<TeacherRegistrationRepo>()),
   );
+  getIt.registerFactory<UsersManagementCubit>(
+    () => UsersManagementCubit(getIt<UsersManagementRepo>()),
+  );
   getIt.registerFactory<GetTeacherAssignmentsCubit>(
     () => GetTeacherAssignmentsCubit(getIt<AssignmentsRepo>()),
   );
@@ -131,5 +143,11 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<GetSubjectDetailsCubit>(
     () => GetSubjectDetailsCubit(getIt<AssignmentsRepo>()),
+  );
+  getIt.registerFactory<TeacherSubjectAssignmentsCubit>(
+    () => TeacherSubjectAssignmentsCubit(getIt<TeacherSubjectAssignmentRepo>()),
+  );
+  getIt.registerFactory<TeacherSubjectAssignmentActionsCubit>(
+    () => TeacherSubjectAssignmentActionsCubit(getIt<TeacherSubjectAssignmentRepo>()),
   );
 }

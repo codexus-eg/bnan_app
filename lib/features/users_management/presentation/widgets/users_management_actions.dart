@@ -6,7 +6,9 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class UsersManagementActions extends StatelessWidget {
-  const UsersManagementActions({super.key});
+  const UsersManagementActions({super.key, required this.usersCount});
+
+  final int usersCount;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class UsersManagementActions extends StatelessWidget {
           child: AddNewTopicButton(
             secondColor:ColorManager.mainColor14 ,
             backgroundColor: ColorManager.secondaryColor ,
-            title: s.usersCount('96'),
+            title: s.usersCount(usersCount.toString()),
             path: ImageManager.usersManagementUserIcon,
           ),
         ),

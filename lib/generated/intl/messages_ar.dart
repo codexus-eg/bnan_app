@@ -288,6 +288,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
         "details": MessageLookupByLibrary.simpleMessage("التفاصيل"),
         "disable": MessageLookupByLibrary.simpleMessage("تعطيل"),
+        "disableAccount": MessageLookupByLibrary.simpleMessage("تعطيل الحساب"),
+        "disableAccountConfirmation":
+            MessageLookupByLibrary.simpleMessage("هل تريد تعطيل هذا الحساب؟"),
         "disableUserDescription": MessageLookupByLibrary.simpleMessage(
             "لن يستطيع الدخول حتى تقوم بتفعيله."),
         "disableUserQuestion": m5,
@@ -323,6 +326,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "البريد الإلكتروني لا يمكن أن يكون فارغًا."),
         "emailRequired": MessageLookupByLibrary.simpleMessage(
             "يرجى إدخال البريد الإلكتروني"),
+        "enableAccount": MessageLookupByLibrary.simpleMessage("فك التعطيل"),
+        "enableAccountConfirmation":
+            MessageLookupByLibrary.simpleMessage("هل تريد فك تعطيل هذا الحساب؟"),
         "emiratiCurriculum":
             MessageLookupByLibrary.simpleMessage("المنهج الإماراتي"),
         "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
@@ -708,6 +714,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("طلب درس جديد"),
         "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
             "تم إرسال طلبك وهو الآن قيد المراجعة."),
+        "userCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إنشاء المستخدم بنجاح"),
+        "userDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف المستخدم بنجاح"),
+        "userPasswordUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم تحديث كلمة مرور المستخدم بنجاح"),
+        "userStatusUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تحديث حالة المستخدم بنجاح"),
+        "userUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تحديث المستخدم بنجاح"),
         "resendCode": MessageLookupByLibrary.simpleMessage("إعادة الإرسال؟"),
         "resetCodeRequired":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كود التحقق"),
@@ -839,6 +855,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
         "sunday": MessageLookupByLibrary.simpleMessage("الأحد"),
         "supervisor": MessageLookupByLibrary.simpleMessage("مشرف"),
+        "supervisedClasses":
+            MessageLookupByLibrary.simpleMessage("الصفوف المشرف عليها"),
         "supervisorRequired":
             MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
         "tabbyTamara":

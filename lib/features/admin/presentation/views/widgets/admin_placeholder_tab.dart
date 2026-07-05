@@ -14,14 +14,12 @@ class AdminPlaceholderTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Text(
-          title,
-          style: StylesManager.styleBold20(
-            context,
-          ).copyWith(color: ColorManager.mainColor14),
-        ),
+    return Center(
+      child: Text(
+        title,
+        style: StylesManager.styleBold20(
+          context,
+        ).copyWith(color: ColorManager.mainColor14),
       ),
     );
   }

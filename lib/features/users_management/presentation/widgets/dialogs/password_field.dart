@@ -5,9 +5,20 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PasswordField extends StatelessWidget {
-  const PasswordField({super.key, required this.mode});
+  const PasswordField({
+    super.key,
+    required this.mode,
+    required this.controller,
+    this.obscureText = true,
+    required this.onToggleVisibility,
+    this.validator,
+  });
 
   final FormMode mode;
+  final TextEditingController controller;
+  final bool obscureText;
+  final VoidCallback onToggleVisibility;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +26,15 @@ class PasswordField extends StatelessWidget {
     return CustomTextField(
       label: mode == FormMode.password ? s.newPassword : s.password,
       hintText: s.atLeastSixChars,
-      obscureText: true,
-      suffixIcon: const Icon(
-        Icons.visibility_outlined,
-        color: ColorManager.greyA8AF,
+      controller: controller,
+      validator: validator,
+      obscureText: obscureText,
+      suffixIcon: GestureDetector(
+        onTap: onToggleVisibility,
+        child: Icon(
+          obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          color: ColorManager.greyA8AF,
+        ),
       ),
     );
   }

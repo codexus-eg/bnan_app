@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppPickers {
   AppPickers._();
@@ -136,6 +137,12 @@ class AppPickers {
         );
       },
     );
+  }
+
+  static String formatDateOnly(String date) {
+    final parsedDate = DateTime.tryParse(date);
+    if (parsedDate == null) return '';
+    return DateFormat('dd/MM/yyyy','en').format(parsedDate);
   }
 
   static TimePickerThemeData _timePickerTheme() {
