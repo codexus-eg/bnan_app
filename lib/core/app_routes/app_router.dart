@@ -332,7 +332,15 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.classesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const ClassesManagementView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
+              ),
+              BlocProvider(create: (_) => getIt<ClassroomActionsCubit>()),
+            ],
+            child: const ClassroomsManagementView(),
+          ),
           key: state.pageKey,
         ),
       ),
@@ -367,7 +375,7 @@ GoRouter buildRouter() {
        GoRoute(
         path: Routes.classRoomManagement,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const ClassroomManagementView(),
+          child: const GradesManagementView(),
           key: state.pageKey,
         ),
       ),

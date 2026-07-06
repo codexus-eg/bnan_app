@@ -28,13 +28,11 @@ class ClassMetaRow extends StatelessWidget {
             ).copyWith(color: ColorManager.grey7D7D),
           ),
           if (spacing == true) ...[Spacer()],
-          Expanded(
-            child: Text(
-              value,
-              style: StylesManager.styleRegular10(
-                context,
-              ).copyWith(color: ColorManager.greyA8AF),
-            ),
+          Text(
+            value,
+            style: StylesManager.styleRegular10(
+              context,
+            ).copyWith(color: ColorManager.greyA8AF),
           ),
         ],
       ),

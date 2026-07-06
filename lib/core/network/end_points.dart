@@ -111,6 +111,10 @@ abstract class EndPoints {
 
   static String createClassroom = classrooms;
 
+  static String updateClassroom(String classroomId) {
+    return '$classrooms/$classroomId';
+  }
+
   static String deleteClassroom(String classroomId) {
     return '$classrooms/$classroomId';
   }

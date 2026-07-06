@@ -1,6 +1,6 @@
 import 'package:bnan_app/features/student_auth/data/models/subject_model.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
-import 'package:bnan_app/features/teacher_registration/presentation/views/widgets/teacher_grades_subjects_data/custom_option.dart';
+import 'package:bnan_app/core/shared_widget/custom_option.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/views/widgets/teacher_shared_widgets/teacher_yes_no_question/teacher_question_title.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
