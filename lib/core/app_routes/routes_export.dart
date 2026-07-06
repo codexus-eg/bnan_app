@@ -47,8 +47,10 @@ export 'package:bnan_app/features/shared_profile/presentation/views/edit_phone_v
 export 'package:bnan_app/features/shared_profile/presentation/views/update_password_view.dart';
 export 'package:bnan_app/features/class_schedules/presentation/views/class_schedules_view.dart';
 export 'package:bnan_app/features/admin/presentation/views/admin_home_view.dart';
-export 'package:bnan_app/features/classes_management/presentation/views/classes_management_view.dart';
-export 'package:bnan_app/features/classroom_management/presentation/views/classroom_management_view.dart';
+export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
+export 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
+export 'package:bnan_app/features/classrooms_management/presentation/views/classrooms_management_view.dart';
+export 'package:bnan_app/features/grades_management/presentation/views/grades_management_view.dart';
 export 'package:bnan_app/features/curriculum_management/presentation/views/curriculum_management_view.dart';
 export 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
