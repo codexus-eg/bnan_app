@@ -16,22 +16,49 @@ class AdminHomeShell extends StatefulWidget {
 class _AdminHomeShellState extends State<AdminHomeShell> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int currentIndex = 0;
+  static const int subjectAssignmentDrawerIndex = 2;
+  static const int classesDrawerIndex = 5;
   static const int notificationsDrawerIndex = 9;
 
   void _changeIndex(int index) => setState(() => currentIndex = index);
   void _goHomeTab() => setState(() => currentIndex = 0);
   void _openDrawer() => scaffoldKey.currentState?.openDrawer();
+  void _closeDrawer() {
+    scaffoldKey.currentState?.closeDrawer();
+  }
+
+  static const Map<int, int> drawerToBottomNavIndex = {
+    0: 0,
+    1: 1,
+    6: 3,
+    4: 3,
+    8: 1,
+    10: 4,
+  };
 
   void _onDrawerItemTap(int index) {
-    scaffoldKey.currentState?.closeDrawer();
-     if (index == 2) {
+    final bottomNavIndex = drawerToBottomNavIndex[index];
+
+    _closeDrawer();
+
+    if (bottomNavIndex != null) {
+      _changeIndex(bottomNavIndex);
+      return;
+    }
+
+    _goHomeTab();
+    _navigateFromDrawer(index);
+  }
+
+  void _navigateFromDrawer(int index) {
+    if (index == subjectAssignmentDrawerIndex) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
-    }
-     if (index == 5) {
+    } else if (index == classesDrawerIndex) {
       MyNavigator.goTo(context, Routes.classesManagement);
-    }
-    if (index == notificationsDrawerIndex) {
+    } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
+    } else if (index == 2) {
+      MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
     }
   }
 
@@ -43,7 +70,11 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       child: PopScope(
         canPop: currentIndex == 0,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop && currentIndex != 0) _goHomeTab();
+          if (didPop) return;
+
+          if (currentIndex != 0) {
+            _goHomeTab();
+          }
         },
         child: Scaffold(
           key: scaffoldKey,
@@ -53,10 +84,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
                   onLogoutTap: _logout,
                 )
               : null,
-          body: AdminHomeBody(
-            index: currentIndex,
-            onMenuTap: _openDrawer,
-          ),
+          body: AdminHomeBody(index: currentIndex, onMenuTap: _openDrawer),
           bottomNavigationBar: AdminBottomNavBar(
             currentIndex: currentIndex,
             onTap: _changeIndex,

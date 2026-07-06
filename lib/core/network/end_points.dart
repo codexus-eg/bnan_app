@@ -22,6 +22,11 @@ abstract class EndPoints {
   static const String users = '/users';
   static const String teachingAssignments = '/teachers/teaching-assignments';
   static const String classrooms = '/classrooms';
+  static const String subjects = '/subjects';
+
+  static String subjectById(String subjectId) {
+    return '$subjects/$subjectId';
+  }
 
   static String curriculumPackages(String curriculumId) {
     return '/packages/curriculum/$curriculumId';

@@ -1,12 +1,13 @@
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/utils/assets.dart';
-import 'package:bnan_app/features/subjects_management/presentation/widgets/dialogs/add_subject_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SubjectManagementHeader extends StatelessWidget {
-  const SubjectManagementHeader({super.key});
+  const SubjectManagementHeader({super.key, required this.onAddTap});
+
+  final VoidCallback onAddTap;
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +23,7 @@ class SubjectManagementHeader extends StatelessWidget {
           AddNewTopicButton(
             title: S.of(context).addSubject,
             path: ImageManager.userAdd,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (_) => const AddSubjectDialog(),
-              );
-            },
+            onTap: onAddTap,
             padding: EdgeInsetsDirectional.symmetric(
               vertical: 6,
               horizontal: 30,

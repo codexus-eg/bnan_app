@@ -11,7 +11,7 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 
 class AcademicLookupsRepoImpl implements AcademicLookupsRepo {
-  const AcademicLookupsRepoImpl({required this.apiConsumer});
+  const AcademicLookupsRepoImpl(this.apiConsumer);
 
   final ApiConsumer apiConsumer;
 
@@ -54,34 +54,34 @@ class AcademicLookupsRepoImpl implements AcademicLookupsRepo {
   }
 
   @override
-Future<Either<Failure, List<AcademicSubjectModel>>> getSubjects({
-  required String curriculumId,
-  required String gradeId,
-  String? classroomId,
-}) {
-  return _guard(() async {
-    if (classroomId == null || classroomId.isEmpty) {
-      return _getCurriculumSubjects(curriculumId, gradeId);
-    }
+  Future<Either<Failure, List<AcademicSubjectModel>>> getSubjects({
+    required String curriculumId,
+    required String gradeId,
+    String? classroomId,
+  }) {
+    return _guard(() async {
+      if (classroomId == null || classroomId.isEmpty) {
+        return _getCurriculumSubjects(curriculumId, gradeId);
+      }
 
-    final response = await apiConsumer.get(
-      EndPoints.classroomSubjectsDetails(classroomId),
-      isProtected: true,
-    );
+      final response = await apiConsumer.get(
+        EndPoints.classroomSubjectsDetails(classroomId),
+        isProtected: true,
+      );
 
-    final data = _asMap(response)['data'];
-    if (data is! Map) return [];
+      final data = _asMap(response)['data'];
+      if (data is! Map) return [];
 
-    final subjects = data['subjects'];
-    return subjects is List
-        ? subjects
-            .whereType<Map<String, dynamic>>()
-            .map(AcademicSubjectModel.fromJson)
-            .where((item) => item.id.isNotEmpty)
-            .toList()
-        : [];
-  });
-}
+      final subjects = data['subjects'];
+      return subjects is List
+          ? subjects
+                .whereType<Map<String, dynamic>>()
+                .map(AcademicSubjectModel.fromJson)
+                .where((item) => item.id.isNotEmpty)
+                .toList()
+          : [];
+    });
+  }
 
   Future<List<AcademicSubjectModel>> _getCurriculumSubjects(
     String curriculumId,
@@ -95,8 +95,6 @@ Future<Either<Failure, List<AcademicSubjectModel>>> getSubjects({
     );
     return _dataList(response).map(AcademicSubjectModel.fromJson).toList();
   }
-
-  
 
   Future<Either<Failure, T>> _guard<T>(Future<T> Function() request) async {
     try {
@@ -113,7 +111,7 @@ Future<Either<Failure, List<AcademicSubjectModel>>> getSubjects({
     return data is List ? data.whereType<Map<String, dynamic>>().toList() : [];
   }
 
-    Map<String, dynamic> _asMap(Object? response) {
+  Map<String, dynamic> _asMap(Object? response) {
     return response is Map ? Map<String, dynamic>.from(response) : {};
   }
 }

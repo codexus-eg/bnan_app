@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
@@ -83,7 +83,7 @@ class StudentInfoStep extends StatelessWidget {
                         name: selectedGrade.name,
                       );
 
-                      context.read<GetSubjectsCubit>().getCurriculumSubjects(
+                      context.read<GetCurriculmSubjectsCubit>().getCurriculumSubjects(
                             curriculumId: registerCubit.curriculumId,
                             gradeId: selectedGrade.id,
                           );

@@ -2,8 +2,8 @@ import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/data/models/subject_model.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_state.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_option_tile.dart';
@@ -18,7 +18,7 @@ class SubjectsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final registerCubit = RegisterCubit.get(context);
 
-    return BlocBuilder<GetSubjectsCubit, GetSubjectsState>(
+    return BlocBuilder<GetCurriculmSubjectsCubit, GetCurriculmSubjectsState>(
       builder: (context, state) {
         final isLoading = state is GetSubjectsLoading;
 
