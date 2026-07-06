@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'teacher_subject_assignment_actions_state.dart';
 
-class TeacherSubjectAssignmentActionsCubit extends Cubit<TeacherSubjectAssignmentActionsState> {
-  TeacherSubjectAssignmentActionsCubit(this.repo) : super(const TeacherSubjectAssignmentActionsInitial());
+class TeacherSubjectAssignmentActionsCubit
+    extends Cubit<TeacherSubjectAssignmentActionsState> {
+  TeacherSubjectAssignmentActionsCubit(this.repo)
+    : super(const TeacherSubjectAssignmentActionsInitial());
 
   final TeacherSubjectAssignmentRepo repo;
 
@@ -21,7 +23,7 @@ class TeacherSubjectAssignmentActionsCubit extends Cubit<TeacherSubjectAssignmen
       teacherId: teacherId,
       curriculumIds: curriculumIds,
     );
-    
+
     result.fold(
       (failure) => emit(AssignCurriculumsFailure(failure.message)),
       (response) => emit(AssignCurriculumsSuccess(response: response)),
@@ -38,10 +40,43 @@ class TeacherSubjectAssignmentActionsCubit extends Cubit<TeacherSubjectAssignmen
       teacherId: teacherId,
       assignments: assignments,
     );
-    
+
     result.fold(
       (failure) => emit(BulkAssignTeachingAssignmentsFailure(failure.message)),
-      (response) => emit(BulkAssignTeachingAssignmentsSuccess(response: response)),
+      (response) =>
+          emit(BulkAssignTeachingAssignmentsSuccess(response: response)),
+    );
+  }
+
+  Future<void> assignSubjectToTeacher({
+    required String teacherId,
+    required String curriculumId,
+    required TeachingAssignmentRequestModel assignment,
+  }) async {
+    emit(const BulkAssignTeachingAssignmentsLoading());
+
+    final curriculumResult = await repo.assignCurriculumsToTeacher(
+      teacherId: teacherId,
+      curriculumIds: [curriculumId],
+    );
+
+    await curriculumResult.fold(
+      (failure) async {
+        emit(BulkAssignTeachingAssignmentsFailure(failure.message));
+      },
+      (_) async {
+        final result = await repo.bulkAssignTeachingAssignments(
+          teacherId: teacherId,
+          assignments: [assignment],
+        );
+
+        result.fold(
+          (failure) =>
+              emit(BulkAssignTeachingAssignmentsFailure(failure.message)),
+          (response) =>
+              emit(BulkAssignTeachingAssignmentsSuccess(response: response)),
+        );
+      },
     );
   }
 }

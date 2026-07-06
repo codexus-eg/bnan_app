@@ -2,7 +2,7 @@ class TeachingAssignmentRequestModel {
   final String classroomId;
   final List<String> subjects;
 
-  TeachingAssignmentRequestModel({
+  const TeachingAssignmentRequestModel({
     required this.classroomId,
     required this.subjects,
   });

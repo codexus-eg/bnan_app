@@ -343,12 +343,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Email cannot be empty."),
         "emailRequired":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
-        "enableAccount":
-            MessageLookupByLibrary.simpleMessage("Enable account"),
-        "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
-            "Do you want to enable this account?"),
         "emiratiCurriculum":
             MessageLookupByLibrary.simpleMessage("Emirati Curriculum"),
+        "enableAccount": MessageLookupByLibrary.simpleMessage("Enable account"),
+        "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Do you want to enable this account?"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "errorBadCertificate":
             MessageLookupByLibrary.simpleMessage("Untrusted SSL certificate."),
@@ -744,16 +743,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Request New Lesson"),
         "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
             "Your request has been submitted and is now under review."),
-        "userCreatedSuccessfully":
-            MessageLookupByLibrary.simpleMessage("User created successfully"),
-        "userDeletedSuccessfully":
-            MessageLookupByLibrary.simpleMessage("User deleted successfully"),
-        "userPasswordUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-            "User password updated successfully"),
-        "userStatusUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-            "User status updated successfully"),
-        "userUpdatedSuccessfully":
-            MessageLookupByLibrary.simpleMessage("User updated successfully"),
         "resendCode": MessageLookupByLibrary.simpleMessage("Resend code?"),
         "resetCodeRequired": MessageLookupByLibrary.simpleMessage(
             "Please enter the verification code"),
@@ -888,9 +877,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your subscription ends in 5 days"),
         "subscriptions": MessageLookupByLibrary.simpleMessage("Subscriptions"),
         "sunday": MessageLookupByLibrary.simpleMessage("Sunday"),
-        "supervisor": MessageLookupByLibrary.simpleMessage("Supervisor"),
         "supervisedClasses":
             MessageLookupByLibrary.simpleMessage("Supervised classes"),
+        "supervisor": MessageLookupByLibrary.simpleMessage("Supervisor"),
         "supervisorRequired":
             MessageLookupByLibrary.simpleMessage("Supervisor is required"),
         "tabbyTamara":
@@ -988,9 +977,19 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Upload Schedule"),
         "usedDays": m23,
         "usedHours": m24,
+        "userCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("User created successfully"),
+        "userDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("User deleted successfully"),
         "userDetails": MessageLookupByLibrary.simpleMessage("User Details"),
         "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
+        "userPasswordUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "User password updated successfully"),
         "userRole": MessageLookupByLibrary.simpleMessage("User Role"),
+        "userStatusUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "User status updated successfully"),
+        "userUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("User updated successfully"),
         "usersCount": m25,
         "usersManagement":
             MessageLookupByLibrary.simpleMessage("Users Management"),
