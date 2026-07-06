@@ -1,31 +1,38 @@
-class TeacherSubjectAssignmentItem {
-  const TeacherSubjectAssignmentItem(this.teacherName, this.assignments);
-  final String teacherName;
-  final List<SubjectAssignmentItem> assignments;
-}
+import 'package:bnan_app/features/teacher_subject_assignment/data/models/assignment_row_item.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/teacher_subject_assignment_card_item.dart';
 
-class SubjectAssignmentItem {
-  const SubjectAssignmentItem(
-    this.subjectName,
-    this.gradeName,
-    this.curriculumName,
-  );
-  final String subjectName;
-  final String gradeName;
-  final String curriculumName;
-}
-
-const teacherSubjectAssignments = [
-  TeacherSubjectAssignmentItem('مس سارة أحمد', [
-    SubjectAssignmentItem('Math', 'الصف الرابع الإبتدائي', 'مصري'),
-    SubjectAssignmentItem('Math', 'الصف الرابع الإبتدائي', 'سعودي'),
-    SubjectAssignmentItem('Math', 'الصف الرابع الإبتدائي', 'مصري'),
-  ]),
-  TeacherSubjectAssignmentItem('مس سهيلة', [
-    SubjectAssignmentItem('English', 'الصف الثاني الثانوي', 'مصري'),
-    SubjectAssignmentItem('English', 'الصف الثاني الثانوي', 'سعودي'),
-  ]),
-  TeacherSubjectAssignmentItem('مستر عبدالفتاح', [
-    SubjectAssignmentItem('الرياضيات', 'الصف الثاني الثانوي', 'مصري'),
-  ]),
+final List<TeacherSubjectAssignmentCardItem> teacherSubjectMockData = [
+  TeacherSubjectAssignmentCardItem(
+    teacherId: '1',
+    teacherName: 'أحمد محمد',
+    rows: [
+      AssignmentRowItem(
+        subjectName: 'الرياضيات',
+        gradeName: 'الصف الأول',
+        curriculumName: 'المنهج المصري',
+        classroomName: '1 / A',
+        assignmentId: 'assignment-1',
+      ),
+      AssignmentRowItem(
+        subjectName: 'العلوم',
+        gradeName: 'الصف الثاني',
+        curriculumName: 'المنهج المصري',
+        classroomName: '2 / B',
+        assignmentId: 'assignment-2',
+      ),
+    ],
+  ),
+  TeacherSubjectAssignmentCardItem(
+    teacherId: '2',
+    teacherName: 'سارة علي',
+    rows: [
+      AssignmentRowItem(
+        subjectName: 'اللغة العربية',
+        gradeName: 'الصف الثالث',
+        curriculumName: 'المنهج السعودي',
+        classroomName: '3 / A',
+        assignmentId: 'assignment-3',
+      ),
+    ],
+  ),
 ];

@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
+import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo_impl.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_subject_details/get_subject_details_cubit.dart';
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
@@ -48,6 +50,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<TeacherSubjectAssignmentRepo>(
     () => TeacherSubjectAssignmentRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<AcademicLookupsRepo>(
+    () => AcademicLookupsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
   // Cubits
 

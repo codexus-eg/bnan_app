@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/data/models/teacher_subject_mock_data.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/data/teacher_subject_mock_data.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignments_cubit/teacher_subject_assignments_cubit.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/teacher_assignment_card.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/teacher_subject_assignment_card_item.dart';
