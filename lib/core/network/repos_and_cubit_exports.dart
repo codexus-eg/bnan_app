@@ -20,7 +20,7 @@ export 'package:bnan_app/features/student_auth/presentation/manager/reset_passwo
 export 'package:bnan_app/features/student_auth/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
-export 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
+export 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
 
 export 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 export 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_cubit.dart';

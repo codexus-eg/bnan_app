@@ -1,6 +1,9 @@
 import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_layout.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_placeholder_tab.dart';
+import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
+import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_management_body.dart';
 import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/users_management_body.dart';
@@ -28,7 +31,14 @@ class AdminHomeBody extends StatelessWidget {
         child: const UsersManagementBody(),
       ),
       AdminPlaceholderTab(title: s.adminSupervisors, onMenuTap: onMenuTap),
-      SubjectManagementBody(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => getIt<GetSubjectsCubit>()..getSubjects()),
+          BlocProvider(create: (_) => getIt<SubjectActionsCubit>()),
+          BlocProvider(create: (_) => getIt<AcademicLookupsCubit>()),
+        ],
+        child: const SubjectManagementBody(),
+      ),
       AdminPlaceholderTab(title: s.packages, onMenuTap: onMenuTap),
     ];
 

@@ -96,7 +96,7 @@ GoRouter buildRouter() {
                       getIt<GetGradesCubit>()
                         ..getCurriculumGrades(curriculumId: args.curriculumId),
                 ),
-                BlocProvider(create: (_) => getIt<GetSubjectsCubit>()),
+                BlocProvider(create: (_) => getIt<GetCurriculmSubjectsCubit>()),
               ],
               child: const StudentRegistrationView(),
             ),
@@ -268,7 +268,7 @@ GoRouter buildRouter() {
                 create: (context) => GetGradesCubit(getIt<AuthRepo>()),
               ),
               BlocProvider(
-                create: (context) => GetSubjectsCubit(getIt<AuthRepo>()),
+                create: (context) => GetCurriculmSubjectsCubit(getIt<AuthRepo>()),
               ),
             ],
             child: const TeacherRegistrationView(),

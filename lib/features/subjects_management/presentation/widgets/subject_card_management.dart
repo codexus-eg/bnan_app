@@ -4,17 +4,18 @@ import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dar
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/subjects_management/data/models/subject_management_model.dart';
+import 'package:bnan_app/features/subjects_management/data/models/subject_response_model.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SubjectCardManagement extends StatelessWidget {
   const SubjectCardManagement({
     super.key,
-    required this.subjectManagementModel,
+    required this.subject,
     this.onEdit,
   });
-  final SubjectManagementModel subjectManagementModel;
+
+  final SubjectModel? subject;
   final VoidCallback? onEdit;
 
   @override
@@ -24,7 +25,7 @@ class SubjectCardManagement extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            subjectManagementModel.name,
+            subject?.name ?? 'اسم المادة',
             style: StylesManager.styleBold10(
               context,
             ).copyWith(color: ColorManager.mainColor14),
@@ -32,13 +33,9 @@ class SubjectCardManagement extends StatelessWidget {
           const SizedBox(height: 8),
           ClassMetaRow(
             label: S.of(context).curriculum,
-            value: subjectManagementModel.curriculum,
+            value: subject?.curriculum?.name ?? '---',
           ),
-          const SizedBox(height: 4),
-          ClassMetaRow(
-            label: S.of(context).grade,
-            value: subjectManagementModel.grade,
-          ),
+      
           const SizedBox(height: 8),
           ActionChipButton(
             title: S.of(context).edit,

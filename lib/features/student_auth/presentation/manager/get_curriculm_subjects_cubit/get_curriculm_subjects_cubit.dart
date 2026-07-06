@@ -1,9 +1,9 @@
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_subjects_cubit/get_subjects_state.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class GetSubjectsCubit extends Cubit<GetSubjectsState> {
-  GetSubjectsCubit(this.authRepo) : super(GetSubjectsInitial());
+class GetCurriculmSubjectsCubit extends Cubit<GetCurriculmSubjectsState> {
+  GetCurriculmSubjectsCubit(this.authRepo) : super(GetSubjectsInitial());
 
   final AuthRepo authRepo;
 
