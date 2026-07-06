@@ -2,6 +2,10 @@ import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
 import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo_impl.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/grades_management/data/repo/grades_repo.dart';
+import 'package:bnan_app/features/grades_management/data/repo/grades_repo_impl.dart';
+import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
+import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
 import 'package:bnan_app/features/subjects_management/data/repo/subjects_repo.dart';
 import 'package:bnan_app/features/subjects_management/data/repo/subjects_repo_imple.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
@@ -65,6 +69,8 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<SubjectsRepo>(
     () => SubjectsRepoImpl(getIt<ApiConsumer>()),
   );
+
+  getIt.registerLazySingleton<GradesRepo>(() => GradesRepoImpl(getIt()));
 
   // Cubits
 
@@ -187,4 +193,8 @@ void setupServiceLocator() {
   getIt.registerFactory<AcademicLookupsCubit>(
     () => AcademicLookupsCubit(repo: getIt<AcademicLookupsRepo>()),
   );
+  getIt.registerFactory<GetGradesmanagementCubit>(
+    () => GetGradesmanagementCubit(getIt()),
+  );
+  getIt.registerFactory<GradeActionsCubit>(() => GradeActionsCubit(getIt()));
 }

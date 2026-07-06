@@ -1,3 +1,6 @@
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
+import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
 
 import 'routes_export.dart';
 
@@ -268,7 +271,8 @@ GoRouter buildRouter() {
                 create: (context) => GetGradesCubit(getIt<AuthRepo>()),
               ),
               BlocProvider(
-                create: (context) => GetCurriculmSubjectsCubit(getIt<AuthRepo>()),
+                create: (context) =>
+                    GetCurriculmSubjectsCubit(getIt<AuthRepo>()),
               ),
             ],
             child: const TeacherRegistrationView(),
@@ -317,8 +321,9 @@ GoRouter buildRouter() {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) => getIt<TeacherSubjectAssignmentsCubit>()
-                  ..getTeacherTeachingAssignments(),
+                create: (_) =>
+                    getIt<TeacherSubjectAssignmentsCubit>()
+                      ..getTeacherTeachingAssignments(),
               ),
               BlocProvider(
                 create: (_) => getIt<TeacherSubjectAssignmentActionsCubit>(),
@@ -330,7 +335,7 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
-        path: Routes.classesManagement,
+        path: Routes.classRoomManagement,
         pageBuilder: (context, state) => buildTransitionPages(
           child: MultiBlocProvider(
             providers: [
@@ -372,10 +377,19 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
-       GoRoute(
-        path: Routes.classRoomManagement,
+      GoRoute(
+        path: Routes.gradesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const GradesManagementView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<GetGradesmanagementCubit>()..getGrades(),
+              ),
+              BlocProvider(create: (context) => getIt<GradeActionsCubit>()),
+              BlocProvider(create: (context) => getIt<AcademicLookupsCubit>()),
+            ],
+            child: const GradesManagementView(),
+          ),
           key: state.pageKey,
         ),
       ),

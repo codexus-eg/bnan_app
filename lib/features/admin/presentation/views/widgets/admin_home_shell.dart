@@ -54,11 +54,14 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     if (index == subjectAssignmentDrawerIndex) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
     } else if (index == classesDrawerIndex) {
-      MyNavigator.goTo(context, Routes.classesManagement);
+      MyNavigator.goTo(context, Routes.classRoomManagement);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == 2) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
+    }
+    else if (index == 7) {
+      MyNavigator.goTo(context, Routes.gradesManagement);
     }
   }
 
