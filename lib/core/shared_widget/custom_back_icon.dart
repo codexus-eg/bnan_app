@@ -37,9 +37,9 @@ class CustomBackIcon extends StatelessWidget {
     if (isIOS) {
       return isRtl
           ? CupertinoIcons.chevron_back
-          : CupertinoIcons.chevron_forward;
+          : CupertinoIcons.chevron_back;
     }
 
-    return isRtl ? Icons.arrow_back : Icons.arrow_forward;
+    return isRtl ? Icons.arrow_back : Icons.arrow_back;
   }
 }

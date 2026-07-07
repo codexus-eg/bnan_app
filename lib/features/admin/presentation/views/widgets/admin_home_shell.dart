@@ -31,7 +31,6 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     0: 0,
     1: 1,
     6: 3,
-    4: 3,
     8: 1,
     10: 4,
   };
@@ -60,7 +59,10 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     } else if (index == 2) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
     }
-    else if (index == 7) {
+    else if (index == 4) {
+      MyNavigator.goTo(context, Routes.teacherApplication);
+    }
+     else if (index == 7) {
       MyNavigator.goTo(context, Routes.gradesManagement);
     }
   }

@@ -1,23 +1,4 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
-import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
-import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo_impl.dart';
-import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
-import 'package:bnan_app/features/grades_management/data/repo/grades_repo.dart';
-import 'package:bnan_app/features/grades_management/data/repo/grades_repo_impl.dart';
-import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
-import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
-import 'package:bnan_app/features/subjects_management/data/repo/subjects_repo.dart';
-import 'package:bnan_app/features/subjects_management/data/repo/subjects_repo_imple.dart';
-import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
-import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_subject_details/get_subject_details_cubit.dart';
-import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
-import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo_impl.dart';
-import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
-import 'package:bnan_app/features/users_management/data/repo/users_management_repo.dart';
-import 'package:bnan_app/features/users_management/data/repo/users_management_repo_impl.dart';
-import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -71,6 +52,10 @@ void setupServiceLocator() {
   );
 
   getIt.registerLazySingleton<GradesRepo>(() => GradesRepoImpl(getIt()));
+
+  getIt.registerLazySingleton<TeacherRequestsRepo>(
+    () => TeacherRequestsRepoImpl(getIt()),
+  );
 
   // Cubits
 
@@ -197,4 +182,16 @@ void setupServiceLocator() {
     () => GetGradesmanagementCubit(getIt()),
   );
   getIt.registerFactory<GradeActionsCubit>(() => GradeActionsCubit(getIt()));
+
+  getIt.registerFactory<PendingTeacherRequestsCubit>(
+    () => PendingTeacherRequestsCubit(getIt()),
+  );
+
+  getIt.registerFactory<TeacherDetailsCubit>(
+    () => TeacherDetailsCubit(getIt()),
+  );
+
+  getIt.registerFactory<TeacherRequestActionsCubit>(
+    () => TeacherRequestActionsCubit(getIt()),
+  );
 }

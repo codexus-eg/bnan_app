@@ -1,6 +1,9 @@
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
+import 'package:bnan_app/features/teacher_application/presentation/manager/pending_teacher_requests_cubit/pending_teacher_requests_cubit.dart';
+import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_details_cubit/teacher_details_cubit.dart';
+import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_request_actions_cubit/teacher_request_actions_cubit.dart';
 
 import 'routes_export.dart';
 
@@ -366,8 +369,19 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.teacherApplication,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TeacherApplicationView(),
           key: state.pageKey,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<PendingTeacherRequestsCubit>()
+                      ..getPendingTeacherRequests(),
+              ),
+              BlocProvider(create: (_) => getIt<TeacherDetailsCubit>()),
+              BlocProvider(create: (_) => getIt<TeacherRequestActionsCubit>()),
+            ],
+            child: const TeacherApplicationView(),
+          ),
         ),
       ),
       GoRoute(
@@ -383,7 +397,8 @@ GoRouter buildRouter() {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => getIt<GetGradesmanagementCubit>()..getGrades(),
+                create: (context) =>
+                    getIt<GetGradesmanagementCubit>()..getGrades(),
               ),
               BlocProvider(create: (context) => getIt<GradeActionsCubit>()),
               BlocProvider(create: (context) => getIt<AcademicLookupsCubit>()),

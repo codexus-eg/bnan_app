@@ -24,6 +24,19 @@ abstract class EndPoints {
   static const String classrooms = '/classrooms';
   static const String subjects = '/subjects';
   static const String grades = '/grades';
+  static const String teachers = '/teachers';
+
+  static String teachersByStatus(String status) {
+    return '$teachers?status=$status';
+  }
+
+  static String teacherById(String teacherId) {
+    return '$teachers/$teacherId';
+  }
+
+  static String teacherStatus(String teacherId) {
+    return '$teachers/$teacherId/status';
+  }
 
   static String gradeById(String gradeId) {
     return '$grades/$gradeId';

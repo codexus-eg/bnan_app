@@ -4,7 +4,6 @@ import 'package:bnan_app/features/teacher_application/data/models/details_field_
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/details_fields_grid.dart';
 import 'package:flutter/material.dart';
 
-export 'package:bnan_app/features/teacher_application/data/models/details_field_data.dart';
 
 class DetailsSection extends StatelessWidget {
   const DetailsSection({super.key, required this.title, required this.fields});

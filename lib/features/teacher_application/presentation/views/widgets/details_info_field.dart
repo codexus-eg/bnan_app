@@ -24,9 +24,9 @@ class DetailsInfoField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: ColorManager.blueD0DE),
       ),
-      child: Text(
+      child: SelectableText(
+        selectionColor: ColorManager.green33B,
         '$label: $value',
-        softWrap: true,
         style: StylesManager.styleRegular12(
           context,
         ).copyWith(color: ColorManager.greyA8AF),

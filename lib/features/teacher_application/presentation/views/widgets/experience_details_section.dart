@@ -1,12 +1,13 @@
-import 'package:bnan_app/features/teacher_application/data/models/teacher_application_details_model.dart';
+import 'package:bnan_app/features/teacher_application/data/models/details_field_data.dart';
+import 'package:bnan_app/features/teacher_application/data/models/teacher_request_model.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/details_section.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ExperienceDetailsSection extends StatelessWidget {
-  const ExperienceDetailsSection({super.key, required this.details});
+  const ExperienceDetailsSection({super.key, required this.teacher});
 
-  final TeacherApplicationDetailsModel details;
+  final TeacherRequestModel teacher;
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +17,15 @@ class ExperienceDetailsSection extends StatelessWidget {
       fields: [
         DetailsFieldData(
           s.taughtOnlineBefore,
-          _yesNo(s, details.hasOnlineExperience),
+          _yesNo(s, teacher.hasOnlineTeachingExperience),
         ),
-        DetailsFieldData(s.gradeLevel, details.gradeLevel),
-        DetailsFieldData(s.platformsUsed, details.platformsUsed),
+        DetailsFieldData(s.gradeLevel, '-'),
+        DetailsFieldData(s.platformsUsed, '-'),
         DetailsFieldData(
           s.hasTeachingExperience,
-          _yesNo(s, details.hasExperience),
+          _yesNo(s, teacher.hasTeachingExperience),
         ),
-        DetailsFieldData(s.taughtSubjects, details.taughtSubjects),
+        DetailsFieldData(s.taughtSubjects, '-'),
       ],
     );
   }
