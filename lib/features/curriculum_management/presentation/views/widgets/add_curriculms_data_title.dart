@@ -3,7 +3,11 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
 
 class AddCurriculmsDataTitle extends StatelessWidget {
-  const AddCurriculmsDataTitle({super.key, required this.title, required this.subtitle});
+  const AddCurriculmsDataTitle({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
 
   final String title;
   final String subtitle;
@@ -15,7 +19,7 @@ class AddCurriculmsDataTitle extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-     title,
+          title,
           style: StylesManager.styleMedium14(
             context,
           ).copyWith(color: ColorManager.mainColor14),

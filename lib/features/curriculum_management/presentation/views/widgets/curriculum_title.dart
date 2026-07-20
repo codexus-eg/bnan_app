@@ -7,27 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CurriculumTitle extends StatelessWidget {
-  const CurriculumTitle({
-    super.key,
-    required this.curriculum,
-    this.onToggle,
-    required this.isExpanded,
-  });
-  final Function()? onToggle;
+  const CurriculumTitle({super.key, required this.curriculum});
   final CurriculumModel curriculum;
-  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-          onPressed: onToggle,
-          icon: Icon(
-            isExpanded ? Icons.expand_less : Icons.expand_more,
-            color: ColorManager.greyA8AF,
-          ),
-        ),
         SvgPicture.asset(
           ImageManager.teacherCurriculm,
           width: 16,

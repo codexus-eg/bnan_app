@@ -19,14 +19,14 @@ export 'package:bnan_app/features/student_auth/presentation/views/subscription_v
 export 'package:bnan_app/features/home_student/presentation/views/home_student_view.dart';
 export 'package:bnan_app/features/home_student/presentation/views/notifications_view.dart';
 
-export 'package:bnan_app/features/messages/presentation/views/chat_view.dart';
+export 'package:bnan_app/features/chats/presentation/views/chat_view.dart';
 
 export 'package:bnan_app/features/splash_and_onboarding/presentation/manager/onboarding_cubit/onboarding_cubit.dart';
 export 'package:bnan_app/features/splash_and_onboarding/presentation/manager/splash_cubit/splash_cubit.dart';
 export 'package:bnan_app/features/splash_and_onboarding/presentation/views/onboarding_view.dart';
 export 'package:bnan_app/features/splash_and_onboarding/presentation/views/splash_view.dart';
 
-export 'package:bnan_app/features/student_groups/presentation/views/groups_view.dart';
+export 'package:bnan_app/features/student_groups/presentation/views/student_groups_view.dart';
 export 'package:bnan_app/features/student_groups/presentation/views/request_lesson_view.dart';
 
 export 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,7 +59,6 @@ export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 export 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
 export 'package:bnan_app/features/teacher_application/presentation/views/teacher_application_view.dart';
 export 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
-export 'package:bnan_app/features/messages/presentation/views/messages_view.dart';
 export 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
 export 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
 export 'package:bnan_app/features/teacher_performance/presentation/views/teacher_performance_view.dart';

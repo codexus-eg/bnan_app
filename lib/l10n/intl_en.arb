@@ -761,5 +761,6 @@
     "parentThirdPreparatoryGrade": "Third Preparatory Grade",
     "classRoomManagement": "ClassRoom Management",
     "noInternetConnection": "No internet connection",
-    "noDataAvailable": "No information available now"
+    "noDataAvailable": "No information available now",
+    "sendNotificationToParentAndStudent": "Send notification to parent and student"
 }

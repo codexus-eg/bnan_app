@@ -18,7 +18,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
   int currentIndex = 0;
   static const int subjectAssignmentDrawerIndex = 2;
   static const int classesDrawerIndex = 5;
-  static const int notificationsDrawerIndex = 9;
+  static const int notificationsDrawerIndex = 10;
 
   void _changeIndex(int index) => setState(() => currentIndex = index);
   void _goHomeTab() => setState(() => currentIndex = 0);
@@ -31,7 +31,6 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     0: 0,
     1: 1,
     6: 3,
-    4: 3,
     8: 1,
     10: 4,
   };
@@ -54,11 +53,20 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     if (index == subjectAssignmentDrawerIndex) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
     } else if (index == classesDrawerIndex) {
-      MyNavigator.goTo(context, Routes.classesManagement);
+      MyNavigator.goTo(context, Routes.classRoomManagement);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == 2) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
+    }
+    else if (index == 4) {
+      MyNavigator.goTo(context, Routes.teacherApplication);
+    }
+     else if (index == 7) {
+      MyNavigator.goTo(context, Routes.gradesManagement);
+    }
+    else if (index == 9) {
+      MyNavigator.goTo(context, Routes.groups);
     }
   }
 

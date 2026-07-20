@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/action_chip.dart';
 import 'package:bnan_app/core/shared_widget/card_header.dart';
 import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
@@ -6,84 +7,110 @@ import 'package:bnan_app/core/shared_widget/info_text.dart';
 import 'package:bnan_app/core/shared_widget/status_action_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/teacher_application/data/models/teacher_application_details_mock_data.dart';
-import 'package:bnan_app/features/teacher_application/data/models/teacher_application_model.dart';
+import 'package:bnan_app/features/teacher_application/data/models/teacher_request_model.dart';
+import 'package:bnan_app/features/teacher_application/presentation/manager/pending_teacher_requests_cubit/pending_teacher_requests_cubit.dart';
+import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_request_actions_cubit/teacher_request_actions_cubit.dart';
+import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_request_actions_cubit/teacher_request_actions_state.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/teacher_application_details_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeacherApplicationCard extends StatelessWidget {
   const TeacherApplicationCard({super.key, required this.teacher});
-  final TeacherApplicationModel teacher;
+
+  final TeacherRequestModel teacher;
+
   @override
   Widget build(BuildContext context) {
-    return CustomDetailsWidgetBackground(
-      child: Column(
-        children: [
-          CardHeader(
-            name: teacher.teacherName,
-            phone: teacher.phone,
-            subtitle: teacher.status,
-          ),
-          const SizedBox(height: 8),
+    final s = S.of(context);
 
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocConsumer<TeacherRequestActionsCubit, TeacherRequestActionsState>(
+      listener: (context, state) {
+        if (state is ApproveTeacherRequestSuccess) {
+          context
+              .read<PendingTeacherRequestsCubit>()
+              .getPendingTeacherRequests();
+        }
+
+        if (state is RejectTeacherRequestSuccess) {
+          context
+              .read<PendingTeacherRequestsCubit>()
+              .getPendingTeacherRequests();
+        }
+
+        if (state is TeacherRequestActionsFailure) {
+          showCustomSnackBar(context, state.message, false);
+        }
+      },
+      builder: (context, state) {
+        return CustomDetailsWidgetBackground(
+          child: Column(
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClassMetaRow(
-                      label: '${S.of(context).specialization}: ',
+              CardHeader(
+                name: teacher.user.fullName,
+                phone: teacher.phone,
+                subtitle: teacher.status,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ClassMetaRow(
+                      label: '${s.specialization}: ',
                       value: teacher.specialization,
                     ),
-                    ClassMetaRow(
-                      label: '${S.of(context).subjects}: ',
-                      value: teacher.subjects.join('، '),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 30),
-              Expanded(
-                child: InfoText(
-                  label: S.of(context).experience,
-                  value: teacher.experienceYears,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              StatusActionButton(
-                title: S.of(context).accept,
-                icon: Icons.check,
-                backgroundColor: ColorManager.orangeF9,
-                onPressed: () {},
-              ),
-              StatusActionButton(onPressed: () {}),
-              ActionChipButton(
-                title: S.of(context).cv,
-                icon: ImageManager.fileIcon,
-                onTap: () {},
-              ),
-              ActionChipButton(
-                title: S.of(context).details,
-                icon: ImageManager.usersManagementEyeOpenIcon,
-                onTap: () => showDialog(
-                  context: context,
-                  builder: (_) => TeacherApplicationDetailsDialog(
-                    teacher: teacher,
-                    details: teacherApplicationDetailsMockData[teacher.id]!,
                   ),
-                ),
+                  const SizedBox(width: 30),
+                  Expanded(
+                    child: InfoText(
+                      label: s.experience,
+                      value: teacher.hasTeachingExperience ? s.yes : s.no,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  StatusActionButton(
+                    title: s.accept,
+                    icon: Icons.check,
+                    backgroundColor: ColorManager.orangeF9,
+                    onPressed: () {
+                      context
+                          .read<TeacherRequestActionsCubit>()
+                          .approveTeacherRequest(teacher.id);
+                    },
+                  ),
+                  StatusActionButton(
+                    onPressed: () {
+                      context
+                          .read<TeacherRequestActionsCubit>()
+                          .rejectTeacherRequest(teacher.id);
+                    },
+                  ),
+                  ActionChipButton(
+                    title: s.cv,
+                    icon: ImageManager.fileIcon,
+                    onTap: () {},
+                  ),
+                  ActionChipButton(
+                    title: s.details,
+                    icon: ImageManager.usersManagementEyeOpenIcon,
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (_) =>
+                          TeacherApplicationDetailsDialog(teacher: teacher),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

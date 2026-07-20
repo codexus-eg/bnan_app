@@ -12,7 +12,7 @@ abstract class Routes {
   static const String home = '/home';
   static const String notification = '/notification';
   static const String chat = '/chat';
-  static const String groups = '/groups';
+  static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
   static const String updatePhone = '/updatePhone';
   static const String updateUserName = '/updateUserName';
@@ -25,7 +25,7 @@ abstract class Routes {
   static const String teacherCertificates = '/teacherCertificates';
   static const String teacherRegistrationRequest =
       '/teacherRegistrationRequest';
-  static const String teacherChats = '/teacherChats';
+  static const String groups = '/groups';
   static const String teacherPerformance = '/teacherPerformance';
   static const String weeklyIdealStudents = '/weeklyIdealStudents';
   static const String weeklyEvaluations = '/weeklyEvaluations';
@@ -33,10 +33,10 @@ abstract class Routes {
   static const String parentCertificates = '/parentCertificates';
   static const String teacherSubjectAssignmentView =
       '/teacherSubjectAssignmentView';
-  static const String classesManagement = '/classesManagement';
+  static const String classRoomManagement = '/classRoomManagement';
   static const String curriculumManagement = '/curriculumManagement';
   static const String tablesManagement = '/tablesManagement';
   static const String teacherApplication = '/teacherApplication';
   static const String registrationRequests = '/registrationRequests';
-  static const String classRoomManagement = '/classRoomManagement';
+  static const String gradesManagement = '/gradesManagement';
 }

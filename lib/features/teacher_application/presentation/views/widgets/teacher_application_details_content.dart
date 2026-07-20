@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/teacher_application/data/models/teacher_application_details_model.dart';
+import 'package:bnan_app/features/teacher_application/data/models/teacher_request_model.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/bnan_teaching_details_section.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/evaluation_details_section.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/experience_details_section.dart';
@@ -8,19 +8,22 @@ import 'package:bnan_app/features/teacher_application/presentation/views/widgets
 import 'package:flutter/material.dart';
 
 class TeacherApplicationDetailsContent extends StatelessWidget {
-  const TeacherApplicationDetailsContent({super.key, required this.details});
+  const TeacherApplicationDetailsContent({
+    super.key,
+    required this.teacher,
+  });
 
-  final TeacherApplicationDetailsModel details;
+  final TeacherRequestModel teacher;
 
   @override
   Widget build(BuildContext context) {
     final sections = [
-      PersonalDetailsSection(details: details),
-      QualificationDetailsSection(details: details),
-      ExperienceDetailsSection(details: details),
-      BnanTeachingDetailsSection(details: details),
-      TechnicalSkillsDetailsSection(details: details),
-      EvaluationDetailsSection(details: details),
+      PersonalDetailsSection(teacher: teacher),
+      QualificationDetailsSection(teacher: teacher),
+      ExperienceDetailsSection(teacher: teacher),
+      BnanTeachingDetailsSection(teacher: teacher),
+      TechnicalSkillsDetailsSection(teacher: teacher),
+      EvaluationDetailsSection(teacher: teacher),
     ];
 
     return Column(

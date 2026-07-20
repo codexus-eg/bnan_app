@@ -6,12 +6,27 @@ class SessionManager {
 
   static final SessionManager instance = SessionManager._();
 
+  String? _userId;
+  String? _userRole;
+  String? _accessToken;
+  String? _refreshToken;
+
+  String? get userId => _userId;
+  String? get userRole => _userRole;
+  String? get accessToken => _accessToken;
+  String? get refreshToken => _refreshToken;
+
   Future<void> saveSession({
     required String accessToken,
     required String refreshToken,
     String? userId,
     String? userRole,
   }) async {
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
+    _userId = userId;
+    _userRole = userRole;
+
     await Future.wait([
       SecureCacheHelper.saveData(
         key: SecureCacheKeys.accessToken,
@@ -34,20 +49,50 @@ class SessionManager {
     ]);
   }
 
-  Future<String?> getAccessToken() {
-    return SecureCacheHelper.getData(key: SecureCacheKeys.accessToken);
+  Future<void> loadSession() async {
+    _accessToken = await SecureCacheHelper.getData(
+      key: SecureCacheKeys.accessToken,
+    );
+
+    _refreshToken = await SecureCacheHelper.getData(
+      key: SecureCacheKeys.refreshToken,
+    );
+
+    _userId = await SecureCacheHelper.getData(
+      key: SecureCacheKeys.userId,
+    );
+
+    _userRole = await SecureCacheHelper.getData(
+      key: SecureCacheKeys.userRole,
+    );
   }
 
-  Future<String?> getRefreshToken() {
-    return SecureCacheHelper.getData(key: SecureCacheKeys.refreshToken);
+  Future<String?> getAccessToken() async {
+    return _accessToken ??
+        await SecureCacheHelper.getData(
+          key: SecureCacheKeys.accessToken,
+        );
   }
 
-  Future<String?> getUserId() {
-    return SecureCacheHelper.getData(key: SecureCacheKeys.userId);
+  Future<String?> getRefreshToken() async {
+    return _refreshToken ??
+        await SecureCacheHelper.getData(
+          key: SecureCacheKeys.refreshToken,
+        );
   }
 
-  Future<String?> getUserRole() {
-    return SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
+  Future<String?> getUserId() async {
+    return _userId ??
+        await SecureCacheHelper.getData(
+          key: SecureCacheKeys.userId,
+        );
+  }
+
+  Future<String?> getUserRole() async {
+    return _userRole ??
+        await SecureCacheHelper.getData(
+          key: SecureCacheKeys.userRole,
+        );
   }
 
   Future<bool> isLoggedIn() async {
@@ -56,6 +101,11 @@ class SessionManager {
   }
 
   Future<void> clearSession() async {
+    _accessToken = null;
+    _refreshToken = null;
+    _userId = null;
+    _userRole = null;
+
     await SecureCacheHelper.clearAll();
   }
 }

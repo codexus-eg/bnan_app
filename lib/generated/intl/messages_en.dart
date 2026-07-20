@@ -801,6 +801,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "semesterTwo": MessageLookupByLibrary.simpleMessage("Semester 2"),
         "send": MessageLookupByLibrary.simpleMessage("Sent"),
         "sendCorrection": MessageLookupByLibrary.simpleMessage("Submit Grade"),
+        "sendNotificationToParentAndStudent":
+            MessageLookupByLibrary.simpleMessage(
+                "Send notification to parent and student"),
         "sendResetCode":
             MessageLookupByLibrary.simpleMessage("Send reset code"),
         "sendResetLink":
