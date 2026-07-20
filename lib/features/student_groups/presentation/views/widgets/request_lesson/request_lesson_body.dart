@@ -34,7 +34,7 @@ class _RequestLessonBodyState extends State<RequestLessonBody> {
       children: [
         SharedGroupHeader(
           title: S.of(context).requestNewLesson,
-          path: Routes.groups,
+          path: Routes.studentGroups,
           badgeTitle: S.of(context).myRequests,
           isIcon: false,
         ),

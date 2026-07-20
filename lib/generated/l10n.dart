@@ -6259,6 +6259,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Send notification to parent and student`
+  String get sendNotificationToParentAndStudent {
+    return Intl.message(
+      'Send notification to parent and student',
+      name: 'sendNotificationToParentAndStudent',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

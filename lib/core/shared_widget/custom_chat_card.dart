@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/shared_widget/custom_avatar.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/assets.dart';
@@ -24,6 +26,7 @@ class CustomChatCard extends StatelessWidget {
             const SizedBox(width: 7),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,

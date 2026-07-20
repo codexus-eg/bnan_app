@@ -11,9 +11,9 @@ class DioConsumer extends ApiConsumer {
   DioConsumer({required this.dio}) {
     dio.options = BaseOptions(
       baseUrl: EndPoints.baseUrl,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
-      sendTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(minutes: 2),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

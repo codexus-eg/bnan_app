@@ -1,6 +1,6 @@
 abstract class EndPoints {
   static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
-
+  static String get socketUrl => 'https://bnan.0xcode7.xyz';
   static const String register = '/auth/register';
   static const String login = '/auth/login';
   static const String forgotPassword = '/auth/forgotPassword';
@@ -25,6 +25,28 @@ abstract class EndPoints {
   static const String subjects = '/subjects';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
+  // Chats - Rooms
+  static const String createSupportRoom = '/chats/support-room';
+  static const String getMyChatRooms = '/chats/rooms';
+  static const String sendMessage = '/messages';
+
+  static String getChatRoom(String roomId) {
+    return '/chats/rooms/$roomId';
+  }
+
+  static String getRoomMessages(String roomId) {
+    return '/chats/rooms/$roomId/messages';
+  }
+
+  // Chats - Messages
+
+  static String editMessage(String messageId) {
+    return '/messages/$messageId';
+  }
+
+  static String deleteMessage(String messageId) {
+    return '/messages/$messageId';
+  }
 
   static String teachersByStatus(String status) {
     return '$teachers?status=$status';

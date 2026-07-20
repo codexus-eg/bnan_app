@@ -71,7 +71,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     if (index == requestLessonDrawerIndex) {
       MyNavigator.goTo(context, Routes.requestLesson);
     } else if (index == groupsDrawerIndex) {
-      MyNavigator.goTo(context, Routes.groups);
+      MyNavigator.goTo(context, Routes.studentGroups);
     } else if (index == notificationDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     }

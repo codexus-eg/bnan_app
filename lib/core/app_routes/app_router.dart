@@ -1,4 +1,8 @@
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
 import 'package:bnan_app/features/teacher_application/presentation/manager/pending_teacher_requests_cubit/pending_teacher_requests_cubit.dart';
@@ -158,16 +162,32 @@ GoRouter buildRouter() {
 
       GoRoute(
         path: Routes.chat,
-        pageBuilder: (context, state) =>
-            buildTransitionPages(child: const ChatView(), key: state.pageKey),
+        pageBuilder: (context, state) {
+          final roomId = state.extra as String;
+
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetRoomMessagesCubit>()
+                        ..initializeChat(roomId: roomId),
+                ),
+                BlocProvider(create: (_) => getIt<SendMessageCubit>()),
+              ],
+              child: ChatView(roomId: roomId),
+            ),
+          );
+        },
       ),
 
       GoRoute(
-        path: Routes.groups,
+        path: Routes.studentGroups,
         pageBuilder: (context, state) => buildTransitionPages(
           child: BlocProvider(
             create: (_) => getIt<GetMyEnrollmentsCubit>()..getMyEnrollments(),
-            child: const GroupsView(),
+            child: const StudentGroupsView(),
           ),
           key: state.pageKey,
         ),
@@ -254,9 +274,12 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
-        path: Routes.teacherChats,
+        path: Routes.groups,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const MessagesView(),
+          child: BlocProvider(
+            create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+            child: const GroupsView(),
+          ),
           key: state.pageKey,
         ),
       ),
