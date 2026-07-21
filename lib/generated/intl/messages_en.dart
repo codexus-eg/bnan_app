@@ -181,9 +181,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("Cardholder name"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("Card number"),
+        "certificateDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Certificate deleted successfully"),
         "certificateReceived": MessageLookupByLibrary.simpleMessage(
             "You received May certificate"),
         "certificates": MessageLookupByLibrary.simpleMessage("Certificates"),
+        "certificatesSentSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Certificates sent successfully"),
+        "certificatesWithoutArticle":
+            MessageLookupByLibrary.simpleMessage("Certificates"),
         "changePassword":
             MessageLookupByLibrary.simpleMessage("Change Password"),
         "changePasswordTitle":
@@ -800,6 +806,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "semesterThree": MessageLookupByLibrary.simpleMessage("Semester 3"),
         "semesterTwo": MessageLookupByLibrary.simpleMessage("Semester 2"),
         "send": MessageLookupByLibrary.simpleMessage("Sent"),
+        "sendAll": MessageLookupByLibrary.simpleMessage("Send All"),
         "sendCorrection": MessageLookupByLibrary.simpleMessage("Submit Grade"),
         "sendNotificationToParentAndStudent":
             MessageLookupByLibrary.simpleMessage(
@@ -808,6 +815,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Send reset code"),
         "sendResetLink":
             MessageLookupByLibrary.simpleMessage("Send reset Code"),
+        "sending": MessageLookupByLibrary.simpleMessage("Sending..."),
         "services": MessageLookupByLibrary.simpleMessage("Services"),
         "sessions": MessageLookupByLibrary.simpleMessage("Sessions"),
         "sessionsThisMonth":
@@ -957,6 +965,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "twoDaysAgo": MessageLookupByLibrary.simpleMessage("2 days ago"),
         "typeMessage":
             MessageLookupByLibrary.simpleMessage("Type message....."),
+        "unableToOpenFile":
+            MessageLookupByLibrary.simpleMessage("Unable to Open the file"),
         "underProcessing":
             MessageLookupByLibrary.simpleMessage("Under Processing"),
         "unexpectedError": MessageLookupByLibrary.simpleMessage(

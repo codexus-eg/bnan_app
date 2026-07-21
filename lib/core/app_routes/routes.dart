@@ -22,7 +22,7 @@ abstract class Routes {
   static const String adminHome = '/adminHome';
   static const String parentHome = '/parentHome';
   static const String teacherSections = '/teacherSections';
-  static const String teacherCertificates = '/teacherCertificates';
+  static const String certificatesManagement = '/certificatesManagement';
   static const String teacherRegistrationRequest =
       '/teacherRegistrationRequest';
   static const String groups = '/groups';

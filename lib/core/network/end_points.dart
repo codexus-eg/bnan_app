@@ -25,6 +25,10 @@ abstract class EndPoints {
   static const String subjects = '/subjects';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
+  static const String studentMonthlyCertificates =
+      '/certificates/student-monthly/';
+  static const String issueMonthlyCertificates =
+      '/certificates/student-monthly/issue';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
@@ -48,12 +52,28 @@ abstract class EndPoints {
     return '/messages/$messageId';
   }
 
+  static String monthlyCertificates({String? gradeId}) {
+    if (gradeId == null || gradeId.isEmpty) {
+      return '/certificates/monthly';
+    }
+
+    return '/certificates/monthly?gradeId=$gradeId';
+  }
+
   static String teachersByStatus(String status) {
     return '$teachers?status=$status';
   }
 
   static String teacherById(String teacherId) {
     return '$teachers/$teacherId';
+  }
+
+  static String certificateById(String certificateId) {
+    return '/certificates/$certificateId';
+  }
+
+  static String updateMonthlyCertificate(String certificateId) {
+    return '/certificates/$certificateId/student-monthly/';
   }
 
   static String teacherStatus(String teacherId) {
@@ -72,8 +92,14 @@ abstract class EndPoints {
     return '/packages/curriculum/$curriculumId';
   }
 
-  static String curriculumGrades(String curriculumId) {
-    return '/grades?curriculum=$curriculumId';
+  static String getGrades({String? curriculumId}) {
+    final id = curriculumId?.trim();
+
+    if (id == null || id.isEmpty) {
+      return '/grades';
+    }
+
+    return '/grades?curriculum=$id';
   }
 
   static String curriculumSubjects({

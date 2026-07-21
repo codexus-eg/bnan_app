@@ -6269,6 +6269,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Send All`
+  String get sendAll {
+    return Intl.message(
+      'Send All',
+      name: 'sendAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificates sent successfully`
+  String get certificatesSentSuccessfully {
+    return Intl.message(
+      'Certificates sent successfully',
+      name: 'certificatesSentSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sending...`
+  String get sending {
+    return Intl.message(
+      'Sending...',
+      name: 'sending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate deleted successfully`
+  String get certificateDeletedSuccessfully {
+    return Intl.message(
+      'Certificate deleted successfully',
+      name: 'certificateDeletedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to Open the file`
+  String get unableToOpenFile {
+    return Intl.message(
+      'Unable to Open the file',
+      name: 'unableToOpenFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificates`
+  String get certificatesWithoutArticle {
+    return Intl.message(
+      'Certificates',
+      name: 'certificatesWithoutArticle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

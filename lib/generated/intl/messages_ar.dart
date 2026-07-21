@@ -173,9 +173,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
+        "certificateDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الشهادة بنجاح"),
         "certificateReceived":
             MessageLookupByLibrary.simpleMessage("حصلت على شهادة شهر مايو"),
         "certificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
+        "certificatesSentSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إرسال الشهادات بنجاح"),
+        "certificatesWithoutArticle":
+            MessageLookupByLibrary.simpleMessage("شهادات"),
         "changePassword":
             MessageLookupByLibrary.simpleMessage("تغيير كلمة المرور"),
         "changePasswordTitle":
@@ -771,6 +777,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "semesterThree": MessageLookupByLibrary.simpleMessage("فصل ٣"),
         "semesterTwo": MessageLookupByLibrary.simpleMessage("فصل ٢"),
         "send": MessageLookupByLibrary.simpleMessage("أرسلت"),
+        "sendAll": MessageLookupByLibrary.simpleMessage("إرسال الكل"),
         "sendCorrection": MessageLookupByLibrary.simpleMessage("إرسال التصحيح"),
         "sendNotificationToParentAndStudent":
             MessageLookupByLibrary.simpleMessage(
@@ -779,6 +786,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
         "sendResetLink":
             MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
+        "sending": MessageLookupByLibrary.simpleMessage("جاري الإرسال..."),
         "services": MessageLookupByLibrary.simpleMessage("الخدمات"),
         "sessions": MessageLookupByLibrary.simpleMessage("حصة"),
         "sessionsThisMonth":
@@ -922,6 +930,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("باقة الـ 20 ساعة"),
         "twoDaysAgo": MessageLookupByLibrary.simpleMessage("منذ يومين"),
         "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة....."),
+        "unableToOpenFile":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل الملف "),
         "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
         "unexpectedError":
             MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع"),

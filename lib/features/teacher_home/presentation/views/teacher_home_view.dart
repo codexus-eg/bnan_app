@@ -63,7 +63,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       MyNavigator.goTo(context, Routes.notification);
     }
     if (index == 9) {
-      MyNavigator.goTo(context, Routes.teacherCertificates);
+      MyNavigator.goTo(context, Routes.certificatesManagement);
     }
   }
 
@@ -78,7 +78,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         canPop: currentIndex == 0,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-      
+
           if (currentIndex != 0) {
             _goHomeTab();
           }
@@ -91,10 +91,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
                   onLogoutTap: _logout,
                 )
               : null,
-          body: TeacherHomeBody(
-            index: currentIndex,
-            onMenuTap: _openDrawer,
-          ),
+          body: TeacherHomeBody(index: currentIndex, onMenuTap: _openDrawer),
           bottomNavigationBar: TeacherBottomNavBar(
             currentIndex: currentIndex,
             onTap: _changeIndex,

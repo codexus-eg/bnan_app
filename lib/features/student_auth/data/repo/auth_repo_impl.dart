@@ -154,7 +154,7 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final response = await apiConsumer.get(
         //TODO
-        EndPoints.curriculumGrades(curriculumId),
+        EndPoints.getGrades(curriculumId: curriculumId),
       );
 
       return Right(GradesResponseModel.fromJson(response));

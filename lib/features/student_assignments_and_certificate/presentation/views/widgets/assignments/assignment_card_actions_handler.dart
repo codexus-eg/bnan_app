@@ -43,9 +43,20 @@ class AssignmentCardActionsHandler extends StatelessWidget {
         return AssignmentActionButtons(
           showSubmit: showSubmit,
           isLoading: isLoading || isSubmitting,
-          onDownload: () {
+          onDownload: () async {
             if (isLoading) return;
-            FileUrlLauncher.download(assignment.attachment);
+
+            final isOpened = await FileUrlLauncher.open(assignment.attachment);
+
+            if (!context.mounted) return;
+
+            if (!isOpened) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(content: Text(S.of(context).unableToOpenFile)),
+                );
+            }
           },
           onSubmit: () async {
             if (isLoading || isSubmitting) return;
