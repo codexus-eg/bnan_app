@@ -1,11 +1,22 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class FileUrlLauncher {
-  static Future<bool> download(String url) async {
-    if (url.trim().isEmpty) return false;
+  const FileUrlLauncher._();
 
-    final uri = Uri.tryParse(url);
-    if (uri == null) return false;
+  static Future<bool> open(String url) async {
+    final value = url.trim();
+
+    if (value.isEmpty) return false;
+
+    final uri = Uri.tryParse(value);
+
+    if (uri == null || !uri.hasScheme) {
+      return false;
+    }
+
+    if (!await canLaunchUrl(uri)) {
+      return false;
+    }
 
     return launchUrl(
       uri,

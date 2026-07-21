@@ -762,5 +762,11 @@
     "classRoomManagement": "ClassRoom Management",
     "noInternetConnection": "No internet connection",
     "noDataAvailable": "No information available now",
-    "sendNotificationToParentAndStudent": "Send notification to parent and student"
+    "sendNotificationToParentAndStudent": "Send notification to parent and student",
+    "sendAll": "Send All",
+    "certificatesSentSuccessfully": "Certificates sent successfully",
+    "sending": "Sending...",
+    "certificateDeletedSuccessfully": "Certificate deleted successfully",
+    "unableToOpenFile": "Unable to Open the file",
+    "certificatesWithoutArticle": "Certificates"
 }

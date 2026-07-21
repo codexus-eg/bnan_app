@@ -3,24 +3,41 @@ class AcademicGradeModel {
     required this.id,
     required this.name,
     this.curriculumId,
+    this.curriculumName,
+    this.curriculumIcon,
   });
 
   final String id;
   final String name;
   final String? curriculumId;
+  final String? curriculumName;
+  final String? curriculumIcon;
 
   factory AcademicGradeModel.fromJson(Map<String, dynamic> json) {
+    final curriculum = json['curriculum'];
+
     return AcademicGradeModel(
-      id: _asString(json['id'] ?? json['_id']),
-      name: _asString(json['name']),
-      curriculumId: _asNullableString(json['curriculum']),
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      curriculumId: curriculum is Map
+          ? curriculum['id']?.toString()
+          : null,
+      curriculumName: curriculum is Map
+          ? curriculum['name']?.toString()
+          : null,
+      curriculumIcon: curriculum is Map
+          ? curriculum['icon']?.toString()
+          : null,
     );
   }
-}
 
-String _asString(dynamic value) => value?.toString().trim() ?? '';
+  String get displayName {
+    final curriculum = curriculumName?.trim();
 
-String? _asNullableString(dynamic value) {
-  final text = _asString(value);
-  return text.isEmpty ? null : text;
+    if (curriculum == null || curriculum.isEmpty) {
+      return name;
+    }
+
+    return '$name - $curriculum';
+  }
 }

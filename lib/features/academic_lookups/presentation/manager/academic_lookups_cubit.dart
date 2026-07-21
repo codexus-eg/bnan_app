@@ -17,7 +17,7 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
   final bool loadClassroomsOnGrade;
   final bool loadSubjectsWithoutClassroom;
 
-  final Map<String, List<AcademicGradeModel>> _gradesByCurriculum = {};
+  final Map<String, List<AcademicGradeModel>> _gradesByScope = {};
   final Map<String, List<AcademicClassroomModel>> _classroomsByGrade = {};
   final Map<String, List<AcademicSubjectModel>> _subjectsByScope = {};
 
@@ -52,28 +52,41 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
       ),
     );
     if (curriculum == null) return;
-    await _loadGrades(curriculum.id);
+    await loadGrades(curriculum.id);
   }
 
-  Future<void> selectGrade(AcademicGradeModel? grade) async {
-    if (state.selectedGrade?.id == grade?.id) return;
-    emit(
-      state.copyWith(
-        selectedGrade: grade,
-        selectedClassroom: null,
-        selectedSubject: null,
-        classrooms: const [],
-        subjects: const [],
-        errorMessage: null,
-      ),
-    );
-    final curriculum = state.selectedCurriculum;
-    if (curriculum == null || grade == null) return;
-    if (loadClassroomsOnGrade) await _loadClassrooms(curriculum.id, grade.id);
-    if (!loadClassroomsOnGrade && loadSubjectsWithoutClassroom) {
-      await _loadSubjects(curriculumId: curriculum.id, gradeId: grade.id);
-    }
+ Future<void> selectGrade(AcademicGradeModel? grade) async {
+  if (state.selectedGrade?.id == grade?.id) return;
+
+  emit(
+    state.copyWith(
+      selectedGrade: grade,
+      selectedClassroom: null,
+      selectedSubject: null,
+      classrooms: const [],
+      subjects: const [],
+      errorMessage: null,
+    ),
+  );
+
+  if (grade == null) return;
+
+  final curriculumId =
+      state.selectedCurriculum?.id ?? grade.curriculumId;
+
+  if (curriculumId == null || curriculumId.isEmpty) return;
+
+  if (loadClassroomsOnGrade) {
+    await _loadClassrooms(curriculumId, grade.id);
   }
+
+  if (!loadClassroomsOnGrade && loadSubjectsWithoutClassroom) {
+    await _loadSubjects(
+      curriculumId: curriculumId,
+      gradeId: grade.id,
+    );
+  }
+}
 
   Future<void> selectClassroom(AcademicClassroomModel? classroom) async {
     if (state.selectedClassroom?.id == classroom?.id) return;
@@ -100,18 +113,33 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
     emit(state.copyWith(selectedSubject: subject, errorMessage: null));
   }
 
-  Future<void> _loadGrades(String curriculumId) async {
-    final cached = _gradesByCurriculum[curriculumId];
-    if (cached != null) return emit(state.copyWith(grades: cached));
-    emit(state.copyWith(isLoadingGrades: true));
-    final result = await repo.getGradesByCurriculum(curriculumId);
-    if (state.selectedCurriculum?.id != curriculumId) return;
+  Future<void> loadGrades([String? curriculumId]) async {
+    final cacheKey = curriculumId == null || curriculumId.isEmpty
+        ? 'all'
+        : 'curriculum:$curriculumId';
+
+    final cached = _gradesByScope[cacheKey];
+
+    if (cached != null) {
+      emit(state.copyWith(grades: cached));
+      return;
+    }
+
+    emit(state.copyWith(isLoadingGrades: true, errorMessage: null));
+
+    final result = await repo.getGrades(curriculumId: curriculumId);
+
+    if (curriculumId != null && state.selectedCurriculum?.id != curriculumId) {
+      return;
+    }
+
     result.fold(
       (failure) => emit(
         state.copyWith(isLoadingGrades: false, errorMessage: failure.message),
       ),
       (items) {
-        _gradesByCurriculum[curriculumId] = items;
+        _gradesByScope[cacheKey] = items;
+
         emit(state.copyWith(grades: items, isLoadingGrades: false));
       },
     );

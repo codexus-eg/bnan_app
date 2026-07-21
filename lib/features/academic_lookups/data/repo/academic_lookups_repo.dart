@@ -8,8 +8,8 @@ import 'package:dartz/dartz.dart';
 abstract class AcademicLookupsRepo {
   Future<Either<Failure, List<AcademicCurriculumModel>>> getCurriculums();
 
-  Future<Either<Failure, List<AcademicGradeModel>>> getGradesByCurriculum(
-    String curriculumId,
+  Future<Either<Failure, List<AcademicGradeModel>>> getGrades(
+  {  String? curriculumId,}
   );
 
   Future<Either<Failure, List<AcademicClassroomModel>>> getClassroomsByGrade({

@@ -1,4 +1,8 @@
+import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/delete_monthly_certificate_cubit/delete_monthly_certificate_cubit.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_monthly_certificates_cubit/get_monthly_certificates_cubit.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/issue_monthly_certificates_cubit/issue_monthly_certificates_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
@@ -260,9 +264,31 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
-        path: Routes.teacherCertificates,
+        path: Routes.certificatesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TeacherCertificatesView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<DeleteMonthlyCertificateCubit>(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    getIt<GetMonthlyCertificatesCubit>()
+                      ..getMonthlyCertificates(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => AcademicLookupsCubit(
+                  repo: getIt<AcademicLookupsRepo>(),
+                  loadClassroomsOnGrade: false,
+                  loadSubjectsWithoutClassroom: false,
+                )..loadGrades(),
+              ),
+            ],
+            child: const CertificatesManagementView(),
+          ),
           key: state.pageKey,
         ),
       ),

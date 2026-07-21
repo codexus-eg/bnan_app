@@ -60,6 +60,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<ChatRepo>(
     () => ChatRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<CertificatesManagementRepo>(
+    () => CertificatesManagementRepoImpl(getIt<ApiConsumer>()),
+  );
 
   getIt.registerLazySingleton<GradesRepo>(() => GradesRepoImpl(getIt()));
 
@@ -67,7 +70,9 @@ void setupServiceLocator() {
     () => TeacherRequestsRepoImpl(getIt()),
   );
 
+
   // Cubits
+
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 
@@ -192,6 +197,24 @@ void setupServiceLocator() {
     () => GetGradesmanagementCubit(getIt()),
   );
   getIt.registerFactory<GradeActionsCubit>(() => GradeActionsCubit(getIt()));
+  getIt.registerFactory<GetMonthlyCertificatesCubit>(
+    () => GetMonthlyCertificatesCubit(getIt<CertificatesManagementRepo>()),
+  );
+  getIt.registerFactory<GetCertificateDetailsCubit>(
+    () => GetCertificateDetailsCubit(getIt<CertificatesManagementRepo>()),
+  );
+  getIt.registerFactory<CreateMonthlyCertificateCubit>(
+    () => CreateMonthlyCertificateCubit(getIt<CertificatesManagementRepo>()),
+  );
+  getIt.registerFactory<UpdateMonthlyCertificateCubit>(
+    () => UpdateMonthlyCertificateCubit(getIt<CertificatesManagementRepo>()),
+  );
+  getIt.registerFactory<IssueMonthlyCertificatesCubit>(
+    () => IssueMonthlyCertificatesCubit(getIt<CertificatesManagementRepo>()),
+  );
+  getIt.registerFactory<DeleteMonthlyCertificateCubit>(
+    () => DeleteMonthlyCertificateCubit(getIt<CertificatesManagementRepo>()),
+  );
 
   getIt.registerFactory<PendingTeacherRequestsCubit>(
     () => PendingTeacherRequestsCubit(getIt()),

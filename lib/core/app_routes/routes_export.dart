@@ -58,7 +58,7 @@ export 'package:bnan_app/features/registration_requests/presentation/view/regist
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 export 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
 export 'package:bnan_app/features/teacher_application/presentation/views/teacher_application_view.dart';
-export 'package:bnan_app/features/teacher_certificates/presentation/views/teacher_certificates_view.dart';
+export 'package:bnan_app/features/certificates_management/presentation/views/certificates_management_view.dart';
 export 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';
 export 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
 export 'package:bnan_app/features/teacher_performance/presentation/views/teacher_performance_view.dart';

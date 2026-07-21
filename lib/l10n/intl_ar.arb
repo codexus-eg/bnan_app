@@ -762,5 +762,11 @@
     "classRoomManagement": "إدراة الصفوف",
     "noInternetConnection": "لا يوجد اتصال بالإنترنت",
     "noDataAvailable": "لا يوجد معلومات حاليا",
-    "sendNotificationToParentAndStudent": "إرسال إشعار لولي الأمر والطالب"
+    "sendNotificationToParentAndStudent": "إرسال إشعار لولي الأمر والطالب",
+    "sendAll": "إرسال الكل",
+    "certificatesSentSuccessfully": "تم إرسال الشهادات بنجاح",
+    "sending": "جاري الإرسال...",
+    "certificateDeletedSuccessfully": "تم حذف الشهادة بنجاح",
+    "unableToOpenFile": "تعذر تحميل الملف ",
+    "certificatesWithoutArticle": "شهادات"
 }
