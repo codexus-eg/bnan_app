@@ -3090,6 +3090,16 @@ class S {
     );
   }
 
+  /// `All students`
+  String get allStudents {
+    return Intl.message(
+      'All students',
+      name: 'allStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Classes`
   String get classes {
     return Intl.message(
@@ -4540,6 +4550,16 @@ class S {
     );
   }
 
+  /// `All grades`
+  String get allGrades {
+    return Intl.message(
+      'All grades',
+      name: 'allGrades',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete assignment`
   String get deleteAssignment {
     return Intl.message(
@@ -4825,6 +4845,76 @@ class S {
     return Intl.message(
       'Upload Schedule',
       name: 'uploadSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule added successfully`
+  String get scheduleCreatedSuccessfully {
+    return Intl.message(
+      'Schedule added successfully',
+      name: 'scheduleCreatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose schedule image`
+  String get chooseScheduleImage {
+    return Intl.message(
+      'Choose schedule image',
+      name: 'chooseScheduleImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose a schedule image`
+  String get scheduleImageRequired {
+    return Intl.message(
+      'Please choose a schedule image',
+      name: 'scheduleImageRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a classroom`
+  String get classroomRequired {
+    return Intl.message(
+      'Please select a classroom',
+      name: 'classroomRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete schedule`
+  String get deleteSchedule {
+    return Intl.message(
+      'Delete schedule',
+      name: 'deleteSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this schedule?`
+  String get deleteScheduleConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this schedule?',
+      name: 'deleteScheduleConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule deleted successfully`
+  String get scheduleDeletedSuccessfully {
+    return Intl.message(
+      'Schedule deleted successfully',
+      name: 'scheduleDeletedSuccessfully',
       desc: '',
       args: [],
     );

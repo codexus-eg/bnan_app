@@ -71,6 +71,9 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     else if (index == 11) {
       MyNavigator.goTo(context, Routes.certificatesManagement);
     }
+    else if (index == 12) {
+      MyNavigator.goTo(context, Routes.tablesManagement);
+    }
   }
 
   void _logout() => MyNavigator.goToOffAll(context, Routes.logIn);

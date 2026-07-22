@@ -124,6 +124,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "algebraCourseCertificate": MessageLookupByLibrary.simpleMessage(
             "Algebra Course Completion Certificate"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
+        "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
+        "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "amount": MessageLookupByLibrary.simpleMessage("Amount"),
@@ -220,6 +222,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseGrade": MessageLookupByLibrary.simpleMessage("Choose grade"),
         "chooseNewCurriculum":
             MessageLookupByLibrary.simpleMessage("Choose curriculum"),
+        "chooseScheduleImage":
+            MessageLookupByLibrary.simpleMessage("Choose schedule image"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("Choose subject"),
         "city": MessageLookupByLibrary.simpleMessage("City"),
         "classDetails": MessageLookupByLibrary.simpleMessage("Class Details"),
@@ -237,6 +241,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesCount": MessageLookupByLibrary.simpleMessage("Classes"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("Classes Management"),
+        "classroomRequired":
+            MessageLookupByLibrary.simpleMessage("Please select a classroom"),
         "close": MessageLookupByLibrary.simpleMessage("Close"),
         "completed": MessageLookupByLibrary.simpleMessage("Completed"),
         "completedSessions":
@@ -303,6 +309,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteGrade": MessageLookupByLibrary.simpleMessage("Delete grade"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this grade?"),
+        "deleteSchedule":
+            MessageLookupByLibrary.simpleMessage("Delete schedule"),
+        "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this schedule?"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("Delivery date"),
         "desiredSubjects":
             MessageLookupByLibrary.simpleMessage("Desired subjects"),
@@ -789,6 +799,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "saveAmount": m19,
         "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
+        "scheduleCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("Schedule added successfully"),
+        "scheduleDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Schedule deleted successfully"),
+        "scheduleImageRequired": MessageLookupByLibrary.simpleMessage(
+            "Please choose a schedule image"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "Next week schedule was updated"),
         "science": MessageLookupByLibrary.simpleMessage("Science"),

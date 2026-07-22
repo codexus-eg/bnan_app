@@ -63,6 +63,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<CertificatesManagementRepo>(
     () => CertificatesManagementRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<TableManagementRepo>(
+    () => TableManagementRepoImpl(getIt<ApiConsumer>()),
+  );
 
   getIt.registerLazySingleton<GradesRepo>(() => GradesRepoImpl(getIt()));
 
@@ -70,9 +73,7 @@ void setupServiceLocator() {
     () => TeacherRequestsRepoImpl(getIt()),
   );
 
-
   // Cubits
-
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 
@@ -214,6 +215,18 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<DeleteMonthlyCertificateCubit>(
     () => DeleteMonthlyCertificateCubit(getIt<CertificatesManagementRepo>()),
+  );
+  getIt.registerFactory<GetEgyptianSchedulesCubit>(
+    () => GetEgyptianSchedulesCubit(getIt<TableManagementRepo>()),
+  );
+  getIt.registerFactory<CreateEgyptianScheduleCubit>(
+    () => CreateEgyptianScheduleCubit(getIt<TableManagementRepo>()),
+  );
+  getIt.registerFactory<DeleteEgyptianScheduleCubit>(
+    () => DeleteEgyptianScheduleCubit(getIt<TableManagementRepo>()),
+  );
+  getIt.registerFactory<GetEgyptianScheduleByClassroomCubit>(
+    () => GetEgyptianScheduleByClassroomCubit(getIt<TableManagementRepo>()),
   );
 
   getIt.registerFactory<PendingTeacherRequestsCubit>(

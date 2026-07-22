@@ -12,6 +12,9 @@ import 'package:bnan_app/features/grades_management/presentation/manager/get_gra
 import 'package:bnan_app/features/teacher_application/presentation/manager/pending_teacher_requests_cubit/pending_teacher_requests_cubit.dart';
 import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_details_cubit/teacher_details_cubit.dart';
 import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_request_actions_cubit/teacher_request_actions_cubit.dart';
+import 'package:bnan_app/features/tables_management/presentation/manager/create_egyptian_schedule_cubit/create_egyptian_schedule_cubit.dart';
+import 'package:bnan_app/features/tables_management/presentation/manager/delete_egyptian_schedule_cubit/delete_egyptian_schedule_cubit.dart';
+import 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedules_cubit/get_egyptian_schedules_cubit.dart';
 
 import 'routes_export.dart';
 
@@ -411,7 +414,24 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.tablesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TablesManagementView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<GetEgyptianSchedulesCubit>()..getEgyptianSchedules(),
+              ),
+              BlocProvider(create: (_) => getIt<CreateEgyptianScheduleCubit>()),
+              BlocProvider(create: (_) => getIt<DeleteEgyptianScheduleCubit>()),
+              BlocProvider(
+                create: (_) => AcademicLookupsCubit(
+                  repo: getIt<AcademicLookupsRepo>(),
+                  loadClassroomsOnGrade: false,
+                  loadSubjectsWithoutClassroom: false,
+                )..loadGrades(),
+              ),
+            ],
+            child: const TablesManagementView(),
+          ),
           key: state.pageKey,
         ),
       ),

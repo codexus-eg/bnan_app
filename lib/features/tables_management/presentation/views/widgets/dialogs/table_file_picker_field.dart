@@ -10,31 +10,41 @@ class TableFilePickerField extends StatelessWidget {
     super.key,
     required this.label,
     required this.hint,
+    this.onTap,
+    this.hasFile = false,
   });
 
   final String label;
   final String hint;
+  final VoidCallback? onTap;
+  final bool hasFile;
 
   @override
   Widget build(BuildContext context) {
-    return CustomTextField(
-      label: label,
-      hintText: hint,
-      readOnly: true,
-      labelColor: ColorManager.mainColor14,
-      hintStyle: StylesManager.styleRegular16(
-        context,
-      ).copyWith(color: ColorManager.greyA8AF),
-      prefixIcon: Padding(
-        padding: const EdgeInsetsDirectional.only(start: 8,end: 4),
-        child: SizedBox(
-          height: 16,
-          width: 16,
-          child: SvgPicture.asset(
-            ImageManager.teacherAssignmentPaperclipIcon,
-            colorFilter: const ColorFilter.mode(
-              ColorManager.greyA8AF,
-              BlendMode.srcIn,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AbsorbPointer(
+        child: CustomTextField(
+          label: label,
+          hintText: hint,
+          readOnly: true,
+          labelColor: ColorManager.mainColor14,
+          hintStyle: StylesManager.styleRegular16(context).copyWith(
+            color: hasFile ? ColorManager.mainColor14 : ColorManager.greyA8AF,
+          ),
+          prefixIcon: Padding(
+            padding: const EdgeInsetsDirectional.only(start: 8, end: 4),
+            child: SizedBox(
+              height: 16,
+              width: 16,
+              child: SvgPicture.asset(
+                ImageManager.teacherAssignmentPaperclipIcon,
+                colorFilter: const ColorFilter.mode(
+                  ColorManager.greyA8AF,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
         ),

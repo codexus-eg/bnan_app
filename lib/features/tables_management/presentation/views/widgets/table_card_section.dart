@@ -2,16 +2,23 @@ import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dar
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/tables_management/data/models/class_schedule_model.dart';
+import 'package:bnan_app/features/tables_management/data/models/egyptian_schedule_model.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TableCardSection extends StatelessWidget {
-  const TableCardSection({super.key, required this.scheduleModel});
-  final ClassScheduleModel scheduleModel;
+  const TableCardSection({super.key, required this.schedule, this.onDelete});
+
+  final EgyptianScheduleModel schedule;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
+    final classroomName =
+        schedule.classroom?.name ?? S.of(context).classSchedulesManagement;
+    final scheduleId = schedule.id ?? '';
+
     return CustomDetailsWidgetBackground(
       padding: EdgeInsets.zero,
       child: Column(
@@ -21,12 +28,7 @@ class TableCardSection extends StatelessWidget {
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
-            child: Image.asset(
-              scheduleModel.imagePath,
-              height: 193,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: _image(),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.only(
@@ -37,31 +39,75 @@ class TableCardSection extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      scheduleModel.curriculum,
-                      style: StylesManager.styleRegular10(
-                        context,
-                      ).copyWith(color: ColorManager.mainColor14),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${scheduleModel.grade} - ${scheduleModel.subject}',
-                      style: StylesManager.styleBold12(
-                        context,
-                      ).copyWith(color: ColorManager.greyA8AF),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        classroomName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: StylesManager.styleRegular10(
+                          context,
+                        ).copyWith(color: ColorManager.mainColor14),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        scheduleId,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: StylesManager.styleBold12(
+                          context,
+                        ).copyWith(color: ColorManager.greyA8AF),
+                      ),
+                    ],
+                  ),
                 ),
-                Spacer(),
-                SvgPicture.asset(ImageManager.trash, height: 24, width: 24),
+                const SizedBox(width: 8),
+                if (onDelete != null)
+                  InkWell(
+                    onTap: onDelete,
+                    child: SvgPicture.asset(
+                      ImageManager.trash,
+                      height: 24,
+                      width: 24,
+                    ),
+                  ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _image() {
+    final image = schedule.image;
+    final placeholder = EgyptianScheduleModel.placeholder.image!;
+
+    if (image == null || image.isEmpty) {
+      return _assetImage(placeholder);
+    }
+
+    if (!image.startsWith('http')) {
+      return _assetImage(image);
+    }
+
+    return Image.network(
+      image,
+      height: 193,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (_, _, _) => _assetImage(placeholder),
+    );
+  }
+
+  Widget _assetImage(String path) {
+    return Image.asset(
+      path,
+      height: 193,
+      width: double.infinity,
+      fit: BoxFit.cover,
     );
   }
 }

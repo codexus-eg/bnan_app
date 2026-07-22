@@ -122,6 +122,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "algebraCourseCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة إتمام دورة الجبر"),
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
+        "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
+        "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
         "amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
@@ -210,6 +212,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "chooseNewCurriculum":
             MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "chooseScheduleImage":
+            MessageLookupByLibrary.simpleMessage("اختر صورة الجدول"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "city": MessageLookupByLibrary.simpleMessage("المدينة"),
         "classDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الفصل"),
@@ -227,6 +231,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
+        "classroomRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار الفصل"),
         "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
         "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
         "completedSessions":
@@ -289,6 +295,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد أنك تريد حذف الصف"),
+        "deleteSchedule": MessageLookupByLibrary.simpleMessage("حذف الجدول"),
+        "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف هذا الجدول؟"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
         "desiredSubjects":
             MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
@@ -760,6 +769,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "save": MessageLookupByLibrary.simpleMessage("حفظ"),
         "saveAmount": m19,
         "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
+        "scheduleCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الجدول بنجاح"),
+        "scheduleDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الجدول بنجاح"),
+        "scheduleImageRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار صورة الجدول"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "تم تعديل جدول الأسبوع القادم"),
         "science": MessageLookupByLibrary.simpleMessage("العلوم"),
