@@ -777,5 +777,10 @@
     "sending": "Sending...",
     "certificateDeletedSuccessfully": "Certificate deleted successfully",
     "unableToOpenFile": "Unable to Open the file",
-    "certificatesWithoutArticle": "Certificates"
+    "certificatesWithoutArticle": "Certificates",
+    "noStudentsInClass": "No students found in this class",
+    "certificateAddedSuccessfully": "Certificate added successfully",
+    "pleaseSelectStudent": "Please select a student",
+    "pleaseEnterSubjectsGrades": "Please enter the subjects grades",
+    "certificateUpdatedSuccessfully": "Certificate updated successfully"
 }

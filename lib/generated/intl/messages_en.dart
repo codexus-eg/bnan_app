@@ -183,10 +183,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("Cardholder name"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("Card number"),
+        "certificateAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Certificate added successfully"),
         "certificateDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Certificate deleted successfully"),
         "certificateReceived": MessageLookupByLibrary.simpleMessage(
             "You received May certificate"),
+        "certificateUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Certificate updated successfully"),
         "certificates": MessageLookupByLibrary.simpleMessage("Certificates"),
         "certificatesSentSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Certificates sent successfully"),
@@ -569,6 +573,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No pending assignments"),
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "All current assignments are completed or there are no new assignments yet."),
+        "noStudentsInClass": MessageLookupByLibrary.simpleMessage(
+            "No students found in this class"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "No subjects available for this grade"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
@@ -704,10 +710,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseChooseCurriculumSubjects": m15,
         "pleaseChooseTeachingCurriculum": MessageLookupByLibrary.simpleMessage(
             "Please choose the curriculum you teach"),
+        "pleaseEnterSubjectsGrades": MessageLookupByLibrary.simpleMessage(
+            "Please enter the subjects grades"),
         "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
             "Please fill in all required fields"),
         "pleaseSelectFile":
             MessageLookupByLibrary.simpleMessage("Please select a file first"),
+        "pleaseSelectStudent":
+            MessageLookupByLibrary.simpleMessage("Please select a student"),
         "poemAnalysis": MessageLookupByLibrary.simpleMessage("Poem Analysis"),
         "point": MessageLookupByLibrary.simpleMessage("Point"),
         "points": MessageLookupByLibrary.simpleMessage("Points"),

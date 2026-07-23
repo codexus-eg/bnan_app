@@ -175,10 +175,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
+        "certificateAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الشهادة بنجاح"),
         "certificateDeletedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حذف الشهادة بنجاح"),
         "certificateReceived":
             MessageLookupByLibrary.simpleMessage("حصلت على شهادة شهر مايو"),
+        "certificateUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الشهادة بنجاح"),
         "certificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
         "certificatesSentSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إرسال الشهادات بنجاح"),
@@ -547,6 +551,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات قيد الانتظار"),
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد."),
+        "noStudentsInClass":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الصف"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الصف"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
@@ -675,10 +681,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseChooseCurriculumSubjects": m15,
         "pleaseChooseTeachingCurriculum": MessageLookupByLibrary.simpleMessage(
             "برجاء اختيار المنهج الذي تدرسه"),
+        "pleaseEnterSubjectsGrades":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال درجات المواد"),
         "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
             "يرجى ملء جميع الحقول المطلوبة"),
         "pleaseSelectFile":
             MessageLookupByLibrary.simpleMessage("من فضلك اختاري ملفًا أولًا"),
+        "pleaseSelectStudent":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار الطالب"),
         "poemAnalysis": MessageLookupByLibrary.simpleMessage("تحليل القصيدة"),
         "point": MessageLookupByLibrary.simpleMessage("نقطة"),
         "points": MessageLookupByLibrary.simpleMessage("النقاط"),

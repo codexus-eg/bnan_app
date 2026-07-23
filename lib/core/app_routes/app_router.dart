@@ -1,20 +1,9 @@
-import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
-import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
-import 'package:bnan_app/features/certificates_management/presentation/manager/delete_monthly_certificate_cubit/delete_monthly_certificate_cubit.dart';
-import 'package:bnan_app/features/certificates_management/presentation/manager/get_monthly_certificates_cubit/get_monthly_certificates_cubit.dart';
-import 'package:bnan_app/features/certificates_management/presentation/manager/issue_monthly_certificates_cubit/issue_monthly_certificates_cubit.dart';
+import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
-import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
-import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
-import 'package:bnan_app/features/teacher_application/presentation/manager/pending_teacher_requests_cubit/pending_teacher_requests_cubit.dart';
-import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_details_cubit/teacher_details_cubit.dart';
-import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_request_actions_cubit/teacher_request_actions_cubit.dart';
-import 'package:bnan_app/features/tables_management/presentation/manager/create_egyptian_schedule_cubit/create_egyptian_schedule_cubit.dart';
-import 'package:bnan_app/features/tables_management/presentation/manager/delete_egyptian_schedule_cubit/delete_egyptian_schedule_cubit.dart';
-import 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedules_cubit/get_egyptian_schedules_cubit.dart';
+
 
 import 'routes_export.dart';
 
@@ -279,15 +268,22 @@ GoRouter buildRouter() {
                     getIt<GetMonthlyCertificatesCubit>()
                       ..getMonthlyCertificates(),
               ),
-              BlocProvider(
-                create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
-              ),
+             
               BlocProvider(
                 create: (_) => AcademicLookupsCubit(
                   repo: getIt<AcademicLookupsRepo>(),
                   loadClassroomsOnGrade: false,
                   loadSubjectsWithoutClassroom: false,
                 )..loadGrades(),
+              ),
+               BlocProvider(
+                create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<UpdateMonthlyCertificateCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<CreateMonthlyCertificateCubit>(),
               ),
             ],
             child: const CertificatesManagementView(),

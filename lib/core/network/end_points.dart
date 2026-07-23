@@ -181,6 +181,17 @@ abstract class EndPoints {
     return '$classrooms/$classroomId';
   }
 
+  static String classroomStudents(String classroomId) {
+    return '$classrooms/$classroomId/students';
+  }
+
+  static String studentSubjects({
+    required String classroomId,
+    required String studentId,
+  }) {
+    return '$classrooms/$classroomId/students/$studentId/subjects';
+  }
+
   static String egyptianSchedulesList({String? gradeId}) {
     final id = gradeId?.trim();
 

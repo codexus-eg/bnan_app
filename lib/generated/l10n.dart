@@ -6419,6 +6419,56 @@ class S {
       args: [],
     );
   }
+
+  /// `No students found in this class`
+  String get noStudentsInClass {
+    return Intl.message(
+      'No students found in this class',
+      name: 'noStudentsInClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate added successfully`
+  String get certificateAddedSuccessfully {
+    return Intl.message(
+      'Certificate added successfully',
+      name: 'certificateAddedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a student`
+  String get pleaseSelectStudent {
+    return Intl.message(
+      'Please select a student',
+      name: 'pleaseSelectStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the subjects grades`
+  String get pleaseEnterSubjectsGrades {
+    return Intl.message(
+      'Please enter the subjects grades',
+      name: 'pleaseEnterSubjectsGrades',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate updated successfully`
+  String get certificateUpdatedSuccessfully {
+    return Intl.message(
+      'Certificate updated successfully',
+      name: 'certificateUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

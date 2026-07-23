@@ -1,5 +1,7 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_student_subjects_cubit/get_student_subjects_cubit.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
@@ -250,4 +252,11 @@ void setupServiceLocator() {
   getIt.registerFactory<SendMessageCubit>(
     () => SendMessageCubit(getIt<ChatRepo>()),
   );
+  getIt.registerFactory<GetClassroomStudentsCubit>(
+  () => GetClassroomStudentsCubit(getIt()),
+);
+
+getIt.registerFactory<GetStudentSubjectsCubit>(
+  () => GetStudentSubjectsCubit(getIt()),
+);
 }

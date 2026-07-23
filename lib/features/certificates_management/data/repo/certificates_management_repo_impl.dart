@@ -3,6 +3,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repo_guard.dart';
+import 'package:bnan_app/features/certificates_management/data/models/classroom_students_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/requests/create_monthly_certificate_request_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/requests/update_monthly_certificate_request_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/certificate_details_response_model.dart';
@@ -10,6 +11,7 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/issue_monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/repo/certificates_management_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
@@ -104,6 +106,38 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
         EndPoints.certificateById(certificateId),
         isProtected: true,
       );
+    });
+  }
+
+  @override
+  Future<Either<Failure, ClassroomStudentsResponseModel>> getClassroomStudents({
+    required String classroomId,
+  }) {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.classroomStudents(classroomId),
+        isProtected: true,
+      );
+
+      return ClassroomStudentsResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, StudentSubjectsResponseModel>> getStudentSubjects({
+    required String classroomId,
+    required String studentId,
+  }) {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.studentSubjects(
+          classroomId: classroomId,
+          studentId: studentId,
+        ),
+        isProtected: true,
+      );
+
+      return StudentSubjectsResponseModel.fromJson(asMap(response));
     });
   }
 }

@@ -1,10 +1,18 @@
 import 'package:bnan_app/features/certificates_management/presentation/views/widgets/grade_box.dart';
+import 'package:bnan_app/features/certificates_management/presentation/views/widgets/grade_input_box.dart';
 import 'package:flutter/material.dart';
 
 class CertificateSubjectRow extends StatelessWidget {
-  const CertificateSubjectRow({super.key, required this.subject});
+  const CertificateSubjectRow({
+    super.key,
+    required this.subject,
+    required this.maxScoreController,
+    required this.scoreController,
+  });
 
   final String subject;
+  final TextEditingController maxScoreController;
+  final TextEditingController scoreController;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +22,24 @@ class CertificateSubjectRow extends StatelessWidget {
         children: [
           Expanded(
             flex: 2,
-            child: GradeBox(text: subject, alignment: Alignment.centerRight),
+            child: GradeBox(
+              text: subject,
+              alignment: Alignment.centerRight,
+            ),
           ),
           const SizedBox(width: 20),
-          Expanded(flex: 1, child: const GradeBox(text: '20')),
+          Expanded(
+            child: GradeInputBox(
+              controller: maxScoreController,
+            ),
+          ),
           const SizedBox(width: 20),
-          Expanded(flex: 1, child: const GradeBox(text: '19', isLight: true)),
+          Expanded(
+            child: GradeInputBox(
+              controller: scoreController,
+              isLight: true,
+            ),
+          ),
         ],
       ),
     );

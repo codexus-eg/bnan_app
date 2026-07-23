@@ -777,5 +777,10 @@
     "sending": "جاري الإرسال...",
     "certificateDeletedSuccessfully": "تم حذف الشهادة بنجاح",
     "unableToOpenFile": "تعذر تحميل الملف ",
-    "certificatesWithoutArticle": "شهادات"
+    "certificatesWithoutArticle": "شهادات",
+    "noStudentsInClass": "لا يوجد طلاب في هذا الصف",
+    "certificateAddedSuccessfully": "تمت إضافة الشهادة بنجاح",
+    "pleaseSelectStudent": "يرجى اختيار الطالب",
+    "pleaseEnterSubjectsGrades": "يرجى إدخال درجات المواد",
+    "certificateUpdatedSuccessfully": "تم تعديل الشهادة بنجاح"
 }
