@@ -1,17 +1,13 @@
-import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
-import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
-import 'package:bnan_app/features/certificates_management/presentation/manager/delete_monthly_certificate_cubit/delete_monthly_certificate_cubit.dart';
-import 'package:bnan_app/features/certificates_management/presentation/manager/get_monthly_certificates_cubit/get_monthly_certificates_cubit.dart';
-import 'package:bnan_app/features/certificates_management/presentation/manager/issue_monthly_certificates_cubit/issue_monthly_certificates_cubit.dart';
+import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
-import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
-import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
-import 'package:bnan_app/features/teacher_application/presentation/manager/pending_teacher_requests_cubit/pending_teacher_requests_cubit.dart';
-import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_details_cubit/teacher_details_cubit.dart';
-import 'package:bnan_app/features/teacher_application/presentation/manager/teacher_request_actions_cubit/teacher_request_actions_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_unassigned_students_cubit/get_unassigned_students_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/views/student_classroom_assignment_view.dart';
 
 import 'routes_export.dart';
 
@@ -276,15 +272,22 @@ GoRouter buildRouter() {
                     getIt<GetMonthlyCertificatesCubit>()
                       ..getMonthlyCertificates(),
               ),
-              BlocProvider(
-                create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
-              ),
+
               BlocProvider(
                 create: (_) => AcademicLookupsCubit(
                   repo: getIt<AcademicLookupsRepo>(),
                   loadClassroomsOnGrade: false,
                   loadSubjectsWithoutClassroom: false,
                 )..loadGrades(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<UpdateMonthlyCertificateCubit>(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<CreateMonthlyCertificateCubit>(),
               ),
             ],
             child: const CertificatesManagementView(),
@@ -411,7 +414,24 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.tablesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TablesManagementView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<GetEgyptianSchedulesCubit>()..getEgyptianSchedules(),
+              ),
+              BlocProvider(create: (_) => getIt<CreateEgyptianScheduleCubit>()),
+              BlocProvider(create: (_) => getIt<DeleteEgyptianScheduleCubit>()),
+              BlocProvider(
+                create: (_) => AcademicLookupsCubit(
+                  repo: getIt<AcademicLookupsRepo>(),
+                  loadClassroomsOnGrade: false,
+                  loadSubjectsWithoutClassroom: false,
+                )..loadGrades(),
+              ),
+            ],
+            child: const TablesManagementView(),
+          ),
           key: state.pageKey,
         ),
       ),
@@ -453,6 +473,31 @@ GoRouter buildRouter() {
               BlocProvider(create: (context) => getIt<AcademicLookupsCubit>()),
             ],
             child: const GradesManagementView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.studentClassroomAssignment,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => GetUnassignedStudentsCubit(
+                  getIt<StudentClassroomAssignmentRepo>(),
+                )..getUnassignedStudents(),
+              ),
+              BlocProvider(
+                create: (_) => GetAvailableClassroomsCubit(
+                  getIt<StudentClassroomAssignmentRepo>(),
+                ),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    AssignStudentCubit(getIt<StudentClassroomAssignmentRepo>()),
+              ),
+            ],
+            child: const StudentClassroomAssignmentView(),
           ),
           key: state.pageKey,
         ),

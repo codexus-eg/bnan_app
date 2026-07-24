@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/certificates_management/data/models/classroom_students_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/requests/create_monthly_certificate_request_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/requests/update_monthly_certificate_request_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/certificate_details_response_model.dart';
@@ -6,7 +7,9 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/issue_monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
 import 'package:dartz/dartz.dart';
+
 
 abstract class CertificatesManagementRepo {
 Future<Either<Failure, MonthlyCertificatesResponseModel>>
@@ -35,4 +38,14 @@ Future<Either<Failure, MonthlyCertificatesResponseModel>>
   Future<Either<Failure, void>> deleteMonthlyCertificate({
     required String certificateId,
   });
+  Future<Either<Failure, ClassroomStudentsResponseModel>>
+    getClassroomStudents({
+  required String classroomId,
+});
+
+Future<Either<Failure, StudentSubjectsResponseModel>>
+    getStudentSubjects({
+  required String classroomId,
+  required String studentId,
+});
 }

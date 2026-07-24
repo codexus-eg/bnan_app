@@ -39,4 +39,6 @@ abstract class Routes {
   static const String teacherApplication = '/teacherApplication';
   static const String registrationRequests = '/registrationRequests';
   static const String gradesManagement = '/gradesManagement';
+  static const String studentClassroomAssignment =
+      '/studentClassroomAssignment';
 }

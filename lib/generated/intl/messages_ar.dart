@@ -122,6 +122,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "algebraCourseCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة إتمام دورة الجبر"),
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
+        "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
+        "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
         "amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
@@ -134,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
         "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
+        "assignStudent": MessageLookupByLibrary.simpleMessage("تعيين طالب"),
         "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
         "assignTeacherInSubject": m0,
         "assignmentDescription": MessageLookupByLibrary.simpleMessage("الوصف"),
@@ -173,10 +176,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
+        "certificateAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الشهادة بنجاح"),
         "certificateDeletedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حذف الشهادة بنجاح"),
         "certificateReceived":
             MessageLookupByLibrary.simpleMessage("حصلت على شهادة شهر مايو"),
+        "certificateUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الشهادة بنجاح"),
         "certificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
         "certificatesSentSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إرسال الشهادات بنجاح"),
@@ -210,6 +217,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "chooseNewCurriculum":
             MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "chooseScheduleImage":
+            MessageLookupByLibrary.simpleMessage("اختر صورة الجدول"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "city": MessageLookupByLibrary.simpleMessage("المدينة"),
         "classDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الفصل"),
@@ -227,6 +236,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
+        "classroom": MessageLookupByLibrary.simpleMessage("الفصل"),
+        "classroomRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار الفصل"),
         "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
         "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
         "completedSessions":
@@ -289,6 +301,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد أنك تريد حذف الصف"),
+        "deleteSchedule": MessageLookupByLibrary.simpleMessage("حذف الجدول"),
+        "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف هذا الجدول؟"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
         "desiredSubjects":
             MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
@@ -456,6 +471,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightAndShadowExperiment":
             MessageLookupByLibrary.simpleMessage("تجربة الضوء والظل"),
         "loading": MessageLookupByLibrary.simpleMessage("جاري التحميل..."),
+        "loadingClassrooms":
+            MessageLookupByLibrary.simpleMessage("جاري تحميل الفصول"),
+        "loadingStudents":
+            MessageLookupByLibrary.simpleMessage("جاري تحميل الطلاب"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل دخول"),
         "loginNow": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -522,6 +541,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات حالياً"),
         "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
             "عند إضافة واجبات جديدة ستظهر في هذه الصفحة."),
+        "noAvailableClassrooms":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
         "noCompletedAssignments":
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات مكتملة"),
         "noCompletedAssignmentsSubtitle":
@@ -538,9 +559,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات قيد الانتظار"),
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد."),
+        "noStudentsInClass":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الصف"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الصف"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
+        "noUnassignedStudents":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب غير معينين"),
         "notAvailable": MessageLookupByLibrary.simpleMessage("غير متاحة"),
         "notSubmitted": MessageLookupByLibrary.simpleMessage("لم يسلم"),
         "notes": MessageLookupByLibrary.simpleMessage(
@@ -666,10 +691,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseChooseCurriculumSubjects": m15,
         "pleaseChooseTeachingCurriculum": MessageLookupByLibrary.simpleMessage(
             "برجاء اختيار المنهج الذي تدرسه"),
+        "pleaseEnterSubjectsGrades":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال درجات المواد"),
         "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
             "يرجى ملء جميع الحقول المطلوبة"),
         "pleaseSelectFile":
             MessageLookupByLibrary.simpleMessage("من فضلك اختاري ملفًا أولًا"),
+        "pleaseSelectStudent":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار الطالب"),
         "poemAnalysis": MessageLookupByLibrary.simpleMessage("تحليل القصيدة"),
         "point": MessageLookupByLibrary.simpleMessage("نقطة"),
         "points": MessageLookupByLibrary.simpleMessage("النقاط"),
@@ -760,15 +789,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "save": MessageLookupByLibrary.simpleMessage("حفظ"),
         "saveAmount": m19,
         "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
+        "scheduleCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الجدول بنجاح"),
+        "scheduleDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الجدول بنجاح"),
+        "scheduleImageRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار صورة الجدول"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "تم تعديل جدول الأسبوع القادم"),
         "science": MessageLookupByLibrary.simpleMessage("العلوم"),
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
         "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
+        "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
+        "selectStudentFirst":
+            MessageLookupByLibrary.simpleMessage("اختر الطالب أولاً"),
         "selectSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),

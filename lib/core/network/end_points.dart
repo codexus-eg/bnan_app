@@ -22,6 +22,7 @@ abstract class EndPoints {
   static const String users = '/users';
   static const String teachingAssignments = '/teachers/teaching-assignments';
   static const String classrooms = '/classrooms';
+  static const String egyptianSchedules = '/egyptianSchedules';
   static const String subjects = '/subjects';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
@@ -33,6 +34,19 @@ abstract class EndPoints {
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
   static const String sendMessage = '/messages';
+  static const String enrollments = '/enrollments';
+
+  static String get unassignedStudents {
+    return '$enrollments/unassigned';
+  }
+
+  static String availableClassroomsForUnassignedStudent(String studentId) {
+    return '$enrollments/unassigned/$studentId/classrooms';
+  }
+
+  static String get assignStudentToClassroom {
+    return '$enrollments/assign';
+  }
 
   static String getChatRoom(String roomId) {
     return '/chats/rooms/$roomId';
@@ -178,6 +192,35 @@ abstract class EndPoints {
 
   static String getClassroom(String classroomId) {
     return '$classrooms/$classroomId';
+  }
+
+  static String classroomStudents(String classroomId) {
+    return '$classrooms/$classroomId/students';
+  }
+
+  static String studentSubjects({
+    required String classroomId,
+    required String studentId,
+  }) {
+    return '$classrooms/$classroomId/students/$studentId/subjects';
+  }
+
+  static String egyptianSchedulesList({String? gradeId}) {
+    final id = gradeId?.trim();
+
+    if (id == null || id.isEmpty) {
+      return egyptianSchedules;
+    }
+
+    return '$egyptianSchedules?gradeId=$id';
+  }
+
+  static String egyptianSchedulesByClassroom(String classroomId) {
+    return '$egyptianSchedules/classroom/$classroomId';
+  }
+
+  static String deleteEgyptianSchedule(String scheduleId) {
+    return '$egyptianSchedules/$scheduleId';
   }
 
   static String createClassroom = classrooms;

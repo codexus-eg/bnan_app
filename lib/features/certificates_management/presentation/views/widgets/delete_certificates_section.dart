@@ -30,7 +30,7 @@ class DeleteCertificatesSection extends StatelessWidget {
         }
 
         if (state is DeleteMonthlyCertificateFailure) {
-          showCustomSnackBar(context, state.message, true);
+          showCustomSnackBar(context, state.message, false);
         }
       },
       builder: (context, state) {

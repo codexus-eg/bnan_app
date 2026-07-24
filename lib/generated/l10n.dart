@@ -3090,6 +3090,16 @@ class S {
     );
   }
 
+  /// `All students`
+  String get allStudents {
+    return Intl.message(
+      'All students',
+      name: 'allStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Classes`
   String get classes {
     return Intl.message(
@@ -4540,6 +4550,16 @@ class S {
     );
   }
 
+  /// `All grades`
+  String get allGrades {
+    return Intl.message(
+      'All grades',
+      name: 'allGrades',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete assignment`
   String get deleteAssignment {
     return Intl.message(
@@ -4825,6 +4845,76 @@ class S {
     return Intl.message(
       'Upload Schedule',
       name: 'uploadSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule added successfully`
+  String get scheduleCreatedSuccessfully {
+    return Intl.message(
+      'Schedule added successfully',
+      name: 'scheduleCreatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose schedule image`
+  String get chooseScheduleImage {
+    return Intl.message(
+      'Choose schedule image',
+      name: 'chooseScheduleImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose a schedule image`
+  String get scheduleImageRequired {
+    return Intl.message(
+      'Please choose a schedule image',
+      name: 'scheduleImageRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a classroom`
+  String get classroomRequired {
+    return Intl.message(
+      'Please select a classroom',
+      name: 'classroomRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete schedule`
+  String get deleteSchedule {
+    return Intl.message(
+      'Delete schedule',
+      name: 'deleteSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this schedule?`
+  String get deleteScheduleConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this schedule?',
+      name: 'deleteScheduleConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule deleted successfully`
+  String get scheduleDeletedSuccessfully {
+    return Intl.message(
+      'Schedule deleted successfully',
+      name: 'scheduleDeletedSuccessfully',
       desc: '',
       args: [],
     );
@@ -6325,6 +6415,136 @@ class S {
     return Intl.message(
       'Certificates',
       name: 'certificatesWithoutArticle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No students found in this class`
+  String get noStudentsInClass {
+    return Intl.message(
+      'No students found in this class',
+      name: 'noStudentsInClass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate added successfully`
+  String get certificateAddedSuccessfully {
+    return Intl.message(
+      'Certificate added successfully',
+      name: 'certificateAddedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a student`
+  String get pleaseSelectStudent {
+    return Intl.message(
+      'Please select a student',
+      name: 'pleaseSelectStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the subjects grades`
+  String get pleaseEnterSubjectsGrades {
+    return Intl.message(
+      'Please enter the subjects grades',
+      name: 'pleaseEnterSubjectsGrades',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate updated successfully`
+  String get certificateUpdatedSuccessfully {
+    return Intl.message(
+      'Certificate updated successfully',
+      name: 'certificateUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assign Student`
+  String get assignStudent {
+    return Intl.message(
+      'Assign Student',
+      name: 'assignStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading students`
+  String get loadingStudents {
+    return Intl.message(
+      'Loading students',
+      name: 'loadingStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No unassigned students`
+  String get noUnassignedStudents {
+    return Intl.message(
+      'No unassigned students',
+      name: 'noUnassignedStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classroom`
+  String get classroom {
+    return Intl.message(
+      'Classroom',
+      name: 'classroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select student first`
+  String get selectStudentFirst {
+    return Intl.message(
+      'Select student first',
+      name: 'selectStudentFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading classrooms`
+  String get loadingClassrooms {
+    return Intl.message(
+      'Loading classrooms',
+      name: 'loadingClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No available classrooms`
+  String get noAvailableClassrooms {
+    return Intl.message(
+      'No available classrooms',
+      name: 'noAvailableClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select classroom`
+  String get selectClassroom {
+    return Intl.message(
+      'Select classroom',
+      name: 'selectClassroom',
       desc: '',
       args: [],
     );

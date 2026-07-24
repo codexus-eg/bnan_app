@@ -4,9 +4,10 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CertificateDialog extends StatelessWidget {
-  const CertificateDialog({super.key, this.isEdit = false});
+  const CertificateDialog({super.key, this.isEdit = false,  this.certificateId});
 
   final bool isEdit;
+  final String? certificateId;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class CertificateDialog extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsetsDirectional.all(16),
         child: CertificateForm(
+          certificateId: certificateId,
           title: isEdit
               ? S.of(context).editCertificate
               : S.of(context).issueNewCertificate,

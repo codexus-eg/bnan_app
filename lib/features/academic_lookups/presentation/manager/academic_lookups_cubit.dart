@@ -11,11 +11,13 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
     required this.repo,
     this.loadClassroomsOnGrade = true,
     this.loadSubjectsWithoutClassroom = true,
+    this.loadSubjectsOnClassroom = true,
   }) : super(const AcademicLookupsState());
 
   final AcademicLookupsRepo repo;
   final bool loadClassroomsOnGrade;
   final bool loadSubjectsWithoutClassroom;
+  final bool loadSubjectsOnClassroom;
 
   final Map<String, List<AcademicGradeModel>> _gradesByScope = {};
   final Map<String, List<AcademicClassroomModel>> _classroomsByGrade = {};
@@ -55,38 +57,34 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
     await loadGrades(curriculum.id);
   }
 
- Future<void> selectGrade(AcademicGradeModel? grade) async {
-  if (state.selectedGrade?.id == grade?.id) return;
+  Future<void> selectGrade(AcademicGradeModel? grade) async {
+    if (state.selectedGrade?.id == grade?.id) return;
 
-  emit(
-    state.copyWith(
-      selectedGrade: grade,
-      selectedClassroom: null,
-      selectedSubject: null,
-      classrooms: const [],
-      subjects: const [],
-      errorMessage: null,
-    ),
-  );
-
-  if (grade == null) return;
-
-  final curriculumId =
-      state.selectedCurriculum?.id ?? grade.curriculumId;
-
-  if (curriculumId == null || curriculumId.isEmpty) return;
-
-  if (loadClassroomsOnGrade) {
-    await _loadClassrooms(curriculumId, grade.id);
-  }
-
-  if (!loadClassroomsOnGrade && loadSubjectsWithoutClassroom) {
-    await _loadSubjects(
-      curriculumId: curriculumId,
-      gradeId: grade.id,
+    emit(
+      state.copyWith(
+        selectedGrade: grade,
+        selectedClassroom: null,
+        selectedSubject: null,
+        classrooms: const [],
+        subjects: const [],
+        errorMessage: null,
+      ),
     );
+
+    if (grade == null) return;
+
+    final curriculumId = state.selectedCurriculum?.id ?? grade.curriculumId;
+
+    if (curriculumId == null || curriculumId.isEmpty) return;
+
+    if (loadClassroomsOnGrade) {
+      await _loadClassrooms(curriculumId, grade.id);
+    }
+
+    if (!loadClassroomsOnGrade && loadSubjectsWithoutClassroom) {
+      await _loadSubjects(curriculumId: curriculumId, gradeId: grade.id);
+    }
   }
-}
 
   Future<void> selectClassroom(AcademicClassroomModel? classroom) async {
     if (state.selectedClassroom?.id == classroom?.id) return;
@@ -100,7 +98,12 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
     );
     final curriculum = state.selectedCurriculum;
     final grade = state.selectedGrade;
-    if (curriculum == null || grade == null || classroom == null) return;
+    if (!loadSubjectsOnClassroom ||
+        curriculum == null ||
+        grade == null ||
+        classroom == null) {
+      return;
+    }
     await _loadSubjects(
       curriculumId: curriculum.id,
       gradeId: grade.id,

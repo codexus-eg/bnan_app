@@ -1,10 +1,14 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_student_subjects_cubit/get_student_subjects_cubit.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
+import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
 
 final getIt = GetIt.instance;
 
@@ -63,16 +67,19 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<CertificatesManagementRepo>(
     () => CertificatesManagementRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<TableManagementRepo>(
+    () => TableManagementRepoImpl(getIt<ApiConsumer>()),
+  );
 
   getIt.registerLazySingleton<GradesRepo>(() => GradesRepoImpl(getIt()));
 
   getIt.registerLazySingleton<TeacherRequestsRepo>(
     () => TeacherRequestsRepoImpl(getIt()),
   );
-
-
+  getIt.registerLazySingleton<StudentClassroomAssignmentRepo>(
+    () => StudentClassroomAssignmentRepoImpl(getIt<ApiConsumer>()),
+  );
   // Cubits
-
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 
@@ -215,6 +222,18 @@ void setupServiceLocator() {
   getIt.registerFactory<DeleteMonthlyCertificateCubit>(
     () => DeleteMonthlyCertificateCubit(getIt<CertificatesManagementRepo>()),
   );
+  getIt.registerFactory<GetEgyptianSchedulesCubit>(
+    () => GetEgyptianSchedulesCubit(getIt<TableManagementRepo>()),
+  );
+  getIt.registerFactory<CreateEgyptianScheduleCubit>(
+    () => CreateEgyptianScheduleCubit(getIt<TableManagementRepo>()),
+  );
+  getIt.registerFactory<DeleteEgyptianScheduleCubit>(
+    () => DeleteEgyptianScheduleCubit(getIt<TableManagementRepo>()),
+  );
+  getIt.registerFactory<GetEgyptianScheduleByClassroomCubit>(
+    () => GetEgyptianScheduleByClassroomCubit(getIt<TableManagementRepo>()),
+  );
 
   getIt.registerFactory<PendingTeacherRequestsCubit>(
     () => PendingTeacherRequestsCubit(getIt()),
@@ -237,4 +256,12 @@ void setupServiceLocator() {
   getIt.registerFactory<SendMessageCubit>(
     () => SendMessageCubit(getIt<ChatRepo>()),
   );
+  getIt.registerFactory<GetClassroomStudentsCubit>(
+    () => GetClassroomStudentsCubit(getIt()),
+  );
+
+  getIt.registerFactory<GetStudentSubjectsCubit>(
+    () => GetStudentSubjectsCubit(getIt()),
+  );
+  
 }

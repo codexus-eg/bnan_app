@@ -47,6 +47,12 @@ export 'package:bnan_app/features/certificates_management/presentation/manager/g
 export 'package:bnan_app/features/certificates_management/presentation/manager/get_monthly_certificates_cubit/get_monthly_certificates_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/issue_monthly_certificates_cubit/issue_monthly_certificates_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/update_monthly_certificate_cubit/update_monthly_certificate_cubit.dart';
+export 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
+export 'package:bnan_app/features/tables_management/data/repo/table_management_repo_impl.dart';
+export 'package:bnan_app/features/tables_management/presentation/manager/create_egyptian_schedule_cubit/create_egyptian_schedule_cubit.dart';
+export 'package:bnan_app/features/tables_management/presentation/manager/delete_egyptian_schedule_cubit/delete_egyptian_schedule_cubit.dart';
+export 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedule_by_classroom_cubit/get_egyptian_schedule_by_classroom_cubit.dart';
+export 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedules_cubit/get_egyptian_schedules_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_details_cubit/classroom_details_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';

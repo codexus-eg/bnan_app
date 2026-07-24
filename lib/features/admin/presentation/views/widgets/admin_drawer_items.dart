@@ -39,5 +39,13 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
     ),
     DrawerItemModel(title: s.notifications, icon: ImageManager.bellIcon),
     DrawerItemModel(title: s.certificates, icon: ImageManager.bellIcon),
+    DrawerItemModel(
+      title: s.schedule,
+      icon: ImageManager.bellIcon,
+    ),
+     DrawerItemModel(
+      title: s.assignmentDescription,
+      icon: ImageManager.bellIcon,
+    ),
   ];
 }
