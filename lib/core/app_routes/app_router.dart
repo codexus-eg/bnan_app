@@ -3,7 +3,11 @@ import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubi
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
-
+import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_unassigned_students_cubit/get_unassigned_students_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/views/student_classroom_assignment_view.dart';
 
 import 'routes_export.dart';
 
@@ -268,7 +272,7 @@ GoRouter buildRouter() {
                     getIt<GetMonthlyCertificatesCubit>()
                       ..getMonthlyCertificates(),
               ),
-             
+
               BlocProvider(
                 create: (_) => AcademicLookupsCubit(
                   repo: getIt<AcademicLookupsRepo>(),
@@ -276,7 +280,7 @@ GoRouter buildRouter() {
                   loadSubjectsWithoutClassroom: false,
                 )..loadGrades(),
               ),
-               BlocProvider(
+              BlocProvider(
                 create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
               ),
               BlocProvider(
@@ -469,6 +473,31 @@ GoRouter buildRouter() {
               BlocProvider(create: (context) => getIt<AcademicLookupsCubit>()),
             ],
             child: const GradesManagementView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.studentClassroomAssignment,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => GetUnassignedStudentsCubit(
+                  getIt<StudentClassroomAssignmentRepo>(),
+                )..getUnassignedStudents(),
+              ),
+              BlocProvider(
+                create: (_) => GetAvailableClassroomsCubit(
+                  getIt<StudentClassroomAssignmentRepo>(),
+                ),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    AssignStudentCubit(getIt<StudentClassroomAssignmentRepo>()),
+              ),
+            ],
+            child: const StudentClassroomAssignmentView(),
           ),
           key: state.pageKey,
         ),

@@ -43,5 +43,9 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.schedule,
       icon: ImageManager.bellIcon,
     ),
+     DrawerItemModel(
+      title: s.assignmentDescription,
+      icon: ImageManager.bellIcon,
+    ),
   ];
 }

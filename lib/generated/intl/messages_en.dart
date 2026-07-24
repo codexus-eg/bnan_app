@@ -140,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "arabicLanguage":
             MessageLookupByLibrary.simpleMessage("Arabic Language"),
+        "assignStudent": MessageLookupByLibrary.simpleMessage("Assign Student"),
         "assignSubject":
             MessageLookupByLibrary.simpleMessage("Assign to Subject"),
         "assignTeacherInSubject": m0,
@@ -245,6 +246,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesCount": MessageLookupByLibrary.simpleMessage("Classes"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("Classes Management"),
+        "classroom": MessageLookupByLibrary.simpleMessage("Classroom"),
         "classroomRequired":
             MessageLookupByLibrary.simpleMessage("Please select a classroom"),
         "close": MessageLookupByLibrary.simpleMessage("Close"),
@@ -491,6 +493,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightAndShadowExperiment":
             MessageLookupByLibrary.simpleMessage("Light and Shadow Experiment"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+        "loadingClassrooms":
+            MessageLookupByLibrary.simpleMessage("Loading classrooms"),
+        "loadingStudents":
+            MessageLookupByLibrary.simpleMessage("Loading students"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginNow": MessageLookupByLibrary.simpleMessage("Login"),
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -558,6 +564,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No assignments yet"),
         "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
             "New assignments will appear here once they are added."),
+        "noAvailableClassrooms":
+            MessageLookupByLibrary.simpleMessage("No available classrooms"),
         "noCompletedAssignments":
             MessageLookupByLibrary.simpleMessage("No completed assignments"),
         "noCompletedAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -578,6 +586,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "No subjects available for this grade"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
+        "noUnassignedStudents":
+            MessageLookupByLibrary.simpleMessage("No unassigned students"),
         "notAvailable": MessageLookupByLibrary.simpleMessage("Not available"),
         "notSubmitted": MessageLookupByLibrary.simpleMessage("Not submitted"),
         "notes":
@@ -821,9 +831,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("Search by name or phone"),
         "sections": MessageLookupByLibrary.simpleMessage("Sections"),
+        "selectClassroom":
+            MessageLookupByLibrary.simpleMessage("Select classroom"),
         "selectFile": MessageLookupByLibrary.simpleMessage("Select File"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),
+        "selectStudentFirst":
+            MessageLookupByLibrary.simpleMessage("Select student first"),
         "selectSubject": MessageLookupByLibrary.simpleMessage("Select Subject"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("Selected Package"),

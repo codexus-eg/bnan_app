@@ -782,5 +782,13 @@
     "certificateAddedSuccessfully": "Certificate added successfully",
     "pleaseSelectStudent": "Please select a student",
     "pleaseEnterSubjectsGrades": "Please enter the subjects grades",
-    "certificateUpdatedSuccessfully": "Certificate updated successfully"
+    "certificateUpdatedSuccessfully": "Certificate updated successfully",
+    "assignStudent": "Assign Student",
+    "loadingStudents": "Loading students",
+    "noUnassignedStudents": "No unassigned students",
+    "classroom": "Classroom",
+    "selectStudentFirst": "Select student first",
+    "loadingClassrooms": "Loading classrooms",
+    "noAvailableClassrooms": "No available classrooms",
+    "selectClassroom": "Select classroom"
 }

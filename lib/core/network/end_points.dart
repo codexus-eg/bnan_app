@@ -34,6 +34,19 @@ abstract class EndPoints {
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
   static const String sendMessage = '/messages';
+  static const String enrollments = '/enrollments';
+
+  static String get unassignedStudents {
+    return '$enrollments/unassigned';
+  }
+
+  static String availableClassroomsForUnassignedStudent(String studentId) {
+    return '$enrollments/unassigned/$studentId/classrooms';
+  }
+
+  static String get assignStudentToClassroom {
+    return '$enrollments/assign';
+  }
 
   static String getChatRoom(String roomId) {
     return '/chats/rooms/$roomId';

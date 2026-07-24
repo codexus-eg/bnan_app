@@ -6469,6 +6469,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Assign Student`
+  String get assignStudent {
+    return Intl.message(
+      'Assign Student',
+      name: 'assignStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading students`
+  String get loadingStudents {
+    return Intl.message(
+      'Loading students',
+      name: 'loadingStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No unassigned students`
+  String get noUnassignedStudents {
+    return Intl.message(
+      'No unassigned students',
+      name: 'noUnassignedStudents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classroom`
+  String get classroom {
+    return Intl.message(
+      'Classroom',
+      name: 'classroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select student first`
+  String get selectStudentFirst {
+    return Intl.message(
+      'Select student first',
+      name: 'selectStudentFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading classrooms`
+  String get loadingClassrooms {
+    return Intl.message(
+      'Loading classrooms',
+      name: 'loadingClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No available classrooms`
+  String get noAvailableClassrooms {
+    return Intl.message(
+      'No available classrooms',
+      name: 'noAvailableClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select classroom`
+  String get selectClassroom {
+    return Intl.message(
+      'Select classroom',
+      name: 'selectClassroom',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

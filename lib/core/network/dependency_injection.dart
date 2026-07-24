@@ -7,6 +7,8 @@ import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
+import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
 
 final getIt = GetIt.instance;
 
@@ -74,7 +76,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<TeacherRequestsRepo>(
     () => TeacherRequestsRepoImpl(getIt()),
   );
-
+  getIt.registerLazySingleton<StudentClassroomAssignmentRepo>(
+    () => StudentClassroomAssignmentRepoImpl(getIt<ApiConsumer>()),
+  );
   // Cubits
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
@@ -253,10 +257,11 @@ void setupServiceLocator() {
     () => SendMessageCubit(getIt<ChatRepo>()),
   );
   getIt.registerFactory<GetClassroomStudentsCubit>(
-  () => GetClassroomStudentsCubit(getIt()),
-);
+    () => GetClassroomStudentsCubit(getIt()),
+  );
 
-getIt.registerFactory<GetStudentSubjectsCubit>(
-  () => GetStudentSubjectsCubit(getIt()),
-);
+  getIt.registerFactory<GetStudentSubjectsCubit>(
+    () => GetStudentSubjectsCubit(getIt()),
+  );
+  
 }

@@ -136,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
         "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
+        "assignStudent": MessageLookupByLibrary.simpleMessage("تعيين طالب"),
         "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
         "assignTeacherInSubject": m0,
         "assignmentDescription": MessageLookupByLibrary.simpleMessage("الوصف"),
@@ -235,6 +236,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
         "classesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
+        "classroom": MessageLookupByLibrary.simpleMessage("الفصل"),
         "classroomRequired":
             MessageLookupByLibrary.simpleMessage("يرجى اختيار الفصل"),
         "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
@@ -469,6 +471,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "lightAndShadowExperiment":
             MessageLookupByLibrary.simpleMessage("تجربة الضوء والظل"),
         "loading": MessageLookupByLibrary.simpleMessage("جاري التحميل..."),
+        "loadingClassrooms":
+            MessageLookupByLibrary.simpleMessage("جاري تحميل الفصول"),
+        "loadingStudents":
+            MessageLookupByLibrary.simpleMessage("جاري تحميل الطلاب"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل دخول"),
         "loginNow": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -535,6 +541,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات حالياً"),
         "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
             "عند إضافة واجبات جديدة ستظهر في هذه الصفحة."),
+        "noAvailableClassrooms":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
         "noCompletedAssignments":
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات مكتملة"),
         "noCompletedAssignmentsSubtitle":
@@ -556,6 +564,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الصف"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
+        "noUnassignedStudents":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب غير معينين"),
         "notAvailable": MessageLookupByLibrary.simpleMessage("غير متاحة"),
         "notSubmitted": MessageLookupByLibrary.simpleMessage("لم يسلم"),
         "notes": MessageLookupByLibrary.simpleMessage(
@@ -791,9 +801,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
         "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
+        "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
+        "selectStudentFirst":
+            MessageLookupByLibrary.simpleMessage("اختر الطالب أولاً"),
         "selectSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
