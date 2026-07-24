@@ -6549,6 +6549,26 @@ class S {
       args: [],
     );
   }
+
+  /// `File downloaded successfully`
+  String get fileDownloadedSuccessfully {
+    return Intl.message(
+      'File downloaded successfully',
+      name: 'fileDownloadedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to download file`
+  String get unableToDownloadFile {
+    return Intl.message(
+      'Unable to download file',
+      name: 'unableToDownloadFile',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

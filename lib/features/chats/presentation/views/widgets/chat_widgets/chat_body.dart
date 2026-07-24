@@ -19,7 +19,7 @@ class ChatBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const ChatHeader(),
+         ChatHeader(chatTitle: '',),
         Expanded(
           child: BlocBuilder<GetRoomMessagesCubit, GetRoomMessagesState>(
             builder: (context, state) {

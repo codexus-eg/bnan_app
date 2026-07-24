@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FileUrlLauncher {
@@ -14,13 +15,16 @@ class FileUrlLauncher {
       return false;
     }
 
-    if (!await canLaunchUrl(uri)) {
+    try {
+      return await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (error) {
+      debugPrint('FILE OPEN ERROR: $error');
+      debugPrint('FILE URL: $value');
+
       return false;
     }
-
-    return launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
   }
 }

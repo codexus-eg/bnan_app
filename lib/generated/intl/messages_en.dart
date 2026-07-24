@@ -414,6 +414,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("This field is required"),
         "fileDownloadStarted":
             MessageLookupByLibrary.simpleMessage("Assignment file opened"),
+        "fileDownloadedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "File downloaded successfully"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "Please fill in all required fields."),
         "finalDelete": MessageLookupByLibrary.simpleMessage("Final Delete"),
@@ -1005,6 +1007,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "twoDaysAgo": MessageLookupByLibrary.simpleMessage("2 days ago"),
         "typeMessage":
             MessageLookupByLibrary.simpleMessage("Type message....."),
+        "unableToDownloadFile":
+            MessageLookupByLibrary.simpleMessage("Unable to download file"),
         "unableToOpenFile":
             MessageLookupByLibrary.simpleMessage("Unable to Open the file"),
         "underProcessing":

@@ -4,7 +4,9 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({super.key});
+  const UserInfo({super.key, required this.chatTitle,});
+
+  final String chatTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class UserInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).teacherSarahName,
+         chatTitle,
           style: StylesManager.styleBold20(
             context,
           ).copyWith(color: ColorManager.white),

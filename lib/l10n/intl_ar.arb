@@ -790,5 +790,7 @@
     "selectStudentFirst": "اختر الطالب أولاً",
     "loadingClassrooms": "جاري تحميل الفصول",
     "noAvailableClassrooms": "لا توجد فصول متاحة",
-    "selectClassroom": "اختر الفصل"
+    "selectClassroom": "اختر الفصل",
+    "fileDownloadedSuccessfully": "تم تحميل الملف بنجاح",
+    "unableToDownloadFile": "تعذر تحميل الملف"
 }

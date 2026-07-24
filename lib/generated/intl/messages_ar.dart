@@ -395,6 +395,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
         "fileDownloadStarted":
             MessageLookupByLibrary.simpleMessage("تم فتح ملف الواجب"),
+        "fileDownloadedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تحميل الملف بنجاح"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "يرجى ملء جميع الحقول المطلوبة."),
         "finalDelete": MessageLookupByLibrary.simpleMessage("حذف نهائي"),
@@ -968,6 +970,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("باقة الـ 20 ساعة"),
         "twoDaysAgo": MessageLookupByLibrary.simpleMessage("منذ يومين"),
         "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة....."),
+        "unableToDownloadFile":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل الملف"),
         "unableToOpenFile":
             MessageLookupByLibrary.simpleMessage("تعذر تحميل الملف "),
         "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
