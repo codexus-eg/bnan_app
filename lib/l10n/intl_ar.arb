@@ -778,7 +778,7 @@
     "certificateDeletedSuccessfully": "تم حذف الشهادة بنجاح",
     "unableToOpenFile": "تعذر تحميل الملف ",
     "certificatesWithoutArticle": "شهادات",
-    "noStudentsInClass": "لا يوجد طلاب في هذا الصف",
+    "noStudentsInClass": "لا يوجد طلاب في هذا الفصل",
     "certificateAddedSuccessfully": "تمت إضافة الشهادة بنجاح",
     "pleaseSelectStudent": "يرجى اختيار الطالب",
     "pleaseEnterSubjectsGrades": "يرجى إدخال درجات المواد",
@@ -792,5 +792,7 @@
     "noAvailableClassrooms": "لا توجد فصول متاحة",
     "selectClassroom": "اختر الفصل",
     "fileDownloadedSuccessfully": "تم تحميل الملف بنجاح",
-    "unableToDownloadFile": "تعذر تحميل الملف"
+    "unableToDownloadFile": "تعذر تحميل الملف",
+    "selectClassroomFirst": "اختر الفصل أولاً",
+    "studentAssignedSuccessfully": "تم تعيين الطالب بنجاح"
 }

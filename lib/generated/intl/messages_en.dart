@@ -584,7 +584,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "All current assignments are completed or there are no new assignments yet."),
         "noStudentsInClass": MessageLookupByLibrary.simpleMessage(
-            "No students found in this class"),
+            "There are no students in this classroom"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "No subjects available for this grade"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
@@ -835,6 +835,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sections": MessageLookupByLibrary.simpleMessage("Sections"),
         "selectClassroom":
             MessageLookupByLibrary.simpleMessage("Select classroom"),
+        "selectClassroomFirst":
+            MessageLookupByLibrary.simpleMessage("Select classroom first"),
         "selectFile": MessageLookupByLibrary.simpleMessage("Select File"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),
@@ -873,6 +875,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Start lesson via Zoom"),
         "startNow": MessageLookupByLibrary.simpleMessage("Start now"),
         "student": MessageLookupByLibrary.simpleMessage("student"),
+        "studentAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Student assigned successfully"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("Student Email"),
         "studentInfo":
             MessageLookupByLibrary.simpleMessage("Student Information"),

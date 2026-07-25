@@ -21,12 +21,13 @@ class DeleteCertificatesSection extends StatelessWidget {
     >(
       listener: (context, state) {
         if (state is DeleteMonthlyCertificateSuccess) {
+          GetMonthlyCertificatesCubit.get(context).getMonthlyCertificates();
+
           showCustomSnackBar(
             context,
             S.of(context).certificateDeletedSuccessfully,
             true,
           );
-          GetMonthlyCertificatesCubit.get(context).getMonthlyCertificates();
         }
 
         if (state is DeleteMonthlyCertificateFailure) {

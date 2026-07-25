@@ -280,6 +280,7 @@ GoRouter buildRouter() {
                   loadSubjectsWithoutClassroom: false,
                 )..loadGrades(),
               ),
+              BlocProvider(create: (_) => getIt<GetCertificateDetailsCubit>()),
               BlocProvider(
                 create: (context) => getIt<IssueMonthlyCertificatesCubit>(),
               ),

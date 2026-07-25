@@ -45,7 +45,9 @@ class CertificatesSendActions extends StatelessWidget {
                       BlocProvider(
                         create: (_) => getIt<GetStudentSubjectsCubit>(),
                       ),
-                     
+                      BlocProvider.value(
+                        value: context.read<GetMonthlyCertificatesCubit>(),
+                      ),
                     ],
                     child: const CertificateDialog(),
                   ),

@@ -778,7 +778,7 @@
     "certificateDeletedSuccessfully": "Certificate deleted successfully",
     "unableToOpenFile": "Unable to Open the file",
     "certificatesWithoutArticle": "Certificates",
-    "noStudentsInClass": "No students found in this class",
+    "noStudentsInClass": "There are no students in this classroom",
     "certificateAddedSuccessfully": "Certificate added successfully",
     "pleaseSelectStudent": "Please select a student",
     "pleaseEnterSubjectsGrades": "Please enter the subjects grades",
@@ -792,5 +792,7 @@
     "noAvailableClassrooms": "No available classrooms",
     "selectClassroom": "Select classroom",
     "fileDownloadedSuccessfully": "File downloaded successfully",
-    "unableToDownloadFile": "Unable to download file"
+    "unableToDownloadFile": "Unable to download file",
+    "selectClassroomFirst": "Select classroom first",
+    "studentAssignedSuccessfully": "Student assigned successfully"
 }

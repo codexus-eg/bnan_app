@@ -562,7 +562,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد."),
         "noStudentsInClass":
-            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الصف"),
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الفصل"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الصف"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
@@ -804,6 +804,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
         "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
         "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
+        "selectClassroomFirst":
+            MessageLookupByLibrary.simpleMessage("اختر الفصل أولاً"),
         "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
@@ -841,6 +843,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ابدأ الحصة عبر Zoom"),
         "startNow": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
         "student": MessageLookupByLibrary.simpleMessage("طالب"),
+        "studentAssignedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعيين الطالب بنجاح"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("ايميل الطالب"),
         "studentInfo": MessageLookupByLibrary.simpleMessage("معلومات الطالب"),
         "studentName": MessageLookupByLibrary.simpleMessage("اسم الطالب"),
