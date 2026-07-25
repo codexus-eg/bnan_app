@@ -6589,6 +6589,196 @@ class S {
       args: [],
     );
   }
+
+  /// `Package Management`
+  String get packagesManagement {
+    return Intl.message(
+      'Package Management',
+      name: 'packagesManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Package`
+  String get addNewPackage {
+    return Intl.message(
+      'Add New Package',
+      name: 'addNewPackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Package`
+  String get editPackage {
+    return Intl.message(
+      'Edit Package',
+      name: 'editPackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Package`
+  String get addNewPackageTitle {
+    return Intl.message(
+      'Add New Package',
+      name: 'addNewPackageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package Type`
+  String get packageType {
+    return Intl.message(
+      'Package Type',
+      name: 'packageType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly Package`
+  String get monthlyPackage {
+    return Intl.message(
+      'Monthly Package',
+      name: 'monthlyPackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package Duration`
+  String get packageDuration {
+    return Intl.message(
+      'Package Duration',
+      name: 'packageDuration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Example: 4-Hour Package`
+  String get packageDurationHint {
+    return Intl.message(
+      'Example: 4-Hour Package',
+      name: 'packageDurationHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Price`
+  String get newPrice {
+    return Intl.message(
+      'New Price',
+      name: 'newPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount Title`
+  String get discountTitle {
+    return Intl.message(
+      'Discount Title',
+      name: 'discountTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Example: Save 120 SAR`
+  String get discountTitleHint {
+    return Intl.message(
+      'Example: Save 120 SAR',
+      name: 'discountTitleHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Visible to Customers`
+  String get visibleToCustomers {
+    return Intl.message(
+      'Visible to Customers',
+      name: 'visibleToCustomers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Package`
+  String get deletePackage {
+    return Intl.message(
+      'Delete Package',
+      name: 'deletePackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this package?`
+  String get deletePackageConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this package?',
+      name: 'deletePackageConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Packages`
+  String get allPackages {
+    return Intl.message(
+      'All Packages',
+      name: 'allPackages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package Name`
+  String get packageName {
+    return Intl.message(
+      'Package Name',
+      name: 'packageName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package Name`
+  String get packageFormName {
+    return Intl.message(
+      'Package Name',
+      name: 'packageFormName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hours Package`
+  String get packageHoursType {
+    return Intl.message(
+      'Hours Package',
+      name: 'packageHoursType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Old Price`
+  String get packageOldPrice {
+    return Intl.message(
+      'Old Price',
+      name: 'packageOldPrice',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -7,53 +7,76 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubscriptionGrid extends StatelessWidget {
-  const SubscriptionGrid({super.key, required this.curriculumId, required this.curriculumName});
+  const SubscriptionGrid({
+    super.key,
+    required this.curriculumId,
+    required this.curriculumName,
+    this.bottomWidget,
+    this.isSliver = true,
+  });
+
   final String curriculumId;
   final String curriculumName;
+  final Widget Function(PackageCardModel plan)? bottomWidget;
+  final bool isSliver;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GetPackagesCubit, GetPackagesState>(
       builder: (context, state) {
         final isLoading = state is GetPackagesLoading;
+
         if (state is GetPackagesFailure) {
-          return SliverToBoxAdapter(
-            child: Center(child: Text(state.errorMessage)),
+          final errorWidget = Center(
+            child: Text(state.errorMessage),
           );
+
+          return isSliver
+              ? SliverToBoxAdapter(child: errorWidget)
+              : errorWidget;
         }
 
         final plans = state is GetPackagesSuccess
             ? state.packages
-                  .map(
-                    (package) => PackageCardModel.fromPackage(
-                      context: context,
-                      package: package,
-                    ),
-                  )
-                  .toList()
+                .map(
+                  (package) => PackageCardModel.fromPackage(
+                    context: context,
+                    package: package,
+                  ),
+                )
+                .toList()
             : PackageCardModel.placeholders(context);
 
-        return SliverToBoxAdapter(
-          child: AppSkeletonizer(
-            isLoading: isLoading,
-            child: _PackagesGrid(
-              plans: plans,
-              curriculumId: curriculumId,
-              curriculumName: curriculumName,
-            ),
+        final grid = AppSkeletonizer(
+          isLoading: isLoading,
+          child: _PackagesGrid(
+            plans: plans,
+            curriculumId: curriculumId,
+            curriculumName: curriculumName,
+            bottomWidget: bottomWidget,
           ),
         );
+
+        return isSliver
+            ? SliverToBoxAdapter(child: grid)
+            : grid;
       },
     );
   }
 }
 
 class _PackagesGrid extends StatelessWidget {
+  const _PackagesGrid({
+    required this.plans,
+    required this.curriculumId,
+    required this.curriculumName,
+    this.bottomWidget,
+  });
+
   final List<PackageCardModel> plans;
   final String curriculumId;
   final String curriculumName;
-
-  const _PackagesGrid({required this.plans, required this.curriculumId, required this.curriculumName});
+  final Widget Function(PackageCardModel plan)? bottomWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -65,24 +88,22 @@ class _PackagesGrid extends StatelessWidget {
         final secondIndex = firstIndex + 1;
 
         return Padding(
-          padding: EdgeInsets.only(bottom: rowIndex == rowsCount - 1 ? 0 : 16),
+          padding: EdgeInsets.only(
+            bottom: rowIndex == rowsCount - 1 ? 0 : 16,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: SubscriptionPlanCard(
-                  plan: plans[firstIndex],
-                  curriculumId: curriculumId,
-                  curriculumName: curriculumName,
+                child: _buildCard(
+                  plans[firstIndex],
                 ),
               ),
               const SizedBox(width: 19),
               if (secondIndex < plans.length)
                 Expanded(
-                  child: SubscriptionPlanCard(
-                    plan: plans[secondIndex],
-                    curriculumId: curriculumId,
-                    curriculumName: curriculumName,
+                  child: _buildCard(
+                    plans[secondIndex],
                   ),
                 )
               else
@@ -91,6 +112,15 @@ class _PackagesGrid extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+
+  Widget _buildCard(PackageCardModel plan) {
+    return SubscriptionPlanCard(
+      plan: plan,
+      curriculumId: curriculumId,
+      curriculumName: curriculumName,
+      bottomWidget: bottomWidget?.call(plan),
     );
   }
 }

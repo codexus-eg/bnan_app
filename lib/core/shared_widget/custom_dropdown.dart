@@ -13,18 +13,20 @@ class CustomDropdown extends StatelessWidget {
     this.hint,
     this.isRequired = false,
     this.hintStyle,
-    this.backgroundColor, this.labelColor,
+    this.backgroundColor,
+    this.labelColor,
+    this.valueStyle,
   });
 
   final String label;
   final String? value;
-  final TextStyle? hintStyle;
+  final TextStyle? hintStyle, valueStyle;
   final String? hint;
   final List<String>? items;
   final Map<String, String>? itemsLabels;
   final ValueChanged<String?>? onChanged;
   final bool isRequired;
-  final Color? backgroundColor,labelColor;
+  final Color? backgroundColor, labelColor;
 
   String _labelOf(String item) => itemsLabels?[item] ?? item;
 
@@ -43,7 +45,7 @@ class CustomDropdown extends StatelessWidget {
               label,
               style: StylesManager.styleBold14(
                 context,
-              ).copyWith(color:labelColor?? ColorManager.mainColor15),
+              ).copyWith(color: labelColor ?? ColorManager.mainColor15),
             ),
             if (isRequired)
               const Text('*', style: TextStyle(color: Colors.red)),
@@ -75,6 +77,7 @@ class CustomDropdown extends StatelessWidget {
                   return _DropdownDisplayedText(
                     text: _labelOf(item),
                     isDisabled: isDisabled,
+                    valueStyle: valueStyle,
                   );
                 }).toList();
               },
@@ -103,21 +106,26 @@ class _DropdownDisplayedText extends StatelessWidget {
     required this.text,
     required this.isDisabled,
     this.hintStyle,
+    this.valueStyle,
   });
 
   final String text;
   final bool isDisabled;
   final TextStyle? hintStyle;
+  final TextStyle? valueStyle;
 
   @override
   Widget build(BuildContext context) {
-    final color = isDisabled ? ColorManager.greyA8AF : ColorManager.mainColor15;
+    final color =
+        isDisabled ? ColorManager.greyA8AF : ColorManager.mainColor15;
 
     return Row(
       children: [
         Icon(
           Icons.keyboard_arrow_down,
-          color: isDisabled ? ColorManager.greyA8AF : ColorManager.greyA8AF,
+          color: isDisabled
+              ? ColorManager.greyA8AF
+              : ColorManager.greyA8AF,
           size: 22,
         ),
         const SizedBox(width: 8),
@@ -125,9 +133,11 @@ class _DropdownDisplayedText extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.start,
-            style:
+            style: valueStyle ??
                 hintStyle ??
-                StylesManager.styleRegular16(context).copyWith(color: color),
+                StylesManager.styleRegular16(context).copyWith(
+                  color: color,
+                ),
           ),
         ),
       ],

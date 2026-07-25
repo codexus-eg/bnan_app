@@ -15,12 +15,15 @@ class SubscriptionPlanCard extends StatelessWidget {
   const SubscriptionPlanCard({
     super.key,
     required this.plan,
-    required this.curriculumId, required this.curriculumName,
+    required this.curriculumId,
+    required this.curriculumName,
+    this.bottomWidget,
   });
 
   final PackageCardModel plan;
   final String curriculumId;
   final String curriculumName;
+  final Widget? bottomWidget;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -45,8 +48,8 @@ class SubscriptionPlanCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: ColorManager.black.withAlpha((255 * .25).round()),
-                blurRadius: 4,
-                offset: const Offset(0, 4),
+                blurRadius: 1,
+                offset: const Offset(0, 1),
               ),
             ],
           ),
@@ -90,22 +93,23 @@ class SubscriptionPlanCard extends StatelessWidget {
               const SizedBox(height: 9),
               Text(plan.saveText, style: StylesManager.styleBold8(context)),
               const SizedBox(height: 9),
-              SubscribeButton(
-                text: S.of(context).subscribeNow,
-                onTap: () {
-                  MyNavigator.goTo(
-                    context,
-                    Routes.studentRegistration,
-                    extra: RegisterFlowArgsModel(
-                      curriculumId: curriculumId,
-                      curriculumName: curriculumName,
-                      packageId: plan.id,
-                      packageName: plan.title,
-                      packagePrice: plan.priceText,
-                    ),
-                  );
-                },
-              ),
+              bottomWidget ??
+                  SubscribeButton(
+                    text: S.of(context).subscribeNow,
+                    onTap: () {
+                      MyNavigator.goTo(
+                        context,
+                        Routes.studentRegistration,
+                        extra: RegisterFlowArgsModel(
+                          curriculumId: curriculumId,
+                          curriculumName: curriculumName,
+                          packageId: plan.id,
+                          packageName: plan.title,
+                          packagePrice: plan.priceText,
+                        ),
+                      );
+                    },
+                  ),
             ],
           ),
         ),
