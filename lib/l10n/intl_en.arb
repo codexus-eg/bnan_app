@@ -790,5 +790,7 @@
     "selectStudentFirst": "Select student first",
     "loadingClassrooms": "Loading classrooms",
     "noAvailableClassrooms": "No available classrooms",
-    "selectClassroom": "Select classroom"
+    "selectClassroom": "Select classroom",
+    "fileDownloadedSuccessfully": "File downloaded successfully",
+    "unableToDownloadFile": "Unable to download file"
 }

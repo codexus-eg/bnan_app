@@ -1,7 +1,10 @@
+import 'package:bnan_app/core/helper/file_url_launcher.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_attachment_model.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_formatters.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChatFileAttachment extends StatelessWidget {
@@ -20,33 +23,53 @@ class ChatFileAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsetsDirectional.all(10),
-      decoration: BoxDecoration(
-        color: isMe
-            ? ColorManager.white.withAlpha(25)
-            : ColorManager.mainColor14.withAlpha(15),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => _openFile(context),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsetsDirectional.all(10),
+        decoration: BoxDecoration(
           color: isMe
-              ? ColorManager.white.withAlpha(50)
-              : ColorManager.mainColor14.withAlpha(40),
+              ? ColorManager.white.withAlpha(25)
+              : ColorManager.mainColor14.withAlpha(15),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isMe
+                ? ColorManager.white.withAlpha(50)
+                : ColorManager.mainColor14.withAlpha(40),
+          ),
+        ),
+        child: Row(
+          children: [
+            _buildIcon(),
+            const SizedBox(width: 10),
+            Expanded(child: _buildDetails(context)),
+            const SizedBox(width: 8),
+            Icon(
+              Icons.open_in_new,
+              color: isMe
+                  ? ColorManager.white
+                  : ColorManager.mainColor14,
+            ),
+          ],
         ),
       ),
-      child: Row(
-        children: [
-          _buildIcon(),
-          const SizedBox(width: 10),
-          Expanded(child: _buildDetails(context)),
-          const SizedBox(width: 8),
-          Icon(
-            Icons.download_outlined,
-            color: isMe ? ColorManager.white : ColorManager.mainColor14,
-          ),
-        ],
-      ),
     );
+  }
+
+  Future<void> _openFile(BuildContext context) async {
+    final opened = await FileUrlLauncher.open(
+      attachment.fileUrl,
+    );
+
+    if (!opened && context.mounted) {
+      showCustomSnackBar(
+        context,
+        S.of(context).unableToOpenFile,
+        false,
+      );
+    }
   }
 
   Widget _buildIcon() {
@@ -56,7 +79,9 @@ class ChatFileAttachment extends StatelessWidget {
           : ColorManager.mainColor14.withAlpha(20),
       child: Icon(
         icon,
-        color: isMe ? ColorManager.white : ColorManager.mainColor14,
+        color: isMe
+            ? ColorManager.white
+            : ColorManager.mainColor14,
       ),
     );
   }
@@ -70,15 +95,21 @@ class ChatFileAttachment extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: StylesManager.styleRegular14(context).copyWith(
-            color: isMe ? ColorManager.white : ColorManager.black,
+            color: isMe
+                ? ColorManager.white
+                : ColorManager.black,
           ),
         ),
         if (attachment.size > 0)
           Text(
-            ChatFormatters.formatFileSize(attachment.size),
+            ChatFormatters.formatFileSize(
+              attachment.size,
+            ),
             style: StylesManager.styleRegular14(context).copyWith(
               fontSize: 11,
-              color: isMe ? ColorManager.grey9D9D : ColorManager.grey7A7C,
+              color: isMe
+                  ? ColorManager.grey9D9D
+                  : ColorManager.grey7A7C,
             ),
           ),
       ],

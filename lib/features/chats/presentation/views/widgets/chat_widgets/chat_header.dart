@@ -4,7 +4,8 @@ import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/
 import 'package:flutter/material.dart';
 
 class ChatHeader extends StatelessWidget {
-  const ChatHeader({super.key});
+  const ChatHeader({super.key, required this.chatTitle});
+  final String chatTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class ChatHeader extends StatelessWidget {
                 color: ColorManager.white,
               ),
             ),
-            const UserInfo(),
+             UserInfo(chatTitle: chatTitle),
           ],
         ),
       ),
@@ -44,23 +45,3 @@ class ChatHeader extends StatelessWidget {
   }
 }
 
-
-
-// class _Avatar extends StatelessWidget {
-//   const _Avatar();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const CircleAvatar(
-//       radius: 20,
-//       backgroundColor: Color(0xffC9A24A),
-//       child: Text(
-//         'س',
-//         style: TextStyle(
-//           color: ColorManager.mainColor14,
-//           fontWeight: FontWeight.bold,
-//         ),
-//       ),
-//     );
-//   }
-// }
