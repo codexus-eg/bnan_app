@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/student_auth/data/models/grade_model.dart';
+import 'package:bnan_app/features/grades_management/data/models/grade_model.dart';
 
 abstract class GetGradesState {}
 

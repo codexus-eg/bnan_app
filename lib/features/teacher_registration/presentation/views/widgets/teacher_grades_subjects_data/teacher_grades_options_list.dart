@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
-import 'package:bnan_app/features/student_auth/data/models/grade_model.dart';
+import 'package:bnan_app/features/grades_management/data/models/grade_model.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
@@ -25,14 +25,15 @@ class TeacherGradesOptionsList extends StatelessWidget {
               return Text(state.errorMessage);
             }
 
-            final grades = state is GetGradesSuccess
+            final  grades = state is GetGradesSuccess
                 ? state.grades
-                : GradeModel.placeholderList();
+                : [];
 
             return AppSkeletonizer(
               isLoading: isLoading,
               child: TeacherGradesOptionsListView(
-                grades: grades,
+                //TODO here
+                grades: [],
                 teacherCubit: teacherCubit,
                 onGradeTap: (grade) {
                   teacherCubit.toggleTeachingGrade(gradeId: grade.id);

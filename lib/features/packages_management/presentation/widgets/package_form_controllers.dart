@@ -6,6 +6,7 @@ class PackageFormControllers {
   final oldPrice = TextEditingController();
   final newPrice = TextEditingController();
   final discountTitle = TextEditingController();
+  final description = TextEditingController();
 
   void dispose() {
     name.dispose();
@@ -13,5 +14,6 @@ class PackageFormControllers {
     oldPrice.dispose();
     newPrice.dispose();
     discountTitle.dispose();
+    description.dispose();
   }
 }

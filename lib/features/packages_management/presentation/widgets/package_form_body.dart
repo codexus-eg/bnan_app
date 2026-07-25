@@ -20,6 +20,8 @@ class PackageFormBody extends StatelessWidget {
     required this.onTypeChanged,
     required this.onPopularChanged,
     required this.onSave,
+    required this.currency,
+    required this.onCurrencyChanged,
   });
 
   final PackageFormControllers controllers;
@@ -32,11 +34,13 @@ class PackageFormBody extends StatelessWidget {
   final ValueChanged<String> onTypeChanged;
   final ValueChanged<bool> onPopularChanged;
   final VoidCallback onSave;
-
+  final String currency;
+  final ValueChanged<String?> onCurrencyChanged;
   @override
   Widget build(BuildContext context) => Expanded(
     child: SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           CustomDropdown(
             label: S.of(context).curriculum,
@@ -49,11 +53,19 @@ class PackageFormBody extends StatelessWidget {
           const SizedBox(height: 16),
           PackageTypeSelector(value: packageType, onChanged: onTypeChanged),
           const SizedBox(height: 16),
-          PackageFormContent(controllers: controllers),
+          PackageFormContent(
+            controllers: controllers,
+            currency: currency,
+            onCurrencyChanged: onCurrencyChanged,
+          ),
           const SizedBox(height: 16),
           PackagePopularSwitch(value: isPopular, onChanged: onPopularChanged),
           const SizedBox(height: 16),
-          CustomAppButton(text: S.of(context).save, height: 44, onPressed: onSave),
+          CustomAppButton(
+            text: S.of(context).save,
+            height: 44,
+            onPressed: onSave,
+          ),
         ],
       ),
     ),

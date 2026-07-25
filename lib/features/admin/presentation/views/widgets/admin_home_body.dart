@@ -2,8 +2,9 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_layout.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_placeholder_tab.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/packages_management_body.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_management_body.dart';
@@ -41,12 +42,18 @@ class AdminHomeBody extends StatelessWidget {
         ],
         child: const SubjectManagementBody(),
       ),
+
       MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => getIt<GetPackagesCubit>()),
-          BlocProvider(create: (_) => getIt<AcademicLookupsCubit>()),
+          BlocProvider(
+            create: (_) => getIt<AcademicLookupsCubit>()..loadCurriculums(),
+          ),
+          BlocProvider(
+            create: (context) => getIt<GetPackagesCubit>()..getPackages(),
+          ),
+          BlocProvider(create: (context) => getIt<PackageActionsCubit>()),
         ],
-        child: PackagesManagementBody(),
+        child: const PackagesManagementBody(),
       ),
     ];
 

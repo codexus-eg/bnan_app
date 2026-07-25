@@ -8,10 +8,14 @@ class PackagePricesRow extends StatelessWidget {
     super.key,
     required this.oldPrice,
     required this.newPrice,
+    required this.currency,
+    required this.onCurrencyChanged,
   });
 
   final TextEditingController oldPrice;
   final TextEditingController newPrice;
+  final String currency;
+  final ValueChanged<String?> onCurrencyChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,8 @@ class PackagePricesRow extends StatelessWidget {
           flex: 2,
           child: PackagePriceField(
             title: S.of(context).packageOldPrice,
-            controller: oldPrice, hintText: '200',
+            controller: oldPrice,
+            hintText: '200',
           ),
         ),
         const SizedBox(width: 20),
@@ -30,7 +35,8 @@ class PackagePricesRow extends StatelessWidget {
           flex: 2,
           child: PackagePriceField(
             title: S.of(context).newPrice,
-            controller: newPrice, hintText: '120',
+            controller: newPrice,
+            hintText: '120',
           ),
         ),
         const SizedBox(width: 20),
@@ -38,10 +44,8 @@ class PackagePricesRow extends StatelessWidget {
           flex: 2,
           child: PackageCurrencyField(
             title: S.of(context).currency,
-            value: 'SAR',
-            onChanged: (value) {
-              // غيري قيمة العملة هنا
-            },
+            value: currency,
+            onChanged: onCurrencyChanged,
           ),
         ),
       ],

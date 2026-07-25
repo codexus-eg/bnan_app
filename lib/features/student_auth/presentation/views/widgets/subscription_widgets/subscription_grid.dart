@@ -1,7 +1,9 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_state.dart';
 import 'package:bnan_app/features/student_auth/data/models/package_card_model.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/get_packages_cubit/get_packages_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscription_plan_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,8 +19,12 @@ class SubscriptionGrid extends StatelessWidget {
 
   final String curriculumId;
   final String curriculumName;
-  final Widget Function(PackageCardModel plan)? bottomWidget;
   final bool isSliver;
+
+  final Widget Function(
+    PackageCardModel plan,
+    PackageModel package,
+  )? bottomWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -27,100 +33,132 @@ class SubscriptionGrid extends StatelessWidget {
         final isLoading = state is GetPackagesLoading;
 
         if (state is GetPackagesFailure) {
-          final errorWidget = Center(
-            child: Text(state.errorMessage),
+          return _wrap(
+            Center(child: Text(state.message)),
           );
-
-          return isSliver
-              ? SliverToBoxAdapter(child: errorWidget)
-              : errorWidget;
         }
 
+        if (state is GetPackagesSuccess && state.packages.isEmpty) {
+          return _wrap(
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * .5,
+              child: const Center(
+                child: NoDataWidget(),
+              ),
+            ),
+          );
+        }
+
+        final packages = state is GetPackagesSuccess
+            ? state.packages.reversed.toList()
+            : <PackageModel>[];
+
         final plans = state is GetPackagesSuccess
-            ? state.packages
-                .map(
-                  (package) => PackageCardModel.fromPackage(
-                    context: context,
-                    package: package,
-                  ),
-                )
-                .toList()
+            ? packages
+                  .map(
+                    (package) => PackageCardModel.fromPackage(
+                      context: context,
+                      package: package,
+                    ),
+                  )
+                  .toList()
             : PackageCardModel.placeholders(context);
 
         final grid = AppSkeletonizer(
           isLoading: isLoading,
-          child: _PackagesGrid(
+          child: PackagesGrid(
             plans: plans,
+            packages: packages,
             curriculumId: curriculumId,
             curriculumName: curriculumName,
             bottomWidget: bottomWidget,
           ),
         );
 
-        return isSliver
-            ? SliverToBoxAdapter(child: grid)
-            : grid;
+        return _wrap(grid);
       },
     );
   }
+
+  Widget _wrap(Widget child) {
+    return isSliver
+        ? SliverToBoxAdapter(child: child)
+        : child;
+  }
 }
 
-class _PackagesGrid extends StatelessWidget {
-  const _PackagesGrid({
+class PackagesGrid extends StatelessWidget {
+  const PackagesGrid({
+    super.key,
     required this.plans,
+    required this.packages,
     required this.curriculumId,
     required this.curriculumName,
     this.bottomWidget,
   });
 
   final List<PackageCardModel> plans;
+  final List<PackageModel> packages;
   final String curriculumId;
   final String curriculumName;
-  final Widget Function(PackageCardModel plan)? bottomWidget;
+
+  final Widget Function(
+    PackageCardModel plan,
+    PackageModel package,
+  )? bottomWidget;
 
   @override
   Widget build(BuildContext context) {
     final rowsCount = (plans.length / 2).ceil();
 
     return Column(
-      children: List.generate(rowsCount, (rowIndex) {
-        final firstIndex = rowIndex * 2;
-        final secondIndex = firstIndex + 1;
-
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: rowIndex == rowsCount - 1 ? 0 : 16,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: _buildCard(
-                  plans[firstIndex],
-                ),
-              ),
-              const SizedBox(width: 19),
-              if (secondIndex < plans.length)
-                Expanded(
-                  child: _buildCard(
-                    plans[secondIndex],
-                  ),
-                )
-              else
-                const Spacer(),
-            ],
-          ),
-        );
-      }),
+      children: List.generate(
+        rowsCount,
+        (rowIndex) => _buildRow(rowIndex),
+      ),
     );
   }
 
-  Widget _buildCard(PackageCardModel plan) {
+  Widget _buildRow(int rowIndex) {
+    final firstIndex = rowIndex * 2;
+    final secondIndex = firstIndex + 1;
+    final rowsCount = (plans.length / 2).ceil();
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: rowIndex == rowsCount - 1 ? 0 : 16,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: _buildCard(firstIndex),
+          ),
+          const SizedBox(width: 19),
+          if (secondIndex < plans.length)
+            Expanded(
+              child: _buildCard(secondIndex),
+            )
+          else
+            const Spacer(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard(int index) {
+    final plan = plans[index];
+
     return SubscriptionPlanCard(
       plan: plan,
       curriculumId: curriculumId,
       curriculumName: curriculumName,
-      bottomWidget: bottomWidget?.call(plan),
+      bottomWidget: index < packages.length
+          ? bottomWidget?.call(
+              plan,
+              packages[index],
+            )
+          : null,
     );
   }
 }

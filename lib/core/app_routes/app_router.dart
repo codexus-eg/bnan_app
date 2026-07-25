@@ -3,6 +3,7 @@ import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubi
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
@@ -80,7 +81,7 @@ GoRouter buildRouter() {
             child: BlocProvider(
               create: (_) =>
                   getIt<GetPackagesCubit>()
-                    ..getCurriculumPackages(curriculumId: curriculum.id),
+                    ..getPackagesByCurriculum(curriculum.id),
               child: SubscriptionView(
                 curriculumId: curriculum.id,
                 curriculumName: curriculum.title,

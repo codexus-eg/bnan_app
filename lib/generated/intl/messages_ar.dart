@@ -126,8 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "algebraCourseCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة إتمام دورة الجبر"),
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
+        "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
         "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
-        "allPackages": MessageLookupByLibrary.simpleMessage("كل الباقات"),
         "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
@@ -275,6 +275,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إنشاء واجب جديد"),
         "creditCard": MessageLookupByLibrary.simpleMessage("بطاقة إئتمانية"),
         "currency": MessageLookupByLibrary.simpleMessage("العملة:"),
+        "currencyRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار العملة"),
         "currentMonth": MessageLookupByLibrary.simpleMessage("الشهر الحالي"),
         "currentPrice": m3,
         "currentProfits":
@@ -470,8 +472,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شكر وتقدير - التفاعل"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
+        "invalidData": MessageLookupByLibrary.simpleMessage(
+            "يرجى التأكد من البيانات المدخلة"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "الرجاء إدخال عنوان بريد إلكتروني صالح."),
+        "invalidPackage":
+            MessageLookupByLibrary.simpleMessage("بيانات الباقة غير صالحة"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
         "kuwaitiCurriculum":
@@ -546,6 +552,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "newPasswordLabel":
             MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
         "newPrice": MessageLookupByLibrary.simpleMessage("السعر الجديد"),
+        "newPriceInvalid": MessageLookupByLibrary.simpleMessage(
+            "يرجى إدخال السعر الجديد بشكل صحيح"),
+        "newPriceMustBeLessThanOldPrice": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يكون السعر الجديد أقل من أو يساوي السعر القديم"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("تقييم أسبوعي جديد لأحمد"),
         "newWeeklyEvaluation":
@@ -593,6 +603,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("كلمة المرور القديمة"),
         "oldPrice": m12,
+        "oldPriceInvalid": MessageLookupByLibrary.simpleMessage(
+            "يرجى إدخال السعر القديم بشكل صحيح"),
         "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "منصة تعليمية تساعدك على تطوير مهاراتك"),
         "onboardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -609,17 +621,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
         "packageCalculation": m13,
+        "packageCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الباقة بنجاح"),
+        "packageDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الباقة بنجاح"),
         "packageDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الباقة"),
         "packageDuration": MessageLookupByLibrary.simpleMessage("مدة الباقة"),
         "packageDurationHint":
             MessageLookupByLibrary.simpleMessage("مثال: باقة الـ 4 ساعات"),
+        "packageDurationInvalid":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال مدة صحيحة للباقة"),
         "packageExpiryText": MessageLookupByLibrary.simpleMessage(
             "ينتهي خلال 18 يوم . تجديد تلقائي"),
         "packageFormName": MessageLookupByLibrary.simpleMessage("اسم الباقة"),
         "packageHoursType": MessageLookupByLibrary.simpleMessage("باقة ساعات"),
+        "packageNameRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال اسم الباقة"),
         "packageOldPrice": MessageLookupByLibrary.simpleMessage("السعر القديم"),
         "packagePrice": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
         "packageType": MessageLookupByLibrary.simpleMessage("نوع الباقة"),
+        "packageUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الباقة بنجاح"),
         "packages": MessageLookupByLibrary.simpleMessage("الباقات"),
         "packagesManagement":
             MessageLookupByLibrary.simpleMessage("إدارة الباقات"),
@@ -829,6 +851,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "selectClassroomFirst":
             MessageLookupByLibrary.simpleMessage("اختر الفصل أولاً"),
+        "selectCurriculumFirst":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار المنهج"),
         "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),

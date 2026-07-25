@@ -1,12 +1,11 @@
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/add_package_button.dart';
-import 'package:bnan_app/features/packages_management/presentation/widgets/delete_package_dialog.dart';
-import 'package:bnan_app/features/packages_management/presentation/widgets/package_admin_actions.dart';
-import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_dialog.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/packages_curriculum_dropdown.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscription_grid.dart';
+import 'package:bnan_app/features/packages_management/presentation/widgets/packages_management_grid_section.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PackagesManagementBody extends StatefulWidget {
   const PackagesManagementBody({super.key});
@@ -17,6 +16,7 @@ class PackagesManagementBody extends StatefulWidget {
 
 class _PackagesManagementBodyState extends State<PackagesManagementBody> {
   String? selectedCurriculumId;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,18 +28,7 @@ class _PackagesManagementBodyState extends State<PackagesManagementBody> {
             headerText: S.of(context).packagesManagement,
             iconNeeded: false,
           ),
-          AddPackageButton(
-            curriculums: const [
-              '6a5fcada03319aba30452a89',
-              '6a5fcada03319aba30452a90',
-              '6a5fcada03319aba30452a91',
-            ],
-            labels: const {
-              '6a5fcada03319aba30452a89': 'المنهج المصري',
-              '6a5fcada03319aba30452a90': 'المنهج السعودي',
-              '6a5fcada03319aba30452a91': 'المنهج الإماراتي',
-            },
-          ),
+         const AddPackageButton(),
           const SizedBox(height: 16),
           PackagesCurriculumDropdown(
             value: selectedCurriculumId,
@@ -47,47 +36,18 @@ class _PackagesManagementBodyState extends State<PackagesManagementBody> {
               setState(() {
                 selectedCurriculumId = value;
               });
+              if (value == null) {
+                context.read<GetPackagesCubit>().getPackages();
+                return;
+              }
+              context.read<GetPackagesCubit>().getPackagesByCurriculum(value);
             },
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: SingleChildScrollView(
-              child: SubscriptionGrid(
-                curriculumId: '6a5fcada03319aba30452a89',
-                curriculumName: 'Egyptian',
-                isSliver: false,
-                bottomWidget: (plan) {
-                  return PackageAdminActions(
-                    plan: plan,
-                    onDelete: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            child: DeletePackageDialog(
-                              packageId: '',
-                              isLoading: false,
-                              onPressed: () {
-                                // delete package
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    onEdit: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => PackageFormDialog(
-                          curriculums: [''],
-                          labels: {'': ""},
-                          isEdit: true,
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+            child: PackagesManagementGridSection(
+              curriculumId: selectedCurriculumId ?? '',
+              curriculumName: '',
             ),
           ),
         ],

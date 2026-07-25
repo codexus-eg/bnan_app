@@ -8,10 +8,13 @@ class PackageFormContent extends StatelessWidget {
   const PackageFormContent({
     super.key,
     required this.controllers,
+    required this.currency,
+    required this.onCurrencyChanged,
   });
 
   final PackageFormControllers controllers;
-
+  final String currency;
+  final ValueChanged<String?> onCurrencyChanged;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,19 +30,22 @@ class PackageFormContent extends StatelessWidget {
           label: S.of(context).packageDuration,
           hintText: S.of(context).packageDurationHint,
           controller: controllers.duration,
+          keyboardType:TextInputType.number ,
           isRequired: true,
         ),
         const SizedBox(height: 14),
         PackagePricesRow(
           oldPrice: controllers.oldPrice,
           newPrice: controllers.newPrice,
+          currency: currency,
+          onCurrencyChanged: onCurrencyChanged,
         ),
         const SizedBox(height: 14),
-        CustomTextField(
-          label: S.of(context).discountTitle,
-          hintText: S.of(context).discountTitleHint,
-          controller: controllers.discountTitle,
-        ),
+        // CustomTextField(
+        //   label: S.of(context).discountTitle,
+        //   hintText: S.of(context).discountTitleHint,
+        //   controller: controllers.discountTitle,
+        // ),
       ],
     );
   }
