@@ -6420,10 +6420,10 @@ class S {
     );
   }
 
-  /// `No students found in this class`
+  /// `There are no students in this classroom`
   String get noStudentsInClass {
     return Intl.message(
-      'No students found in this class',
+      'There are no students in this classroom',
       name: 'noStudentsInClass',
       desc: '',
       args: [],
@@ -6565,6 +6565,26 @@ class S {
     return Intl.message(
       'Unable to download file',
       name: 'unableToDownloadFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select classroom first`
+  String get selectClassroomFirst {
+    return Intl.message(
+      'Select classroom first',
+      name: 'selectClassroomFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Student assigned successfully`
+  String get studentAssignedSuccessfully {
+    return Intl.message(
+      'Student assigned successfully',
+      name: 'studentAssignedSuccessfully',
       desc: '',
       args: [],
     );

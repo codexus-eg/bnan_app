@@ -27,7 +27,7 @@ class CertificateStudentDropdown extends StatefulWidget {
 
 class _CertificateStudentDropdownState
     extends State<CertificateStudentDropdown> {
-  String? selectedStudentName;
+  String? selectedStudentId;
 
   @override
   void didUpdateWidget(
@@ -37,7 +37,7 @@ class _CertificateStudentDropdownState
 
     if (oldWidget.classroomId == widget.classroomId) return;
 
-    selectedStudentName = null;
+    selectedStudentId = null;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -49,50 +49,62 @@ class _CertificateStudentDropdownState
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<
-      GetClassroomStudentsCubit,
-      GetClassroomStudentsState
-    >(
+        GetClassroomStudentsCubit,
+        GetClassroomStudentsState>(
       builder: (context, state) {
-        final isLoading = state is GetClassroomStudentsLoading;
+        final classroomId = widget.classroomId?.trim();
 
-        final students = state is GetClassroomStudentsSuccess
-            ? state.response.data
-            : <ClassroomStudentModel>[];
+        final hasClassroom =
+            classroomId != null && classroomId.isNotEmpty;
 
-        final hasStudents = students.isNotEmpty;
+        final isLoading =
+            hasClassroom && state is GetClassroomStudentsLoading;
 
-        final names = isLoading
-            ? ['Student name']
-            : hasStudents
-                ? students
-                    .map(
-                      (student) =>
-                          student.fullName?.trim() ?? '',
-                    )
-                    .where((name) => name.isNotEmpty)
-                    .toList()
-                : [S.of(context).noStudentsInClass];
+        final students =
+            hasClassroom && state is GetClassroomStudentsSuccess
+                ? state.response.data
+                : <ClassroomStudentModel>[];
+
+        final items = students
+            .map((student) => student.id?.trim() ?? '')
+            .where((id) => id.isNotEmpty)
+            .toList();
+
+        final hasStudents = items.isNotEmpty;
+
+        final labels = {
+          for (final student in students)
+            if (student.id?.trim().isNotEmpty == true)
+              student.id!.trim():
+                  student.fullName?.trim() ?? '',
+        };
 
         return AppSkeletonizer(
           isLoading: isLoading,
           child: CustomDropdown(
-            value: selectedStudentName,
-            hint: S.of(context).student,
-            isRequired: true,
-            items: names,
+            value: selectedStudentId,
             label: S.of(context).student,
+            isRequired: true,
             backgroundColor: ColorManager.white,
+            hint: _getHint(
+              context,
+              hasClassroom: hasClassroom,
+              hasStudents: hasStudents,
+            ),
             hintStyle: StylesManager.styleBold14(
               context,
             ).copyWith(
               color: ColorManager.mainColor14,
             ),
-            onChanged: hasStudents
-                ? (name) {
+            items: hasClassroom && hasStudents
+                ? items
+                : const [],
+            itemsLabels: labels,
+            onChanged: hasClassroom && hasStudents
+                ? (studentId) {
                     _onStudentChanged(
                       context,
-                      name,
-                      students,
+                      studentId,
                     );
                   }
                 : null,
@@ -104,37 +116,45 @@ class _CertificateStudentDropdownState
 
   void _onStudentChanged(
     BuildContext context,
-    String? name,
-    List<ClassroomStudentModel> students,
+    String? studentId,
   ) {
     final classroomId = widget.classroomId?.trim();
+    final id = studentId?.trim();
 
     if (classroomId == null ||
         classroomId.isEmpty ||
-        name == null ||
-        name.trim().isEmpty) {
+        id == null ||
+        id.isEmpty) {
       return;
     }
 
-    final student = students.firstWhere(
-      (student) => student.fullName?.trim() == name.trim(),
-    );
-
-    final studentId = student.id?.trim();
-
-    if (studentId == null || studentId.isEmpty) return;
-
     setState(() {
-      selectedStudentName = name;
+      selectedStudentId = id;
     });
 
-    widget.onStudentSelected(studentId);
+    widget.onStudentSelected(id);
 
     context.read<GetStudentSubjectsCubit>().reset();
 
     context.read<GetStudentSubjectsCubit>().getStudentSubjects(
       classroomId: classroomId,
-      studentId: studentId,
+      studentId: id,
     );
+  }
+
+  String _getHint(
+    BuildContext context, {
+    required bool hasClassroom,
+    required bool hasStudents,
+  }) {
+    if (!hasClassroom) {
+      return S.of(context).selectClassroomFirst;
+    }
+
+    if (!hasStudents) {
+      return S.of(context).noStudentsInClass;
+    }
+
+    return S.of(context).selectStudent;
   }
 }

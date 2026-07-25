@@ -8,9 +8,12 @@ class StudentClassroomAssignmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: CustomAppbar(headerText: S.of(context).assignStudent),
-      body: StudentClassroomAssignmentBody(),
+      body: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
+        child: StudentClassroomAssignmentBody(),
+      ),
     );
   }
 }

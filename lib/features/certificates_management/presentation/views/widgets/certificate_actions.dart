@@ -91,10 +91,14 @@ class CertificateActions extends StatelessWidget {
               loadSubjectsWithoutClassroom: true,
             )..loadCurriculums(),
           ),
+          BlocProvider(create: (_) => getIt<GetCertificateDetailsCubit>()),
           BlocProvider(create: (_) => getIt<GetClassroomStudentsCubit>()),
           BlocProvider(create: (_) => getIt<GetStudentSubjectsCubit>()),
           BlocProvider.value(
             value: context.read<UpdateMonthlyCertificateCubit>(),
+          ),
+          BlocProvider.value(
+            value: context.read<GetMonthlyCertificatesCubit>(),
           ),
         ],
         child: CertificateDialog(isEdit: true, certificateId: certificateId),
