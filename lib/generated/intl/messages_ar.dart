@@ -103,6 +103,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "addNewEvaluation":
             MessageLookupByLibrary.simpleMessage("إضافة تقييم جديد"),
         "addNewGrade": MessageLookupByLibrary.simpleMessage("إضافة صف جديد"),
+        "addNewPackage":
+            MessageLookupByLibrary.simpleMessage("إضافة باقة جديدة"),
+        "addNewPackageTitle":
+            MessageLookupByLibrary.simpleMessage("إضافة باقة جديدة"),
         "addNewSchedule":
             MessageLookupByLibrary.simpleMessage("إضافة جدول جديد"),
         "addNewSemester":
@@ -123,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شهادة إتمام دورة الجبر"),
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
         "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
+        "allPackages": MessageLookupByLibrary.simpleMessage("كل الباقات"),
         "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
@@ -301,6 +306,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد أنك تريد حذف الصف"),
+        "deletePackage": MessageLookupByLibrary.simpleMessage("حذف الباقة"),
+        "deletePackageConfirmation":
+            MessageLookupByLibrary.simpleMessage("هل تريد حذف هذه الباقة؟"),
         "deleteSchedule": MessageLookupByLibrary.simpleMessage("حذف الجدول"),
         "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد من حذف هذا الجدول؟"),
@@ -315,6 +323,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "disableUserDescription": MessageLookupByLibrary.simpleMessage(
             "لن يستطيع الدخول حتى تقوم بتفعيله."),
         "disableUserQuestion": m5,
+        "discountTitle": MessageLookupByLibrary.simpleMessage("عنوان الخصم"),
+        "discountTitleHint":
+            MessageLookupByLibrary.simpleMessage("مثال: وفر 120 ر.س"),
         "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
@@ -330,6 +341,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
         "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
+        "editPackage": MessageLookupByLibrary.simpleMessage("تعديل الباقة"),
         "editSubject": MessageLookupByLibrary.simpleMessage("تعديل المادة"),
         "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
         "egpShort": MessageLookupByLibrary.simpleMessage("ج.م"),
@@ -505,6 +517,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
         "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
         "month": MessageLookupByLibrary.simpleMessage("الشهر"),
+        "monthlyPackage": MessageLookupByLibrary.simpleMessage("باقة شهرية"),
         "monthlyProfits":
             MessageLookupByLibrary.simpleMessage("الأرباح الشهرية"),
         "monthlyRevenue": MessageLookupByLibrary.simpleMessage("إيرادات الشهر"),
@@ -532,6 +545,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
         "newPasswordLabel":
             MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
+        "newPrice": MessageLookupByLibrary.simpleMessage("السعر الجديد"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("تقييم أسبوعي جديد لأحمد"),
         "newWeeklyEvaluation":
@@ -596,10 +610,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
         "packageCalculation": m13,
         "packageDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الباقة"),
+        "packageDuration": MessageLookupByLibrary.simpleMessage("مدة الباقة"),
+        "packageDurationHint":
+            MessageLookupByLibrary.simpleMessage("مثال: باقة الـ 4 ساعات"),
         "packageExpiryText": MessageLookupByLibrary.simpleMessage(
             "ينتهي خلال 18 يوم . تجديد تلقائي"),
+        "packageFormName": MessageLookupByLibrary.simpleMessage("اسم الباقة"),
+        "packageHoursType": MessageLookupByLibrary.simpleMessage("باقة ساعات"),
+        "packageOldPrice": MessageLookupByLibrary.simpleMessage("السعر القديم"),
         "packagePrice": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
+        "packageType": MessageLookupByLibrary.simpleMessage("نوع الباقة"),
         "packages": MessageLookupByLibrary.simpleMessage("الباقات"),
+        "packagesManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة الباقات"),
         "parent": MessageLookupByLibrary.simpleMessage("ولي الأمر"),
         "parentAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
         "parentCertificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
@@ -1017,6 +1040,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "veryGood": MessageLookupByLibrary.simpleMessage("جيد جدًا"),
         "view": MessageLookupByLibrary.simpleMessage("عرض"),
         "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "visibleToCustomers":
+            MessageLookupByLibrary.simpleMessage("ظاهر للعملاء"),
         "waitingForCorrection":
             MessageLookupByLibrary.simpleMessage("بانتظار التصحيح"),
         "waitingForTeacherApproval":

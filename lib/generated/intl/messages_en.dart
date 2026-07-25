@@ -105,6 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "addNewEvaluation":
             MessageLookupByLibrary.simpleMessage("Add New Evaluation"),
         "addNewGrade": MessageLookupByLibrary.simpleMessage("Add New Grade"),
+        "addNewPackage":
+            MessageLookupByLibrary.simpleMessage("Add New Package"),
+        "addNewPackageTitle":
+            MessageLookupByLibrary.simpleMessage("Add New Package"),
         "addNewSchedule":
             MessageLookupByLibrary.simpleMessage("Add New Schedule"),
         "addNewSemester":
@@ -125,6 +129,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Algebra Course Completion Certificate"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
+        "allPackages": MessageLookupByLibrary.simpleMessage("All Packages"),
         "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
@@ -315,6 +320,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteGrade": MessageLookupByLibrary.simpleMessage("Delete grade"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this grade?"),
+        "deletePackage": MessageLookupByLibrary.simpleMessage("Delete Package"),
+        "deletePackageConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this package?"),
         "deleteSchedule":
             MessageLookupByLibrary.simpleMessage("Delete schedule"),
         "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
@@ -331,6 +339,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "disableUserDescription": MessageLookupByLibrary.simpleMessage(
             "They will not be able to log in until you reactivate them."),
         "disableUserQuestion": m5,
+        "discountTitle": MessageLookupByLibrary.simpleMessage("Discount Title"),
+        "discountTitleHint":
+            MessageLookupByLibrary.simpleMessage("Example: Save 120 SAR"),
         "discounts": MessageLookupByLibrary.simpleMessage("Deductions"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
@@ -347,6 +358,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "editEvaluation":
             MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
         "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
+        "editPackage": MessageLookupByLibrary.simpleMessage("Edit Package"),
         "editSubject": MessageLookupByLibrary.simpleMessage("Edit Subject"),
         "egpCurrency":
             MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
@@ -527,6 +539,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "messages": MessageLookupByLibrary.simpleMessage("Messages"),
         "monday": MessageLookupByLibrary.simpleMessage("Monday"),
         "month": MessageLookupByLibrary.simpleMessage("Month"),
+        "monthlyPackage":
+            MessageLookupByLibrary.simpleMessage("Monthly Package"),
         "monthlyProfits":
             MessageLookupByLibrary.simpleMessage("Monthly Profits"),
         "monthlyRevenue":
@@ -555,6 +569,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
         "newPasswordLabel":
             MessageLookupByLibrary.simpleMessage("New Password"),
+        "newPrice": MessageLookupByLibrary.simpleMessage("New Price"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("New weekly rating for Ahmed"),
         "newWeeklyEvaluation":
@@ -619,10 +634,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "packageCalculation": m13,
         "packageDetails":
             MessageLookupByLibrary.simpleMessage("Package Details"),
+        "packageDuration":
+            MessageLookupByLibrary.simpleMessage("Package Duration"),
+        "packageDurationHint":
+            MessageLookupByLibrary.simpleMessage("Example: 4-Hour Package"),
         "packageExpiryText": MessageLookupByLibrary.simpleMessage(
             "Expires in 18 days. Auto renewal"),
+        "packageFormName": MessageLookupByLibrary.simpleMessage("Package Name"),
+        "packageHoursType":
+            MessageLookupByLibrary.simpleMessage("Hours Package"),
+        "packageName": MessageLookupByLibrary.simpleMessage("Package Name"),
+        "packageOldPrice": MessageLookupByLibrary.simpleMessage("Old Price"),
         "packagePrice": MessageLookupByLibrary.simpleMessage("Session Price"),
+        "packageType": MessageLookupByLibrary.simpleMessage("Package Type"),
         "packages": MessageLookupByLibrary.simpleMessage("Packages"),
+        "packagesManagement":
+            MessageLookupByLibrary.simpleMessage("Package Management"),
         "parent": MessageLookupByLibrary.simpleMessage("Parent"),
         "parentAccount": MessageLookupByLibrary.simpleMessage("My Account"),
         "parentCertificates":
@@ -1058,6 +1085,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "veryGood": MessageLookupByLibrary.simpleMessage("Very Good"),
         "view": MessageLookupByLibrary.simpleMessage("View"),
         "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
+        "visibleToCustomers":
+            MessageLookupByLibrary.simpleMessage("Visible to Customers"),
         "waitingForCorrection":
             MessageLookupByLibrary.simpleMessage("Waiting for Grading"),
         "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
