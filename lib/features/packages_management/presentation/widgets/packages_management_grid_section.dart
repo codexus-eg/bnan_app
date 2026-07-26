@@ -3,6 +3,7 @@ import 'package:bnan_app/features/academic_lookups/presentation/manager/academic
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/delete_package_dialog.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_admin_actions.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_dialog.dart';
@@ -22,6 +23,7 @@ class PackagesManagementGridSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: EdgeInsets.zero,
       child: SubscriptionGrid(
         curriculumId: curriculumId,
         curriculumName: curriculumName,
@@ -58,10 +60,7 @@ class PackagesManagementGridSection extends StatelessWidget {
     );
   }
 
-  void _showEditDialog(
-    BuildContext context,
-    PackageModel package,
-  ) {
+  void _showEditDialog(BuildContext context, PackageModel package) {
     final lookups = context.read<AcademicLookupsCubit>();
     final actionsCubit = context.read<PackageActionsCubit>();
 
@@ -76,8 +75,11 @@ class PackagesManagementGridSection extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (_) => BlocProvider.value(
-        value: actionsCubit,
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: actionsCubit),
+          BlocProvider(create: (_) => getIt<PackageFormCubit>()),
+        ],
         child: PackageFormDialog(
           curriculums: curriculums,
           labels: labels,

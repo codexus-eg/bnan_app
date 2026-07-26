@@ -13,6 +13,7 @@ import 'package:bnan_app/features/packages_management/data/repo/packages_repo/pa
 import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo_impl.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
 
@@ -96,6 +97,7 @@ void setupServiceLocator() {
   getIt.registerFactory<GetPackagesCubit>(
     () => GetPackagesCubit(getIt<PackagesRepo>()),
   );
+  getIt.registerFactory<PackageFormCubit>(() => PackageFormCubit());
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 

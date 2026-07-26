@@ -31,24 +31,15 @@ class PackageCurrencyField extends StatelessWidget {
         ),
         CustomDropdown(
           label: '',
-          value: 'SAR',
+          value: value,
           hintStyle: StylesManager.styleRegular12(
             context,
           ).copyWith(color: ColorManager.mainColor14),
           valueStyle: StylesManager.styleRegular12(
             context,
           ).copyWith(color: ColorManager.greyA8AF),
-
-          items: [
-            "EGP", // الجنيه المصري
-            "SAR", // الريال السعودي
-            "AED", // الدرهم الإماراتي
-            "KWD", // الدينار الكويتي
-            "QAR", // الريال القطري
-            "BHD", // الدينار البحريني
-            "OMR",
-          ],
-          onChanged: (_) {},
+          items: const ['EGP', 'SAR', 'AED', 'KWD', 'QAR', 'BHD', 'OMR'],
+          onChanged: onChanged,
         ),
       ],
     );
