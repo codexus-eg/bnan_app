@@ -38,6 +38,10 @@ abstract class EndPoints {
   // Packages
   static const String packages = '/packages';
 
+  static String updateCurriculum(String curriculumId) {
+    return '$curriculums/$curriculumId';
+  }
+
   static String packageById(String packageId) {
     return '$packages/$packageId';
   }

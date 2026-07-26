@@ -79,6 +79,7 @@ class CustomTextField extends StatelessWidget {
         ConstrainedBox(
           constraints: BoxConstraints(minHeight: isMultiLine ? 0 : 40),
           child: TextFormField(
+            onTap: onTap,
             textInputAction: isMultiLine
                 ? TextInputAction.newline
                 : TextInputAction.done,

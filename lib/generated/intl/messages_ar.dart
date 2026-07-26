@@ -218,6 +218,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
             "اختر المنهج الدراسي المناسب لأبنائك وابدأ رحلة التعليم معنا"),
+        "chooseCurriculumIcon":
+            MessageLookupByLibrary.simpleMessage("اختر أيقونة المنهج"),
+        "chooseCurriculumType":
+            MessageLookupByLibrary.simpleMessage("اختر نوع المنهج"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "chooseNewCurriculum":
@@ -283,6 +287,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الأرباح الحالية"),
         "curricula": MessageLookupByLibrary.simpleMessage("المناهج"),
         "curriculum": MessageLookupByLibrary.simpleMessage("المنهج"),
+        "curriculumDescription":
+            MessageLookupByLibrary.simpleMessage("وصف المنهج"),
+        "curriculumIcon": MessageLookupByLibrary.simpleMessage("صورة المنهج"),
         "curriculumName": MessageLookupByLibrary.simpleMessage("اسم المنهج"),
         "curriculumRequired":
             MessageLookupByLibrary.simpleMessage("المنهج مطلوب"),
@@ -340,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "editCertificate":
             MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
         "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
+        "editCurriculum": MessageLookupByLibrary.simpleMessage("تعديل المنهج"),
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
         "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
@@ -446,6 +454,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupCreatedByYou":
             MessageLookupByLibrary.simpleMessage("تم إنشاء المجموعة، ابدأ بكم"),
         "groups": MessageLookupByLibrary.simpleMessage("المجموعات"),
+        "gulfCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج الخليجي"),
         "hasClearMic":
             MessageLookupByLibrary.simpleMessage("هل لديك مايك واضح؟"),
         "hasGoodCamera":
@@ -573,6 +583,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات مكتملة"),
         "noCompletedAssignmentsSubtitle":
             MessageLookupByLibrary.simpleMessage("عند حل الواجبات ستظهر هنا."),
+        "noCurriculumsFound":
+            MessageLookupByLibrary.simpleMessage("لا توجد مناهج"),
         "noDataAvailable":
             MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
         "noGroupsYet":
@@ -783,6 +795,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "انضم للفصول الدراسية وابدأ رحلتك التعليمية"),
         "registrationDate":
             MessageLookupByLibrary.simpleMessage("تاريخ التسجيل"),
+        "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("طلبات التسجيل"),
         "reject": MessageLookupByLibrary.simpleMessage("رفض"),

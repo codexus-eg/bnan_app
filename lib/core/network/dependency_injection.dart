@@ -7,6 +7,11 @@ import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo.dart';
+import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo_impl.dart';
+import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
+import 'package:bnan_app/features/curriculum_management/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart'
+    as curriculum_management;
 import 'package:bnan_app/features/packages_management/data/repo/package_actions_repo/package_actions_repo.dart';
 import 'package:bnan_app/features/packages_management/data/repo/package_actions_repo/package_actions_repo_impl.dart';
 import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
@@ -35,6 +40,9 @@ void setupServiceLocator() {
 
   getIt.registerLazySingleton<PackageActionsRepo>(
     () => PackageActionsRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<CurriculumManagementRepo>(
+    () => CurriculumManagementRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<AssignmentsRepo>(
     () => AssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
@@ -98,6 +106,14 @@ void setupServiceLocator() {
     () => GetPackagesCubit(getIt<PackagesRepo>()),
   );
   getIt.registerFactory<PackageFormCubit>(() => PackageFormCubit());
+  getIt.registerFactory<curriculum_management.GetCurriculumsCubit>(
+    () => curriculum_management.GetCurriculumsCubit(
+      getIt<CurriculumManagementRepo>(),
+    ),
+  );
+  getIt.registerFactory<CurriculumActionsCubit>(
+    () => CurriculumActionsCubit(getIt<CurriculumManagementRepo>()),
+  );
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 
