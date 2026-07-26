@@ -128,8 +128,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "algebraCourseCertificate": MessageLookupByLibrary.simpleMessage(
             "Algebra Course Completion Certificate"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
+        "allCurriculms": MessageLookupByLibrary.simpleMessage("All Curriculms"),
         "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
-        "allPackages": MessageLookupByLibrary.simpleMessage("All Packages"),
         "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
@@ -287,6 +287,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Create New Assignment"),
         "creditCard": MessageLookupByLibrary.simpleMessage("Credit Card"),
         "currency": MessageLookupByLibrary.simpleMessage("Currency:"),
+        "currencyRequired":
+            MessageLookupByLibrary.simpleMessage("Please select a currency"),
         "currentMonth": MessageLookupByLibrary.simpleMessage("Current Month"),
         "currentPrice": m3,
         "currentProfits":
@@ -492,8 +494,12 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Appreciation Certificate - Interaction"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("Interaction Level"),
+        "invalidData": MessageLookupByLibrary.simpleMessage(
+            "Please check the entered data"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid email address."),
+        "invalidPackage":
+            MessageLookupByLibrary.simpleMessage("Invalid package data"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("Issue New Certificate"),
         "kuwaitiCurriculum":
@@ -570,6 +576,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "newPasswordLabel":
             MessageLookupByLibrary.simpleMessage("New Password"),
         "newPrice": MessageLookupByLibrary.simpleMessage("New Price"),
+        "newPriceInvalid": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid new price"),
+        "newPriceMustBeLessThanOldPrice": MessageLookupByLibrary.simpleMessage(
+            "The new price must be less than or equal to the old price"),
         "newRating":
             MessageLookupByLibrary.simpleMessage("New weekly rating for Ahmed"),
         "newWeeklyEvaluation":
@@ -616,6 +626,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("Old Password"),
         "oldPrice": m12,
+        "oldPriceInvalid": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid old price"),
         "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "An educational platform that helps you develop your skills"),
         "onboardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -632,21 +644,31 @@ class MessageLookup extends MessageLookupByLibrary {
         "optional": MessageLookupByLibrary.simpleMessage("Optional"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("4-hour package"),
         "packageCalculation": m13,
+        "packageCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("Package added successfully"),
+        "packageDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Package deleted successfully"),
         "packageDetails":
             MessageLookupByLibrary.simpleMessage("Package Details"),
         "packageDuration":
             MessageLookupByLibrary.simpleMessage("Package Duration"),
         "packageDurationHint":
             MessageLookupByLibrary.simpleMessage("Example: 4-Hour Package"),
+        "packageDurationInvalid": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid package duration"),
         "packageExpiryText": MessageLookupByLibrary.simpleMessage(
             "Expires in 18 days. Auto renewal"),
         "packageFormName": MessageLookupByLibrary.simpleMessage("Package Name"),
         "packageHoursType":
             MessageLookupByLibrary.simpleMessage("Hours Package"),
         "packageName": MessageLookupByLibrary.simpleMessage("Package Name"),
+        "packageNameRequired": MessageLookupByLibrary.simpleMessage(
+            "Please enter the package name"),
         "packageOldPrice": MessageLookupByLibrary.simpleMessage("Old Price"),
         "packagePrice": MessageLookupByLibrary.simpleMessage("Session Price"),
         "packageType": MessageLookupByLibrary.simpleMessage("Package Type"),
+        "packageUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Package updated successfully"),
         "packages": MessageLookupByLibrary.simpleMessage("Packages"),
         "packagesManagement":
             MessageLookupByLibrary.simpleMessage("Package Management"),
@@ -864,6 +886,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Select classroom"),
         "selectClassroomFirst":
             MessageLookupByLibrary.simpleMessage("Select classroom first"),
+        "selectCurriculumFirst":
+            MessageLookupByLibrary.simpleMessage("Please select a curriculum"),
         "selectFile": MessageLookupByLibrary.simpleMessage("Select File"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),

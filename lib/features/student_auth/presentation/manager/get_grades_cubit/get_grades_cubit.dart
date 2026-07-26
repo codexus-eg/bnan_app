@@ -18,7 +18,7 @@ class GetGradesCubit extends Cubit<GetGradesState> {
 
     result.fold(
       (failure) => emit(GetGradesFailure(errorMessage: failure.message)),
-      (response) => emit(GetGradesSuccess(grades: response.grades)),
+      (response) => emit(GetGradesSuccess(grades: [])),
     );
   }
 }

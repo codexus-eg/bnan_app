@@ -1,4 +1,5 @@
-import 'package:bnan_app/features/student_auth/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_type.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -27,24 +28,34 @@ class SubscriptionPlanModel {
     required BuildContext context,
     required PackageModel package,
   }) {
-    final saveAmount = package.oldPrice - package.price;
+    final oldPrice = package.oldPrice ?? 0;
+    final price = package.price ?? 0;
+    final saveAmount = oldPrice - price;
+    final hoursCount = package.hours ?? 0;
+    final monthsCount = package.months ?? 0;
+
+    final isHours = package.type == PackageType.hours;
 
     return SubscriptionPlanModel(
-      id: package.id,
-      title: S.of(context).hoursPackage(package.hours.toString()),
-      hours: S.of(context).trainingHours(package.hours.toString()),
-      lessons: S.of(context).weeklyLessons(package.hours.toString()),
-      oldPrice: S.of(context).oldPrice(package.oldPrice.toInt().toString()),
-      price: S.of(context).currentPrice(package.price.toInt().toString()),
+      id: package.id ?? '',
+      title: package.name ?? '',
+      hours: isHours
+          ? S.of(context).trainingHours(hoursCount.toString())
+          : '$monthsCount شهر',
+      lessons: isHours
+          ? S.of(context).weeklyLessons(hoursCount.toString())
+          : '$monthsCount شهر',
+      oldPrice: S.of(context).oldPrice(oldPrice.toInt().toString()),
+      price: S.of(context).currentPrice(price.toInt().toString()),
       save: S.of(context).saveAmount(saveAmount.toInt().toString()),
-      isPopular: package.isPopular,
+      isPopular: package.isPopular ?? false,
     );
   }
 
   static List<SubscriptionPlanModel> placeholders(BuildContext context) {
     return List.generate(
       4,
-      (index) => SubscriptionPlanModel(
+      (_) => SubscriptionPlanModel(
         id: '',
         title: S.of(context).hoursPackage('8'),
         hours: S.of(context).trainingHours('8'),

@@ -6730,11 +6730,11 @@ class S {
     );
   }
 
-  /// `All Packages`
-  String get allPackages {
+  /// `All Curriculms`
+  String get allCurriculms {
     return Intl.message(
-      'All Packages',
-      name: 'allPackages',
+      'All Curriculms',
+      name: 'allCurriculms',
       desc: '',
       args: [],
     );
@@ -6775,6 +6775,126 @@ class S {
     return Intl.message(
       'Old Price',
       name: 'packageOldPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package deleted successfully`
+  String get packageDeletedSuccessfully {
+    return Intl.message(
+      'Package deleted successfully',
+      name: 'packageDeletedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package added successfully`
+  String get packageCreatedSuccessfully {
+    return Intl.message(
+      'Package added successfully',
+      name: 'packageCreatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package updated successfully`
+  String get packageUpdatedSuccessfully {
+    return Intl.message(
+      'Package updated successfully',
+      name: 'packageUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a curriculum`
+  String get selectCurriculumFirst {
+    return Intl.message(
+      'Please select a curriculum',
+      name: 'selectCurriculumFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the package name`
+  String get packageNameRequired {
+    return Intl.message(
+      'Please enter the package name',
+      name: 'packageNameRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid package duration`
+  String get packageDurationInvalid {
+    return Intl.message(
+      'Please enter a valid package duration',
+      name: 'packageDurationInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid old price`
+  String get oldPriceInvalid {
+    return Intl.message(
+      'Please enter a valid old price',
+      name: 'oldPriceInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid new price`
+  String get newPriceInvalid {
+    return Intl.message(
+      'Please enter a valid new price',
+      name: 'newPriceInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The new price must be less than or equal to the old price`
+  String get newPriceMustBeLessThanOldPrice {
+    return Intl.message(
+      'The new price must be less than or equal to the old price',
+      name: 'newPriceMustBeLessThanOldPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a currency`
+  String get currencyRequired {
+    return Intl.message(
+      'Please select a currency',
+      name: 'currencyRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please check the entered data`
+  String get invalidData {
+    return Intl.message(
+      'Please check the entered data',
+      name: 'invalidData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid package data`
+  String get invalidPackage {
+    return Intl.message(
+      'Invalid package data',
+      name: 'invalidPackage',
       desc: '',
       args: [],
     );

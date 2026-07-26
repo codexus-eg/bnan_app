@@ -3,10 +3,10 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/features/grades_management/data/models/grades_response_model.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_response_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/auth_response_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/curriculum_model.dart';
-import 'package:bnan_app/features/student_auth/data/models/grade_model.dart';
-import 'package:bnan_app/features/student_auth/data/models/package_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/simple_response_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/subject_model.dart';
@@ -131,15 +131,15 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, PackagesResponseModel>> getCurriculumPackages({
+  Future<Either<Failure, PackageResponseModel>> getCurriculumPackages({
     required String curriculumId,
   }) async {
     try {
       final response = await apiConsumer.get(
-        EndPoints.curriculumPackages(curriculumId),
+        EndPoints.packagesByCurriculum(curriculumId),
       );
 
-      return Right(PackagesResponseModel.fromJson(response));
+      return Right(PackageResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {

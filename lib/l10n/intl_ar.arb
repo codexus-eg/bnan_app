@@ -809,8 +809,20 @@
     "visibleToCustomers": "ظاهر للعملاء",
     "deletePackage": "حذف الباقة",
     "deletePackageConfirmation": "هل تريد حذف هذه الباقة؟",
-    "allPackages": "كل الباقات",
+    "allCurriculms": "كل المناهج",
     "packageFormName": "اسم الباقة",
     "packageHoursType": "باقة ساعات",
-    "packageOldPrice": "السعر القديم"
+    "packageOldPrice": "السعر القديم",
+    "packageDeletedSuccessfully": "تم حذف الباقة بنجاح",
+    "packageCreatedSuccessfully": "تمت إضافة الباقة بنجاح",
+    "packageUpdatedSuccessfully": "تم تعديل الباقة بنجاح",
+    "selectCurriculumFirst": "يرجى اختيار المنهج",
+    "packageNameRequired": "يرجى إدخال اسم الباقة",
+    "packageDurationInvalid": "يرجى إدخال مدة صحيحة للباقة",
+    "oldPriceInvalid": "يرجى إدخال السعر القديم بشكل صحيح",
+    "newPriceInvalid": "يرجى إدخال السعر الجديد بشكل صحيح",
+    "newPriceMustBeLessThanOldPrice": "يجب أن يكون السعر الجديد أقل من أو يساوي السعر القديم",
+    "currencyRequired": "يرجى اختيار العملة",
+    "invalidData": "يرجى التأكد من البيانات المدخلة",
+    "invalidPackage": "بيانات الباقة غير صالحة"
 }

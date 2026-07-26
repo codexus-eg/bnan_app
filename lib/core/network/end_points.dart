@@ -35,6 +35,16 @@ abstract class EndPoints {
   static const String getMyChatRooms = '/chats/rooms';
   static const String sendMessage = '/messages';
   static const String enrollments = '/enrollments';
+  // Packages
+  static const String packages = '/packages';
+
+  static String packageById(String packageId) {
+    return '$packages/$packageId';
+  }
+
+  static String packagesByCurriculum(String curriculumId) {
+    return '$packages/curriculum/$curriculumId';
+  }
 
   static String get unassignedStudents {
     return '$enrollments/unassigned';
@@ -100,10 +110,6 @@ abstract class EndPoints {
 
   static String subjectById(String subjectId) {
     return '$subjects/$subjectId';
-  }
-
-  static String curriculumPackages(String curriculumId) {
-    return '/packages/curriculum/$curriculumId';
   }
 
   static String getGrades({String? curriculumId}) {

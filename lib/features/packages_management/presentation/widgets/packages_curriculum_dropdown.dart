@@ -27,7 +27,7 @@ class PackagesCurriculumDropdown extends StatelessWidget {
         ];
 
         final itemsLabels = <String, String>{
-          'all': S.of(context).allPackages,
+          'all': S.of(context).allCurriculms,
           for (final curriculum in curriculums)
             curriculum.id.toString(): curriculum.name,
         };

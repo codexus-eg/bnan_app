@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_content.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_controllers.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_popular_switch.dart';
@@ -20,6 +21,10 @@ class PackageFormBody extends StatelessWidget {
     required this.onTypeChanged,
     required this.onPopularChanged,
     required this.onSave,
+    required this.isLoading,
+    required this.currency,
+    required this.onCurrencyChanged,
+    this.errorMessage,
   });
 
   final PackageFormControllers controllers;
@@ -31,31 +36,55 @@ class PackageFormBody extends StatelessWidget {
   final ValueChanged<String?> onCurriculumChanged;
   final ValueChanged<String> onTypeChanged;
   final ValueChanged<bool> onPopularChanged;
-  final VoidCallback onSave;
+  final VoidCallback? onSave;
+  final bool isLoading;
+  final String currency;
+  final ValueChanged<String?> onCurrencyChanged;
+  final String? errorMessage;
 
   @override
-  Widget build(BuildContext context) => Expanded(
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          CustomDropdown(
-            label: S.of(context).curriculum,
-            value: curriculumId,
-            items: curriculums,
-            itemsLabels: labels,
-            isRequired: true,
-            onChanged: onCurriculumChanged,
+  Widget build(BuildContext context) => SingleChildScrollView(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CustomDropdown(
+          hint: S.of(context).chooseNewCurriculum,
+          label: S.of(context).curriculum,
+          value: curriculumId,
+          items: curriculums,
+          itemsLabels: labels,
+          isRequired: true,
+          onChanged: onCurriculumChanged,
+        ),
+        const SizedBox(height: 16),
+        PackageTypeSelector(value: packageType, onChanged: onTypeChanged),
+        const SizedBox(height: 16),
+        PackageFormContent(
+          controllers: controllers,
+          currency: currency,
+          onCurrencyChanged: onCurrencyChanged,
+        ),
+        const SizedBox(height: 16),
+        PackagePopularSwitch(value: isPopular, onChanged: onPopularChanged),
+        const SizedBox(height: 16),
+        if (errorMessage != null) ...[
+          Center(
+            child: Text(
+              errorMessage!,
+              style: StylesManager.styleRegular12(
+                context,
+              ).copyWith(color: Colors.red),
+            ),
           ),
-          const SizedBox(height: 16),
-          PackageTypeSelector(value: packageType, onChanged: onTypeChanged),
-          const SizedBox(height: 16),
-          PackageFormContent(controllers: controllers),
-          const SizedBox(height: 16),
-          PackagePopularSwitch(value: isPopular, onChanged: onPopularChanged),
-          const SizedBox(height: 16),
-          CustomAppButton(text: S.of(context).save, height: 44, onPressed: onSave),
+          const SizedBox(height: 8),
         ],
-      ),
+        CustomAppButton(
+          text: S.of(context).save,
+          height: 44,
+          isLoading: isLoading,
+          onPressed: onSave,
+        ),
+      ],
     ),
   );
 }

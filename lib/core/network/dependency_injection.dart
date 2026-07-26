@@ -7,6 +7,13 @@ import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/packages_management/data/repo/package_actions_repo/package_actions_repo.dart';
+import 'package:bnan_app/features/packages_management/data/repo/package_actions_repo/package_actions_repo_impl.dart';
+import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
+import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo_impl.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
 
@@ -22,6 +29,13 @@ void setupServiceLocator() {
 
   // Repositories
 
+  getIt.registerLazySingleton<PackagesRepo>(
+    () => PackagesRepoImpl(getIt<ApiConsumer>()),
+  );
+
+  getIt.registerLazySingleton<PackageActionsRepo>(
+    () => PackageActionsRepoImpl(getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<AssignmentsRepo>(
     () => AssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
@@ -80,6 +94,10 @@ void setupServiceLocator() {
     () => StudentClassroomAssignmentRepoImpl(getIt<ApiConsumer>()),
   );
   // Cubits
+  getIt.registerFactory<GetPackagesCubit>(
+    () => GetPackagesCubit(getIt<PackagesRepo>()),
+  );
+  getIt.registerFactory<PackageFormCubit>(() => PackageFormCubit());
 
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 
@@ -113,9 +131,7 @@ void setupServiceLocator() {
   getIt.registerFactory<GetCurriculumsCubit>(
     () => GetCurriculumsCubit(getIt<AuthRepo>()),
   );
-  getIt.registerFactory<GetPackagesCubit>(
-    () => GetPackagesCubit(getIt<AuthRepo>()),
-  );
+
   getIt.registerFactory<GetGradesCubit>(
     () => GetGradesCubit(getIt<AuthRepo>()),
   );
@@ -263,5 +279,8 @@ void setupServiceLocator() {
   getIt.registerFactory<GetStudentSubjectsCubit>(
     () => GetStudentSubjectsCubit(getIt()),
   );
-  
+
+  getIt.registerFactory<PackageActionsCubit>(
+    () => PackageActionsCubit(getIt<PackageActionsRepo>()),
+  );
 }

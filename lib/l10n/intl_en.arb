@@ -809,9 +809,21 @@
     "visibleToCustomers": "Visible to Customers",
     "deletePackage": "Delete Package",
     "deletePackageConfirmation": "Are you sure you want to delete this package?",
-    "allPackages": "All Packages",
+    "allCurriculms": "All Curriculms",
     "packageName": "Package Name",
     "packageFormName": "Package Name",
     "packageHoursType": "Hours Package",
-    "packageOldPrice": "Old Price"
+    "packageOldPrice": "Old Price",
+    "packageDeletedSuccessfully": "Package deleted successfully",
+    "packageCreatedSuccessfully": "Package added successfully",
+    "packageUpdatedSuccessfully": "Package updated successfully",
+    "selectCurriculumFirst": "Please select a curriculum",
+    "packageNameRequired": "Please enter the package name",
+    "packageDurationInvalid": "Please enter a valid package duration",
+    "oldPriceInvalid": "Please enter a valid old price",
+    "newPriceInvalid": "Please enter a valid new price",
+    "newPriceMustBeLessThanOldPrice": "The new price must be less than or equal to the old price",
+    "currencyRequired": "Please select a currency",
+    "invalidData": "Please check the entered data",
+    "invalidPackage": "Invalid package data"
 }

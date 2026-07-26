@@ -76,7 +76,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
-                  plan.hoursText,
+                  plan.durationText,
                   style: StylesManager.styleBold8(context),
                 ),
               ),
