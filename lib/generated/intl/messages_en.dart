@@ -228,6 +228,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Choose classroom"),
         "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
             "Choose the suitable curriculum for your children and start the learning journey with us"),
+        "chooseCurriculumIcon":
+            MessageLookupByLibrary.simpleMessage("Choose curriculum icon"),
+        "chooseCurriculumType":
+            MessageLookupByLibrary.simpleMessage("Choose Curriculum Type"),
         "chooseFile": MessageLookupByLibrary.simpleMessage("Choose file"),
         "chooseGrade": MessageLookupByLibrary.simpleMessage("Choose grade"),
         "chooseNewCurriculum":
@@ -295,6 +299,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Current Earnings"),
         "curricula": MessageLookupByLibrary.simpleMessage("Curricula"),
         "curriculum": MessageLookupByLibrary.simpleMessage("Curriculum"),
+        "curriculumDescription":
+            MessageLookupByLibrary.simpleMessage("Curriculum Description"),
+        "curriculumIcon":
+            MessageLookupByLibrary.simpleMessage("Curriculum Image"),
         "curriculumName":
             MessageLookupByLibrary.simpleMessage("Curriculum Name"),
         "curriculumRequired":
@@ -356,6 +364,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "editCertificate":
             MessageLookupByLibrary.simpleMessage("Edit Certificate"),
         "editClass": MessageLookupByLibrary.simpleMessage("Edit Class"),
+        "editCurriculum":
+            MessageLookupByLibrary.simpleMessage("Edit Curriculum"),
         "editData": MessageLookupByLibrary.simpleMessage("Edit Data"),
         "editEvaluation":
             MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
@@ -467,6 +477,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupCreatedByYou":
             MessageLookupByLibrary.simpleMessage("Group created, start now"),
         "groups": MessageLookupByLibrary.simpleMessage("Groups"),
+        "gulfCurriculum":
+            MessageLookupByLibrary.simpleMessage("Gulf Curriculum"),
         "hasClearMic": MessageLookupByLibrary.simpleMessage(
             "Do you have a clear microphone?"),
         "hasGoodCamera":
@@ -597,6 +609,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No completed assignments"),
         "noCompletedAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
             "Completed assignments will appear here."),
+        "noCurriculumsFound":
+            MessageLookupByLibrary.simpleMessage("No curriculums found"),
         "noDataAvailable": MessageLookupByLibrary.simpleMessage(
             "No information available now"),
         "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
@@ -817,6 +831,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Join classes and start your learning journey"),
         "registrationDate":
             MessageLookupByLibrary.simpleMessage("Registration Date"),
+        "registrationMode":
+            MessageLookupByLibrary.simpleMessage("Registration Mode"),
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("Registration Requests"),
         "reject": MessageLookupByLibrary.simpleMessage("Reject"),

@@ -750,6 +750,12 @@
     "curriculums": "Curriculums",
     "addNewCurriculum": "Add New Curriculum",
     "curriculumName": "Curriculum Name",
+    "editCurriculum": "Edit Curriculum",
+    "curriculumDescription": "Curriculum Description",
+    "registrationMode": "Registration Mode",
+    "gulfCurriculum": "Gulf Curriculum",
+    "chooseCurriculumIcon": "Choose curriculum icon",
+    "noCurriculumsFound": "No curriculums found",
     "addNewGrade": "Add New Grade",
     "gradeName": "Grade Name",
     "addNewSemester": "Add New Semester",
@@ -825,5 +831,7 @@
     "newPriceMustBeLessThanOldPrice": "The new price must be less than or equal to the old price",
     "currencyRequired": "Please select a currency",
     "invalidData": "Please check the entered data",
-    "invalidPackage": "Invalid package data"
+    "invalidPackage": "Invalid package data",
+    "chooseCurriculumType": "Choose Curriculum Type",
+    "curriculumIcon": "Curriculum Image"
 }

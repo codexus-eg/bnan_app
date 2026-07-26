@@ -750,6 +750,12 @@
     "curriculums": "المناهج",
     "addNewCurriculum": "إضافة منهج جديد",
     "curriculumName": "اسم المنهج",
+    "editCurriculum": "تعديل المنهج",
+    "curriculumDescription": "وصف المنهج",
+    "registrationMode": "نوع التسجيل",
+    "gulfCurriculum": "المنهج الخليجي",
+    "chooseCurriculumIcon": "اختر أيقونة المنهج",
+    "noCurriculumsFound": "لا توجد مناهج",
     "addNewGrade": "إضافة صف جديد",
     "gradeName": "اسم الصف",
     "addNewSemester": "إضافة فصل جديد",
@@ -824,5 +830,7 @@
     "newPriceMustBeLessThanOldPrice": "يجب أن يكون السعر الجديد أقل من أو يساوي السعر القديم",
     "currencyRequired": "يرجى اختيار العملة",
     "invalidData": "يرجى التأكد من البيانات المدخلة",
-    "invalidPackage": "بيانات الباقة غير صالحة"
+    "invalidPackage": "بيانات الباقة غير صالحة",
+    "chooseCurriculumType": "اختر نوع المنهج",
+    "curriculumIcon": "صورة المنهج"
 }

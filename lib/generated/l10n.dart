@@ -6190,6 +6190,66 @@ class S {
     );
   }
 
+  /// `Edit Curriculum`
+  String get editCurriculum {
+    return Intl.message(
+      'Edit Curriculum',
+      name: 'editCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculum Description`
+  String get curriculumDescription {
+    return Intl.message(
+      'Curriculum Description',
+      name: 'curriculumDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration Mode`
+  String get registrationMode {
+    return Intl.message(
+      'Registration Mode',
+      name: 'registrationMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gulf Curriculum`
+  String get gulfCurriculum {
+    return Intl.message(
+      'Gulf Curriculum',
+      name: 'gulfCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose curriculum icon`
+  String get chooseCurriculumIcon {
+    return Intl.message(
+      'Choose curriculum icon',
+      name: 'chooseCurriculumIcon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No curriculums found`
+  String get noCurriculumsFound {
+    return Intl.message(
+      'No curriculums found',
+      name: 'noCurriculumsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add New Grade`
   String get addNewGrade {
     return Intl.message(
@@ -6895,6 +6955,26 @@ class S {
     return Intl.message(
       'Invalid package data',
       name: 'invalidPackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose Curriculum Type`
+  String get chooseCurriculumType {
+    return Intl.message(
+      'Choose Curriculum Type',
+      name: 'chooseCurriculumType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculum Image`
+  String get curriculumIcon {
+    return Intl.message(
+      'Curriculum Image',
+      name: 'curriculumIcon',
       desc: '',
       args: [],
     );

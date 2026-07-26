@@ -47,5 +47,9 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.assignStudent,
       icon: ImageManager.bellIcon,
     ),
+     DrawerItemModel(
+      title: s.curriculum,
+      icon: ImageManager.bellIcon,
+    ),
   ];
 }

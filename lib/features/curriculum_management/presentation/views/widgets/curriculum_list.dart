@@ -9,16 +9,11 @@ class CurriculumList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.separated(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 24, 16, 24),
-        itemCount: curriculums.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 16),
-        itemBuilder: (_, index) => CurriculumCard(
-          curriculum: curriculums[index],
-        
-        ),
-      ),
+    return ListView.separated(
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 24, 16, 24),
+      itemCount: curriculums.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 16),
+      itemBuilder: (_, index) => CurriculumCard(curriculum: curriculums[index]),
     );
   }
 }
