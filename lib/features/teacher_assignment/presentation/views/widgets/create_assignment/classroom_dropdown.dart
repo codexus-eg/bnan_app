@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/teacher_class_room_model.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/create_assignment/create_assignment_cubit.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_state.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/views/widgets/create_assignment/dropdown_hint_style.dart';
@@ -40,11 +40,11 @@ class ClassroomDropdown extends StatelessWidget {
             createCubit.changeClassroom(classroomId);
 
             if (classroomId != null) {
-              context.read<GetClassroomSubjectsCubit>().getClassroomSubjects(
-                classroomId: classroomId,
-              );
+              context
+                  .read<GetTeacherAssignedSubjectsCubit>()
+                  .getTeacherAssignedSubjects(classroomId: classroomId);
             } else {
-              context.read<GetClassroomSubjectsCubit>().clear();
+              context.read<GetTeacherAssignedSubjectsCubit>().clear();
             }
           },
         );

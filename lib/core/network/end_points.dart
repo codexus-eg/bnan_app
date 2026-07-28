@@ -19,6 +19,8 @@ abstract class EndPoints {
   static const String teacherProfile = '/users/teacherProfile';
   static const String assignments = '/assignments';
   static const String teacherClassrooms = '/teachers/myclassrooms';
+  static const String teacherAssignedSubjects =
+      '/teachers/me/assigned-subjects';
   static const String users = '/users';
   static const String teachingAssignments = '/teachers/teaching-assignments';
   static const String classrooms = '/classrooms';
@@ -30,6 +32,8 @@ abstract class EndPoints {
       '/certificates/student-monthly/';
   static const String issueMonthlyCertificates =
       '/certificates/student-monthly/issue';
+  static const String egyptianRegistrationRequests =
+      '/admin/egyptian-registration-requests';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
@@ -40,6 +44,18 @@ abstract class EndPoints {
 
   static String updateCurriculum(String curriculumId) {
     return '$curriculums/$curriculumId';
+  }
+
+  static String confirmEgyptianRegistrationPayment(String studentId) {
+    return '$egyptianRegistrationRequests/$studentId/payment';
+  }
+
+  static String approveEgyptianRegistration(String studentId) {
+    return '$egyptianRegistrationRequests/$studentId/approve';
+  }
+
+  static String rejectEgyptianRegistration(String studentId) {
+    return '$egyptianRegistrationRequests/$studentId/reject';
   }
 
   static String packageById(String packageId) {

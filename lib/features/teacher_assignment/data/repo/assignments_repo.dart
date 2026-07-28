@@ -3,6 +3,7 @@ import 'package:bnan_app/features/student_assignments_and_certificate/data/model
 import 'package:bnan_app/features/teacher_assignment/data/model/assignment_submissions_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/classroom_subjects_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/create_assignment_request_model.dart';
+import 'package:bnan_app/features/teacher_assignment/data/model/get_teacher_assigned_subjects_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/review_assignment_request_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/subject_details_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/teacher_assignment_response_model.dart';
@@ -44,17 +45,15 @@ abstract class AssignmentsRepo {
   });
 
   Future<Either<Failure, ClassroomSubjectsResponseModel>> getClassroomSubjects({
-  required String classroomId,
-});
+    required String classroomId,
+  });
 
-Future<Either<Failure, SubjectDetailsModel>> getSubjectDetails({
-  required String subjectId,
-});
-Future<Either<Failure, AssignmentSubmissionsResponseModel>>
-    getAssignmentSubmissions({
-  required String assignmentId,
-});
+  Future<Either<Failure, GetTeacherAssignedSubjectsResponseModel>>
+  getTeacherAssignedSubjects({required String classroomId});
 
-
-
+  Future<Either<Failure, SubjectDetailsModel>> getSubjectDetails({
+    required String subjectId,
+  });
+  Future<Either<Failure, AssignmentSubmissionsResponseModel>>
+  getAssignmentSubmissions({required String assignmentId});
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bnan_app/core/helper/file_picker_helper.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/custom_file_picker_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -10,7 +11,6 @@ import 'package:bnan_app/features/academic_lookups/data/models/academic_lookup_s
 import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic_lookup_dropdowns.dart';
 import 'package:bnan_app/features/tables_management/presentation/manager/create_egyptian_schedule_cubit/create_egyptian_schedule_cubit.dart';
 import 'package:bnan_app/features/tables_management/presentation/manager/create_egyptian_schedule_cubit/create_egyptian_schedule_state.dart';
-import 'package:bnan_app/features/tables_management/presentation/views/widgets/dialogs/table_file_picker_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +61,7 @@ class _AddTableScheduleDialogState extends State<AddTableScheduleDialog> {
                   onSelectionChanged: _onSelectionChanged,
                 ),
                 const SizedBox(height: 16),
-                TableFilePickerField(
+                CustomFilePickerField(
                   label: S.of(context).chooseScheduleImage,
                   hint: _fileName ?? S.of(context).selectFile,
                   hasFile: scheduleImage != null,

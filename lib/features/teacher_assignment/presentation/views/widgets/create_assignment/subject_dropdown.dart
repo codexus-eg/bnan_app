@@ -1,8 +1,8 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
-import 'package:bnan_app/features/teacher_assignment/data/model/subject_details_model.dart';
+import 'package:bnan_app/features/teacher_assignment/data/model/teacher_assigned_subject_model.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/create_assignment/create_assignment_cubit.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_state.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_state.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/views/widgets/create_assignment/dropdown_hint_style.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +15,14 @@ class SubjectDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final createCubit = context.watch<CreateAssignmentCubit>();
 
-    return BlocBuilder<GetClassroomSubjectsCubit, GetClassroomSubjectsState>(
+    return BlocBuilder<
+      GetTeacherAssignedSubjectsCubit,
+      GetTeacherAssignedSubjectsState
+    >(
       builder: (context, state) {
-        final subjects = state is GetClassroomSubjectsSuccess
-            ? state.classroomSubjects.subjects
-            : <SubjectDetailsModel>[];
+        final subjects = state is GetTeacherAssignedSubjectsSuccess
+            ? state.response.data.subjects
+            : <TeacherAssignedSubjectModel>[];
         final subjectIds = subjects.map((item) => item.id).toList();
         final selectedSubjectId =
             subjectIds.contains(createCubit.selectedSubjectId)
@@ -27,7 +30,7 @@ class SubjectDropdown extends StatelessWidget {
             : null;
         final canSelect =
             createCubit.selectedClassroomId != null &&
-            state is GetClassroomSubjectsSuccess &&
+            state is GetTeacherAssignedSubjectsSuccess &&
             subjects.isNotEmpty;
 
         return CustomDropdown(
@@ -46,9 +49,20 @@ class SubjectDropdown extends StatelessWidget {
           onChanged: !canSelect
               ? null
               : (subjectId) {
+                  if (subjectId == null) {
+                    createCubit.changeClassroomSubject(
+                      subjectId: null,
+                      classroomSubjectId: null,
+                    );
+                    return;
+                  }
+
+                  final selectedSubject = subjects.firstWhere(
+                    (subject) => subject.id == subjectId,
+                  );
                   createCubit.changeClassroomSubject(
-                    subjectId: subjectId,
-                    classroomSubjectId: null,
+                    subjectId: selectedSubject.id,
+                    classroomSubjectId: selectedSubject.classroomSubjectId,
                   );
                 },
         );
@@ -58,17 +72,19 @@ class SubjectDropdown extends StatelessWidget {
 
   String _hint(
     BuildContext context,
-    GetClassroomSubjectsState state,
-    List<SubjectDetailsModel> subjects,
+    GetTeacherAssignedSubjectsState state,
+    List<TeacherAssignedSubjectModel> subjects,
     bool hasClassroom,
   ) {
     if (!hasClassroom) return S.of(context).selectClassroomFirst;
-    if (state is GetClassroomSubjectsLoading) return S.of(context).loading;
-    if (state is GetClassroomSubjectsFailure) {
+    if (state is GetTeacherAssignedSubjectsLoading) {
+      return S.of(context).loading;
+    }
+    if (state is GetTeacherAssignedSubjectsFailure) {
       return S.of(context).unexpectedError;
     }
-    if (state is GetClassroomSubjectsSuccess && subjects.isEmpty) {
-      return S.of(context).noSubjectsAvailableForClassroom;
+    if (state is GetTeacherAssignedSubjectsSuccess && subjects.isEmpty) {
+      return S.of(context).noAssignedSubjectsForClassroom;
     }
     return S.of(context).chooseSubject;
   }

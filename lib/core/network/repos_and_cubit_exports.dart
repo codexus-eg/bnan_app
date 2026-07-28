@@ -8,6 +8,12 @@ export 'package:bnan_app/features/shared_profile/data/repo/teacher_profile_repo/
 
 export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_assignments_repo.dart';
 export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_assignments_repo_impl.dart';
+export 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo.dart';
+export 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo_impl.dart';
+export 'package:bnan_app/features/registration_requests/presentation/manager/get_registration_requests_cubit/get_registration_requests_cubit.dart';
+export 'package:bnan_app/features/registration_requests/presentation/manager/get_registration_requests_cubit/get_registration_requests_state.dart';
+export 'package:bnan_app/features/registration_requests/presentation/manager/registration_request_actions_cubit/registration_request_actions_cubit.dart';
+export 'package:bnan_app/features/registration_requests/presentation/manager/registration_request_actions_cubit/registration_request_actions_state.dart';
 
 export 'package:bnan_app/features/home_student/data/repo/home_student_repo/home_student_repo.dart';
 export 'package:bnan_app/features/home_student/data/repo/home_student_repo/home_student_repo_imple.dart';
@@ -64,6 +70,7 @@ export 'package:bnan_app/features/teacher_assignment/presentation/manager/delete
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_assignment_submissions/get_assignment_submissions_cubit.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_assignment_submissions/get_assignment_submissions_state.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assignments/get_teacher_assignments_cubit.dart';
+export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_cubit.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_curriculums/get_teacher_curriculums_cubit.dart';
 export 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_grades/get_teacher_grades_cubit.dart';

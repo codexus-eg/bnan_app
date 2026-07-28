@@ -5,8 +5,8 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TableFilePickerField extends StatelessWidget {
-  const TableFilePickerField({
+class CustomFilePickerField extends StatelessWidget {
+  const CustomFilePickerField({
     super.key,
     required this.label,
     required this.hint,

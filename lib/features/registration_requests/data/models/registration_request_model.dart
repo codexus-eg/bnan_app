@@ -1,94 +1,65 @@
-class RegistrationRequestModel {
-  final String name;
-  final String phone;
-  final String customerType;
-  final String registrationDate;
-  final int childrenCount;
-  final List<String> className;
-  final List<String> subject;
-  final String curriculum;
-  final String paymentStatus;
-  final String amount;
-  final String paymentActionText;
+import 'registration_json_parsing.dart';
 
+part 'registration_requests_mock_data.dart';
+
+class RegistrationRequestModel {
   const RegistrationRequestModel({
-    required this.name,
-    required this.phone,
-    required this.customerType,
-    required this.registrationDate,
-    required this.childrenCount,
-    required this.className,
-    required this.subject,
+    required this.studentId,
+    required this.studentName,
+    required this.parentName,
+    required this.parentPhone,
     required this.curriculum,
+    required this.grade,
+    required this.subjects,
+    required DateTime? registrationDate,
+    required this.registrationStatus,
     required this.paymentStatus,
-    required this.amount,
-    required this.paymentActionText,
-  });
+    this.paymentAmount,
+  }) : registrationDateValue = registrationDate;
+
+  final String studentId;
+  final String studentName;
+  final String parentName;
+  final String parentPhone;
+  final String curriculum;
+  final String grade;
+  final List<String> subjects;
+  final DateTime? registrationDateValue;
+  final String registrationStatus;
+  final String paymentStatus;
+  final num? paymentAmount;
+
+  factory RegistrationRequestModel.fromJson(Map<String, dynamic> json) {
+    final payment = registrationMap(json['payment']);
+
+    return RegistrationRequestModel(
+      studentId: registrationString(json['studentId']),
+      studentName: registrationString(json['studentName']),
+      parentName: registrationString(json['parentName']),
+      parentPhone: registrationString(json['parentPhone']),
+      curriculum: registrationString(json['curriculum']),
+      grade: registrationString(json['grade']),
+      subjects: registrationStringList(json['subjects']),
+      registrationDate: parseRegistrationDate(json['registrationDate']),
+      registrationStatus: registrationString(json['registrationStatus']),
+      paymentStatus: registrationString(json['paymentStatus']),
+      paymentAmount: registrationNum(
+        json['amount'] ?? json['paymentAmount'] ?? payment?['amount'],
+      ),
+    );
+  }
+
+  String get name => studentName;
+  String get phone => parentPhone;
+  String get customerType => registrationStatus;
+  int get childrenCount => 1;
+  List<String> get className => grade.isEmpty ? const [] : [grade];
+  List<String> get subject => subjects;
+  String get registrationDate =>
+      registrationDateValue?.toIso8601String().split('T').first ?? '';
+  num? get amount => paymentAmount;
+  String get paymentActionText => paymentStatus;
+  bool get isPaymentConfirmed => paymentStatus == 'confirmed';
+  bool get isPendingRegistration => registrationStatus == 'pending';
+  String get subjectsText => subjects.join('، ');
 }
- const List<RegistrationRequestModel> requests = [
-    RegistrationRequestModel(
-      name: 'سارة أحمد',
-      phone: '010111123655',
-      customerType: 'عميل جديد',
-      registrationDate: '2026/06/20',
-      childrenCount: 1,
-      className: ['الصف الثالث الابتدائي'],
-      subject: ['القرآن الكريم'],
-      curriculum: 'المنهج المصري',
-      paymentStatus: 'بانتظار مراجعة الإيصال يدوياً',
-      amount: 'SAR 42',
-      paymentActionText: 'تأكيد الدفع يدوياً',
-    ),
-    RegistrationRequestModel(
-      name: 'محمد علي',
-      phone: '01098765432',
-      customerType: 'عميل جديد',
-      registrationDate: '2026/06/18',
-      childrenCount: 2,
-      className: ['الصف الثالث الابتدائي'],
-      subject: ['القرآن الكريم'],
-      curriculum: 'المنهج المصري',
-      paymentStatus: 'تم الدفع',
-      amount: 'SAR 84',
-      paymentActionText: 'تم التأكيد',
-    ),
-    RegistrationRequestModel(
-      name: 'ريم خالد',
-      phone: '01122334455',
-      customerType: 'عميل حالي',
-      registrationDate: '2026/06/15',
-      childrenCount: 3,
-      className: ['الصف الثالث الابتدائي'],
-      subject: ['القرآن الكريم'],
-      curriculum: 'المنهج السعودي',
-      paymentStatus: 'بانتظار مراجعة الإيصال يدوياً',
-      amount: 'SAR 126',
-      paymentActionText: 'تأكيد الدفع يدوياً',
-    ),
-    RegistrationRequestModel(
-      name: 'عبدالله حسن',
-      phone: '01234567890',
-      customerType: 'عميل جديد',
-      registrationDate: '2026/06/12',
-      childrenCount: 1,
-      className: ['الصف الثالث الابتدائي'],
-      subject: ['القرآن الكريم'],
-      curriculum: 'المنهج السعودي',
-      paymentStatus: 'تم الدفع',
-      amount: 'SAR 65',
-      paymentActionText: 'تم التأكيد',
-    ),
-    RegistrationRequestModel(
-      name: 'نور أحمد',
-      phone: '01555666777',
-      customerType: 'عميل جديد',
-      registrationDate: '2026/06/10',
-      childrenCount: 2,
-      className: ['الصف الثالث الابتدائي'],
-      subject: ['القرآن الكريم'],
-      curriculum: 'المنهج البريطاني',
-      paymentStatus: 'بانتظار مراجعة الإيصال يدوياً',
-      amount: 'SAR 90',
-      paymentActionText: 'تأكيد الدفع يدوياً',
-    ),
-  ];
