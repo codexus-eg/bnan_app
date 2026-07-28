@@ -189,6 +189,7 @@ class AuthRepoImpl implements AuthRepo {
 
   Future<void> _saveSession(AuthResponseModel authResponse) async {
     if (!authResponse.hasToken) return;
+    print("TOOOKKKKKKKDENNNSSSSSSSSSSS:${authResponse.token}");
 
     await SessionManager.instance.saveSession(
       accessToken: authResponse.token,
@@ -196,5 +197,6 @@ class AuthRepoImpl implements AuthRepo {
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
     );
+    print("sallllllllmmmmmma:${authResponse.token}");
   }
 }

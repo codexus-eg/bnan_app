@@ -2,8 +2,8 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/create_assignment/create_assignment_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/create_assignment/create_assignment_state.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
-import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_state.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
+import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_state.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -27,13 +27,15 @@ class CreateAssignmentForm extends StatelessWidget {
       },
       builder: (context, state) {
         final classroomState = context.watch<GetTeacherClassroomsCubit>().state;
-        final subjectState = context.watch<GetClassroomSubjectsCubit>().state;
+        final subjectState = context
+            .watch<GetTeacherAssignedSubjectsCubit>()
+            .state;
         final hasUnavailableOptions =
             classroomState is GetTeacherClassroomsSuccess &&
                 classroomState.classrooms.classrooms.isEmpty ||
             cubit.selectedClassroomId != null &&
-                subjectState is GetClassroomSubjectsSuccess &&
-                subjectState.classroomSubjects.subjects.isEmpty;
+                subjectState is GetTeacherAssignedSubjectsSuccess &&
+                subjectState.response.data.subjects.isEmpty;
 
         return Form(
           key: cubit.formKey,

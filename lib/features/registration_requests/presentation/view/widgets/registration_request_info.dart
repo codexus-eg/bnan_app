@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/app_pickers.dart';
 import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
 import 'package:bnan_app/core/shared_widget/info_text.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart';
@@ -11,6 +12,14 @@ class RegistrationRequestInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final date = requestModel.registrationDateValue;
+    final registrationDate = date == null
+        ? '-'
+        : AppPickers.formatDateOnly(date.toIso8601String());
+    final subjects = requestModel.subjects.isEmpty
+        ? '-'
+        : requestModel.subjects.join('، ');
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -23,16 +32,18 @@ class RegistrationRequestInfo extends StatelessWidget {
                 value: requestModel.curriculum,
               ),
               ClassMetaRow(
-                label: '${S.of(context).children}: ',
-                value: '${requestModel.childrenCount}',
+                label: '${S.of(context).parentName}: ',
+                value: requestModel.parentName.isEmpty
+                    ? '-'
+                    : requestModel.parentName,
               ),
               ClassMetaRow(
                 label: '${S.of(context).classes}: ',
-                value: requestModel.className.join('، '),
+                value: requestModel.grade.isEmpty ? '-' : requestModel.grade,
               ),
               ClassMetaRow(
                 label: '${S.of(context).subjects}: ',
-                value: requestModel.subject.join('، '),
+                value: subjects,
               ),
             ],
           ),
@@ -41,7 +52,7 @@ class RegistrationRequestInfo extends StatelessWidget {
         Expanded(
           child: InfoText(
             label: S.of(context).registrationDate,
-            value: requestModel.registrationDate,
+            value: registrationDate,
           ),
         ),
       ],

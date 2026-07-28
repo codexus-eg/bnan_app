@@ -12,6 +12,8 @@ class SplashCubit extends Cubit<SplashState> {
 
     final token = await SessionManager.instance.getAccessToken();
 
+    print("TOOOKKKKKKKDENNN:${token}");
+
     if (isClosed) return;
 
     if (token != null && token.isNotEmpty) {

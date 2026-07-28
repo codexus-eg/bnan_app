@@ -7,18 +7,20 @@ class RegistrationFilledButton extends StatelessWidget {
     required this.title,
     required this.color,
     this.icon,
+    this.onPressed,
   });
 
   final String title;
   final Color color;
   final IconData? icon;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 25,
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed ?? () {},
         icon: icon == null
             ? const SizedBox.shrink()
             : Icon(icon, size: 18, color: Colors.white),
