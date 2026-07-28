@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.hintStyle,
     this.addLabel,
     this.labelColor,
+    this.inputFormatters,
   });
 
   final String? label, addLabel;
@@ -39,6 +41,7 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final String? Function(String?)? validator;
   final Color? backgroundColor, labelColor;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +92,7 @@ class CustomTextField extends StatelessWidget {
             maxLines: effectiveMaxLines,
             controller: controller,
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             obscureText: obscureText,
             decoration: InputDecoration(
               fillColor: backgroundColor,

@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
+import 'package:bnan_app/features/teacher_assignment/data/model/assignment_submissions_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/classroom_subjects_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/create_assignment_request_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/review_assignment_request_model.dart';
@@ -49,5 +50,11 @@ abstract class AssignmentsRepo {
 Future<Either<Failure, SubjectDetailsModel>> getSubjectDetails({
   required String subjectId,
 });
+Future<Either<Failure, AssignmentSubmissionsResponseModel>>
+    getAssignmentSubmissions({
+  required String assignmentId,
+});
+
+
 
 }

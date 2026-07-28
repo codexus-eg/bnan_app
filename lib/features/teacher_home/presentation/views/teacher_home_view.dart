@@ -1,6 +1,10 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
+import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_bottom_nav_bar.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
@@ -17,6 +21,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   int currentIndex = 0;
+  bool _isLoggingOut = false;
 
   static const int notificationsDrawerIndex = 13;
 
@@ -67,8 +72,23 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     }
   }
 
-  void _logout() {
-    MyNavigator.goToOffAll(context, Routes.logIn);
+  Future<void> _logout() async {
+    if (_isLoggingOut) return;
+    _isLoggingOut = true;
+
+    try {
+      await SessionManager.instance.clearSession();
+      if (await SessionManager.instance.isLoggedIn()) {
+        throw StateError('Authentication session was not cleared');
+      }
+      getIt<SocketService>().disconnect();
+      if (!mounted) return;
+      MyNavigator.goToOffAll(context, Routes.logIn);
+    } catch (error) {
+      _isLoggingOut = false;
+      if (!mounted) return;
+      showCustomSnackBar(context, error.toString(), false);
+    }
   }
 
   @override

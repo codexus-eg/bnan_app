@@ -160,6 +160,10 @@ abstract class EndPoints {
     return '/assignments/$assignmentId/submissions/$submissionId/review';
   }
 
+  static String assignmentSubmissions(String assignmentId) {
+    return '/assignments/$assignmentId/submissions';
+  }
+
   static String gradeClassrooms(String gradeId) {
     return '/grades/$gradeId/classrooms';
   }

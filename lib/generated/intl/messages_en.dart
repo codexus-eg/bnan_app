@@ -80,6 +80,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(count) => "${count} weekly lessons";
 
+  static String m27(totalPoints) =>
+      "Score must be between 0 and ${totalPoints}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Packages": MessageLookupByLibrary.simpleMessage("Packages"),
@@ -611,6 +614,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Completed assignments will appear here."),
         "noCurriculumsFound":
             MessageLookupByLibrary.simpleMessage("No curriculums found"),
+        "noClassroomsAvailable":
+            MessageLookupByLibrary.simpleMessage("No classrooms available"),
         "noDataAvailable": MessageLookupByLibrary.simpleMessage(
             "No information available now"),
         "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
@@ -626,6 +631,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "There are no students in this classroom"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "No subjects available for this grade"),
+        "noSubjectsAvailableForClassroom":
+            MessageLookupByLibrary.simpleMessage(
+                "No subjects available for this classroom"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
         "noUnassignedStudents":
             MessageLookupByLibrary.simpleMessage("No unassigned students"),
@@ -895,6 +903,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "Next week schedule was updated"),
         "science": MessageLookupByLibrary.simpleMessage("Science"),
+        "scoreRange": m27,
+        "scoreRequired":
+            MessageLookupByLibrary.simpleMessage("Score is required"),
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("Search by name or phone"),
         "sections": MessageLookupByLibrary.simpleMessage("Sections"),
@@ -1105,6 +1116,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Upload Schedule"),
         "usedDays": m23,
         "usedHours": m24,
+        "validIntegerScore": MessageLookupByLibrary.simpleMessage(
+            "Enter a valid integer score"),
         "userCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("User created successfully"),
         "userDeletedSuccessfully":

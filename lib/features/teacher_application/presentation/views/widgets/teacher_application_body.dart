@@ -17,7 +17,7 @@ class TeacherApplicationBody extends StatelessWidget {
       builder: (context, state) {
         final isLoading = state is PendingTeacherRequestsLoading;
         final teachers = state is PendingTeacherRequestsSuccess
-            ? state.response.data
+            ? state.response.data.reversed.toList()
             : teacherApplicationsMockData;
 
         if (state is PendingTeacherRequestsFailure) {

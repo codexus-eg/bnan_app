@@ -78,6 +78,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m26(count) => "${count} محاضرة أسبوعية";
 
+  static String m27(totalPoints) =>
+      "يجب أن تكون الدرجة بين 0 و${totalPoints}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Packages": MessageLookupByLibrary.simpleMessage("باقات"),
@@ -585,6 +588,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("عند حل الواجبات ستظهر هنا."),
         "noCurriculumsFound":
             MessageLookupByLibrary.simpleMessage("لا توجد مناهج"),
+        "noClassroomsAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
         "noDataAvailable":
             MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
         "noGroupsYet":
@@ -601,6 +606,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الفصل"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الصف"),
+        "noSubjectsAvailableForClassroom":
+            MessageLookupByLibrary.simpleMessage(
+                "لا توجد مواد متاحة لهذا الفصل"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
         "noUnassignedStudents":
             MessageLookupByLibrary.simpleMessage("لا يوجد طلاب غير معينين"),
@@ -858,6 +866,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "تم تعديل جدول الأسبوع القادم"),
         "science": MessageLookupByLibrary.simpleMessage("العلوم"),
+        "scoreRange": m27,
+        "scoreRequired": MessageLookupByLibrary.simpleMessage("الدرجة مطلوبة"),
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
         "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
@@ -1057,6 +1067,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploadSchedule": MessageLookupByLibrary.simpleMessage("رفع الجدول"),
         "usedDays": m23,
         "usedHours": m24,
+        "validIntegerScore":
+            MessageLookupByLibrary.simpleMessage("أدخل درجة صحيحة بدون كسور"),
         "userCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إنشاء المستخدم بنجاح"),
         "userDeletedSuccessfully":

@@ -4,12 +4,25 @@ import 'package:flutter/material.dart';
 import 'correct_assignment_body.dart';
 
 class CorrectAssignmentDialog extends StatelessWidget {
-  const CorrectAssignmentDialog({super.key});
+  const CorrectAssignmentDialog({
+    super.key,
+    required this.assignmentId,
+    required this.assignmentTitle,
+    required this.totalPoints,
+  });
+
+  final String assignmentId;
+  final String assignmentTitle;
+  final num totalPoints;
 
   @override
   Widget build(BuildContext context) {
-    return const CustomAppDialog(
-      child: CorrectAssignmentBody(),
+    return CustomAppDialog(
+      child: CorrectAssignmentBody(
+        assignmentId: assignmentId,
+        assignmentTitle: assignmentTitle,
+        totalPoints: totalPoints,
+      ),
     );
   }
 }

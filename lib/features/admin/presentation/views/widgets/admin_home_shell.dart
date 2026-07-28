@@ -1,6 +1,10 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
+import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_bottom_nav_bar.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_body.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_drawer.dart';
@@ -16,6 +20,7 @@ class AdminHomeShell extends StatefulWidget {
 class _AdminHomeShellState extends State<AdminHomeShell> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int currentIndex = 0;
+  bool _isLoggingOut = false;
   static const int subjectAssignmentDrawerIndex = 2;
   static const int classesDrawerIndex = 5;
   static const int notificationsDrawerIndex = 10;
@@ -58,31 +63,43 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == 2) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
-    }
-    else if (index == 4) {
+    } else if (index == 3) {
       MyNavigator.goTo(context, Routes.teacherApplication);
-    }
-     else if (index == 7) {
+    } else if (index == 4) {
+      MyNavigator.goTo(context, Routes.teacherApplication);
+    } else if (index == 7) {
       MyNavigator.goTo(context, Routes.gradesManagement);
-    }
-    else if (index == 9) {
+    } else if (index == 9) {
       MyNavigator.goTo(context, Routes.groups);
-    }
-    else if (index == 11) {
+    } else if (index == 11) {
       MyNavigator.goTo(context, Routes.certificatesManagement);
-    }
-    else if (index == 12) {
+    } else if (index == 12) {
       MyNavigator.goTo(context, Routes.tablesManagement);
-    }
-    else if (index == 13) {
+    } else if (index == 13) {
       MyNavigator.goTo(context, Routes.studentClassroomAssignment);
-    }
-    else if (index == 14) {
+    } else if (index == 14) {
       MyNavigator.goTo(context, Routes.curriculumManagement);
     }
   }
 
-  void _logout() => MyNavigator.goToOffAll(context, Routes.logIn);
+  Future<void> _logout() async {
+    if (_isLoggingOut) return;
+    _isLoggingOut = true;
+
+    try {
+      await SessionManager.instance.clearSession();
+      if (await SessionManager.instance.isLoggedIn()) {
+        throw StateError('Authentication session was not cleared');
+      }
+      getIt<SocketService>().disconnect();
+      if (!mounted) return;
+      MyNavigator.goToOffAll(context, Routes.logIn);
+    } catch (error) {
+      _isLoggingOut = false;
+      if (!mounted) return;
+      showCustomSnackBar(context, error.toString(), false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
