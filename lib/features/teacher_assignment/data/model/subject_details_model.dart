@@ -2,17 +2,19 @@ class SubjectDetailsModel {
   final String id;
   final String name;
 
-  const SubjectDetailsModel({
-    required this.id,
-    required this.name,
-  });
+  const SubjectDetailsModel({required this.id, required this.name});
 
   factory SubjectDetailsModel.fromJson(Map<String, dynamic> json) {
-    final data = json['data'] ?? {};
+    final nestedData = json['data'];
+    final data = nestedData is Map
+        ? Map<String, dynamic>.from(nestedData)
+        : json;
 
     return SubjectDetailsModel(
-      id: data['id'] ?? '',
-      name: data['name'] ?? '',
+      id: _asString(data['id'] ?? data['_id']),
+      name: _asString(data['name']),
     );
   }
 }
+
+String _asString(dynamic value) => value?.toString().trim() ?? '';

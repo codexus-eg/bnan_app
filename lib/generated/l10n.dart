@@ -3440,6 +3440,36 @@ class S {
     );
   }
 
+  /// `Score is required`
+  String get scoreRequired {
+    return Intl.message(
+      'Score is required',
+      name: 'scoreRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid integer score`
+  String get validIntegerScore {
+    return Intl.message(
+      'Enter a valid integer score',
+      name: 'validIntegerScore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Score must be between 0 and {totalPoints}`
+  String scoreRange(Object totalPoints) {
+    return Intl.message(
+      'Score must be between 0 and $totalPoints',
+      name: 'scoreRange',
+      desc: '',
+      args: [totalPoints],
+    );
+  }
+
   /// `Sections`
   String get sections {
     return Intl.message(
@@ -6635,6 +6665,26 @@ class S {
     return Intl.message(
       'Select classroom first',
       name: 'selectClassroomFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No classrooms available`
+  String get noClassroomsAvailable {
+    return Intl.message(
+      'No classrooms available',
+      name: 'noClassroomsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects available for this classroom`
+  String get noSubjectsAvailableForClassroom {
+    return Intl.message(
+      'No subjects available for this classroom',
+      name: 'noSubjectsAvailableForClassroom',
       desc: '',
       args: [],
     );

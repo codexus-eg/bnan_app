@@ -27,11 +27,12 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
   String? selectedClassroomId;
   String? selectedSubjectId;
   String? validationMessage;
+
   void changeClassroom(String? value) {
     selectedClassroomId = value;
     selectedSubjectId = null;
     selectedClassroomSubjectId = null;
-    emit(CreateAssignmentChangeValue());
+    _emitChange();
   }
 
   void changeClassroomSubject({
@@ -40,7 +41,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
   }) {
     selectedSubjectId = subjectId;
     selectedClassroomSubjectId = classroomSubjectId;
-    emit(CreateAssignmentChangeValue());
+    _emitChange();
   }
 
   String? get attachmentFileName {
@@ -53,27 +54,27 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
 
     if (attachmentFile == null) return;
 
-    emit(CreateAssignmentChangeValue());
+    _emitChange();
   }
 
   void changeCurriculum(String? value) {
     selectedCurriculumId = value;
     selectedGradeId = null;
-    emit(CreateAssignmentChangeValue());
+    _emitChange();
   }
 
   void changeGrade(String? value) {
     selectedGradeId = value;
-    emit(CreateAssignmentChangeValue());
+    _emitChange();
   }
 
   void changeDueDate(String? value) {
     selectedDueDate = value;
-    emit(CreateAssignmentChangeValue());
+    _emitChange();
   }
 
   Future<void> createAssignment() async {
-    validationMessage = null;
+    clearError();
 
     if (!formKey.currentState!.validate()) return;
 
@@ -100,16 +101,22 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
 
     result.fold(
       (failure) {
-        emit(
-          CreateAssignmentFailure(
-            errorMessage: S.current.fillAllRequiredFields,
-          ),
-        );
+        emit(CreateAssignmentFailure(errorMessage: failure.message));
       },
       (assignment) {
         emit(CreateAssignmentSuccess(assignment: assignment));
       },
     );
+  }
+
+  void clearError() {
+    if (validationMessage == null && state is! CreateAssignmentFailure) return;
+    _emitChange();
+  }
+
+  void _emitChange() {
+    validationMessage = null;
+    emit(CreateAssignmentChangeValue());
   }
 
   @override

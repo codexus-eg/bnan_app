@@ -450,6 +450,14 @@
     "assignmentNotSubmittedYet": "Assignment Not Submitted Yet",
     "degree": "Degree",
     "sendCorrection": "Submit Grade",
+    "scoreRequired": "Score is required",
+    "validIntegerScore": "Enter a valid integer score",
+    "scoreRange": "Score must be between 0 and {totalPoints}",
+    "@scoreRange": {
+        "placeholders": {
+            "totalPoints": {}
+        }
+    },
     "sections": "Sections",
     "classR": "Class",
     "issueNewCertificate": "Issue New Certificate",
@@ -800,6 +808,8 @@
     "fileDownloadedSuccessfully": "File downloaded successfully",
     "unableToDownloadFile": "Unable to download file",
     "selectClassroomFirst": "Select classroom first",
+    "noClassroomsAvailable": "No classrooms available",
+    "noSubjectsAvailableForClassroom": "No subjects available for this classroom",
     "studentAssignedSuccessfully": "Student assigned successfully",
     "packagesManagement": "Package Management",
     "addNewPackage": "Add New Package",

@@ -7,27 +7,30 @@ class GetClassroomSubjectsCubit extends Cubit<GetClassroomSubjectsState> {
     : super(GetClassroomSubjectsInitial());
 
   final AssignmentsRepo assignmentsRepo;
+  String? _activeClassroomId;
 
-  Future<void> getClassroomSubjects({
-    required String classroomId,
-  }) async {
+  Future<void> getClassroomSubjects({required String classroomId}) async {
+    _activeClassroomId = classroomId;
     emit(GetClassroomSubjectsLoading());
 
     final result = await assignmentsRepo.getClassroomSubjects(
       classroomId: classroomId,
     );
 
+    if (isClosed || _activeClassroomId != classroomId) return;
+
     result.fold(
       (failure) {
         emit(GetClassroomSubjectsFailure(errorMessage: failure.message));
       },
       (classroomSubjects) {
-        emit(
-          GetClassroomSubjectsSuccess(
-            classroomSubjects: classroomSubjects,
-          ),
-        );
+        emit(GetClassroomSubjectsSuccess(classroomSubjects: classroomSubjects));
       },
     );
+  }
+
+  void clear() {
+    _activeClassroomId = null;
+    if (!isClosed) emit(GetClassroomSubjectsInitial());
   }
 }

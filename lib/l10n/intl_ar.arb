@@ -449,6 +449,14 @@
     "assignmentNotSubmittedYet": "لم يسلم الواجب بعد",
     "degree": "الدرجة",
     "sendCorrection": "إرسال التصحيح",
+    "scoreRequired": "الدرجة مطلوبة",
+    "validIntegerScore": "أدخل درجة صحيحة بدون كسور",
+    "scoreRange": "يجب أن تكون الدرجة بين 0 و{totalPoints}",
+    "@scoreRange": {
+        "placeholders": {
+            "totalPoints": {}
+        }
+    },
     "sections": "الفصول",
     "classR": "فصل",
     "issueNewCertificate": "إصدار شهادة جديدة",
@@ -800,6 +808,8 @@
     "fileDownloadedSuccessfully": "تم تحميل الملف بنجاح",
     "unableToDownloadFile": "تعذر تحميل الملف",
     "selectClassroomFirst": "اختر الفصل أولاً",
+    "noClassroomsAvailable": "لا توجد فصول متاحة",
+    "noSubjectsAvailableForClassroom": "لا توجد مواد متاحة لهذا الفصل",
     "studentAssignedSuccessfully": "تم تعيين الطالب بنجاح",
     "packagesManagement": "إدارة الباقات",
     "addNewPackage": "إضافة باقة جديدة",

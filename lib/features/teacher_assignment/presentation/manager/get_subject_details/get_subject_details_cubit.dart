@@ -5,33 +5,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetSubjectDetailsCubit extends Cubit<GetSubjectDetailsState> {
   GetSubjectDetailsCubit(this.assignmentsRepo)
-      : super(GetSubjectDetailsInitial());
+    : super(GetSubjectDetailsInitial());
 
   final AssignmentsRepo assignmentsRepo;
 
   List<String> _lastSubjectIds = [];
+  int _requestVersion = 0;
 
-  Future<void> getSubjectsDetails({
-    required List<String> subjectIds,
-  }) async {
+  Future<void> getSubjectsDetails({required List<String> subjectIds}) async {
     if (isClosed) return;
+
+    if (subjectIds.isEmpty) {
+      _lastSubjectIds = [];
+      _requestVersion++;
+      emit(GetSubjectDetailsSuccess(subjects: const []));
+      return;
+    }
 
     if (_isSameSubjects(subjectIds)) return;
 
     _lastSubjectIds = List.from(subjectIds);
+    final requestVersion = ++_requestVersion;
 
     emit(GetSubjectDetailsLoading());
 
     final subjects = <SubjectDetailsModel>[];
 
     for (final subjectId in subjectIds) {
-      if (isClosed) return;
+      if (isClosed || requestVersion != _requestVersion) return;
 
       final result = await assignmentsRepo.getSubjectDetails(
         subjectId: subjectId,
       );
 
-      if (isClosed) return;
+      if (isClosed || requestVersion != _requestVersion) return;
 
       final hasFailure = result.fold(
         (failure) {
@@ -47,7 +54,7 @@ class GetSubjectDetailsCubit extends Cubit<GetSubjectDetailsState> {
       if (hasFailure) return;
     }
 
-    if (isClosed) return;
+    if (isClosed || requestVersion != _requestVersion) return;
 
     emit(GetSubjectDetailsSuccess(subjects: subjects));
   }
@@ -63,6 +70,7 @@ class GetSubjectDetailsCubit extends Cubit<GetSubjectDetailsState> {
   }
 
   void clear() {
+    _requestVersion++;
     _lastSubjectIds = [];
 
     if (!isClosed) {

@@ -12,16 +12,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CurriculumDropdown extends StatelessWidget {
   const CurriculumDropdown({super.key});
-//TODO remove
+  //TODO remove
   @override
   Widget build(BuildContext context) {
     final createCubit = context.watch<CreateAssignmentCubit>();
 
     return BlocBuilder<GetTeacherCurriculumsCubit, GetTeacherCurriculumsState>(
       builder: (context, state) {
-        final List<TeacherCurriculumModel> curriculums= state is GetTeacherCurriculumsSuccess
+        final List<TeacherCurriculumModel> curriculums =
+            state is GetTeacherCurriculumsSuccess
             ? state.curriculums.curriculums
-                : TeacherCurriculumsResponseModel.placeholder().curriculums;
+            : TeacherCurriculumsResponseModel.placeholder().curriculums;
 
         return CustomDropdown(
           label: S.of(context).curriculum,

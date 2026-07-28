@@ -15,7 +15,12 @@ class TeacherAssignmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = AssignmentColors.fromStatus(assignment.status);
     return InkWell(
-      onTap: () => TeacherAssignmentDialogs.showCorrectAssignment(context),
+      onTap: () => TeacherAssignmentDialogs.showCorrectAssignment(
+        context,
+        assignmentId: assignment.id,
+        assignmentTitle: assignment.title,
+        totalPoints: assignment.totalPoints,
+      ),
       child: Container(
         padding: const EdgeInsets.all(8),
         margin: EdgeInsetsDirectional.only(bottom: 16),

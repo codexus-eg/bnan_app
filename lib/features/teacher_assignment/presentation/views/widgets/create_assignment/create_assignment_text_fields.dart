@@ -19,6 +19,7 @@ class CreateAssignmentTextFields extends StatelessWidget {
           backgroundColor: ColorManager.white,
           isRequired: true,
           controller: cubit.titleController,
+          onChanged: (_) => cubit.clearError(),
         ),
         const SizedBox(height: 16),
         CustomTextField(
@@ -26,6 +27,7 @@ class CreateAssignmentTextFields extends StatelessWidget {
           backgroundColor: ColorManager.white,
           controller: cubit.descriptionController,
           maxLine: 3,
+          onChanged: (_) => cubit.clearError(),
         ),
         // const SizedBox(height: 16),
         // CustomTextField(

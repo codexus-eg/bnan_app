@@ -177,6 +177,14 @@ void setupServiceLocator() {
     () => GetTeacherAssignmentsCubit(getIt<AssignmentsRepo>()),
   );
 
+  getIt.registerFactory<GetAssignmentSubmissionsCubit>(
+    () => GetAssignmentSubmissionsCubit(getIt<AssignmentsRepo>()),
+  );
+
+  getIt.registerFactory<ReviewAssignmentSubmissionCubit>(
+    () => ReviewAssignmentSubmissionCubit(getIt<AssignmentsRepo>()),
+  );
+
   getIt.registerFactory<CreateAssignmentCubit>(
     () => CreateAssignmentCubit(getIt<AssignmentsRepo>()),
   );

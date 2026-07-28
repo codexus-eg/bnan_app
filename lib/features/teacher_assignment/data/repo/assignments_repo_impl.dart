@@ -3,6 +3,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
+import 'package:bnan_app/features/teacher_assignment/data/model/assignment_submissions_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/classroom_subjects_response_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/create_assignment_request_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/review_assignment_request_model.dart';
@@ -190,7 +191,7 @@ class AssignmentsRepoImpl implements AssignmentsRepo {
   }) async {
     try {
       final response = await apiConsumer.get(
-        EndPoints.classroomSubjects(classroomId),
+        EndPoints.classroomSubjectsDetails(classroomId),
         isProtected: true,
       );
 
@@ -213,6 +214,23 @@ class AssignmentsRepoImpl implements AssignmentsRepo {
       );
 
       return Right(SubjectDetailsModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AssignmentSubmissionsResponseModel>>
+  getAssignmentSubmissions({required String assignmentId}) async {
+    try {
+      final response = await apiConsumer.get(
+        EndPoints.assignmentSubmissions(assignmentId),
+        isProtected: true,
+      );
+
+      return Right(AssignmentSubmissionsResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
