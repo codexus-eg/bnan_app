@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/registration_requests/data/models/registration_request_filter.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_requests_pagination_model.dart';
 import 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo.dart';
@@ -15,6 +16,7 @@ class GetRegistrationRequestsCubit extends Cubit<GetRegistrationRequestsState> {
   int _lastPage = 1;
   bool _isLoadingMore = false;
   int _requestId = 0;
+  RegistrationRequestFilter currentFilter = RegistrationRequestFilter.pending;
   RegistrationRequestsPaginationModel _pagination =
       const RegistrationRequestsPaginationModel(
         currentPage: 1,
@@ -26,14 +28,20 @@ class GetRegistrationRequestsCubit extends Cubit<GetRegistrationRequestsState> {
   List<RegistrationRequestModel> get requests => List.unmodifiable(_requests);
   bool get canLoadMore => !_isLoadingMore && _currentPage < _lastPage;
 
-  Future<void> getRegistrationRequests({bool refresh = false}) async {
+  Future<void> getRegistrationRequests({
+    RegistrationRequestFilter? filter,
+    bool refresh = false,
+  }) async {
+    final nextFilter = filter ?? currentFilter;
+    final filterChanged = nextFilter != currentFilter;
+    currentFilter = nextFilter;
     final requestId = ++_requestId;
     _isLoadingMore = false;
-    if (refresh) _reset();
+    if (refresh || filterChanged) _reset();
     emit(GetRegistrationRequestsLoading());
 
     final result = await registrationRequestsRepo
-        .getEgyptianRegistrationRequests();
+        .getEgyptianRegistrationRequests(status: currentFilter.apiValue);
     if (isClosed || requestId != _requestId) return;
 
     result.fold(
@@ -63,7 +71,10 @@ class GetRegistrationRequestsCubit extends Cubit<GetRegistrationRequestsState> {
 
     try {
       final result = await registrationRequestsRepo
-          .getEgyptianRegistrationRequests(page: nextPage);
+          .getEgyptianRegistrationRequests(
+            status: currentFilter.apiValue,
+            page: nextPage,
+          );
       if (isClosed || requestId != _requestId) return;
       _isLoadingMore = false;
 

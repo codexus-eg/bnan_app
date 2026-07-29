@@ -36,10 +36,10 @@ abstract class Routes {
   static const String classRoomManagement = '/classRoomManagement';
   static const String curriculumManagement = '/curriculumManagement';
   static const String tablesManagement = '/tablesManagement';
+  static const String lessonsManagement = '/lessonsManagement';
   static const String teacherApplication = '/teacherApplication';
   static const String registrationRequests = '/registrationRequests';
   static const String gradesManagement = '/gradesManagement';
   static const String studentClassroomAssignment =
       '/studentClassroomAssignment';
-
 }

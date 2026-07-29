@@ -9,6 +9,7 @@ class RegistrationFilledButton extends StatelessWidget {
     this.icon,
     this.onPressed,
     this.isDisabled = false,
+    this.isLoading = false,
   });
 
   final String title;
@@ -16,14 +17,24 @@ class RegistrationFilledButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
   final bool isDisabled;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 25,
       child: ElevatedButton.icon(
-        onPressed: isDisabled ? null : (onPressed ?? () {}),
-        icon: icon == null
+        onPressed: isDisabled || isLoading ? null : (onPressed ?? () {}),
+        icon: isLoading
+            ? const SizedBox(
+                width: 12,
+                height: 12,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : icon == null
             ? const SizedBox.shrink()
             : Icon(icon, size: 18, color: Colors.white),
         label: Text(title),

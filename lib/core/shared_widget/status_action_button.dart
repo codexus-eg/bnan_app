@@ -10,12 +10,14 @@ class StatusActionButton extends StatelessWidget {
     this.title,
     this.backgroundColor,
     this.icon,
+    this.isLoading = false,
   });
 
   final VoidCallback onPressed;
   final String? title;
   final Color? backgroundColor;
   final IconData? icon;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,17 @@ class StatusActionButton extends StatelessWidget {
       height: 25,
       width: 66,
       child: ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon ?? Icons.close, size: 12,color: ColorManager.white,),
+        onPressed: isLoading ? null : onPressed,
+        icon: isLoading
+            ? const SizedBox(
+                width: 12,
+                height: 12,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: ColorManager.white,
+                ),
+              )
+            : Icon(icon ?? Icons.close, size: 12, color: ColorManager.white),
         label: Text(
           title ?? S.of(context).reject,
           style: StylesManager.styleRegular10(

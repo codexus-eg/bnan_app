@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class RegistrationRequestsRepo {
   Future<Either<Failure, GetRegistrationRequestsResponseModel>>
-  getEgyptianRegistrationRequests({int page = 1});
+  getEgyptianRegistrationRequests({required String status, int page = 1});
 
   Future<Either<Failure, RegistrationRequestActionResponseModel>>
   confirmEgyptianRegistrationPayment({

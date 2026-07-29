@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
+import 'package:bnan_app/features/registration_requests/data/models/registration_request_filter.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart'
     as registration_models;
 import 'package:bnan_app/features/registration_requests/presentation/manager/get_registration_requests_cubit/get_registration_requests_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:bnan_app/features/registration_requests/presentation/manager/get
 import 'package:bnan_app/features/registration_requests/presentation/view/widgets/registration_requests_empty.dart';
 import 'package:bnan_app/features/registration_requests/presentation/view/widgets/registration_requests_failure.dart';
 import 'package:bnan_app/features/registration_requests/presentation/view/widgets/registration_requests_list.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,7 +49,14 @@ class RegistrationRequestsBlocBuilder extends StatelessWidget {
 
         final currentRequests = _requestsFrom(state);
         if (currentRequests.isEmpty) {
-          return RegistrationRequestsEmpty(onRefresh: refresh);
+          final message =
+              cubit.currentFilter == RegistrationRequestFilter.approved
+              ? S.of(context).noActiveAccountsFound
+              : S.of(context).noInactiveAccountsFound;
+          return RegistrationRequestsEmpty(
+            message: message,
+            onRefresh: refresh,
+          );
         }
 
         return RegistrationRequestsList(

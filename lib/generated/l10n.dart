@@ -5294,6 +5294,166 @@ class S {
     );
   }
 
+  /// `Account activated successfully`
+  String get accountActivatedSuccessfully {
+    return Intl.message(
+      'Account activated successfully',
+      name: 'accountActivatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration request rejected successfully`
+  String get registrationRequestRejectedSuccessfully {
+    return Intl.message(
+      'Registration request rejected successfully',
+      name: 'registrationRequestRejectedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open WhatsApp`
+  String get unableToOpenWhatsApp {
+    return Intl.message(
+      'Unable to open WhatsApp',
+      name: 'unableToOpenWhatsApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Waiting for receipt review`
+  String get waitingForReceiptReview {
+    return Intl.message(
+      'Waiting for receipt review',
+      name: 'waitingForReceiptReview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get activated {
+    return Intl.message('Active', name: 'activated', desc: '', args: []);
+  }
+
+  /// `Inactive`
+  String get notActivated {
+    return Intl.message('Inactive', name: 'notActivated', desc: '', args: []);
+  }
+
+  /// `No active accounts found`
+  String get noActiveAccountsFound {
+    return Intl.message(
+      'No active accounts found',
+      name: 'noActiveAccountsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No inactive accounts found`
+  String get noInactiveAccountsFound {
+    return Intl.message(
+      'No inactive accounts found',
+      name: 'noInactiveAccountsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open payment receipt`
+  String get unableToOpenPaymentReceipt {
+    return Intl.message(
+      'Unable to open payment receipt',
+      name: 'unableToOpenPaymentReceipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lessons Management`
+  String get lessonsManagement {
+    return Intl.message(
+      'Lessons Management',
+      name: 'lessonsManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Lesson`
+  String get addLesson {
+    return Intl.message('Add Lesson', name: 'addLesson', desc: '', args: []);
+  }
+
+  /// `Edit Lesson`
+  String get editLesson {
+    return Intl.message('Edit Lesson', name: 'editLesson', desc: '', args: []);
+  }
+
+  /// `Lesson date`
+  String get lessonDate {
+    return Intl.message('Lesson date', name: 'lessonDate', desc: '', args: []);
+  }
+
+  /// `Start time`
+  String get startTime {
+    return Intl.message('Start time', name: 'startTime', desc: '', args: []);
+  }
+
+  /// `End time`
+  String get endTime {
+    return Intl.message('End time', name: 'endTime', desc: '', args: []);
+  }
+
+  /// `Week days`
+  String get weekDays {
+    return Intl.message('Week days', name: 'weekDays', desc: '', args: []);
+  }
+
+  /// `Saturday`
+  String get saturday {
+    return Intl.message('Saturday', name: 'saturday', desc: '', args: []);
+  }
+
+  /// `Friday`
+  String get friday {
+    return Intl.message('Friday', name: 'friday', desc: '', args: []);
+  }
+
+  /// `Thursday, 07 May 2026`
+  String get selectedLessonDatePreview {
+    return Intl.message(
+      'Thursday, 07 May 2026',
+      name: 'selectedLessonDatePreview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empty lesson`
+  String get emptyLesson {
+    return Intl.message(
+      'Empty lesson',
+      name: 'emptyLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No lessons for the selected day`
+  String get noLessonsForSelectedDay {
+    return Intl.message(
+      'No lessons for the selected day',
+      name: 'noLessonsForSelectedDay',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Enter a valid amount of at least 0.01`
   String get invalidPaymentAmount {
     return Intl.message(
@@ -5344,10 +5504,10 @@ class S {
     );
   }
 
-  /// `Contact WhatsApp`
+  /// `Contact via WhatsApp`
   String get contactWhatsApp {
     return Intl.message(
-      'Contact WhatsApp',
+      'Contact via WhatsApp',
       name: 'contactWhatsApp',
       desc: '',
       args: [],

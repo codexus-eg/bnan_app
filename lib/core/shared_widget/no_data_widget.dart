@@ -4,13 +4,15 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class NoDataWidget extends StatelessWidget {
-  const NoDataWidget({super.key});
+  const NoDataWidget({super.key, this.title});
+
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
     return EmptyStateWidget(
       image: ImageManager.noData,
-      title: S.of(context).noDataAvailable,
+      title: title ?? S.of(context).noDataAvailable,
     );
   }
 }

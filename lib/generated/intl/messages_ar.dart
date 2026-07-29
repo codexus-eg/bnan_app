@@ -94,12 +94,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "accept": MessageLookupByLibrary.simpleMessage("قبول"),
     "acceptRequest": MessageLookupByLibrary.simpleMessage("قبول الطلب"),
     "acceptStudentRequest": MessageLookupByLibrary.simpleMessage("قبول طلب"),
+    "accountActivatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم تفعيل الحساب بنجاح",
+    ),
+    "activated": MessageLookupByLibrary.simpleMessage("مفعل"),
     "active": MessageLookupByLibrary.simpleMessage("نشطة"),
     "active2": MessageLookupByLibrary.simpleMessage("نشط"),
     "activeGroups": MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
     "activeSubscriptions": MessageLookupByLibrary.simpleMessage(
       "اشتراكات نشطة",
     ),
+    "addLesson": MessageLookupByLibrary.simpleMessage("إضافة حصة"),
     "addNewChapter": MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
     "addNewCurriculum": MessageLookupByLibrary.simpleMessage("إضافة منهج جديد"),
     "addNewEvaluation": MessageLookupByLibrary.simpleMessage(
@@ -380,6 +385,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
     "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
     "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
+    "editLesson": MessageLookupByLibrary.simpleMessage("تعديل الحصة"),
     "editPackage": MessageLookupByLibrary.simpleMessage("تعديل الباقة"),
     "editSubject": MessageLookupByLibrary.simpleMessage("تعديل المادة"),
     "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
@@ -401,10 +407,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "emiratiCurriculum": MessageLookupByLibrary.simpleMessage(
       "المنهج الإماراتي",
     ),
+    "emptyLesson": MessageLookupByLibrary.simpleMessage("حصة فارغة"),
     "enableAccount": MessageLookupByLibrary.simpleMessage("فك التعطيل"),
     "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
       "هل تريد فك تعطيل هذا الحساب؟",
     ),
+    "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
     "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
     "errorBadCertificate": MessageLookupByLibrary.simpleMessage(
       "شهادة SSL غير موثوقة.",
@@ -475,6 +483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "fourDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 4 أيام"),
     "fourHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 4 ساعات"),
+    "friday": MessageLookupByLibrary.simpleMessage("الجمعة"),
     "from": MessageLookupByLibrary.simpleMessage("من"),
     "fullName": MessageLookupByLibrary.simpleMessage("الاسم بالكامل"),
     "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
@@ -549,10 +558,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "latestEarnedPoints": MessageLookupByLibrary.simpleMessage(
       "آخر النقاط المكتسبة",
     ),
+    "lessonDate": MessageLookupByLibrary.simpleMessage("تاريخ الحصة"),
     "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
       "حصة الرياضيات تبدأ خلال 15 د",
     ),
     "lessons": MessageLookupByLibrary.simpleMessage("حصة"),
+    "lessonsManagement": MessageLookupByLibrary.simpleMessage("إدارة الحصص"),
     "lightAndShadowExperiment": MessageLookupByLibrary.simpleMessage(
       "تجربة الضوء والظل",
     ),
@@ -642,6 +653,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
     "nextLevelPointsText": m11,
     "no": MessageLookupByLibrary.simpleMessage("لا"),
+    "noActiveAccountsFound": MessageLookupByLibrary.simpleMessage(
+      "لا توجد حسابات مفعلة",
+    ),
     "noAssignedSubjectsForClassroom": MessageLookupByLibrary.simpleMessage(
       "لا توجد مواد مسندة لك في هذا الفصل",
     ),
@@ -673,8 +687,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
       "عند الانضمام إلى مجموعة أو إرسال طلب جديد ستظهر هنا.",
     ),
+    "noInactiveAccountsFound": MessageLookupByLibrary.simpleMessage(
+      "لا توجد حسابات غير مفعلة",
+    ),
     "noInternetConnection": MessageLookupByLibrary.simpleMessage(
       "لا يوجد اتصال بالإنترنت",
+    ),
+    "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
+      "لا توجد حصص في اليوم المحدد",
     ),
     "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
       "لا توجد واجبات قيد الانتظار",
@@ -695,6 +715,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noUnassignedStudents": MessageLookupByLibrary.simpleMessage(
       "لا يوجد طلاب غير معينين",
     ),
+    "notActivated": MessageLookupByLibrary.simpleMessage("غير مفعل"),
     "notAvailable": MessageLookupByLibrary.simpleMessage("غير متاحة"),
     "notSubmitted": MessageLookupByLibrary.simpleMessage("لم يسلم"),
     "notes": MessageLookupByLibrary.simpleMessage(
@@ -939,6 +960,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "registrationDate": MessageLookupByLibrary.simpleMessage("تاريخ التسجيل"),
     "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
+    "registrationRequestRejectedSuccessfully":
+        MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
     "registrationRequests": MessageLookupByLibrary.simpleMessage(
       "طلبات التسجيل",
     ),
@@ -992,6 +1015,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sarCurrency": MessageLookupByLibrary.simpleMessage("ريال سعودي (ر.س)"),
     "sarShort": MessageLookupByLibrary.simpleMessage("ريال"),
+    "saturday": MessageLookupByLibrary.simpleMessage("السبت"),
     "saudiCurriculum": MessageLookupByLibrary.simpleMessage("المنهج السعودي"),
     "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
       "نقدم جميع المواد الدراسية للمرحلة الابتدائية، المتوسطة، والثانوية وفق المنهج المعتمد.",
@@ -1034,6 +1058,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "اختر الطالب أولاً",
     ),
     "selectSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
+    "selectedLessonDatePreview": MessageLookupByLibrary.simpleMessage(
+      "الخميس 07 مايو 2026",
+    ),
     "selectedPackage": MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
     "semesterName": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
     "semesterOne": MessageLookupByLibrary.simpleMessage("فصل ١"),
@@ -1066,6 +1093,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ابدأ الحصة عبر Zoom",
     ),
     "startNow": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
+    "startTime": MessageLookupByLibrary.simpleMessage("وقت البداية"),
     "student": MessageLookupByLibrary.simpleMessage("طالب"),
     "studentAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم تعيين الطالب بنجاح",
@@ -1225,6 +1253,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "تعذر تحميل الملف ",
     ),
+    "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح إيصال الدفع",
+    ),
+    "unableToOpenWhatsApp": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح واتساب",
+    ),
     "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "حدث خطأ غير متوقع",
@@ -1283,11 +1317,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "waitingForCorrection": MessageLookupByLibrary.simpleMessage(
       "بانتظار التصحيح",
     ),
+    "waitingForReceiptReview": MessageLookupByLibrary.simpleMessage(
+      "بانتظار مراجعة الإيصال",
+    ),
     "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
       "بانتظار موافقة المعلم",
     ),
     "wallet": MessageLookupByLibrary.simpleMessage("محفظة إلكترونية"),
     "wednesday": MessageLookupByLibrary.simpleMessage("الأربعاء"),
+    "weekDays": MessageLookupByLibrary.simpleMessage("أيام الأسبوع"),
     "weekStart": MessageLookupByLibrary.simpleMessage("بداية الأسبوع"),
     "weeklyEvaluation": MessageLookupByLibrary.simpleMessage(
       "التقييم الأسبوعي",

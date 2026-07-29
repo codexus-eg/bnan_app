@@ -450,6 +450,13 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.lessonsManagement,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const LessonsManagementView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.teacherApplication,
         pageBuilder: (context, state) => buildTransitionPages(
           key: state.pageKey,
