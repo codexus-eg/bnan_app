@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/cache/secure_cache_helper.dart';
+import 'package:bnan_app/core/cache/secure_cache_keys.dart';
 import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
@@ -13,6 +15,7 @@ import 'package:bnan_app/features/student_auth/data/models/subject_model.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthRepoImpl implements AuthRepo {
   const AuthRepoImpl({required this.apiConsumer});
@@ -189,7 +192,9 @@ class AuthRepoImpl implements AuthRepo {
 
   Future<void> _saveSession(AuthResponseModel authResponse) async {
     if (!authResponse.hasToken) return;
-    print("TOOOKKKKKKKDENNNSSSSSSSSSSS:${authResponse.token}");
+    debugPrint(
+      'Student login token received: ${authResponse.token.isNotEmpty}',
+    );
 
     await SessionManager.instance.saveSession(
       accessToken: authResponse.token,
@@ -197,6 +202,13 @@ class AuthRepoImpl implements AuthRepo {
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
     );
-    print("sallllllllmmmmmma:${authResponse.token}");
+
+    final storedToken = await SecureCacheHelper.getData(
+      key: SecureCacheKeys.accessToken,
+    );
+    debugPrint(
+      'Token stored after student login: '
+      '${storedToken != null && storedToken.isNotEmpty}',
+    );
   }
 }

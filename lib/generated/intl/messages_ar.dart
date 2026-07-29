@@ -538,6 +538,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidPackage": MessageLookupByLibrary.simpleMessage(
       "بيانات الباقة غير صالحة",
     ),
+    "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
+      "أدخل مبلغًا صحيحًا لا يقل عن 0.01",
+    ),
     "issueNewCertificate": MessageLookupByLibrary.simpleMessage(
       "إصدار شهادة جديدة",
     ),
@@ -828,11 +831,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "كلمتا المرور غير متطابقتين.",
     ),
     "paymentCompleted": MessageLookupByLibrary.simpleMessage("تم الدفع"),
+    "paymentConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم تأكيد الدفع بنجاح",
+    ),
     "paymentDoneOn": MessageLookupByLibrary.simpleMessage("تم الدفع في"),
     "paymentInfo": MessageLookupByLibrary.simpleMessage("معلومات الدفع"),
     "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
     "paymentMethods": MessageLookupByLibrary.simpleMessage("طرق الدفع"),
     "paymentReceipt": MessageLookupByLibrary.simpleMessage("إيصال الدفع"),
+    "paymentReceiptRequired": MessageLookupByLibrary.simpleMessage(
+      "صورة إيصال الدفع مطلوبة",
+    ),
     "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
     "pending": MessageLookupByLibrary.simpleMessage("معلق"),
     "pendingMathSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -1239,6 +1248,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadPaymentReceipt": MessageLookupByLibrary.simpleMessage(
       "ارفع صورة الإيصال",
     ),
+    "uploadReceipt": MessageLookupByLibrary.simpleMessage("رفع الإيصال"),
     "uploadSchedule": MessageLookupByLibrary.simpleMessage("رفع الجدول"),
     "usedDays": m24,
     "usedHours": m25,

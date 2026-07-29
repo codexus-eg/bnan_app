@@ -2,8 +2,6 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart';
 import 'package:bnan_app/features/registration_requests/presentation/view/widgets/payment_status_chip.dart';
-import 'package:bnan_app/features/registration_requests/presentation/view/widgets/registration_filled_button.dart';
-import 'package:bnan_app/features/registration_requests/presentation/view/widgets/confirm_registration_payment_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +13,6 @@ class PaymentReviewBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final isConfirmed = request.paymentStatus == 'confirmed';
     final hasPayment =
         request.paymentAmount != null ||
         request.paymentStatus == 'pending' ||
@@ -66,19 +63,6 @@ class PaymentReviewBox extends StatelessWidget {
               const Spacer(),
               PaymentStatusChip(text: paymentStatusText),
             ],
-          ),
-          const SizedBox(height: 8),
-          RegistrationFilledButton(
-            title: isConfirmed
-                ? s.paymentCompleted
-                : s.manualPaymentConfirmation,
-            color: ColorManager.secondaryColor,
-            onPressed: isConfirmed
-                ? null
-                : () => showDialog<void>(
-                    context: context,
-                    builder: (_) => const ConfirmRegistrationPaymentDialog(),
-                  ),
           ),
         ],
       ),

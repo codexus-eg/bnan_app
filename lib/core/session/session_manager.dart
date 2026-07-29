@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/cache/secure_cache_helper.dart';
 import 'package:bnan_app/core/cache/secure_cache_keys.dart';
+import 'package:flutter/foundation.dart';
 
 class SessionManager {
   SessionManager._();
@@ -22,31 +23,40 @@ class SessionManager {
     String? userId,
     String? userRole,
   }) async {
+    debugPrint('SessionManager.saveSession started');
+
     _accessToken = accessToken;
     _refreshToken = refreshToken;
     _userId = userId;
     _userRole = userRole;
 
-    await Future.wait([
-      SecureCacheHelper.saveData(
-        key: SecureCacheKeys.accessToken,
-        value: accessToken,
-      ),
-      SecureCacheHelper.saveData(
-        key: SecureCacheKeys.refreshToken,
-        value: refreshToken,
-      ),
-      if (userId != null)
-        SecureCacheHelper.saveData(
-          key: SecureCacheKeys.userId,
-          value: userId,
-        ),
-      if (userRole != null)
-        SecureCacheHelper.saveData(
-          key: SecureCacheKeys.userRole,
-          value: userRole,
-        ),
-    ]);
+    await SecureCacheHelper.saveData(
+      key: SecureCacheKeys.accessToken,
+      value: accessToken,
+    );
+    debugPrint('Access token write completed');
+
+    await SecureCacheHelper.saveData(
+      key: SecureCacheKeys.refreshToken,
+      value: refreshToken,
+    );
+    debugPrint('Refresh token write completed');
+
+    if (userId != null) {
+      await SecureCacheHelper.saveData(
+        key: SecureCacheKeys.userId,
+        value: userId,
+      );
+      debugPrint('User id write completed');
+    }
+
+    if (userRole != null) {
+      await SecureCacheHelper.saveData(
+        key: SecureCacheKeys.userRole,
+        value: userRole,
+      );
+      debugPrint('User role write completed');
+    }
   }
 
   Future<void> loadSession() async {
@@ -58,41 +68,29 @@ class SessionManager {
       key: SecureCacheKeys.refreshToken,
     );
 
-    _userId = await SecureCacheHelper.getData(
-      key: SecureCacheKeys.userId,
-    );
+    _userId = await SecureCacheHelper.getData(key: SecureCacheKeys.userId);
 
-    _userRole = await SecureCacheHelper.getData(
-      key: SecureCacheKeys.userRole,
-    );
+    _userRole = await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
   }
 
   Future<String?> getAccessToken() async {
     return _accessToken ??
-        await SecureCacheHelper.getData(
-          key: SecureCacheKeys.accessToken,
-        );
+        await SecureCacheHelper.getData(key: SecureCacheKeys.accessToken);
   }
 
   Future<String?> getRefreshToken() async {
     return _refreshToken ??
-        await SecureCacheHelper.getData(
-          key: SecureCacheKeys.refreshToken,
-        );
+        await SecureCacheHelper.getData(key: SecureCacheKeys.refreshToken);
   }
 
   Future<String?> getUserId() async {
     return _userId ??
-        await SecureCacheHelper.getData(
-          key: SecureCacheKeys.userId,
-        );
+        await SecureCacheHelper.getData(key: SecureCacheKeys.userId);
   }
 
   Future<String?> getUserRole() async {
     return _userRole ??
-        await SecureCacheHelper.getData(
-          key: SecureCacheKeys.userRole,
-        );
+        await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
   }
 
   Future<bool> isLoggedIn() async {
@@ -101,11 +99,14 @@ class SessionManager {
   }
 
   Future<void> clearSession() async {
+    debugPrint('SessionManager.clearSession started');
+
     _accessToken = null;
     _refreshToken = null;
     _userId = null;
     _userRole = null;
 
     await SecureCacheHelper.clearAll();
+    debugPrint('SessionManager.clearSession completed');
   }
 }
