@@ -2,6 +2,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart';
 import 'package:bnan_app/features/registration_requests/presentation/view/widgets/payment_status_chip.dart';
+import 'package:bnan_app/features/registration_requests/presentation/view/widgets/receipt_download_button.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -13,16 +14,14 @@ class PaymentReviewBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final hasPayment =
-        request.paymentAmount != null ||
-        request.paymentStatus == 'pending' ||
-        request.paymentStatus == 'confirmed' ||
-        request.paymentStatus == 'rejected';
-    final paymentStatusText = !hasPayment
-        ? s.newCustomer
-        : request.paymentStatus == 'rejected'
-        ? s.reject
-        : s.paymentCompleted;
+    final paymentStatusText = request.isPaymentConfirmed
+        ? s.paymentCompleted
+        : s.waitingForReceiptReview;
+    final receiptUrl = request.payment?.receiptImage?.trim() ?? '';
+    final canOpenReceipt =
+        request.registrationStatus == 'approved' &&
+        request.isPaymentConfirmed &&
+        receiptUrl.isNotEmpty;
 
     return Container(
       padding: const EdgeInsetsDirectional.only(
@@ -40,28 +39,35 @@ class PaymentReviewBox extends StatelessWidget {
         children: [
           Row(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    s.paymentStatus,
-                    style: StylesManager.styleBold10(
-                      context,
-                    ).copyWith(color: ColorManager.mainColor14),
-                  ),
-                  if (request.paymentAmount != null) ...[
-                    const SizedBox(height: 4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      '${s.amount} ${request.paymentAmount}',
-                      style: StylesManager.styleRegular10(
+                      s.paymentStatus,
+                      style: StylesManager.styleBold10(
                         context,
-                      ).copyWith(color: ColorManager.greyA8AF),
+                      ).copyWith(color: ColorManager.mainColor14),
                     ),
+                    if (request.paymentAmount != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        '${s.amount} ${request.paymentAmount}',
+                        style: StylesManager.styleRegular10(
+                          context,
+                        ).copyWith(color: ColorManager.greyA8AF),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-              const Spacer(),
+
+              const SizedBox(width: 8),
               PaymentStatusChip(text: paymentStatusText),
+              if (canOpenReceipt) ...[
+                const SizedBox(width: 8),
+                ReceiptDownloadButton(receiptUrl: receiptUrl),
+              ],
             ],
           ),
         ],

@@ -99,6 +99,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "acceptStudentRequest": MessageLookupByLibrary.simpleMessage(
       "Accept Request",
     ),
+    "accountActivatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Account activated successfully",
+    ),
+    "activated": MessageLookupByLibrary.simpleMessage("Active"),
     "active": MessageLookupByLibrary.simpleMessage("Active"),
     "active2": MessageLookupByLibrary.simpleMessage("Active"),
     "activeGroups": MessageLookupByLibrary.simpleMessage("Active Groups"),
@@ -317,7 +321,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "This Month Achievement",
     ),
     "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
-    "contactWhatsApp": MessageLookupByLibrary.simpleMessage("Contact WhatsApp"),
+    "contactWhatsApp": MessageLookupByLibrary.simpleMessage(
+      "Contact via WhatsApp",
+    ),
     "correctAssignment": MessageLookupByLibrary.simpleMessage(
       "Grade Assignment",
     ),
@@ -701,6 +707,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "next": MessageLookupByLibrary.simpleMessage("Next"),
     "nextLevelPointsText": m11,
     "no": MessageLookupByLibrary.simpleMessage("No"),
+    "noActiveAccountsFound": MessageLookupByLibrary.simpleMessage(
+      "No active accounts found",
+    ),
     "noAssignedSubjectsForClassroom": MessageLookupByLibrary.simpleMessage(
       "No assigned subjects for this classroom",
     ),
@@ -732,6 +741,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
       "Your groups and pending requests will appear here.",
     ),
+    "noInactiveAccountsFound": MessageLookupByLibrary.simpleMessage(
+      "No inactive accounts found",
+    ),
     "noInternetConnection": MessageLookupByLibrary.simpleMessage(
       "No internet connection",
     ),
@@ -754,6 +766,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noUnassignedStudents": MessageLookupByLibrary.simpleMessage(
       "No unassigned students",
     ),
+    "notActivated": MessageLookupByLibrary.simpleMessage("Inactive"),
     "notAvailable": MessageLookupByLibrary.simpleMessage("Not available"),
     "notSubmitted": MessageLookupByLibrary.simpleMessage("Not submitted"),
     "notes": MessageLookupByLibrary.simpleMessage(
@@ -1011,6 +1024,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "registrationMode": MessageLookupByLibrary.simpleMessage(
       "Registration Mode",
     ),
+    "registrationRequestRejectedSuccessfully":
+        MessageLookupByLibrary.simpleMessage(
+          "Registration request rejected successfully",
+        ),
     "registrationRequests": MessageLookupByLibrary.simpleMessage(
       "Registration Requests",
     ),
@@ -1307,6 +1324,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "Unable to Open the file",
     ),
+    "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
+      "Unable to open payment receipt",
+    ),
+    "unableToOpenWhatsApp": MessageLookupByLibrary.simpleMessage(
+      "Unable to open WhatsApp",
+    ),
     "underProcessing": MessageLookupByLibrary.simpleMessage("Under Processing"),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "An unexpected error occurred",
@@ -1366,6 +1389,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "waitingForCorrection": MessageLookupByLibrary.simpleMessage(
       "Waiting for Grading",
+    ),
+    "waitingForReceiptReview": MessageLookupByLibrary.simpleMessage(
+      "Waiting for receipt review",
     ),
     "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
       "Waiting for teacher approval",

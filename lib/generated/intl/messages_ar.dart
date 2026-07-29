@@ -94,6 +94,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "accept": MessageLookupByLibrary.simpleMessage("قبول"),
     "acceptRequest": MessageLookupByLibrary.simpleMessage("قبول الطلب"),
     "acceptStudentRequest": MessageLookupByLibrary.simpleMessage("قبول طلب"),
+    "accountActivatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم تفعيل الحساب بنجاح",
+    ),
+    "activated": MessageLookupByLibrary.simpleMessage("مفعل"),
     "active": MessageLookupByLibrary.simpleMessage("نشطة"),
     "active2": MessageLookupByLibrary.simpleMessage("نشط"),
     "activeGroups": MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
@@ -642,6 +646,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
     "nextLevelPointsText": m11,
     "no": MessageLookupByLibrary.simpleMessage("لا"),
+    "noActiveAccountsFound": MessageLookupByLibrary.simpleMessage(
+      "لا توجد حسابات مفعلة",
+    ),
     "noAssignedSubjectsForClassroom": MessageLookupByLibrary.simpleMessage(
       "لا توجد مواد مسندة لك في هذا الفصل",
     ),
@@ -673,6 +680,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
       "عند الانضمام إلى مجموعة أو إرسال طلب جديد ستظهر هنا.",
     ),
+    "noInactiveAccountsFound": MessageLookupByLibrary.simpleMessage(
+      "لا توجد حسابات غير مفعلة",
+    ),
     "noInternetConnection": MessageLookupByLibrary.simpleMessage(
       "لا يوجد اتصال بالإنترنت",
     ),
@@ -695,6 +705,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noUnassignedStudents": MessageLookupByLibrary.simpleMessage(
       "لا يوجد طلاب غير معينين",
     ),
+    "notActivated": MessageLookupByLibrary.simpleMessage("غير مفعل"),
     "notAvailable": MessageLookupByLibrary.simpleMessage("غير متاحة"),
     "notSubmitted": MessageLookupByLibrary.simpleMessage("لم يسلم"),
     "notes": MessageLookupByLibrary.simpleMessage(
@@ -939,6 +950,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "registrationDate": MessageLookupByLibrary.simpleMessage("تاريخ التسجيل"),
     "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
+    "registrationRequestRejectedSuccessfully":
+        MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
     "registrationRequests": MessageLookupByLibrary.simpleMessage(
       "طلبات التسجيل",
     ),
@@ -1225,6 +1238,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "تعذر تحميل الملف ",
     ),
+    "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح إيصال الدفع",
+    ),
+    "unableToOpenWhatsApp": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح واتساب",
+    ),
     "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "حدث خطأ غير متوقع",
@@ -1282,6 +1301,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "visibleToCustomers": MessageLookupByLibrary.simpleMessage("ظاهر للعملاء"),
     "waitingForCorrection": MessageLookupByLibrary.simpleMessage(
       "بانتظار التصحيح",
+    ),
+    "waitingForReceiptReview": MessageLookupByLibrary.simpleMessage(
+      "بانتظار مراجعة الإيصال",
     ),
     "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
       "بانتظار موافقة المعلم",

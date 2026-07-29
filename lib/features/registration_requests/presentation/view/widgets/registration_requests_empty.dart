@@ -1,9 +1,15 @@
-import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
+import 'package:bnan_app/core/shared_widget/empty_state.dart';
+import 'package:bnan_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationRequestsEmpty extends StatelessWidget {
-  const RegistrationRequestsEmpty({super.key, required this.onRefresh});
+  const RegistrationRequestsEmpty({
+    super.key,
+    required this.message,
+    required this.onRefresh,
+  });
 
+  final String message;
   final Future<void> Function() onRefresh;
 
   @override
@@ -17,7 +23,10 @@ class RegistrationRequestsEmpty extends StatelessWidget {
             children: [
               SizedBox(
                 height: constraints.maxHeight,
-                child: const NoDataWidget(),
+                child: EmptyStateWidget(
+                  image: ImageManager.noData,
+                  title: message,
+                ),
               ),
             ],
           ),

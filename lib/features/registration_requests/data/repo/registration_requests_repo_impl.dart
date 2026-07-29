@@ -15,11 +15,11 @@ class RegistrationRequestsRepoImpl implements RegistrationRequestsRepo {
 
   @override
   Future<Either<Failure, GetRegistrationRequestsResponseModel>>
-  getEgyptianRegistrationRequests({int page = 1}) {
+  getEgyptianRegistrationRequests({required String status, int page = 1}) {
     return repoGuard(() async {
       final response = await apiConsumer.get(
         EndPoints.egyptianRegistrationRequests,
-        queryParameter: {'page': page},
+        queryParameter: {'status': status, 'page': page},
         isProtected: true,
       );
       return GetRegistrationRequestsResponseModel.fromJson(asMap(response));
