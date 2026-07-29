@@ -39,17 +39,12 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
     ),
     DrawerItemModel(title: s.notifications, icon: ImageManager.bellIcon),
     DrawerItemModel(title: s.certificates, icon: ImageManager.bellIcon),
+    DrawerItemModel(title: s.schedule, icon: ImageManager.bellIcon),
+    DrawerItemModel(title: s.assignStudent, icon: ImageManager.bellIcon),
+    DrawerItemModel(title: s.curriculum, icon: ImageManager.bellIcon),
     DrawerItemModel(
-      title: s.schedule,
-      icon: ImageManager.bellIcon,
-    ),
-     DrawerItemModel(
-      title: s.assignStudent,
-      icon: ImageManager.bellIcon,
-    ),
-     DrawerItemModel(
-      title: s.curriculum,
-      icon: ImageManager.bellIcon,
+      title: s.lessonsManagement,
+      icon: ImageManager.calendarIcon,
     ),
   ];
 }

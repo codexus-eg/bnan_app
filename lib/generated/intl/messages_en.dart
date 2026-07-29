@@ -109,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "activeSubscriptions": MessageLookupByLibrary.simpleMessage(
       "Active Subscriptions",
     ),
+    "addLesson": MessageLookupByLibrary.simpleMessage("Add Lesson"),
     "addNewChapter": MessageLookupByLibrary.simpleMessage("Add New Chapter"),
     "addNewCurriculum": MessageLookupByLibrary.simpleMessage(
       "Add New Curriculum",
@@ -425,6 +426,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "editData": MessageLookupByLibrary.simpleMessage("Edit Data"),
     "editEvaluation": MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
     "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
+    "editLesson": MessageLookupByLibrary.simpleMessage("Edit Lesson"),
     "editPackage": MessageLookupByLibrary.simpleMessage("Edit Package"),
     "editSubject": MessageLookupByLibrary.simpleMessage("Edit Subject"),
     "egpCurrency": MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
@@ -450,10 +452,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "emiratiCurriculum": MessageLookupByLibrary.simpleMessage(
       "Emirati Curriculum",
     ),
+    "emptyLesson": MessageLookupByLibrary.simpleMessage("Empty lesson"),
     "enableAccount": MessageLookupByLibrary.simpleMessage("Enable account"),
     "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
       "Do you want to enable this account?",
     ),
+    "endTime": MessageLookupByLibrary.simpleMessage("End time"),
     "english": MessageLookupByLibrary.simpleMessage("English"),
     "errorBadCertificate": MessageLookupByLibrary.simpleMessage(
       "Untrusted SSL certificate.",
@@ -534,6 +538,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "fourDaysAgo": MessageLookupByLibrary.simpleMessage("4 days ago"),
     "fourHoursPlan": MessageLookupByLibrary.simpleMessage("4-hour package"),
+    "friday": MessageLookupByLibrary.simpleMessage("Friday"),
     "from": MessageLookupByLibrary.simpleMessage("From"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
     "goToPayment": MessageLookupByLibrary.simpleMessage("Proceed to Payment"),
@@ -614,10 +619,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "latestEarnedPoints": MessageLookupByLibrary.simpleMessage(
       "Latest Earned Points",
     ),
+    "lessonDate": MessageLookupByLibrary.simpleMessage("Lesson date"),
     "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
       "Math lesson starts in 15 min",
     ),
     "lessons": MessageLookupByLibrary.simpleMessage("Lessons"),
+    "lessonsManagement": MessageLookupByLibrary.simpleMessage(
+      "Lessons Management",
+    ),
     "lightAndShadowExperiment": MessageLookupByLibrary.simpleMessage(
       "Light and Shadow Experiment",
     ),
@@ -746,6 +755,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noInternetConnection": MessageLookupByLibrary.simpleMessage(
       "No internet connection",
+    ),
+    "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
+      "No lessons for the selected day",
     ),
     "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
       "No pending assignments",
@@ -1083,6 +1095,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sarCurrency": MessageLookupByLibrary.simpleMessage("Saudi Riyal (SAR)"),
     "sarShort": MessageLookupByLibrary.simpleMessage("SAR"),
+    "saturday": MessageLookupByLibrary.simpleMessage("Saturday"),
     "saudiCurriculum": MessageLookupByLibrary.simpleMessage("Saudi Curriculum"),
     "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
       "We provide all subjects for primary, middle, and secondary stages according to the approved curriculum.",
@@ -1125,6 +1138,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Select student first",
     ),
     "selectSubject": MessageLookupByLibrary.simpleMessage("Select Subject"),
+    "selectedLessonDatePreview": MessageLookupByLibrary.simpleMessage(
+      "Thursday, 07 May 2026",
+    ),
     "selectedPackage": MessageLookupByLibrary.simpleMessage("Selected Package"),
     "semesterName": MessageLookupByLibrary.simpleMessage("Semester Name"),
     "semesterOne": MessageLookupByLibrary.simpleMessage("Semester 1"),
@@ -1155,6 +1171,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Start lesson via Zoom",
     ),
     "startNow": MessageLookupByLibrary.simpleMessage("Start now"),
+    "startTime": MessageLookupByLibrary.simpleMessage("Start time"),
     "student": MessageLookupByLibrary.simpleMessage("student"),
     "studentAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Student assigned successfully",
@@ -1398,6 +1415,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "wallet": MessageLookupByLibrary.simpleMessage("Electronic wallet"),
     "wednesday": MessageLookupByLibrary.simpleMessage("Wednesday"),
+    "weekDays": MessageLookupByLibrary.simpleMessage("Week days"),
     "weekStart": MessageLookupByLibrary.simpleMessage("Week Start"),
     "weeklyEvaluation": MessageLookupByLibrary.simpleMessage(
       "Weekly evaluation",

@@ -18,6 +18,7 @@ export 'package:bnan_app/features/student_auth/presentation/views/subscription_v
 
 export 'package:bnan_app/features/home_student/presentation/views/home_student_view.dart';
 export 'package:bnan_app/features/home_student/presentation/views/notifications_view.dart';
+export 'package:bnan_app/features/lessons_management/presentation/views/lessons_management_view.dart';
 
 export 'package:bnan_app/features/chats/presentation/views/chat_view.dart';
 

@@ -5374,6 +5374,86 @@ class S {
     );
   }
 
+  /// `Lessons Management`
+  String get lessonsManagement {
+    return Intl.message(
+      'Lessons Management',
+      name: 'lessonsManagement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Lesson`
+  String get addLesson {
+    return Intl.message('Add Lesson', name: 'addLesson', desc: '', args: []);
+  }
+
+  /// `Edit Lesson`
+  String get editLesson {
+    return Intl.message('Edit Lesson', name: 'editLesson', desc: '', args: []);
+  }
+
+  /// `Lesson date`
+  String get lessonDate {
+    return Intl.message('Lesson date', name: 'lessonDate', desc: '', args: []);
+  }
+
+  /// `Start time`
+  String get startTime {
+    return Intl.message('Start time', name: 'startTime', desc: '', args: []);
+  }
+
+  /// `End time`
+  String get endTime {
+    return Intl.message('End time', name: 'endTime', desc: '', args: []);
+  }
+
+  /// `Week days`
+  String get weekDays {
+    return Intl.message('Week days', name: 'weekDays', desc: '', args: []);
+  }
+
+  /// `Saturday`
+  String get saturday {
+    return Intl.message('Saturday', name: 'saturday', desc: '', args: []);
+  }
+
+  /// `Friday`
+  String get friday {
+    return Intl.message('Friday', name: 'friday', desc: '', args: []);
+  }
+
+  /// `Thursday, 07 May 2026`
+  String get selectedLessonDatePreview {
+    return Intl.message(
+      'Thursday, 07 May 2026',
+      name: 'selectedLessonDatePreview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empty lesson`
+  String get emptyLesson {
+    return Intl.message(
+      'Empty lesson',
+      name: 'emptyLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No lessons for the selected day`
+  String get noLessonsForSelectedDay {
+    return Intl.message(
+      'No lessons for the selected day',
+      name: 'noLessonsForSelectedDay',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Enter a valid amount of at least 0.01`
   String get invalidPaymentAmount {
     return Intl.message(
