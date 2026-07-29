@@ -2,7 +2,7 @@ import 'package:bnan_app/features/teacher_assignment/data/model/student_assignme
 import 'package:flutter/material.dart';
 
 import 'correction_summary.dart';
-import 'student_submission_card.dart';
+import 'correction_submissions_list.dart';
 
 class CorrectionSubmissionsContent extends StatelessWidget {
   const CorrectionSubmissionsContent({
@@ -14,6 +14,8 @@ class CorrectionSubmissionsContent extends StatelessWidget {
     required this.reviewed,
     required this.submitted,
     required this.notSubmitted,
+    required this.isLoading,
+    this.errorMessage,
   });
 
   final List<StudentAssignmentSubmission> submissions;
@@ -23,6 +25,8 @@ class CorrectionSubmissionsContent extends StatelessWidget {
   final int reviewed;
   final int submitted;
   final int notSubmitted;
+  final bool isLoading;
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +39,12 @@ class CorrectionSubmissionsContent extends StatelessWidget {
           notSubmitted: notSubmitted,
         ),
         const SizedBox(height: 16),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: submissions.length,
-          itemBuilder: (context, index) {
-            return StudentSubmissionCard(
-              studentSubmission: submissions[index],
-              assignmentId: assignmentId,
-              totalPoints: totalPoints,
-            );
-          },
-          separatorBuilder: (_, _) => const SizedBox(height: 16),
+        CorrectionSubmissionsList(
+          submissions: submissions,
+          assignmentId: assignmentId,
+          totalPoints: totalPoints,
+          isLoading: isLoading,
+          errorMessage: errorMessage,
         ),
       ],
     );

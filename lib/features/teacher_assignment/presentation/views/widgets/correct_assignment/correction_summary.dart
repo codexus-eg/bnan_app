@@ -20,53 +20,32 @@ class CorrectionSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final itemWidth = (constraints.maxWidth - 12) / 2;
-
-        return Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            _item(
-              width: itemWidth,
-              count: totalStudents,
-              title: S.of(context).totalStudents,
-              image: ImageManager.userProfileGroupIcon,
-            ),
-            _item(
-              width: itemWidth,
-              count: reviewed,
-              title: S.of(context).graded,
-              image: ImageManager.teacherAssignmentCheckContainedIcon,
-            ),
-            _item(
-              width: itemWidth,
-              count: submitted,
-              title: S.of(context).submitted,
-              image: ImageManager.teacherAssignmentClockIcon,
-            ),
-            _item(
-              width: itemWidth,
-              count: notSubmitted,
-              title: S.of(context).notSubmitted,
-              image: ImageManager.teacherAssignmentCircleWarningIcon,
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _item({
-    required double width,
-    required int count,
-    required String title,
-    required String image,
-  }) {
-    return SizedBox(
-      width: width,
-      child: CorrectionSummaryItem(count: count, title: title, image: image),
+    return Row(
+      children: [
+        Expanded(
+          child: CorrectionSummaryItem(
+            count: reviewed,
+            title: S.of(context).graded,
+            image: ImageManager.teacherAssignmentCheckContainedIcon,
+          ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: CorrectionSummaryItem(
+            count: submitted,
+            title: S.of(context).waitingForCorrection,
+            image: ImageManager.teacherAssignmentClockIcon,
+          ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: CorrectionSummaryItem(
+            count: notSubmitted,
+            title: S.of(context).notSubmitted,
+            image: ImageManager.teacherAssignmentCircleWarningIcon,
+          ),
+        ),
+      ],
     );
   }
 }
