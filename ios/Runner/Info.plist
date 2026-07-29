@@ -8,6 +8,8 @@
 		<true/>
 	    <key>NSMicrophoneUsageDescription</key>
         <string>نحتاج إلى استخدام الميكروفون لتسجيل الرسائل الصوتية</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Select a payment receipt image</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

@@ -5274,6 +5274,46 @@ class S {
     );
   }
 
+  /// `Upload Receipt`
+  String get uploadReceipt {
+    return Intl.message(
+      'Upload Receipt',
+      name: 'uploadReceipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment confirmed successfully`
+  String get paymentConfirmedSuccessfully {
+    return Intl.message(
+      'Payment confirmed successfully',
+      name: 'paymentConfirmedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid amount of at least 0.01`
+  String get invalidPaymentAmount {
+    return Intl.message(
+      'Enter a valid amount of at least 0.01',
+      name: 'invalidPaymentAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment receipt image is required`
+  String get paymentReceiptRequired {
+    return Intl.message(
+      'Payment receipt image is required',
+      name: 'paymentReceiptRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pending manual receipt review`
   String get manualTransferReviewPending {
     return Intl.message(

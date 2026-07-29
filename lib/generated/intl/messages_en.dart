@@ -595,6 +595,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidPackage": MessageLookupByLibrary.simpleMessage(
       "Invalid package data",
     ),
+    "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
+      "Enter a valid amount of at least 0.01",
+    ),
     "issueNewCertificate": MessageLookupByLibrary.simpleMessage(
       "Issue New Certificate",
     ),
@@ -896,11 +899,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Passwords do not match.",
     ),
     "paymentCompleted": MessageLookupByLibrary.simpleMessage("Paid"),
+    "paymentConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Payment confirmed successfully",
+    ),
     "paymentDoneOn": MessageLookupByLibrary.simpleMessage("Paid On"),
     "paymentInfo": MessageLookupByLibrary.simpleMessage("Payment Information"),
     "paymentMethod": MessageLookupByLibrary.simpleMessage("Payment Method"),
     "paymentMethods": MessageLookupByLibrary.simpleMessage("Payment methods"),
     "paymentReceipt": MessageLookupByLibrary.simpleMessage("Payment receipt"),
+    "paymentReceiptRequired": MessageLookupByLibrary.simpleMessage(
+      "Payment receipt image is required",
+    ),
     "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
     "pending": MessageLookupByLibrary.simpleMessage("In Progress"),
     "pendingMathSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -1321,6 +1330,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadPaymentReceipt": MessageLookupByLibrary.simpleMessage(
       "Upload receipt image",
     ),
+    "uploadReceipt": MessageLookupByLibrary.simpleMessage("Upload Receipt"),
     "uploadSchedule": MessageLookupByLibrary.simpleMessage("Upload Schedule"),
     "usedDays": m24,
     "usedHours": m25,

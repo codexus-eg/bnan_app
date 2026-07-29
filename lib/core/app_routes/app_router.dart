@@ -470,10 +470,17 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.registrationRequests,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<GetRegistrationRequestsCubit>()
-                  ..getRegistrationRequests(refresh: true),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<GetRegistrationRequestsCubit>()
+                      ..getRegistrationRequests(refresh: true),
+              ),
+              BlocProvider(
+                create: (_) => getIt<RegistrationRequestActionsCubit>(),
+              ),
+            ],
             child: const RegistrationRequestsView(),
           ),
           key: state.pageKey,

@@ -1,4 +1,5 @@
 import 'registration_json_parsing.dart';
+import 'registration_payment_model.dart';
 
 part 'registration_requests_mock_data.dart';
 
@@ -14,6 +15,7 @@ class RegistrationRequestModel {
     required DateTime? registrationDate,
     required this.registrationStatus,
     required this.paymentStatus,
+    this.payment,
     this.paymentAmount,
   }) : registrationDateValue = registrationDate;
 
@@ -27,6 +29,7 @@ class RegistrationRequestModel {
   final DateTime? registrationDateValue;
   final String registrationStatus;
   final String paymentStatus;
+  final RegistrationPaymentModel? payment;
   final num? paymentAmount;
 
   factory RegistrationRequestModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +46,9 @@ class RegistrationRequestModel {
       registrationDate: parseRegistrationDate(json['registrationDate']),
       registrationStatus: registrationString(json['registrationStatus']),
       paymentStatus: registrationString(json['paymentStatus']),
+      payment: payment == null
+          ? null
+          : RegistrationPaymentModel.fromJson(payment),
       paymentAmount: registrationNum(
         json['amount'] ?? json['paymentAmount'] ?? payment?['amount'],
       ),
@@ -61,5 +67,14 @@ class RegistrationRequestModel {
   String get paymentActionText => paymentStatus;
   bool get isPaymentConfirmed => paymentStatus == 'confirmed';
   bool get isPendingRegistration => registrationStatus == 'pending';
+  bool get hasPayment {
+    final currentPayment = payment;
+    if (currentPayment == null) return false;
+
+    final amount = currentPayment.amount;
+    return (amount != null && amount > 0) ||
+        currentPayment.receiptImage?.trim().isNotEmpty == true;
+  }
+
   String get subjectsText => subjects.join('، ');
 }
