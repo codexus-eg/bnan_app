@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +37,15 @@ class PlansFiltersSection extends StatelessWidget {
         }
         if (constraints.maxWidth < 300) {
           return Column(
-            children: [fields.first, const SizedBox(height: 12), fields.last],
+            children: [fields.first, const SizedBox(height: 20), fields.last],
           );
         }
         return Row(
           children: [
-            Expanded(child: fields.first),
-            const SizedBox(width: 16),
+            Expanded(
+              flex: 2,
+              child: fields.first),
+            const SizedBox(width: 20),
             Expanded(child: fields.last),
           ],
         );
@@ -63,6 +66,9 @@ class PlansFiltersSection extends StatelessWidget {
             'first': s.firstPrimaryClassroom,
             'second': s.secondPrimaryClassroom,
           },
+          valueStyle: StylesManager.styleRegular16(
+            context,
+          ).copyWith(color: ColorManager.mainColor14),
           backgroundColor: ColorManager.white,
           onChanged: onClassroomChanged,
         ),
@@ -72,9 +78,12 @@ class PlansFiltersSection extends StatelessWidget {
           value: week,
           hint: s.selectWeek,
           items: const ['week1', 'week2'],
-          itemsLabels: {'week1': s.weekOne, 'week2': s.weekTwo},
+          itemsLabels: {'week1':'week 1', 'week2': 'week 2'},
           backgroundColor: ColorManager.white,
           onChanged: onWeekChanged,
+          valueStyle: StylesManager.styleRegular16(
+            context,
+          ).copyWith(color: ColorManager.mainColor14),
         ),
     ];
   }

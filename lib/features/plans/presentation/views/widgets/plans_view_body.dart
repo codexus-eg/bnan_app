@@ -55,9 +55,9 @@ class _PlansViewBodyState extends State<PlansViewBody> {
           onClassroomChanged: (value) => setState(() => classroom = value),
           onWeekChanged: (value) => setState(() => week = value),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Text(plan.title, style: StylesManager.styleBold14(context)),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         if (widget.showEmpty)
           SizedBox(
             height: 260,

@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/custom_table/custom_table_row.dart';
 import 'package:bnan_app/features/student_schedule/presentation/widgets/schedule_widgets/schedule_cell.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,44 @@ class ScheduleGridTable extends StatelessWidget {
     ];
 
     final rows = [
-      _ScheduleRow(day: s.sunday, lessons: ['${s.arabic}\n${s.teacherSarahName}', '', '${s.arabic}\n${s.teacherSarahName}', '', '']),
-      _ScheduleRow(day: s.monday, lessons: ['','${s.arabic}\n${s.teacherSarahName}', '', '', '']),
-      _ScheduleRow(day: s.tuesday, lessons: ['${s.arabic}\n${s.teacherSarahName}', '','${s.arabic}\n${s.teacherSarahName}', '${s.arabic}\n${s.teacherSarahName}', '']),
-      _ScheduleRow(day: s.wednesday, lessons: ['', '${s.arabic}\n${s.teacherSarahName}', '', '', '']),
-      _ScheduleRow(day: s.thursday, lessons: ['${s.arabic}\n${s.teacherSarahName}', '', '${s.arabic}\n${s.teacherSarahName}', '', '']),
+      _ScheduleRow(
+        day: s.sunday,
+        lessons: [
+          '${s.arabic}\n${s.teacherSarahName}',
+          '',
+          '${s.arabic}\n${s.teacherSarahName}',
+          '',
+          '',
+        ],
+      ),
+      _ScheduleRow(
+        day: s.monday,
+        lessons: ['', '${s.arabic}\n${s.teacherSarahName}', '', '', ''],
+      ),
+      _ScheduleRow(
+        day: s.tuesday,
+        lessons: [
+          '${s.arabic}\n${s.teacherSarahName}',
+          '',
+          '${s.arabic}\n${s.teacherSarahName}',
+          '${s.arabic}\n${s.teacherSarahName}',
+          '',
+        ],
+      ),
+      _ScheduleRow(
+        day: s.wednesday,
+        lessons: ['', '${s.arabic}\n${s.teacherSarahName}', '', '', ''],
+      ),
+      _ScheduleRow(
+        day: s.thursday,
+        lessons: [
+          '${s.arabic}\n${s.teacherSarahName}',
+          '',
+          '${s.arabic}\n${s.teacherSarahName}',
+          '',
+          '',
+        ],
+      ),
     ];
 
     return SingleChildScrollView(
@@ -34,10 +68,7 @@ class ScheduleGridTable extends StatelessWidget {
         children: [
           _HeaderRow(timeTitle: s.time, timeSlots: timeSlots),
           ...rows.map((row) {
-            return _DayRow(
-              row: row,
-              slotsCount: timeSlots.length,
-            );
+            return _DayRow(row: row, slotsCount: timeSlots.length);
           }),
         ],
       ),
@@ -46,17 +77,14 @@ class ScheduleGridTable extends StatelessWidget {
 }
 
 class _HeaderRow extends StatelessWidget {
-  const _HeaderRow({
-    required this.timeTitle,
-    required this.timeSlots,
-  });
+  const _HeaderRow({required this.timeTitle, required this.timeSlots});
 
   final String timeTitle;
   final List<String> timeSlots;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return CustomTableRow(
       children: [
         ScheduleCell(
           text: timeTitle,
@@ -78,10 +106,7 @@ class _HeaderRow extends StatelessWidget {
 }
 
 class _DayRow extends StatelessWidget {
-  const _DayRow({
-    required this.row,
-    required this.slotsCount,
-  });
+  const _DayRow({required this.row, required this.slotsCount});
 
   final _ScheduleRow row;
   final int slotsCount;
@@ -90,7 +115,7 @@ class _DayRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final lessons = _completeLessons(row.lessons, slotsCount);
 
-    return Row(
+    return CustomTableRow(
       children: [
         ScheduleCell(
           text: row.day,
@@ -115,18 +140,12 @@ class _DayRow extends StatelessWidget {
       return lessons.take(count).toList();
     }
 
-    return [
-      ...lessons,
-      ...List.generate(count - lessons.length, (_) => ''),
-    ];
+    return [...lessons, ...List.generate(count - lessons.length, (_) => '')];
   }
 }
 
 class _ScheduleRow {
-  const _ScheduleRow({
-    required this.day,
-    required this.lessons,
-  });
+  const _ScheduleRow({required this.day, required this.lessons});
 
   final String day;
   final List<String> lessons;

@@ -1,6 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/utils/assets.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_view_mode.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_navigation_item.dart';
 import 'package:bnan_app/generated/l10n.dart';
 
@@ -16,12 +15,7 @@ abstract class SupervisorNavigationConfig {
       ),
       _item(s.messages, ImageManager.chatIcon, Routes.groups),
       _item(s.attendance, ImageManager.teacherMeetingIcon),
-      _item(
-        s.plansTitle,
-        ImageManager.calendarIcon,
-        Routes.plans,
-        PlansViewMode.supervisor,
-      ),
+      _item(s.plansTitle, ImageManager.calendarIcon, Routes.plans),
       _item(
         s.weeklyIdealStudent,
         ImageManager.crownSimple,

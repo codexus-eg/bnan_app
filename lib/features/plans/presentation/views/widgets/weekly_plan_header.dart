@@ -1,5 +1,7 @@
+import 'package:bnan_app/core/shared_widget/custom_table/custom_table_cell.dart';
+import 'package:bnan_app/core/shared_widget/custom_table/custom_table_row.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_header_cell.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -17,20 +19,44 @@ class WeeklyPlanHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final style = StylesManager.styleBold12(context);
+    return CustomTableRow(
+      equalHeight: true,
       children: [
-        WeeklyPlanHeaderCell(
-          text: S.of(context).day,
+        CustomTableCell(
           width: dayWidth,
+          height: null,
+          constraints: const BoxConstraints(minHeight: 29),
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: 8,
+            vertical: 4,
+          ),
+          borderRadius: BorderRadius.circular(10),
           backgroundColor: ColorManager.blueE3,
-          textColor: ColorManager.greyA8AF,
+          child: Text(
+            S.of(context).today,
+            textAlign: TextAlign.center,
+            softWrap: true,
+            style: style.copyWith(color: ColorManager.greyA8AF),
+          ),
         ),
         ...subjectNames.map(
-          (name) => WeeklyPlanHeaderCell(
-            text: name,
+          (name) => CustomTableCell(
             width: subjectWidth,
+            height: null,
+            constraints: const BoxConstraints(minHeight: 29),
+            padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: 8,
+              vertical: 4,
+            ),
+            borderRadius: BorderRadius.circular(10),
             backgroundColor: ColorManager.mainColor14,
-            textColor: ColorManager.white,
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: style.copyWith(color: ColorManager.white),
+            ),
           ),
         ),
       ],
