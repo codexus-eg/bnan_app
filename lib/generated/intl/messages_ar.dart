@@ -640,6 +640,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "newBadge": MessageLookupByLibrary.simpleMessage("جديد"),
     "newCertificate": MessageLookupByLibrary.simpleMessage("شهادة تقدير"),
+    "newClassMessageNotification": MessageLookupByLibrary.simpleMessage(
+      "رسالة جديدة من الصف الرابع",
+    ),
     "newCustomer": MessageLookupByLibrary.simpleMessage("عميل جديد"),
     "newMessage": MessageLookupByLibrary.simpleMessage(
       "رسالة جديدة من أ/ سارة",
@@ -710,6 +713,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
       "لا توجد حصص في اليوم المحدد",
     ),
+    "noNotifications": MessageLookupByLibrary.simpleMessage("لا توجد إشعارات"),
     "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
       "لا توجد واجبات قيد الانتظار",
     ),
@@ -1205,6 +1209,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "الصفوف المشرف عليها",
     ),
     "supervisor": MessageLookupByLibrary.simpleMessage("مشرف"),
+    "supervisorAssignedNotification": MessageLookupByLibrary.simpleMessage(
+      "تم تعيينك مشرفًا في الصف الثالث",
+    ),
     "supervisorRequired": MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
     "tabbyTamara": MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
     "taughtOnlineBefore": MessageLookupByLibrary.simpleMessage(
@@ -1374,6 +1381,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "weekTwo": MessageLookupByLibrary.simpleMessage("الأسبوع الثاني"),
     "weeklyEvaluation": MessageLookupByLibrary.simpleMessage(
       "التقييم الأسبوعي",
+    ),
+    "weeklyEvaluationAddedNotification": MessageLookupByLibrary.simpleMessage(
+      "أضيف تقييم أسبوعي لفصل 4أ",
     ),
     "weeklyEvaluations": MessageLookupByLibrary.simpleMessage(
       "التقييمات الأسبوعية",

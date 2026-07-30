@@ -6548,6 +6548,46 @@ class S {
   String get dateFormatHint {
     return Intl.message('mm/dd/yy', name: 'dateFormatHint', desc: '', args: []);
   }
+
+  /// `You were assigned as supervisor for third grade`
+  String get supervisorAssignedNotification {
+    return Intl.message(
+      'You were assigned as supervisor for third grade',
+      name: 'supervisorAssignedNotification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A weekly evaluation was added for class 4A`
+  String get weeklyEvaluationAddedNotification {
+    return Intl.message(
+      'A weekly evaluation was added for class 4A',
+      name: 'weeklyEvaluationAddedNotification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A new message from fourth grade`
+  String get newClassMessageNotification {
+    return Intl.message(
+      'A new message from fourth grade',
+      name: 'newClassMessageNotification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No notifications`
+  String get noNotifications {
+    return Intl.message(
+      'No notifications',
+      name: 'noNotifications',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

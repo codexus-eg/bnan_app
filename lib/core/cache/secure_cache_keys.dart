@@ -3,4 +3,5 @@ abstract class SecureCacheKeys {
   static const String refreshToken = 'refreshToken';
   static const String userId = 'userId';
   static const String userRole = 'userRole';
+  static const String userName = 'userName';
 }

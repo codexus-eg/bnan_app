@@ -9,11 +9,13 @@ class SessionManager {
 
   String? _userId;
   String? _userRole;
+  String? _userName;
   String? _accessToken;
   String? _refreshToken;
 
   String? get userId => _userId;
   String? get userRole => _userRole;
+  String? get userName => _userName;
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
 
@@ -22,6 +24,7 @@ class SessionManager {
     required String refreshToken,
     String? userId,
     String? userRole,
+    String? userName,
   }) async {
     debugPrint('SessionManager.saveSession started');
 
@@ -29,6 +32,7 @@ class SessionManager {
     _refreshToken = refreshToken;
     _userId = userId;
     _userRole = userRole;
+    _userName = userName;
 
     await SecureCacheHelper.saveData(
       key: SecureCacheKeys.accessToken,
@@ -57,6 +61,13 @@ class SessionManager {
       );
       debugPrint('User role write completed');
     }
+
+    if (userName != null) {
+      await SecureCacheHelper.saveData(
+        key: SecureCacheKeys.userName,
+        value: userName,
+      );
+    }
   }
 
   Future<void> loadSession() async {
@@ -71,6 +82,7 @@ class SessionManager {
     _userId = await SecureCacheHelper.getData(key: SecureCacheKeys.userId);
 
     _userRole = await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
+    _userName = await SecureCacheHelper.getData(key: SecureCacheKeys.userName);
   }
 
   Future<String?> getAccessToken() async {
@@ -93,6 +105,11 @@ class SessionManager {
         await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
   }
 
+  Future<String?> getUserName() async {
+    return _userName ??
+        await SecureCacheHelper.getData(key: SecureCacheKeys.userName);
+  }
+
   Future<bool> isLoggedIn() async {
     final token = await getAccessToken();
     return token != null && token.isNotEmpty;
@@ -105,6 +122,7 @@ class SessionManager {
     _refreshToken = null;
     _userId = null;
     _userRole = null;
+    _userName = null;
 
     await SecureCacheHelper.clearAll();
     debugPrint('SessionManager.clearSession completed');

@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
@@ -26,12 +27,9 @@ class LoginForm extends StatelessWidget {
             '${S.of(context).loginWelcomeTitle} ${state.user.fullName}',
             true,
           );
-          if (state.user.role == 'student') {
-            MyNavigator.goToOffAll(context, Routes.home);
-          } else if (state.user.role == 'teacher') {
-            MyNavigator.goToOffAll(context, Routes.teacherHome);
-          } else if (state.user.role == 'admin') {
-            MyNavigator.goToOffAll(context, Routes.adminHome);
+          final homeRoute = HomeRouteResolver.forRole(state.user.role);
+          if (homeRoute != null) {
+            MyNavigator.goToOffAll(context, homeRoute);
           }
         }
         if (state is LoginFailure) {

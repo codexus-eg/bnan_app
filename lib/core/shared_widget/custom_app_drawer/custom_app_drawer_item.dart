@@ -9,7 +9,8 @@ class CustomAppDrawerItem extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.isSelected,
-    required this.onTap, this.iconColor,
+    required this.onTap,
+    this.iconColor,
   });
 
   final String title;
@@ -20,32 +21,37 @@ class CustomAppDrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isSelected ? ColorManager.mainColor14 : ColorManager.white;
+    final textColor = isSelected
+        ? ColorManager.mainColor14
+        : ColorManager.white;
 
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsetsDirectional.only(start: 8, top: 5,bottom: 5),
+        padding: const EdgeInsetsDirectional.only(start: 8, top: 5, bottom: 5),
         decoration: BoxDecoration(
           color: isSelected ? ColorManager.white : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
-             _DrawerIconBox(
+            _DrawerIconBox(
               icon: icon,
               iconColor: iconColor,
               isSelected: isSelected,
             ),
             const SizedBox(width: 16),
-            Text(
-              title,
-              style: StylesManager.styleBold16(context).copyWith(
-                color: textColor,
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: StylesManager.styleBold16(
+                  context,
+                ).copyWith(color: textColor),
               ),
             ),
-           
           ],
         ),
       ),
@@ -56,7 +62,8 @@ class CustomAppDrawerItem extends StatelessWidget {
 class _DrawerIconBox extends StatelessWidget {
   const _DrawerIconBox({
     required this.icon,
-    required this.isSelected, this.iconColor,
+    required this.isSelected,
+    this.iconColor,
   });
 
   final String icon;
@@ -77,7 +84,10 @@ class _DrawerIconBox extends StatelessWidget {
           icon,
           height: 24,
           width: 24,
-          colorFilter: ColorFilter.mode(iconColor??ColorManager.mainColor14, BlendMode.srcIn),
+          colorFilter: ColorFilter.mode(
+            iconColor ?? ColorManager.mainColor14,
+            BlendMode.srcIn,
+          ),
         ),
       ),
     );

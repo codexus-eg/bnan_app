@@ -705,6 +705,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "newCertificate": MessageLookupByLibrary.simpleMessage(
       "Certificate of Appreciation",
     ),
+    "newClassMessageNotification": MessageLookupByLibrary.simpleMessage(
+      "A new message from fourth grade",
+    ),
     "newCustomer": MessageLookupByLibrary.simpleMessage("New Customer"),
     "newMessage": MessageLookupByLibrary.simpleMessage(
       "New message from Ms. Sarah",
@@ -773,6 +776,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
       "No lessons for the selected day",
     ),
+    "noNotifications": MessageLookupByLibrary.simpleMessage("No notifications"),
     "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
       "No pending assignments",
     ),
@@ -1291,6 +1295,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Supervised classes",
     ),
     "supervisor": MessageLookupByLibrary.simpleMessage("Supervisor"),
+    "supervisorAssignedNotification": MessageLookupByLibrary.simpleMessage(
+      "You were assigned as supervisor for third grade",
+    ),
     "supervisorRequired": MessageLookupByLibrary.simpleMessage(
       "Supervisor is required",
     ),
@@ -1468,6 +1475,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "weekTwo": MessageLookupByLibrary.simpleMessage("Week 2"),
     "weeklyEvaluation": MessageLookupByLibrary.simpleMessage(
       "Weekly evaluation",
+    ),
+    "weeklyEvaluationAddedNotification": MessageLookupByLibrary.simpleMessage(
+      "A weekly evaluation was added for class 4A",
     ),
     "weeklyEvaluations": MessageLookupByLibrary.simpleMessage(
       "Weekly Evaluations",

@@ -42,6 +42,7 @@ class TeacherRegistrationRepoImpl implements TeacherRegistrationRepo {
       refreshToken: '',
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
+      userName: authResponse.user.fullName,
     );
   }
 }

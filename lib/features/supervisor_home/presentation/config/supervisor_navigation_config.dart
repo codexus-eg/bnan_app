@@ -1,0 +1,60 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/features/plans/presentation/models/plans_view_mode.dart';
+import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_navigation_item.dart';
+import 'package:bnan_app/generated/l10n.dart';
+
+abstract class SupervisorNavigationConfig {
+  static List<SupervisorNavigationItem> drawer(S s) {
+    return [
+      _item(s.home, ImageManager.homeIcon),
+      _item(s.evaluations, ImageManager.starIcon, Routes.weeklyEvaluations),
+      _item(
+        s.certificates,
+        ImageManager.certificateBadgeIcon,
+        Routes.certificatesManagement,
+      ),
+      _item(s.messages, ImageManager.chatIcon, Routes.groups),
+      _item(s.attendance, ImageManager.teacherMeetingIcon),
+      _item(
+        s.plansTitle,
+        ImageManager.calendarIcon,
+        Routes.plans,
+        PlansViewMode.supervisor,
+      ),
+      _item(
+        s.weeklyIdealStudent,
+        ImageManager.crownSimple,
+        Routes.weeklyIdealStudents,
+      ),
+    ];
+  }
+
+  static List<SupervisorNavigationItem> bottom(S s) {
+    return [
+      _item(s.home, ImageManager.homeIcon),
+      _item(s.evaluations, ImageManager.starIcon, Routes.weeklyEvaluations),
+      _item(s.messages, ImageManager.chatIcon, Routes.groups),
+      _item(
+        s.certificates,
+        ImageManager.certificateBadgeIcon,
+        Routes.certificatesManagement,
+      ),
+      _item(s.attendance, ImageManager.teacherMeetingIcon),
+    ];
+  }
+
+  static SupervisorNavigationItem _item(
+    String title,
+    String icon, [
+    String? route,
+    Object? extra,
+  ]) {
+    return SupervisorNavigationItem(
+      title: title,
+      icon: icon,
+      route: route,
+      extra: extra,
+    );
+  }
+}
