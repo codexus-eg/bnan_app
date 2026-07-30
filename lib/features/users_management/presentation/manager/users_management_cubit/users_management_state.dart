@@ -18,15 +18,32 @@ class GetUsersSuccess extends UsersManagementState {
   const GetUsersSuccess({
     required this.users,
     required this.usersCount,
+    required this.canLoadMore,
+    required this.currentPage,
   });
 
   final List<UserItem> users;
   final int usersCount;
+  final bool canLoadMore;
+  final int currentPage;
+}
+
+class GetUsersLoadingMore extends UsersManagementState {
+  const GetUsersLoadingMore({required this.users});
+
+  final List<UserItem> users;
 }
 
 class GetUsersFailure extends UsersManagementState {
   const GetUsersFailure(this.message);
 
+  final String message;
+}
+
+class GetUsersLoadMoreFailure extends UsersManagementState {
+  const GetUsersLoadMoreFailure({required this.users, required this.message});
+
+  final List<UserItem> users;
   final String message;
 }
 
@@ -59,10 +76,7 @@ class UsersActionSuccess extends UsersManagementState {
 }
 
 class UsersActionFailure extends UsersManagementState {
-  const UsersActionFailure({
-    required this.action,
-    required this.message,
-  });
+  const UsersActionFailure({required this.action, required this.message});
 
   final UsersManagementAction action;
   final String message;

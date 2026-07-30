@@ -1,19 +1,23 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/users_management/data/models/add_user_request_model.dart';
 import 'package:bnan_app/features/users_management/data/models/user_model.dart';
 import 'package:bnan_app/features/users_management/data/models/user_response_model.dart';
 import 'package:bnan_app/features/users_management/data/models/users_response_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class UsersManagementRepo {
-  Future<Either<Failure, UsersResponseModel>> getUsers();
+  Future<Either<Failure, UsersResponseModel>> getUsers({
+    required int page,
+    String? search,
+    String? role,
+  });
 
   Future<Either<Failure, UserResponseModel>> getUserDetails({
     required String userId,
   });
 
   Future<Either<Failure, UserResponseModel>> createUser({
-    required UserItem user,
-    required String password,
+    required AddUserRequestModel request,
   });
 
   Future<Either<Failure, UserResponseModel>> updateUser({
@@ -31,7 +35,5 @@ abstract class UsersManagementRepo {
     required String status,
   });
 
-  Future<Either<Failure, bool>> deleteUser({
-    required String userId,
-  });
+  Future<Either<Failure, bool>> deleteUser({required String userId});
 }

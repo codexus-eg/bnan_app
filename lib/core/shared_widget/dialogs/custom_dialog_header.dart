@@ -11,14 +11,16 @@ class CustomDialogHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style:style?? StylesManager.styleBold16(
-            context,
-          ).copyWith(color: ColorManager.black),
+        Expanded(
+          child: Text(
+            title,
+            style:style?? StylesManager.styleBold16(
+              context,
+            ).copyWith(color: ColorManager.black),
+          ),
         ),
-        const Spacer(),
         InkWell(
           onTap: () => Navigator.pop(context),
           child: const Icon(Icons.close, size: 22),

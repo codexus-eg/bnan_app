@@ -1,6 +1,4 @@
-import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
-import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_assignment_submissions/get_assignment_submissions_cubit.dart';
@@ -54,29 +52,28 @@ class CorrectAssignmentBody extends StatelessWidget {
                     : null;
                 final submissions =
                     response?.data ?? skeletonAssignmentSubmissions;
+                final errorMessage = state is GetAssignmentSubmissionsFailure
+                    ? state.errorMessage
+                    : null;
 
-                if (state is GetAssignmentSubmissionsFailure) {
-                  return const NoDataWidget();
-                }
-
-                if (!isLoading && submissions.isEmpty) {
-                  return const NoDataWidget();
-                }
-
-                return AppSkeletonizer(
+                return CorrectionSubmissionsContent(
                   isLoading: isLoading,
-                  child: CorrectionSubmissionsContent(
-                    submissions: submissions,
-                    assignmentId: assignmentId,
-                    totalPoints: totalPoints,
-                    totalStudents:
-                        response?.summary.totalStudents ??
-                        skeletonTotalStudents,
-                    reviewed: response?.summary.reviewed ?? skeletonReviewed,
-                    submitted: response?.summary.submitted ?? skeletonSubmitted,
-                    notSubmitted:
-                        response?.summary.notSubmitted ?? skeletonNotSubmitted,
-                  ),
+                  errorMessage: errorMessage,
+                  submissions: submissions,
+                  assignmentId: assignmentId,
+                  totalPoints: totalPoints,
+                  totalStudents:
+                      response?.summary.totalStudents ??
+                      (isLoading ? skeletonTotalStudents : 0),
+                  reviewed:
+                      response?.summary.reviewed ??
+                      (isLoading ? skeletonReviewed : 0),
+                  submitted:
+                      response?.summary.submitted ??
+                      (isLoading ? skeletonSubmitted : 0),
+                  notSubmitted:
+                      response?.summary.notSubmitted ??
+                      (isLoading ? skeletonNotSubmitted : 0),
                 );
               },
             ),
