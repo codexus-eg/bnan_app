@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
@@ -366,6 +367,19 @@ GoRouter buildRouter() {
           child: const ClassSchedulesView(),
           key: state.pageKey,
         ),
+      ),
+      GoRoute(
+        path: Routes.plans,
+        pageBuilder: (context, state) {
+          final extra = state.extra;
+          final mode = extra is PlansViewMode
+              ? extra
+              : PlansViewMode.fromRole(SessionManager.instance.userRole);
+          return buildTransitionPages(
+            child: PlansView(viewMode: mode),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.parentCertificates,

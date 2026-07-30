@@ -70,3 +70,5 @@ export 'package:bnan_app/features/teacher_registration/presentation/views/teache
 export 'package:bnan_app/features/teacher_request_groups/presentation/views/teacher_registration_requests_view.dart';
 export 'package:bnan_app/features/teacher_subject_assignment/presentation/views/teacher_subject_assignment_view.dart';
 export 'package:bnan_app/features/weekly_evaluations/presentation/views/weekly_evaluations_view.dart';
+export 'package:bnan_app/features/plans/presentation/models/plans_view_mode.dart';
+export 'package:bnan_app/features/plans/presentation/views/plans_view.dart';
