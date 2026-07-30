@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/cache/secure_cache_helper.dart';
 import 'package:bnan_app/core/cache/secure_cache_keys.dart';
+import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/splash_and_onboarding/presentation/manager/splash_cubit/splash_state.dart';
 import 'package:flutter/foundation.dart';
@@ -36,16 +37,15 @@ class SplashCubit extends Cubit<SplashState> {
 
     if (token != null && token.isNotEmpty) {
       final role = await SessionManager.instance.getUserRole();
-      if (role == 'student') {
-        emit(SplashNavigateToStudentHome());
-      } else if (role == 'teacher') {
-        emit(SplashNavigateToTeacherHome());
-      } else if (role == 'parent') {
+      if (role == 'parent') {
         emit(SplashNavigateToParentHome());
-      } else if (role == 'admin') {
-        emit(SplashNavigateToAdminHome());
-      } else {
+        return;
+      }
+      final route = HomeRouteResolver.forRole(role);
+      if (route == null) {
         emit(SplashNavigateToOnboarding());
+      } else {
+        emit(SplashNavigateToHome(route));
       }
     } else {
       emit(SplashNavigateToOnboarding());

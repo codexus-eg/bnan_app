@@ -201,6 +201,7 @@ class AuthRepoImpl implements AuthRepo {
       refreshToken: '',
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
+      userName: authResponse.user.fullName,
     );
 
     final storedToken = await SecureCacheHelper.getData(

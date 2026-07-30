@@ -250,6 +250,13 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.supervisorHome,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const SupervisorHomeView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.parentHome,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const ParentHomeView(),

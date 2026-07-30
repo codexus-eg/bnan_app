@@ -906,5 +906,9 @@
     "sampleExercisesHomework": "حل تمرين 45",
     "sampleTeacherOne": "سارة عبدالله",
     "sampleTeacherTwo": "منى أحمد",
-    "dateFormatHint": "mm/dd/yy"
+    "dateFormatHint": "mm/dd/yy",
+    "supervisorAssignedNotification": "تم تعيينك مشرفًا في الصف الثالث",
+    "weeklyEvaluationAddedNotification": "أضيف تقييم أسبوعي لفصل 4أ",
+    "newClassMessageNotification": "رسالة جديدة من الصف الرابع",
+    "noNotifications": "لا توجد إشعارات"
 }

@@ -4,10 +4,10 @@ final class SplashInitial extends SplashState {}
 
 final class SplashNavigateToOnboarding extends SplashState {}
 
-final class SplashNavigateToStudentHome extends SplashState {}
+final class SplashNavigateToHome extends SplashState {
+  SplashNavigateToHome(this.route);
 
-final class SplashNavigateToTeacherHome extends SplashState {}
+  final String route;
+}
 
 final class SplashNavigateToParentHome extends SplashState {}
-
-final class SplashNavigateToAdminHome extends SplashState {}

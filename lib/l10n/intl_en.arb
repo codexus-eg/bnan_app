@@ -907,5 +907,9 @@
     "sampleExercisesHomework": "Solve exercise 45",
     "sampleTeacherOne": "Sarah Abdullah",
     "sampleTeacherTwo": "Mona Ahmed",
-    "dateFormatHint": "mm/dd/yy"
+    "dateFormatHint": "mm/dd/yy",
+    "supervisorAssignedNotification": "You were assigned as supervisor for third grade",
+    "weeklyEvaluationAddedNotification": "A weekly evaluation was added for class 4A",
+    "newClassMessageNotification": "A new message from fourth grade",
+    "noNotifications": "No notifications"
 }
