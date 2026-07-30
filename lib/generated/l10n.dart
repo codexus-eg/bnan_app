@@ -7389,6 +7389,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Select curriculum`
+  String get selectCurriculum {
+    return Intl.message(
+      'Select curriculum',
+      name: 'selectCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No curricula available`
+  String get noCurriculumsAvailable {
+    return Intl.message(
+      'No curricula available',
+      name: 'noCurriculumsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message(
+      'Retry',
+      name: 'retry',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -27,9 +27,11 @@ class UsersResponseModel {
       ),
       data: users is List
           ? users
-              .whereType<Map>()
-              .map((user) => UserItem.fromJson(Map<String, dynamic>.from(user)))
-              .toList()
+                .whereType<Map>()
+                .map(
+                  (user) => UserItem.fromJson(Map<String, dynamic>.from(user)),
+                )
+                .toList()
           : const [],
     );
   }

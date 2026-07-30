@@ -1,14 +1,13 @@
 import 'package:bnan_app/core/helper/validator_form_field.dart';
-import 'package:bnan_app/core/shared_widget/custom_dropdown_form_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
+import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/add_user_curriculum_field.dart';
+import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/add_user_role_field.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/form_mode.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/password_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FormFields extends StatelessWidget {
   const FormFields({
@@ -20,6 +19,8 @@ class FormFields extends StatelessWidget {
     required this.passwordController,
     required this.obscurePassword,
     required this.onTogglePasswordVisibility,
+    required this.curriculumId,
+    required this.onCurriculumChanged,
   });
 
   final FormMode mode;
@@ -29,6 +30,8 @@ class FormFields extends StatelessWidget {
   final TextEditingController passwordController;
   final bool obscurePassword;
   final VoidCallback onTogglePasswordVisibility;
+  final String? curriculumId;
+  final ValueChanged<String?> onCurriculumChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -56,28 +59,17 @@ class FormFields extends StatelessWidget {
           CustomTextField(
             label: s.phoneNumber,
             controller: phoneController,
-            validator: (value) => MyValidator.requiredField(
-              value,
-              s.phoneNumber,
-            ),
+            validator: (value) =>
+                MyValidator.requiredField(value, s.phoneNumber),
             hintStyle: getStyle(context),
             backgroundColor: ColorManager.white,
           ),
           const SizedBox(height: 16),
-          CustomDropdownFormField(
-            label: s.userRole,
-            value: _roleLabel(context),
-            backgroundColor: ColorManager.white,
-            items: [s.student, s.parentRole, s.supervisor, s.teacher],
-            validator: (value) => MyValidator.requiredField(
-              value,
-              s.userRole,
-            ),
-            onChanged: (value) {
-              context.read<UsersManagementCubit>().setSelectedRole(
-                _roleValue(context, value),
-              );
-            },
+          const AddUserRoleField(),
+          const SizedBox(height: 16),
+          AddUserCurriculumField(
+            value: curriculumId,
+            onChanged: onCurriculumChanged,
           ),
         ],
         if (mode != FormMode.edit) ...[
@@ -98,23 +90,5 @@ class FormFields extends StatelessWidget {
     return StylesManager.styleMedium14(
       context,
     ).copyWith(color: ColorManager.mainColor14);
-  }
-
-  String _roleLabel(BuildContext context) {
-    final s = S.of(context);
-    final role = context.read<UsersManagementCubit>().selectedRole;
-    if (role == 'parent') return s.parentRole;
-    if (role == 'supervisor') return s.supervisor;
-    if (role == 'teacher') return s.teacher;
-    return s.student;
-  }
-
-  String _roleValue(BuildContext context, String? value) {
-    final s = S.of(context);
-    if (value == s.parentRole) return 'parent';
-    if (value == s.supervisor) return 'supervisor';
-    if (value == s.teacher) return 'teacher';
-
-    return 'student';
   }
 }

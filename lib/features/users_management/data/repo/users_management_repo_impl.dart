@@ -2,6 +2,7 @@ import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/features/users_management/data/models/add_user_request_model.dart';
 import 'package:bnan_app/features/users_management/data/models/user_model.dart';
 import 'package:bnan_app/features/users_management/data/models/user_response_model.dart';
 import 'package:bnan_app/features/users_management/data/models/users_response_model.dart';
@@ -14,10 +15,19 @@ class UsersManagementRepoImpl implements UsersManagementRepo {
   final ApiConsumer apiConsumer;
 
   @override
-  Future<Either<Failure, UsersResponseModel>> getUsers() {
+  Future<Either<Failure, UsersResponseModel>> getUsers({
+    required int page,
+    String? search,
+    String? role,
+  }) {
     return _guard(() async {
       final response = await apiConsumer.get(
         EndPoints.users,
+        queryParameter: {
+          'page': page,
+          if (search != null && search.isNotEmpty) 'search': search,
+          if (role != null && role.isNotEmpty) 'role': role,
+        },
         isProtected: true,
       );
 
@@ -41,13 +51,12 @@ class UsersManagementRepoImpl implements UsersManagementRepo {
 
   @override
   Future<Either<Failure, UserResponseModel>> createUser({
-    required UserItem user,
-    required String password,
+    required AddUserRequestModel request,
   }) {
     return _guard(() async {
       final response = await apiConsumer.post(
         EndPoints.users,
-        data: user.toCreateJson(password: password),
+        data: request.toJson(),
         isProtected: true,
       );
 
@@ -106,10 +115,7 @@ class UsersManagementRepoImpl implements UsersManagementRepo {
   @override
   Future<Either<Failure, bool>> deleteUser({required String userId}) {
     return _guard(() async {
-      await apiConsumer.delete(
-        EndPoints.userById(userId),
-        isProtected: true,
-      );
+      await apiConsumer.delete(EndPoints.userById(userId), isProtected: true);
 
       return true;
     });

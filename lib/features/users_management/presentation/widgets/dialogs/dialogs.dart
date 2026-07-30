@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/helper/app_dialogs.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/users_management/data/models/user_model.dart';
 import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/confirm_dialog.dart';
@@ -19,8 +21,13 @@ class UserDialogs {
     final cubit = context.read<UsersManagementCubit>()..prepareAdd();
     return AppDialogs.show(
       context: context,
-      child: BlocProvider.value(
-        value: cubit,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: cubit),
+          BlocProvider(
+            create: (_) => getIt<AcademicLookupsCubit>()..loadCurriculums(),
+          ),
+        ],
         child: const FormDialog.add(),
       ),
     );

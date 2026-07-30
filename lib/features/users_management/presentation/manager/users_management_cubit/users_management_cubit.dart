@@ -1,4 +1,6 @@
+import 'package:bnan_app/features/users_management/data/models/add_user_request_model.dart';
 import 'package:bnan_app/features/users_management/data/models/user_model.dart';
+import 'package:bnan_app/features/users_management/data/models/users_pagination_model.dart';
 import 'package:bnan_app/features/users_management/data/repo/users_management_repo.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +9,7 @@ part 'users_management_state.dart';
 
 class UsersManagementCubit extends Cubit<UsersManagementState> {
   UsersManagementCubit(this.usersManagementRepo)
-      : super(const UsersManagementInitial());
+    : super(const UsersManagementInitial());
 
   final UsersManagementRepo usersManagementRepo;
   final formKey = GlobalKey<FormState>();
@@ -15,38 +17,104 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   List<UserItem> users = [];
   int usersCount = 0;
   UserItem? selectedUser;
-  String selectedRole = 'student';
+  String? selectedRole;
+  int _currentPage = 1;
+  int _lastPage = 1;
+  bool _isLoadingMore = false;
+  int _requestId = 0;
+  String _search = '';
+  String? _role;
 
-  Future<void> getUsers({bool emitLoading = true}) async {
+  bool get canLoadMore => !_isLoadingMore && _currentPage < _lastPage;
+
+  Future<void> getUsers({bool refresh = false, bool emitLoading = true}) async {
+    final requestId = ++_requestId;
+    _isLoadingMore = false;
+    if (refresh) _resetPagination();
     if (emitLoading) emit(const GetUsersLoading());
 
-    final result = await usersManagementRepo.getUsers();
-    result.fold(
-      (failure) => emit(GetUsersFailure(failure.message)),
-      (response) {
-        users = response.data;
-        usersCount = response.results;
-        emit(GetUsersSuccess(users: users, usersCount: usersCount));
-      },
+    final result = await usersManagementRepo.getUsers(
+      page: 1,
+      search: _search,
+      role: _role,
     );
+    if (isClosed || requestId != _requestId) return;
+
+    result.fold((failure) => emit(GetUsersFailure(failure.message)), (
+      response,
+    ) {
+      users = _unique(response.data);
+      _setPagination(response.pagination);
+      emit(_success());
+    });
+  }
+
+  Future<void> refreshUsers({bool emitLoading = false}) {
+    return getUsers(refresh: true, emitLoading: emitLoading);
+  }
+
+  Future<void> applyFilters({
+    required String search,
+    required String role,
+  }) async {
+    final nextSearch = search.trim();
+    final nextRole = role == 'all' ? null : role;
+    if (_search == nextSearch && _role == nextRole) return;
+    _search = nextSearch;
+    _role = nextRole;
+    users = [];
+    usersCount = 0;
+    await refreshUsers(emitLoading: true);
+  }
+
+  Future<void> loadMore() async {
+    if (!canLoadMore) return;
+    _isLoadingMore = true;
+    final requestId = _requestId;
+    final nextPage = _currentPage + 1;
+    emit(GetUsersLoadingMore(users: List.unmodifiable(users)));
+
+    try {
+      final result = await usersManagementRepo.getUsers(
+        page: nextPage,
+        search: _search,
+        role: _role,
+      );
+      if (isClosed || requestId != _requestId) return;
+      _isLoadingMore = false;
+      result.fold(
+        (failure) => emit(
+          GetUsersLoadMoreFailure(
+            users: List.unmodifiable(users),
+            message: failure.message,
+          ),
+        ),
+        (response) {
+          _appendUnique(response.data);
+          _setPagination(response.pagination);
+          emit(_success());
+        },
+      );
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 
   Future<void> getUserDetails({required String userId}) async {
     emit(const GetUserDetailsLoading());
 
     final result = await usersManagementRepo.getUserDetails(userId: userId);
-    result.fold(
-      (failure) => emit(GetUserDetailsFailure(failure.message)),
-      (response) {
-        selectedUser = response.user;
-        emit(GetUserDetailsSuccess(user: selectedUser));
-      },
-    );
+    result.fold((failure) => emit(GetUserDetailsFailure(failure.message)), (
+      response,
+    ) {
+      selectedUser = response.user;
+      emit(GetUserDetailsSuccess(user: selectedUser));
+    });
   }
 
   void prepareAdd() {
     selectedUser = null;
-    selectedRole = 'student';
+    selectedRole = null;
   }
 
   void prepareEdit(UserItem user) {
@@ -61,14 +129,23 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   Future<void> createUser({
     required UserItem user,
     required String password,
+    required String curriculumId,
   }) async {
     if (formKey.currentState?.validate() != true) return;
-    if (selectedRole.trim().isEmpty) return;
+    final role = selectedRole?.trim() ?? '';
+    final selectedCurriculumId = curriculumId.trim();
+    if (role.isEmpty || selectedCurriculumId.isEmpty) return;
 
     emit(const UsersActionLoading(action: UsersManagementAction.create));
     final result = await usersManagementRepo.createUser(
-      user: _withRole(user, selectedRole),
-      password: password,
+      request: AddUserRequestModel(
+        fullName: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: role,
+        password: password,
+        curriculumId: selectedCurriculumId,
+      ),
     );
 
     await result.fold(
@@ -80,7 +157,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       ),
       (_) async {
         emit(const UsersActionSuccess(action: UsersManagementAction.create));
-        await getUsers(emitLoading: false);
+        await refreshUsers();
       },
     );
   }
@@ -106,7 +183,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       ),
       (_) async {
         emit(const UsersActionSuccess(action: UsersManagementAction.update));
-        await getUsers(emitLoading: false);
+        await refreshUsers();
       },
     );
   }
@@ -132,7 +209,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       ),
       (_) async {
         emit(const UsersActionSuccess(action: UsersManagementAction.password));
-        await getUsers(emitLoading: false);
+        await refreshUsers();
       },
     );
   }
@@ -156,7 +233,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       ),
       (_) async {
         emit(const UsersActionSuccess(action: UsersManagementAction.status));
-        await getUsers(emitLoading: false);
+        await refreshUsers();
       },
     );
   }
@@ -174,7 +251,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       ),
       (_) async {
         emit(const UsersActionSuccess(action: UsersManagementAction.delete));
-        await getUsers(emitLoading: false);
+        await refreshUsers();
       },
     );
   }
@@ -198,4 +275,39 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   }
 
   UserItem _withoutRole(UserItem user) => _withRole(user, '');
+
+  void _appendUnique(List<UserItem> newUsers) {
+    final knownIds = users
+        .map((user) => user.id)
+        .where((id) => id.isNotEmpty)
+        .toSet();
+    users.addAll(
+      newUsers.where((user) => user.id.isEmpty || knownIds.add(user.id)),
+    );
+  }
+
+  List<UserItem> _unique(List<UserItem> source) {
+    final ids = <String>{};
+    return source.where((user) => user.id.isEmpty || ids.add(user.id)).toList();
+  }
+
+  void _setPagination(UsersPaginationModel pagination) {
+    _currentPage = pagination.currentPage;
+    _lastPage = pagination.lastPage;
+    usersCount = pagination.total;
+  }
+
+  GetUsersSuccess _success() {
+    return GetUsersSuccess(
+      users: List.unmodifiable(users),
+      usersCount: usersCount,
+      canLoadMore: canLoadMore,
+      currentPage: _currentPage,
+    );
+  }
+
+  void _resetPagination() {
+    _currentPage = 1;
+    _lastPage = 1;
+  }
 }

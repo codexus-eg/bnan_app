@@ -50,16 +50,6 @@ class UserItem {
     );
   }
 
-  Map<String, dynamic> toCreateJson({required String password}) {
-    return {
-      'fullName': name,
-      'email': email,
-      'phone': phone,
-      'password': password,
-      'role': roles,
-    };
-  }
-
   Map<String, dynamic> toUpdateJson() {
     return {'fullName': name, 'email': email, 'phone': phone};
   }

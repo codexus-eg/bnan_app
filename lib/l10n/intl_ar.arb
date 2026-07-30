@@ -878,5 +878,8 @@
     "invalidData": "يرجى التأكد من البيانات المدخلة",
     "invalidPackage": "بيانات الباقة غير صالحة",
     "chooseCurriculumType": "اختر نوع المنهج",
-    "curriculumIcon": "صورة المنهج"
+    "curriculumIcon": "صورة المنهج",
+    "selectCurriculum": "اختر المنهج",
+    "noCurriculumsAvailable": "لا توجد مناهج متاحة",
+    "retry": "إعادة المحاولة"
 }

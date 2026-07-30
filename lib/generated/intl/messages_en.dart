@@ -636,6 +636,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Completed assignments will appear here."),
         "noCurriculumsFound":
             MessageLookupByLibrary.simpleMessage("No curriculums found"),
+        "noCurriculumsAvailable":
+            MessageLookupByLibrary.simpleMessage("No curricula available"),
         "noDataAvailable": MessageLookupByLibrary.simpleMessage(
             "No information available now"),
         "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
@@ -955,6 +957,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Select classroom first"),
         "selectCurriculumFirst":
             MessageLookupByLibrary.simpleMessage("Please select a curriculum"),
+        "selectCurriculum":
+            MessageLookupByLibrary.simpleMessage("Select curriculum"),
+        "retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "selectFile": MessageLookupByLibrary.simpleMessage("Select File"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),

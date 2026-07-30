@@ -879,5 +879,8 @@
     "invalidData": "Please check the entered data",
     "invalidPackage": "Invalid package data",
     "chooseCurriculumType": "Choose Curriculum Type",
-    "curriculumIcon": "Curriculum Image"
+    "curriculumIcon": "Curriculum Image",
+    "selectCurriculum": "Select curriculum",
+    "noCurriculumsAvailable": "No curricula available",
+    "retry": "Retry"
 }

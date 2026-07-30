@@ -8,21 +8,25 @@ class CustomDropdownFormField extends StatelessWidget {
     required this.label,
     required this.items,
     required this.onChanged,
+    this.itemsLabels,
     this.value,
     this.hint,
     this.isRequired = false,
     this.validator,
-    this.backgroundColor, this.labelColor, this.hintStyle,
+    this.backgroundColor,
+    this.labelColor,
+    this.hintStyle,
   });
 
   final String label;
   final String? value;
   final String? hint;
   final List<String> items;
+  final Map<String, String>? itemsLabels;
   final ValueChanged<String?> onChanged;
   final bool isRequired;
   final String? Function(String?)? validator;
-  final Color? backgroundColor,labelColor;
+  final Color? backgroundColor, labelColor;
   final TextStyle? hintStyle;
 
   @override
@@ -42,6 +46,7 @@ class CustomDropdownFormField extends StatelessWidget {
               hint: hint,
               labelColor: labelColor,
               items: items,
+              itemsLabels: itemsLabels,
               isRequired: isRequired,
               onChanged: (newValue) {
                 field.didChange(newValue);

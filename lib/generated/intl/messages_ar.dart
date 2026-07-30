@@ -609,6 +609,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("عند حل الواجبات ستظهر هنا."),
         "noCurriculumsFound":
             MessageLookupByLibrary.simpleMessage("لا توجد مناهج"),
+        "noCurriculumsAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد مناهج متاحة"),
         "noDataAvailable":
             MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
         "noGroupsYet":
@@ -911,6 +913,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("اختر الفصل أولاً"),
         "selectCurriculumFirst":
             MessageLookupByLibrary.simpleMessage("يرجى اختيار المنهج"),
+        "selectCurriculum":
+            MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
         "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),

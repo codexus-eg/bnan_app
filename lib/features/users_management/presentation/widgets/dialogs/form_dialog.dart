@@ -1,10 +1,13 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
 import 'package:bnan_app/features/users_management/data/models/user_model.dart';
 import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/form_fields.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/form_mode.dart';
+import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/dialog_error_message.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +33,7 @@ class _FormDialogState extends State<FormDialog> {
   late final TextEditingController phoneController;
   late final TextEditingController passwordController;
   bool obscurePassword = true;
+  String? curriculumId;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -79,10 +83,14 @@ class _FormDialogState extends State<FormDialog> {
                   passwordController: passwordController,
                   obscurePassword: obscurePassword,
                   onTogglePasswordVisibility: _togglePasswordVisibility,
+                  curriculumId: curriculumId,
+                  onCurriculumChanged: (value) {
+                    setState(() => curriculumId = value);
+                  },
                 ),
               ),
               const SizedBox(height: 16),
-              CustomAppButton(text: s.save, onPressed: () => _onSave(context)),
+              _buildActions(context, s),
             ],
           ),
         ),
@@ -94,6 +102,46 @@ class _FormDialogState extends State<FormDialog> {
     if (widget.mode == FormMode.add) return s.addNewUser;
     if (widget.mode == FormMode.edit) return s.editData;
     return s.resetPassword;
+  }
+
+  Widget _buildActions(BuildContext context, S s) {
+    if (widget.mode != FormMode.add) {
+      return _actionContent(context, s, canSave: true);
+    }
+    return BlocBuilder<AcademicLookupsCubit, AcademicLookupsState>(
+      builder: (context, state) {
+        final canSave =
+            !state.isLoadingCurriculums && state.curriculums.isNotEmpty;
+        return _actionContent(context, s, canSave: canSave);
+      },
+    );
+  }
+
+  Widget _actionContent(BuildContext context, S s, {required bool canSave}) {
+    return BlocBuilder<UsersManagementCubit, UsersManagementState>(
+      builder: (context, state) {
+        final isLoading =
+            state is UsersActionLoading && _isCurrentAction(state.action);
+        final failure =
+            state is UsersActionFailure &&
+                state.action == UsersManagementAction.create
+            ? state.message
+            : null;
+        return Column(
+          children: [
+            if (failure != null) ...[
+              DialogErrorMessage(message: failure),
+              const SizedBox(height: 12),
+            ],
+            CustomAppButton(
+              text: s.save,
+              isLoading: isLoading,
+              onPressed: canSave && !isLoading ? () => _onSave(context) : null,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _listenToActionState(BuildContext context, UsersManagementState state) {
@@ -126,6 +174,7 @@ class _FormDialogState extends State<FormDialog> {
       await cubit.createUser(
         user: _userFromFields(),
         password: passwordController.text,
+        curriculumId: curriculumId ?? '',
       );
     }
   }
