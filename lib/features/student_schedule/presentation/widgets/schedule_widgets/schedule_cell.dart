@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/custom_table/custom_table_cell.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
@@ -25,27 +26,16 @@ class ScheduleCell extends StatelessWidget {
     final Color bgColor = _getBackgroundColor(hasText);
     final Color textColor = _getTextColor(hasText);
 
-    return Container(
+    return CustomTableCell(
       width: width,
-      height: 37,
-      margin: const EdgeInsetsDirectional.only(
-        start: 10,
-        end: 10,
-        bottom: 12,
-      ),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      backgroundColor: bgColor,
       child: Text(
         text,
         textAlign: TextAlign.center,
         maxLines: 2,
-        style: StylesManager.styleBold12(context).copyWith(
-          color: textColor,
-          height: 1.1,
-        ),
+        style: StylesManager.styleBold12(
+          context,
+        ).copyWith(color: textColor, height: 1.1),
       ),
     );
   }

@@ -30,18 +30,18 @@ List<DrawerItemModel> studentDrawerItems(BuildContext context) {
       icon: ImageManager.tableIcon,
     ),
     DrawerItemModel(
+      title: S.of(context).plansTitle,
+      icon: ImageManager.calendarIcon,
+    ),
+    DrawerItemModel(
       title: S.of(context).PackagesandSubscriptions,
       icon: ImageManager.subscription,
     ),
-     DrawerItemModel(
+    DrawerItemModel(
       title: S.of(context).notifications,
       icon: ImageManager.bellIcon,
     ),
-   
-    DrawerItemModel(
-      title: S.of(context).reviews,
-      icon: ImageManager.starIcon,
-    ),
+    DrawerItemModel(title: S.of(context).reviews, icon: ImageManager.starIcon),
     DrawerItemModel(
       title: S.of(context).assignments,
       icon: ImageManager.fileIcon,

@@ -1,4 +1,4 @@
-import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
+import 'package:bnan_app/core/shared_widget/custom_table/custom_table_container.dart';
 import 'package:bnan_app/features/student_schedule/presentation/widgets/schedule_widgets/schedule_grid_table.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +7,6 @@ class ScheduleTableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomDetailsWidgetBackground(
-     
-      child: const ScheduleGridTable(),
-    );
+    return const CustomTableContainer(child: ScheduleGridTable());
   }
 }

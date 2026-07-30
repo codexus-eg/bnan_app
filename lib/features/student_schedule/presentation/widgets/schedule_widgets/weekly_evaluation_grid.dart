@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/custom_table/custom_table_row.dart';
 import 'package:bnan_app/features/student_schedule/presentation/widgets/schedule_widgets/schedule_cell.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _EvaluationHeaderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return CustomTableRow(
       children: [
         ScheduleCell(
           text: headers.first,
@@ -94,7 +95,7 @@ class _EvaluationDataRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final values = _completeValues(row.values, valuesCount);
 
-    return Row(
+    return CustomTableRow(
       children: [
         ScheduleCell(
           text: row.subject,

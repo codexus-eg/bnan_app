@@ -24,6 +24,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   bool _isLoggingOut = false;
 
   static const int notificationsDrawerIndex = 13;
+  static const int plansDrawerIndex = 11;
 
   static const Map<int, int> drawerToBottomNavIndex = {
     0: 0,
@@ -66,8 +67,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   void _navigateFromDrawer(int index) {
     if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
-    }
-    if (index == 9) {
+    } else if (index == plansDrawerIndex) {
+      MyNavigator.goTo(context, Routes.plans);
+    } else if (index == 9) {
       MyNavigator.goTo(context, Routes.certificatesManagement);
     }
   }

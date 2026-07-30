@@ -1,11 +1,11 @@
-import 'package:bnan_app/features/plans/presentation/models/plans_view_mode.dart';
-
 class PlansAccessPolicy {
   const PlansAccessPolicy({
     required this.showClassroomFilter,
     required this.showWeekFilter,
     required this.showManagementActions,
     required this.canAddDailyPlan,
+    required this.canEditPlan,
+    required this.canDeletePlan,
     required this.canUploadPlan,
     required this.showTeacherFieldInAddDialog,
     required this.isReadOnly,
@@ -15,20 +15,26 @@ class PlansAccessPolicy {
   final bool showWeekFilter;
   final bool showManagementActions;
   final bool canAddDailyPlan;
+  final bool canEditPlan;
+  final bool canDeletePlan;
   final bool canUploadPlan;
   final bool showTeacherFieldInAddDialog;
   final bool isReadOnly;
 
-  factory PlansAccessPolicy.fromMode(PlansViewMode mode) {
-    final isStudent = mode == PlansViewMode.student;
+  factory PlansAccessPolicy.fromRole(String? role) {
+    final normalizedRole = role?.trim().toLowerCase();
+    final isSupervisor = normalizedRole == 'supervisor';
+    final canManage = isSupervisor || normalizedRole == 'teacher';
     return PlansAccessPolicy(
-      showClassroomFilter: !isStudent,
+      showClassroomFilter: canManage,
       showWeekFilter: true,
-      showManagementActions: !isStudent,
-      canAddDailyPlan: !isStudent,
-      canUploadPlan: !isStudent,
-      showTeacherFieldInAddDialog: mode == PlansViewMode.supervisor,
-      isReadOnly: isStudent,
+      showManagementActions: canManage,
+      canAddDailyPlan: canManage,
+      canEditPlan: canManage,
+      canDeletePlan: canManage,
+      canUploadPlan: canManage,
+      showTeacherFieldInAddDialog: isSupervisor,
+      isReadOnly: !canManage,
     );
   }
 }
