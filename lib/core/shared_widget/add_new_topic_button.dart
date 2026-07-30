@@ -10,7 +10,8 @@ class AddNewTopicButton extends StatelessWidget {
     this.onTap,
     this.backgroundColor,
     this.secondColor,
-    required this.path, this.padding,
+    required this.path,
+    this.padding,
   });
   final String title, path;
   final Function()? onTap;
@@ -22,12 +23,14 @@ class AddNewTopicButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding:padding?? EdgeInsetsDirectional.only(
-          start: 11.5,
-          end: 10.5,
-          top: 8,
-          bottom: 8,
-        ),
+        padding:
+            padding ??
+            EdgeInsetsDirectional.only(
+              start: 11.5,
+              end: 10.5,
+              top: 8,
+              bottom: 8,
+            ),
         decoration: BoxDecoration(
           color: backgroundColor ?? ColorManager.mainColor14,
           borderRadius: BorderRadius.circular(10),
@@ -46,11 +49,17 @@ class AddNewTopicButton extends StatelessWidget {
               height: 16,
             ),
             const SizedBox(width: 12),
-            Text(
-              title,
-              style: StylesManager.styleBold12(
-                context,
-              ).copyWith(color: secondColor ?? ColorManager.white),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  style: StylesManager.styleBold12(
+                    context,
+                  ).copyWith(color: secondColor ?? ColorManager.white),
+                ),
+              ),
             ),
           ],
         ),
