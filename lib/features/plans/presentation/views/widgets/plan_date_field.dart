@@ -7,35 +7,67 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PlanDateField extends StatelessWidget {
-  const PlanDateField({super.key, required this.controller});
+  const PlanDateField({
+    super.key,
+    required this.controller,
+    required this.selectedDate,
+    required this.onDateChanged,
+  });
 
   final TextEditingController controller;
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime> onDateChanged;
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
     return CustomTextField(
-      label: s.day,
+      label: s.today,
       hintText: s.dateFormatHint,
       controller: controller,
       isRequired: true,
       readOnly: true,
-      validator: (value) => MyValidator.requiredField(value, s.day),
+      validator: (value) {
+        final requiredError = MyValidator.requiredField(value, s.day);
+        if (requiredError != null) return requiredError;
+        final date = selectedDate;
+        if (date != null &&
+            _dateOnly(date).isAfter(_dateOnly(DateTime.now()))) {
+          return s.futurePlanDateNotAllowed;
+        }
+        return null;
+      },
       onTap: () => _pickDate(context),
-      suffixIcon: Padding(
-        padding: const EdgeInsetsDirectional.only(end: 10),
-        child: SvgPicture.asset(
-          ImageManager.teacherAssignmentDateIcon,
-          width: 16,
-        ),
+      prefixIcon: Padding(
+        padding: const EdgeInsetsDirectional.only(end: 10, start: 10),
+        child: SvgPicture.asset(ImageManager.teacherAssignmentDateIcon),
       ),
     );
   }
 
   Future<void> _pickDate(BuildContext context) async {
-    final date = await AppPickers.pickDate(context: context);
+    final today = _dateOnly(DateTime.now());
+    // TODO: Replace firstAllowedDate with the plans start date from the API.
+    final firstAllowedDate = DateTime(today.year - 1, today.month, today.day);
+    final date = await AppPickers.pickDate(
+      context: context,
+      initialDate: _clampDate(selectedDate ?? today, firstAllowedDate, today),
+      firstDate: firstAllowedDate,
+      lastDate: today,
+    );
     if (date != null && context.mounted) {
       controller.text = MaterialLocalizations.of(context).formatShortDate(date);
+      onDateChanged(date);
     }
+  }
+
+  DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
+
+  DateTime _clampDate(DateTime date, DateTime firstDate, DateTime lastDate) {
+    final normalizedDate = _dateOnly(date);
+    if (normalizedDate.isBefore(firstDate)) return firstDate;
+    if (normalizedDate.isAfter(lastDate)) return lastDate;
+    return normalizedDate;
   }
 }

@@ -367,6 +367,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "curriculums": MessageLookupByLibrary.simpleMessage("Curriculums"),
     "cv": MessageLookupByLibrary.simpleMessage("CV"),
     "cvv": MessageLookupByLibrary.simpleMessage("CVV"),
+    "dailyPlanAlreadyUploaded": MessageLookupByLibrary.simpleMessage(
+      "The plan has already been uploaded for this day.",
+    ),
+    "dailyPlanCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Daily plan added successfully",
+    ),
     "dailyPlansTitle": MessageLookupByLibrary.simpleMessage("Daily Plans"),
     "dailyProfits": MessageLookupByLibrary.simpleMessage("Daily Profits"),
     "dashboard": MessageLookupByLibrary.simpleMessage("Home"),
@@ -550,6 +556,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "friday": MessageLookupByLibrary.simpleMessage("Friday"),
     "from": MessageLookupByLibrary.simpleMessage("From"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
+    "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
+      "Future dates are not allowed",
+    ),
     "goToPayment": MessageLookupByLibrary.simpleMessage("Proceed to Payment"),
     "good": MessageLookupByLibrary.simpleMessage("Good"),
     "grade": MessageLookupByLibrary.simpleMessage("Grade"),
@@ -789,6 +798,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noStudentsInClass": MessageLookupByLibrary.simpleMessage(
       "There are no students in this classroom",
     ),
+    "noStudyWeeksAvailable": MessageLookupByLibrary.simpleMessage(
+      "No study weeks are available for this classroom",
+    ),
     "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
       "No subjects available for this grade",
     ),
@@ -980,6 +992,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone number"),
     "physics": MessageLookupByLibrary.simpleMessage("Physics"),
     "planFile": MessageLookupByLibrary.simpleMessage("Plan file"),
+    "planFileRequired": MessageLookupByLibrary.simpleMessage(
+      "Plan file is required",
+    ),
     "plansTitle": MessageLookupByLibrary.simpleMessage("Plans"),
     "platformsUsed": MessageLookupByLibrary.simpleMessage("Platforms used"),
     "pleaseAnswerAllQuestions": MessageLookupByLibrary.simpleMessage(
@@ -1357,6 +1372,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "teachingInBnan": MessageLookupByLibrary.simpleMessage("Teaching in Bnan"),
     "technicalAppsLevel": MessageLookupByLibrary.simpleMessage(
       "What is your level of using Computer?",
+    ),
+    "termPlanUploadedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Term plan uploaded successfully",
     ),
     "theRequiredLesson": MessageLookupByLibrary.simpleMessage(
       "The required lesson",

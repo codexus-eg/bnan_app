@@ -106,3 +106,12 @@ export 'package:bnan_app/features/teacher_registration/presentation/manager/teac
 export 'package:bnan_app/features/users_management/data/repo/users_management_repo.dart';
 export 'package:bnan_app/features/users_management/data/repo/users_management_repo_impl.dart';
 export 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
+export 'package:bnan_app/features/plans/data/repo/plans_repo.dart';
+export 'package:bnan_app/features/plans/data/repo/plans_repo_impl.dart';
+export 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_cubit.dart';
+export 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_term_plans_cubit.dart';
+export 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
+export 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
+export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo.dart';
+export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo_impl.dart';
+export 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_cubit.dart';
