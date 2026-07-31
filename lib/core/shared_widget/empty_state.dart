@@ -25,7 +25,14 @@ class EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(image, height: imageHeight, fit: BoxFit.contain),
+            Flexible(
+              fit: FlexFit.loose,
+              child: SvgPicture.asset(
+                image,
+                height: imageHeight,
+                fit: BoxFit.contain,
+              ),
+            ),
             const SizedBox(height: 30),
             Text(
               title,

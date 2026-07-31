@@ -5,6 +5,7 @@ import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/plans_route_scope.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
@@ -376,8 +377,10 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.plans,
-        pageBuilder: (context, state) =>
-            buildTransitionPages(child: const PlansView(), key: state.pageKey),
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const PlansRouteScope(),
+          key: state.pageKey,
+        ),
       ),
       GoRoute(
         path: Routes.parentCertificates,

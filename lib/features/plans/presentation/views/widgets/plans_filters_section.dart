@@ -2,6 +2,7 @@ import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -10,16 +11,24 @@ class PlansFiltersSection extends StatelessWidget {
     super.key,
     required this.policy,
     required this.classroom,
+    required this.classrooms,
+    required this.classroomHint,
     required this.week,
+    required this.weeks,
+    required this.weekHint,
     required this.onClassroomChanged,
     required this.onWeekChanged,
   });
 
   final PlansAccessPolicy policy;
-  final String? classroom;
-  final String? week;
-  final ValueChanged<String?> onClassroomChanged;
-  final ValueChanged<String?> onWeekChanged;
+  final PlanClassroomOption? classroom;
+  final List<PlanClassroomOption>? classrooms;
+  final String classroomHint;
+  final int? week;
+  final List<int>? weeks;
+  final String weekHint;
+  final ValueChanged<PlanClassroomOption?> onClassroomChanged;
+  final ValueChanged<int?> onWeekChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +51,9 @@ class PlansFiltersSection extends StatelessWidget {
         }
         return Row(
           children: [
-            Expanded(
-              flex: 2,
-              child: fields.first),
+            Expanded(flex: 3, child: fields.first),
             const SizedBox(width: 20),
-            Expanded(child: fields.last),
+            Expanded(flex: 2, child: fields.last),
           ],
         );
       },
@@ -58,29 +65,34 @@ class PlansFiltersSection extends StatelessWidget {
     return [
       if (policy.showClassroomFilter)
         CustomDropdown(
-          label: s.grade,
-          value: classroom,
-          hint: s.chooseGrade,
-          items: const ['first', 'second'],
+          label: s.classRoom,
+          value: classroom?.id,
+          hint: classroomHint,
+          items: classrooms?.map((item) => item.id).toList(),
           itemsLabels: {
-            'first': s.firstPrimaryClassroom,
-            'second': s.secondPrimaryClassroom,
+            for (final item in classrooms ?? const <PlanClassroomOption>[])
+              item.id: item.name,
           },
           valueStyle: StylesManager.styleRegular16(
             context,
           ).copyWith(color: ColorManager.mainColor14),
           backgroundColor: ColorManager.white,
-          onChanged: onClassroomChanged,
+          onChanged: (id) => onClassroomChanged(
+            classrooms?.where((item) => item.id == id).firstOrNull,
+          ),
         ),
       if (policy.showWeekFilter)
         CustomDropdown(
           label: s.week,
-          value: week,
-          hint: s.selectWeek,
-          items: const ['week1', 'week2'],
-          itemsLabels: {'week1':'week 1', 'week2': 'week 2'},
+          value: week?.toString(),
+          hint: weekHint,
+          items: weeks?.map((item) => item.toString()).toList(),
+          itemsLabels: {
+            for (final item in weeks ?? const <int>[])
+              item.toString(): '${s.week} $item',
+          },
           backgroundColor: ColorManager.white,
-          onChanged: onWeekChanged,
+          onChanged: (value) => onWeekChanged(int.tryParse(value ?? '')),
           valueStyle: StylesManager.styleRegular16(
             context,
           ).copyWith(color: ColorManager.mainColor14),

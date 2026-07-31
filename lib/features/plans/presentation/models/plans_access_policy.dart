@@ -24,16 +24,18 @@ class PlansAccessPolicy {
   factory PlansAccessPolicy.fromRole(String? role) {
     final normalizedRole = role?.trim().toLowerCase();
     final isSupervisor = normalizedRole == 'supervisor';
-    final canManage = isSupervisor || normalizedRole == 'teacher';
+    final isAdmin = normalizedRole == 'admin';
+    final canManage = isSupervisor || isAdmin || normalizedRole == 'teacher';
+    final hasClassrooms = canManage || normalizedRole == 'student';
     return PlansAccessPolicy(
-      showClassroomFilter: canManage,
+      showClassroomFilter: hasClassrooms,
       showWeekFilter: true,
       showManagementActions: canManage,
       canAddDailyPlan: canManage,
       canEditPlan: canManage,
       canDeletePlan: canManage,
       canUploadPlan: canManage,
-      showTeacherFieldInAddDialog: isSupervisor,
+      showTeacherFieldInAddDialog: isSupervisor || isAdmin,
       isReadOnly: !canManage,
     );
   }

@@ -24,11 +24,21 @@ void main() {
     expect(policy.isReadOnly, isFalse);
   });
 
+  test('admin can manage plans and select a teacher', () {
+    final policy = PlansAccessPolicy.fromRole('admin');
+
+    expect(policy.showManagementActions, isTrue);
+    expect(policy.canAddDailyPlan, isTrue);
+    expect(policy.canUploadPlan, isTrue);
+    expect(policy.showTeacherFieldInAddDialog, isTrue);
+    expect(policy.isReadOnly, isFalse);
+  });
+
   test('student has a safe read-only policy', () {
     final policy = PlansAccessPolicy.fromRole('student');
 
     expect(policy.showManagementActions, isFalse);
-    expect(policy.showClassroomFilter, isFalse);
+    expect(policy.showClassroomFilter, isTrue);
     expect(policy.showWeekFilter, isTrue);
     expect(policy.canAddDailyPlan, isFalse);
     expect(policy.canEditPlan, isFalse);

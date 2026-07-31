@@ -5,10 +5,10 @@ class FilePickerHelper {
   const FilePickerHelper._();
 
   static Future<File?> pickFile({
-    List<String> allowedExtensions = const ['pdf', 'jpg', 'jpeg', 'png'],
+    List<String>? allowedExtensions = const ['pdf', 'jpg', 'jpeg', 'png'],
   }) async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
+      type: allowedExtensions == null ? FileType.any : FileType.custom,
       allowedExtensions: allowedExtensions,
     );
 

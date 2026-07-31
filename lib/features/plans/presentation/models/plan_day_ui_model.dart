@@ -1,10 +1,7 @@
 import 'package:bnan_app/features/plans/presentation/models/plan_subject_ui_model.dart';
 
 class PlanDayUiModel {
-  const PlanDayUiModel({
-    required this.dayName,
-    this.subjects = const [],
-  });
+  const PlanDayUiModel({required this.dayName, this.subjects = const []});
 
   final String dayName;
   final List<PlanSubjectUiModel> subjects;

@@ -334,6 +334,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "curriculums": MessageLookupByLibrary.simpleMessage("المناهج"),
     "cv": MessageLookupByLibrary.simpleMessage("CV"),
     "cvv": MessageLookupByLibrary.simpleMessage("رمز التحقق CVV"),
+    "dailyPlanAlreadyUploaded": MessageLookupByLibrary.simpleMessage(
+      "الخطة مرفوعة بالفعل لهذا اليوم.",
+    ),
+    "dailyPlanCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تمت إضافة الخطة اليومية بنجاح",
+    ),
     "dailyPlansTitle": MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
     "dailyProfits": MessageLookupByLibrary.simpleMessage("الأرباح اليومية"),
     "dashboard": MessageLookupByLibrary.simpleMessage("الرئيسية"),
@@ -495,6 +501,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "friday": MessageLookupByLibrary.simpleMessage("الجمعة"),
     "from": MessageLookupByLibrary.simpleMessage("من"),
     "fullName": MessageLookupByLibrary.simpleMessage("الاسم بالكامل"),
+    "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
+      "لا يمكن اختيار تاريخ مستقبلي",
+    ),
     "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
     "good": MessageLookupByLibrary.simpleMessage("جيد"),
     "grade": MessageLookupByLibrary.simpleMessage("الصف"),
@@ -726,6 +735,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noStudentsInClass": MessageLookupByLibrary.simpleMessage(
       "لا يوجد طلاب في هذا الفصل",
     ),
+    "noStudyWeeksAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد أسابيع دراسية متاحة لهذا الفصل",
+    ),
     "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد مواد متاحة لهذا الصف",
     ),
@@ -910,6 +922,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
     "physics": MessageLookupByLibrary.simpleMessage("الفيزياء"),
     "planFile": MessageLookupByLibrary.simpleMessage("ملف الخطة"),
+    "planFileRequired": MessageLookupByLibrary.simpleMessage("ملف الخطة مطلوب"),
     "plansTitle": MessageLookupByLibrary.simpleMessage("الخطط"),
     "platformsUsed": MessageLookupByLibrary.simpleMessage("المنصات المستخدمة"),
     "pleaseAnswerAllQuestions": MessageLookupByLibrary.simpleMessage(
@@ -1267,6 +1280,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "teachingInBnan": MessageLookupByLibrary.simpleMessage("التدريس في بنان"),
     "technicalAppsLevel": MessageLookupByLibrary.simpleMessage(
       "مستوى استخدام الكمبيوتر",
+    ),
+    "termPlanUploadedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم رفع خطة الترم بنجاح",
     ),
     "theRequiredLesson": MessageLookupByLibrary.simpleMessage("الدرس المطلوب"),
     "theSupervisor": MessageLookupByLibrary.simpleMessage("المشرف"),

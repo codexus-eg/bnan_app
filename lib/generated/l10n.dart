@@ -6389,6 +6389,36 @@ class S {
     );
   }
 
+  /// `Daily plan added successfully`
+  String get dailyPlanCreatedSuccessfully {
+    return Intl.message(
+      'Daily plan added successfully',
+      name: 'dailyPlanCreatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The plan has already been uploaded for this day.`
+  String get dailyPlanAlreadyUploaded {
+    return Intl.message(
+      'The plan has already been uploaded for this day.',
+      name: 'dailyPlanAlreadyUploaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Term plan uploaded successfully`
+  String get termPlanUploadedSuccessfully {
+    return Intl.message(
+      'Term plan uploaded successfully',
+      name: 'termPlanUploadedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Upload study plan`
   String get uploadStudyPlan {
     return Intl.message(
@@ -6459,9 +6489,29 @@ class S {
     );
   }
 
+  /// `No study weeks are available for this classroom`
+  String get noStudyWeeksAvailable {
+    return Intl.message(
+      'No study weeks are available for this classroom',
+      name: 'noStudyWeeksAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Plan file`
   String get planFile {
     return Intl.message('Plan file', name: 'planFile', desc: '', args: []);
+  }
+
+  /// `Plan file is required`
+  String get planFileRequired {
+    return Intl.message(
+      'Plan file is required',
+      name: 'planFileRequired',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `First primary grade`
@@ -6547,6 +6597,16 @@ class S {
   /// `mm/dd/yy`
   String get dateFormatHint {
     return Intl.message('mm/dd/yy', name: 'dateFormatHint', desc: '', args: []);
+  }
+
+  /// `Future dates are not allowed`
+  String get futurePlanDateNotAllowed {
+    return Intl.message(
+      'Future dates are not allowed',
+      name: 'futurePlanDateNotAllowed',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `You were assigned as supervisor for third grade`
