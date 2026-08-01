@@ -3,7 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/plans/data/models/create_daily_plan_request_model.dart';
 import 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
