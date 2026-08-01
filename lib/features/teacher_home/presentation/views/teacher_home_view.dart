@@ -65,7 +65,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _navigateFromDrawer(int index) {
-    if (index == notificationsDrawerIndex) {
+    if (index == 4) {
+      MyNavigator.goTo(context, Routes.weeklyEvaluations);
+    } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == plansDrawerIndex) {
       MyNavigator.goTo(context, Routes.plans);

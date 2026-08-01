@@ -26,7 +26,7 @@ class _WeekStartFieldState extends State<WeekStartField> {
   Widget build(BuildContext context) {
     return SchedulePickerField(
       label: S.of(context).weekStart,
-      hintText: 'mm/dd/yy',
+      hintText: S.of(context).dateFormatHint,
       value: selectedDate,
       icon: ImageManager.calendarIcon,
       onTap: () async {

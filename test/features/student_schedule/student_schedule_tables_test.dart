@@ -2,6 +2,7 @@ import 'package:bnan_app/core/shared_widget/custom_table/custom_table_cell.dart'
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_container.dart';
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_row.dart';
 import 'package:bnan_app/features/student_schedule/presentation/widgets/schedule_widgets/schedule_body.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_table.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,6 +28,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(CustomTableContainer), findsNWidgets(2));
+    expect(find.byType(WeeklyEvaluationTable), findsOneWidget);
     expect(find.byType(CustomTableRow), findsWidgets);
     expect(find.byType(CustomTableCell), findsWidgets);
     expect(tester.takeException(), isNull);
