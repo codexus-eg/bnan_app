@@ -5,9 +5,10 @@ import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/ge
 import 'package:bnan_app/features/plans/presentation/mappers/weekly_plans_ui_mapper.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/plans/presentation/models/weekly_plan_ui_model.dart';
+import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/plans_classrooms_feedback.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_card.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_skeleton.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/weekly_plan_card.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/weekly_plan_skeleton.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,12 +20,18 @@ class PlansWeeklyContent extends StatefulWidget {
     required this.week,
     required this.showEmpty,
     this.waitingMessage,
+    this.externalResponse,
+    this.externalLoading = false,
+    this.titleOverride,
   });
 
   final PlanClassroomOption? classroom;
   final int? week;
   final bool showEmpty;
   final String? waitingMessage;
+  final WeeklyPlansResponseModel? externalResponse;
+  final bool externalLoading;
+  final String? titleOverride;
 
   @override
   State<PlansWeeklyContent> createState() => _PlansWeeklyContentState();
@@ -44,6 +51,12 @@ class _PlansWeeklyContentState extends State<PlansWeeklyContent> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.externalResponse != null) {
+      return _response(context, widget.externalResponse!);
+    }
+    if (widget.externalLoading) {
+      return _table(context, _placeholder(context), loading: true);
+    }
     if (widget.classroom == null || widget.week == null) {
       final loading = widget.waitingMessage == null;
       return _table(
@@ -62,13 +75,18 @@ class _PlansWeeklyContentState extends State<PlansWeeklyContent> {
   }
 
   Widget _success(BuildContext context, GetWeeklyPlansSuccess state) {
+    return _response(context, state.response);
+  }
+
+  Widget _response(BuildContext context, WeeklyPlansResponseModel response) {
     final mapped = mapWeeklyPlansToUiModel(
       S.of(context),
-      state.response,
-      fallbackClassroomName: widget.classroom!.name,
-      fallbackWeek: widget.week!,
+      response,
+      fallbackClassroomName: widget.classroom?.name ?? '',
+      fallbackWeek: widget.week ?? 1,
+      titleOverride: widget.titleOverride,
     );
-    final empty = widget.showEmpty || isWeeklyPlansEmpty(state.response);
+    final empty = widget.showEmpty || isWeeklyPlansEmpty(response);
     final plan = empty && mapped.subjectNames.isEmpty
         ? _placeholder(context, loading: false)
         : empty && widget.showEmpty

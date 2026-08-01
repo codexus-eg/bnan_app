@@ -331,6 +331,9 @@ void setupServiceLocator() {
   getIt.registerFactory<GetWeeklyPlansCubit>(
     () => GetWeeklyPlansCubit(getIt<PlansRepo>()),
   );
+  getIt.registerFactory<GetParentPlansCubit>(
+    () => GetParentPlansCubit(getIt<PlansRepo>()),
+  );
   getIt.registerFactory<GetTermPlansCubit>(
     () => GetTermPlansCubit(getIt<PlansRepo>()),
   );

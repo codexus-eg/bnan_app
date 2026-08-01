@@ -138,6 +138,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "شهادة إتمام دورة الجبر",
     ),
     "all": MessageLookupByLibrary.simpleMessage("الكل"),
+    "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
     "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
     "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
     "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
@@ -171,6 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "atLeastSixChars": MessageLookupByLibrary.simpleMessage("6 أحرف على الأقل"),
     "attachedFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
+    "attachment": MessageLookupByLibrary.simpleMessage("المرفق"),
     "attachmentFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
     "attendance": MessageLookupByLibrary.simpleMessage("الحضور"),
     "attendanceRate": MessageLookupByLibrary.simpleMessage("نسبة الحضور"),
@@ -242,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "تحقق من بريدك الإلكتروني ",
     ),
     "chemistry": MessageLookupByLibrary.simpleMessage("الكيمياء"),
+    "child": MessageLookupByLibrary.simpleMessage("الابن"),
     "children": MessageLookupByLibrary.simpleMessage("الأبناء"),
     "chooseAccountType": MessageLookupByLibrary.simpleMessage(
       "اختر نوع الحساب للمتابعة",
@@ -284,6 +287,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "يرجى اختيار الفصل",
     ),
     "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
+    "closePreview": MessageLookupByLibrary.simpleMessage("إغلاق المعاينة"),
     "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
     "completedSessions": MessageLookupByLibrary.simpleMessage("الحصص المكتملة"),
     "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
@@ -691,6 +695,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noAvailableClassrooms": MessageLookupByLibrary.simpleMessage(
       "لا توجد فصول متاحة",
     ),
+    "noChildrenAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد أبناء متاحون",
+    ),
     "noClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد فصول متاحة",
     ),
@@ -729,6 +736,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
       "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد.",
     ),
+    "noPlansAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد خطط متاحة",
+    ),
     "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
       "لا توجد خطط لهذا الأسبوع",
     ),
@@ -745,6 +755,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "لا توجد مواد متاحة لهذا الفصل",
     ),
     "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
+    "noTermPlansAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد خطط ترم متاحة",
+    ),
     "noUnassignedStudents": MessageLookupByLibrary.simpleMessage(
       "لا يوجد طلاب غير معينين",
     ),
@@ -1093,6 +1106,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "الصف الثاني الابتدائي",
     ),
     "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
+    "selectChild": MessageLookupByLibrary.simpleMessage("اختر الابن"),
     "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
     "selectClassroomFirst": MessageLookupByLibrary.simpleMessage(
       "اختر الفصل أولاً",
@@ -1190,6 +1204,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "المناهج الدراسية ",
     ),
     "studyMaterials": MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
+    "studyPlanFor": MessageLookupByLibrary.simpleMessage("الخطة الدراسية"),
     "studyPlanTitlePrefix": MessageLookupByLibrary.simpleMessage(
       "الخطة الدراسية لـ",
     ),
@@ -1281,6 +1296,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "technicalAppsLevel": MessageLookupByLibrary.simpleMessage(
       "مستوى استخدام الكمبيوتر",
     ),
+    "termPlan": MessageLookupByLibrary.simpleMessage("خطة الترم"),
     "termPlanUploadedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم رفع خطة الترم بنجاح",
     ),
@@ -1310,6 +1326,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة....."),
     "unableToDownloadFile": MessageLookupByLibrary.simpleMessage(
       "تعذر تحميل الملف",
+    ),
+    "unableToLoadAttachment": MessageLookupByLibrary.simpleMessage(
+      "تعذر تحميل المرفق",
+    ),
+    "unableToOpenAttachment": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح المرفق",
     ),
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "تعذر تحميل الملف ",
@@ -1378,6 +1400,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "veryGood": MessageLookupByLibrary.simpleMessage("جيد جدًا"),
     "view": MessageLookupByLibrary.simpleMessage("عرض"),
     "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+    "viewTermPlan": MessageLookupByLibrary.simpleMessage("عرض خطة الترم"),
     "visibleToCustomers": MessageLookupByLibrary.simpleMessage("ظاهر للعملاء"),
     "waitingForCorrection": MessageLookupByLibrary.simpleMessage(
       "بانتظار التصحيح",

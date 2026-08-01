@@ -917,5 +917,18 @@
     "supervisorAssignedNotification": "You were assigned as supervisor for third grade",
     "weeklyEvaluationAddedNotification": "A weekly evaluation was added for class 4A",
     "newClassMessageNotification": "A new message from fourth grade",
-    "noNotifications": "No notifications"
+    "noNotifications": "No notifications",
+    "termPlan": "Term Plan",
+    "allClassrooms": "All Classrooms",
+    "noTermPlansAvailable": "No term plans available",
+    "viewTermPlan": "View Term Plan",
+    "attachment": "Attachment",
+    "unableToLoadAttachment": "Unable to load the attachment",
+    "unableToOpenAttachment": "Unable to open the attachment",
+    "closePreview": "Close preview",
+    "child": "Child",
+    "selectChild": "Select Child",
+    "studyPlanFor": "Study Plan",
+    "noChildrenAvailable": "No children available",
+    "noPlansAvailable": "No plans available"
 }

@@ -1,11 +1,15 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/plans_route_scope.dart';
+import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
@@ -377,8 +381,80 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.plans,
+        pageBuilder: (context, state) {
+          final role = SessionManager.instance.role;
+          final policy = PlansAccessPolicy.fromRole(
+            SessionManager.instance.userRole,
+          );
+          return buildTransitionPages(
+            child: MultiBlocProvider(
+              providers: [
+                if (role != UserRole.parent) ...[
+                  BlocProvider(create: (_) => getIt<GetWeeklyPlansCubit>()),
+                  BlocProvider(create: (_) => getIt<GetElapsedWeeksCubit>()),
+                ],
+                if (policy.showManagementActions) ...[
+                  BlocProvider(create: (_) => getIt<GetTermPlansCubit>()),
+                  BlocProvider(create: (_) => getIt<PlansActionsCubit>()),
+                  BlocProvider(
+                    create: (_) => getIt<GetClassroomSubjectsCubit>(),
+                  ),
+                  BlocProvider(
+                    create: (_) => getIt<GetTeacherAssignedSubjectsCubit>(),
+                  ),
+                  BlocProvider(create: (_) => getIt<ClassroomDetailsCubit>()),
+                ],
+                if (role == UserRole.teacher)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetTeacherClassroomsCubit>()..getMyClassrooms(),
+                  ),
+                if (role == UserRole.student)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetMyEnrollmentsCubit>()..getMyEnrollments(),
+                  ),
+                if (role == UserRole.supervisor)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetSupervisorClassroomsCubit>()
+                          ..getMyClassrooms(),
+                  ),
+                if (role == UserRole.admin)
+                  BlocProvider(
+                    create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
+                  ),
+                if (role == UserRole.parent)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetParentPlansCubit>()..loadParentPlans(),
+                  ),
+              ],
+              child: const PlansView(),
+            ),
+            key: state.pageKey,
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.termPlans,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.admin) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const PlansRouteScope(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<GetTermPlansCubit>()..getAllTermPlans(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
+              ),
+            ],
+            child: const TermPlansView(),
+          ),
           key: state.pageKey,
         ),
       ),

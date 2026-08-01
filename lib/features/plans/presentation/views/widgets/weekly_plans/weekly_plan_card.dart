@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_container.dart';
 import 'package:bnan_app/features/plans/presentation/models/weekly_plan_ui_model.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_day_row.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_header.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/weekly_plan_day_row.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/weekly_plan_header.dart';
 import 'package:flutter/material.dart';
 
 class WeeklyPlanCard extends StatelessWidget {

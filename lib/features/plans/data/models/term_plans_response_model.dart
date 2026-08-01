@@ -6,17 +6,27 @@ class TermPlansResponseModel {
     this.success = false,
     this.results = 0,
     this.data = const TermPlansDataModel(),
+    this.items = const [],
   });
 
   final bool success;
   final int results;
   final TermPlansDataModel data;
+  final List<TermPlansDataModel> items;
 
   factory TermPlansResponseModel.fromJson(Map<String, dynamic> json) {
+    final rawData = json['data'];
+    final items = PlanModelParser.maps(
+      rawData,
+    ).map(TermPlansDataModel.fromJson).toList();
+    final legacyData = rawData is Map
+        ? TermPlansDataModel.fromJson(Map<String, dynamic>.from(rawData))
+        : items.firstOrNull ?? const TermPlansDataModel();
     return TermPlansResponseModel(
       success: PlanModelParser.boolean(json['success']),
       results: PlanModelParser.integer(json['results']),
-      data: TermPlansDataModel.fromJson(PlanModelParser.map(json['data'])),
+      data: legacyData,
+      items: items.isEmpty && rawData is Map ? [legacyData] : items,
     );
   }
 }

@@ -37,10 +37,10 @@ class SplashCubit extends Cubit<SplashState> {
 
     if (token != null && token.isNotEmpty) {
       final role = await SessionManager.instance.getUserRole();
-      if (role == 'parent') {
-        emit(SplashNavigateToParentHome());
-        return;
-      }
+      // if (role == 'parent') {
+      //   emit(SplashNavigateToParentHome());
+      //   return;
+      // }
       final route = HomeRouteResolver.forRole(role);
       if (route == null) {
         emit(SplashNavigateToOnboarding());

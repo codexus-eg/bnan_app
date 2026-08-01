@@ -6648,6 +6648,116 @@ class S {
       args: [],
     );
   }
+
+  /// `Term Plan`
+  String get termPlan {
+    return Intl.message('Term Plan', name: 'termPlan', desc: '', args: []);
+  }
+
+  /// `All Classrooms`
+  String get allClassrooms {
+    return Intl.message(
+      'All Classrooms',
+      name: 'allClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No term plans available`
+  String get noTermPlansAvailable {
+    return Intl.message(
+      'No term plans available',
+      name: 'noTermPlansAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View Term Plan`
+  String get viewTermPlan {
+    return Intl.message(
+      'View Term Plan',
+      name: 'viewTermPlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attachment`
+  String get attachment {
+    return Intl.message('Attachment', name: 'attachment', desc: '', args: []);
+  }
+
+  /// `Unable to load the attachment`
+  String get unableToLoadAttachment {
+    return Intl.message(
+      'Unable to load the attachment',
+      name: 'unableToLoadAttachment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open the attachment`
+  String get unableToOpenAttachment {
+    return Intl.message(
+      'Unable to open the attachment',
+      name: 'unableToOpenAttachment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close preview`
+  String get closePreview {
+    return Intl.message(
+      'Close preview',
+      name: 'closePreview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Child`
+  String get child {
+    return Intl.message('Child', name: 'child', desc: '', args: []);
+  }
+
+  /// `Select Child`
+  String get selectChild {
+    return Intl.message(
+      'Select Child',
+      name: 'selectChild',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Study Plan`
+  String get studyPlanFor {
+    return Intl.message('Study Plan', name: 'studyPlanFor', desc: '', args: []);
+  }
+
+  /// `No children available`
+  String get noChildrenAvailable {
+    return Intl.message(
+      'No children available',
+      name: 'noChildrenAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No plans available`
+  String get noPlansAvailable {
+    return Intl.message(
+      'No plans available',
+      name: 'noPlansAvailable',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

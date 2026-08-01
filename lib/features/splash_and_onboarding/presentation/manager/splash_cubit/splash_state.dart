@@ -10,4 +10,4 @@ final class SplashNavigateToHome extends SplashState {
   final String route;
 }
 
-final class SplashNavigateToParentHome extends SplashState {}
+// final class SplashNavigateToParentHome extends SplashState {}

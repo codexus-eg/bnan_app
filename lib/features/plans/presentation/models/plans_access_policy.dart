@@ -1,6 +1,7 @@
 class PlansAccessPolicy {
   const PlansAccessPolicy({
     required this.showClassroomFilter,
+    required this.showChildFilter,
     required this.showWeekFilter,
     required this.showManagementActions,
     required this.canAddDailyPlan,
@@ -12,6 +13,7 @@ class PlansAccessPolicy {
   });
 
   final bool showClassroomFilter;
+  final bool showChildFilter;
   final bool showWeekFilter;
   final bool showManagementActions;
   final bool canAddDailyPlan;
@@ -25,10 +27,12 @@ class PlansAccessPolicy {
     final normalizedRole = role?.trim().toLowerCase();
     final isSupervisor = normalizedRole == 'supervisor';
     final isAdmin = normalizedRole == 'admin';
+    final isParent = normalizedRole == 'parent';
     final canManage = isSupervisor || isAdmin || normalizedRole == 'teacher';
     final hasClassrooms = canManage || normalizedRole == 'student';
     return PlansAccessPolicy(
       showClassroomFilter: hasClassrooms,
+      showChildFilter: isParent,
       showWeekFilter: true,
       showManagementActions: canManage,
       canAddDailyPlan: canManage,

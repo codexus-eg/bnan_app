@@ -6,6 +6,7 @@ abstract class HomeRouteResolver {
       'student' => Routes.home,
       'teacher' => Routes.teacherHome,
       'admin' => Routes.adminHome,
+      'parent' => Routes.parentHome,
       'supervisor' => Routes.supervisorHome,
       _ => null,
     };
