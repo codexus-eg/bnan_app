@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 

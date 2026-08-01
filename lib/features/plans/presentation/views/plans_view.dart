@@ -1,8 +1,8 @@
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_file_picker.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/utils/plans_file_picker.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/plans_view_body.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';

@@ -56,9 +56,16 @@ void main() {
     );
   });
 
-  test('uses current week when valid and week one as invalid fallback', () {
-    expect(resolveInitialPlanWeek(weeksCount: 5), 1);
-    expect(resolveInitialPlanWeek(weeksCount: 0), isNull);
+  test('uses the API current week when it is available', () {
+    expect(resolveInitialPlanWeek(weeksCount: 16, currentWeek: 5), 5);
+    expect(resolveInitialPlanWeek(weeksCount: 16, currentWeek: 1), 1);
+    expect(resolveInitialPlanWeek(weeksCount: 16, currentWeek: 16), 16);
+  });
+
+  test('falls back safely when the API current week is invalid', () {
+    expect(resolveInitialPlanWeek(weeksCount: 16, currentWeek: 0), 1);
+    expect(resolveInitialPlanWeek(weeksCount: 16, currentWeek: 20), 1);
+    expect(resolveInitialPlanWeek(weeksCount: 0, currentWeek: 1), isNull);
   });
 }
 

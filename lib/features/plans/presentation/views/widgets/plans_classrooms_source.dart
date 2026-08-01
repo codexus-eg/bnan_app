@@ -2,7 +2,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_state.dart';
 import 'package:bnan_app/features/plans/presentation/mappers/plan_classroom_options_mapper.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_classrooms_ui_state.dart';
+import 'package:bnan_app/features/plans/presentation/states/plans_classrooms_ui_state.dart';
 import 'package:bnan_app/features/student_groups/presentation/manager/get_my_enrollments/get_my_enrollments_cubit.dart';
 import 'package:bnan_app/features/student_groups/presentation/manager/get_my_enrollments/get_my_enrollments_state.dart';
 import 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_cubit.dart';

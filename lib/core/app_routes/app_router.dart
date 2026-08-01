@@ -8,7 +8,7 @@ import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';

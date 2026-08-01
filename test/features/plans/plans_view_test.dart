@@ -22,12 +22,17 @@ import 'package:bnan_app/features/plans/data/models/term_plans_response_model.da
 import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/repo/plans_repo.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_cubit.dart';
+import 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_term_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_file_picker.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/utils/plans_file_picker.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/plan_date_field.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/add_daily_plan_dialog.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/plans_management_body.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/plans_parent_body.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/plans_view_body.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/upload_study_plan_dialog.dart';
 import 'package:bnan_app/features/student_groups/data/models/student_enrollment_model.dart';
 import 'package:bnan_app/features/student_groups/data/repo/student_groups_repo/student_groups_repo.dart';
@@ -57,6 +62,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('PlansViewBody chooses management flow for non-parent roles', (
+    tester,
+  ) async {
+    await _pumpPlans(tester, 'teacher');
+
+    expect(find.byType(PlansManagementBody), findsOneWidget);
+    expect(find.byType(PlansParentBody), findsNothing);
+  });
+
+  testWidgets('PlansViewBody chooses parent flow for the parent role', (
+    tester,
+  ) async {
+    await _pumpParentPlansBody(tester);
+
+    expect(find.byType(PlansParentBody), findsOneWidget);
+    expect(find.byType(PlansManagementBody), findsNothing);
+  });
+
   testWidgets('initial classrooms state keeps filters and table visible', (
     tester,
   ) async {
@@ -70,7 +93,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('week one loading keeps the same table structure', (
+  testWidgets('current week loading keeps the same table structure', (
     tester,
   ) async {
     final repo = _PlansRepo()
@@ -78,14 +101,25 @@ void main() {
           Completer<Either<Failure, WeeklyPlansResponseModel>>();
     await _pumpPlans(tester, 'teacher', plansRepo: repo, settle: false);
 
-    expect(repo.weekRequests.single, ('classroom', 1));
-    expect(find.text('Week 1'), findsOneWidget);
+    expect(repo.weekRequests.single, ('classroom', 2));
+    expect(find.text('Week 2'), findsOneWidget);
     expect(find.byType(CustomTableContainer), findsOneWidget);
     expect(find.text('Sunday'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
-    repo.weeklyCompleter!.complete(Right(_weeklyResponse(1)));
+    repo.weeklyCompleter!.complete(Right(_weeklyResponse(2)));
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('no available weeks does not load a weekly plan', (tester) async {
+    final repo = _PlansRepo()
+      ..elapsedResponses['classroom'] = const ElapsedWeeksResponseModel();
+
+    await _pumpPlans(tester, 'teacher', plansRepo: repo);
+
+    expect(repo.weekRequests, isEmpty);
+    expect(find.text('Week 1'), findsNothing);
+    expect(find.text('Week 2'), findsNothing);
   });
 
   testWidgets('empty week keeps headers and day rows visible', (tester) async {
@@ -127,7 +161,7 @@ void main() {
     expect(find.byType(CustomTableContainer), findsOneWidget);
     expect(find.byType(CustomTableRow), findsWidgets);
     expect(find.byType(CustomTableCell), findsWidgets);
-    expect(find.text('Week 1'), findsOneWidget);
+    expect(find.text('Week 2'), findsOneWidget);
     expect(find.text('Thursday'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
@@ -177,7 +211,7 @@ void main() {
     final repo = _PlansRepo();
     await _pumpPlans(tester, 'teacher', plansRepo: repo);
 
-    await tester.tap(find.text('Week 1'));
+    await tester.tap(find.text('Week 2'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Week 3').last);
     await tester.pumpAndSettle();
@@ -186,10 +220,16 @@ void main() {
     expect(find.text('Week 3'), findsOneWidget);
   });
 
-  testWidgets('changing classroom resets the selected week to one', (
-    tester,
-  ) async {
-    final repo = _PlansRepo();
+  testWidgets('changing classroom uses its current week once', (tester) async {
+    final repo = _PlansRepo()
+      ..elapsedResponses.addAll({
+        'classroom-a': const ElapsedWeeksResponseModel(
+          data: ElapsedWeeksDataModel(weeksCount: 4, currentWeek: 2),
+        ),
+        'classroom-b': const ElapsedWeeksResponseModel(
+          data: ElapsedWeeksDataModel(weeksCount: 4, currentWeek: 3),
+        ),
+      });
     await _pumpPlans(
       tester,
       'teacher',
@@ -205,8 +245,9 @@ void main() {
     await tester.tap(find.text('Class B').last);
     await tester.pumpAndSettle();
 
-    expect(repo.weekRequests.last, ('classroom-b', 1));
-    expect(find.text('Week 1'), findsOneWidget);
+    expect(repo.elapsedRequests, ['classroom-a', 'classroom-b']);
+    expect(repo.weekRequests, [('classroom-a', 2), ('classroom-b', 3)]);
+    expect(find.text('Week 3'), findsOneWidget);
   });
 
   testWidgets('daily plan success refreshes the same classroom and week', (
@@ -458,13 +499,35 @@ void main() {
   });
 }
 
+Future<void> _pumpParentPlansBody(WidgetTester tester) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      home: BlocProvider(
+        create: (_) => GetParentPlansCubit(_PlansRepo()),
+        child: PlansViewBody(
+          policy: PlansAccessPolicy.fromRole('parent'),
+          showEmpty: false,
+        ),
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
 String _dateOnly(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
 
 Future<void> _selectWeek(WidgetTester tester, int week) async {
-  await tester.tap(find.text('Week 1'));
+  await tester.tap(find.text('Week 2'));
   await tester.pumpAndSettle();
   await tester.tap(find.text('Week $week').last);
   await tester.pumpAndSettle();
@@ -725,6 +788,7 @@ class _ClassroomsRepo implements ClassroomsRepo {
 
 class _PlansRepo implements PlansRepo {
   final List<(String, int)> weekRequests = [];
+  final List<String> elapsedRequests = [];
   final List<(String, String, CreateDailyPlanRequestModel)> dailyRequests = [];
   final List<(String, String, String)> uploadRequests = [];
   final List<String> termRequests = [];
@@ -737,8 +801,9 @@ class _PlansRepo implements PlansRepo {
   Completer<Either<Failure, CreatePlanResponseModel>>? uploadCompleter;
   Completer<Either<Failure, CreatePlanResponseModel>>? dailyCompleter;
   Completer<Either<Failure, WeeklyPlansResponseModel>>? weeklyCompleter;
+  final Map<String, ElapsedWeeksResponseModel> elapsedResponses = {};
   Either<Failure, WeeklyPlansResponseModel> weeklyResult = Right(
-    _weeklyResponse(1),
+    _weeklyResponse(2),
   );
 
   @override
@@ -755,10 +820,12 @@ class _PlansRepo implements PlansRepo {
   Future<Either<Failure, ElapsedWeeksResponseModel>> getElapsedWeeks({
     required String classroomId,
   }) async {
-    return const Right(
-      ElapsedWeeksResponseModel(
-        data: ElapsedWeeksDataModel(weeksCount: 3, currentWeek: 2),
-      ),
+    elapsedRequests.add(classroomId);
+    return Right(
+      elapsedResponses[classroomId] ??
+          const ElapsedWeeksResponseModel(
+            data: ElapsedWeeksDataModel(weeksCount: 3, currentWeek: 2),
+          ),
     );
   }
 

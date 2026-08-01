@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/helper/app_dialogs.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_file_picker.dart';
+import 'package:bnan_app/features/plans/presentation/utils/plans_file_picker.dart';
 import 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';

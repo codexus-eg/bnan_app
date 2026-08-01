@@ -34,6 +34,31 @@ void main() {
     await cubit.close();
   });
 
+  test('elapsed weeks cubit ignores an older classroom response', () async {
+    final repo = FakePlansRepo();
+    final first = Completer<Either<Failure, ElapsedWeeksResponseModel>>();
+    final second = Completer<Either<Failure, ElapsedWeeksResponseModel>>();
+    repo.elapsed.addAll([first, second]);
+    final cubit = GetElapsedWeeksCubit(repo);
+
+    final oldRequest = cubit.getElapsedWeeks(classroomId: 'a');
+    final newRequest = cubit.getElapsedWeeks(classroomId: 'b');
+    second.complete(
+      const Right(
+        ElapsedWeeksResponseModel(
+          data: ElapsedWeeksDataModel(weeksCount: 4, currentWeek: 3),
+        ),
+      ),
+    );
+    await newRequest;
+    first.complete(Left(Failure(message: 'stale')));
+    await oldRequest;
+
+    final state = cubit.state as GetElapsedWeeksSuccess;
+    expect(state.response.data.currentWeek, 3);
+    await cubit.close();
+  });
+
   test('term and elapsed cubits emit success', () async {
     final repo = FakePlansRepo();
     repo.term.add(Completer()..complete(const Right(TermPlansResponseModel())));

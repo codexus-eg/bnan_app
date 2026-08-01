@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/helper/validator_form_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown_form_field.dart';
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/plan_date_field.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';

@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
