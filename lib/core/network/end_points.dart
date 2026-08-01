@@ -42,6 +42,8 @@ abstract class EndPoints {
   static const String enrollments = '/enrollments';
   // Packages
   static const String packages = '/packages';
+  static const String parentChildren = '/parents/my-childs';
+  static const String parentChildrenPlans = '/parent/children-plans';
 
   static String updateCurriculum(String curriculumId) {
     return '$curriculums/$curriculumId';
@@ -278,6 +280,8 @@ abstract class EndPoints {
   static String termPlans(String classroomId) {
     return '$classrooms/$classroomId/plans/term';
   }
+
+  static const String allTermPlans = '/classrooms/plans/term';
 
   static String elapsedPlanWeeks(String classroomId) {
     return '$classrooms/$classroomId/plans/weeks/elapsed';

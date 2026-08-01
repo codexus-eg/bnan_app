@@ -3,10 +3,17 @@ import 'package:bnan_app/features/plans/data/models/create_daily_plan_request_mo
 import 'package:bnan_app/features/plans/data/models/create_plan_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/elapsed_weeks_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/term_plans_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_children_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_children_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class PlansRepo {
+  Future<Either<Failure, ParentChildrenResponseModel>> getParentChildren();
+
+  Future<Either<Failure, ParentChildrenPlansResponseModel>>
+  getParentChildrenPlans();
+
   Future<Either<Failure, CreatePlanResponseModel>> uploadTermPlan({
     required String classroomId,
     required String subjectId,
@@ -26,6 +33,10 @@ abstract class PlansRepo {
 
   Future<Either<Failure, TermPlansResponseModel>> getTermPlans({
     required String classroomId,
+  });
+
+  Future<Either<Failure, TermPlansResponseModel>> getAllTermPlans({
+    String? classroomId,
   });
 
   Future<Either<Failure, ElapsedWeeksResponseModel>> getElapsedWeeks({

@@ -1,7 +1,7 @@
 import 'package:bnan_app/features/plans/presentation/models/plan_day_ui_model.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_subject_ui_model.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_day_row.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plan_header.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/weekly_plan_day_row.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/weekly_plan_header.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

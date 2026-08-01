@@ -1,8 +1,11 @@
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_state.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_term_plans_cubit.dart';
+import 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_cubit.dart';
+import 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_state.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/mappers/elapsed_weeks_selection_mapper.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
@@ -14,7 +17,7 @@ import 'package:bnan_app/features/plans/presentation/views/widgets/plans_classro
 import 'package:bnan_app/features/plans/presentation/views/widgets/plans_dialogs.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/plans_filters_section.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/plans_header_actions.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/plans_weekly_content.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/plans_weekly_content.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_classroom_subjects/get_classroom_subjects_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
@@ -49,6 +52,7 @@ class _PlansViewBodyState extends State<PlansViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.policy.showChildFilter) return _buildParentPlans();
     final elapsedState = context.watch<GetElapsedWeeksCubit>().state;
     return BlocListener<GetElapsedWeeksCubit, GetElapsedWeeksState>(
       listener: _onElapsedState,
@@ -82,6 +86,85 @@ class _PlansViewBodyState extends State<PlansViewBody> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildParentPlans() {
+    return BlocBuilder<GetParentPlansCubit, GetParentPlansState>(
+      builder: (context, state) {
+        final cubit = context.read<GetParentPlansCubit>();
+        if (state is GetParentPlansSuccess && cubit.children.isEmpty) {
+          return NoDataWidget(title: S.of(context).noChildrenAvailable);
+        }
+        return ListView(
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
+          children: [
+            if (cubit.children.isNotEmpty) ...[
+              _parentFilters(cubit),
+              const SizedBox(height: 16),
+            ],
+            _parentContent(cubit, state),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _parentFilters(GetParentPlansCubit cubit) {
+    final s = S.of(context);
+    return PlansFiltersSection(
+      policy: widget.policy,
+      classroom: null,
+      classrooms: const [],
+      classroomHint: '',
+      week: cubit.selectedWeek,
+      weeks: cubit.availableWeeks,
+      weekHint: '${s.week} ${cubit.selectedWeek}',
+      onClassroomChanged: (_) {},
+      onWeekChanged: cubit.selectWeek,
+      children: cubit.children,
+      selectedChildId: cubit.selectedChildId,
+      childHint: s.selectChild,
+      onChildChanged: cubit.selectChild,
+    );
+  }
+
+  Widget _parentContent(GetParentPlansCubit cubit, GetParentPlansState state) {
+    final s = S.of(context);
+    final title = cubit.selectedChildName.isEmpty
+        ? s.studyPlanFor
+        : '${s.studyPlanFor} - ${cubit.selectedChildName}';
+    final classroom = cubit.selectedChildId == null
+        ? null
+        : PlanClassroomOption(
+            id: cubit.selectedChildId!,
+            name: cubit.selectedChildName,
+          );
+    if (state is GetParentPlansFailure) {
+      return PlansClassroomsFeedback(
+        message: state.message,
+        onRetry: cubit.retry,
+      );
+    }
+    if (state is GetParentPlansLoading) {
+      return PlansWeeklyContent(
+        classroom: classroom,
+        week: cubit.selectedWeek,
+        showEmpty: false,
+        externalLoading: true,
+        titleOverride: title,
+      );
+    }
+    final response = cubit.currentWeeklyPlan;
+    if (response == null || response.data.subjects.isEmpty) {
+      return NoDataWidget(title: s.noPlansAvailable);
+    }
+    return PlansWeeklyContent(
+      classroom: classroom,
+      week: cubit.selectedWeek,
+      showEmpty: false,
+      externalResponse: response,
+      titleOverride: title,
     );
   }
 

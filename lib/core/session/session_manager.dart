@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/cache/secure_cache_helper.dart';
 import 'package:bnan_app/core/cache/secure_cache_keys.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:flutter/foundation.dart';
 
 class SessionManager {
@@ -15,6 +16,7 @@ class SessionManager {
 
   String? get userId => _userId;
   String? get userRole => _userRole;
+  UserRole? get role => UserRole.fromValue(_userRole);
   String? get userName => _userName;
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;

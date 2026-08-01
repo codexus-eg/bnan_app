@@ -81,6 +81,8 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       MyNavigator.goTo(context, Routes.curriculumManagement);
     } else if (index == 15) {
       MyNavigator.goTo(context, Routes.lessonsManagement);
+    } else if (index == 16) {
+      MyNavigator.goTo(context, Routes.termPlans);
     }
   }
 

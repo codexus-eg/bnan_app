@@ -6,6 +6,8 @@ import 'package:bnan_app/features/plans/data/models/create_plan_response_model.d
 import 'package:bnan_app/features/plans/data/models/elapsed_weeks_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/term_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_children_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_children_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/repo/plans_repo.dart';
 import 'package:dartz/dartz.dart';
 
@@ -15,8 +17,20 @@ class FakePlansRepo implements PlansRepo {
   final elapsed = <Completer<Either<Failure, ElapsedWeeksResponseModel>>>[];
   final daily = <Completer<Either<Failure, CreatePlanResponseModel>>>[];
   final upload = <Completer<Either<Failure, CreatePlanResponseModel>>>[];
+  final parentChildren =
+      <Completer<Either<Failure, ParentChildrenResponseModel>>>[];
+  final parentPlans =
+      <Completer<Either<Failure, ParentChildrenPlansResponseModel>>>[];
   int dailyCalls = 0;
   int uploadCalls = 0;
+
+  @override
+  Future<Either<Failure, ParentChildrenResponseModel>> getParentChildren() =>
+      parentChildren.removeAt(0).future;
+
+  @override
+  Future<Either<Failure, ParentChildrenPlansResponseModel>>
+  getParentChildrenPlans() => parentPlans.removeAt(0).future;
 
   @override
   Future<Either<Failure, WeeklyPlansResponseModel>> getPlansByWeek({
@@ -27,6 +41,11 @@ class FakePlansRepo implements PlansRepo {
   @override
   Future<Either<Failure, TermPlansResponseModel>> getTermPlans({
     required String classroomId,
+  }) => term.removeAt(0).future;
+
+  @override
+  Future<Either<Failure, TermPlansResponseModel>> getAllTermPlans({
+    String? classroomId,
   }) => term.removeAt(0).future;
 
   @override

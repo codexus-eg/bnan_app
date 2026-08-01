@@ -46,5 +46,6 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.lessonsManagement,
       icon: ImageManager.calendarIcon,
     ),
+    DrawerItemModel(title: s.termPlan, icon: ImageManager.tableIcon),
   ];
 }

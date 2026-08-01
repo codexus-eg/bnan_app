@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
+import 'package:bnan_app/core/shared_widget/attachment_preview/network_attachment_preview.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -23,12 +24,15 @@ class TableCardSection extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
+          NetworkAttachmentPreview(
+            attachmentUrl: schedule.image ?? '',
+            height: 193,
+            fit: BoxFit.cover,
+            title: classroomName,
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
-            child: _image(),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.only(
@@ -78,36 +82,6 @@ class TableCardSection extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _image() {
-    final image = schedule.image;
-    final placeholder = EgyptianScheduleModel.placeholder.image!;
-
-    if (image == null || image.isEmpty) {
-      return _assetImage(placeholder);
-    }
-
-    if (!image.startsWith('http')) {
-      return _assetImage(image);
-    }
-
-    return Image.network(
-      image,
-      height: 193,
-      width: double.infinity,
-      fit: BoxFit.cover,
-      errorBuilder: (_, _, _) => _assetImage(placeholder),
-    );
-  }
-
-  Widget _assetImage(String path) {
-    return Image.asset(
-      path,
-      height: 193,
-      width: double.infinity,
-      fit: BoxFit.cover,
     );
   }
 }

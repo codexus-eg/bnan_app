@@ -3,7 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_table/custom_table_row.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_day_ui_model.dart';
-import 'package:bnan_app/features/plans/presentation/views/widgets/plan_subject_content.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/weekly_plans/plan_subject_content.dart';
 import 'package:flutter/material.dart';
 
 class WeeklyPlanDayRow extends StatelessWidget {

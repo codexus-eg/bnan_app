@@ -145,6 +145,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Algebra Course Completion Certificate",
     ),
     "all": MessageLookupByLibrary.simpleMessage("All"),
+    "allClassrooms": MessageLookupByLibrary.simpleMessage("All Classrooms"),
     "allCurriculms": MessageLookupByLibrary.simpleMessage("All Curriculms"),
     "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
     "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
@@ -184,6 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "At least 6 characters",
     ),
     "attachedFile": MessageLookupByLibrary.simpleMessage("Attached File"),
+    "attachment": MessageLookupByLibrary.simpleMessage("Attachment"),
     "attachmentFile": MessageLookupByLibrary.simpleMessage("Attachment file"),
     "attendance": MessageLookupByLibrary.simpleMessage("Attendance"),
     "attendanceRate": MessageLookupByLibrary.simpleMessage("Attendance Rate"),
@@ -255,6 +257,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Check your email ",
     ),
     "chemistry": MessageLookupByLibrary.simpleMessage("Chemistry"),
+    "child": MessageLookupByLibrary.simpleMessage("Child"),
     "children": MessageLookupByLibrary.simpleMessage("Children"),
     "chooseAccountType": MessageLookupByLibrary.simpleMessage(
       "Choose account type to continue",
@@ -303,6 +306,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please select a classroom",
     ),
     "close": MessageLookupByLibrary.simpleMessage("Close"),
+    "closePreview": MessageLookupByLibrary.simpleMessage("Close preview"),
     "completed": MessageLookupByLibrary.simpleMessage("Completed"),
     "completedSessions": MessageLookupByLibrary.simpleMessage(
       "Completed Sessions",
@@ -754,6 +758,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noAvailableClassrooms": MessageLookupByLibrary.simpleMessage(
       "No available classrooms",
     ),
+    "noChildrenAvailable": MessageLookupByLibrary.simpleMessage(
+      "No children available",
+    ),
     "noClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
       "No classrooms available",
     ),
@@ -792,6 +799,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
       "All current assignments are completed or there are no new assignments yet.",
     ),
+    "noPlansAvailable": MessageLookupByLibrary.simpleMessage(
+      "No plans available",
+    ),
     "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
       "No plans for this week",
     ),
@@ -808,6 +818,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "No subjects available for this classroom",
     ),
     "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
+    "noTermPlansAvailable": MessageLookupByLibrary.simpleMessage(
+      "No term plans available",
+    ),
     "noUnassignedStudents": MessageLookupByLibrary.simpleMessage(
       "No unassigned students",
     ),
@@ -1177,6 +1190,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Second primary grade",
     ),
     "sections": MessageLookupByLibrary.simpleMessage("Sections"),
+    "selectChild": MessageLookupByLibrary.simpleMessage("Select Child"),
     "selectClassroom": MessageLookupByLibrary.simpleMessage("Select classroom"),
     "selectClassroomFirst": MessageLookupByLibrary.simpleMessage(
       "Select classroom first",
@@ -1274,6 +1288,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Study Curricula ",
     ),
     "studyMaterials": MessageLookupByLibrary.simpleMessage("Study Materials"),
+    "studyPlanFor": MessageLookupByLibrary.simpleMessage("Study Plan"),
     "studyPlanTitlePrefix": MessageLookupByLibrary.simpleMessage(
       "Study plan for",
     ),
@@ -1373,6 +1388,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "technicalAppsLevel": MessageLookupByLibrary.simpleMessage(
       "What is your level of using Computer?",
     ),
+    "termPlan": MessageLookupByLibrary.simpleMessage("Term Plan"),
     "termPlanUploadedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Term plan uploaded successfully",
     ),
@@ -1404,6 +1420,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "typeMessage": MessageLookupByLibrary.simpleMessage("Type message....."),
     "unableToDownloadFile": MessageLookupByLibrary.simpleMessage(
       "Unable to download file",
+    ),
+    "unableToLoadAttachment": MessageLookupByLibrary.simpleMessage(
+      "Unable to load the attachment",
+    ),
+    "unableToOpenAttachment": MessageLookupByLibrary.simpleMessage(
+      "Unable to open the attachment",
     ),
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "Unable to Open the file",
@@ -1472,6 +1494,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "veryGood": MessageLookupByLibrary.simpleMessage("Very Good"),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
+    "viewTermPlan": MessageLookupByLibrary.simpleMessage("View Term Plan"),
     "visibleToCustomers": MessageLookupByLibrary.simpleMessage(
       "Visible to Customers",
     ),

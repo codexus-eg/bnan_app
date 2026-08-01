@@ -7,6 +7,8 @@ import 'package:bnan_app/features/plans/data/models/create_plan_response_model.d
 import 'package:bnan_app/features/plans/data/models/elapsed_weeks_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/term_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_children_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_children_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/repo/plans_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -15,6 +17,29 @@ class PlansRepoImpl implements PlansRepo {
   const PlansRepoImpl(this.apiConsumer);
 
   final ApiConsumer apiConsumer;
+
+  @override
+  Future<Either<Failure, ParentChildrenResponseModel>> getParentChildren() {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.parentChildren,
+        isProtected: true,
+      );
+      return ParentChildrenResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, ParentChildrenPlansResponseModel>>
+  getParentChildrenPlans() {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.parentChildrenPlans,
+        isProtected: true,
+      );
+      return ParentChildrenPlansResponseModel.fromJson(asMap(response));
+    });
+  }
 
   @override
   Future<Either<Failure, CreatePlanResponseModel>> uploadTermPlan({
@@ -73,6 +98,21 @@ class PlansRepoImpl implements PlansRepo {
     return repoGuard(() async {
       final response = await apiConsumer.get(
         EndPoints.termPlans(classroomId),
+        isProtected: true,
+      );
+      return TermPlansResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, TermPlansResponseModel>> getAllTermPlans({
+    String? classroomId,
+  }) {
+    return repoGuard(() async {
+      final id = classroomId?.trim();
+      final response = await apiConsumer.get(
+        EndPoints.allTermPlans,
+        queryParameter: {if (id != null && id.isNotEmpty) 'classroomId': id},
         isProtected: true,
       );
       return TermPlansResponseModel.fromJson(asMap(response));

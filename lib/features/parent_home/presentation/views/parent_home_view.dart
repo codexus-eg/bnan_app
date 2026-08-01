@@ -70,6 +70,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     if (index == 4) {
       MyNavigator.goTo(context, Routes.parentCertificates);
     }
+    if (index == 8) {
+      MyNavigator.goTo(context, Routes.plans);
+    }
   }
 
   Future<void> _logout() async {

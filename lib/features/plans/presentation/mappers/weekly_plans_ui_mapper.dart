@@ -31,6 +31,7 @@ WeeklyPlanUiModel mapWeeklyPlansToUiModel(
   WeeklyPlansResponseModel response, {
   required String fallbackClassroomName,
   required int fallbackWeek,
+  String? titleOverride,
 }) {
   final data = response.data;
 
@@ -42,7 +43,7 @@ WeeklyPlanUiModel mapWeeklyPlansToUiModel(
   final subjectNames = _subjectNames(data.subjects);
 
   return WeeklyPlanUiModel(
-    title: '${s.studyPlanTitlePrefix} $classroomName',
+    title: titleOverride ?? '${s.studyPlanTitlePrefix} $classroomName',
     classroomName: classroomName,
     weekName: '${s.week} $week',
     subjectNames: subjectNames,

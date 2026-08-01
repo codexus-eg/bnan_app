@@ -111,6 +111,7 @@ export 'package:bnan_app/features/plans/data/repo/plans_repo_impl.dart';
 export 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_cubit.dart';
 export 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_term_plans_cubit.dart';
 export 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
+export 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_cubit.dart';
 export 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo_impl.dart';

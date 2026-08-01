@@ -3,6 +3,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/plans/presentation/models/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
+import 'package:bnan_app/features/plans/data/models/parent_plan_child_model.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,10 @@ class PlansFiltersSection extends StatelessWidget {
     required this.weekHint,
     required this.onClassroomChanged,
     required this.onWeekChanged,
+    this.children = const [],
+    this.selectedChildId,
+    this.childHint,
+    this.onChildChanged,
   });
 
   final PlansAccessPolicy policy;
@@ -29,6 +34,10 @@ class PlansFiltersSection extends StatelessWidget {
   final String weekHint;
   final ValueChanged<PlanClassroomOption?> onClassroomChanged;
   final ValueChanged<int?> onWeekChanged;
+  final List<ParentPlanChildModel> children;
+  final String? selectedChildId;
+  final String? childHint;
+  final ValueChanged<String?>? onChildChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +72,19 @@ class PlansFiltersSection extends StatelessWidget {
   List<Widget> _fields(BuildContext context) {
     final s = S.of(context);
     return [
+      if (policy.showChildFilter)
+        CustomDropdown(
+          label: s.child,
+          value: selectedChildId,
+          hint: childHint ?? s.selectChild,
+          items: children.map((item) => item.id).toList(),
+          itemsLabels: {for (final item in children) item.id: item.fullName},
+          valueStyle: StylesManager.styleRegular16(
+            context,
+          ).copyWith(color: ColorManager.mainColor14),
+          backgroundColor: ColorManager.white,
+          onChanged: onChildChanged,
+        ),
       if (policy.showClassroomFilter)
         CustomDropdown(
           label: s.classRoom,

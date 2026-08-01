@@ -916,5 +916,18 @@
     "supervisorAssignedNotification": "تم تعيينك مشرفًا في الصف الثالث",
     "weeklyEvaluationAddedNotification": "أضيف تقييم أسبوعي لفصل 4أ",
     "newClassMessageNotification": "رسالة جديدة من الصف الرابع",
-    "noNotifications": "لا توجد إشعارات"
+    "noNotifications": "لا توجد إشعارات",
+    "termPlan": "خطة الترم",
+    "allClassrooms": "كل الفصول",
+    "noTermPlansAvailable": "لا توجد خطط ترم متاحة",
+    "viewTermPlan": "عرض خطة الترم",
+    "attachment": "المرفق",
+    "unableToLoadAttachment": "تعذر تحميل المرفق",
+    "unableToOpenAttachment": "تعذر فتح المرفق",
+    "closePreview": "إغلاق المعاينة",
+    "child": "الابن",
+    "selectChild": "اختر الابن",
+    "studyPlanFor": "الخطة الدراسية",
+    "noChildrenAvailable": "لا يوجد أبناء متاحون",
+    "noPlansAvailable": "لا توجد خطط متاحة"
 }
