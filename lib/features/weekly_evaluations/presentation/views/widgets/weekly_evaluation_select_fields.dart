@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluation_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_dummy_data.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -17,43 +18,73 @@ class WeeklyEvaluationSelectFields extends StatefulWidget {
 class _WeeklyEvaluationSelectFieldsState
     extends State<WeeklyEvaluationSelectFields> {
   String? selectedStudent;
-  String? selectedClass;
+  String? selectedClassroom;
+  String? selectedSubject;
 
   @override
   void initState() {
     super.initState();
     selectedStudent = widget.evaluation?.studentName;
-    selectedClass = widget.evaluation?.classLabel;
+    selectedClassroom = widget.evaluation?.classLabel;
   }
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-
     return Column(
       children: [
-        CustomDropdown(
+        _dropdown(
           label: s.student,
-          backgroundColor: ColorManager.white,
-          isRequired: true,
           value: selectedStudent,
-          items: const ['شهد أحمد', 'محمد جمال'],
-          onChanged: (value) {
-            setState(() => selectedStudent = value);
-          },
+          hint: s.selectStudent,
+          items: _students,
+          onChanged: (value) => setState(() => selectedStudent = value),
         ),
         const SizedBox(height: 16),
-        CustomDropdown(
+        _dropdown(
           label: s.classRoom,
-          isRequired: true,
-          value: selectedClass,
+          value: selectedClassroom,
           hint: s.chooseClassRoom,
-          items: const ['الصف الثالث الإعدادي', 'الصف الثاني الإعدادي'],
-          onChanged: (value) {
-            setState(() => selectedClass = value);
-          },
+          items: _classrooms,
+          onChanged: (value) => setState(() => selectedClassroom = value),
+        ),
+        const SizedBox(height: 16),
+        _dropdown(
+          label: s.subject,
+          value: selectedSubject,
+          hint: s.chooseSubject,
+          items: [s.arabic, s.math],
+          onChanged: (value) => setState(() => selectedSubject = value),
         ),
       ],
+    );
+  }
+
+  List<String> get _students => weeklyEvaluationsDummyData
+      .map((item) => item.studentName)
+      .toSet()
+      .toList(growable: false);
+
+  List<String> get _classrooms => weeklyEvaluationsDummyData
+      .map((item) => item.classLabel)
+      .toSet()
+      .toList(growable: false);
+
+  Widget _dropdown({
+    required String label,
+    required String? value,
+    required String hint,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return CustomDropdown(
+      label: label,
+      value: value,
+      hint: hint,
+      items: items,
+      isRequired: true,
+      backgroundColor: ColorManager.white,
+      onChanged: onChanged,
     );
   }
 }

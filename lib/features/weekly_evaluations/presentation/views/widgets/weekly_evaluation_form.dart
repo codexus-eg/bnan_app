@@ -9,33 +9,67 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-class WeeklyEvaluationForm extends StatelessWidget {
-  const WeeklyEvaluationForm({super.key, required this.title, this.evaluation});
+class WeeklyEvaluationForm extends StatefulWidget {
+  const WeeklyEvaluationForm({
+    super.key,
+    required this.title,
+    this.evaluation,
+    this.onSave,
+  });
 
   final String title;
   final WeeklyEvaluationModel? evaluation;
+  final VoidCallback? onSave;
+
+  @override
+  State<WeeklyEvaluationForm> createState() => _WeeklyEvaluationFormState();
+}
+
+class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
+  late final TextEditingController _notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _notesController = TextEditingController(text: widget.evaluation?.notes);
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomDialogHeader(title: title),
+          CustomDialogHeader(title: widget.title),
           const SizedBox(height: 16),
-          WeeklyEvaluationSelectFields(evaluation: evaluation),
+          WeeklyEvaluationSelectFields(evaluation: widget.evaluation),
           const SizedBox(height: 16),
-          WeekStartField(value: evaluation?.weekStart),
+          WeekStartField(value: widget.evaluation?.weekStart),
           const SizedBox(height: 16),
-          EvaluationScoreFields(evaluation: evaluation),
+          EvaluationScoreFields(evaluation: widget.evaluation),
           const SizedBox(height: 16),
-          CustomTextField(label: s.notesText,backgroundColor: ColorManager.white,),
+          CustomTextField(
+            label: s.notesText,
+            controller: _notesController,
+            maxLine: 3,
+            backgroundColor: ColorManager.white,
+          ),
           const SizedBox(height: 16),
-          CustomAppButton(text: s.save, onPressed: () {}),
+          CustomAppButton(text: s.save, onPressed: _save),
         ],
       ),
     );
+  }
+
+  void _save() {
+    widget.onSave?.call();
+    Navigator.of(context).pop();
   }
 }
