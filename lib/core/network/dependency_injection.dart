@@ -110,6 +110,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<SupervisorManagementRepo>(
     () => SupervisorManagementRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<WeeklyEvaluationsRepo>(
+    () => WeeklyEvaluationsRepoImpl(getIt<ApiConsumer>()),
+  );
   // Cubits
   getIt.registerFactory<GetPackagesCubit>(
     () => GetPackagesCubit(getIt<PackagesRepo>()),
@@ -345,5 +348,8 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<GetSupervisorClassroomsCubit>(
     () => GetSupervisorClassroomsCubit(getIt<SupervisorManagementRepo>()),
+  );
+  getIt.registerFactory<WeeklyEvaluationsCubit>(
+    () => WeeklyEvaluationsCubit(getIt<WeeklyEvaluationsRepo>()),
   );
 }

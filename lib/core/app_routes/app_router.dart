@@ -367,10 +367,38 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.weeklyEvaluations,
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: const WeeklyEvaluationsView(),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final role = SessionManager.instance.role;
+          return buildTransitionPages(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<WeeklyEvaluationsCubit>()
+                        ..initialize(SessionManager.instance.userRole),
+                ),
+                if (role == UserRole.teacher)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetTeacherClassroomsCubit>()..getMyClassrooms(),
+                  ),
+                if (role == UserRole.student)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetMyEnrollmentsCubit>()..getMyEnrollments(),
+                  ),
+                if (role == UserRole.supervisor)
+                  BlocProvider(
+                    create: (_) =>
+                        getIt<GetSupervisorClassroomsCubit>()
+                          ..getMyClassrooms(),
+                  ),
+              ],
+              child: const WeeklyEvaluationsView(),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.classSchedules,

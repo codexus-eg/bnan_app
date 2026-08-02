@@ -36,6 +36,8 @@ class WeeklyEvaluationTableHeader extends StatelessWidget {
           child: Text(
             headers[index],
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: StylesManager.styleBold12(
               context,
             ).copyWith(color: ColorManager.white),

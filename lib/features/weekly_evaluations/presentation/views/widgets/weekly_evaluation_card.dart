@@ -1,23 +1,20 @@
-import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_ui_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_ui_text.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_table.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class WeeklyEvaluationCard extends StatelessWidget {
   const WeeklyEvaluationCard({
     super.key,
     required this.evaluation,
-    required this.showEditAction,
-    this.onEditPressed,
+    this.headerAction,
   });
 
   final WeeklyEvaluationUiModel evaluation;
-  final bool showEditAction;
-  final VoidCallback? onEditPressed;
+  final Widget? headerAction;
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +31,19 @@ class WeeklyEvaluationCard extends StatelessWidget {
                 ).copyWith(color: ColorManager.mainColor15),
               ),
             ),
-            if (showEditAction)
-              IconButton(
-                tooltip: S.of(context).editEvaluation,
-                onPressed: onEditPressed,
-                icon: SvgPicture.asset(ImageManager.edit, width: 20),
-              ),
+            if (headerAction != null) headerAction!,
           ],
         ),
         const SizedBox(height: 8),
-        WeeklyEvaluationTable(subjects: evaluation.subjects),
+        if (evaluation.subjects.isEmpty)
+          SizedBox(
+            height: 138,
+            child: NoDataWidget(
+              title: EvaluationUiText.noStudentEvaluation(context),
+            ),
+          )
+        else
+          WeeklyEvaluationTable(subjects: evaluation.subjects),
       ],
     );
   }

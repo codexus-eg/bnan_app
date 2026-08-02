@@ -7,13 +7,11 @@ class WeeklyEvaluationUiModel {
     required this.subjects,
     this.studentName,
     this.classroomName,
-    this.weekStart,
   });
 
   final String id;
   final String title;
   final String? studentName;
   final String? classroomName;
-  final String? weekStart;
   final List<WeeklyEvaluationSubjectUiModel> subjects;
 }

@@ -1,134 +1,121 @@
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
-import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluation_model.dart';
-import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_dummy_data.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/weekly_evaluation_ui_mapper.dart';
+import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
+import 'package:bnan_app/features/plans/presentation/states/plans_classrooms_ui_state.dart';
+import 'package:bnan_app/features/plans/presentation/views/widgets/plans_classrooms_source.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_cubit.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_state.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_ui_text.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/policies/weekly_evaluations_access_policy.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/dialogs/weekly_evaluation_dialog.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_classroom_filter.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_filters.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_failure.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_header_actions.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_list.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_skeleton.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_students.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WeeklyEvaluationsBody extends StatefulWidget {
-  const WeeklyEvaluationsBody({
-    super.key,
-    required this.policy,
-    this.evaluations = weeklyEvaluationsDummyData,
-    this.isLoading = false,
-    this.errorMessage,
-    this.onRetry,
-  });
-
+class WeeklyEvaluationsBody extends StatelessWidget {
+  const WeeklyEvaluationsBody({super.key, required this.policy});
   final WeeklyEvaluationsAccessPolicy policy;
-  final List<WeeklyEvaluationModel> evaluations;
-  final bool isLoading;
-  final String? errorMessage;
-  final VoidCallback? onRetry;
-
-  @override
-  State<WeeklyEvaluationsBody> createState() => _WeeklyEvaluationsBodyState();
-}
-
-class _WeeklyEvaluationsBodyState extends State<WeeklyEvaluationsBody> {
-  String? _selectedClassroom;
-
-  List<String> get _classrooms {
-    return widget.evaluations
-        .map((item) => item.classLabel)
-        .where((item) => item.trim().isNotEmpty)
-        .toSet()
-        .toList(growable: false);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectInitialClassroom();
-  }
-
-  @override
-  void didUpdateWidget(covariant WeeklyEvaluationsBody oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!_classrooms.contains(_selectedClassroom)) _selectInitialClassroom();
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isLoading) {
-      return ListView(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
-        children: [
-          WeeklyEvaluationsSkeleton(
-            showActions: widget.policy.canAdd,
-            showFilter: widget.policy.canFilterByClassroom,
-          ),
-        ],
-      );
-    }
-    final evaluations = _visibleEvaluations;
-    final s = S.of(context);
-    final uiEvaluations = List.generate(evaluations.length, (index) {
-      final evaluation = evaluations[index];
-      final title = widget.policy.isStudent
-          ? s.weeklyEvaluation
-          : '${s.weeklyEvaluation} - ${evaluation.studentName}';
-      return mapWeeklyEvaluationToUi(s, evaluation, title: title, index: index);
-    });
+    if (policy.isParent) return _listener(context, null);
+    return PlansClassroomsSource(
+      builder: (context, state, retry) {
+        final classrooms = state is PlansClassroomsSuccess
+            ? state.classrooms
+            : null;
+        if (classrooms != null) _syncClassrooms(context, classrooms);
+        return _listener(
+          context,
+          classrooms,
+          sourceError: state is PlansClassroomsFailure ? state.message : null,
+          sourceRetry: retry,
+        );
+      },
+    );
+  }
+
+  Widget _listener(
+    BuildContext context,
+    List<PlanClassroomOption>? classrooms, {
+    String? sourceError,
+    VoidCallback? sourceRetry,
+  }) => BlocConsumer<WeeklyEvaluationsCubit, WeeklyEvaluationsState>(
+    listenWhen: (_, state) => state is EvaluationSaved,
+    listener: (context, _) =>
+        showCustomSnackBar(context, EvaluationUiText.saved(context), true),
+    builder: (context, state) =>
+        _content(context, state, classrooms, sourceError, sourceRetry),
+  );
+
+  Widget _content(
+    BuildContext context,
+    WeeklyEvaluationsState state,
+    List<PlanClassroomOption>? classrooms,
+    String? sourceError,
+    VoidCallback? sourceRetry,
+  ) {
+    final cubit = context.read<WeeklyEvaluationsCubit>();
+    final response = cubit.response;
+    final students = response == null
+        ? null
+        : WeeklyEvaluationsStudents(
+            policy: policy,
+            response: response,
+            cubit: cubit,
+          );
     return ListView(
       padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
       children: [
-        if (widget.policy.canAdd) ...[
-          WeeklyEvaluationsHeaderActions(onAddPressed: () => _showForm()),
-          const SizedBox(height: 16),
-        ],
-        if (widget.policy.canFilterByClassroom) ...[
-          WeeklyEvaluationsClassroomFilter(
-            classrooms: _classrooms,
-            selectedClassroom: _selectedClassroom,
-            onChanged: (value) => setState(() => _selectedClassroom = value),
+        if (policy.canAdd) ...[
+          WeeklyEvaluationsHeaderActions(
+            onAddPressed: students == null
+                ? null
+                : () => students.showAdd(context),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
         ],
-        if (widget.errorMessage != null)
-          WeeklyEvaluationsFailure(
-            message: widget.errorMessage!,
-            onRetry: widget.onRetry,
-          )
-        else if (uiEvaluations.isEmpty)
-          NoDataWidget(title: s.noDataAvailable)
+        WeeklyEvaluationFilters(cubit: cubit, classrooms: classrooms),
+        const SizedBox(height: 16),
+        if (sourceError != null)
+          WeeklyEvaluationsFailure(message: sourceError, onRetry: sourceRetry)
+        else if (_isInitialLoading(state) && response == null)
+          WeeklyEvaluationsSkeleton(showActions: false, showFilter: false)
+        else if (state is EvaluationsFailure)
+          WeeklyEvaluationsFailure(message: state.message, onRetry: cubit.retry)
+        else if (response == null)
+          NoDataWidget(title: _emptyTitle(context, cubit))
+        else if (response.data.students.isEmpty)
+          NoDataWidget(title: EvaluationUiText.noWeekEvaluations(context))
         else
-          WeeklyEvaluationsList(
-            evaluations: uiEvaluations,
-            showEditAction: widget.policy.canEdit,
-            onEditPressed: (index) => _showForm(evaluations[index]),
-          ),
+          students!,
       ],
     );
   }
 
-  List<WeeklyEvaluationModel> get _visibleEvaluations {
-    Iterable<WeeklyEvaluationModel> items = widget.evaluations;
-    if (widget.policy.canFilterByClassroom && _selectedClassroom != null) {
-      items = items.where((item) => item.classLabel == _selectedClassroom);
+  String _emptyTitle(BuildContext context, WeeklyEvaluationsCubit cubit) {
+    if (cubit.selectedClassroom != null && cubit.availableWeeks.isEmpty) {
+      return EvaluationUiText.noWeeks(context);
     }
-    if (widget.policy.isStudent) return items.take(1).toList(growable: false);
-    return items.toList(growable: false);
+    return S.of(context).noDataAvailable;
   }
 
-  void _selectInitialClassroom() {
-    _selectedClassroom =
-        widget.policy.canFilterByClassroom && _classrooms.isNotEmpty
-        ? _classrooms.first
-        : null;
-  }
+  bool _isInitialLoading(WeeklyEvaluationsState state) =>
+      state is WeeklyEvaluationsInitial ||
+      state is ParentChildrenLoading ||
+      state is EvaluationWeeksLoading ||
+      state is EvaluationsLoading;
 
-  Future<void> _showForm([WeeklyEvaluationModel? evaluation]) {
-    return showDialog<void>(
-      context: context,
-      builder: (_) => WeeklyEvaluationDialog(evaluation: evaluation),
-    );
-  }
+  void _syncClassrooms(
+    BuildContext context,
+    List<PlanClassroomOption> classrooms,
+  ) => WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (context.mounted) {
+      context.read<WeeklyEvaluationsCubit>().setClassrooms(classrooms);
+    }
+  });
 }

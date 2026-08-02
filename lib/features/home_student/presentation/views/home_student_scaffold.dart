@@ -28,13 +28,13 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   static const int groupsDrawerIndex = 3;
   static const int plansDrawerIndex = 6;
   static const int notificationDrawerIndex = 8;
+  static const int evaluationsDrawerIndex = 9;
 
   static const Map<int, int> drawerToBottomNavIndex = {
     0: 0,
     5: 1,
     10: 2,
     4: 3,
-    9: 1,
     11: 4,
   };
 
@@ -77,6 +77,8 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
       MyNavigator.goTo(context, Routes.plans);
     } else if (index == notificationDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
+    } else if (index == evaluationsDrawerIndex) {
+      MyNavigator.goTo(context, Routes.weeklyEvaluations);
     }
   }
 

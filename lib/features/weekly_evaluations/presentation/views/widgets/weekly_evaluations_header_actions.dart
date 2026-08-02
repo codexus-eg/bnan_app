@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 
 class WeeklyEvaluationsHeaderActions extends StatelessWidget {
   const WeeklyEvaluationsHeaderActions({super.key, this.onAddPressed});
-
   final VoidCallback? onAddPressed;
 
   @override
   Widget build(BuildContext context) {
-    return AddNewTopicButton(
-      title: S.of(context).addNewEvaluation,
-      path: ImageManager.plus,
-      onTap: onAddPressed,
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: AddNewTopicButton(
+        title: S.of(context).addNewEvaluation,
+        path: ImageManager.plus,
+        onTap: onAddPressed,
+      ),
     );
   }
 }

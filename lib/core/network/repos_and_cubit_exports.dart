@@ -116,3 +116,6 @@ export 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo_impl.dart';
 export 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_cubit.dart';
+export 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
+export 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo_impl.dart';
+export 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_cubit.dart';

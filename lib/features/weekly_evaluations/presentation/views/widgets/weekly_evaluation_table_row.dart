@@ -26,6 +26,7 @@ class WeeklyEvaluationTableRow extends StatelessWidget {
       subject.attendance,
       subject.participation,
       subject.homework,
+      subject.behavior,
       subject.notes,
     ];
     return CustomTableRow(
@@ -46,6 +47,8 @@ class WeeklyEvaluationTableRow extends StatelessWidget {
           child: Text(
             values[index].isEmpty ? '-' : values[index],
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: StylesManager.styleRegular12(context).copyWith(
               color: index == 0 ? ColorManager.white : ColorManager.mainColor15,
             ),

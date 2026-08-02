@@ -4,6 +4,7 @@ class WeeklyEvaluationsAccessPolicy {
     required this.canEdit,
     required this.canFilterByClassroom,
     required this.isStudent,
+    required this.isParent,
     required this.isReadOnly,
   });
 
@@ -11,6 +12,7 @@ class WeeklyEvaluationsAccessPolicy {
   final bool canEdit;
   final bool canFilterByClassroom;
   final bool isStudent;
+  final bool isParent;
   final bool isReadOnly;
 
   factory WeeklyEvaluationsAccessPolicy.fromRole(String? role) {
@@ -18,12 +20,14 @@ class WeeklyEvaluationsAccessPolicy {
     final isSupervisor = normalizedRole == 'supervisor';
     final isTeacher = normalizedRole == 'teacher';
     final isStudent = normalizedRole == 'student';
+    final isParent = normalizedRole == 'parent';
     final canManage = isSupervisor || isTeacher;
     return WeeklyEvaluationsAccessPolicy(
       canAdd: canManage,
       canEdit: canManage,
       canFilterByClassroom: canManage,
       isStudent: isStudent,
+      isParent: isParent,
       isReadOnly: !canManage,
     );
   }

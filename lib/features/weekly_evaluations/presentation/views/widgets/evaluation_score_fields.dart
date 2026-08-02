@@ -1,67 +1,64 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluation_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_value_ui_mapper.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-class EvaluationScoreFields extends StatefulWidget {
-  const EvaluationScoreFields({super.key, this.evaluation});
-
-  final WeeklyEvaluationModel? evaluation;
-
-  @override
-  State<EvaluationScoreFields> createState() => _EvaluationScoreFieldsState();
-}
-
-class _EvaluationScoreFieldsState extends State<EvaluationScoreFields> {
-  String? attendance;
-  String? participation;
-  String? assignments;
-  String? behavior;
-
-  @override
-  void initState() {
-    super.initState();
-    attendance = widget.evaluation?.attendance;
-    participation = widget.evaluation?.participation;
-    assignments = widget.evaluation?.assignments;
-    behavior = widget.evaluation?.behavior;
-  }
+class EvaluationScoreFields extends StatelessWidget {
+  const EvaluationScoreFields({
+    super.key,
+    required this.attendance,
+    required this.participation,
+    required this.homework,
+    required this.behavior,
+    required this.onAttendanceChanged,
+    required this.onParticipationChanged,
+    required this.onHomeworkChanged,
+    required this.onBehaviorChanged,
+  });
+  final String attendance, participation, homework, behavior;
+  final ValueChanged<String> onAttendanceChanged, onParticipationChanged;
+  final ValueChanged<String> onHomeworkChanged, onBehaviorChanged;
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final scores = [s.excellent, s.veryGood, s.good];
+    const performance = [
+      'excellent',
+      'very_good',
+      'good',
+      'acceptable',
+      'weak',
+    ];
     return Column(
       children: [
         _pair(
           context,
-          _field(s.attendance, attendance, [
-            ...scores,
-            s.absent,
-          ], (value) => setState(() => attendance = value)),
+          _field(context, s.attendance, attendance, const [
+            'present',
+            'absent',
+            'late',
+            'excused',
+          ], onAttendanceChanged),
           _field(
+            context,
             s.participation,
             participation,
-            scores,
-            (value) => setState(() => participation = value),
+            performance,
+            onParticipationChanged,
           ),
         ),
         const SizedBox(height: 16),
         _pair(
           context,
           _field(
+            context,
             s.assignments,
-            assignments,
-            scores,
-            (value) => setState(() => assignments = value),
+            homework,
+            performance,
+            onHomeworkChanged,
           ),
-          _field(
-            s.behavior,
-            behavior,
-            scores,
-            (value) => setState(() => behavior = value),
-          ),
+          _field(context, s.behavior, behavior, performance, onBehaviorChanged),
         ),
       ],
     );
@@ -85,20 +82,26 @@ class _EvaluationScoreFieldsState extends State<EvaluationScoreFields> {
   }
 
   Widget _field(
+    BuildContext context,
     String label,
-    String? value,
+    String value,
     List<String> options,
-    ValueChanged<String?> onChanged,
+    ValueChanged<String> onChanged,
   ) {
-    final items = {if (value != null) value, ...options}.toList();
     return CustomDropdown(
       label: label,
       value: value,
       hint: label,
-      items: items,
+      items: options,
+      itemsLabels: {
+        for (final option in options)
+          option: evaluationValueLabel(context, option),
+      },
       isRequired: true,
       backgroundColor: ColorManager.white,
-      onChanged: onChanged,
+      onChanged: (value) {
+        if (value != null) onChanged(value);
+      },
     );
   }
 }
