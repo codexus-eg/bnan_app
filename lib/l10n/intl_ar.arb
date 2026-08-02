@@ -945,5 +945,6 @@
     "evaluationWeak": "ضعيف",
     "evaluationEvaluated": "تم التقييم",
     "evaluationNotEvaluated": "لم يتم التقييم",
-    "noSubjectsAvailableForTeacherStudent": "لا توجد مواد متاحة لك لهذا الطالب"
+    "noSubjectsAvailableForTeacherStudent": "لا توجد مواد متاحة لك لهذا الطالب",
+    "noChildrenLinked": "لا يوجد أبناء مرتبطون بهذا الحساب"
 }

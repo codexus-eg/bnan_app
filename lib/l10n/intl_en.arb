@@ -946,5 +946,6 @@
     "evaluationWeak": "Weak",
     "evaluationEvaluated": "Evaluated",
     "evaluationNotEvaluated": "Not evaluated",
-    "noSubjectsAvailableForTeacherStudent": "No subjects are available to you for this student"
+    "noSubjectsAvailableForTeacherStudent": "No subjects are available to you for this student",
+    "noChildrenLinked": "No children are linked to this account"
 }

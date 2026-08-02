@@ -6,13 +6,19 @@ class ParentHomeBody extends StatelessWidget {
     super.key,
     required this.index,
     required this.onMenuTap,
+    required this.onShowAllChildren,
   });
 
   final int index;
   final VoidCallback onMenuTap;
+  final VoidCallback onShowAllChildren;
 
   @override
   Widget build(BuildContext context) {
-    return ParentHomeContent(index: index, onMenuTap: onMenuTap);
+    return ParentHomeContent(
+      index: index,
+      onMenuTap: onMenuTap,
+      onShowAllChildren: onShowAllChildren,
+    );
   }
 }

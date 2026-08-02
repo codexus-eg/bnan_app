@@ -7,9 +7,14 @@ import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_
 import 'package:flutter/material.dart';
 
 class ParentHomePage extends StatelessWidget {
-  const ParentHomePage({super.key, required this.onMenuTap});
+  const ParentHomePage({
+    super.key,
+    required this.onMenuTap,
+    required this.onShowAllChildren,
+  });
 
   final VoidCallback onMenuTap;
+  final VoidCallback onShowAllChildren;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +33,12 @@ class ParentHomePage extends StatelessWidget {
             child: SingleChildScrollView(
               padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 24),
               child: Column(
-                children: const [
-                  ParentHomeStatsSection(),
-                  SizedBox(height: 16),
-                  ParentSubscriptionAlertCard(),
-                  SizedBox(height: 16),
-                  ParentChildrenSection(),
+                children: [
+                  const ParentHomeStatsSection(),
+                  const SizedBox(height: 16),
+                  const ParentSubscriptionAlertCard(),
+                  const SizedBox(height: 16),
+                  ParentChildrenSection(onShowAll: onShowAllChildren),
                 ],
               ),
             ),

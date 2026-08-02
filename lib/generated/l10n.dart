@@ -6903,6 +6903,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No children are linked to this account`
+  String get noChildrenLinked {
+    return Intl.message(
+      'No children are linked to this account',
+      name: 'noChildrenLinked',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

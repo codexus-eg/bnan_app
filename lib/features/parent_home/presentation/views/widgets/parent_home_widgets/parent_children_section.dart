@@ -1,12 +1,13 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
-import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_child_card.dart';
+import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_preview_cards.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ParentChildrenSection extends StatelessWidget {
-  const ParentChildrenSection({super.key});
+  const ParentChildrenSection({super.key, required this.onShowAll});
+
+  final VoidCallback onShowAll;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class ParentChildrenSection extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () {},
+              onTap: onShowAll,
               behavior: HitTestBehavior.opaque,
               child: Text(
                 s.parentShowAll,
@@ -36,9 +37,7 @@ class ParentChildrenSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        ParentChildCard(parentChildModel: children[0]),
-        const SizedBox(height: 8),
-        ParentChildCard(parentChildModel: children[1]),
+        const ParentChildrenPreviewCards(),
       ],
     );
   }

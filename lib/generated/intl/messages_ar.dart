@@ -713,6 +713,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noChildrenAvailable": MessageLookupByLibrary.simpleMessage(
       "لا يوجد أبناء متاحون",
     ),
+    "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد أبناء مرتبطون بهذا الحساب",
+    ),
     "noClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد فصول متاحة",
     ),
