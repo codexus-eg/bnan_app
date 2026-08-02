@@ -72,4 +72,22 @@ void main() {
     expect(json, isNot(contains('weekStart')));
     expect(json, isNot(contains('evaluationId')));
   });
+
+  test('upsert preserves exact backend evaluation values', () {
+    const request = UpsertEvaluationRequestModel(
+      student: 's',
+      classroom: 'c',
+      subject: 'x',
+      week: 2,
+      attendance: 'excused',
+      participation: 'very_good',
+      homework: '-',
+      behavior: 'acceptable',
+    );
+
+    expect(request.toJson(), containsPair('attendance', 'excused'));
+    expect(request.toJson(), containsPair('participation', 'very_good'));
+    expect(request.toJson(), containsPair('homework', '-'));
+    expect(request.toJson(), containsPair('behavior', 'acceptable'));
+  });
 }

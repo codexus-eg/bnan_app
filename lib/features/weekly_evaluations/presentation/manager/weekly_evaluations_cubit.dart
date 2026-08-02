@@ -1,15 +1,19 @@
 import 'package:bnan_app/features/plans/data/models/parent_plan_child_model.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
+import 'package:bnan_app/features/teacher_assignment/data/repo/assignments_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/upsert_evaluation_request_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_subject_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
-  WeeklyEvaluationsCubit(this.repo) : super(WeeklyEvaluationsInitial());
+  WeeklyEvaluationsCubit(this.repo, this.assignmentsRepo)
+    : super(WeeklyEvaluationsInitial());
 
   final WeeklyEvaluationsRepo repo;
+  final AssignmentsRepo assignmentsRepo;
   String role = '';
   PlanClassroomOption? selectedClassroom;
   List<int> availableWeeks = const [];
@@ -18,11 +22,16 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   WeeklyEvaluationsResponseModel? response;
   List<ParentPlanChildModel> children = const [];
   String? selectedChildId;
+  List<WeeklyEvaluationStudentModel> formStudents = const [];
+  List<EvaluationSubjectModel> formSubjects = const [];
+  String? formClassroomId, formStudentId;
   int _requestId = 0;
+  int _formRequestId = 0;
   String _classroomsSignature = '';
   bool _isSaving = false;
 
   bool get canManage => role == 'teacher' || role == 'supervisor';
+  bool get isTeacher => role == 'teacher';
   bool get isParent => role == 'parent';
   bool get hasMultipleChildren => children.length > 1;
 
@@ -112,6 +121,82 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
     }
   }
 
+  void clearFormOptions() {
+    _formRequestId++;
+    formClassroomId = null;
+    formStudentId = null;
+    formStudents = const [];
+    formSubjects = const [];
+  }
+
+  Future<void> loadFormStudents(String classroomId) async {
+    final requestId = ++_formRequestId;
+    formClassroomId = classroomId;
+    formStudentId = null;
+    formStudents = const [];
+    formSubjects = const [];
+    emit(EvaluationStudentsLoading());
+    final result = await repo.getClassroomStudents(classroomId);
+    if (!_isCurrentForm(requestId, classroomId)) return;
+    result.fold((failure) => emit(EvaluationOptionsFailure(failure.message)), (
+      students,
+    ) {
+      formStudents = students;
+      emit(EvaluationStudentsLoaded());
+    });
+  }
+
+  Future<void> loadFormSubjects({
+    required String classroomId,
+    required String studentId,
+  }) async {
+    final requestId = ++_formRequestId;
+    formClassroomId = classroomId;
+    formStudentId = studentId;
+    formSubjects = const [];
+    emit(EvaluationSubjectsLoading());
+    final result = await repo.getStudentSubjects(
+      classroomId: classroomId,
+      studentId: studentId,
+    );
+    if (!_isCurrentForm(requestId, classroomId, studentId)) return;
+    List<EvaluationSubjectModel>? available;
+    result.fold(
+      (failure) => emit(EvaluationOptionsFailure(failure.message)),
+      (subjects) => available = subjects,
+    );
+    if (available == null) return;
+    if (!isTeacher) {
+      formSubjects = available!;
+      emit(EvaluationSubjectsLoaded());
+      return;
+    }
+    final assignedResult = await assignmentsRepo.getTeacherAssignedSubjects(
+      classroomId: classroomId,
+    );
+    if (!_isCurrentForm(requestId, classroomId, studentId)) return;
+    assignedResult.fold(
+      (failure) => emit(EvaluationOptionsFailure(failure.message)),
+      (response) {
+        final assignedIds = response.data.subjects
+            .map((item) => item.id)
+            .toSet();
+        formSubjects = available!
+            .where((subject) => assignedIds.contains(subject.id))
+            .toList(growable: false);
+        emit(EvaluationSubjectsLoaded());
+      },
+    );
+  }
+
+  Future<void> retryFormOptions() async {
+    final classroomId = formClassroomId;
+    if (classroomId == null) return;
+    final studentId = formStudentId;
+    if (studentId == null) return loadFormStudents(classroomId);
+    return loadFormSubjects(classroomId: classroomId, studentId: studentId);
+  }
+
   Future<void> _loadChildren() async {
     final requestId = ++_requestId;
     emit(ParentChildrenLoading());
@@ -194,4 +279,10 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   }
 
   bool _isCurrent(int requestId) => !isClosed && requestId == _requestId;
+
+  bool _isCurrentForm(int requestId, String classroomId, [String? studentId]) =>
+      !isClosed &&
+      requestId == _formRequestId &&
+      formClassroomId == classroomId &&
+      formStudentId == studentId;
 }

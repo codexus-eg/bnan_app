@@ -29,6 +29,52 @@ void main() {
     expect(api.query, {'week': 3, 'studentId': 'child-2'});
   });
 
+  test('roster studentId is used in the student subjects endpoint', () async {
+    api.response = {
+      'success': true,
+      'results': 1,
+      'data': [
+        {
+          'studentId': '6a65349c2796ce31be8b9d7c',
+          'fullName': 'Gulf Test Student',
+          'attendance': null,
+        },
+      ],
+    };
+    final students = await repo.getClassroomStudents(
+      '6a65398115f5e200601af614',
+    );
+    final student = students.getOrElse(() => const []).single;
+    expect(student.id, '6a65349c2796ce31be8b9d7c');
+
+    api.response = {
+      'success': true,
+      'data': [
+        {'id': 'subject', 'name': 'Math'},
+      ],
+    };
+    final subjects = await repo.getStudentSubjects(
+      classroomId: '6a65398115f5e200601af614',
+      studentId: student.id,
+    );
+    expect(
+      api.path,
+      '/classrooms/6a65398115f5e200601af614/students/'
+      '6a65349c2796ce31be8b9d7c/subjects',
+    );
+    expect(subjects.getOrElse(() => const []).single.id, 'subject');
+  });
+
+  test('empty studentId returns a failure without sending a request', () async {
+    final result = await repo.getStudentSubjects(
+      classroomId: 'classroom',
+      studentId: '  ',
+    );
+
+    expect(result.isLeft(), isTrue);
+    expect(api.getCalls, 0);
+  });
+
   test('PUT sends only request contract fields', () async {
     await repo.upsert(
       const UpsertEvaluationRequestModel(
@@ -54,6 +100,8 @@ class _FakeApi implements ApiConsumer {
   String path = '';
   Map<String, dynamic>? query;
   Object? data;
+  Object response = {'success': true, 'data': <String, dynamic>{}};
+  int getCalls = 0;
 
   @override
   Future<dynamic> get(
@@ -62,9 +110,10 @@ class _FakeApi implements ApiConsumer {
     Map<String, dynamic>? queryParameter,
     bool isProtected = false,
   }) async {
+    getCalls++;
     this.path = path;
     query = queryParameter;
-    return {'success': true, 'data': <String, dynamic>{}};
+    return response;
   }
 
   @override

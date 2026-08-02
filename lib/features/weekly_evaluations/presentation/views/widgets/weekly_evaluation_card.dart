@@ -2,8 +2,8 @@ import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_ui_model.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_ui_text.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_table.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class WeeklyEvaluationCard extends StatelessWidget {
@@ -37,10 +37,8 @@ class WeeklyEvaluationCard extends StatelessWidget {
         const SizedBox(height: 8),
         if (evaluation.subjects.isEmpty)
           SizedBox(
-            height: 138,
-            child: NoDataWidget(
-              title: EvaluationUiText.noStudentEvaluation(context),
-            ),
+            height: 210,
+            child: NoDataWidget(title: S.of(context).noEvaluationForStudent),
           )
         else
           WeeklyEvaluationTable(subjects: evaluation.subjects),

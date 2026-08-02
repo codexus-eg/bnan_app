@@ -53,7 +53,7 @@ class CustomDropdown extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Container(
-          height: 40,
+          constraints: const BoxConstraints(minHeight: 40),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: isDisabled
@@ -116,16 +116,13 @@ class _DropdownDisplayedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        isDisabled ? ColorManager.greyA8AF : ColorManager.mainColor15;
+    final color = isDisabled ? ColorManager.greyA8AF : ColorManager.mainColor15;
 
     return Row(
       children: [
         Icon(
           Icons.keyboard_arrow_down,
-          color: isDisabled
-              ? ColorManager.greyA8AF
-              : ColorManager.greyA8AF,
+          color: isDisabled ? ColorManager.greyA8AF : ColorManager.greyA8AF,
           size: 22,
         ),
         const SizedBox(width: 8),
@@ -133,11 +130,10 @@ class _DropdownDisplayedText extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.start,
-            style: valueStyle ??
+            style:
+                valueStyle ??
                 hintStyle ??
-                StylesManager.styleRegular16(context).copyWith(
-                  color: color,
-                ),
+                StylesManager.styleRegular16(context).copyWith(color: color),
           ),
         ),
       ],

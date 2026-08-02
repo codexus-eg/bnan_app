@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_value_ui_mapper.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_options.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -16,35 +17,29 @@ class EvaluationScoreFields extends StatelessWidget {
     required this.onHomeworkChanged,
     required this.onBehaviorChanged,
   });
-  final String attendance, participation, homework, behavior;
+  final String? attendance, participation, homework, behavior;
   final ValueChanged<String> onAttendanceChanged, onParticipationChanged;
   final ValueChanged<String> onHomeworkChanged, onBehaviorChanged;
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    const performance = [
-      'excellent',
-      'very_good',
-      'good',
-      'acceptable',
-      'weak',
-    ];
     return Column(
       children: [
         _pair(
           context,
-          _field(context, s.attendance, attendance, const [
-            'present',
-            'absent',
-            'late',
-            'excused',
-          ], onAttendanceChanged),
+          _field(
+            context,
+            s.attendance,
+            attendance,
+            EvaluationOptions.attendance,
+            onAttendanceChanged,
+          ),
           _field(
             context,
             s.participation,
             participation,
-            performance,
+            EvaluationOptions.performance,
             onParticipationChanged,
           ),
         ),
@@ -53,12 +48,18 @@ class EvaluationScoreFields extends StatelessWidget {
           context,
           _field(
             context,
-            s.assignments,
+            s.homeworkLabel,
             homework,
-            performance,
+            EvaluationOptions.performance,
             onHomeworkChanged,
           ),
-          _field(context, s.behavior, behavior, performance, onBehaviorChanged),
+          _field(
+            context,
+            s.behavior,
+            behavior,
+            EvaluationOptions.performance,
+            onBehaviorChanged,
+          ),
         ),
       ],
     );
@@ -84,7 +85,7 @@ class EvaluationScoreFields extends StatelessWidget {
   Widget _field(
     BuildContext context,
     String label,
-    String value,
+    String? value,
     List<String> options,
     ValueChanged<String> onChanged,
   ) {

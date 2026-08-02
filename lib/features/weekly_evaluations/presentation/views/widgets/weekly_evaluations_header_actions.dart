@@ -10,7 +10,7 @@ class WeeklyEvaluationsHeaderActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: AlignmentDirectional.centerStart,
+      alignment: AlignmentDirectional.centerEnd,
       child: AddNewTopicButton(
         title: S.of(context).addNewEvaluation,
         path: ImageManager.plus,

@@ -75,7 +75,9 @@ class WeeklyEvaluationStudentModel {
 
   factory WeeklyEvaluationStudentModel.fromJson(Map<String, dynamic> json) =>
       WeeklyEvaluationStudentModel(
-        id: EvaluationJsonParser.id(json),
+        id: EvaluationJsonParser.string(
+          json['studentId'] ?? json['id'] ?? json['_id'],
+        ),
         fullName: EvaluationJsonParser.string(json['fullName'] ?? json['name']),
         avatar: EvaluationJsonParser.string(json['avatar']),
         subjects: EvaluationJsonParser.maps(

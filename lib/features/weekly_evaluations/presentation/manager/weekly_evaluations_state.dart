@@ -27,3 +27,16 @@ final class EvaluationSaveFailure extends WeeklyEvaluationsState {
 }
 
 final class ParentChildrenLoading extends WeeklyEvaluationsState {}
+
+final class EvaluationStudentsLoading extends WeeklyEvaluationsState {}
+
+final class EvaluationStudentsLoaded extends WeeklyEvaluationsState {}
+
+final class EvaluationSubjectsLoading extends WeeklyEvaluationsState {}
+
+final class EvaluationSubjectsLoaded extends WeeklyEvaluationsState {}
+
+final class EvaluationOptionsFailure extends WeeklyEvaluationsState {
+  const EvaluationOptionsFailure(this.message);
+  final String message;
+}
