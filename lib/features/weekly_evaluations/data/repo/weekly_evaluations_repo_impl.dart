@@ -4,6 +4,8 @@ import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repo_guard.dart';
 import 'package:bnan_app/features/plans/data/models/parent_children_response_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/elapsed_evaluation_weeks_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_json_parser.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_subject_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/upsert_evaluation_request_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
@@ -62,6 +64,40 @@ class WeeklyEvaluationsRepoImpl implements WeeklyEvaluationsRepo {
         );
         return ParentChildrenResponseModel.fromJson(asMap(response));
       });
+
+  @override
+  Future<Either<Failure, List<WeeklyEvaluationStudentModel>>>
+  getClassroomStudents(String classroomId) => repoGuard(() async {
+    final response = await apiConsumer.get(
+      EndPoints.classroomStudents(classroomId),
+      isProtected: true,
+    );
+    return EvaluationJsonParser.maps(
+      asMap(response)['data'],
+    ).map(WeeklyEvaluationStudentModel.fromJson).toList();
+  });
+
+  @override
+  Future<Either<Failure, List<EvaluationSubjectModel>>> getStudentSubjects({
+    required String classroomId,
+    required String studentId,
+  }) {
+    final id = studentId.trim();
+    if (id.isEmpty) {
+      return Future.value(
+        Left(Failure(message: 'Student ID is required to load subjects')),
+      );
+    }
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.studentSubjects(classroomId: classroomId, studentId: id),
+        isProtected: true,
+      );
+      return EvaluationJsonParser.maps(
+        asMap(response)['data'],
+      ).map(EvaluationSubjectModel.fromJson).toList();
+    });
+  }
 
   @override
   Future<Either<Failure, Unit>> upsert(UpsertEvaluationRequestModel request) =>

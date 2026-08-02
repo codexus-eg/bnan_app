@@ -930,5 +930,21 @@
     "selectChild": "Select Child",
     "studyPlanFor": "Study Plan",
     "noChildrenAvailable": "No children available",
-    "noPlansAvailable": "No plans available"
+    "noPlansAvailable": "No plans available",
+    "weeklyEvaluationStudentTitle": "Student: {name}",
+    "noEvaluationWeeksAvailable": "No evaluation weeks are available",
+    "noWeeklyEvaluations": "No weekly evaluations",
+    "noEvaluationForStudent": "No evaluation for this student",
+    "noSubjectsForStudent": "No subjects are available for this student",
+    "positiveWeekRequired": "Enter a positive whole week number",
+    "evaluationSavedSuccessfully": "Evaluation saved successfully",
+    "evaluationPresent": "Present",
+    "evaluationAbsent": "Absent",
+    "evaluationLate": "Late",
+    "evaluationExcused": "Excused",
+    "evaluationAcceptable": "Acceptable",
+    "evaluationWeak": "Weak",
+    "evaluationEvaluated": "Evaluated",
+    "evaluationNotEvaluated": "Not evaluated",
+    "noSubjectsAvailableForTeacherStudent": "No subjects are available to you for this student"
 }

@@ -350,6 +350,9 @@ void setupServiceLocator() {
     () => GetSupervisorClassroomsCubit(getIt<SupervisorManagementRepo>()),
   );
   getIt.registerFactory<WeeklyEvaluationsCubit>(
-    () => WeeklyEvaluationsCubit(getIt<WeeklyEvaluationsRepo>()),
+    () => WeeklyEvaluationsCubit(
+      getIt<WeeklyEvaluationsRepo>(),
+      getIt<AssignmentsRepo>(),
+    ),
   );
 }

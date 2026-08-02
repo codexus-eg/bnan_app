@@ -1,13 +1,13 @@
-import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
+import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_editor_context.dart';
 
 class EvaluationDialogContext {
   const EvaluationDialogContext.add({
-    required this.students,
-    required this.classroomId,
-    required this.classroomName,
     required this.week,
-  }) : editor = null;
+    required this.classrooms,
+  }) : editor = null,
+       classroomId = '',
+       classroomName = '';
 
   factory EvaluationDialogContext.edit(EvaluationEditorContext editor) =>
       EvaluationDialogContext._(
@@ -15,6 +15,7 @@ class EvaluationDialogContext {
         classroomId: editor.classroomId,
         classroomName: editor.classroomName,
         week: editor.week,
+        classrooms: const [],
       );
 
   const EvaluationDialogContext._({
@@ -22,11 +23,12 @@ class EvaluationDialogContext {
     required this.classroomId,
     required this.classroomName,
     required this.week,
-  }) : students = const [];
+    required this.classrooms,
+  });
 
   final EvaluationEditorContext? editor;
-  final List<WeeklyEvaluationStudentModel> students;
   final String classroomId, classroomName;
   final int week;
+  final List<PlanClassroomOption> classrooms;
   bool get isEdit => editor != null;
 }

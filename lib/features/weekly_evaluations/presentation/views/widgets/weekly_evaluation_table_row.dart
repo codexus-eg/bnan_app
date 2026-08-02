@@ -30,31 +30,36 @@ class WeeklyEvaluationTableRow extends StatelessWidget {
       subject.notes,
     ];
     return CustomTableRow(
-      children: List.generate(
-        values.length,
-        (index) => CustomTableCell(
+      equalHeight: true,
+      children: List.generate(values.length, (index) {
+        final isNotes = index == values.length - 1;
+        return CustomTableCell(
           width: index == 0
               ? subjectWidth
-              : index == values.length - 1
+              : isNotes
               ? notesWidth
               : valueWidth,
-          height: 42,
+          height: null,
+          constraints: const BoxConstraints(minHeight: 42),
           margin: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 8),
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 6),
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: 6,
+            vertical: 8,
+          ),
           backgroundColor: index == 0
               ? ColorManager.mainColor14
               : ColorManager.white,
           child: Text(
             values[index].isEmpty ? '-' : values[index],
             textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: isNotes ? null : 1,
+            overflow: isNotes ? null : TextOverflow.ellipsis,
             style: StylesManager.styleRegular12(context).copyWith(
               color: index == 0 ? ColorManager.white : ColorManager.mainColor15,
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

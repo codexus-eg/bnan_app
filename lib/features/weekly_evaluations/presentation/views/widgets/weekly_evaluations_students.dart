@@ -1,7 +1,7 @@
 import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_subject_model.dart';
+import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_cubit.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_ui_text.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/weekly_evaluation_ui_mapper.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_dialog_context.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_editor_context.dart';
@@ -9,6 +9,7 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/policies/weekl
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/dialogs/weekly_evaluation_dialog.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_card.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_subject_actions.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,7 +35,7 @@ class WeeklyEvaluationsStudents extends StatelessWidget {
           student,
           classroomName: data.classroomName,
           week: cubit.selectedWeek ?? data.week,
-          title: EvaluationUiText.studentTitle(context, student.fullName),
+          title: S.of(context).weeklyEvaluationStudentTitle(student.fullName),
           index: index,
         );
         return Padding(
@@ -54,20 +55,13 @@ class WeeklyEvaluationsStudents extends StatelessWidget {
     );
   }
 
-  void showAdd(BuildContext context) {
+  void showAdd(BuildContext context, List<PlanClassroomOption> classrooms) {
     final classroom = cubit.selectedClassroom;
     final week = cubit.selectedWeek;
     if (classroom == null || week == null) return;
     _showDialog(
       context,
-      EvaluationDialogContext.add(
-        students: response.data.students,
-        classroomId: classroom.id,
-        classroomName: response.data.classroomName.isEmpty
-            ? classroom.name
-            : response.data.classroomName,
-        week: week,
-      ),
+      EvaluationDialogContext.add(week: week, classrooms: classrooms),
     );
   }
 

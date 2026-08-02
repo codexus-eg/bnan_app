@@ -929,5 +929,21 @@
     "selectChild": "اختر الابن",
     "studyPlanFor": "الخطة الدراسية",
     "noChildrenAvailable": "لا يوجد أبناء متاحون",
-    "noPlansAvailable": "لا توجد خطط متاحة"
+    "noPlansAvailable": "لا توجد خطط متاحة",
+    "weeklyEvaluationStudentTitle": "الطالب/ة: {name}",
+    "noEvaluationWeeksAvailable": "لا توجد أسابيع متاحة للتقييم",
+    "noWeeklyEvaluations": "لا توجد تقييمات أسبوعية",
+    "noEvaluationForStudent": "لا يوجد تقييم لهذا الطالب",
+    "noSubjectsForStudent": "لا توجد مواد متاحة لهذا الطالب",
+    "positiveWeekRequired": "أدخل رقم أسبوع صحيحًا موجبًا",
+    "evaluationSavedSuccessfully": "تم حفظ التقييم بنجاح",
+    "evaluationPresent": "حاضر",
+    "evaluationAbsent": "غائب",
+    "evaluationLate": "متأخر",
+    "evaluationExcused": "غياب بعذر",
+    "evaluationAcceptable": "مقبول",
+    "evaluationWeak": "ضعيف",
+    "evaluationEvaluated": "تم التقييم",
+    "evaluationNotEvaluated": "لم يتم التقييم",
+    "noSubjectsAvailableForTeacherStudent": "لا توجد مواد متاحة لك لهذا الطالب"
 }
