@@ -107,6 +107,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<PlansRepo>(
     () => PlansRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<ParentHomeRepo>(
+    () => ParentHomeRepoImpl(getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<SupervisorManagementRepo>(
     () => SupervisorManagementRepoImpl(getIt<ApiConsumer>()),
   );
@@ -345,6 +348,9 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<PlansActionsCubit>(
     () => PlansActionsCubit(getIt<PlansRepo>()),
+  );
+  getIt.registerFactory<GetParentChildrenCubit>(
+    () => GetParentChildrenCubit(getIt<ParentHomeRepo>()),
   );
   getIt.registerFactory<GetSupervisorClassroomsCubit>(
     () => GetSupervisorClassroomsCubit(getIt<SupervisorManagementRepo>()),

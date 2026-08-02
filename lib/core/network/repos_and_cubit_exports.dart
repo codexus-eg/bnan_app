@@ -113,6 +113,9 @@ export 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_
 export 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
 export 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_cubit.dart';
 export 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
+export 'package:bnan_app/features/parent_home/data/repo/parent_home_repo.dart';
+export 'package:bnan_app/features/parent_home/data/repo/parent_home_repo_impl.dart';
+export 'package:bnan_app/features/parent_home/presentation/manager/get_parent_children/get_parent_children_cubit.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo_impl.dart';
 export 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_cubit.dart';

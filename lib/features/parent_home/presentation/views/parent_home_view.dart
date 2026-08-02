@@ -117,7 +117,11 @@ class _ParentHomeViewState extends State<ParentHomeView> {
                   onLogoutTap: _logout,
                 )
               : null,
-          body: ParentHomeBody(index: currentIndex, onMenuTap: _openDrawer),
+          body: ParentHomeBody(
+            index: currentIndex,
+            onMenuTap: _openDrawer,
+            onShowAllChildren: () => _changeIndex(1),
+          ),
           bottomNavigationBar: ParentBottomNavBar(
             currentIndex: currentIndex,
             onTap: _changeIndex,

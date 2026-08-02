@@ -7,11 +7,20 @@ import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dar
 import 'package:flutter/material.dart';
 
 class ParentChildCard extends StatelessWidget {
-  const ParentChildCard({super.key,required this.parentChildModel});
-final ParentChildModel parentChildModel;
+  const ParentChildCard({super.key, required this.child});
+
+  final ParentChildModel child;
 
   @override
   Widget build(BuildContext context) {
+    final fullName = child.fullName.trim().isEmpty ? '-' : child.fullName;
+    final classroomName = child.classroom?.name.trim();
+    final gradeName = child.classroom?.grade?.name.trim();
+    final classroom = classroomName == null || classroomName.isEmpty
+        ? '-'
+        : classroomName;
+    final grade = gradeName == null || gradeName.isEmpty ? '-' : gradeName;
+
     return CustomDetailsWidgetBackground(
       child: Row(
         children: [
@@ -22,14 +31,18 @@ final ParentChildModel parentChildModel;
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                 parentChildModel.name,
+                  fullName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: StylesManager.styleBold16(
                     context,
                   ).copyWith(color: ColorManager.mainColor14),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  parentChildModel.grade,
+                  '$classroom - $grade',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: StylesManager.styleRegular14(
                     context,
                   ).copyWith(color: ColorManager.greyA8AF),
