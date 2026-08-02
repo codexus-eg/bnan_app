@@ -13,7 +13,7 @@ class WeeklyEvaluationTable extends StatelessWidget {
   static const double subjectWidth = 112;
   static const double valueWidth = 88;
   static const double notesWidth = 144;
-  static const double minimumWidth = 560;
+  static const double minimumWidth = 656;
 
   final List<WeeklyEvaluationSubjectUiModel> subjects;
 
@@ -25,6 +25,7 @@ class WeeklyEvaluationTable extends StatelessWidget {
       s.attendance,
       s.participation,
       s.assignments,
+      s.behavior,
       s.notesText,
     ];
     return CustomTableContainer(

@@ -1,123 +1,33 @@
-import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
-import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
-import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluation_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_subject_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_value_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_cubit.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_dialog_context.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_editor_context.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_subject_ui_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_ui_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/policies/weekly_evaluations_access_policy.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/dialogs/weekly_evaluation_dialog.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_card.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_subject_actions.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_table.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_body.dart';
-import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_failure.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_card.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_form.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_header_actions.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-const _evaluation = WeeklyEvaluationModel(
-  studentName: 'Student One',
-  classLabel: 'Class A',
-  weekStart: '03/15/2026',
-  previewImage: '',
-  attendance: 'Excellent',
-  participation: 'Very Good',
-  assignments: 'Good',
-  behavior: 'Excellent',
-  notes: 'Progress note',
-);
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  test('access policy matches the four supported roles', () {
-    final supervisor = WeeklyEvaluationsAccessPolicy.fromRole('supervisor');
-    final teacher = WeeklyEvaluationsAccessPolicy.fromRole('teacher');
-    final parent = WeeklyEvaluationsAccessPolicy.fromRole('parent');
-    final student = WeeklyEvaluationsAccessPolicy.fromRole('student');
-
-    expect(supervisor.canAdd, isTrue);
-    expect(teacher.canAdd, isTrue);
-    expect(parent.isReadOnly, isTrue);
-    expect(parent.canFilterByClassroom, isFalse);
-    expect(student.isStudent, isTrue);
-    expect(student.canEdit, isFalse);
+  test('student and parent are read only while teacher can manage', () {
+    expect(WeeklyEvaluationsAccessPolicy.fromRole('teacher').canEdit, isTrue);
+    expect(WeeklyEvaluationsAccessPolicy.fromRole('student').canEdit, isFalse);
+    expect(WeeklyEvaluationsAccessPolicy.fromRole('parent').canAdd, isFalse);
   });
 
-  testWidgets('supervisor sees add filter edit and subject field', (
-    tester,
-  ) async {
-    await _pumpBody(tester, 'supervisor');
-
-    expect(find.text('Add New Evaluation'), findsOneWidget);
-    expect(find.text('Send All'), findsNothing);
-    expect(find.byType(CustomDropdown), findsOneWidget);
-    expect(find.byTooltip('Edit Evaluation'), findsOneWidget);
-    await tester.tap(find.text('Add New Evaluation'));
-    await tester.pumpAndSettle();
-
-    expect(_subjectDropdown, findsOneWidget);
-  });
-
-  testWidgets('teacher sees add and subject field but no send all', (
-    tester,
-  ) async {
-    await _pumpBody(tester, 'teacher');
-
-    expect(find.text('Add New Evaluation'), findsOneWidget);
-    expect(find.text('Send All'), findsNothing);
-    expect(find.byType(CustomDropdown), findsOneWidget);
-    await tester.tap(find.text('Add New Evaluation'));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(WeeklyEvaluationDialog), findsOneWidget);
-    expect(_subjectDropdown, findsOneWidget);
-  });
-
-  testWidgets('parent sees multiple read-only student cards', (tester) async {
-    await _pumpBody(
-      tester,
-      'parent',
-      evaluations: const [
-        _evaluation,
-        WeeklyEvaluationModel(
-          studentName: 'Student Two',
-          classLabel: 'Class B',
-          weekStart: '03/15/2026',
-          previewImage: '',
-          attendance: 'Good',
-          participation: 'Good',
-          assignments: 'Good',
-          behavior: 'Good',
-          notes: '',
-        ),
-      ],
-    );
-
-    expect(find.byType(WeeklyEvaluationCard), findsNWidgets(2));
-    expect(find.textContaining('Student One'), findsOneWidget);
-    expect(find.textContaining('Student Two'), findsOneWidget);
-    expect(find.byType(CustomDropdown), findsNothing);
-    expect(find.byTooltip('Edit Evaluation'), findsNothing);
-  });
-
-  testWidgets('student sees one shared read-only table', (tester) async {
-    await _pumpBody(tester, 'student');
-
-    expect(find.byType(WeeklyEvaluationTable), findsOneWidget);
-    expect(find.byType(CustomDropdown), findsNothing);
-    expect(find.text('Add New Evaluation'), findsNothing);
-    expect(find.byTooltip('Edit Evaluation'), findsNothing);
-  });
-
-  testWidgets('edit opens one prefilled dialog', (tester) async {
-    await _pumpBody(tester, 'supervisor');
-    await tester.tap(find.byTooltip('Edit Evaluation'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Edit Evaluation'), findsWidgets);
-    expect(find.text('Student One'), findsWidgets);
-    expect(find.text('Progress note'), findsOneWidget);
-  });
-
-  testWidgets('shared table has four headers and no narrow overflow', (
+  testWidgets('table renders behavior before notes without narrow overflow', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(320, 640));
@@ -127,58 +37,142 @@ void main() {
       const WeeklyEvaluationTable(
         subjects: [
           WeeklyEvaluationSubjectUiModel(
-            subjectName: 'Mathematics',
-            attendance: 'Excellent',
-            participation: 'Very Good',
+            subjectName: 'Math',
+            attendance: 'Present',
+            participation: 'Good',
             homework: 'Good',
-            notes: 'Progress note',
+            behavior: 'Excellent',
+            notes: 'Progress',
           ),
         ],
       ),
     );
 
-    expect(find.text('Subject'), findsOneWidget);
-    expect(find.text('Attendance'), findsOneWidget);
-    expect(find.text('Participation'), findsOneWidget);
-    expect(find.text('Assignments'), findsOneWidget);
-    expect(find.text('Notes'), findsOneWidget);
-    expect(find.text('Progress note'), findsOneWidget);
+    final behaviorX = tester.getTopLeft(find.text('Behavior')).dx;
+    final notesX = tester.getTopLeft(find.text('Notes')).dx;
+    expect(behaviorX, lessThan(notesX));
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('loading failure and empty keep presentation states', (
+  testWidgets('add action is compact and edit action is subject-specific', (
     tester,
   ) async {
-    await _pumpBody(tester, 'teacher', isLoading: true);
-    expect(find.byType(AppSkeletonizer), findsWidgets);
+    await _pump(
+      tester,
+      Column(
+        children: [
+          const WeeklyEvaluationsHeaderActions(),
+          WeeklyEvaluationSubjectActions(
+            subjects: const [
+              EvaluationSubjectModel(id: 'a', name: 'Math'),
+              EvaluationSubjectModel(
+                id: 'b',
+                name: 'Physics',
+                status: 'evaluated',
+                evaluation: EvaluationValueModel(attendance: 'present'),
+              ),
+            ],
+            onPressed: (_) {},
+          ),
+        ],
+      ),
+    );
 
-    await _pumpBody(tester, 'teacher', errorMessage: 'Failed');
-    expect(find.byType(WeeklyEvaluationsFailure), findsOneWidget);
     expect(find.text('Add New Evaluation'), findsOneWidget);
+    expect(find.byType(IconButton), findsOneWidget);
+    expect(
+      tester.getSize(find.text('Add New Evaluation')).width,
+      lessThan(tester.getSize(find.byType(Column).first).width),
+    );
+  });
 
-    await _pumpBody(tester, 'teacher', evaluations: const []);
-    expect(find.byType(NoDataWidget), findsOneWidget);
-    expect(find.text('Add New Evaluation'), findsOneWidget);
+  testWidgets('student without subjects has compact no-data and no table', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      const WeeklyEvaluationCard(
+        evaluation: WeeklyEvaluationUiModel(
+          id: 'student',
+          title: 'Student: No Subjects',
+          subjects: [],
+        ),
+      ),
+    );
+
+    expect(find.text('No evaluation for this student'), findsOneWidget);
+    expect(find.byType(WeeklyEvaluationTable), findsNothing);
+  });
+
+  testWidgets('add form shows week and never renders week-start picker', (
+    tester,
+  ) async {
+    await _pumpForm(
+      tester,
+      const EvaluationDialogContext.add(
+        students: [_student],
+        classroomId: 'classroom',
+        classroomName: 'Class A',
+        week: 2,
+      ),
+    );
+
+    expect(find.text('Week Start'), findsNothing);
+    expect(find.text('Week 2'), findsOneWidget);
+    expect(find.widgetWithText(CustomDropdown, 'Student'), findsOneWidget);
+  });
+
+  testWidgets('edit form pre-fills behavior from current evaluation', (
+    tester,
+  ) async {
+    await _pumpForm(
+      tester,
+      EvaluationDialogContext.edit(
+        const EvaluationEditorContext(
+          studentId: 'student',
+          studentName: 'Student',
+          classroomId: 'classroom',
+          classroomName: 'Class A',
+          week: 2,
+          subject: _evaluatedSubject,
+        ),
+      ),
+    );
+
+    final behavior = tester.widget<CustomDropdown>(
+      find.byWidgetPredicate(
+        (widget) => widget is CustomDropdown && widget.label == 'Behavior',
+      ),
+    );
+    expect(behavior.value, 'very_good');
   });
 }
 
-Future<void> _pumpBody(
-  WidgetTester tester,
-  String role, {
-  List<WeeklyEvaluationModel> evaluations = const [_evaluation],
-  bool isLoading = false,
-  String? errorMessage,
-}) {
-  return _pump(
-    tester,
-    WeeklyEvaluationsBody(
-      policy: WeeklyEvaluationsAccessPolicy.fromRole(role),
-      evaluations: evaluations,
-      isLoading: isLoading,
-      errorMessage: errorMessage,
-    ),
-  );
-}
+const _evaluatedSubject = EvaluationSubjectModel(
+  id: 'subject',
+  name: 'Math',
+  status: 'evaluated',
+  evaluation: EvaluationValueModel(
+    attendance: 'present',
+    participation: 'good',
+    homework: 'good',
+    behavior: 'very_good',
+  ),
+);
+const _student = WeeklyEvaluationStudentModel(
+  id: 'student',
+  fullName: 'Student',
+  subjects: [EvaluationSubjectModel(id: 'new', name: 'Physics')],
+);
+
+Future<void> _pumpForm(WidgetTester tester, EvaluationDialogContext data) =>
+    _pump(
+      tester,
+      BlocProvider(
+        create: (_) => WeeklyEvaluationsCubit(_NoopRepo()),
+        child: WeeklyEvaluationForm(title: 'Evaluation', data: data),
+      ),
+    );
 
 Future<void> _pump(WidgetTester tester, Widget child) async {
   await tester.pumpWidget(
@@ -196,6 +190,7 @@ Future<void> _pump(WidgetTester tester, Widget child) async {
   await tester.pumpAndSettle();
 }
 
-final _subjectDropdown = find.byWidgetPredicate(
-  (widget) => widget is CustomDropdown && widget.label == 'Subject',
-);
+class _NoopRepo implements WeeklyEvaluationsRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}

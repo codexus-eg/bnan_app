@@ -1,28 +1,43 @@
-import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluation_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_value_ui_mapper.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_subject_ui_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_ui_model.dart';
-import 'package:bnan_app/generated/l10n.dart';
+import 'package:flutter/widgets.dart';
 
 WeeklyEvaluationUiModel mapWeeklyEvaluationToUi(
-  S s,
-  WeeklyEvaluationModel evaluation, {
+  BuildContext context,
+  WeeklyEvaluationStudentModel student, {
+  required String classroomName,
+  required int week,
   required String title,
   required int index,
 }) {
   return WeeklyEvaluationUiModel(
-    id: '${evaluation.studentName}-${evaluation.weekStart}-$index',
+    id: '${student.id}-$week-$index',
     title: title,
-    studentName: evaluation.studentName,
-    classroomName: evaluation.classLabel,
-    weekStart: evaluation.weekStart,
-    subjects: [
-      WeeklyEvaluationSubjectUiModel(
-        subjectName: s.subject,
-        attendance: evaluation.attendance,
-        participation: evaluation.participation,
-        homework: evaluation.assignments,
-        notes: evaluation.notes,
-      ),
-    ],
+    studentName: student.fullName,
+    classroomName: classroomName,
+    subjects: student.subjects.map((subject) {
+      final value = subject.evaluation;
+      final isEvaluated = subject.isEvaluated;
+      return WeeklyEvaluationSubjectUiModel(
+        id: subject.id,
+        subjectName: subject.name,
+        attendance: isEvaluated
+            ? evaluationValueLabel(context, value!.attendance)
+            : '-',
+        participation: isEvaluated
+            ? evaluationValueLabel(context, value!.participation)
+            : '',
+        homework: isEvaluated
+            ? evaluationValueLabel(context, value!.homework)
+            : '',
+        behavior: isEvaluated
+            ? evaluationValueLabel(context, value!.behavior)
+            : '',
+        notes: isEvaluated ? value!.notes : '',
+        isEvaluated: isEvaluated,
+      );
+    }).toList(),
   );
 }
