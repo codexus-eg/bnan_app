@@ -4994,6 +4994,116 @@ class S {
     );
   }
 
+  /// `Supervisor Assignment`
+  String get supervisorAssignment {
+    return Intl.message(
+      'Supervisor Assignment',
+      name: 'supervisorAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assign to classroom`
+  String get assignToClassroom {
+    return Intl.message(
+      'Assign to classroom',
+      name: 'assignToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assign {name} to a classroom`
+  String assignSupervisorToClassroom(Object name) {
+    return Intl.message(
+      'Assign $name to a classroom',
+      name: 'assignSupervisorToClassroom',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `Classrooms`
+  String get classrooms {
+    return Intl.message('Classrooms', name: 'classrooms', desc: '', args: []);
+  }
+
+  /// `Choose a classroom`
+  String get chooseClassroom {
+    return Intl.message(
+      'Choose a classroom',
+      name: 'chooseClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to remove this supervisor from {classroomName}?`
+  String cancelSupervisorAssignmentQuestion(Object classroomName) {
+    return Intl.message(
+      'Do you want to remove this supervisor from $classroomName?',
+      name: 'cancelSupervisorAssignmentQuestion',
+      desc: '',
+      args: [classroomName],
+    );
+  }
+
+  /// `Sara Ahmed`
+  String get supervisorSaraAhmed {
+    return Intl.message(
+      'Sara Ahmed',
+      name: 'supervisorSaraAhmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Somaya`
+  String get supervisorSomaya {
+    return Intl.message('Somaya', name: 'supervisorSomaya', desc: '', args: []);
+  }
+
+  /// `Abdelfattah`
+  String get supervisorAbdelfattah {
+    return Intl.message(
+      'Abdelfattah',
+      name: 'supervisorAbdelfattah',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fourth primary grade`
+  String get fourthPrimaryClassroom {
+    return Intl.message(
+      'Fourth primary grade',
+      name: 'fourthPrimaryClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Second secondary grade`
+  String get secondSecondaryClassroom {
+    return Intl.message(
+      'Second secondary grade',
+      name: 'secondSecondaryClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Egyptian`
+  String get egyptian {
+    return Intl.message('Egyptian', name: 'egyptian', desc: '', args: []);
+  }
+
+  /// `Saudi`
+  String get saudi {
+    return Intl.message('Saudi', name: 'saudi', desc: '', args: []);
+  }
+
   /// `Add New Chapter`
   String get addNewChapter {
     return Intl.message(

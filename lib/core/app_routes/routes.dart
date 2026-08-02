@@ -45,4 +45,6 @@ abstract class Routes {
   static const String gradesManagement = '/gradesManagement';
   static const String studentClassroomAssignment =
       '/studentClassroomAssignment';
+  static const String supervisorClassRoomAssignment =
+      '/supervisorClassRoomAssignment';
 }
