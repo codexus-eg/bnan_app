@@ -723,6 +723,29 @@
     "subjectRequired": "المادة مطلوبة",
     "hourlyRateRequired": "سعر الساعة مطلوب",
     "hourlyRateMustBeNumber": "سعر الساعة يجب أن يكون رقم",
+    "supervisorAssignment": "توظيف المشرف",
+    "assignToClassroom": "توظيف في صف",
+    "assignSupervisorToClassroom": "توظيف {name} في صف",
+    "@assignSupervisorToClassroom": {
+        "placeholders": {
+            "name": {}
+        }
+    },
+    "classrooms": "الصفوف",
+    "chooseClassroom": "اختر الصف",
+    "cancelSupervisorAssignmentQuestion": "هل تريد إلغاء توظيف هذا المشرف من الصف {classroomName}؟",
+    "@cancelSupervisorAssignmentQuestion": {
+        "placeholders": {
+            "classroomName": {}
+        }
+    },
+    "supervisorSaraAhmed": "سارة أحمد",
+    "supervisorSomaya": "سمية",
+    "supervisorAbdelfattah": "عبدالفتاح",
+    "fourthPrimaryClassroom": "الصف الرابع الابتدائي",
+    "secondSecondaryClassroom": "الصف الثاني الثانوي",
+    "egyptian": "مصري",
+    "saudi": "سعودي",
     "addNewChapter": "إضافة فصل جديد",
     "editClass": "تعديل الفصل",
     "classDetails": "تفاصيل الفصل",

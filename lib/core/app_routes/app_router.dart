@@ -17,6 +17,7 @@ import 'package:bnan_app/features/student_classroom_assignment/presentation/mana
 import 'package:bnan_app/features/student_classroom_assignment/presentation/views/student_classroom_assignment_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart'
     as curriculum_management;
+import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/supervisor_classroom_assignment_view.dart';
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
@@ -651,6 +652,13 @@ GoRouter buildRouter() {
             ],
             child: const StudentClassroomAssignmentView(),
           ),
+          key: state.pageKey,
+        ),
+      ),
+       GoRoute(
+        path: Routes.supervisorClassRoomAssignment,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const SupervisorClassroomAssignmentView(),
           key: state.pageKey,
         ),
       ),

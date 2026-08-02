@@ -47,5 +47,7 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       icon: ImageManager.calendarIcon,
     ),
     DrawerItemModel(title: s.termPlan, icon: ImageManager.tableIcon),
+        DrawerItemModel(title: s.supervisorAssignment, icon: ImageManager.tableIcon),
+
   ];
 }
