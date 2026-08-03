@@ -122,3 +122,7 @@ export 'package:bnan_app/features/supervisor_management/presentation/manager/get
 export 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
 export 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo_impl.dart';
 export 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_cubit.dart';
+export 'package:bnan_app/features/supervisor_classroom_assignment/data/repo/supervisor_assignment_repo.dart';
+export 'package:bnan_app/features/supervisor_classroom_assignment/data/repo/supervisor_assignment_repo_impl.dart';
+export 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/get_supervisors/get_supervisors_cubit.dart';
+export 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/supervisor_assignment_actions/supervisor_assignment_actions_cubit.dart';

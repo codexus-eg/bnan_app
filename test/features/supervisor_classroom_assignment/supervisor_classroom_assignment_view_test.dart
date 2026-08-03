@@ -1,96 +1,126 @@
-import 'package:bnan_app/core/shared_widget/details_row_section.dart';
+import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/data/models/assign_supervisor_request_model.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/data/models/get_supervisors_response_model.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/data/models/supervisor_assignments_response_model.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/data/models/unassign_supervisor_response_model.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/data/repo/supervisor_assignment_repo.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/get_supervisors/get_supervisors_cubit.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/supervisor_assignment_actions/supervisor_assignment_actions_cubit.dart';
 import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/supervisor_classroom_assignment_view.dart';
-import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/widgets/dialogs/assign_supervisor_dialog.dart';
-import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/widgets/dialogs/cancel_supervisor_assignment_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('shows supervisor assignment title and local supervisors', (
+  testWidgets('shows real supervisors, classrooms and empty assignments', (
     tester,
   ) async {
-    await _pumpView(tester);
+    await _pumpView(tester, _FakeRepo(_success));
 
     expect(find.text('Supervisor Assignment'), findsOneWidget);
-    expect(find.text('Sara Ahmed'), findsOneWidget);
-    expect(find.text('Somaya'), findsOneWidget);
-    expect(find.text('Abdelfattah'), findsOneWidget);
-    expect(find.text('Assign to classroom'), findsNWidgets(3));
+    expect(find.text('Mahmoud Supervisor'), findsOneWidget);
+    expect(find.text('Supervisor without classes'), findsOneWidget);
+    expect(find.text('First classroom'), findsOneWidget);
+    expect(find.text('Egyptian'), findsOneWidget);
+    expect(find.text('Assign to classroom'), findsNWidgets(2));
   });
 
-  testWidgets('assign dialog has one validated classroom dropdown', (
-    tester,
-  ) async {
-    await _pumpView(tester);
-    await tester.tap(find.text('Assign to classroom').first);
-    await tester.pumpAndSettle();
-
-    expect(find.byType(AssignSupervisorDialog), findsOneWidget);
-    expect(find.text('Assign Sara Ahmed to a classroom'), findsOneWidget);
-    expect(find.byType(DropdownButton<String>), findsOneWidget);
-    expect(find.text('Hourly Rate (SAR)'), findsNothing);
-    expect(find.text('Subject'), findsNothing);
-
-    await tester.tap(find.text('Save'));
-    await tester.pump();
-    expect(find.text('This field is required'), findsOneWidget);
-    expect(find.byType(AssignSupervisorDialog), findsOneWidget);
-
-    await tester.tap(find.byType(DropdownButton<String>));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Fourth primary grade').last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
-    expect(find.byType(AssignSupervisorDialog), findsNothing);
+  testWidgets('empty success shows the no supervisors state', (tester) async {
+    await _pumpView(
+      tester,
+      _FakeRepo(const Right(GetSupervisorsResponseModel())),
+    );
+    expect(find.byType(NoDataWidget), findsOneWidget);
+    expect(find.text('No supervisors found'), findsOneWidget);
   });
 
-  testWidgets('delete icon opens cancellation dialog with classroom name', (
-    tester,
-  ) async {
-    await _pumpView(tester);
-    final row = find.ancestor(
-      of: find.text('Fourth primary grade'),
-      matching: find.byType(DetailsRowSection),
-    );
-    final deleteButton = find.descendant(
-      of: row,
-      matching: find.byType(InkWell),
-    );
-
-    await tester.tap(deleteButton);
-    await tester.pumpAndSettle();
-
-    expect(find.byType(CancelSupervisorAssignmentDialog), findsOneWidget);
-    expect(
-      find.text(
-        'Do you want to remove this supervisor from Fourth primary grade?',
-      ),
-      findsOneWidget,
-    );
-    await tester.tap(find.text('No'));
-    await tester.pumpAndSettle();
-    expect(find.byType(CancelSupervisorAssignmentDialog), findsNothing);
+  testWidgets('failure shows message and retry control', (tester) async {
+    await _pumpView(tester, _FakeRepo(Left(Failure(message: 'load failed'))));
+    expect(find.text('load failed'), findsOneWidget);
+    expect(find.byIcon(Icons.refresh), findsOneWidget);
   });
 }
 
-Future<void> _pumpView(WidgetTester tester) async {
+Future<void> _pumpView(WidgetTester tester, _FakeRepo repo) async {
   await tester.binding.setSurfaceSize(const Size(400, 900));
   addTearDown(() => tester.binding.setSurfaceSize(null));
   await tester.pumpWidget(
-    MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => GetSupervisorsCubit(repo)..getSupervisors(),
+        ),
+        BlocProvider(create: (_) => SupervisorAssignmentActionsCubit(repo)),
       ],
-      supportedLocales: S.delegate.supportedLocales,
-      home: const SupervisorClassroomAssignmentView(),
+      child: MaterialApp(
+        locale: const Locale('en'),
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        home: const SupervisorClassroomAssignmentView(),
+      ),
     ),
   );
   await tester.pumpAndSettle();
+}
+
+const _success = Right<Failure, GetSupervisorsResponseModel>(
+  GetSupervisorsResponseModel(
+    data: [
+      SupervisorModel(
+        id: 'supervisor-1',
+        user: SupervisorUserModel(fullName: 'Mahmoud Supervisor'),
+        curriculum: SupervisorCurriculumModel(id: 'c1', name: 'Egyptian'),
+        assignments: [
+          SupervisorAssignmentModel(
+            classroom: SupervisorAssignmentClassroomModel(
+              id: 'class-1',
+              name: 'First classroom',
+            ),
+            curriculum: SupervisorAssignmentCurriculumModel(name: 'Egyptian'),
+          ),
+        ],
+      ),
+      SupervisorModel(
+        id: 'supervisor-2',
+        user: SupervisorUserModel(fullName: 'Supervisor without classes'),
+      ),
+    ],
+  ),
+);
+
+class _FakeRepo implements SupervisorAssignmentRepo {
+  const _FakeRepo(this.response);
+  final Either<Failure, GetSupervisorsResponseModel> response;
+
+  @override
+  Future<Either<Failure, GetSupervisorsResponseModel>> getSupervisors() async =>
+      response;
+
+  @override
+  Future<Either<Failure, SupervisorAssignmentsResponseModel>>
+  assignSupervisorToClassrooms({
+    required String supervisorId,
+    required AssignSupervisorRequestModel request,
+  }) async => const Right(SupervisorAssignmentsResponseModel());
+
+  @override
+  Future<Either<Failure, SupervisorAssignmentsResponseModel>>
+  getSupervisorAssignments({required String supervisorId}) async =>
+      const Right(SupervisorAssignmentsResponseModel());
+
+  @override
+  Future<Either<Failure, UnassignSupervisorResponseModel>>
+  unassignSupervisorFromClassroom({
+    required String supervisorId,
+    required String classroomId,
+  }) async => const Right(UnassignSupervisorResponseModel());
 }

@@ -4924,6 +4924,16 @@ class S {
     );
   }
 
+  /// `Teacher assigned successfully`
+  String get teacherAssignedSuccessfully {
+    return Intl.message(
+      'Teacher assigned successfully',
+      name: 'teacherAssignedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Hourly Rate (SAR)`
   String get hourlyRate {
     return Intl.message(
@@ -4951,6 +4961,26 @@ class S {
       name: 'cancelAssignmentMessage',
       desc: '',
       args: [gradeName, subjectName],
+    );
+  }
+
+  /// `Do you want to remove this teacher from {classroomName}?`
+  String cancelTeacherAssignmentQuestion(Object classroomName) {
+    return Intl.message(
+      'Do you want to remove this teacher from $classroomName?',
+      name: 'cancelTeacherAssignmentQuestion',
+      desc: '',
+      args: [classroomName],
+    );
+  }
+
+  /// `Teacher assignment removed successfully`
+  String get teacherUnassignedSuccessfully {
+    return Intl.message(
+      'Teacher assignment removed successfully',
+      name: 'teacherUnassignedSuccessfully',
+      desc: '',
+      args: [],
     );
   }
 
@@ -5046,6 +5076,36 @@ class S {
       name: 'cancelSupervisorAssignmentQuestion',
       desc: '',
       args: [classroomName],
+    );
+  }
+
+  /// `No supervisors found`
+  String get noSupervisorsFound {
+    return Intl.message(
+      'No supervisors found',
+      name: 'noSupervisorsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervisor assigned successfully`
+  String get assignmentAddedSuccessfully {
+    return Intl.message(
+      'Supervisor assigned successfully',
+      name: 'assignmentAddedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervisor assignment removed successfully`
+  String get assignmentRemovedSuccessfully {
+    return Intl.message(
+      'Supervisor assignment removed successfully',
+      name: 'assignmentRemovedSuccessfully',
+      desc: '',
+      args: [],
     );
   }
 
@@ -6094,10 +6154,30 @@ class S {
     );
   }
 
-  /// `No subjects available for this classroom`
+  /// `No grades are available for this curriculum`
+  String get noGradesAvailableForCurriculum {
+    return Intl.message(
+      'No grades are available for this curriculum',
+      name: 'noGradesAvailableForCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No classrooms are available for this grade`
+  String get noClassroomsAvailableForGrade {
+    return Intl.message(
+      'No classrooms are available for this grade',
+      name: 'noClassroomsAvailableForGrade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects are available for this classroom`
   String get noSubjectsAvailableForClassroom {
     return Intl.message(
-      'No subjects available for this classroom',
+      'No subjects are available for this classroom',
       name: 'noSubjectsAvailableForClassroom',
       desc: '',
       args: [],

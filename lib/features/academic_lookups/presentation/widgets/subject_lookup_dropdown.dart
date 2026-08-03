@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -21,20 +23,41 @@ class SubjectLookupDropdown extends StatelessWidget {
             ? null
             : state.subjects.map((item) => item.id).toList();
 
-        return CustomDropdown(
-          label: S.of(context).subject,
-          hint: state.isLoadingSubjects
-              ? S.of(context).loading
-              : S.of(context).chooseSubject,
-          value: state.selectedSubject?.id,
-          items: items,
-          itemsLabels: {for (final item in state.subjects) item.id: item.name},
-          onChanged: (value) {
-            final selected = state.subjects
-                .where((item) => item.id == value)
-                .firstOrNull;
-            context.read<AcademicLookupsCubit>().selectSubject(selected);
-          },
+        final isEmpty =
+            canSelect &&
+            !state.isLoadingSubjects &&
+            state.errorMessage == null &&
+            state.subjects.isEmpty;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomDropdown(
+              label: S.of(context).subject,
+              hint: state.isLoadingSubjects
+                  ? S.of(context).loading
+                  : S.of(context).chooseSubject,
+              value: state.selectedSubject?.id,
+              items: items,
+              itemsLabels: {
+                for (final item in state.subjects) item.id: item.name,
+              },
+              onChanged: (value) {
+                final selected = state.subjects
+                    .where((item) => item.id == value)
+                    .firstOrNull;
+                context.read<AcademicLookupsCubit>().selectSubject(selected);
+              },
+            ),
+            if (isEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                S.of(context).noSubjectsAvailableForClassroom,
+                style: StylesManager.styleRegular12(
+                  context,
+                ).copyWith(color: ColorManager.red),
+              ),
+            ],
+          ],
         );
       },
     );

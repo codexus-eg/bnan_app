@@ -4,7 +4,8 @@ abstract class TeacherSubjectAssignmentActionsState {
   const TeacherSubjectAssignmentActionsState();
 }
 
-class TeacherSubjectAssignmentActionsInitial extends TeacherSubjectAssignmentActionsState {
+class TeacherSubjectAssignmentActionsInitial
+    extends TeacherSubjectAssignmentActionsState {
   const TeacherSubjectAssignmentActionsInitial();
 }
 
@@ -24,18 +25,45 @@ class AssignCurriculumsFailure extends TeacherSubjectAssignmentActionsState {
   final String message;
 }
 
-class BulkAssignTeachingAssignmentsLoading extends TeacherSubjectAssignmentActionsState {
-  const BulkAssignTeachingAssignmentsLoading();
+class AssignTeacherLoading extends TeacherSubjectAssignmentActionsState {
+  const AssignTeacherLoading();
 }
 
-class BulkAssignTeachingAssignmentsSuccess extends TeacherSubjectAssignmentActionsState {
-  const BulkAssignTeachingAssignmentsSuccess({required this.response});
+class AssignTeacherSuccess extends TeacherSubjectAssignmentActionsState {
+  const AssignTeacherSuccess({required this.response});
 
-  final BulkAssignTeachingAssignmentsResponseModel response;
+  final AssignTeacherResponseModel response;
 }
 
-class BulkAssignTeachingAssignmentsFailure extends TeacherSubjectAssignmentActionsState {
-  const BulkAssignTeachingAssignmentsFailure(this.message);
+class AssignTeacherFailure extends TeacherSubjectAssignmentActionsState {
+  const AssignTeacherFailure(this.errorMessage);
 
-  final String message;
+  final String errorMessage;
+}
+
+class UnassignTeacherLoading extends TeacherSubjectAssignmentActionsState {
+  const UnassignTeacherLoading(this.teacherId, this.classroomId);
+
+  final String teacherId;
+  final String classroomId;
+}
+
+class UnassignTeacherSuccess extends TeacherSubjectAssignmentActionsState {
+  const UnassignTeacherSuccess(this.teacherId, this.classroomId, this.response);
+
+  final String teacherId;
+  final String classroomId;
+  final UnassignTeacherResponseModel response;
+}
+
+class UnassignTeacherFailure extends TeacherSubjectAssignmentActionsState {
+  const UnassignTeacherFailure(
+    this.teacherId,
+    this.classroomId,
+    this.errorMessage,
+  );
+
+  final String teacherId;
+  final String classroomId;
+  final String errorMessage;
 }

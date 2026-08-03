@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -17,20 +19,41 @@ class GradeLookupDropdown extends StatelessWidget {
             ? null
             : state.grades.map((item) => item.id).toList();
 
-        return CustomDropdown(
-          label: S.of(context).grade,
-          hint: state.isLoadingGrades
-              ? S.of(context).loading
-              : S.of(context).grade,
-          value: state.selectedGrade?.id,
-          items: items,
-          itemsLabels: {for (final item in state.grades) item.id: item.name},
-          onChanged: (value) {
-            final selected = state.grades
-                .where((item) => item.id == value)
-                .firstOrNull;
-            context.read<AcademicLookupsCubit>().selectGrade(selected);
-          },
+        final isEmpty =
+            canSelect &&
+            !state.isLoadingGrades &&
+            state.errorMessage == null &&
+            state.grades.isEmpty;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomDropdown(
+              label: S.of(context).grade,
+              hint: state.isLoadingGrades
+                  ? S.of(context).loading
+                  : S.of(context).grade,
+              value: state.selectedGrade?.id,
+              items: items,
+              itemsLabels: {
+                for (final item in state.grades) item.id: item.name,
+              },
+              onChanged: (value) {
+                final selected = state.grades
+                    .where((item) => item.id == value)
+                    .firstOrNull;
+                context.read<AcademicLookupsCubit>().selectGrade(selected);
+              },
+            ),
+            if (isEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                S.of(context).noGradesAvailableForCurriculum,
+                style: StylesManager.styleRegular12(
+                  context,
+                ).copyWith(color: ColorManager.red),
+              ),
+            ],
+          ],
         );
       },
     );

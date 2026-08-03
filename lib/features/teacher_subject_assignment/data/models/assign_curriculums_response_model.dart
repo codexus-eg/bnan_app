@@ -24,9 +24,7 @@ class AssignCurriculumsResponseModel {
 class AssignCurriculumsData {
   final AssignCurriculumsTeacher teacher;
 
-  AssignCurriculumsData({
-    required this.teacher,
-  });
+  AssignCurriculumsData({required this.teacher});
 
   factory AssignCurriculumsData.fromJson(Map<String, dynamic> json) {
     return AssignCurriculumsData(
@@ -39,10 +37,7 @@ class AssignCurriculumsTeacher {
   final String id;
   final List<String> curriculums;
 
-  AssignCurriculumsTeacher({
-    required this.id,
-    required this.curriculums,
-  });
+  AssignCurriculumsTeacher({required this.id, required this.curriculums});
 
   factory AssignCurriculumsTeacher.fromJson(Map<String, dynamic> json) {
     return AssignCurriculumsTeacher(

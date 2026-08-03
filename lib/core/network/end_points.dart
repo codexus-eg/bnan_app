@@ -29,6 +29,7 @@ abstract class EndPoints {
   static const String subjects = '/subjects';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
+  static const String supervisors = '/supervisors';
   static const String studentMonthlyCertificates =
       '/certificates/student-monthly/';
   static const String issueMonthlyCertificates =
@@ -217,8 +218,26 @@ abstract class EndPoints {
     return '/teachers/$teacherId/curriculums/assign';
   }
 
-  static String bulkAssignTeachingAssignments(String teacherId) {
-    return '/teachers/$teacherId/teaching-assignments';
+  static String assignTeacher(String teacherId) {
+    return '/teachers/$teacherId/teaching-assignment';
+  }
+
+  static String unassignTeacherFromClassroom({
+    required String teacherId,
+    required String classroomId,
+  }) {
+    return '/teachers/$teacherId/classrooms/$classroomId/unassign';
+  }
+
+  static String supervisorAssignments(String supervisorId) {
+    return '/supervisors/$supervisorId/assignments';
+  }
+
+  static String unassignSupervisorFromClassroom({
+    required String supervisorId,
+    required String classroomId,
+  }) {
+    return '/supervisors/$supervisorId/classrooms/$classroomId/unassign';
   }
 
   static String getClassroomsByGrade(String gradeId) {
