@@ -140,6 +140,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "إضافة نقاط التميز",
     ),
     "addSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة"),
+    "subjectCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تمت إضافة المادة بنجاح",
+    ),
     "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
     "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
     "adminSupervisors": MessageLookupByLibrary.simpleMessage("مشرفين"),

@@ -22,7 +22,7 @@ class SubjectsRepoImpl implements SubjectsRepo {
 
   @override
   Future<Either<Failure, Unit>> addSubject({
-    required SubjectRequestModel request,
+    required AddSubjectRequestModel request,
   }) {
     return repoGuard(() async {
       await apiConsumer.post(
@@ -38,7 +38,7 @@ class SubjectsRepoImpl implements SubjectsRepo {
   @override
   Future<Either<Failure, Unit>> updateSubject({
     required String subjectId,
-    required SubjectRequestModel request,
+    required UpdateSubjectRequestModel request,
   }) {
     return repoGuard(() async {
       await apiConsumer.patch(

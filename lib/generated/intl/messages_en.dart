@@ -147,6 +147,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add Excellence Points",
     ),
     "addSubject": MessageLookupByLibrary.simpleMessage("Add Subject"),
+    "subjectCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Subject added successfully",
+    ),
     "addUser": MessageLookupByLibrary.simpleMessage("Add User"),
     "admin": MessageLookupByLibrary.simpleMessage("Admin"),
     "adminSupervisors": MessageLookupByLibrary.simpleMessage("Supervisors"),
@@ -304,7 +307,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Choose Curriculum Type",
     ),
     "chooseFile": MessageLookupByLibrary.simpleMessage("Choose file"),
-    "chooseGrade": MessageLookupByLibrary.simpleMessage("Choose grade"),
+    "chooseGrade": MessageLookupByLibrary.simpleMessage("Choose a grade"),
     "chooseNewCurriculum": MessageLookupByLibrary.simpleMessage(
       "Choose curriculum",
     ),

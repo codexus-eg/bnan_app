@@ -2219,10 +2219,10 @@ class S {
     return Intl.message('Congrats!', name: 'congrats', desc: '', args: []);
   }
 
-  /// `Choose grade`
+  /// `Choose a grade`
   String get chooseGrade {
     return Intl.message(
-      'Choose grade',
+      'Choose a grade',
       name: 'chooseGrade',
       desc: '',
       args: [],
@@ -5237,6 +5237,16 @@ class S {
   /// `Add Subject`
   String get addSubject {
     return Intl.message('Add Subject', name: 'addSubject', desc: '', args: []);
+  }
+
+  /// `Subject added successfully`
+  String get subjectCreatedSuccessfully {
+    return Intl.message(
+      'Subject added successfully',
+      name: 'subjectCreatedSuccessfully',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Add New Subject`

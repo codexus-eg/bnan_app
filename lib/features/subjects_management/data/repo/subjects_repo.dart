@@ -7,11 +7,11 @@ abstract class SubjectsRepo {
   Future<Either<Failure, SubjectsResponseModel>> getSubjects();
 
   Future<Either<Failure, Unit>> addSubject({
-    required SubjectRequestModel request,
+    required AddSubjectRequestModel request,
   });
 
   Future<Either<Failure, Unit>> updateSubject({
     required String subjectId,
-    required SubjectRequestModel request,
+    required UpdateSubjectRequestModel request,
   });
 }

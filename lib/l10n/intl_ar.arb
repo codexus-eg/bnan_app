@@ -761,6 +761,7 @@
     "supervisorRequired": "المشرف مطلوب",
     "subjectsManagement": "إدارة المواد الدراسية",
     "addSubject": "إضافة مادة",
+    "subjectCreatedSuccessfully": "تمت إضافة المادة بنجاح",
     "addNewSubject": "إضافة مادة جديد",
     "editSubject": "تعديل المادة",
     "subjectName": "اسم المادة",

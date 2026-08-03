@@ -16,6 +16,7 @@ class AcademicLookupDropdowns extends StatefulWidget {
     this.showGrade = true,
     this.showClassroom = true,
     this.showSubject = true,
+    this.gradeHint,
     required this.onSelectionChanged,
   });
 
@@ -23,6 +24,7 @@ class AcademicLookupDropdowns extends StatefulWidget {
   final bool showGrade;
   final bool showClassroom;
   final bool showSubject;
+  final String? gradeHint;
   final ValueChanged<AcademicLookupSelection> onSelectionChanged;
 
   @override
@@ -67,7 +69,7 @@ class _AcademicLookupDropdownsState extends State<AcademicLookupDropdowns> {
     }
 
     if (widget.showCurriculum) add(const CurriculumLookupDropdown());
-    if (widget.showGrade) add(const GradeLookupDropdown());
+    if (widget.showGrade) add(GradeLookupDropdown(hint: widget.gradeHint));
     if (widget.showClassroom) add(const ClassroomLookupDropdown());
     if (widget.showSubject) {
       add(SubjectLookupDropdown(requiresClassroom: widget.showClassroom));

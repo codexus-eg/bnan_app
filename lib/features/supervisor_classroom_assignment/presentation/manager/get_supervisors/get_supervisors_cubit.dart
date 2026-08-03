@@ -9,8 +9,10 @@ class GetSupervisorsCubit extends Cubit<GetSupervisorsState> {
   final SupervisorAssignmentRepo repo;
 
   Future<void> getSupervisors() async {
+    if (isClosed) return;
     emit(const GetSupervisorsLoading());
     final result = await repo.getSupervisors();
+    if (isClosed) return;
     result.fold(
       (failure) => emit(GetSupervisorsFailure(failure.message)),
       (response) => emit(GetSupervisorsSuccess(response.data)),

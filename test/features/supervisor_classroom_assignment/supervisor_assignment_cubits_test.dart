@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/supervisor_classroom_assignment/data/models/assign_supervisor_request_model.dart';
 import 'package:bnan_app/features/supervisor_classroom_assignment/data/models/get_supervisors_response_model.dart';
@@ -43,6 +45,26 @@ void main() {
     await cubit.getSupervisors();
     expect((cubit.state as GetSupervisorsFailure).errorMessage, 'failed');
   });
+
+  test(
+    'closing while list request is pending never emits after close',
+    () async {
+      final completer =
+          Completer<Either<Failure, GetSupervisorsResponseModel>>();
+      final repo = _FakeRepo(listCompleter: completer);
+      final cubit = GetSupervisorsCubit(repo);
+
+      final request = cubit.getSupervisors();
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state, isA<GetSupervisorsLoading>());
+      await cubit.close();
+      completer.complete(const Right(GetSupervisorsResponseModel()));
+
+      await expectLater(request, completes);
+      expect(repo.listCalls, 1);
+      expect(cubit.isClosed, isTrue);
+    },
+  );
 
   test('assign maps all classroom ids and calls repository once', () async {
     final repo = _FakeRepo();
@@ -96,6 +118,7 @@ void main() {
 class _FakeRepo implements SupervisorAssignmentRepo {
   _FakeRepo({
     Either<Failure, GetSupervisorsResponseModel>? listResponse,
+    this.listCompleter,
     this.unassignResponse = const Right(UnassignSupervisorResponseModel()),
   }) : listResponse =
            listResponse ??
@@ -104,6 +127,7 @@ class _FakeRepo implements SupervisorAssignmentRepo {
            );
 
   Either<Failure, GetSupervisorsResponseModel> listResponse;
+  final Completer<Either<Failure, GetSupervisorsResponseModel>>? listCompleter;
   final Either<Failure, UnassignSupervisorResponseModel> unassignResponse;
   int listCalls = 0;
   int assignCalls = 0;
@@ -113,6 +137,7 @@ class _FakeRepo implements SupervisorAssignmentRepo {
   @override
   Future<Either<Failure, GetSupervisorsResponseModel>> getSupervisors() async {
     listCalls++;
+    if (listCompleter != null) return listCompleter!.future;
     return listResponse;
   }
 
