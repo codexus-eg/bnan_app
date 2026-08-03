@@ -26,9 +26,7 @@ class RegisterAccountTypesList extends StatelessWidget {
           title: S.of(context).registerAsParent,
           subtitle: S.of(context).registerAsParentSubtitle,
           icon: ImageManager.parentIcon,
-          onTap: () {
-            // MyNavigator.goTo(context, Routes.curriculum);
-          },
+          onTap: () => MyNavigator.goTo(context, Routes.parentRegistration),
         ),
         const SizedBox(height: 16),
         RegisterAccountTypeCard(

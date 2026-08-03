@@ -8,6 +8,7 @@ abstract class Routes {
   static const String curriculum = '/curriculum';
   static const String subscription = '/subscription';
   static const String studentRegistration = '/student-registration';
+  static const String parentRegistration = '/parent-registration';
   static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String notification = '/notification';
