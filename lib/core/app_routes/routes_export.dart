@@ -74,3 +74,4 @@ export 'package:bnan_app/features/teacher_subject_assignment/presentation/views/
 export 'package:bnan_app/features/weekly_evaluations/presentation/views/weekly_evaluations_view.dart';
 export 'package:bnan_app/features/supervisor_home/presentation/views/supervisor_home_view.dart';
 export 'package:bnan_app/features/plans/presentation/views/plans_view.dart';
+export 'package:bnan_app/features/attendance/presentation/views/attendance_view.dart';

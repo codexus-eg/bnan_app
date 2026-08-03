@@ -984,5 +984,21 @@
     "evaluationEvaluated": "Evaluated",
     "evaluationNotEvaluated": "Not evaluated",
     "noSubjectsAvailableForTeacherStudent": "No subjects are available to you for this student",
-    "noChildrenLinked": "No children are linked to this account"
+    "noChildrenLinked": "No children are linked to this account",
+    "attendanceRegistration": "Attendance Registration",
+    "editAttendance": "Edit Attendance",
+    "selectLesson": "Select lesson",
+    "saveChanges": "Save Changes",
+    "attendanceRegisteredSuccessfully": "Attendance registered successfully",
+    "attendanceUpdatedSuccessfully": "Attendance updated successfully",
+    "selectGradeToViewAttendance": "Select a grade to view attendance data",
+    "noLessonsAvailable": "No lessons available",
+    "noStudentsInClassroom": "There are no students in this classroom",
+    "failedToLoadAttendance": "Failed to load attendance data",
+    "attendanceStudentsTitle": "Attendance for {grade}",
+    "@attendanceStudentsTitle": {
+        "placeholders": {
+            "grade": {}
+        }
+    }
 }

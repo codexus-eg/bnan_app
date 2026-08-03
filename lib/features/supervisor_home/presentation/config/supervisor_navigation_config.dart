@@ -14,7 +14,7 @@ abstract class SupervisorNavigationConfig {
         Routes.certificatesManagement,
       ),
       _item(s.messages, ImageManager.chatIcon, Routes.groups),
-      _item(s.attendance, ImageManager.teacherMeetingIcon),
+      _item(s.attendance, ImageManager.teacherMeetingIcon, Routes.attendance),
       _item(s.plansTitle, ImageManager.calendarIcon, Routes.plans),
       _item(
         s.weeklyIdealStudent,
@@ -34,7 +34,7 @@ abstract class SupervisorNavigationConfig {
         ImageManager.certificateBadgeIcon,
         Routes.certificatesManagement,
       ),
-      _item(s.attendance, ImageManager.teacherMeetingIcon),
+      _item(s.attendance, ImageManager.teacherMeetingIcon, Routes.attendance),
     ];
   }
 

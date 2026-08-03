@@ -1,8 +1,10 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/supervisor_home_view.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   testWidgets('renders at 360px and opens its shared drawer', (tester) async {
@@ -22,14 +24,14 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('disabled attendance navigation does not crash', (tester) async {
+  testWidgets('attendance navigation opens its route', (tester) async {
     await tester.pumpWidget(testApp());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Attendance').last);
     await tester.pumpAndSettle();
 
-    expect(find.byType(SupervisorHomeView), findsOneWidget);
+    expect(find.text('Attendance destination'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -48,7 +50,22 @@ void main() {
 }
 
 Widget testApp({Locale locale = const Locale('en')}) {
-  return MaterialApp(
+  final router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (_, _) => const SupervisorHomeView(
+          userName: 'A very long supervisor display name for overflow testing',
+        ),
+      ),
+      GoRoute(
+        path: Routes.attendance,
+        builder: (_, _) => const Scaffold(body: Text('Attendance destination')),
+      ),
+    ],
+  );
+  return MaterialApp.router(
+    routerConfig: router,
     locale: locale,
     localizationsDelegates: const [
       S.delegate,
@@ -57,8 +74,5 @@ Widget testApp({Locale locale = const Locale('en')}) {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: S.delegate.supportedLocales,
-    home: const SupervisorHomeView(
-      userName: 'A very long supervisor display name for overflow testing',
-    ),
   );
 }

@@ -122,11 +122,17 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<SupervisorAssignmentRepo>(
     () => SupervisorAssignmentRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<AttendanceRepo>(
+    () => AttendanceRepoImpl(getIt<ApiConsumer>()),
+  );
   // Cubits
   getIt.registerFactory<GetPackagesCubit>(
     () => GetPackagesCubit(getIt<PackagesRepo>()),
   );
   getIt.registerFactory<PackageFormCubit>(() => PackageFormCubit());
+  getIt.registerFactory<AttendanceCubit>(
+    () => AttendanceCubit(getIt<AttendanceRepo>()),
+  );
   getIt.registerFactory<curriculum_management.GetCurriculumsCubit>(
     () => curriculum_management.GetCurriculumsCubit(
       getIt<CurriculumManagementRepo>(),

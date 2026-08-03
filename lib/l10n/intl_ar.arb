@@ -983,5 +983,21 @@
     "evaluationEvaluated": "تم التقييم",
     "evaluationNotEvaluated": "لم يتم التقييم",
     "noSubjectsAvailableForTeacherStudent": "لا توجد مواد متاحة لك لهذا الطالب",
-    "noChildrenLinked": "لا يوجد أبناء مرتبطون بهذا الحساب"
+    "noChildrenLinked": "لا يوجد أبناء مرتبطون بهذا الحساب",
+    "attendanceRegistration": "تسجيل الحضور",
+    "editAttendance": "تعديل الحضور",
+    "selectLesson": "اختر الحصة",
+    "saveChanges": "حفظ التعديلات",
+    "attendanceRegisteredSuccessfully": "تم تسجيل الحضور بنجاح",
+    "attendanceUpdatedSuccessfully": "تم تعديل الحضور بنجاح",
+    "selectGradeToViewAttendance": "اختر الصف لعرض بيانات الحضور",
+    "noLessonsAvailable": "لا توجد حصص متاحة",
+    "noStudentsInClassroom": "لا يوجد طلاب في هذا الفصل",
+    "failedToLoadAttendance": "تعذر تحميل بيانات الحضور",
+    "attendanceStudentsTitle": "حضور طلاب {grade}",
+    "@attendanceStudentsTitle": {
+        "placeholders": {
+            "grade": {}
+        }
+    }
 }
