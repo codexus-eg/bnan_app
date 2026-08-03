@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -17,22 +19,41 @@ class ClassroomLookupDropdown extends StatelessWidget {
             ? null
             : state.classrooms.map((item) => item.id).toList();
 
-        return CustomDropdown(
-          label: S.of(context).classRoom,
-          hint: state.isLoadingClassrooms
-              ? S.of(context).loading
-              : S.of(context).chooseClassRoom,
-          value: state.selectedClassroom?.id,
-          items: items,
-          itemsLabels: {
-            for (final item in state.classrooms) item.id: item.name,
-          },
-          onChanged: (value) {
-            final selected = state.classrooms
-                .where((item) => item.id == value)
-                .firstOrNull;
-            context.read<AcademicLookupsCubit>().selectClassroom(selected);
-          },
+        final isEmpty =
+            canSelect &&
+            !state.isLoadingClassrooms &&
+            state.errorMessage == null &&
+            state.classrooms.isEmpty;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomDropdown(
+              label: S.of(context).classRoom,
+              hint: state.isLoadingClassrooms
+                  ? S.of(context).loading
+                  : S.of(context).chooseClassRoom,
+              value: state.selectedClassroom?.id,
+              items: items,
+              itemsLabels: {
+                for (final item in state.classrooms) item.id: item.name,
+              },
+              onChanged: (value) {
+                final selected = state.classrooms
+                    .where((item) => item.id == value)
+                    .firstOrNull;
+                context.read<AcademicLookupsCubit>().selectClassroom(selected);
+              },
+            ),
+            if (isEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                S.of(context).noClassroomsAvailableForGrade,
+                style: StylesManager.styleRegular12(
+                  context,
+                ).copyWith(color: ColorManager.red),
+              ),
+            ],
+          ],
         );
       },
     );

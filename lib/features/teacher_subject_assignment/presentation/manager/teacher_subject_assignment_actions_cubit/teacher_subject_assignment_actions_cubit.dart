@@ -1,6 +1,7 @@
 import 'package:bnan_app/features/teacher_subject_assignment/data/models/assign_curriculums_response_model.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/data/models/bulk_assign_response_model.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/data/models/teaching_assignment_request_model.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/data/models/assign_teacher_response_model.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/data/models/assign_teacher_request_model.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/data/models/unassign_teacher_response_model.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/data/repo/teacher_subject_assignment_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,53 +31,52 @@ class TeacherSubjectAssignmentActionsCubit
     );
   }
 
-  Future<void> bulkAssignTeachingAssignments({
+  Future<void> assignTeacher({
     required String teacherId,
-    required List<TeachingAssignmentRequestModel> assignments,
+    required String curriculumId,
+    required String gradeId,
+    required String classroomId,
+    required String subjectId,
+    required num pricePerSession,
   }) async {
-    emit(const BulkAssignTeachingAssignmentsLoading());
-
-    final result = await repo.bulkAssignTeachingAssignments(
+    if (state is AssignTeacherLoading) return;
+    emit(const AssignTeacherLoading());
+    final result = await repo.assignTeacher(
       teacherId: teacherId,
-      assignments: assignments,
+      request: AssignTeacherRequestModel(
+        curriculumId: curriculumId,
+        gradeId: gradeId,
+        classroomId: classroomId,
+        subjectId: subjectId,
+        pricePerSession: pricePerSession,
+      ),
     );
-
     result.fold(
-      (failure) => emit(BulkAssignTeachingAssignmentsFailure(failure.message)),
-      (response) =>
-          emit(BulkAssignTeachingAssignmentsSuccess(response: response)),
+      (failure) => emit(AssignTeacherFailure(failure.message)),
+      (response) => emit(AssignTeacherSuccess(response: response)),
     );
   }
 
-  Future<void> assignSubjectToTeacher({
+  Future<void> unassignTeacherFromClassroom({
     required String teacherId,
-    required String curriculumId,
-    required TeachingAssignmentRequestModel assignment,
+    required String classroomId,
   }) async {
-    emit(const BulkAssignTeachingAssignmentsLoading());
+    final safeTeacherId = teacherId.trim();
+    final safeClassroomId = classroomId.trim();
+    if (safeTeacherId.isEmpty || safeClassroomId.isEmpty) return;
 
-    final curriculumResult = await repo.assignCurriculumsToTeacher(
-      teacherId: teacherId,
-      curriculumIds: [curriculumId],
+    emit(UnassignTeacherLoading(safeTeacherId, safeClassroomId));
+    final result = await repo.unassignTeacherFromClassroom(
+      teacherId: safeTeacherId,
+      classroomId: safeClassroomId,
     );
-
-    await curriculumResult.fold(
-      (failure) async {
-        emit(BulkAssignTeachingAssignmentsFailure(failure.message));
-      },
-      (_) async {
-        final result = await repo.bulkAssignTeachingAssignments(
-          teacherId: teacherId,
-          assignments: [assignment],
-        );
-
-        result.fold(
-          (failure) =>
-              emit(BulkAssignTeachingAssignmentsFailure(failure.message)),
-          (response) =>
-              emit(BulkAssignTeachingAssignmentsSuccess(response: response)),
-        );
-      },
+    result.fold(
+      (failure) => emit(
+        UnassignTeacherFailure(safeTeacherId, safeClassroomId, failure.message),
+      ),
+      (response) => emit(
+        UnassignTeacherSuccess(safeTeacherId, safeClassroomId, response),
+      ),
     );
   }
 }

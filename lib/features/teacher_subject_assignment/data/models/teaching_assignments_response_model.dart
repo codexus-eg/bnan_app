@@ -13,9 +13,9 @@ class TeachingAssignmentsResponseModel {
     return TeachingAssignmentsResponseModel(
       success: json['success'] == true,
       length: _asInt(json['length']),
-      data: _asList(json['data'])
-          .map((item) => TeachingAssignmentItem.fromJson(item))
-          .toList(),
+      data: _asList(
+        json['data'],
+      ).map((item) => TeachingAssignmentItem.fromJson(item)).toList(),
     );
   }
 }
@@ -32,9 +32,9 @@ class TeachingAssignmentItem {
   factory TeachingAssignmentItem.fromJson(Map<String, dynamic> json) {
     return TeachingAssignmentItem(
       teacher: TeacherInfo.fromJson(_asMap(json['teacher'])),
-      curriculums: _asList(json['curriculums'])
-          .map((item) => TeachingCurriculumModel.fromJson(item))
-          .toList(),
+      curriculums: _asList(
+        json['curriculums'],
+      ).map((item) => TeachingCurriculumModel.fromJson(item)).toList(),
     );
   }
 
@@ -109,9 +109,9 @@ class TeachingCurriculumModel {
     return TeachingCurriculumModel(
       id: _asString(json['_id'] ?? json['id']),
       name: _asString(json['name']),
-      grades: _asList(json['grades'])
-          .map((item) => TeachingGradeModel.fromJson(item))
-          .toList(),
+      grades: _asList(
+        json['grades'],
+      ).map((item) => TeachingGradeModel.fromJson(item)).toList(),
     );
   }
 }
@@ -131,9 +131,9 @@ class TeachingGradeModel {
     return TeachingGradeModel(
       id: _asString(json['_id'] ?? json['id']),
       name: _asString(json['name']),
-      subjects: _asList(json['subjects'])
-          .map((item) => TeachingSubjectModel.fromJson(item))
-          .toList(),
+      subjects: _asList(
+        json['subjects'],
+      ).map((item) => TeachingSubjectModel.fromJson(item)).toList(),
     );
   }
 }
@@ -153,9 +153,9 @@ class TeachingSubjectModel {
     return TeachingSubjectModel(
       id: _asString(json['_id'] ?? json['id']),
       name: _asString(json['name']),
-      classrooms: _asList(json['classrooms'])
-          .map((item) => TeachingClassroomModel.fromJson(item))
-          .toList(),
+      classrooms: _asList(
+        json['classrooms'],
+      ).map((item) => TeachingClassroomModel.fromJson(item)).toList(),
     );
   }
 }

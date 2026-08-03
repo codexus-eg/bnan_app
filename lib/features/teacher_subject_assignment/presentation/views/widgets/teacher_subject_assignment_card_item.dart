@@ -24,6 +24,7 @@ class TeacherSubjectAssignmentCardItem {
               subjectName: row.subjectName,
               gradeName: row.gradeName,
               curriculumName: row.curriculumName,
+              classroomId: row.classroomId,
               classroomName: row.classroomName,
               assignmentId: row.assignmentId,
             ),

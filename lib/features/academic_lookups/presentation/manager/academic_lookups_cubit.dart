@@ -50,6 +50,9 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
         grades: const [],
         classrooms: const [],
         subjects: const [],
+        isLoadingGrades: false,
+        isLoadingClassrooms: false,
+        isLoadingSubjects: false,
         errorMessage: null,
       ),
     );
@@ -67,6 +70,8 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
         selectedSubject: null,
         classrooms: const [],
         subjects: const [],
+        isLoadingClassrooms: false,
+        isLoadingSubjects: false,
         errorMessage: null,
       ),
     );
@@ -93,6 +98,7 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
         selectedClassroom: classroom,
         selectedSubject: null,
         subjects: const [],
+        isLoadingSubjects: false,
         errorMessage: null,
       ),
     );
@@ -186,7 +192,10 @@ class AcademicLookupsCubit extends Cubit<AcademicLookupsState> {
       gradeId: gradeId,
       classroomId: classroomId,
     );
-    if (state.selectedGrade?.id != gradeId) return;
+    if (state.selectedGrade?.id != gradeId ||
+        (classroomId != null && state.selectedClassroom?.id != classroomId)) {
+      return;
+    }
     result.fold(
       (failure) => emit(
         state.copyWith(isLoadingSubjects: false, errorMessage: failure.message),

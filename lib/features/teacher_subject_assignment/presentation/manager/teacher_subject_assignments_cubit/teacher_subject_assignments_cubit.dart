@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'teacher_subject_assignments_state.dart';
 
-class TeacherSubjectAssignmentsCubit extends Cubit<TeacherSubjectAssignmentsState> {
-  TeacherSubjectAssignmentsCubit(this.repo) : super(const TeacherSubjectAssignmentsInitial());
+class TeacherSubjectAssignmentsCubit
+    extends Cubit<TeacherSubjectAssignmentsState> {
+  TeacherSubjectAssignmentsCubit(this.repo)
+    : super(const TeacherSubjectAssignmentsInitial());
 
   final TeacherSubjectAssignmentRepo repo;
 

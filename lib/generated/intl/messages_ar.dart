@@ -20,7 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ar';
 
-  static String m0(name) => "توظيف ${name} في صف";
+  static String m0(name) => "توظيف ${name} في فصل";
 
   static String m1(teacherName) => "توظيف ${teacherName} في مادة";
 
@@ -30,7 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "هل تريد إلغاء توظيف هذا المعلم من ${gradeName} - ${subjectName} ؟";
 
   static String m4(classroomName) =>
-      "هل تريد إلغاء توظيف هذا المشرف من الصف ${classroomName}؟";
+      "هل تريد إلغاء توظيف هذا المشرف من الفصل ${classroomName}؟";
 
   static String m5(price) => "${price} ر.س";
 
@@ -86,6 +86,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m29(name) => "الطالب/ة: ${name}";
 
   static String m30(count) => "${count} محاضرة أسبوعية";
+
+  static String m31(classroomName) =>
+      "هل تريد إلغاء توظيف هذا المعلم من الفصل ${classroomName}؟";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -166,10 +169,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
     "assignSupervisorToClassroom": m0,
     "assignTeacherInSubject": m1,
-    "assignToClassroom": MessageLookupByLibrary.simpleMessage("توظيف في صف"),
+    "cancelTeacherAssignmentQuestion": m31,
+    "teacherUnassignedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم إلغاء توظيف المعلم بنجاح",
+    ),
+    "teacherAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم توظيف المعلم بنجاح",
+    ),
+    "assignToClassroom": MessageLookupByLibrary.simpleMessage("توظيف في فصل"),
+    "assignmentAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم توظيف المشرف بنجاح",
+    ),
     "assignmentDescription": MessageLookupByLibrary.simpleMessage("الوصف"),
     "assignmentNotSubmittedYet": MessageLookupByLibrary.simpleMessage(
       "لم يسلم الواجب بعد",
+    ),
+    "assignmentRemovedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم إلغاء توظيف المشرف بنجاح",
     ),
     "assignmentSubmittedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم رفع الواجب بنجاح",
@@ -260,7 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "اختر نوع الحساب للمتابعة",
     ),
     "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
-    "chooseClassroom": MessageLookupByLibrary.simpleMessage("اختر الصف"),
+    "chooseClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
     "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
       "اختر المنهج الدراسي المناسب لأبنائك وابدأ رحلة التعليم معنا",
     ),
@@ -297,7 +313,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "classroomRequired": MessageLookupByLibrary.simpleMessage(
       "يرجى اختيار الفصل",
     ),
-    "classrooms": MessageLookupByLibrary.simpleMessage("الصفوف"),
+    "classrooms": MessageLookupByLibrary.simpleMessage("الفصول"),
     "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
     "closePreview": MessageLookupByLibrary.simpleMessage("إغلاق المعاينة"),
     "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
@@ -733,6 +749,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد فصول متاحة",
     ),
+    "noClassroomsAvailableForGrade": MessageLookupByLibrary.simpleMessage(
+      "لا توجد فصول لهذا الصف",
+    ),
     "noCompletedAssignments": MessageLookupByLibrary.simpleMessage(
       "لا توجد واجبات مكتملة",
     ),
@@ -751,6 +770,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noEvaluationWeeksAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد أسابيع متاحة للتقييم",
+    ),
+    "noGradesAvailableForCurriculum": MessageLookupByLibrary.simpleMessage(
+      "لا توجد صفوف لهذا المنهج",
     ),
     "noGroupsYet": MessageLookupByLibrary.simpleMessage(
       "لا توجد مجموعات حالياً",
@@ -790,7 +812,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "لا توجد مواد متاحة لهذا الصف",
     ),
     "noSubjectsAvailableForClassroom": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد متاحة لهذا الفصل",
+      "لا توجد مواد لهذا الفصل",
     ),
     "noSubjectsAvailableForTeacherStudent":
         MessageLookupByLibrary.simpleMessage(
@@ -800,6 +822,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "لا توجد مواد متاحة لهذا الطالب",
     ),
     "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
+    "noSupervisorsFound": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد مشرفون",
+    ),
     "noTermPlansAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد خطط ترم متاحة",
     ),

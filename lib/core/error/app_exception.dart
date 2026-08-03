@@ -38,14 +38,14 @@ class AppException implements Exception {
     final statusCode = error.response?.statusCode;
     final data = error.response?.data;
 
-    final validationMessage = _extractValidationMessage(data);
-    if (validationMessage != null) {
-      return AppException(_safeBackendMessage(validationMessage));
-    }
-
     final backendMessage = _extractBackendMessage(data);
     if (backendMessage != null) {
       return AppException(_safeBackendMessage(backendMessage));
+    }
+
+    final validationMessage = _extractValidationMessage(data);
+    if (validationMessage != null) {
+      return AppException(_safeBackendMessage(validationMessage));
     }
 
     switch (statusCode) {
@@ -88,15 +88,23 @@ class AppException implements Exception {
 
     final errors = data['errors'];
 
+    const technicalIdKeys = {
+      'teacherId',
+      'classroomId',
+      'subjectId',
+      'classroomSubjectId',
+    };
     if (errors is Map && errors.isNotEmpty) {
-      final firstError = errors.values.first;
-
-      if (firstError is List && firstError.isNotEmpty) {
-        return firstError.first.toString();
-      }
-
-      if (firstError is String && firstError.trim().isNotEmpty) {
-        return firstError.trim();
+      for (final entry in errors.entries) {
+        if (technicalIdKeys.contains(entry.key?.toString())) continue;
+        final error = entry.value;
+        if (error is List && error.isNotEmpty) {
+          final message = error.first.toString().trim();
+          if (message.isNotEmpty) return message;
+        }
+        if (error is String && error.trim().isNotEmpty) {
+          return error.trim();
+        }
       }
     }
 

@@ -90,6 +90,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m30(count) => "${count} weekly lessons";
 
+  static String m31(classroomName) =>
+      "Do you want to remove this teacher from ${classroomName}?";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "Packages": MessageLookupByLibrary.simpleMessage("Packages"),
@@ -175,14 +178,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "assignSubject": MessageLookupByLibrary.simpleMessage("Assign to Subject"),
     "assignSupervisorToClassroom": m0,
     "assignTeacherInSubject": m1,
+    "cancelTeacherAssignmentQuestion": m31,
+    "teacherUnassignedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Teacher assignment removed successfully",
+    ),
+    "teacherAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Teacher assigned successfully",
+    ),
     "assignToClassroom": MessageLookupByLibrary.simpleMessage(
       "Assign to classroom",
+    ),
+    "assignmentAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Supervisor assigned successfully",
     ),
     "assignmentDescription": MessageLookupByLibrary.simpleMessage(
       "Description",
     ),
     "assignmentNotSubmittedYet": MessageLookupByLibrary.simpleMessage(
       "Assignment Not Submitted Yet",
+    ),
+    "assignmentRemovedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Supervisor assignment removed successfully",
     ),
     "assignmentSubmittedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Assignment submitted successfully",
@@ -800,6 +816,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
       "No classrooms available",
     ),
+    "noClassroomsAvailableForGrade": MessageLookupByLibrary.simpleMessage(
+      "No classrooms are available for this grade",
+    ),
     "noCompletedAssignments": MessageLookupByLibrary.simpleMessage(
       "No completed assignments",
     ),
@@ -820,6 +839,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noEvaluationWeeksAvailable": MessageLookupByLibrary.simpleMessage(
       "No evaluation weeks are available",
+    ),
+    "noGradesAvailableForCurriculum": MessageLookupByLibrary.simpleMessage(
+      "No grades are available for this curriculum",
     ),
     "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
     "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -857,7 +879,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No subjects available for this grade",
     ),
     "noSubjectsAvailableForClassroom": MessageLookupByLibrary.simpleMessage(
-      "No subjects available for this classroom",
+      "No subjects are available for this classroom",
     ),
     "noSubjectsAvailableForTeacherStudent":
         MessageLookupByLibrary.simpleMessage(
@@ -867,6 +889,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "No subjects are available for this student",
     ),
     "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
+    "noSupervisorsFound": MessageLookupByLibrary.simpleMessage(
+      "No supervisors found",
+    ),
     "noTermPlansAvailable": MessageLookupByLibrary.simpleMessage(
       "No term plans available",
     ),

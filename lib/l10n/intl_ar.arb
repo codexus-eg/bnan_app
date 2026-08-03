@@ -716,29 +716,35 @@
     "notAvailable": "غير متاحة",
     "assignSubject": "توظيف في مادة",
     "assignTeacherInSubject": "توظيف {teacherName} في مادة",
+    "teacherAssignedSuccessfully": "تم توظيف المعلم بنجاح",
     "hourlyRate": "سعر الساعة(ر.س)",
     "cancelAssignment": "إلغاء توظيف",
     "cancelAssignmentMessage": "هل تريد إلغاء توظيف هذا المعلم من {gradeName} - {subjectName} ؟",
+    "cancelTeacherAssignmentQuestion": "هل تريد إلغاء توظيف هذا المعلم من الفصل {classroomName}؟",
+    "teacherUnassignedSuccessfully": "تم إلغاء توظيف المعلم بنجاح",
     "curriculumRequired": "المنهج مطلوب",
     "subjectRequired": "المادة مطلوبة",
     "hourlyRateRequired": "سعر الساعة مطلوب",
     "hourlyRateMustBeNumber": "سعر الساعة يجب أن يكون رقم",
     "supervisorAssignment": "توظيف المشرف",
-    "assignToClassroom": "توظيف في صف",
-    "assignSupervisorToClassroom": "توظيف {name} في صف",
+    "assignToClassroom": "توظيف في فصل",
+    "assignSupervisorToClassroom": "توظيف {name} في فصل",
     "@assignSupervisorToClassroom": {
         "placeholders": {
             "name": {}
         }
     },
-    "classrooms": "الصفوف",
-    "chooseClassroom": "اختر الصف",
-    "cancelSupervisorAssignmentQuestion": "هل تريد إلغاء توظيف هذا المشرف من الصف {classroomName}؟",
+    "classrooms": "الفصول",
+    "chooseClassroom": "اختر الفصل",
+    "cancelSupervisorAssignmentQuestion": "هل تريد إلغاء توظيف هذا المشرف من الفصل {classroomName}؟",
     "@cancelSupervisorAssignmentQuestion": {
         "placeholders": {
             "classroomName": {}
         }
     },
+    "noSupervisorsFound": "لا يوجد مشرفون",
+    "assignmentAddedSuccessfully": "تم توظيف المشرف بنجاح",
+    "assignmentRemovedSuccessfully": "تم إلغاء توظيف المشرف بنجاح",
     "supervisorSaraAhmed": "سارة أحمد",
     "supervisorSomaya": "سمية",
     "supervisorAbdelfattah": "عبدالفتاح",
@@ -867,7 +873,9 @@
     "unableToDownloadFile": "تعذر تحميل الملف",
     "selectClassroomFirst": "اختر الفصل أولاً",
     "noClassroomsAvailable": "لا توجد فصول متاحة",
-    "noSubjectsAvailableForClassroom": "لا توجد مواد متاحة لهذا الفصل",
+    "noGradesAvailableForCurriculum": "لا توجد صفوف لهذا المنهج",
+    "noClassroomsAvailableForGrade": "لا توجد فصول لهذا الصف",
+    "noSubjectsAvailableForClassroom": "لا توجد مواد لهذا الفصل",
     "noAssignedSubjectsForClassroom": "لا توجد مواد مسندة لك في هذا الفصل",
     "studentAssignedSuccessfully": "تم تعيين الطالب بنجاح",
     "packagesManagement": "إدارة الباقات",

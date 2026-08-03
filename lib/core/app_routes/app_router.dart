@@ -655,10 +655,20 @@ GoRouter buildRouter() {
           key: state.pageKey,
         ),
       ),
-       GoRoute(
+      GoRoute(
         path: Routes.supervisorClassRoomAssignment,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const SupervisorClassroomAssignmentView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<GetSupervisorsCubit>()..getSupervisors(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<SupervisorAssignmentActionsCubit>(),
+              ),
+            ],
+            child: const SupervisorClassroomAssignmentView(),
+          ),
           key: state.pageKey,
         ),
       ),

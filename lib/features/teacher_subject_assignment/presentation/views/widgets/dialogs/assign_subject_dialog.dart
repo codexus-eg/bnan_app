@@ -5,9 +5,11 @@ import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_lookup_selection.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic_lookup_dropdowns.dart';
-import 'package:bnan_app/features/teacher_subject_assignment/data/models/teaching_assignment_request_model.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignment_actions_cubit/teacher_subject_assignment_actions_cubit.dart';
+import 'package:bnan_app/features/teacher_subject_assignment/presentation/views/widgets/dialogs/teacher_assignment_dialog_error.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,11 +48,11 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
       TeacherSubjectAssignmentActionsState
     >(
       listener: (context, state) {
-        if (state is BulkAssignTeachingAssignmentsSuccess) {
-          Navigator.pop(context, true);
+        if (state is AssignTeacherSuccess) {
+          Navigator.pop(context, state.response.message);
         }
-        if (state is BulkAssignTeachingAssignmentsFailure) {
-          setState(() => validationMessage = state.message);
+        if (state is AssignTeacherFailure) {
+          setState(() => validationMessage = state.errorMessage);
         }
       },
       builder: (context, state) {
@@ -85,21 +87,35 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
                     labelColor: ColorManager.mainColor14,
                     keyboardType: TextInputType.number,
                     hintStyle: getStyle(context),
+                    onChanged: (_) => setState(() => validationMessage = null),
+                    validator: validatePrice,
                   ),
                   if (validationMessage != null) ...[
                     const SizedBox(height: 16),
-                    Text(
-                      validationMessage!,
-                      style: StylesManager.styleRegular12(
-                        context,
-                      ).copyWith(color: Colors.red),
-                    ),
+                    TeacherAssignmentDialogError(message: validationMessage!),
                   ],
                   const SizedBox(height: 16),
-                  CustomAppButton(
-                    text: s.save,
-                    isLoading: state is BulkAssignTeachingAssignmentsLoading,
-                    onPressed: submit,
+                  BlocBuilder<AcademicLookupsCubit, AcademicLookupsState>(
+                    builder: (context, lookupState) {
+                      final selectedSubjectId = lookupState.selectedSubject?.id;
+                      final hasCurrentSubject =
+                          selectedSubjectId != null &&
+                          lookupState.subjects.any(
+                            (subject) => subject.id == selectedSubjectId,
+                          );
+                      return CustomAppButton(
+                        text: s.save,
+                        isLoading: state is AssignTeacherLoading,
+                        onPressed:
+                            lookupState.grades.isEmpty ||
+                                lookupState.classrooms.isEmpty ||
+                                lookupState.isLoadingSubjects ||
+                                !hasCurrentSubject ||
+                                !hasValidPrice
+                            ? null
+                            : submit,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -113,19 +129,43 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
   void submit() {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
-    if (!selection.isComplete(requireClassroom: true)) {
+    final lookupState = context.read<AcademicLookupsCubit>().state;
+    final subjectBelongsToCurrentClassroom =
+        lookupState.selectedClassroom?.id == selection.classroomId &&
+        lookupState.selectedSubject?.id == selection.subjectId &&
+        lookupState.subjects.any(
+          (subject) => subject.id == selection.subjectId,
+        );
+    if (!selection.isComplete(requireClassroom: true) ||
+        !subjectBelongsToCurrentClassroom) {
       setState(() => validationMessage = S.current.fillAllRequiredFields);
       return;
     }
 
-  context.read<TeacherSubjectAssignmentActionsCubit>().assignSubjectToTeacher(
+    final price = num.parse(priceController.text.trim());
+    setState(() => validationMessage = null);
+    context.read<TeacherSubjectAssignmentActionsCubit>().assignTeacher(
       teacherId: widget.teacherId,
       curriculumId: selection.curriculumId!,
-      assignment: TeachingAssignmentRequestModel(
-        classroomId: selection.classroomId!,
-        subjects: [selection.subjectId!],
-      ),
+      gradeId: selection.gradeId!,
+      classroomId: selection.classroomId!,
+      subjectId: selection.subjectId!,
+      pricePerSession: price,
     );
+  }
+
+  bool get hasValidPrice {
+    final price = num.tryParse(priceController.text.trim());
+    return price != null && price > 0;
+  }
+
+  String? validatePrice(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return S.current.hourlyRateRequired;
+    }
+    final price = num.tryParse(value.trim());
+    if (price == null || price <= 0) return S.current.hourlyRateMustBeNumber;
+    return null;
   }
 
   TextStyle getStyle(context) {
