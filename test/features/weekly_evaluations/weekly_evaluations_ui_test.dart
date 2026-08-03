@@ -3,6 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_cell.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_subject_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/elapsed_evaluation_weeks_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/upsert_evaluation_request_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_value_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
@@ -15,11 +16,13 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluat
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_subject_ui_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/weekly_evaluation_ui_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/policies/weekly_evaluations_access_policy.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/dialogs/weekly_evaluation_dialog.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_subject_actions.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_table.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_table_row.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_card.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_form.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_filters.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_failure.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_header_actions.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -32,6 +35,7 @@ import 'package:dartz/dartz.dart';
 void main() {
   test('student and parent are read only while teacher can manage', () {
     expect(WeeklyEvaluationsAccessPolicy.fromRole('teacher').canEdit, isTrue);
+    expect(WeeklyEvaluationsAccessPolicy.fromRole('supervisor').canAdd, isTrue);
     expect(WeeklyEvaluationsAccessPolicy.fromRole('student').canEdit, isFalse);
     expect(WeeklyEvaluationsAccessPolicy.fromRole('parent').canAdd, isFalse);
   });
@@ -186,7 +190,10 @@ void main() {
     );
 
     expect(find.text('Week Start'), findsNothing);
-    expect(find.widgetWithText(CustomTextField, 'Week'), findsOneWidget);
+    final week = _dropdownByLabel(tester, 'Week');
+    expect(week.value, '2');
+    expect(week.items, ['1', '2', '3']);
+    expect(week.itemsLabels, {'1': 'Week 1', '2': 'Week 2', '3': 'Week 3'});
     final classroom = tester.widget<CustomDropdown>(
       find.byWidgetPredicate(
         (widget) => widget is CustomDropdown && widget.label == 'Classroom',
@@ -318,6 +325,78 @@ void main() {
     expect(find.byType(SnackBar), findsNothing);
     expect(_dropdownByLabel(tester, 'Behavior').value, 'very_good');
   });
+
+  testWidgets('classroom and week filters call the selected flow values', (
+    tester,
+  ) async {
+    final repo = _FlowRepo();
+    final cubit = WeeklyEvaluationsCubit(repo, _NoopAssignmentsRepo());
+    await cubit.initialize('supervisor');
+    const classrooms = [
+      PlanClassroomOption(id: 'classroom-1', name: 'Class A'),
+      PlanClassroomOption(id: 'classroom-2', name: 'Class B'),
+    ];
+    await cubit.setClassrooms(classrooms);
+    await _pump(
+      tester,
+      BlocProvider.value(
+        value: cubit,
+        child: WeeklyEvaluationFilters(cubit: cubit, classrooms: classrooms),
+      ),
+    );
+
+    _dropdownByLabel(tester, 'Classroom').onChanged!('classroom-2');
+    await tester.pumpAndSettle();
+    expect(cubit.selectedClassroom?.id, 'classroom-2');
+    expect(repo.weeklyCalls.last, ('classroom-2', 2));
+
+    _dropdownByLabel(tester, 'Week').onChanged!('1');
+    await tester.pumpAndSettle();
+    expect(cubit.selectedWeek, 1);
+    expect(repo.weeklyCalls.last, ('classroom-2', 1));
+  });
+
+  testWidgets('successful save closes the current evaluation dialog', (
+    tester,
+  ) async {
+    final repo = _SaveSuccessRepo();
+    final cubit = WeeklyEvaluationsCubit(repo, _NoopAssignmentsRepo());
+    final data = EvaluationDialogContext.edit(
+      const EvaluationEditorContext(
+        studentId: 'student',
+        studentName: 'Student',
+        classroomId: 'classroom',
+        classroomName: 'Class A',
+        week: 2,
+        subject: _evaluatedSubject,
+      ),
+    );
+    await _pump(
+      tester,
+      Builder(
+        builder: (context) => TextButton(
+          onPressed: () => showDialog<void>(
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: cubit,
+              child: WeeklyEvaluationDialog(data: data),
+            ),
+          ),
+          child: const Text('Open'),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+    expect(find.byType(WeeklyEvaluationForm), findsOneWidget);
+    await tester.ensureVisible(find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(repo.calls, 1);
+    expect(find.byType(WeeklyEvaluationForm), findsNothing);
+  });
 }
 
 const _evaluatedSubject = EvaluationSubjectModel(
@@ -335,14 +414,19 @@ Future<void> _pumpForm(
   WidgetTester tester,
   EvaluationDialogContext data, {
   WeeklyEvaluationsRepo? repo,
-}) => _pump(
-  tester,
-  BlocProvider(
-    create: (_) =>
-        WeeklyEvaluationsCubit(repo ?? _NoopRepo(), _NoopAssignmentsRepo()),
-    child: WeeklyEvaluationForm(title: 'Evaluation', data: data),
-  ),
-);
+}) {
+  final cubit = WeeklyEvaluationsCubit(
+    repo ?? _NoopRepo(),
+    _NoopAssignmentsRepo(),
+  )..availableWeeks = [1, 2, 3];
+  return _pump(
+    tester,
+    BlocProvider.value(
+      value: cubit,
+      child: WeeklyEvaluationForm(title: 'Evaluation', data: data),
+    ),
+  );
+}
 
 Future<void> _pump(WidgetTester tester, Widget child) async {
   await tester.pumpWidget(
@@ -389,6 +473,50 @@ class _SaveFailureRepo extends _NoopRepo {
   Future<Either<Failure, Unit>> upsert(
     UpsertEvaluationRequestModel request,
   ) async => Left(Failure(message: 'Server rejected evaluation'));
+}
+
+class _SaveSuccessRepo extends _NoopRepo {
+  int calls = 0;
+
+  @override
+  Future<Either<Failure, Unit>> upsert(
+    UpsertEvaluationRequestModel request,
+  ) async {
+    calls++;
+    return const Right(unit);
+  }
+}
+
+class _FlowRepo extends _NoopRepo {
+  final weeklyCalls = <(String, int)>[];
+
+  @override
+  Future<Either<Failure, ElapsedEvaluationWeeksModel>> getElapsedWeeks(
+    String classroomId,
+  ) async => const Right(
+    ElapsedEvaluationWeeksModel(
+      success: true,
+      data: ElapsedEvaluationWeeksData(weeksCount: 2, currentWeek: 2),
+    ),
+  );
+
+  @override
+  Future<Either<Failure, WeeklyEvaluationsResponseModel>> getClassroomWeekly({
+    required String classroomId,
+    required int week,
+  }) async {
+    weeklyCalls.add((classroomId, week));
+    return Right(
+      WeeklyEvaluationsResponseModel(
+        success: true,
+        data: WeeklyEvaluationsDataModel(
+          classroomId: classroomId,
+          week: week,
+          students: const [WeeklyEvaluationStudentModel(id: 'student')],
+        ),
+      ),
+    );
+  }
 }
 
 class _NoopAssignmentsRepo implements AssignmentsRepo {

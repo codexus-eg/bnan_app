@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/upsert_evaluation_request_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo_impl.dart';
@@ -16,6 +17,23 @@ void main() {
     await repo.getClassroomWeekly(classroomId: 'classroom', week: 4);
     expect(api.path, '/classrooms/classroom/evaluations/weekly');
     expect(api.query, {'week': 4});
+    expect(api.method, 'GET');
+    expect(api.isProtected, isTrue);
+  });
+
+  test('elapsed weeks endpoint uses selected classroom', () async {
+    api.response = {
+      'success': true,
+      'data': {'weeksCount': 0},
+    };
+    final result = await repo.getElapsedWeeks('classroom');
+
+    expect(api.path, '/classrooms/classroom/evaluations/weeks/elapsed');
+    expect(api.query, isNull);
+    expect(
+      result.getOrElse(() => throw StateError('failure')).data.weeks,
+      isEmpty,
+    );
   });
 
   test('student and one-child requests omit studentId', () async {
@@ -90,9 +108,55 @@ void main() {
     );
     final body = api.data as Map<String, dynamic>;
     expect(api.path, '/student-evaluations');
+    expect(api.method, 'PUT');
+    expect(api.isProtected, isTrue);
     expect(body['week'], 2);
     expect(body['behavior'], 'very_good');
     expect(body, isNot(contains('weekStart')));
+    expect(
+      body.keys,
+      unorderedEquals([
+        'student',
+        'classroom',
+        'subject',
+        'week',
+        'attendance',
+        'participation',
+        'homework',
+        'behavior',
+        'notes',
+      ]),
+    );
+  });
+
+  test('empty roster and subjects responses parse as empty lists', () async {
+    api.response = {'success': true, 'data': <Object>[]};
+
+    final students = await repo.getClassroomStudents('classroom');
+    expect(api.path, '/classrooms/classroom/students');
+    expect(students.getOrElse(() => throw StateError('failure')), isEmpty);
+
+    final subjects = await repo.getStudentSubjects(
+      classroomId: 'classroom',
+      studentId: 'student',
+    );
+    expect(api.path, '/classrooms/classroom/students/student/subjects');
+    expect(subjects.getOrElse(() => throw StateError('failure')), isEmpty);
+  });
+
+  test('backend AppException message is preserved as Failure', () async {
+    api.error = const AppException('Backend evaluation error');
+
+    final result = await repo.getClassroomWeekly(
+      classroomId: 'classroom',
+      week: 1,
+    );
+
+    expect(result.isLeft(), isTrue);
+    result.fold(
+      (failure) => expect(failure.message, 'Backend evaluation error'),
+      (_) => fail('Expected failure'),
+    );
   });
 }
 
@@ -102,6 +166,9 @@ class _FakeApi implements ApiConsumer {
   Object? data;
   Object response = {'success': true, 'data': <String, dynamic>{}};
   int getCalls = 0;
+  String method = '';
+  bool isProtected = false;
+  AppException? error;
 
   @override
   Future<dynamic> get(
@@ -110,9 +177,12 @@ class _FakeApi implements ApiConsumer {
     Map<String, dynamic>? queryParameter,
     bool isProtected = false,
   }) async {
+    if (error case final error?) throw error;
     getCalls++;
+    method = 'GET';
     this.path = path;
     query = queryParameter;
+    this.isProtected = isProtected;
     return response;
   }
 
@@ -124,8 +194,11 @@ class _FakeApi implements ApiConsumer {
     bool isFormData = false,
     bool isProtected = false,
   }) async {
+    if (error case final error?) throw error;
+    method = 'PUT';
     this.path = path;
     this.data = data;
+    this.isProtected = isProtected;
     return {'success': true};
   }
 

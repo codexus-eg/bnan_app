@@ -31,7 +31,7 @@ class WeeklyEvaluationForm extends StatefulWidget {
 class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _notesController;
-  late final TextEditingController _weekController;
+  int? week;
   String? classroomId, studentId, subjectId;
   String? attendance, participation, homework, behavior;
 
@@ -39,7 +39,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   void initState() {
     super.initState();
     _notesController = TextEditingController();
-    _weekController = TextEditingController(text: '${widget.data.week}');
+    week = widget.data.week;
     final editor = widget.data.editor;
     if (editor == null) {
       attendance = 'present';
@@ -58,7 +58,6 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   @override
   void dispose() {
     _notesController.dispose();
-    _weekController.dispose();
     super.dispose();
   }
 
@@ -91,7 +90,10 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
                 subjectId: subjectId,
                 students: _students,
                 subjects: _subjects,
-                weekController: _weekController,
+                availableWeeks: context
+                    .read<WeeklyEvaluationsCubit>()
+                    .availableWeeks,
+                week: week,
                 emptySubjectsMessage:
                     context.read<WeeklyEvaluationsCubit>().isTeacher
                     ? s.noSubjectsAvailableForTeacherStudent
@@ -102,7 +104,8 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
                 onClassroomChanged: _selectClassroom,
                 onStudentChanged: _selectStudent,
                 onSubjectChanged: _selectSubject,
-                onWeekChanged: (_) => setState(() {}),
+                onWeekChanged: (value) =>
+                    setState(() => week = int.tryParse(value ?? '')),
               ),
               if (state is EvaluationOptionsFailure) ...[
                 const SizedBox(height: 12),
@@ -155,7 +158,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
       participation != null &&
       homework != null &&
       behavior != null &&
-      (int.tryParse(_weekController.text) ?? 0) > 0;
+      week != null;
 
   void _selectClassroom(String? value) {
     setState(() {
@@ -207,7 +210,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
         student: studentId!,
         classroom: classroomId!,
         subject: subject.id,
-        week: int.parse(_weekController.text),
+        week: week!,
         attendance: attendance!,
         participation: participation!,
         homework: homework!,
