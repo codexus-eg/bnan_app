@@ -26,6 +26,7 @@ class SubjectModel {
     required this.name,
     required this.isActive,
     this.curriculum,
+    this.grade,
     this.createdAt,
     this.updatedAt,
   });
@@ -34,6 +35,7 @@ class SubjectModel {
   final String name;
   final bool isActive;
   final SubjectCurriculumModel? curriculum;
+  final SubjectGradeModel? grade;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -45,13 +47,14 @@ class SubjectModel {
       curriculum: json['curriculum'] == null
           ? null
           : SubjectCurriculumModel.fromJson(json['curriculum']),
+      grade: json['grade'] is Map
+          ? SubjectGradeModel.fromJson(Map<String, dynamic>.from(json['grade']))
+          : null,
       createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
     );
   }
-  
 }
-
 
 class SubjectCurriculumModel {
   const SubjectCurriculumModel({
@@ -69,6 +72,20 @@ class SubjectCurriculumModel {
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       icon: json['icon'] ?? '',
+    );
+  }
+}
+
+class SubjectGradeModel {
+  const SubjectGradeModel({this.id, this.name});
+
+  final String? id;
+  final String? name;
+
+  factory SubjectGradeModel.fromJson(Map<String, dynamic> json) {
+    return SubjectGradeModel(
+      id: json['id']?.toString(),
+      name: json['name']?.toString(),
     );
   }
 }

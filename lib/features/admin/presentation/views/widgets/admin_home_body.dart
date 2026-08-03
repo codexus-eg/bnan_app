@@ -38,7 +38,6 @@ class AdminHomeBody extends StatelessWidget {
         providers: [
           BlocProvider(create: (_) => getIt<GetSubjectsCubit>()..getSubjects()),
           BlocProvider(create: (_) => getIt<SubjectActionsCubit>()),
-          BlocProvider(create: (_) => getIt<AcademicLookupsCubit>()),
         ],
         child: const SubjectManagementBody(),
       ),

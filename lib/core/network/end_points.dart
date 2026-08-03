@@ -8,6 +8,7 @@ abstract class EndPoints {
   static const String resetPassword = '/auth/resetPassword';
   static const String updatePassword = '/auth/updatePassword';
   static const String registerTeacher = '/auth/register-teacher';
+  static const String registerParent = '/auth/register-parent';
   static const String getLoggedUser = '/users/me';
   static const String updateLoggedUserName = '/users/me/name';
   static const String updateLoggedUserPhone = '/users/me/phone';

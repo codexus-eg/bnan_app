@@ -9,11 +9,7 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SubjectCardManagement extends StatelessWidget {
-  const SubjectCardManagement({
-    super.key,
-    required this.subject,
-    this.onEdit,
-  });
+  const SubjectCardManagement({super.key, required this.subject, this.onEdit});
 
   final SubjectModel? subject;
   final VoidCallback? onEdit;
@@ -35,7 +31,7 @@ class SubjectCardManagement extends StatelessWidget {
             label: S.of(context).curriculum,
             value: subject?.curriculum?.name ?? '---',
           ),
-      
+
           const SizedBox(height: 8),
           ActionChipButton(
             title: S.of(context).edit,

@@ -1,12 +1,13 @@
-import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_lookup_selection.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic_lookup_dropdowns.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_state.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/dialogs/subject_dialog_field.dart';
+import 'package:bnan_app/features/subjects_management/presentation/widgets/dialogs/subject_dialog_error.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +40,7 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
           Navigator.pop(context, true);
         }
         if (state is AddSubjectFailure) {
-          showCustomSnackBar(context, state.message, false);
+          setState(() => validationMessage = state.message);
         }
       },
       builder: (context, state) {
@@ -64,9 +65,10 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
                   const SizedBox(height: 16),
                   AcademicLookupDropdowns(
                     showCurriculum: true,
-                    showGrade: false,
+                    showGrade: true,
                     showClassroom: false,
                     showSubject: false,
+                    gradeHint: s.chooseGrade,
                     onSelectionChanged: (value) {
                       setState(() {
                         selection = value;
@@ -76,16 +78,13 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
                   ),
                   if (validationMessage != null) ...[
                     const SizedBox(height: 16),
-                    Text(
-                      validationMessage!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                    SubjectDialogError(message: validationMessage!),
                   ],
                   const SizedBox(height: 16),
                   CustomAppButton(
                     text: s.save,
                     isLoading: state is AddSubjectLoading,
-                    onPressed: submit,
+                    onPressed: _canSubmit(state) ? submit : null,
                   ),
                 ],
               ),
@@ -100,16 +99,28 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
     final curriculumId = selection.curriculumId;
-    // final gradeId = selection.gradeId;
-    if (curriculumId == null ) {
+    final gradeId = selection.gradeId;
+    if (curriculumId == null || gradeId == null) {
       setState(() => validationMessage = S.current.fillAllRequiredFields);
       return;
     }
 
+    setState(() => validationMessage = null);
     context.read<SubjectActionsCubit>().addSubject(
       name: nameController.text.trim(),
       curriculumId: curriculumId,
-      // gradeId: gradeId,
+      gradeId: gradeId,
     );
+  }
+
+  bool _canSubmit(SubjectActionsState state) {
+    final lookups = context.read<AcademicLookupsCubit>().state;
+    return nameController.text.trim().isNotEmpty &&
+        selection.curriculumId != null &&
+        selection.gradeId != null &&
+        !lookups.isLoadingGrades &&
+        lookups.errorMessage == null &&
+        lookups.grades.isNotEmpty &&
+        state is! AddSubjectLoading;
   }
 }

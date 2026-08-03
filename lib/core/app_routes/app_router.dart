@@ -82,6 +82,16 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.parentRegistration,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) => getIt<ParentRegisterCubit>(),
+            child: const ParentRegisterView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.subscription,
         pageBuilder: (context, state) {
           final curriculum = state.extra as CurriculumCardModel;

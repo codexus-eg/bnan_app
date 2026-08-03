@@ -1,19 +1,24 @@
-class SubjectRequestModel {
-  const SubjectRequestModel({
+class AddSubjectRequestModel {
+  const AddSubjectRequestModel({
     required this.name,
-    this.curriculum,
-    this.grade,
+    required this.curriculumId,
+    required this.gradeId,
   });
+  final String name;
+  final String curriculumId;
+  final String gradeId;
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'curriculum': curriculumId,
+    'grade': gradeId,
+  };
+}
+
+class UpdateSubjectRequestModel {
+  const UpdateSubjectRequestModel({required this.name});
 
   final String name;
-  final String? curriculum;
-  final String? grade;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      if (curriculum != null) 'curriculum': curriculum,
-      if (grade != null) 'grade': grade,
-    };
-  }
+  Map<String, dynamic> toJson() => {'name': name};
 }

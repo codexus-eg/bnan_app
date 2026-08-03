@@ -53,6 +53,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AuthRepo>(
     () => AuthRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<ParentAuthRepo>(
+    () => ParentAuthRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<StudentProfileRepo>(
     () => StudentProfileRepoImpl(apiConsumer: getIt()),
   );
@@ -138,6 +141,10 @@ void setupServiceLocator() {
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<AuthRepo>()));
 
   getIt.registerFactory<RegisterCubit>(() => RegisterCubit(getIt<AuthRepo>()));
+
+  getIt.registerFactory<ParentRegisterCubit>(
+    () => ParentRegisterCubit(getIt<ParentAuthRepo>()),
+  );
 
   getIt.registerFactory<ForgotPasswordCubit>(
     () => ForgotPasswordCubit(getIt<AuthRepo>()),

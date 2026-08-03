@@ -1,5 +1,8 @@
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo_impl.dart';
+export 'package:bnan_app/features/parent_auth/data/repo/parent_auth_repo.dart';
+export 'package:bnan_app/features/parent_auth/data/repo/parent_auth_repo_impl.dart';
+export 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_cubit.dart';
 
 export 'package:bnan_app/features/shared_profile/data/repo/student_profile_repo/student_profile_repo.dart';
 export 'package:bnan_app/features/shared_profile/data/repo/student_profile_repo/student_profile_repo_impl.dart';

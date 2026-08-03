@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GradeLookupDropdown extends StatelessWidget {
-  const GradeLookupDropdown({super.key});
+  const GradeLookupDropdown({super.key, this.hint});
+
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class GradeLookupDropdown extends StatelessWidget {
               label: S.of(context).grade,
               hint: state.isLoadingGrades
                   ? S.of(context).loading
-                  : S.of(context).grade,
+                  : hint ?? S.of(context).grade,
               value: state.selectedGrade?.id,
               items: items,
               itemsLabels: {

@@ -4,6 +4,7 @@ export 'package:bnan_app/core/network/dependency_injection.dart';
 
 export 'package:bnan_app/features/student_auth/presentation/manager/forgot_password_cubit/forgot_password_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/login_cubit/login_cubit.dart';
+export 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 export 'package:bnan_app/features/student_auth/presentation/manager/reset_password_cubit/reset_password_cubit.dart';
 export 'package:bnan_app/features/shared_profile/presentation/manager/update_password_cubit/update_password_cubit.dart';
@@ -12,6 +13,7 @@ export 'package:bnan_app/features/student_auth/presentation/views/change_passwor
 export 'package:bnan_app/features/student_auth/presentation/views/curricula_view.dart';
 export 'package:bnan_app/features/student_auth/presentation/views/forget_password_view.dart';
 export 'package:bnan_app/features/student_auth/presentation/views/login_view.dart';
+export 'package:bnan_app/features/parent_auth/presentation/views/parent_register_view.dart';
 export 'package:bnan_app/features/student_auth/presentation/views/register_view.dart';
 export 'package:bnan_app/features/student_auth/presentation/views/student_registration_view.dart';
 export 'package:bnan_app/features/student_auth/presentation/views/subscription_view.dart';
