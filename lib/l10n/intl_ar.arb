@@ -1026,5 +1026,10 @@
         "placeholders": {
             "grade": {}
         }
-    }
+    },
+    "copiedSuccessfully": "تم النسخ بنجاح",
+    "cvUnavailable": "رابط السيرة الذاتية غير متاح",
+    "invalidCvUrl": "رابط السيرة الذاتية غير صالح",
+    "failedToOpenCv": "تعذر فتح السيرة الذاتية",
+    "failedToCopy": "تعذر النسخ"
 }

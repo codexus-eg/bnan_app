@@ -1027,5 +1027,10 @@
         "placeholders": {
             "grade": {}
         }
-    }
+    },
+    "copiedSuccessfully": "Copied successfully",
+    "cvUnavailable": "CV link is not available",
+    "invalidCvUrl": "The CV link is invalid",
+    "failedToOpenCv": "Unable to open the CV",
+    "failedToCopy": "Unable to copy"
 }

@@ -1,7 +1,6 @@
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_layout.dart';
-import 'package:bnan_app/features/admin/presentation/views/widgets/admin_placeholder_tab.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/packages_management_body.dart';
@@ -10,7 +9,6 @@ import 'package:bnan_app/features/subjects_management/presentation/manager/subje
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_management_body.dart';
 import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/users_management_body.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +24,6 @@ class AdminHomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
     final pages = [
       AdminHomeLayout(onMenuTap: onMenuTap),
       BlocProvider(
