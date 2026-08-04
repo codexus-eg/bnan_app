@@ -246,7 +246,7 @@ class _SubjectsRepo implements SubjectsRepo {
   @override
   Future<Either<Failure, SubjectsResponseModel>> getSubjects({
     required int page,
-    required int perPage,
+    required int limit,
   }) async {
     getCalls++;
     return const Right(

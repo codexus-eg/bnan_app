@@ -7,9 +7,22 @@ final class GetSubjectsInitial extends GetSubjectsState {}
 final class GetSubjectsLoading extends GetSubjectsState {}
 
 final class GetSubjectsSuccess extends GetSubjectsState {
-  final SubjectsResponseModel subjects;
+  final List<SubjectModel> subjects;
 
   GetSubjectsSuccess({required this.subjects});
+}
+
+final class GetSubjectsLoadingMore extends GetSubjectsState {
+  GetSubjectsLoadingMore({required this.subjects});
+
+  final List<SubjectModel> subjects;
+}
+
+final class GetSubjectsLoadMoreFailure extends GetSubjectsState {
+  GetSubjectsLoadMoreFailure({required this.subjects, required this.message});
+
+  final List<SubjectModel> subjects;
+  final String message;
 }
 
 final class GetSubjectsFailure extends GetSubjectsState {

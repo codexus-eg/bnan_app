@@ -1,6 +1,5 @@
 import 'package:bnan_app/features/subjects_management/data/models/subject_response_model.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_card_management.dart';
-import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_pagination_controls.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,23 +15,8 @@ void main() {
 
     await _pump(tester, SubjectCardManagement(subject: _subject(null)));
     expect(find.text('Grade two'), findsNothing);
+    expect(find.text('-'), findsOneWidget);
     expect(tester.takeException(), isNull);
-  });
-
-  testWidgets('pagination hides on one page and disables boundaries', (
-    tester,
-  ) async {
-    await _pump(tester, _controls(current: 1, last: 1));
-    expect(find.text('Previous'), findsNothing);
-
-    await _pump(tester, _controls(current: 1, last: 3));
-    expect(_button(tester, 'Previous').onPressed, isNull);
-    expect(_button(tester, 'Next').onPressed, isNotNull);
-
-    await _pump(tester, _controls(current: 3, last: 3));
-    expect(_button(tester, 'Previous').onPressed, isNotNull);
-    expect(_button(tester, 'Next').onPressed, isNull);
-    expect(find.text('3'), findsOneWidget);
   });
 }
 
@@ -43,22 +27,6 @@ SubjectModel _subject(String? grade) => SubjectModel(
   curriculum: const SubjectCurriculumModel(id: 'c1', name: 'Saudi', icon: ''),
   grade: grade == null ? null : SubjectGradeModel(id: 'g1', name: grade),
 );
-
-Widget _controls({required int current, required int last}) {
-  return SubjectPaginationControls(
-    currentPage: current,
-    lastPage: last,
-    isLoading: false,
-    onPrevious: () {},
-    onNext: () {},
-  );
-}
-
-ElevatedButton _button(WidgetTester tester, String text) {
-  return tester.widget<ElevatedButton>(
-    find.ancestor(of: find.text(text), matching: find.byType(ElevatedButton)),
-  );
-}
 
 Future<void> _pump(WidgetTester tester, Widget child) {
   return tester.pumpWidget(

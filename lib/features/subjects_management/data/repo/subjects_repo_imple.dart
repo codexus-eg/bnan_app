@@ -15,12 +15,12 @@ class SubjectsRepoImpl implements SubjectsRepo {
   @override
   Future<Either<Failure, SubjectsResponseModel>> getSubjects({
     required int page,
-    required int perPage,
+    required int limit,
   }) {
     return repoGuard(() async {
       final response = await apiConsumer.get(
         EndPoints.subjects,
-        queryParameter: {'page': page, 'limit': perPage},
+        queryParameter: {'page': page, 'limit': limit},
         isProtected: true,
       );
       return SubjectsResponseModel.fromJson(asMap(response));

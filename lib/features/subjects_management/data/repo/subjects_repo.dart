@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 abstract class SubjectsRepo {
   Future<Either<Failure, SubjectsResponseModel>> getSubjects({
     required int page,
-    required int perPage,
+    required int limit,
   });
 
   Future<Either<Failure, Unit>> addSubject({

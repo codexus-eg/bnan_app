@@ -15,6 +15,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   final formKey = GlobalKey<FormState>();
 
   List<UserItem> users = [];
+  final List<UserItem> _locallyCreatedUsers = [];
   int usersCount = 0;
   UserItem? selectedUser;
   String? selectedRole;
@@ -43,7 +44,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     result.fold((failure) => emit(GetUsersFailure(failure.message)), (
       response,
     ) {
-      users = _unique(response.data);
+      users = _withLocalUsers(response.data);
       _setPagination(response.pagination);
       emit(_success());
     });
@@ -131,6 +132,10 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     required String password,
     required String curriculumId,
   }) async {
+    if (state is UsersActionLoading &&
+        (state as UsersActionLoading).action == UsersManagementAction.create) {
+      return;
+    }
     if (formKey.currentState?.validate() != true) return;
     final role = selectedRole?.trim() ?? '';
     final selectedCurriculumId = curriculumId.trim();
@@ -155,9 +160,17 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
           message: failure.message,
         ),
       ),
-      (_) async {
+      (response) async {
+        final createdUser = response.user;
+        if (createdUser != null && createdUser.id.isNotEmpty) {
+          final isNew = _rememberCreatedUser(createdUser);
+          if (_matchesCurrentFilters(createdUser)) {
+            users = _prependUnique(createdUser, users);
+          }
+          if (isNew) usersCount++;
+        }
         emit(const UsersActionSuccess(action: UsersManagementAction.create));
-        await refreshUsers();
+        if (createdUser == null || createdUser.id.isEmpty) await refreshUsers();
       },
     );
   }
@@ -181,7 +194,8 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
           message: failure.message,
         ),
       ),
-      (_) async {
+      (response) async {
+        _replaceLocalUser(response.user);
         emit(const UsersActionSuccess(action: UsersManagementAction.update));
         await refreshUsers();
       },
@@ -231,7 +245,8 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
           message: failure.message,
         ),
       ),
-      (_) async {
+      (response) async {
+        _replaceLocalUser(response.user);
         emit(const UsersActionSuccess(action: UsersManagementAction.status));
         await refreshUsers();
       },
@@ -250,6 +265,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
         ),
       ),
       (_) async {
+        _locallyCreatedUsers.removeWhere((user) => user.id == userId);
         emit(const UsersActionSuccess(action: UsersManagementAction.delete));
         await refreshUsers();
       },
@@ -289,6 +305,42 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   List<UserItem> _unique(List<UserItem> source) {
     final ids = <String>{};
     return source.where((user) => user.id.isEmpty || ids.add(user.id)).toList();
+  }
+
+  List<UserItem> _withLocalUsers(List<UserItem> apiUsers) {
+    final local = _locallyCreatedUsers.where(_matchesCurrentFilters).toList();
+    return _unique([...local, ...apiUsers]);
+  }
+
+  List<UserItem> _prependUnique(UserItem user, List<UserItem> source) {
+    return [
+      user,
+      ...source.where((item) => item.id.isEmpty || item.id != user.id),
+    ];
+  }
+
+  bool _rememberCreatedUser(UserItem user) {
+    final isNew = _locallyCreatedUsers.every((item) => item.id != user.id);
+    _locallyCreatedUsers.removeWhere((item) => item.id == user.id);
+    _locallyCreatedUsers.insert(0, user);
+    return isNew;
+  }
+
+  void _replaceLocalUser(UserItem? user) {
+    if (user == null) return;
+    final index = _locallyCreatedUsers.indexWhere((item) => item.id == user.id);
+    if (index != -1) _locallyCreatedUsers[index] = user;
+  }
+
+  bool _matchesCurrentFilters(UserItem user) {
+    final matchesRole =
+        _role == null ||
+        user.roles.trim().toLowerCase() == _role!.trim().toLowerCase();
+    if (!matchesRole) return false;
+    final query = _search.toLowerCase();
+    if (query.isEmpty) return true;
+    return user.name.toLowerCase().contains(query) ||
+        user.phone.toLowerCase().contains(query);
   }
 
   void _setPagination(UsersPaginationModel pagination) {
