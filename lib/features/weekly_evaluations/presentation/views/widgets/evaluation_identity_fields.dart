@@ -1,12 +1,10 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
-import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_subject_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_dialog_context.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class EvaluationIdentityFields extends StatelessWidget {
   const EvaluationIdentityFields({
@@ -17,7 +15,8 @@ class EvaluationIdentityFields extends StatelessWidget {
     required this.subjectId,
     required this.students,
     required this.subjects,
-    required this.weekController,
+    required this.availableWeeks,
+    required this.week,
     required this.emptySubjectsMessage,
     required this.showAvailabilityMessages,
     required this.onClassroomChanged,
@@ -30,12 +29,13 @@ class EvaluationIdentityFields extends StatelessWidget {
   final String? classroomId, studentId, subjectId;
   final List<WeeklyEvaluationStudentModel> students;
   final List<EvaluationSubjectModel> subjects;
-  final TextEditingController weekController;
+  final List<int> availableWeeks;
+  final int? week;
   final String emptySubjectsMessage;
   final bool showAvailabilityMessages;
   final ValueChanged<String?> onClassroomChanged;
   final ValueChanged<String?> onStudentChanged, onSubjectChanged;
-  final ValueChanged<String> onWeekChanged;
+  final ValueChanged<String?> onWeekChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +60,17 @@ class EvaluationIdentityFields extends StatelessWidget {
             subjects.isEmpty)
           _message(emptySubjectsMessage),
         const SizedBox(height: 12),
-        CustomTextField(
+        CustomDropdown(
           label: s.week,
-          controller: weekController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          onChanged: onWeekChanged,
+          value: week?.toString(),
+          hint: s.selectWeek,
+          items: availableWeeks.map((item) => '$item').toList(),
+          itemsLabels: {
+            for (final item in availableWeeks) '$item': '${s.week} $item',
+          },
           isRequired: true,
           backgroundColor: ColorManager.white,
-          validator: (value) {
-            final week = int.tryParse(value ?? '');
-            return week != null && week > 0 ? null : s.positiveWeekRequired;
-          },
+          onChanged: onWeekChanged,
         ),
       ],
     );

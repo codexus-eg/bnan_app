@@ -412,6 +412,27 @@ GoRouter buildRouter() {
         },
       ),
       GoRoute(
+        path: Routes.attendance,
+        redirect: (context, state) {
+          final role = SessionManager.instance.role;
+          if (role == UserRole.teacher || role == UserRole.supervisor) {
+            return null;
+          }
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) =>
+                getIt<AttendanceCubit>()
+                  ..initialize(SessionManager.instance.role),
+            child: const AttendanceView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+
+      GoRoute(
         path: Routes.classSchedules,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const ClassSchedulesView(),

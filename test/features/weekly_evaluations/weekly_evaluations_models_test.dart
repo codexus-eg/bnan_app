@@ -90,4 +90,71 @@ void main() {
     expect(request.toJson(), containsPair('homework', '-'));
     expect(request.toJson(), containsPair('behavior', 'acceptable'));
   });
+
+  test('complete response parses student subject and evaluation ids', () {
+    final response = WeeklyEvaluationsResponseModel.fromJson({
+      'success': true,
+      'results': 1,
+      'data': {
+        'classroom': {'_id': 'classroom', 'name': 'Class A'},
+        'week': 3,
+        'weekStart': '2026-08-01',
+        'students': [
+          {
+            'studentId': 'student',
+            'fullName': 'Student Name',
+            'subjects': [
+              {
+                '_id': 'subject',
+                'name': 'Math',
+                'status': 'evaluated',
+                'evaluation': {
+                  '_id': 'evaluation',
+                  'attendance': 'present',
+                  'participation': 'good',
+                  'homework': 'excellent',
+                  'behavior': 'very_good',
+                  'notes': '',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    final data = response.data;
+    final student = data.students.single;
+    final subject = student.subjects.single;
+    expect(data.classroomId, 'classroom');
+    expect(data.week, 3);
+    expect(student.id, 'student');
+    expect(subject.id, 'subject');
+    expect(subject.evaluation?.id, 'evaluation');
+    expect(subject.evaluation?.notes, isEmpty);
+  });
+
+  test('single-student response shape and missing scores parse safely', () {
+    final response = WeeklyEvaluationsResponseModel.fromJson({
+      'success': true,
+      'data': {
+        'week': '2',
+        'student': {'_id': 'student', 'name': 'Student'},
+        'subjects': [
+          {
+            'id': 'subject',
+            'name': 'Science',
+            'evaluation': {'attendance': null, 'notes': null},
+          },
+        ],
+      },
+    });
+
+    final subject = response.data.students.single.subjects.single;
+    expect(response.data.week, 2);
+    expect(subject.isEvaluated, isTrue);
+    expect(subject.evaluation?.attendance, isEmpty);
+    expect(subject.evaluation?.participation, isEmpty);
+    expect(subject.evaluation?.notes, isEmpty);
+  });
 }

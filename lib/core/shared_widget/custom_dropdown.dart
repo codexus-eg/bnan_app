@@ -16,6 +16,10 @@ class CustomDropdown extends StatelessWidget {
     this.backgroundColor,
     this.labelColor,
     this.valueStyle,
+    this.showLabel = true,
+    this.fieldHeight = 40,
+    this.useDefaultIcon = false,
+    this.isDense = false,
   });
 
   final String label;
@@ -25,7 +29,8 @@ class CustomDropdown extends StatelessWidget {
   final List<String>? items;
   final Map<String, String>? itemsLabels;
   final ValueChanged<String?>? onChanged;
-  final bool isRequired;
+  final bool isRequired, showLabel, useDefaultIcon, isDense;
+  final double fieldHeight;
   final Color? backgroundColor, labelColor;
 
   String _labelOf(String item) => itemsLabels?[item] ?? item;
@@ -38,22 +43,24 @@ class CustomDropdown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: StylesManager.styleBold14(
-                context,
-              ).copyWith(color: labelColor ?? ColorManager.mainColor15),
-            ),
-            if (isRequired)
-              const Text('*', style: TextStyle(color: Colors.red)),
-          ],
-        ),
-        const SizedBox(height: 8),
+        if (showLabel) ...[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: StylesManager.styleBold14(
+                  context,
+                ).copyWith(color: labelColor ?? ColorManager.mainColor15),
+              ),
+              if (isRequired)
+                const Text('*', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
         Container(
-          constraints: const BoxConstraints(minHeight: 40),
+          constraints: BoxConstraints(minHeight: fieldHeight),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: isDisabled
@@ -66,11 +73,19 @@ class CustomDropdown extends StatelessWidget {
             child: DropdownButton<String>(
               value: dropdownItems.contains(value) ? value : null,
               isExpanded: true,
-              icon: const SizedBox.shrink(),
+              isDense: isDense,
+              icon: useDefaultIcon
+                  ? const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: ColorManager.greyA8AF,
+                      size: 22,
+                    )
+                  : const SizedBox.shrink(),
               hint: _DropdownDisplayedText(
                 text: hint ?? '',
                 isDisabled: isDisabled,
                 hintStyle: hintStyle,
+                showLeadingIcon: !useDefaultIcon,
               ),
               selectedItemBuilder: (context) {
                 return dropdownItems.map((item) {
@@ -78,6 +93,7 @@ class CustomDropdown extends StatelessWidget {
                     text: _labelOf(item),
                     isDisabled: isDisabled,
                     valueStyle: valueStyle,
+                    showLeadingIcon: !useDefaultIcon,
                   );
                 }).toList();
               },
@@ -107,12 +123,14 @@ class _DropdownDisplayedText extends StatelessWidget {
     required this.isDisabled,
     this.hintStyle,
     this.valueStyle,
+    this.showLeadingIcon = true,
   });
 
   final String text;
   final bool isDisabled;
   final TextStyle? hintStyle;
   final TextStyle? valueStyle;
+  final bool showLeadingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -120,12 +138,14 @@ class _DropdownDisplayedText extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(
-          Icons.keyboard_arrow_down,
-          color: isDisabled ? ColorManager.greyA8AF : ColorManager.greyA8AF,
-          size: 22,
-        ),
-        const SizedBox(width: 8),
+        if (showLeadingIcon) ...[
+          Icon(
+            Icons.keyboard_arrow_down,
+            color: ColorManager.greyA8AF,
+            size: 22,
+          ),
+          const SizedBox(width: 8),
+        ],
         Expanded(
           child: Text(
             text,

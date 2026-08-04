@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/plans/data/models/parent_children_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/parent_plan_child_model.dart';
@@ -160,6 +162,102 @@ void main() {
       );
     },
   );
+
+  test('weeks failure is exposed without requesting evaluations', () async {
+    final repo = _FakeRepo(weeksFailure: Failure(message: 'Weeks failed'));
+    final cubit = _cubit(repo);
+    await cubit.initialize('teacher');
+
+    await cubit.setClassrooms(const [PlanClassroomOption(id: 'c1', name: 'A')]);
+
+    expect(cubit.state, isA<EvaluationsFailure>());
+    expect((cubit.state as EvaluationsFailure).message, 'Weeks failed');
+    expect(repo.weeklyCalls, isEmpty);
+  });
+
+  test('empty weeks stops before requesting evaluations', () async {
+    final repo = _FakeRepo(weeksCount: 0);
+    final cubit = _cubit(repo);
+    await cubit.initialize('supervisor');
+
+    await cubit.setClassrooms(const [PlanClassroomOption(id: 'c1', name: 'A')]);
+
+    expect(cubit.state, isA<EvaluationsEmpty>());
+    expect(cubit.selectedWeek, isNull);
+    expect(repo.weeklyCalls, isEmpty);
+  });
+
+  test('evaluation failure exposes repository message', () async {
+    final repo = _FakeRepo(weeklyFailure: Failure(message: 'Load failed'));
+    final cubit = _cubit(repo);
+    await cubit.initialize('teacher');
+
+    await cubit.setClassrooms(const [PlanClassroomOption(id: 'c1', name: 'A')]);
+
+    expect(cubit.state, isA<EvaluationsFailure>());
+    expect((cubit.state as EvaluationsFailure).message, 'Load failed');
+  });
+
+  test('save failure stops loading and allows a later retry', () async {
+    final repo = _FakeRepo(saveFailure: Failure(message: 'Save failed'));
+    final cubit = _cubit(repo);
+
+    expect(await cubit.upsert(_request), isFalse);
+    expect(cubit.state, isA<EvaluationSaveFailure>());
+    repo.saveFailure = null;
+    expect(await cubit.upsert(_request), isTrue);
+    expect(repo.saved, hasLength(2));
+  });
+
+  test('concurrent save is ignored while first request is pending', () async {
+    final completer = Completer<Either<Failure, Unit>>();
+    final repo = _FakeRepo(saveCompleter: completer);
+    final cubit = _cubit(repo);
+
+    final first = cubit.upsert(_request);
+    expect(await cubit.upsert(_request), isFalse);
+    expect(repo.saved, hasLength(1));
+    completer.complete(const Right(unit));
+    expect(await first, isTrue);
+  });
+
+  test('invalid required ids never reach repository', () async {
+    final repo = _FakeRepo();
+    final cubit = _cubit(repo);
+    const invalid = UpsertEvaluationRequestModel(
+      student: ' ',
+      classroom: 'c1',
+      subject: 'subject',
+      week: 1,
+      attendance: 'present',
+      participation: 'good',
+      homework: 'good',
+      behavior: 'good',
+    );
+
+    expect(await cubit.upsert(invalid), isFalse);
+    expect(repo.saved, isEmpty);
+  });
+
+  test('late classroom response cannot replace newer selection', () async {
+    final repo = _RaceRepo();
+    final cubit = _cubit(repo);
+    await cubit.initialize('teacher');
+
+    final first = cubit.setClassrooms(const [
+      PlanClassroomOption(id: 'old', name: 'Old'),
+    ]);
+    final second = cubit.setClassrooms(const [
+      PlanClassroomOption(id: 'new', name: 'New'),
+    ]);
+    repo.weeks['new']!.complete(_weeksResult());
+    await second;
+    repo.weeks['old']!.complete(_weeksResult());
+    await first;
+
+    expect(cubit.selectedClassroom?.id, 'new');
+    expect(repo.weeklyCalls, [('new', 2)]);
+  });
 }
 
 WeeklyEvaluationsCubit _cubit(_FakeRepo repo) =>
@@ -190,12 +288,21 @@ class _FakeRepo implements WeeklyEvaluationsRepo {
   _FakeRepo({
     this.children = const [],
     this.emptyWeekly = false,
+    this.weeksCount = 2,
+    this.weeksFailure,
+    this.weeklyFailure,
+    this.saveFailure,
+    this.saveCompleter,
     this.subjects = const [
       EvaluationSubjectModel(id: 'only-subject', name: 'Math'),
     ],
   });
   final List<ParentPlanChildModel> children;
   final bool emptyWeekly;
+  final int weeksCount;
+  final Failure? weeksFailure, weeklyFailure;
+  Failure? saveFailure;
+  final Completer<Either<Failure, Unit>>? saveCompleter;
   final List<EvaluationSubjectModel> subjects;
   final weeklyCalls = <(String, int)>[];
   final myCalls = <(int, String?)>[];
@@ -204,12 +311,9 @@ class _FakeRepo implements WeeklyEvaluationsRepo {
   @override
   Future<Either<Failure, ElapsedEvaluationWeeksModel>> getElapsedWeeks(
     String classroomId,
-  ) async => const Right(
-    ElapsedEvaluationWeeksModel(
-      success: true,
-      data: ElapsedEvaluationWeeksData(weeksCount: 2, currentWeek: 2),
-    ),
-  );
+  ) async => weeksFailure != null
+      ? Left(weeksFailure!)
+      : _weeksResult(weeksCount: weeksCount);
 
   @override
   Future<Either<Failure, WeeklyEvaluationsResponseModel>> getClassroomWeekly({
@@ -217,6 +321,7 @@ class _FakeRepo implements WeeklyEvaluationsRepo {
     required int week,
   }) async {
     weeklyCalls.add((classroomId, week));
+    if (weeklyFailure != null) return Left(weeklyFailure!);
     return Right(emptyWeekly ? _emptyResponse(week) : _response(week));
   }
 
@@ -254,9 +359,37 @@ class _FakeRepo implements WeeklyEvaluationsRepo {
     UpsertEvaluationRequestModel request,
   ) async {
     saved.add(request);
+    if (saveCompleter != null) return saveCompleter!.future;
+    if (saveFailure != null) return Left(saveFailure!);
     return const Right(unit);
   }
 }
+
+class _RaceRepo extends _FakeRepo {
+  final weeks =
+      <String, Completer<Either<Failure, ElapsedEvaluationWeeksModel>>>{};
+
+  @override
+  Future<Either<Failure, ElapsedEvaluationWeeksModel>> getElapsedWeeks(
+    String classroomId,
+  ) {
+    final completer = Completer<Either<Failure, ElapsedEvaluationWeeksModel>>();
+    weeks[classroomId] = completer;
+    return completer.future;
+  }
+}
+
+Either<Failure, ElapsedEvaluationWeeksModel> _weeksResult({
+  int weeksCount = 2,
+}) => Right(
+  ElapsedEvaluationWeeksModel(
+    success: true,
+    data: ElapsedEvaluationWeeksData(
+      weeksCount: weeksCount,
+      currentWeek: weeksCount,
+    ),
+  ),
+);
 
 class _FakeAssignmentsRepo implements AssignmentsRepo {
   _FakeAssignmentsRepo(this.assignedIds, {this.failure});

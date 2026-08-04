@@ -64,6 +64,10 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
       icon: ImageManager.bellIcon,
     ),
     DrawerItemModel(
+      title: s.attendance,
+      icon: ImageManager.teacherMeetingIcon,
+    ),
+    DrawerItemModel(
       title: s.myAccount,
       icon: ImageManager.userProfileIcon,
     ),

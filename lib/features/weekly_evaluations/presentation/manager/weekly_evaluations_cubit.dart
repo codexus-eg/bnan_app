@@ -101,7 +101,7 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   }
 
   Future<bool> upsert(UpsertEvaluationRequestModel request) async {
-    if (_isSaving || isClosed) return false;
+    if (_isSaving || isClosed || !_isValidRequest(request)) return false;
     _isSaving = true;
     emit(EvaluationSaving());
     try {
@@ -279,6 +279,16 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   }
 
   bool _isCurrent(int requestId) => !isClosed && requestId == _requestId;
+
+  bool _isValidRequest(UpsertEvaluationRequestModel request) =>
+      request.student.trim().isNotEmpty &&
+      request.classroom.trim().isNotEmpty &&
+      request.subject.trim().isNotEmpty &&
+      request.week > 0 &&
+      request.attendance.trim().isNotEmpty &&
+      request.participation.trim().isNotEmpty &&
+      request.homework.trim().isNotEmpty &&
+      request.behavior.trim().isNotEmpty;
 
   bool _isCurrentForm(int requestId, String classroomId, [String? studentId]) =>
       !isClosed &&

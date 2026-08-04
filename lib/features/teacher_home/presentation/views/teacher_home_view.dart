@@ -31,7 +31,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     3: 1,
     5: 2,
     8: 3,
-    14: 4,
+    15: 4,
   };
 
   void _changeIndex(int index) {
@@ -73,6 +73,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       MyNavigator.goTo(context, Routes.plans);
     } else if (index == 9) {
       MyNavigator.goTo(context, Routes.certificatesManagement);
+    } else if (index == 14) {
+      MyNavigator.goTo(context, Routes.attendance);
     }
   }
 

@@ -12,15 +12,17 @@ void main() {
     expect(plans.extra, isNull);
   });
 
-  test('attendance destinations stay safely disabled', () {
-    final disabledDrawer = SupervisorNavigationConfig.drawer(
-      S(),
-    ).where((item) => !item.isEnabled);
-    final disabledBottom = SupervisorNavigationConfig.bottom(
-      S(),
-    ).where((item) => !item.isEnabled);
+  test('attendance destinations use the attendance route', () {
+    final drawer = SupervisorNavigationConfig.drawer(S());
+    final bottom = SupervisorNavigationConfig.bottom(S());
 
-    expect(disabledDrawer.length, 2);
-    expect(disabledBottom.length, 2);
+    expect(
+      drawer.where((item) => item.route == Routes.attendance),
+      hasLength(1),
+    );
+    expect(
+      bottom.where((item) => item.route == Routes.attendance),
+      hasLength(1),
+    );
   });
 }

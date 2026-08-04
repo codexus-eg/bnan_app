@@ -129,3 +129,6 @@ export 'package:bnan_app/features/supervisor_classroom_assignment/data/repo/supe
 export 'package:bnan_app/features/supervisor_classroom_assignment/data/repo/supervisor_assignment_repo_impl.dart';
 export 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/get_supervisors/get_supervisors_cubit.dart';
 export 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/supervisor_assignment_actions/supervisor_assignment_actions_cubit.dart';
+export 'package:bnan_app/features/attendance/data/repo/attendance_repo.dart';
+export 'package:bnan_app/features/attendance/data/repo/attendance_repo_impl.dart';
+export 'package:bnan_app/features/attendance/presentation/manager/attendance_cubit.dart';

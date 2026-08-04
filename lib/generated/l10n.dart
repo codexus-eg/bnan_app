@@ -8329,6 +8329,116 @@ class S {
       args: [],
     );
   }
+
+  /// `Attendance Registration`
+  String get attendanceRegistration {
+    return Intl.message(
+      'Attendance Registration',
+      name: 'attendanceRegistration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Attendance`
+  String get editAttendance {
+    return Intl.message(
+      'Edit Attendance',
+      name: 'editAttendance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select lesson`
+  String get selectLesson {
+    return Intl.message(
+      'Select lesson',
+      name: 'selectLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Changes`
+  String get saveChanges {
+    return Intl.message(
+      'Save Changes',
+      name: 'saveChanges',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attendance registered successfully`
+  String get attendanceRegisteredSuccessfully {
+    return Intl.message(
+      'Attendance registered successfully',
+      name: 'attendanceRegisteredSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attendance updated successfully`
+  String get attendanceUpdatedSuccessfully {
+    return Intl.message(
+      'Attendance updated successfully',
+      name: 'attendanceUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a grade to view attendance data`
+  String get selectGradeToViewAttendance {
+    return Intl.message(
+      'Select a grade to view attendance data',
+      name: 'selectGradeToViewAttendance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No lessons available`
+  String get noLessonsAvailable {
+    return Intl.message(
+      'No lessons available',
+      name: 'noLessonsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no students in this classroom`
+  String get noStudentsInClassroom {
+    return Intl.message(
+      'There are no students in this classroom',
+      name: 'noStudentsInClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load attendance data`
+  String get failedToLoadAttendance {
+    return Intl.message(
+      'Failed to load attendance data',
+      name: 'failedToLoadAttendance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attendance for {grade}`
+  String attendanceStudentsTitle(Object grade) {
+    return Intl.message(
+      'Attendance for $grade',
+      name: 'attendanceStudentsTitle',
+      desc: '',
+      args: [grade],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
