@@ -6,12 +6,12 @@ class LessonWeekDayItem extends StatelessWidget {
   const LessonWeekDayItem({
     super.key,
     required this.day,
-    required this.number,
+    required this.onTap,
     this.isSelected = false,
   });
 
   final String day;
-  final String number;
+  final VoidCallback onTap;
   final bool isSelected;
 
   @override
@@ -19,34 +19,27 @@ class LessonWeekDayItem extends StatelessWidget {
     final foreground = isSelected
         ? ColorManager.mainColor14
         : ColorManager.greyA8AF;
-    return Container(
-      padding: const EdgeInsetsDirectional.symmetric(
-        vertical: 4,
-        horizontal: 7.5,
-      ),
-      decoration: BoxDecoration(
-        color: isSelected
-            ? ColorManager.secondaryColor.withAlpha((255 * .2).round())
-            : ColorManager.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: foreground),
-      ),
-      child: Column(
-        children: [
-          Text(
-            day,
-            style: StylesManager.styleRegular10(
-              context,
-            ).copyWith(color: foreground),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            number,
-            style: StylesManager.styleMedium16(
-              context,
-            ).copyWith(color: foreground),
-          ),
-        ],
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsetsDirectional.symmetric(
+          vertical: 10,
+          horizontal: 14,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? ColorManager.secondaryColor.withAlpha((255 * .2).round())
+              : ColorManager.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: foreground),
+        ),
+        child: Text(
+          day,
+          style: StylesManager.styleRegular12(
+            context,
+          ).copyWith(color: foreground),
+        ),
       ),
     );
   }

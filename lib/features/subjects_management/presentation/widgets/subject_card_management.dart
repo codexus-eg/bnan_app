@@ -16,6 +16,7 @@ class SubjectCardManagement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gradeName = subject?.grade?.name?.trim();
     return CustomDetailsWidgetBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +32,8 @@ class SubjectCardManagement extends StatelessWidget {
             label: S.of(context).curriculum,
             value: subject?.curriculum?.name ?? '---',
           ),
-
+          if (gradeName != null && gradeName.isNotEmpty)
+            ClassMetaRow(label: S.of(context).grade, value: gradeName),
           const SizedBox(height: 8),
           ActionChipButton(
             title: S.of(context).edit,

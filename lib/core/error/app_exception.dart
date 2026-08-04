@@ -74,7 +74,7 @@ class AppException implements Exception {
   static String? _extractBackendMessage(dynamic data) {
     if (data is! Map) return null;
 
-    final message = data['message'] ?? data['error'];
+    final message = data['message'] ?? data['error'] ?? data['code'];
 
     if (message is String && message.trim().isNotEmpty) {
       return message.trim();

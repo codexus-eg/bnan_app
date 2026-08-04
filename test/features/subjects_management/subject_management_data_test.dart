@@ -33,6 +33,24 @@ void main() {
     expect(SubjectModel.fromJson({'id': 'subject-2'}).grade, isNull);
   });
 
+  test('subject response reads pagination from the API', () {
+    final response = SubjectsResponseModel.fromJson({
+      'success': true,
+      'data': <Object>[],
+      'pagination': {
+        'currentPage': '2',
+        'perPage': 15,
+        'total': '31',
+        'lastPage': 3,
+      },
+    });
+
+    expect(response.pagination.currentPage, 2);
+    expect(response.pagination.perPage, 15);
+    expect(response.pagination.total, 31);
+    expect(response.pagination.lastPage, 3);
+  });
+
   test('repository posts protected request through repoGuard', () async {
     final api = _Api();
     final result = await SubjectsRepoImpl(api).addSubject(request: request);
@@ -45,13 +63,48 @@ void main() {
     final failure = await SubjectsRepoImpl(api).addSubject(request: request);
     expect(failure.fold((item) => item.message, (_) => ''), 'backend error');
   });
+
+  test('repository sends page and perPage with protected get', () async {
+    final api = _Api();
+    final result = await SubjectsRepoImpl(
+      api,
+    ).getSubjects(page: 2, perPage: 15);
+
+    expect(result.isRight(), isTrue);
+    expect(api.path, EndPoints.subjects);
+    expect(api.query, {'page': 2, 'perPage': 15});
+    expect(api.isProtected, isTrue);
+  });
 }
 
 class _Api implements ApiConsumer {
   String? path;
   Object? data;
   bool isProtected = false;
+  Map<String, dynamic>? query;
   AppException? error;
+
+  @override
+  Future<dynamic> get(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameter,
+    bool isProtected = false,
+  }) async {
+    this.path = path;
+    query = queryParameter;
+    this.isProtected = isProtected;
+    return {
+      'success': true,
+      'data': <Object>[],
+      'pagination': {
+        'currentPage': 2,
+        'perPage': 15,
+        'total': 0,
+        'lastPage': 1,
+      },
+    };
+  }
 
   @override
   Future<dynamic> post(

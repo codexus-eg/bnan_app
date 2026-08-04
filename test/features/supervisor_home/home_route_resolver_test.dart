@@ -11,7 +11,7 @@ void main() {
     expect(HomeRouteResolver.forRole('student'), Routes.home);
     expect(HomeRouteResolver.forRole('teacher'), Routes.teacherHome);
     expect(HomeRouteResolver.forRole('admin'), Routes.adminHome);
-    expect(HomeRouteResolver.forRole('parent'), isNull);
+    expect(HomeRouteResolver.forRole('parent'), Routes.parentHome);
     expect(HomeRouteResolver.forRole('unknown'), isNull);
   });
 }

@@ -1,9 +1,17 @@
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lesson_week_day_item.dart';
+import 'package:bnan_app/features/lessons_management/presentation/models/lesson_days.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class LessonsWeekDaysSelector extends StatelessWidget {
-  const LessonsWeekDaysSelector({super.key});
+  const LessonsWeekDaysSelector({
+    super.key,
+    required this.selectedDay,
+    required this.onSelected,
+  });
+
+  final String selectedDay;
+  final ValueChanged<String> onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +21,14 @@ class LessonsWeekDaysSelector extends StatelessWidget {
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
       child: Row(
         children: [
-          LessonWeekDayItem(day: s.saturday, number: '05'),
-          const SizedBox(width: 8),
-          LessonWeekDayItem(day: s.friday, number: '06'),
-          const SizedBox(width: 8),
-          LessonWeekDayItem(day: s.thursday, number: '07', isSelected: true),
-          const SizedBox(width: 8),
-          LessonWeekDayItem(day: s.wednesday, number: '08'),
-          const SizedBox(width: 8),
-          LessonWeekDayItem(day: s.tuesday, number: '09'),
-          const SizedBox(width: 8),
-          LessonWeekDayItem(day: s.monday, number: '10'),
+          for (final day in lessonDays) ...[
+            LessonWeekDayItem(
+              day: lessonDayLabel(s, day),
+              isSelected: selectedDay == day,
+              onTap: () => onSelected(day),
+            ),
+            if (day != lessonDays.last) const SizedBox(width: 8),
+          ],
         ],
       ),
     );

@@ -25,4 +25,13 @@ void main() {
       hasLength(1),
     );
   });
+
+  test('drawer contains one Gulf lessons management destination', () {
+    final drawer = SupervisorNavigationConfig.drawer(S());
+
+    expect(
+      drawer.where((item) => item.route == Routes.lessonsManagement),
+      hasLength(1),
+    );
+  });
 }

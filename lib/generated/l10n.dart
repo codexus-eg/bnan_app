@@ -6710,6 +6710,226 @@ class S {
     );
   }
 
+  /// `Schedule for {day}`
+  String scheduleForDay(Object day) {
+    return Intl.message(
+      'Schedule for $day',
+      name: 'scheduleForDay',
+      desc: '',
+      args: [day],
+    );
+  }
+
+  /// `No schedule entries have been added for this classroom yet`
+  String get noScheduleEntriesForClassroom {
+    return Intl.message(
+      'No schedule entries have been added for this classroom yet',
+      name: 'noScheduleEntriesForClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No lesson is scheduled for this day`
+  String get noScheduledLessonForDay {
+    return Intl.message(
+      'No lesson is scheduled for this day',
+      name: 'noScheduledLessonForDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Gulf classrooms are available`
+  String get noGulfClassroomsAvailable {
+    return Intl.message(
+      'No Gulf classrooms are available',
+      name: 'noGulfClassroomsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load the schedule`
+  String get gulfScheduleLoadFailed {
+    return Intl.message(
+      'Failed to load the schedule',
+      name: 'gulfScheduleLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule entry added successfully`
+  String get gulfScheduleEntryAdded {
+    return Intl.message(
+      'Schedule entry added successfully',
+      name: 'gulfScheduleEntryAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule entry updated successfully`
+  String get gulfScheduleEntryUpdated {
+    return Intl.message(
+      'Schedule entry updated successfully',
+      name: 'gulfScheduleEntryUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule entry deleted successfully`
+  String get gulfScheduleEntryDeleted {
+    return Intl.message(
+      'Schedule entry deleted successfully',
+      name: 'gulfScheduleEntryDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The schedule cannot be created because the classroom-subject link is unavailable`
+  String get gulfClassroomSubjectUnavailable {
+    return Intl.message(
+      'The schedule cannot be created because the classroom-subject link is unavailable',
+      name: 'gulfClassroomSubjectUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start lesson`
+  String get startSession {
+    return Intl.message(
+      'Start lesson',
+      name: 'startSession',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Starting lesson`
+  String get sessionStarting {
+    return Intl.message(
+      'Starting lesson',
+      name: 'sessionStarting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lesson started`
+  String get sessionStarted {
+    return Intl.message(
+      'Lesson started',
+      name: 'sessionStarted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open lesson link`
+  String get openSessionLink {
+    return Intl.message(
+      'Open lesson link',
+      name: 'openSessionLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The lesson started, but its link could not be opened`
+  String get sessionStartedLinkOpenFailed {
+    return Intl.message(
+      'The lesson started, but its link could not be opened',
+      name: 'sessionStartedLinkOpenFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subject data is unavailable`
+  String get sessionSubjectUnavailable {
+    return Intl.message(
+      'Subject data is unavailable',
+      name: 'sessionSubjectUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Zoom setup is incomplete for this classroom`
+  String get classroomZoomNotConfigured {
+    return Intl.message(
+      'Zoom setup is incomplete for this classroom',
+      name: 'classroomZoomNotConfigured',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Another lesson is already active for this classroom`
+  String get classroomSessionAlreadyActive {
+    return Intl.message(
+      'Another lesson is already active for this classroom',
+      name: 'classroomSessionAlreadyActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No teacher is assigned to this subject`
+  String get teacherNotAssignedToSessionSubject {
+    return Intl.message(
+      'No teacher is assigned to this subject',
+      name: 'teacherNotAssignedToSessionSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are not authorized to start this lesson`
+  String get sessionStartUnauthorized {
+    return Intl.message(
+      'You are not authorized to start this lesson',
+      name: 'sessionStartUnauthorized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add schedule entry`
+  String get addScheduleEntry {
+    return Intl.message(
+      'Add schedule entry',
+      name: 'addScheduleEntry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit schedule entry`
+  String get editScheduleEntry {
+    return Intl.message(
+      'Edit schedule entry',
+      name: 'editScheduleEntry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only one schedule entry can be added for the same day`
+  String get duplicateScheduleDay {
+    return Intl.message(
+      'Only one schedule entry can be added for the same day',
+      name: 'duplicateScheduleDay',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Enter a valid amount of at least 0.01`
   String get invalidPaymentAmount {
     return Intl.message(

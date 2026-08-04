@@ -1,21 +1,42 @@
+import 'package:bnan_app/features/subjects_management/data/models/subjects_pagination_model.dart';
+
 class SubjectsResponseModel {
   const SubjectsResponseModel({
     required this.success,
     required this.length,
     required this.data,
+    this.pagination = const SubjectsPaginationModel(
+      currentPage: 1,
+      perPage: 0,
+      total: 0,
+      lastPage: 1,
+    ),
   });
 
   final bool success;
   final int length;
   final List<SubjectModel> data;
+  final SubjectsPaginationModel pagination;
 
   factory SubjectsResponseModel.fromJson(Map<String, dynamic> json) {
+    final data = (json['data'] as List<dynamic>? ?? [])
+        .map((item) => SubjectModel.fromJson(item))
+        .toList();
+    final pagination = json['pagination'];
     return SubjectsResponseModel(
       success: json['success'] ?? false,
       length: json['length'] ?? 0,
-      data: (json['data'] as List<dynamic>? ?? [])
-          .map((item) => SubjectModel.fromJson(item))
-          .toList(),
+      data: data,
+      pagination: pagination is Map
+          ? SubjectsPaginationModel.fromJson(
+              Map<String, dynamic>.from(pagination),
+            )
+          : SubjectsPaginationModel(
+              currentPage: 1,
+              perPage: data.length,
+              total: data.length,
+              lastPage: 1,
+            ),
     );
   }
 }

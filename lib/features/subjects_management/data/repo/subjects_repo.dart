@@ -4,7 +4,10 @@ import 'package:bnan_app/features/subjects_management/data/models/subject_respon
 import 'package:dartz/dartz.dart';
 
 abstract class SubjectsRepo {
-  Future<Either<Failure, SubjectsResponseModel>> getSubjects();
+  Future<Either<Failure, SubjectsResponseModel>> getSubjects({
+    required int page,
+    required int perPage,
+  });
 
   Future<Either<Failure, Unit>> addSubject({
     required AddSubjectRequestModel request,
