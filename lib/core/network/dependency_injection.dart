@@ -125,6 +125,12 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AttendanceRepo>(
     () => AttendanceRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<GulfScheduleRepo>(
+    () => GulfScheduleRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<StartSessionRepo>(
+    () => StartSessionRepoImpl(getIt<ApiConsumer>()),
+  );
   // Cubits
   getIt.registerFactory<GetPackagesCubit>(
     () => GetPackagesCubit(getIt<PackagesRepo>()),
@@ -132,6 +138,12 @@ void setupServiceLocator() {
   getIt.registerFactory<PackageFormCubit>(() => PackageFormCubit());
   getIt.registerFactory<AttendanceCubit>(
     () => AttendanceCubit(getIt<AttendanceRepo>()),
+  );
+  getIt.registerFactory<GulfScheduleCubit>(
+    () => GulfScheduleCubit(getIt<GulfScheduleRepo>()),
+  );
+  getIt.registerFactory<StartSessionCubit>(
+    () => StartSessionCubit(getIt<StartSessionRepo>()),
   );
   getIt.registerFactory<curriculum_management.GetCurriculumsCubit>(
     () => curriculum_management.GetCurriculumsCubit(

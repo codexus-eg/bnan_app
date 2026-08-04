@@ -1,0 +1,140 @@
+class GulfSchedulesResponse {
+  const GulfSchedulesResponse({required this.success, required this.data});
+
+  final bool success;
+  final GulfSchedulesData data;
+
+  factory GulfSchedulesResponse.fromJson(Map<String, dynamic> json) =>
+      GulfSchedulesResponse(
+        success: json['success'] == true,
+        data: GulfSchedulesData.fromJson(_map(json['data'])),
+      );
+}
+
+class GulfSchedulesData {
+  const GulfSchedulesData({required this.classrooms});
+  final List<GulfClassroom> classrooms;
+
+  factory GulfSchedulesData.fromJson(Map<String, dynamic> json) =>
+      GulfSchedulesData(
+        classrooms: _maps(json['classrooms'])
+            .map(GulfClassroom.fromJson)
+            .where((item) => item.id.isNotEmpty)
+            .toList(growable: false),
+      );
+}
+
+class GulfClassroom {
+  const GulfClassroom({
+    required this.id,
+    required this.name,
+    this.grade,
+    this.curriculum,
+    this.subject,
+    this.schedule,
+    this.classroomSubject,
+  });
+
+  final String id, name;
+  final GulfGrade? grade;
+  final GulfCurriculum? curriculum;
+  final GulfSubject? subject;
+  final GulfSchedule? schedule;
+  final String? classroomSubject;
+
+  String? get classroomSubjectId =>
+      _nonEmpty(schedule?.classroomSubject) ?? _nonEmpty(classroomSubject);
+  List<GulfScheduleEntry> get entries =>
+      schedule?.isActive == false ? const [] : schedule?.entries ?? const [];
+
+  factory GulfClassroom.fromJson(Map<String, dynamic> json) => GulfClassroom(
+    id: _id(json),
+    name: _string(json['name']),
+    grade: _nullable(json['grade'], GulfGrade.fromJson),
+    curriculum: _nullable(json['curriculum'], GulfCurriculum.fromJson),
+    subject: _nullable(json['subject'], GulfSubject.fromJson),
+    schedule: _nullable(json['schedule'], GulfSchedule.fromJson),
+    classroomSubject: _referenceId(json['classroomSubject']),
+  );
+}
+
+class GulfGrade extends GulfReference {
+  const GulfGrade({required super.id, required super.name});
+  factory GulfGrade.fromJson(Map<String, dynamic> json) =>
+      GulfGrade(id: _id(json), name: _string(json['name']));
+}
+
+class GulfCurriculum extends GulfReference {
+  const GulfCurriculum({required super.id, required super.name});
+  factory GulfCurriculum.fromJson(Map<String, dynamic> json) =>
+      GulfCurriculum(id: _id(json), name: _string(json['name']));
+}
+
+class GulfSubject extends GulfReference {
+  const GulfSubject({required super.id, required super.name});
+  factory GulfSubject.fromJson(Map<String, dynamic> json) =>
+      GulfSubject(id: _id(json), name: _string(json['name']));
+}
+
+abstract class GulfReference {
+  const GulfReference({required this.id, required this.name});
+  final String id, name;
+}
+
+class GulfSchedule {
+  const GulfSchedule({
+    required this.id,
+    required this.classroomSubject,
+    required this.entries,
+    required this.isActive,
+  });
+
+  final String id, classroomSubject;
+  final List<GulfScheduleEntry> entries;
+  final bool isActive;
+
+  factory GulfSchedule.fromJson(Map<String, dynamic> json) => GulfSchedule(
+    id: _id(json),
+    classroomSubject: _referenceId(json['classroomSubject']) ?? '',
+    entries: _maps(json['entries'])
+        .map(GulfScheduleEntry.fromJson)
+        .where((item) => item.isValid)
+        .toList(growable: false),
+    isActive: json['isActive'] != false,
+  );
+}
+
+class GulfScheduleEntry {
+  const GulfScheduleEntry({required this.day, required this.startTime});
+  final String day, startTime;
+  bool get isValid => day.isNotEmpty && startTime.isNotEmpty;
+
+  factory GulfScheduleEntry.fromJson(Map<String, dynamic> json) =>
+      GulfScheduleEntry(
+        day: _string(json['day']).toLowerCase(),
+        startTime: _string(json['startTime']),
+      );
+
+  Map<String, dynamic> toJson() => {'day': day, 'startTime': startTime};
+}
+
+Map<String, dynamic> _map(Object? value) =>
+    value is Map ? Map<String, dynamic>.from(value) : const {};
+List<Map<String, dynamic>> _maps(Object? value) => value is List
+    ? value
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList()
+    : const [];
+String _string(Object? value) => value is String ? value.trim() : '';
+String _id(Map<String, dynamic> json) =>
+    _string(json['id']).isNotEmpty ? _string(json['id']) : _string(json['_id']);
+String? _nonEmpty(String? value) =>
+    value == null || value.trim().isEmpty ? null : value.trim();
+String? _referenceId(Object? value) => value is String
+    ? _nonEmpty(value)
+    : value is Map
+    ? _nonEmpty(_id(Map<String, dynamic>.from(value)))
+    : null;
+T? _nullable<T>(Object? value, T Function(Map<String, dynamic>) parser) =>
+    value is Map ? parser(Map<String, dynamic>.from(value)) : null;

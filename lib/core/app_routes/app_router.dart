@@ -602,6 +602,16 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.lessonsManagement,
+        redirect: (context, state) {
+          final role = SessionManager.instance.role;
+          if (role == UserRole.teacher ||
+              role == UserRole.supervisor ||
+              role == UserRole.admin) {
+            return null;
+          }
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
           child: const LessonsManagementView(),
           key: state.pageKey,

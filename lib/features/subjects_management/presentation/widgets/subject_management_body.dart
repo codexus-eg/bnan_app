@@ -5,6 +5,7 @@ import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/subjects_management/data/models/subject_mock_data.dart';
+import 'package:bnan_app/features/subjects_management/data/models/subject_response_model.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_state.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:bnan_app/features/subjects_management/presentation/widgets/dialo
 import 'package:bnan_app/features/subjects_management/presentation/widgets/dialogs/edit_subject_dialog.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_card_management.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_management_header.dart';
+import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_pagination_controls.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +52,7 @@ class SubjectManagementBody extends StatelessWidget {
               );
 
               if (result == true && context.mounted) {
-                await context.read<GetSubjectsCubit>().getSubjects();
+                await context.read<GetSubjectsCubit>().reloadCurrentPage();
                 if (!context.mounted) return;
                 showCustomSnackBar(
                   context,
@@ -63,11 +65,12 @@ class SubjectManagementBody extends StatelessWidget {
           Expanded(
             child: BlocBuilder<GetSubjectsCubit, GetSubjectsState>(
               builder: (context, state) {
+                final cubit = context.read<GetSubjectsCubit>();
                 final isLoading = state is GetSubjectsLoading;
 
                 final subjects = state is GetSubjectsSuccess
                     ? state.subjects.data.reversed.toList()
-                    : mockSubjects;
+                    : cubit.subjects?.data.reversed.toList() ?? mockSubjects;
 
                 if (state is GetSubjectsFailure) {
                   return const NoDataWidget();
@@ -77,42 +80,41 @@ class SubjectManagementBody extends StatelessWidget {
                   return const NoDataWidget();
                 }
 
-                return AppSkeletonizer(
-                  isLoading: isLoading,
-                  child: ListView.separated(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                      16,
-                      16,
-                      16,
-                      24,
+                return Column(
+                  children: [
+                    Expanded(
+                      child: AppSkeletonizer(
+                        isLoading: isLoading,
+                        child: ListView.separated(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            16,
+                            16,
+                            24,
+                          ),
+                          itemBuilder: (context, index) {
+                            final subject = subjects[index];
+                            return SubjectCardManagement(
+                              subject: subject,
+                              onEdit: isLoading
+                                  ? null
+                                  : () => _editSubject(context, subject),
+                            );
+                          },
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 16),
+                          itemCount: subjects.length,
+                        ),
+                      ),
                     ),
-                    itemBuilder: (context, index) {
-                      final subject = subjects[index];
-
-                      return SubjectCardManagement(
-                        subject: subject,
-                        onEdit: isLoading
-                            ? null
-                            : () async {
-                                final result = await showDialog<bool>(
-                                  context: context,
-                                  builder: (_) => BlocProvider.value(
-                                    value: context.read<SubjectActionsCubit>(),
-                                    child: EditSubjectDialog(subject: subject),
-                                  ),
-                                );
-
-                                if (result == true && context.mounted) {
-                                  context
-                                      .read<GetSubjectsCubit>()
-                                      .getSubjects();
-                                }
-                              },
-                      );
-                    },
-                    separatorBuilder: (_, _) => const SizedBox(height: 16),
-                    itemCount: subjects.length,
-                  ),
+                    SubjectPaginationControls(
+                      currentPage: cubit.currentPage,
+                      lastPage: cubit.lastPage,
+                      isLoading: isLoading,
+                      onPrevious: cubit.previousPage,
+                      onNext: cubit.nextPage,
+                    ),
+                  ],
                 );
               },
             ),
@@ -120,5 +122,18 @@ class SubjectManagementBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _editSubject(BuildContext context, SubjectModel subject) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<SubjectActionsCubit>(),
+        child: EditSubjectDialog(subject: subject),
+      ),
+    );
+    if (result == true && context.mounted) {
+      await context.read<GetSubjectsCubit>().reloadCurrentPage();
+    }
   }
 }

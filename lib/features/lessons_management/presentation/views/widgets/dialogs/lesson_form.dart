@@ -1,28 +1,170 @@
+import 'package:bnan_app/core/helper/app_pickers.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_classroom_dropdown.dart';
-import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_date_field.dart';
-import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_subject_dropdown.dart';
-import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_time_fields.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/features/lessons_management/data/models/lesson_ui_model.dart';
+import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
+import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_state.dart';
+import 'package:bnan_app/features/lessons_management/presentation/views/widgets/delete_lesson_button.dart';
+import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_day_dropdown.dart';
+import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_start_time_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LessonForm extends StatelessWidget {
-  const LessonForm({super.key});
+class LessonForm extends StatefulWidget {
+  const LessonForm({
+    super.key,
+    required this.classroom,
+    required this.initialDay,
+    required this.blockedDays,
+    required this.actionText,
+    required this.onSave,
+    this.initialTime,
+    this.onDelete,
+  });
+
+  final LessonClassroomUiModel classroom;
+  final String initialDay, actionText;
+  final String? initialTime;
+  final Set<String> blockedDays;
+  final Future<bool> Function({required String day, required String startTime})
+  onSave;
+  final Future<bool> Function()? onDelete;
+
+  @override
+  State<LessonForm> createState() => _LessonFormState();
+}
+
+class _LessonFormState extends State<LessonForm> {
+  late String day = widget.initialDay;
+  late String? startTime = widget.initialTime;
+  late final classroom = TextEditingController(text: widget.classroom.name);
+  late final subject = TextEditingController(
+    text: widget.classroom.subjectName,
+  );
+  String? localError;
+
+  @override
+  void dispose() {
+    classroom.dispose();
+    subject.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickTime() async {
+    final parts = startTime?.split(':');
+    final initial = parts?.length == 2
+        ? TimeOfDay(
+            hour: int.tryParse(parts![0]) ?? 0,
+            minute: int.tryParse(parts[1]) ?? 0,
+          )
+        : null;
+    final value = await AppPickers.pickTime(
+      context: context,
+      initialTime: initial,
+    );
+    if (!mounted || value == null) return;
+    setState(() {
+      startTime =
+          '${value.hour.toString().padLeft(2, '0')}:'
+          '${value.minute.toString().padLeft(2, '0')}';
+      localError = null;
+    });
+  }
+
+  Future<void> _submit() async {
+    if (widget.blockedDays.contains(day)) {
+      setState(() => localError = S.of(context).duplicateScheduleDay);
+      return;
+    }
+    if (startTime == null) {
+      setState(() => localError = S.of(context).fillAllRequiredFields);
+      return;
+    }
+    final saved = await widget.onSave(day: day, startTime: startTime!);
+    if (saved && mounted) Navigator.pop(context);
+  }
+
+  Future<void> _delete() async {
+    final deleted = await widget.onDelete?.call() ?? false;
+    if (deleted && mounted) Navigator.pop(context);
+  }
+
+  String? _issueMessage(BuildContext context, GulfScheduleState state) {
+    if (localError != null) return localError;
+    if (state.actionError != null) return state.actionError;
+    return switch (state.actionIssue) {
+      GulfScheduleIssue.missingClassroomSubject =>
+        S.of(context).gulfClassroomSubjectUnavailable,
+      GulfScheduleIssue.duplicateDay => S.of(context).duplicateScheduleDay,
+      GulfScheduleIssue.invalidData => S.of(context).fillAllRequiredFields,
+      null => null,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const LessonClassroomDropdown(),
-        const SizedBox(height: 16),
-        const LessonSubjectDropdown(),
-        const SizedBox(height: 16),
-        const LessonDateField(),
-        const SizedBox(height: 16),
-        const LessonTimeFields(),
-        const SizedBox(height: 16),
-        CustomAppButton(text: S.of(context).save),
-      ],
+    return BlocBuilder<GulfScheduleCubit, GulfScheduleState>(
+      builder: (context, state) {
+        final error = _issueMessage(context, state);
+        return Column(
+          children: [
+            CustomTextField(
+              label: S.of(context).classroom,
+              controller: classroom,
+              readOnly: true,
+              backgroundColor: ColorManager.greyF4F6,
+            ),
+            const SizedBox(height: 16),
+            CustomTextField(
+              label: S.of(context).subject,
+              controller: subject,
+              readOnly: true,
+              backgroundColor: ColorManager.greyF4F6,
+            ),
+            const SizedBox(height: 16),
+            LessonDayDropdown(
+              value: day,
+              onChanged: state.isSaving
+                  ? null
+                  : (value) => setState(() {
+                      day = value ?? day;
+                      localError = null;
+                      context.read<GulfScheduleCubit>().clearActionFeedback();
+                    }),
+            ),
+            const SizedBox(height: 16),
+            LessonStartTimeField(
+              value: startTime,
+              onTap: state.isSaving ? () {} : _pickTime,
+            ),
+            if (error != null) ...[
+              const SizedBox(height: 10),
+              Text(
+                error,
+                style: StylesManager.styleRegular12(
+                  context,
+                ).copyWith(color: ColorManager.red),
+              ),
+            ],
+            const SizedBox(height: 16),
+            CustomAppButton(
+              text: widget.actionText,
+              isLoading: state.isSaving,
+              onPressed: state.isSaving ? null : _submit,
+            ),
+            if (widget.onDelete != null) ...[
+              const SizedBox(height: 12),
+              DeleteLessonButton(
+                isLoading: state.isSaving,
+                onPressed: state.isSaving ? null : _delete,
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }

@@ -7,6 +7,11 @@ abstract class SupervisorNavigationConfig {
   static List<SupervisorNavigationItem> drawer(S s) {
     return [
       _item(s.home, ImageManager.homeIcon),
+      _item(
+        s.lessonsManagement,
+        ImageManager.calendarIcon,
+        Routes.lessonsManagement,
+      ),
       _item(s.evaluations, ImageManager.starIcon, Routes.weeklyEvaluations),
       _item(
         s.certificates,

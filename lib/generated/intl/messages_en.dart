@@ -76,24 +76,26 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m23(amount) => "Save SAR ${amount}";
 
-  static String m24(totalPoints) =>
+  static String m24(day) => "Schedule for ${day}";
+
+  static String m25(totalPoints) =>
       "Score must be between 0 and ${totalPoints}";
 
-  static String m25(name) => "Application details - ${name}";
+  static String m26(name) => "Application details - ${name}";
 
-  static String m26(time) => "Today, ${time}";
+  static String m27(time) => "Today, ${time}";
 
-  static String m27(hours) => "${hours} training hours";
+  static String m28(hours) => "${hours} training hours";
 
-  static String m28(used, total) => "Used ${used} of ${total} days";
+  static String m29(used, total) => "Used ${used} of ${total} days";
 
-  static String m29(used, total) => "${used} of ${total} used";
+  static String m30(used, total) => "${used} of ${total} used";
 
-  static String m30(count) => "${count} users";
+  static String m31(count) => "${count} users";
 
-  static String m31(name) => "Student: ${name}";
+  static String m32(name) => "Student: ${name}";
 
-  static String m32(count) => "${count} weekly lessons";
+  static String m33(count) => "${count} weekly lessons";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -142,6 +144,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Rewards are calculated based on performance"),
         "addRewardPointsTitle":
             MessageLookupByLibrary.simpleMessage("Add Excellence Points"),
+        "addScheduleEntry":
+            MessageLookupByLibrary.simpleMessage("Add schedule entry"),
         "addSubject": MessageLookupByLibrary.simpleMessage("Add Subject"),
         "addUser": MessageLookupByLibrary.simpleMessage("Add User"),
         "admin": MessageLookupByLibrary.simpleMessage("Admin"),
@@ -304,6 +308,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "classroom": MessageLookupByLibrary.simpleMessage("Classroom"),
         "classroomRequired":
             MessageLookupByLibrary.simpleMessage("Please select a classroom"),
+        "classroomSessionAlreadyActive": MessageLookupByLibrary.simpleMessage(
+            "Another lesson is already active for this classroom"),
+        "classroomZoomNotConfigured": MessageLookupByLibrary.simpleMessage(
+            "Zoom setup is incomplete for this classroom"),
         "classrooms": MessageLookupByLibrary.simpleMessage("Classrooms"),
         "close": MessageLookupByLibrary.simpleMessage("Close"),
         "closePreview": MessageLookupByLibrary.simpleMessage("Close preview"),
@@ -416,6 +424,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dueFriday": MessageLookupByLibrary.simpleMessage("Due Friday"),
         "dueSunday": MessageLookupByLibrary.simpleMessage("Due Sunday"),
         "dues": MessageLookupByLibrary.simpleMessage("Dues"),
+        "duplicateScheduleDay": MessageLookupByLibrary.simpleMessage(
+            "Only one schedule entry can be added for the same day"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editAttendance":
             MessageLookupByLibrary.simpleMessage("Edit Attendance"),
@@ -430,6 +440,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
         "editLesson": MessageLookupByLibrary.simpleMessage("Edit Lesson"),
         "editPackage": MessageLookupByLibrary.simpleMessage("Edit Package"),
+        "editScheduleEntry":
+            MessageLookupByLibrary.simpleMessage("Edit schedule entry"),
         "editSubject": MessageLookupByLibrary.simpleMessage("Edit Subject"),
         "egpCurrency":
             MessageLookupByLibrary.simpleMessage("Egyptian Pound (EGP)"),
@@ -562,8 +574,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupCreatedByYou":
             MessageLookupByLibrary.simpleMessage("Group created, start now"),
         "groups": MessageLookupByLibrary.simpleMessage("Groups"),
+        "gulfClassroomSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
+            "The schedule cannot be created because the classroom-subject link is unavailable"),
         "gulfCurriculum":
             MessageLookupByLibrary.simpleMessage("Gulf Curriculum"),
+        "gulfScheduleEntryAdded": MessageLookupByLibrary.simpleMessage(
+            "Schedule entry added successfully"),
+        "gulfScheduleEntryDeleted": MessageLookupByLibrary.simpleMessage(
+            "Schedule entry deleted successfully"),
+        "gulfScheduleEntryUpdated": MessageLookupByLibrary.simpleMessage(
+            "Schedule entry updated successfully"),
+        "gulfScheduleLoadFailed":
+            MessageLookupByLibrary.simpleMessage("Failed to load the schedule"),
         "hasClearMic": MessageLookupByLibrary.simpleMessage(
             "Do you have a clear microphone?"),
         "hasGoodCamera":
@@ -731,6 +753,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noGroupsYet": MessageLookupByLibrary.simpleMessage("No groups yet"),
         "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
             "Your groups and pending requests will appear here."),
+        "noGulfClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
+            "No Gulf classrooms are available"),
         "noInactiveAccountsFound":
             MessageLookupByLibrary.simpleMessage("No inactive accounts found"),
         "noInternetConnection":
@@ -749,6 +773,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No plans available"),
         "noPlansForWeek":
             MessageLookupByLibrary.simpleMessage("No plans for this week"),
+        "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
+            "No schedule entries have been added for this classroom yet"),
+        "noScheduledLessonForDay": MessageLookupByLibrary.simpleMessage(
+            "No lesson is scheduled for this day"),
         "noStudentsInClass": MessageLookupByLibrary.simpleMessage(
             "There are no students in this classroom"),
         "noStudentsInClassroom": MessageLookupByLibrary.simpleMessage(
@@ -800,6 +828,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "onboardingTitle3":
             MessageLookupByLibrary.simpleMessage("Success starts here"),
         "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
+        "openSessionLink":
+            MessageLookupByLibrary.simpleMessage("Open lesson link"),
         "optional": MessageLookupByLibrary.simpleMessage("Optional"),
         "other": MessageLookupByLibrary.simpleMessage("Other"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("4-hour package"),
@@ -1075,12 +1105,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Schedule added successfully"),
         "scheduleDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Schedule deleted successfully"),
+        "scheduleForDay": m24,
         "scheduleImageRequired": MessageLookupByLibrary.simpleMessage(
             "Please choose a schedule image"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "Next week schedule was updated"),
         "science": MessageLookupByLibrary.simpleMessage("Science"),
-        "scoreRange": m24,
+        "scoreRange": m25,
         "scoreRequired":
             MessageLookupByLibrary.simpleMessage("Score is required"),
         "searchByNameOrPhone":
@@ -1130,6 +1161,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Send reset Code"),
         "sending": MessageLookupByLibrary.simpleMessage("Sending..."),
         "services": MessageLookupByLibrary.simpleMessage("Services"),
+        "sessionStartUnauthorized": MessageLookupByLibrary.simpleMessage(
+            "You are not authorized to start this lesson"),
+        "sessionStarted":
+            MessageLookupByLibrary.simpleMessage("Lesson started"),
+        "sessionStartedLinkOpenFailed": MessageLookupByLibrary.simpleMessage(
+            "The lesson started, but its link could not be opened"),
+        "sessionStarting":
+            MessageLookupByLibrary.simpleMessage("Starting lesson"),
+        "sessionSubjectUnavailable":
+            MessageLookupByLibrary.simpleMessage("Subject data is unavailable"),
         "sessions": MessageLookupByLibrary.simpleMessage("Sessions"),
         "sessionsThisMonth":
             MessageLookupByLibrary.simpleMessage("Sessions This Month"),
@@ -1143,6 +1184,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "startLessonViaZoom":
             MessageLookupByLibrary.simpleMessage("Start lesson via Zoom"),
         "startNow": MessageLookupByLibrary.simpleMessage("Start now"),
+        "startSession": MessageLookupByLibrary.simpleMessage("Start lesson"),
         "startTime": MessageLookupByLibrary.simpleMessage("Start time"),
         "student": MessageLookupByLibrary.simpleMessage("student"),
         "studentAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
@@ -1234,7 +1276,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "teacher": MessageLookupByLibrary.simpleMessage("teacher"),
         "teacherAhmedFouad":
             MessageLookupByLibrary.simpleMessage("Mr. Ahmed Fouad"),
-        "teacherApplicationDetailsTitle": m25,
+        "teacherApplicationDetailsTitle": m26,
         "teacherApplications":
             MessageLookupByLibrary.simpleMessage("Teacher Applications"),
         "teacherApplySubtitle": MessageLookupByLibrary.simpleMessage(
@@ -1245,6 +1287,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Teacher assigned successfully"),
         "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
             "I confirm that all the information mentioned above is correct, and I agree to follow Banan Academy rules and policies"),
+        "teacherNotAssignedToSessionSubject":
+            MessageLookupByLibrary.simpleMessage(
+                "No teacher is assigned to this subject"),
         "teacherNote": MessageLookupByLibrary.simpleMessage("Teacher Note"),
         "teacherNoteText": MessageLookupByLibrary.simpleMessage(
             "Excellent work on solving the assignments this time."),
@@ -1287,13 +1332,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tip to Increase Points"),
         "to": MessageLookupByLibrary.simpleMessage("To"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
-        "todayAtTime": m26,
+        "todayAtTime": m27,
         "todayClasses":
             MessageLookupByLibrary.simpleMessage("Today\'s Classes"),
         "total": MessageLookupByLibrary.simpleMessage("Total"),
         "totalSessions": MessageLookupByLibrary.simpleMessage("Total Sessions"),
         "totalStudents": MessageLookupByLibrary.simpleMessage("Total Students"),
-        "trainingHours": m27,
+        "trainingHours": m28,
         "tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
         "twelveHoursPlan":
             MessageLookupByLibrary.simpleMessage("12-hour package"),
@@ -1341,8 +1386,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Upload Schedule"),
         "uploadStudyPlan":
             MessageLookupByLibrary.simpleMessage("Upload study plan"),
-        "usedDays": m28,
-        "usedHours": m29,
+        "usedDays": m29,
+        "usedHours": m30,
         "userCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("User created successfully"),
         "userDeletedSuccessfully":
@@ -1356,7 +1401,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "User status updated successfully"),
         "userUpdatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("User updated successfully"),
-        "usersCount": m30,
+        "usersCount": m31,
         "usersManagement":
             MessageLookupByLibrary.simpleMessage("Users Management"),
         "validIntegerScore":
@@ -1386,7 +1431,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "weeklyEvaluationAddedNotification":
             MessageLookupByLibrary.simpleMessage(
                 "A weekly evaluation was added for class 4A"),
-        "weeklyEvaluationStudentTitle": m31,
+        "weeklyEvaluationStudentTitle": m32,
         "weeklyEvaluations":
             MessageLookupByLibrary.simpleMessage("Weekly Evaluations"),
         "weeklyHours": MessageLookupByLibrary.simpleMessage("Weekly hours"),
@@ -1394,7 +1439,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Weekly Ideal Student"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "Weekly Ideal Students Ranking"),
-        "weeklyLessons": m32,
+        "weeklyLessons": m33,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("Weekly Plans"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),
         "whatsappNumber":
