@@ -33,24 +33,6 @@ void main() {
     expect(SubjectModel.fromJson({'id': 'subject-2'}).grade, isNull);
   });
 
-  test('subject response reads pagination from the API', () {
-    final response = SubjectsResponseModel.fromJson({
-      'success': true,
-      'data': <Object>[],
-      'pagination': {
-        'currentPage': '2',
-        'perPage': 15,
-        'total': '31',
-        'lastPage': 3,
-      },
-    });
-
-    expect(response.pagination.currentPage, 2);
-    expect(response.pagination.perPage, 15);
-    expect(response.pagination.total, 31);
-    expect(response.pagination.lastPage, 3);
-  });
-
   test('repository posts protected request through repoGuard', () async {
     final api = _Api();
     final result = await SubjectsRepoImpl(api).addSubject(request: request);
@@ -64,15 +46,14 @@ void main() {
     expect(failure.fold((item) => item.message, (_) => ''), 'backend error');
   });
 
-  test('repository sends page and perPage with protected get', () async {
+  test('repository sends page and limit without perPage', () async {
     final api = _Api();
-    final result = await SubjectsRepoImpl(
-      api,
-    ).getSubjects(page: 2, perPage: 15);
+    final result = await SubjectsRepoImpl(api).getSubjects(page: 2, limit: 10);
 
     expect(result.isRight(), isTrue);
     expect(api.path, EndPoints.subjects);
-    expect(api.query, {'page': 2, 'perPage': 15});
+    expect(api.query, {'page': 2, 'limit': 10});
+    expect(api.query, isNot(contains('perPage')));
     expect(api.isProtected, isTrue);
   });
 }
@@ -94,16 +75,7 @@ class _Api implements ApiConsumer {
     this.path = path;
     query = queryParameter;
     this.isProtected = isProtected;
-    return {
-      'success': true,
-      'data': <Object>[],
-      'pagination': {
-        'currentPage': 2,
-        'perPage': 15,
-        'total': 0,
-        'lastPage': 1,
-      },
-    };
+    return {'success': true, 'length': 0, 'data': <Object>[]};
   }
 
   @override

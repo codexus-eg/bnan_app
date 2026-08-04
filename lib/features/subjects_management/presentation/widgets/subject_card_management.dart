@@ -32,8 +32,10 @@ class SubjectCardManagement extends StatelessWidget {
             label: S.of(context).curriculum,
             value: subject?.curriculum?.name ?? '---',
           ),
-          if (gradeName != null && gradeName.isNotEmpty)
-            ClassMetaRow(label: S.of(context).grade, value: gradeName),
+          ClassMetaRow(
+            label: S.of(context).grade,
+            value: gradeName == null || gradeName.isEmpty ? '-' : gradeName,
+          ),
           const SizedBox(height: 8),
           ActionChipButton(
             title: S.of(context).edit,
