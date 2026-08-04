@@ -33,7 +33,7 @@ class AdminHomeBody extends StatelessWidget {
         create: (_) => getIt<UsersManagementCubit>()..getUsers(),
         child: const UsersManagementBody(),
       ),
-      AdminPlaceholderTab(title: s.adminSupervisors, onMenuTap: onMenuTap),
+      // AdminPlaceholderTab(title: s.adminSupervisors, onMenuTap: onMenuTap),
       MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => getIt<GetSubjectsCubit>()..getSubjects()),
