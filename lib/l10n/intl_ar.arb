@@ -213,6 +213,15 @@
     "requestNewLesson": "طلب درس جديد",
     "myGroups": "مجموعاتي",
     "certificates": "الشهادات",
+    "noCertificatesAvailable": "لا توجد شهادات متاحة حتى الآن",
+    "studentCertificate": "شهادة الطالب",
+    "monthlyCertificateTitle": "شهادة شهر {month}",
+    "@monthlyCertificateTitle": {
+        "placeholders": {
+            "month": {}
+        }
+    },
+    "certificateFileUnavailable": "ملف الشهادة غير متاح",
     "PackagesandSubscriptions": "الباقات والاشتراكات",
     "subscriptions": "الاشتراكات",
     "reviews": "التقييمات",

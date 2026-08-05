@@ -11,6 +11,8 @@ export 'package:bnan_app/features/shared_profile/data/repo/teacher_profile_repo/
 
 export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_assignments_repo.dart';
 export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_assignments_repo_impl.dart';
+export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_certificates_repo.dart';
+export 'package:bnan_app/features/student_assignments_and_certificate/data/repo/student_certificates_repo_impl.dart';
 export 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo.dart';
 export 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo_impl.dart';
 export 'package:bnan_app/features/registration_requests/presentation/manager/get_registration_requests_cubit/get_registration_requests_cubit.dart';
@@ -38,6 +40,7 @@ export 'package:bnan_app/features/shared_profile/presentation/manager/update_pas
 
 export 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_assignment/get_assignments_cubit.dart';
 export 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/submit_assignment/submit_assignment_cubit.dart';
+export 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_certificates/get_certificates_cubit.dart';
 
 export 'package:bnan_app/features/home_student/presentation/manager/get_student_subscription/get_student_subscription_cubit.dart';
 export 'package:bnan_app/core/network/api_consumer.dart';

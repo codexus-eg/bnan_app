@@ -213,6 +213,15 @@
     "requestNewLesson": "Request New Lesson",
     "myGroups": "My Groups",
     "certificates": "Certificates",
+    "noCertificatesAvailable": "No certificates are available yet",
+    "studentCertificate": "Student Certificate",
+    "monthlyCertificateTitle": "{month} Certificate",
+    "@monthlyCertificateTitle": {
+        "placeholders": {
+            "month": {}
+        }
+    },
+    "certificateFileUnavailable": "Certificate file is unavailable",
     "PackagesandSubscriptions": "Packages and Subscriptions",
     "subscriptions": "Subscriptions",
     "reviews": "Reviews",
