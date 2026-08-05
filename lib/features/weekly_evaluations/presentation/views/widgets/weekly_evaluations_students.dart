@@ -27,9 +27,14 @@ class WeeklyEvaluationsStudents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = response.data;
+    final evaluatedStudents = data.students
+        .where(
+          (student) => student.subjects.any((subject) => subject.isEvaluated),
+        )
+        .toList();
     return Column(
-      children: List.generate(data.students.length, (index) {
-        final student = data.students[index];
+      children: List.generate(evaluatedStudents.length, (index) {
+        final student = evaluatedStudents[index];
         final ui = mapWeeklyEvaluationToUi(
           context,
           student,

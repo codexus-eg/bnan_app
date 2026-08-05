@@ -1031,5 +1031,18 @@
     "cvUnavailable": "رابط السيرة الذاتية غير متاح",
     "invalidCvUrl": "رابط السيرة الذاتية غير صالح",
     "failedToOpenCv": "تعذر فتح السيرة الذاتية",
-    "failedToCopy": "تعذر النسخ"
+    "failedToCopy": "تعذر النسخ",
+    "weeklyEvaluationsStudentAccessDenied": "غير مصرح بعرض بيانات هذا الطالب",
+    "weeklyEvaluationsGulfClassroomConflict": "توجد مشكلة في إعداد مادة الفصل، يرجى التواصل مع الإدارة",
+    "weekNumber": "الأسبوع {number}",
+    "@weekNumber": {
+        "placeholders": {
+            "number": {}
+        }
+    },
+    "noEvaluationRecordedThisWeek": "لم يتم تسجيل تقييم لهذا الأسبوع",
+    "noSubjectEvaluationRecordedThisWeek": "لم يتم تسجيل تقييم لهذه المادة في هذا الأسبوع",
+    "noValidSubjectForClassroom": "لا توجد مادة صالحة مرتبطة بهذا الفصل",
+    "evaluationStatusUnavailable": "حالة التقييم غير متاحة",
+    "noSubjectsAvailableReadOnly": "لا توجد مواد متاحة"
 }

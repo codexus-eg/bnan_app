@@ -114,7 +114,9 @@ class WeeklyEvaluationsBody extends StatelessWidget {
     if (response == null) {
       return Center(child: NoDataWidget(title: _emptyTitle(context, cubit)));
     }
-    if (response.data.students.isEmpty) {
+    if (response.data.students.every(
+      (student) => student.subjects.every((subject) => !subject.isEvaluated),
+    )) {
       return Center(
         child: NoDataWidget(title: S.of(context).noWeeklyEvaluations),
       );
