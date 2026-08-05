@@ -29,10 +29,6 @@ class AdminBottomNavBar extends StatelessWidget {
       BottomNavItemModel(icon: ImageManager.homeIcon, title: s.home),
       BottomNavItemModel(icon: ImageManager.children, title: s.adminUsers),
       BottomNavItemModel(
-        icon: ImageManager.adminShieldCheckIcon,
-        title: s.adminSupervisors,
-      ),
-      BottomNavItemModel(
         icon: ImageManager.teacherBookTwoIcon,
         title: s.subjects,
       ),

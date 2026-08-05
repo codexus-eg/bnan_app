@@ -93,9 +93,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m31(count) => "${count} users";
 
-  static String m32(name) => "Student: ${name}";
+  static String m32(number) => "Week ${number}";
 
-  static String m33(count) => "${count} weekly lessons";
+  static String m33(name) => "Student: ${name}";
+
+  static String m34(count) => "${count} weekly lessons";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -335,6 +337,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
         "contactWhatsApp":
             MessageLookupByLibrary.simpleMessage("Contact via WhatsApp"),
+        "copiedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("Copied successfully"),
         "correctAssignment":
             MessageLookupByLibrary.simpleMessage("Grade Assignment"),
         "country": MessageLookupByLibrary.simpleMessage("Country"),
@@ -367,6 +371,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Curriculum Selection"),
         "curriculums": MessageLookupByLibrary.simpleMessage("Curriculums"),
         "cv": MessageLookupByLibrary.simpleMessage("CV"),
+        "cvUnavailable":
+            MessageLookupByLibrary.simpleMessage("CV link is not available"),
         "cvv": MessageLookupByLibrary.simpleMessage("CVV"),
         "dailyPlanAlreadyUploaded": MessageLookupByLibrary.simpleMessage(
             "The plan has already been uploaded for this day."),
@@ -508,6 +514,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "evaluationPresent": MessageLookupByLibrary.simpleMessage("Present"),
         "evaluationSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Evaluation saved successfully"),
+        "evaluationStatusUnavailable": MessageLookupByLibrary.simpleMessage(
+            "Evaluation status is unavailable"),
         "evaluationWeak": MessageLookupByLibrary.simpleMessage("Weak"),
         "evaluations": MessageLookupByLibrary.simpleMessage("Evaluations"),
         "excellencePoints":
@@ -521,8 +529,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "expiredSubscriptions":
             MessageLookupByLibrary.simpleMessage("Expired Subscriptions"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("Expiry date"),
+        "failedToCopy": MessageLookupByLibrary.simpleMessage("Unable to copy"),
         "failedToLoadAttendance": MessageLookupByLibrary.simpleMessage(
             "Failed to load attendance data"),
+        "failedToOpenCv":
+            MessageLookupByLibrary.simpleMessage("Unable to open the CV"),
         "fieldIsRequired": m11,
         "fieldRequired":
             MessageLookupByLibrary.simpleMessage("This field is required"),
@@ -615,6 +626,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Appreciation Certificate - Interaction"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("Interaction Level"),
+        "invalidCvUrl":
+            MessageLookupByLibrary.simpleMessage("The CV link is invalid"),
         "invalidData": MessageLookupByLibrary.simpleMessage(
             "Please check the entered data"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
@@ -746,6 +759,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "No information available now"),
         "noEvaluationForStudent": MessageLookupByLibrary.simpleMessage(
             "No evaluation for this student"),
+        "noEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
+            "No evaluation was recorded for this week"),
         "noEvaluationWeeksAvailable": MessageLookupByLibrary.simpleMessage(
             "No evaluation weeks are available"),
         "noGradesAvailableForCurriculum": MessageLookupByLibrary.simpleMessage(
@@ -783,6 +798,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "There are no students in this classroom"),
         "noStudyWeeksAvailable": MessageLookupByLibrary.simpleMessage(
             "No study weeks are available for this classroom"),
+        "noSubjectEvaluationRecordedThisWeek":
+            MessageLookupByLibrary.simpleMessage(
+                "No evaluation was recorded for this subject this week"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "No subjects available for this grade"),
         "noSubjectsAvailableForClassroom": MessageLookupByLibrary.simpleMessage(
@@ -790,6 +808,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noSubjectsAvailableForTeacherStudent":
             MessageLookupByLibrary.simpleMessage(
                 "No subjects are available to you for this student"),
+        "noSubjectsAvailableReadOnly":
+            MessageLookupByLibrary.simpleMessage("No subjects are available"),
         "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
             "No subjects are available for this student"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
@@ -799,6 +819,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No term plans available"),
         "noUnassignedStudents":
             MessageLookupByLibrary.simpleMessage("No unassigned students"),
+        "noValidSubjectForClassroom": MessageLookupByLibrary.simpleMessage(
+            "No valid subject is linked to this classroom"),
         "noWeeklyEvaluations":
             MessageLookupByLibrary.simpleMessage("No weekly evaluations"),
         "notActivated": MessageLookupByLibrary.simpleMessage("Inactive"),
@@ -1423,6 +1445,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "wednesday": MessageLookupByLibrary.simpleMessage("Wednesday"),
         "week": MessageLookupByLibrary.simpleMessage("Week"),
         "weekDays": MessageLookupByLibrary.simpleMessage("Week days"),
+        "weekNumber": m32,
         "weekOne": MessageLookupByLibrary.simpleMessage("Week 1"),
         "weekStart": MessageLookupByLibrary.simpleMessage("Week Start"),
         "weekTwo": MessageLookupByLibrary.simpleMessage("Week 2"),
@@ -1431,15 +1454,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "weeklyEvaluationAddedNotification":
             MessageLookupByLibrary.simpleMessage(
                 "A weekly evaluation was added for class 4A"),
-        "weeklyEvaluationStudentTitle": m32,
+        "weeklyEvaluationStudentTitle": m33,
         "weeklyEvaluations":
             MessageLookupByLibrary.simpleMessage("Weekly Evaluations"),
+        "weeklyEvaluationsGulfClassroomConflict":
+            MessageLookupByLibrary.simpleMessage(
+                "There is a problem with the classroom subject setup. Please contact administration"),
+        "weeklyEvaluationsStudentAccessDenied":
+            MessageLookupByLibrary.simpleMessage(
+                "You are not authorized to view this student\'s data"),
         "weeklyHours": MessageLookupByLibrary.simpleMessage("Weekly hours"),
         "weeklyIdealStudent":
             MessageLookupByLibrary.simpleMessage("Weekly Ideal Student"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "Weekly Ideal Students Ranking"),
-        "weeklyLessons": m33,
+        "weeklyLessons": m34,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("Weekly Plans"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),
         "whatsappNumber":

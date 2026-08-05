@@ -1027,5 +1027,23 @@
         "placeholders": {
             "grade": {}
         }
-    }
+    },
+    "copiedSuccessfully": "Copied successfully",
+    "cvUnavailable": "CV link is not available",
+    "invalidCvUrl": "The CV link is invalid",
+    "failedToOpenCv": "Unable to open the CV",
+    "failedToCopy": "Unable to copy",
+    "weeklyEvaluationsStudentAccessDenied": "You are not authorized to view this student's data",
+    "weeklyEvaluationsGulfClassroomConflict": "There is a problem with the classroom subject setup. Please contact administration",
+    "weekNumber": "Week {number}",
+    "@weekNumber": {
+        "placeholders": {
+            "number": {}
+        }
+    },
+    "noEvaluationRecordedThisWeek": "No evaluation was recorded for this week",
+    "noSubjectEvaluationRecordedThisWeek": "No evaluation was recorded for this subject this week",
+    "noValidSubjectForClassroom": "No valid subject is linked to this classroom",
+    "evaluationStatusUnavailable": "Evaluation status is unavailable",
+    "noSubjectsAvailableReadOnly": "No subjects are available"
 }

@@ -38,16 +38,13 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       icon: ImageManager.parentChatConversationCircleIcon,
     ),
     DrawerItemModel(title: s.notifications, icon: ImageManager.bellIcon),
-    DrawerItemModel(title: s.certificates, icon: ImageManager.certificateBadgeIcon),
-    DrawerItemModel(title: s.schedule, icon: ImageManager.parentCalendarIcon),
+    DrawerItemModel(
+      title: s.certificates,
+      icon: ImageManager.certificateBadgeIcon,
+    ),
     DrawerItemModel(title: s.assignStudent, icon: ImageManager.userAdd),
     DrawerItemModel(title: s.curriculum, icon: ImageManager.bellIcon),
-    DrawerItemModel(
-      title: s.lessonsManagement,
-      icon: ImageManager.calendarIcon,
-    ),
     DrawerItemModel(title: s.termPlan, icon: ImageManager.tableIcon),
-        DrawerItemModel(title: s.supervisorAssignment, icon: ImageManager.userAdd),
-
+    DrawerItemModel(title: s.supervisorAssignment, icon: ImageManager.userAdd),
   ];
 }

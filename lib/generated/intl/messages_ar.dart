@@ -90,9 +90,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m31(count) => "${count} مستخدم";
 
-  static String m32(name) => "الطالب/ة: ${name}";
+  static String m32(number) => "الأسبوع ${number}";
 
-  static String m33(count) => "${count} محاضرة أسبوعية";
+  static String m33(name) => "الطالب/ة: ${name}";
+
+  static String m34(count) => "${count} محاضرة أسبوعية";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -319,6 +321,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إتقان هذا الشهر"),
         "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
         "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
+        "copiedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم النسخ بنجاح"),
         "correctAssignment":
             MessageLookupByLibrary.simpleMessage("تصحيح الواجب"),
         "country": MessageLookupByLibrary.simpleMessage("الدولة"),
@@ -349,6 +353,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("اختيار المنهج"),
         "curriculums": MessageLookupByLibrary.simpleMessage("المناهج"),
         "cv": MessageLookupByLibrary.simpleMessage("CV"),
+        "cvUnavailable": MessageLookupByLibrary.simpleMessage(
+            "رابط السيرة الذاتية غير متاح"),
         "cvv": MessageLookupByLibrary.simpleMessage("رمز التحقق CVV"),
         "dailyPlanAlreadyUploaded": MessageLookupByLibrary.simpleMessage(
             "الخطة مرفوعة بالفعل لهذا اليوم."),
@@ -484,6 +490,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "evaluationPresent": MessageLookupByLibrary.simpleMessage("حاضر"),
         "evaluationSavedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حفظ التقييم بنجاح"),
+        "evaluationStatusUnavailable":
+            MessageLookupByLibrary.simpleMessage("حالة التقييم غير متاحة"),
         "evaluationWeak": MessageLookupByLibrary.simpleMessage("ضعيف"),
         "evaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
         "excellencePoints": MessageLookupByLibrary.simpleMessage("نقاط التميز"),
@@ -496,8 +504,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "expiredSubscriptions":
             MessageLookupByLibrary.simpleMessage("اشتراكات منتهية"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
+        "failedToCopy": MessageLookupByLibrary.simpleMessage("تعذر النسخ"),
         "failedToLoadAttendance":
             MessageLookupByLibrary.simpleMessage("تعذر تحميل بيانات الحضور"),
+        "failedToOpenCv":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح السيرة الذاتية"),
         "fieldIsRequired": m11,
         "fieldRequired":
             MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
@@ -587,6 +598,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شكر وتقدير - التفاعل"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
+        "invalidCvUrl": MessageLookupByLibrary.simpleMessage(
+            "رابط السيرة الذاتية غير صالح"),
         "invalidData": MessageLookupByLibrary.simpleMessage(
             "يرجى التأكد من البيانات المدخلة"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
@@ -716,6 +729,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
         "noEvaluationForStudent":
             MessageLookupByLibrary.simpleMessage("لا يوجد تقييم لهذا الطالب"),
+        "noEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
+            "لم يتم تسجيل تقييم لهذا الأسبوع"),
         "noEvaluationWeeksAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد أسابيع متاحة للتقييم"),
         "noGradesAvailableForCurriculum":
@@ -754,6 +769,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الفصل"),
         "noStudyWeeksAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد أسابيع دراسية متاحة لهذا الفصل"),
+        "noSubjectEvaluationRecordedThisWeek":
+            MessageLookupByLibrary.simpleMessage(
+                "لم يتم تسجيل تقييم لهذه المادة في هذا الأسبوع"),
         "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الصف"),
         "noSubjectsAvailableForClassroom":
@@ -761,6 +779,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noSubjectsAvailableForTeacherStudent":
             MessageLookupByLibrary.simpleMessage(
                 "لا توجد مواد متاحة لك لهذا الطالب"),
+        "noSubjectsAvailableReadOnly":
+            MessageLookupByLibrary.simpleMessage("لا توجد مواد متاحة"),
         "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الطالب"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
@@ -770,6 +790,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد خطط ترم متاحة"),
         "noUnassignedStudents":
             MessageLookupByLibrary.simpleMessage("لا يوجد طلاب غير معينين"),
+        "noValidSubjectForClassroom": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مادة صالحة مرتبطة بهذا الفصل"),
         "noWeeklyEvaluations":
             MessageLookupByLibrary.simpleMessage("لا توجد تقييمات أسبوعية"),
         "notActivated": MessageLookupByLibrary.simpleMessage("غير مفعل"),
@@ -1364,6 +1386,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "wednesday": MessageLookupByLibrary.simpleMessage("الأربعاء"),
         "week": MessageLookupByLibrary.simpleMessage("الأسبوع"),
         "weekDays": MessageLookupByLibrary.simpleMessage("أيام الأسبوع"),
+        "weekNumber": m32,
         "weekOne": MessageLookupByLibrary.simpleMessage("الأسبوع الأول"),
         "weekStart": MessageLookupByLibrary.simpleMessage("بداية الأسبوع"),
         "weekTwo": MessageLookupByLibrary.simpleMessage("الأسبوع الثاني"),
@@ -1371,16 +1394,22 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("التقييم الأسبوعي"),
         "weeklyEvaluationAddedNotification":
             MessageLookupByLibrary.simpleMessage("أضيف تقييم أسبوعي لفصل 4أ"),
-        "weeklyEvaluationStudentTitle": m32,
+        "weeklyEvaluationStudentTitle": m33,
         "weeklyEvaluations":
             MessageLookupByLibrary.simpleMessage("التقييمات الأسبوعية"),
+        "weeklyEvaluationsGulfClassroomConflict":
+            MessageLookupByLibrary.simpleMessage(
+                "توجد مشكلة في إعداد مادة الفصل، يرجى التواصل مع الإدارة"),
+        "weeklyEvaluationsStudentAccessDenied":
+            MessageLookupByLibrary.simpleMessage(
+                "غير مصرح بعرض بيانات هذا الطالب"),
         "weeklyHours":
             MessageLookupByLibrary.simpleMessage("الساعات الأسبوعية"),
         "weeklyIdealStudent":
             MessageLookupByLibrary.simpleMessage("الطالب المثالي للأسبوع"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "ترتيب الطلاب المثاليين هذا الأسبوع"),
-        "weeklyLessons": m33,
+        "weeklyLessons": m34,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),
         "whatsappNumber": MessageLookupByLibrary.simpleMessage("رقم الواتساب"),

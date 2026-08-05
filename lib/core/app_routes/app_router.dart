@@ -18,6 +18,7 @@ import 'package:bnan_app/features/student_classroom_assignment/presentation/view
 import 'package:bnan_app/features/curriculum_management/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart'
     as curriculum_management;
 import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/supervisor_classroom_assignment_view.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
@@ -380,6 +381,19 @@ GoRouter buildRouter() {
         path: Routes.weeklyEvaluations,
         pageBuilder: (context, state) {
           final role = SessionManager.instance.role;
+          if (role == UserRole.student || role == UserRole.parent) {
+            return buildTransitionPages(
+              child: BlocProvider(
+                create: (_) => role == UserRole.student
+                    ? (getIt<ReadOnlyWeeklyEvaluationsCubit>()
+                        ..loadForStudent())
+                    : (getIt<ReadOnlyWeeklyEvaluationsCubit>()
+                        ..loadForParent()),
+                child: const WeeklyEvaluationsView(),
+              ),
+              key: state.pageKey,
+            );
+          }
           return buildTransitionPages(
             child: MultiBlocProvider(
               providers: [
@@ -392,11 +406,6 @@ GoRouter buildRouter() {
                   BlocProvider(
                     create: (_) =>
                         getIt<GetTeacherClassroomsCubit>()..getMyClassrooms(),
-                  ),
-                if (role == UserRole.student)
-                  BlocProvider(
-                    create: (_) =>
-                        getIt<GetMyEnrollmentsCubit>()..getMyEnrollments(),
                   ),
                 if (role == UserRole.supervisor)
                   BlocProvider(

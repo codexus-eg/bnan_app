@@ -1,7 +1,10 @@
+import 'package:bnan_app/core/helper/clipboard_helper.dart';
+import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/action_chip.dart';
 import 'package:bnan_app/core/shared_widget/card_header.dart';
 import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
+import 'package:bnan_app/core/shared_widget/copy_icon_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/shared_widget/info_text.dart';
 import 'package:bnan_app/core/shared_widget/status_action_button.dart';
@@ -94,7 +97,7 @@ class TeacherApplicationCard extends StatelessWidget {
                   ActionChipButton(
                     title: s.cv,
                     icon: ImageManager.fileIcon,
-                    onTap: () {},
+                    onTap: () => _openCv(context),
                   ),
                   ActionChipButton(
                     title: s.details,
@@ -112,5 +115,22 @@ class TeacherApplicationCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _openCv(BuildContext context) async {
+    final cv = teacher.cv.trim();
+    if (cv.isEmpty) {
+      showCustomSnackBar(context, S.of(context).cvUnavailable, false);
+      return;
+    }
+    if (!FileUrlLauncher.isValidWebUrl(cv)) {
+      showCustomSnackBar(context, S.of(context).invalidCvUrl, false);
+      return;
+    }
+
+    final opened = await FileUrlLauncher.open(cv);
+    if (!opened && context.mounted) {
+      showCustomSnackBar(context, S.of(context).failedToOpenCv, false);
+    }
   }
 }

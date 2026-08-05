@@ -8659,6 +8659,136 @@ class S {
       args: [grade],
     );
   }
+
+  /// `Copied successfully`
+  String get copiedSuccessfully {
+    return Intl.message(
+      'Copied successfully',
+      name: 'copiedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CV link is not available`
+  String get cvUnavailable {
+    return Intl.message(
+      'CV link is not available',
+      name: 'cvUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The CV link is invalid`
+  String get invalidCvUrl {
+    return Intl.message(
+      'The CV link is invalid',
+      name: 'invalidCvUrl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open the CV`
+  String get failedToOpenCv {
+    return Intl.message(
+      'Unable to open the CV',
+      name: 'failedToOpenCv',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to copy`
+  String get failedToCopy {
+    return Intl.message(
+      'Unable to copy',
+      name: 'failedToCopy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are not authorized to view this student's data`
+  String get weeklyEvaluationsStudentAccessDenied {
+    return Intl.message(
+      'You are not authorized to view this student\'s data',
+      name: 'weeklyEvaluationsStudentAccessDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is a problem with the classroom subject setup. Please contact administration`
+  String get weeklyEvaluationsGulfClassroomConflict {
+    return Intl.message(
+      'There is a problem with the classroom subject setup. Please contact administration',
+      name: 'weeklyEvaluationsGulfClassroomConflict',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Week {number}`
+  String weekNumber(Object number) {
+    return Intl.message(
+      'Week $number',
+      name: 'weekNumber',
+      desc: '',
+      args: [number],
+    );
+  }
+
+  /// `No evaluation was recorded for this week`
+  String get noEvaluationRecordedThisWeek {
+    return Intl.message(
+      'No evaluation was recorded for this week',
+      name: 'noEvaluationRecordedThisWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No evaluation was recorded for this subject this week`
+  String get noSubjectEvaluationRecordedThisWeek {
+    return Intl.message(
+      'No evaluation was recorded for this subject this week',
+      name: 'noSubjectEvaluationRecordedThisWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No valid subject is linked to this classroom`
+  String get noValidSubjectForClassroom {
+    return Intl.message(
+      'No valid subject is linked to this classroom',
+      name: 'noValidSubjectForClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Evaluation status is unavailable`
+  String get evaluationStatusUnavailable {
+    return Intl.message(
+      'Evaluation status is unavailable',
+      name: 'evaluationStatusUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects are available`
+  String get noSubjectsAvailableReadOnly {
+    return Intl.message(
+      'No subjects are available',
+      name: 'noSubjectsAvailableReadOnly',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

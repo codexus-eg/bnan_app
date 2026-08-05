@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/clipboard_helper.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/users_management/data/models/user_model.dart';
@@ -22,12 +23,18 @@ class DialogDetailsBody extends StatelessWidget {
             label: s.email,
             value: user.email,
             showCopy: true,
+            onCopy: user.email.trim().isEmpty
+                ? null
+                : () => ClipboardHelper.copy(context, user.email),
             icon: ImageManager.usersManagementEmailIcon,
           ),
           DetailRow(
             label: s.phoneNumber,
             value: user.phone,
             showCopy: true,
+            onCopy: user.phone.trim().isEmpty
+                ? null
+                : () => ClipboardHelper.copy(context, user.phone),
             icon: ImageManager.usersManagementPhoneIcon,
           ),
           DetailRow(

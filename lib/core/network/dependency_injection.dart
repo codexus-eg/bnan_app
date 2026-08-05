@@ -21,6 +21,9 @@ import 'package:bnan_app/features/packages_management/presentation/manager/packa
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -118,6 +121,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<WeeklyEvaluationsRepo>(
     () => WeeklyEvaluationsRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<WeeklyEvaluationsReadRepo>(
+    () => WeeklyEvaluationsReadRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<SupervisorAssignmentRepo>(
     () => SupervisorAssignmentRepoImpl(getIt<ApiConsumer>()),
@@ -394,5 +400,8 @@ void setupServiceLocator() {
       getIt<WeeklyEvaluationsRepo>(),
       getIt<AssignmentsRepo>(),
     ),
+  );
+  getIt.registerFactory<ReadOnlyWeeklyEvaluationsCubit>(
+    () => ReadOnlyWeeklyEvaluationsCubit(getIt<WeeklyEvaluationsReadRepo>()),
   );
 }

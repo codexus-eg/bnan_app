@@ -1,6 +1,6 @@
-import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/core/shared_widget/copy_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,12 +11,14 @@ class DetailRow extends StatelessWidget {
     this.value,
     required this.icon,
     this.showCopy = false,
+    this.onCopy,
   });
 
   final String label;
   final String? value;
   final String icon;
   final bool? showCopy;
+  final VoidCallback? onCopy;
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +43,7 @@ class DetailRow extends StatelessWidget {
             Spacer(),
             Row(
               children: [
-                if (showCopy == true) ...[
-                  SvgPicture.asset(
-                    ImageManager.usersManagementCopyIcon,
-                    width: 12,
-                    height: 12,
-                  ),
-                  const SizedBox(width: 4),
-                ],
+                if (showCopy == true) ...[CopyIconButton(onPressed: onCopy)],
                 Text(
                   value!,
                   style: StylesManager.styleRegular10(
