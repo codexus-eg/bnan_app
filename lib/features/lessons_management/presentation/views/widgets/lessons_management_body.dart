@@ -18,7 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LessonsManagementBody extends StatelessWidget {
-  const LessonsManagementBody({super.key});
+  const LessonsManagementBody({super.key, this.readOnly = false});
+
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -56,19 +58,23 @@ class LessonsManagementBody extends StatelessWidget {
     if (classroom == null) {
       return NoDataWidget(title: S.of(context).noGulfClassroomsAvailable);
     }
+    final subjectUnavailable =
+        readOnly && (classroom.hasSubjectConflict || classroom.subject == null);
     final uiClassrooms = state.classrooms.map(_classroomUi).toList();
-    final lessons =
-        classroom.entries
-            .map((entry) => _lessonUi(classroom, entry))
-            .where((item) => item.day == state.selectedDay)
-            .toList()
-          ..sort((a, b) => a.startTime.compareTo(b.startTime));
+    final lessons = subjectUnavailable
+        ? <LessonUiModel>[]
+        : (classroom.entries
+              .map((entry) => _lessonUi(classroom, entry))
+              .where((item) => item.day == state.selectedDay)
+              .toList()
+            ..sort((a, b) => a.startTime.compareTo(b.startTime)));
     return Column(
       children: [
         LessonsManagementHeader(
           classrooms: uiClassrooms,
           selectedClassroomId: state.selectedClassroomId,
           onClassroomChanged: context.read<GulfScheduleCubit>().selectClassroom,
+          showAddButton: !readOnly,
           onAddTap: classroom.classroomSubjectId == null
               ? null
               : () => _openAdd(context, classroom),
@@ -87,10 +93,14 @@ class LessonsManagementBody extends StatelessWidget {
           child: lessons.isNotEmpty
               ? LessonsList(
                   lessons: lessons,
-                  onTap: (lesson) => _openEdit(context, classroom, lesson),
+                  onTap: readOnly
+                      ? null
+                      : (lesson) => _openEdit(context, classroom, lesson),
                 )
               : _FlexibleNoData(
-                  title: classroom.entries.isEmpty
+                  title: subjectUnavailable
+                      ? S.of(context).gulfClassroomSubjectUnavailable
+                      : classroom.entries.isEmpty
                       ? classroom.classroomSubjectId == null
                             ? S.of(context).gulfClassroomSubjectUnavailable
                             : S.of(context).noScheduleEntriesForClassroom

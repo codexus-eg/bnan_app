@@ -452,8 +452,10 @@ GoRouter buildRouter() {
         path: Routes.plans,
         pageBuilder: (context, state) {
           final role = SessionManager.instance.role;
+          final isGulfStudent = role == UserRole.student && state.extra == true;
           final policy = PlansAccessPolicy.fromRole(
             SessionManager.instance.userRole,
+            isGulfStudent: isGulfStudent,
           );
           return buildTransitionPages(
             child: MultiBlocProvider(
@@ -478,10 +480,14 @@ GoRouter buildRouter() {
                     create: (_) =>
                         getIt<GetTeacherClassroomsCubit>()..getMyClassrooms(),
                   ),
-                if (role == UserRole.student)
+                if (role == UserRole.student && !isGulfStudent)
                   BlocProvider(
                     create: (_) =>
                         getIt<GetMyEnrollmentsCubit>()..getMyEnrollments(),
+                  ),
+                if (isGulfStudent)
+                  BlocProvider(
+                    create: (_) => getIt<GulfScheduleCubit>()..load(),
                   ),
                 if (role == UserRole.supervisor)
                   BlocProvider(
@@ -499,7 +505,7 @@ GoRouter buildRouter() {
                         getIt<GetParentPlansCubit>()..loadParentPlans(),
                   ),
               ],
-              child: const PlansView(),
+              child: PlansView(isGulfStudent: isGulfStudent),
             ),
             key: state.pageKey,
           );

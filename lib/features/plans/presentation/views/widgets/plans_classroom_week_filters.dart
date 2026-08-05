@@ -35,6 +35,7 @@ class PlansClassroomWeekFilters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlansClassroomsSource(
+      policy: policy,
       builder: (context, state, retry) => _build(context, state, retry),
     );
   }

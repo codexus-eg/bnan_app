@@ -830,7 +830,7 @@
     "gulfScheduleEntryAdded": "Schedule entry added successfully",
     "gulfScheduleEntryUpdated": "Schedule entry updated successfully",
     "gulfScheduleEntryDeleted": "Schedule entry deleted successfully",
-    "gulfClassroomSubjectUnavailable": "The schedule cannot be created because the classroom-subject link is unavailable",
+    "gulfClassroomSubjectUnavailable": "The classroom subject data needs to be reviewed by the administration.",
     "startSession": "Start lesson",
     "sessionStarting": "Starting lesson",
     "sessionStarted": "Lesson started",

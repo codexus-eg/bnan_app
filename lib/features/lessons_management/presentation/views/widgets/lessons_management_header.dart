@@ -10,12 +10,14 @@ class LessonsManagementHeader extends StatelessWidget {
     required this.selectedClassroomId,
     required this.onClassroomChanged,
     required this.onAddTap,
+    this.showAddButton = true,
   });
 
   final List<LessonClassroomUiModel> classrooms;
   final String? selectedClassroomId;
   final ValueChanged<String?> onClassroomChanged;
   final VoidCallback? onAddTap;
+  final bool showAddButton;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +31,10 @@ class LessonsManagementHeader extends StatelessWidget {
             value: selectedClassroomId,
             onChanged: onClassroomChanged,
           ),
-          const SizedBox(height: 12),
-          AddLessonButton(onTap: onAddTap),
+          if (showAddButton) ...[
+            const SizedBox(height: 12),
+            AddLessonButton(onTap: onAddTap),
+          ],
         ],
       ),
     );

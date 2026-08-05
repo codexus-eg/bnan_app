@@ -787,7 +787,7 @@ class _ClassroomsRepo implements ClassroomsRepo {
 }
 
 class _PlansRepo implements PlansRepo {
-  final List<(String, int)> weekRequests = [];
+  final List<(String, int?)> weekRequests = [];
   final List<String> elapsedRequests = [];
   final List<(String, String, CreateDailyPlanRequestModel)> dailyRequests = [];
   final List<(String, String, String)> uploadRequests = [];
@@ -850,7 +850,7 @@ class _PlansRepo implements PlansRepo {
   @override
   Future<Either<Failure, WeeklyPlansResponseModel>> getPlansByWeek({
     required String classroomId,
-    required int week,
+    int? week,
   }) {
     weekRequests.add((classroomId, week));
     return weeklyCompleter?.future ?? Future.value(weeklyResult);

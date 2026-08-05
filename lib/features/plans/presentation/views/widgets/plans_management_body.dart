@@ -89,10 +89,10 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
     );
   }
 
-  void _onClassroomChanged(
+  Future<void> _onClassroomChanged(
     PlanClassroomOption? classroom, {
     bool force = false,
-  }) {
+  }) async {
     if (!force && classroom?.id == selectedClassroom?.id) return;
     _requestedElapsedClassroomId = classroom?.id;
     setState(() {
@@ -102,6 +102,12 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
     });
     if (classroom != null) {
       _loadSubjects(classroom.id);
+      if (widget.policy.isGulfStudent) {
+        await context.read<GetWeeklyPlansCubit>().getPlansByWeek(
+          classroomId: classroom.id,
+        );
+        if (!mounted || selectedClassroom?.id != classroom.id) return;
+      }
       context.read<GetElapsedWeeksCubit>().getElapsedWeeks(
         classroomId: classroom.id,
       );

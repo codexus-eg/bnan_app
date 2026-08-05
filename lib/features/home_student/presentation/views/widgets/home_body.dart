@@ -7,11 +7,13 @@ class HomeStudentBody extends StatelessWidget {
     required this.index,
     required this.onMenuTap,
     required this.userName,
+    this.isGulfStudent = false,
   });
 
   final int index;
   final VoidCallback onMenuTap;
   final String userName;
+  final bool isGulfStudent;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class HomeStudentBody extends StatelessWidget {
       index: index,
       onMenuTap: onMenuTap,
       userName: userName,
+      isGulfStudent: isGulfStudent,
     );
   }
 }

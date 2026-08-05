@@ -9,7 +9,7 @@ class LessonCard extends StatelessWidget {
   const LessonCard({super.key, required this.lesson, required this.onTap});
 
   final LessonUiModel lesson;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

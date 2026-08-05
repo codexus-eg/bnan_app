@@ -74,7 +74,11 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     } else if (index == groupsDrawerIndex) {
       MyNavigator.goTo(context, Routes.studentGroups);
     } else if (index == plansDrawerIndex) {
-      MyNavigator.goTo(context, Routes.plans);
+      MyNavigator.goTo(
+        context,
+        Routes.plans,
+        extra: widget.loggedUser.isGulfStudent,
+      );
     } else if (index == notificationDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == evaluationsDrawerIndex) {
@@ -116,6 +120,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
           body: HomeStudentBody(
             index: currentIndex,
             userName: widget.loggedUser.firstTwoNames,
+            isGulfStudent: widget.loggedUser.isGulfStudent,
             onMenuTap: _openDrawer,
           ),
           bottomNavigationBar: HomeStudentBottomNavBar(

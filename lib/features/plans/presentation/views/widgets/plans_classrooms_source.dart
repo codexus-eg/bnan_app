@@ -11,6 +11,10 @@ import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_te
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/generated/l10n.dart';
+import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
+import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_state.dart';
+import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 
 typedef PlansClassroomsBuilder =
     Widget Function(
@@ -20,9 +24,14 @@ typedef PlansClassroomsBuilder =
     );
 
 class PlansClassroomsSource extends StatelessWidget {
-  const PlansClassroomsSource({super.key, required this.builder});
+  const PlansClassroomsSource({
+    super.key,
+    required this.builder,
+    this.policy,
+  });
 
   final PlansClassroomsBuilder builder;
+  final PlansAccessPolicy? policy;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +40,14 @@ class PlansClassroomsSource extends StatelessWidget {
         BlocBuilder<GetTeacherClassroomsCubit, GetTeacherClassroomsState>(
           builder: (context, state) => _teacher(context, state),
         ),
-      'student' => BlocBuilder<GetMyEnrollmentsCubit, GetMyEnrollmentsState>(
-        builder: (context, state) => _student(context, state),
-      ),
+      'student' =>
+        policy?.isGulfStudent == true
+            ? BlocBuilder<GulfScheduleCubit, GulfScheduleState>(
+                builder: (context, state) => _gulfStudent(context, state),
+              )
+            : BlocBuilder<GetMyEnrollmentsCubit, GetMyEnrollmentsState>(
+                builder: (context, state) => _student(context, state),
+              ),
       'supervisor' =>
         BlocBuilder<GetSupervisorClassroomsCubit, GetSupervisorClassroomsState>(
           builder: (context, state) => _supervisor(context, state),
@@ -43,6 +57,19 @@ class PlansClassroomsSource extends StatelessWidget {
       ),
       _ => builder(context, const PlansClassroomsSuccess([]), () {}),
     };
+  }
+
+  Widget _gulfStudent(BuildContext context, GulfScheduleState state) {
+    final uiState = switch (state.status) {
+      GulfScheduleLoadStatus.ready => PlansClassroomsSuccess(
+        mapGulfScheduleToPlanOptions(state.classrooms),
+      ),
+      GulfScheduleLoadStatus.failure => PlansClassroomsFailure(
+        state.loadError ?? S.of(context).unexpectedError,
+      ),
+      _ => const PlansClassroomsLoading(),
+    };
+    return builder(context, uiState, context.read<GulfScheduleCubit>().load);
   }
 
   Widget _teacher(BuildContext context, GetTeacherClassroomsState state) {

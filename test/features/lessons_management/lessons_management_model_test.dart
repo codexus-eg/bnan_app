@@ -48,6 +48,38 @@ void main() {
     expect(result.data.classrooms.single.entries, isEmpty);
   });
 
+  test('parses every classroom from the wrapped student contract', () {
+    final classrooms = List.generate(
+      70,
+      (index) => {
+        'id': 'class-$index',
+        'hasSubjectConflict': index == 0,
+        'schedule': {
+          'id': 'schedule-$index',
+          'classroomSubject': 'link-$index',
+          'entries': [
+            {'day': 'sunday', 'startTime': '18:00'},
+          ],
+          'createdAt': '2026-08-01T10:00:00.000Z',
+          'updatedAt': '2026-08-05T10:00:00.000Z',
+        },
+      },
+    );
+    final result = GulfSchedulesResponse.fromJson({
+      'success': true,
+      'data': {
+        'students': [
+          {'classrooms': classrooms},
+        ],
+      },
+    });
+
+    expect(result.data.classrooms, hasLength(70));
+    expect(result.data.classrooms.first.hasSubjectConflict, isTrue);
+    expect(result.data.classrooms.last.schedule?.createdAt, isNotNull);
+    expect(result.data.classrooms.last.schedule?.updatedAt, isNotNull);
+  });
+
   test('request sends classroomSubject and day/startTime only', () {
     const request = GulfScheduleRequest(
       classroomSubject: 'link-1',

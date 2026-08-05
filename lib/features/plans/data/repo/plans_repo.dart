@@ -28,7 +28,7 @@ abstract class PlansRepo {
 
   Future<Either<Failure, WeeklyPlansResponseModel>> getPlansByWeek({
     required String classroomId,
-    required int week,
+    int? week,
   });
 
   Future<Either<Failure, TermPlansResponseModel>> getTermPlans({

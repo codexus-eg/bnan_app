@@ -319,6 +319,10 @@ abstract class EndPoints {
     return '$classrooms/$classroomId/plans/week/$week';
   }
 
+  static String classroomPlans(String classroomId) {
+    return '$classrooms/$classroomId/plans';
+  }
+
   static String termPlans(String classroomId) {
     return '$classrooms/$classroomId/plans/term';
   }

@@ -3,6 +3,7 @@ import 'package:bnan_app/features/classrooms_management/data/models/classroom_mo
 import 'package:bnan_app/features/student_groups/data/models/student_enrollment_model.dart';
 import 'package:bnan_app/features/supervisor_management/data/models/supervisor_classroom_model.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/teacher_class_room_model.dart';
+import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_models.dart';
 
 List<PlanClassroomOption> mapTeacherClassroomsToPlanOptions(
   List<TeacherClassroomModel> classrooms,
@@ -21,6 +22,14 @@ List<PlanClassroomOption> mapStudentEnrollmentsToPlanOptions(
           name: item.classroom.name,
         ),
       ),
+);
+
+List<PlanClassroomOption> mapGulfScheduleToPlanOptions(
+  List<GulfClassroom> classrooms,
+) => _unique(
+  classrooms
+      .where((item) => item.subject != null && !item.hasSubjectConflict)
+      .map((item) => PlanClassroomOption(id: item.id, name: item.name)),
 );
 
 List<PlanClassroomOption> mapSupervisorClassroomsToPlanOptions(

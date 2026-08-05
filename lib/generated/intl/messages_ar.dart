@@ -559,7 +559,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم إنشاء المجموعة، ابدأ بكم"),
         "groups": MessageLookupByLibrary.simpleMessage("المجموعات"),
         "gulfClassroomSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
-            "لا يمكن إنشاء الجدول لأن ارتباط المادة بالفصل غير متاح"),
+            "بيانات مادة الفصل تحتاج إلى مراجعة الإدارة"),
         "gulfCurriculum":
             MessageLookupByLibrary.simpleMessage("المنهج الخليجي"),
         "gulfScheduleEntryAdded":

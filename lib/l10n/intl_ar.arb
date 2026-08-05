@@ -830,7 +830,7 @@
     "gulfScheduleEntryAdded": "تمت إضافة الموعد",
     "gulfScheduleEntryUpdated": "تم تعديل الموعد",
     "gulfScheduleEntryDeleted": "تم حذف الموعد",
-    "gulfClassroomSubjectUnavailable": "لا يمكن إنشاء الجدول لأن ارتباط المادة بالفصل غير متاح",
+    "gulfClassroomSubjectUnavailable": "بيانات مادة الفصل تحتاج إلى مراجعة الإدارة",
     "startSession": "بدء الحصة",
     "sessionStarting": "جارٍ بدء الحصة",
     "sessionStarted": "تم بدء الحصة",

@@ -586,7 +586,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Group created, start now"),
         "groups": MessageLookupByLibrary.simpleMessage("Groups"),
         "gulfClassroomSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
-            "The schedule cannot be created because the classroom-subject link is unavailable"),
+            "The classroom subject data needs to be reviewed by the administration."),
         "gulfCurriculum":
             MessageLookupByLibrary.simpleMessage("Gulf Curriculum"),
         "gulfScheduleEntryAdded": MessageLookupByLibrary.simpleMessage(
