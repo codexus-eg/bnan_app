@@ -8,6 +8,7 @@ import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo.dart'
 import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/message_documents_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
@@ -381,6 +382,9 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<ClassroomSummariesCubit>(
     () => ClassroomSummariesCubit(getIt<ClassroomDocumentsRepo>()),
+  );
+  getIt.registerFactory<MessageDocumentsCubit>(
+    () => MessageDocumentsCubit(getIt<ChatRepo>()),
   );
   getIt.registerFactory<GetClassroomStudentsCubit>(
     () => GetClassroomStudentsCubit(getIt()),

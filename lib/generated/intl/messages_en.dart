@@ -745,6 +745,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidEmail": MessageLookupByLibrary.simpleMessage(
       "Please enter a valid email address.",
     ),
+    "invalidLink": MessageLookupByLibrary.simpleMessage("Invalid link"),
     "invalidPackage": MessageLookupByLibrary.simpleMessage(
       "Invalid package data",
     ),
@@ -809,6 +810,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Math . Ms. Sarah Abdullah",
     ),
     "mayCertificate": MessageLookupByLibrary.simpleMessage("May Certificate"),
+    "messageDocuments": MessageLookupByLibrary.simpleMessage(
+      "Message Documents",
+    ),
     "messages": MessageLookupByLibrary.simpleMessage("Messages"),
     "monday": MessageLookupByLibrary.simpleMessage("Monday"),
     "month": MessageLookupByLibrary.simpleMessage("Month"),
@@ -940,6 +944,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
       "No lessons for the selected day",
     ),
+    "noMessageDocumentsAvailable": MessageLookupByLibrary.simpleMessage(
+      "No message documents are available yet",
+    ),
     "noNotifications": MessageLookupByLibrary.simpleMessage("No notifications"),
     "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
       "No pending assignments",
@@ -1048,6 +1055,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
     "openDocument": MessageLookupByLibrary.simpleMessage("Open Document"),
+    "openFile": MessageLookupByLibrary.simpleMessage("Open File"),
+    "openLink": MessageLookupByLibrary.simpleMessage("Open Link"),
     "openRecording": MessageLookupByLibrary.simpleMessage("Open Recording"),
     "openSessionLink": MessageLookupByLibrary.simpleMessage("Open lesson link"),
     "optional": MessageLookupByLibrary.simpleMessage("Optional"),
@@ -1679,14 +1688,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "unableToOpenAttachment": MessageLookupByLibrary.simpleMessage(
       "Unable to open the attachment",
     ),
+    "unableToOpenDocument": MessageLookupByLibrary.simpleMessage(
+      "Unable to open the document",
+    ),
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
-      "Unable to Open the file",
+      "Unable to open the file",
     ),
     "unableToOpenLink": MessageLookupByLibrary.simpleMessage(
       "Unable to open link",
     ),
     "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
       "Unable to open payment receipt",
+    ),
+    "unableToOpenSessionRecording": MessageLookupByLibrary.simpleMessage(
+      "Unable to open the session recording",
     ),
     "unableToOpenWhatsApp": MessageLookupByLibrary.simpleMessage(
       "Unable to open WhatsApp",

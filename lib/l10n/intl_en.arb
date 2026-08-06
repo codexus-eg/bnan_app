@@ -1066,5 +1066,14 @@
     "noRecordingsAvailable": "No recordings are available yet",
     "noReportsAvailable": "No reports are available yet",
     "noSummaryContent": "No summary content is available",
-    "unableToOpenLink": "Unable to open link"
+    "unableToOpenLink": "Unable to open link",
+    "messages": "Messages",
+    "messageDocuments": "Message Documents",
+    "noMessageDocumentsAvailable": "No message documents are available yet",
+    "openFile": "Open File",
+    "openLink": "Open Link",
+    "unableToOpenFile": "Unable to open the file",
+    "unableToOpenDocument": "Unable to open the document",
+    "unableToOpenSessionRecording": "Unable to open the session recording",
+    "invalidLink": "Invalid link"
 }

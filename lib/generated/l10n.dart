@@ -6289,10 +6289,10 @@ class S {
     );
   }
 
-  /// `Unable to Open the file`
+  /// `Unable to open the file`
   String get unableToOpenFile {
     return Intl.message(
-      'Unable to Open the file',
+      'Unable to open the file',
       name: 'unableToOpenFile',
       desc: '',
       args: [],
@@ -7764,6 +7764,66 @@ class S {
     return Intl.message(
       'Unable to open link',
       name: 'unableToOpenLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Message Documents`
+  String get messageDocuments {
+    return Intl.message(
+      'Message Documents',
+      name: 'messageDocuments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No message documents are available yet`
+  String get noMessageDocumentsAvailable {
+    return Intl.message(
+      'No message documents are available yet',
+      name: 'noMessageDocumentsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open File`
+  String get openFile {
+    return Intl.message('Open File', name: 'openFile', desc: '', args: []);
+  }
+
+  /// `Open Link`
+  String get openLink {
+    return Intl.message('Open Link', name: 'openLink', desc: '', args: []);
+  }
+
+  /// `Unable to open the document`
+  String get unableToOpenDocument {
+    return Intl.message(
+      'Unable to open the document',
+      name: 'unableToOpenDocument',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open the session recording`
+  String get unableToOpenSessionRecording {
+    return Intl.message(
+      'Unable to open the session recording',
+      name: 'unableToOpenSessionRecording',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid link`
+  String get invalidLink {
+    return Intl.message(
+      'Invalid link',
+      name: 'invalidLink',
       desc: '',
       args: [],
     );

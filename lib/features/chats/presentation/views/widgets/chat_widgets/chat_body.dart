@@ -17,12 +17,14 @@ class ChatBody extends StatelessWidget {
     this.roomType,
     this.classroomId,
     this.classroomName,
+    this.currentUserRole,
   });
 
   final String roomId;
   final String? roomType;
   final String? classroomId;
   final String? classroomName;
+  final String? currentUserRole;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,10 @@ class ChatBody extends StatelessWidget {
       children: [
         ChatHeader(
           chatTitle: classroomName ?? '',
+          roomId: roomId,
           roomType: roomType,
           classroomId: classroomId,
+          currentUserRole: currentUserRole,
         ),
         Expanded(
           child: BlocBuilder<GetRoomMessagesCubit, GetRoomMessagesState>(

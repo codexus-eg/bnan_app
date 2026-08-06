@@ -678,6 +678,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidEmail": MessageLookupByLibrary.simpleMessage(
       "الرجاء إدخال عنوان بريد إلكتروني صالح.",
     ),
+    "invalidLink": MessageLookupByLibrary.simpleMessage("رابط غير صالح"),
     "invalidPackage": MessageLookupByLibrary.simpleMessage(
       "بيانات الباقة غير صالحة",
     ),
@@ -738,6 +739,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "الرياضيات . أ/سارة عبدالله",
     ),
     "mayCertificate": MessageLookupByLibrary.simpleMessage("شهادة شهر مايو"),
+    "messageDocuments": MessageLookupByLibrary.simpleMessage("مستندات الرسائل"),
     "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
     "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
     "month": MessageLookupByLibrary.simpleMessage("الشهر"),
@@ -869,6 +871,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
       "لا توجد حصص في اليوم المحدد",
     ),
+    "noMessageDocumentsAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد مستندات في الرسائل حتى الآن",
+    ),
     "noNotifications": MessageLookupByLibrary.simpleMessage("لا توجد إشعارات"),
     "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
       "لا توجد واجبات قيد الانتظار",
@@ -977,6 +982,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingTitle3": MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
     "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
     "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
+    "openFile": MessageLookupByLibrary.simpleMessage("فتح الملف"),
+    "openLink": MessageLookupByLibrary.simpleMessage("فتح الرابط"),
     "openRecording": MessageLookupByLibrary.simpleMessage("فتح التسجيل"),
     "openSessionLink": MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
     "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
@@ -1573,12 +1580,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "unableToOpenAttachment": MessageLookupByLibrary.simpleMessage(
       "تعذر فتح المرفق",
     ),
-    "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل الملف ",
+    "unableToOpenDocument": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح المستند",
     ),
+    "unableToOpenFile": MessageLookupByLibrary.simpleMessage("تعذر فتح الملف"),
     "unableToOpenLink": MessageLookupByLibrary.simpleMessage("تعذر فتح الرابط"),
     "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
       "تعذر فتح إيصال الدفع",
+    ),
+    "unableToOpenSessionRecording": MessageLookupByLibrary.simpleMessage(
+      "تعذر فتح تسجيل الحصة",
     ),
     "unableToOpenWhatsApp": MessageLookupByLibrary.simpleMessage(
       "تعذر فتح واتساب",
