@@ -4,9 +4,15 @@ import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscr
 import 'package:flutter/material.dart';
 
 class SubscriptionBody extends StatelessWidget {
-  const SubscriptionBody({super.key, required this.curriculumId, required this.curriculumName});
+  const SubscriptionBody({
+    super.key,
+    required this.curriculumId,
+    required this.curriculumName,
+    this.registrationMode,
+  });
   final String curriculumId;
   final String curriculumName;
+  final String? registrationMode;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,11 @@ class SubscriptionBody extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
             padding: EdgeInsetsDirectional.only(start: 14, end: 18),
-            sliver: SubscriptionGrid(curriculumId: curriculumId, curriculumName: curriculumName),
+            sliver: SubscriptionGrid(
+              curriculumId: curriculumId,
+              curriculumName: curriculumName,
+              registrationMode: registrationMode,
+            ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],

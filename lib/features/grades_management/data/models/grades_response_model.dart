@@ -13,10 +13,13 @@ class GradesResponseModel {
 
   factory GradesResponseModel.fromJson(Map<String, dynamic> json) {
     return GradesResponseModel(
-      success: json['success'] ?? false,
-      length: json['length'] ?? 0,
+      success: json['success'] == true,
+      length: json['length'] is num
+          ? (json['length'] as num).toInt()
+          : (json['data'] as List? ?? []).length,
       data: (json['data'] as List? ?? [])
-          .map((item) => GradeModel.fromJson(item))
+          .whereType<Map>()
+          .map((item) => GradeModel.fromJson(Map<String, dynamic>.from(item)))
           .toList(),
     );
   }

@@ -53,6 +53,7 @@ dependencies:
   pinput: ^6.0.1
   custom_info_window: ^1.0.1
   dartz: ^0.10.1
+  crypto: ^3.0.6
   loading_overlay: ^0.4.0
   lottie: ^3.3.2
   # google_fonts: ^8.0.1

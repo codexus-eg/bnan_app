@@ -6,7 +6,13 @@ Future<Either<Failure, T>> repoGuard<T>(Future<T> Function() request) async {
   try {
     return Right(await request());
   } on AppException catch (error) {
-    return Left(Failure(message: error.message));
+    return Left(
+      Failure(
+        message: error.message,
+        responseReceived: error.responseReceived,
+        statusCode: error.statusCode,
+      ),
+    );
   } catch (error) {
     return Left(Failure(message: error.toString()));
   }

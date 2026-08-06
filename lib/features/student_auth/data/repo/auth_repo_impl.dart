@@ -66,6 +66,33 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<Either<Failure, AuthResponseModel>> loginStudentAfterPayment({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await apiConsumer.post(
+        EndPoints.login,
+        data: {'email': email.trim(), 'password': password},
+      );
+      final authResponse = AuthResponseModel.fromJson(response);
+      final user = authResponse.user;
+      final isActiveStudent =
+          user.role.trim().toLowerCase() == 'student' &&
+          user.status.trim().toLowerCase() == 'active';
+      if (!authResponse.hasToken || !isActiveStudent) {
+        return Left(Failure(message: 'Unauthorized student account'));
+      }
+      await _saveSession(authResponse);
+      return Right(authResponse);
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
   Future<Either<Failure, SimpleResponseModel>> forgotPassword({
     required String email,
   }) async {
@@ -156,10 +183,25 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       final response = await apiConsumer.get(
-        //TODO
         EndPoints.getGrades(curriculumId: curriculumId),
       );
 
+      return Right(GradesResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GradesResponseModel>> getGulfCurriculumGrades({
+    required String curriculumId,
+  }) async {
+    try {
+      final response = await apiConsumer.get(
+        EndPoints.gradesByCurriculum(curriculumId),
+      );
       return Right(GradesResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
@@ -175,13 +217,26 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       final response = await apiConsumer.get(
-        // TODO HERE
         EndPoints.curriculumSubjects(
           curriculumId: '6a1b56274fdcd300239c9877',
           gradeId: gradeId,
         ),
       );
 
+      return Right(SubjectsResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SubjectsResponseModel>> getGulfGradeSubjects({
+    required String gradeId,
+  }) async {
+    try {
+      final response = await apiConsumer.get(EndPoints.gradeSubjects(gradeId));
       return Right(SubjectsResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));

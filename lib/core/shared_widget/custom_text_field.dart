@@ -55,11 +55,13 @@ class CustomTextField extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                label!,
-                style: StylesManager.styleBold14(
-                  context,
-                ).copyWith(color: labelColor ?? ColorManager.mainColor15),
+              Flexible(
+                child: Text(
+                  label!,
+                  style: StylesManager.styleBold14(
+                    context,
+                  ).copyWith(color: labelColor ?? ColorManager.mainColor15),
+                ),
               ),
               if (isRequired)
                 const Text(

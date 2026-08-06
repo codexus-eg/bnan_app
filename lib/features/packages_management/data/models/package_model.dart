@@ -11,6 +11,7 @@ class PackageModel {
   final String? description;
   final String? discountTitle;
   final bool? isPopular;
+  final bool isActive;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -27,6 +28,7 @@ class PackageModel {
     this.description,
     this.discountTitle,
     this.isPopular,
+    this.isActive = false,
     this.createdAt,
     this.updatedAt,
   });
@@ -45,6 +47,7 @@ class PackageModel {
       description: json['description']?.toString(),
       discountTitle: json['discountTitle']?.toString(),
       isPopular: json['isPopular'] as bool?,
+      isActive: json['isActive'] == true,
       createdAt: _toDateTime(json['createdAt']),
       updatedAt: _toDateTime(json['updatedAt']),
     );

@@ -3,6 +3,7 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:bnan_app/core/helper/validator_form_field.dart';
 import 'package:flutter/material.dart';
 
 class ParentInfoStep extends StatelessWidget {
@@ -29,13 +30,15 @@ class ParentInfoStep extends StatelessWidget {
             label: S.of(context).parentName,
             hintText: '',
             isRequired: true,
-                    ),
+            validator: MyValidator.validateName,
+          ),
           const SizedBox(height: 16),
           CustomTextField(
             controller: cubit.parentEmailController,
             label: S.of(context).email,
             isRequired: true,
             keyboardType: TextInputType.emailAddress,
+            validator: MyValidator.validateEmail,
           ),
           const SizedBox(height: 16),
           CustomTextField(
@@ -43,6 +46,8 @@ class ParentInfoStep extends StatelessWidget {
             label: S.of(context).phoneNumber,
             keyboardType: TextInputType.phone,
             isRequired: true,
+            validator: (value) =>
+                MyValidator.requiredField(value, S.of(context).phoneNumber),
           ),
           const SizedBox(height: 16),
           CustomTextField(
@@ -52,11 +57,16 @@ class ParentInfoStep extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           CustomTextField(
-            controller: cubit.studentPasswordController,
-            label: S.of(context).studentPassword,
+            controller: cubit.isGulf
+                ? cubit.parentPasswordController
+                : cubit.studentPasswordController,
+            label: cubit.isGulf
+                ? S.of(context).password
+                : S.of(context).studentPassword,
             hintText: S.of(context).passwordHint,
             obscureText: true,
             isRequired: true,
+            validator: cubit.isGulf ? MyValidator.validateStrongPassword : null,
             suffixIcon: const Icon(
               Icons.visibility_outlined,
               size: 24,
@@ -69,9 +79,9 @@ class ParentInfoStep extends StatelessWidget {
             child: Text(
               S.of(context).passwordWillBeUsed,
               textAlign: TextAlign.start,
-              style: StylesManager.styleBold12(context).copyWith(
-                color: ColorManager.grey7D7D,
-              ),
+              style: StylesManager.styleBold12(
+                context,
+              ).copyWith(color: ColorManager.grey7D7D),
             ),
           ),
         ],

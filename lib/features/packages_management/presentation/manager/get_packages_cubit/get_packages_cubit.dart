@@ -25,7 +25,11 @@ class GetPackagesCubit extends Cubit<GetPackagesState> {
 
     result.fold(
       (failure) => emit(GetPackagesFailure(failure.message)),
-      (response) => emit(GetPackagesSuccess(response.data)),
+      (response) => emit(
+        GetPackagesSuccess(
+          response.data.where((package) => package.isActive).toList(),
+        ),
+      ),
     );
   }
 }

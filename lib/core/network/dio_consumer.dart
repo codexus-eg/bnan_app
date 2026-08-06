@@ -68,6 +68,7 @@ class DioConsumer extends ApiConsumer {
         responseHeader: false,
         responseBody: true,
         compact: true,
+        filter: (options, _) => options.extra['sensitive'] != true,
       ),
     );
   }
@@ -182,11 +183,7 @@ class DioConsumer extends ApiConsumer {
   }
 
   Options _options(bool isProtected) {
-    return Options(
-      extra: {
-        'isProtected': isProtected,
-      },
-    );
+    return Options(extra: {'isProtected': isProtected});
   }
 
   Object? _body(Object? data, bool isFormData) {

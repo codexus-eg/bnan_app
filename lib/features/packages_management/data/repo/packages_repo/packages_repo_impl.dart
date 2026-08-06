@@ -45,7 +45,6 @@ class PackagesRepoImpl implements PackagesRepo {
     return repoGuard(() async {
       final response = await apiConsumer.get(
         EndPoints.packagesByCurriculum(curriculumId),
-        isProtected: true,
       );
 
       return GetPackagesResponseModel.fromJson(asMap(response));

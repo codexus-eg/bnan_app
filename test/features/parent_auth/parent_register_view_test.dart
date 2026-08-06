@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_response_model.dart';
@@ -22,12 +23,10 @@ void main() {
   ) async {
     final repo = _ImmediateRepo(const Right(_response));
     await tester.pumpWidget(_localizedApp(repo));
+    final s = S.of(tester.element(find.byType(ParentRegisterView)));
 
-    expect(find.text('نموذج تسجيل ولي الأمر'), findsOneWidget);
-    expect(
-      find.text('ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع'),
-      findsNothing,
-    );
+    expect(find.text(s.parentRegistrationForm), findsOneWidget);
+    expect(find.text(s.passwordWillBeUsed), findsNothing);
     final fields = tester
         .widgetList<CustomTextField>(find.byType(CustomTextField))
         .toList();
@@ -35,7 +34,7 @@ void main() {
     expect(fields[3].isRequired, isFalse);
     expect(fields[4].obscureText, isTrue);
 
-    await tester.tap(find.byIcon(Icons.visibility_outlined));
+    await tester.tap(find.byIcon(Icons.visibility_off_outlined));
     await tester.pump();
     expect(
       tester
@@ -47,7 +46,7 @@ void main() {
 
     await _tapNext(tester);
     expect(repo.calls, 0);
-    expect(find.text('الاسم لا يمكن أن يكون فارغًا.'), findsOneWidget);
+    expect(find.text(s.nameCannotBeEmpty), findsOneWidget);
   });
 
   testWidgets('valid submit calls once and disables the loading button', (
@@ -131,7 +130,7 @@ Future<void> _fillValidForm(WidgetTester tester) async {
 }
 
 Future<void> _tapNext(WidgetTester tester) async {
-  final next = find.text('التالي');
+  final next = find.byType(CustomAppButton);
   await tester.ensureVisible(next);
   await tester.tap(next);
   await tester.pump();

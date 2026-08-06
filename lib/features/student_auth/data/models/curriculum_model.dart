@@ -10,8 +10,11 @@ class CurriculumsResponseModel {
   factory CurriculumsResponseModel.fromJson(Map<String, dynamic> json) {
     return CurriculumsResponseModel(
       success: json['success'] ?? false,
-      curriculums: (json['data'] as List<dynamic>? ?? [])
-          .map((item) => CurriculumModel.fromJson(item))
+      curriculums: (json['data'] as List? ?? [])
+          .whereType<Map>()
+          .map(
+            (item) => CurriculumModel.fromJson(Map<String, dynamic>.from(item)),
+          )
           .toList(),
     );
   }
@@ -25,6 +28,7 @@ class CurriculumModel {
   final String description;
   final String createdAt;
   final String updatedAt;
+  final String? registrationMode;
 
   const CurriculumModel({
     required this.id,
@@ -34,6 +38,7 @@ class CurriculumModel {
     required this.description,
     required this.createdAt,
     required this.updatedAt,
+    this.registrationMode,
   });
 
   factory CurriculumModel.fromJson(Map<String, dynamic> json) {
@@ -42,20 +47,28 @@ class CurriculumModel {
       name: json['name'] ?? '',
       baseCurriculum: json['baseCurriculum'] ?? '',
       icon: json['icon'] ?? '',
-      description: json['Description'] ?? '',
+      description: (json['description'] ?? json['Description'] ?? '')
+          .toString(),
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
+      registrationMode: _registrationMode(json['registrationMode']),
     );
   }
- factory CurriculumModel.mock(Map<String, dynamic> json) {
-  return const CurriculumModel(
-    id: '',
-    name: 'Curriculum Name',
-    baseCurriculum: '',
-    icon: '',
-    description: '',
-    createdAt: '',
-    updatedAt: '',
-  );
-}
+  factory CurriculumModel.mock(Map<String, dynamic> json) {
+    return const CurriculumModel(
+      id: '',
+      name: 'Curriculum Name',
+      baseCurriculum: '',
+      icon: '',
+      description: '',
+      createdAt: '',
+      updatedAt: '',
+      registrationMode: null,
+    );
+  }
+
+  static String? _registrationMode(dynamic value) {
+    final mode = value?.toString().trim().toLowerCase();
+    return mode == 'egyptian' || mode == 'gulf' ? mode : null;
+  }
 }

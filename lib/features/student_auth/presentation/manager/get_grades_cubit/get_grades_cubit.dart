@@ -9,16 +9,23 @@ class GetGradesCubit extends Cubit<GetGradesState> {
 
   Future<void> getCurriculumGrades({
     required String curriculumId,
+    bool isGulf = false,
   }) async {
     emit(GetGradesLoading());
 
-    final result = await authRepo.getCurriculumGrades(
-      curriculumId: curriculumId,
-    );
+    final result = isGulf
+        ? await authRepo.getGulfCurriculumGrades(curriculumId: curriculumId)
+        : await authRepo.getCurriculumGrades(curriculumId: curriculumId);
 
     result.fold(
       (failure) => emit(GetGradesFailure(errorMessage: failure.message)),
-      (response) => emit(GetGradesSuccess(grades: [])),
+      (response) => emit(
+        GetGradesSuccess(
+          grades: isGulf
+              ? response.data.where((grade) => grade.isActive).toList()
+              : const [],
+        ),
+      ),
     );
   }
 }

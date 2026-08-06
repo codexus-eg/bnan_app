@@ -2,16 +2,14 @@ class SubjectsResponseModel {
   final bool success;
   final List<SubjectModel> subjects;
 
-  const SubjectsResponseModel({
-    required this.success,
-    required this.subjects,
-  });
+  const SubjectsResponseModel({required this.success, required this.subjects});
 
   factory SubjectsResponseModel.fromJson(Map<String, dynamic> json) {
     return SubjectsResponseModel(
       success: json['success'] ?? false,
-      subjects: (json['data'] as List<dynamic>? ?? [])
-          .map((item) => SubjectModel.fromJson(item))
+      subjects: (json['data'] as List? ?? [])
+          .whereType<Map>()
+          .map((item) => SubjectModel.fromJson(Map<String, dynamic>.from(item)))
           .toList(),
     );
   }
@@ -34,11 +32,11 @@ class SubjectModel {
 
   factory SubjectModel.fromJson(Map<String, dynamic> json) {
     return SubjectModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      grade: json['grade'] ?? '',
-      curriculum: json['curriculum'] ?? '',
-      isActive: json['isActive'] ?? false,
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      grade: (json['grade'] ?? '').toString(),
+      curriculum: (json['curriculum'] ?? '').toString(),
+      isActive: json['isActive'] != false,
     );
   }
 
