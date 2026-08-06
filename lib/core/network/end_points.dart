@@ -28,6 +28,7 @@ abstract class EndPoints {
   static const String teachingAssignments = '/teachers/teaching-assignments';
   static const String classrooms = '/classrooms';
   static const String egyptianSchedules = '/egyptianSchedules';
+  static const String myEgyptianSchedule = '$egyptianSchedules/mySchedule';
   static const String subjects = '/subjects';
   static const String grades = '/grades';
   static const String teachers = '/teachers';

@@ -12,40 +12,53 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
   GulfScheduleRepoImpl(this.api);
   final ApiConsumer api;
   GulfSchedulesResponse? _cached;
-  String? _cacheOwner, _inFlightOwner;
+  String? _cacheOwner, _cacheStudentId, _inFlightOwner, _inFlightStudentId;
   Future<Either<Failure, GulfSchedulesResponse>>? _inFlight;
 
   @override
-  Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule() {
+  Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule({
+    String? studentId,
+  }) {
     final owner = SessionManager.instance.accessToken;
-    if (_cacheOwner == owner && _cached != null) {
+    final id = _studentId(studentId);
+    if (_cacheOwner == owner && _cacheStudentId == id && _cached != null) {
       return Future.value(Right(_cached!));
     }
-    if (_inFlightOwner == owner && _inFlight != null) return _inFlight!;
-    final request = _load(owner);
+    if (_inFlightOwner == owner &&
+        _inFlightStudentId == id &&
+        _inFlight != null) {
+      return _inFlight!;
+    }
+    final request = _load(owner, id);
     _inFlightOwner = owner;
+    _inFlightStudentId = id;
     _inFlight = request;
     request.whenComplete(() {
       if (!identical(_inFlight, request)) return;
       _inFlight = null;
       _inFlightOwner = null;
+      _inFlightStudentId = null;
     });
     return request;
   }
 
-  Future<Either<Failure, GulfSchedulesResponse>> _load(String? owner) =>
-      repoGuard(() async {
-        final response = await api.get(
-          EndPoints.myGulfSchedule,
-          isProtected: true,
-        );
-        final parsed = GulfSchedulesResponse.fromJson(asMap(response));
-        if (SessionManager.instance.accessToken == owner) {
-          _cacheOwner = owner;
-          _cached = parsed;
-        }
-        return parsed;
-      });
+  Future<Either<Failure, GulfSchedulesResponse>> _load(
+    String? owner,
+    String? studentId,
+  ) => repoGuard(() async {
+    final response = await api.get(
+      EndPoints.myGulfSchedule,
+      queryParameter: studentId == null ? null : {'studentId': studentId},
+      isProtected: true,
+    );
+    final parsed = GulfSchedulesResponse.fromJson(asMap(response));
+    if (SessionManager.instance.accessToken == owner) {
+      _cacheOwner = owner;
+      _cacheStudentId = studentId;
+      _cached = parsed;
+    }
+    return parsed;
+  });
 
   @override
   Future<Either<Failure, Unit>> createClassroomSchedule(
@@ -85,6 +98,12 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
         await call();
         _cached = null;
         _cacheOwner = null;
+        _cacheStudentId = null;
         return unit;
       });
+
+  String? _studentId(String? value) {
+    final id = value?.trim();
+    return id == null || id.isEmpty ? null : id;
+  }
 }

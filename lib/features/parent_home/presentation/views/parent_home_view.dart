@@ -67,6 +67,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     if (index == 2) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
     }
+    if (index == 3) {
+      MyNavigator.goTo(context, Routes.parentSchedule);
+    }
     if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     }

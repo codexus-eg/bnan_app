@@ -280,6 +280,18 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.parentSchedule,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.parent) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const ParentScheduleView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.teacherSections,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const TeacherSectionsView(),
@@ -593,6 +605,11 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.tablesManagement,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.admin) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
           child: MultiBlocProvider(
             providers: [
@@ -616,16 +633,49 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.egyptianSchedulesReadOnly,
+        redirect: (context, state) {
+          final session = SessionManager.instance;
+          final isAllowed =
+              session.isEgyptianSupervisor ||
+              session.isEgyptianStudent ||
+              (session.role == UserRole.teacher &&
+                  session.hasEgyptianRegistration);
+          if (isAllowed) return null;
+          return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) =>
+                getIt<GetEgyptianSchedulesCubit>()..getMyEgyptianSchedule(),
+            child: const EgyptianSchedulesReadOnlyView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.gulfStudentScheduleReadOnly,
+        redirect: (context, state) {
+          final session = SessionManager.instance;
+          if (session.isGulfStudent) return null;
+          return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const GulfStudentScheduleReadOnlyView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.lessonsManagement,
         redirect: (context, state) {
-          final role = SessionManager.instance.role;
-          if (role == UserRole.teacher ||
-              role == UserRole.supervisor ||
-              role == UserRole.admin) {
+          final session = SessionManager.instance;
+          final isAllowed =
+              session.isGulfSupervisor ||
+              (session.role == UserRole.teacher && session.hasGulfRegistration);
+          if (isAllowed) {
             return null;
           }
-          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
-              Routes.splash;
+          return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
         },
         pageBuilder: (context, state) => buildTransitionPages(
           child: const LessonsManagementView(),

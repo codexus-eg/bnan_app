@@ -9,16 +9,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TableCardSection extends StatelessWidget {
-  const TableCardSection({super.key, required this.schedule, this.onDelete});
+  const TableCardSection({
+    super.key,
+    required this.schedule,
+    this.onDelete,
+    this.showAcademicDetails = false,
+  });
 
   final EgyptianScheduleModel schedule;
   final VoidCallback? onDelete;
+  final bool showAcademicDetails;
 
   @override
   Widget build(BuildContext context) {
     final classroomName =
         schedule.classroom?.name ?? S.of(context).classSchedulesManagement;
     final scheduleId = schedule.id ?? '';
+    final academicDetails = [
+      schedule.grade?.name,
+      schedule.curriculum?.name,
+    ].whereType<String>().where((value) => value.isNotEmpty).join(' • ');
+    final subtitle = showAcademicDetails && academicDetails.isNotEmpty
+        ? academicDetails
+        : scheduleId;
 
     return CustomDetailsWidgetBackground(
       padding: EdgeInsets.zero,
@@ -57,7 +70,7 @@ class TableCardSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        scheduleId,
+                        subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: StylesManager.styleBold12(

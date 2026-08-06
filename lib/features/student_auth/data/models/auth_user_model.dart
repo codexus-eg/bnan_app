@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/enums/registration_mode.dart';
+
 class AuthUserModel {
   const AuthUserModel({
     required this.id,
@@ -5,6 +7,8 @@ class AuthUserModel {
     required this.email,
     required this.role,
     required this.status,
+    this.registrationMode,
+    this.registrationModes = const [],
   });
 
   final String id;
@@ -12,6 +16,8 @@ class AuthUserModel {
   final String email;
   final String role;
   final String status;
+  final RegistrationMode? registrationMode;
+  final List<RegistrationMode> registrationModes;
 
   factory AuthUserModel.fromJson(Map<String, dynamic> json) {
     return AuthUserModel(
@@ -20,6 +26,8 @@ class AuthUserModel {
       email: (json['email'] ?? '').toString(),
       role: (json['role'] ?? '').toString(),
       status: (json['status'] ?? '').toString(),
+      registrationMode: RegistrationMode.fromValue(json['registrationMode']),
+      registrationModes: RegistrationMode.fromList(json['registrationModes']),
     );
   }
 
@@ -30,6 +38,8 @@ class AuthUserModel {
       'email': email,
       'role': role,
       'status': status,
+      'registrationMode': registrationMode?.name,
+      'registrationModes': registrationModes.map((mode) => mode.name).toList(),
     };
   }
 }

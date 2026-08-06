@@ -14,10 +14,12 @@ class TableSchedulesList extends StatelessWidget {
     super.key,
     required this.schedules,
     this.enableDelete = true,
+    this.showAcademicDetails = false,
   });
 
   final List<EgyptianScheduleModel> schedules;
   final bool enableDelete;
+  final bool showAcademicDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class TableSchedulesList extends StatelessWidget {
         return TableCardSection(
           key: ValueKey(schedule.id ?? index),
           schedule: schedule,
+          showAcademicDetails: showAcademicDetails,
           onDelete: _canDelete(schedule)
               ? () => _confirmDelete(context, schedule.id!)
               : null,

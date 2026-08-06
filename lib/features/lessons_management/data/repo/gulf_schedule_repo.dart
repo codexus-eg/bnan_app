@@ -4,7 +4,9 @@ import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_m
 import 'package:dartz/dartz.dart';
 
 abstract class GulfScheduleRepo {
-  Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule();
+  Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule({
+    String? studentId,
+  });
   Future<Either<Failure, Unit>> createClassroomSchedule(
     String classroomId,
     GulfScheduleRequest request,

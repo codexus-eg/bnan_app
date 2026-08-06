@@ -12,15 +12,20 @@ class FakeGulfScheduleRepo implements GulfScheduleRepo {
 
   List<GulfClassroom> classrooms;
   Failure? loadFailure, saveFailure;
-  String? lastOperation, lastClassroomId;
+  String? lastOperation, lastClassroomId, lastStudentId;
   GulfScheduleRequest? lastRequest;
   int loadCalls = 0;
+  final studentIds = <String?>[];
   Completer<void>? loadGate;
   final queuedLoads = <Completer<Either<Failure, GulfSchedulesResponse>>>[];
 
   @override
-  Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule() async {
+  Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule({
+    String? studentId,
+  }) async {
     loadCalls++;
+    lastStudentId = studentId;
+    studentIds.add(studentId);
     if (queuedLoads.isNotEmpty) return queuedLoads.removeAt(0).future;
     await loadGate?.future;
     if (loadFailure != null) return Left(loadFailure!);

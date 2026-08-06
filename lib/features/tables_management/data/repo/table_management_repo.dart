@@ -10,6 +10,9 @@ abstract class TableManagementRepo {
     String? gradeId,
   });
 
+  Future<Either<Failure, EgyptianSchedulesResponseModel>>
+  getMyEgyptianSchedule({String? studentId});
+
   Future<Either<Failure, EgyptianScheduleResponseModel>>
   getEgyptianScheduleByClassroom(String classroomId);
 

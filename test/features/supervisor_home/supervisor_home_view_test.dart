@@ -1,12 +1,20 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/supervisor_home_view.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
+  setUp(() async {
+    FlutterSecureStorage.setMockInitialValues({});
+    await _saveSupervisor(RegistrationMode.gulf);
+  });
+
   testWidgets('renders at 360px and opens its shared drawer', (tester) async {
     await tester.binding.setSurfaceSize(const Size(360, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -56,6 +64,24 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('Egyptian schedule item opens the read-only route', (
+    tester,
+  ) async {
+    await _saveSupervisor(RegistrationMode.egyptian);
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    final state = tester.state<SupervisorHomeViewState>(
+      find.byType(SupervisorHomeView),
+    );
+    state.scaffoldKey.currentState?.openDrawer();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Schedule'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Egyptian schedules destination'), findsOneWidget);
+  });
+
   testWidgets('supports the Arabic RTL layout at 360px', (tester) async {
     await tester.binding.setSurfaceSize(const Size(360, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -88,6 +114,11 @@ Widget testApp({Locale locale = const Locale('en')}) {
         builder: (_, _) =>
             Scaffold(appBar: AppBar(), body: const Text('Lessons destination')),
       ),
+      GoRoute(
+        path: Routes.egyptianSchedulesReadOnly,
+        builder: (_, _) =>
+            const Scaffold(body: Text('Egyptian schedules destination')),
+      ),
     ],
   );
   return MaterialApp.router(
@@ -100,5 +131,14 @@ Widget testApp({Locale locale = const Locale('en')}) {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: S.delegate.supportedLocales,
+  );
+}
+
+Future<void> _saveSupervisor(RegistrationMode mode) {
+  return SessionManager.instance.saveSession(
+    accessToken: 'token',
+    refreshToken: '',
+    userRole: 'supervisor',
+    registrationMode: mode,
   );
 }

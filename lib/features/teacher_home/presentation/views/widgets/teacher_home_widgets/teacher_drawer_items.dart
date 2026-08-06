@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/drawer_item_model.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 
 List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
   final s = S.of(context);
+  final scheduleRoutes = teacherScheduleRoutes();
 
   return [
     DrawerItemModel(
@@ -15,9 +18,13 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
       title: s.classes,
       icon: ImageManager.teacherGraduationCapIcon,
     ),
-    DrawerItemModel(
-      title: s.schedule,
-      icon: ImageManager.tableIcon,
+    ...scheduleRoutes.map(
+      (route) => DrawerItemModel(
+        title: route == Routes.egyptianSchedulesReadOnly
+            ? s.schedule
+            : s.lessonsManagement,
+        icon: ImageManager.tableIcon,
+      ),
     ),
     DrawerItemModel(
       title: s.classesManagement,
@@ -71,5 +78,13 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
       title: s.myAccount,
       icon: ImageManager.userProfileIcon,
     ),
+  ];
+}
+
+List<String> teacherScheduleRoutes() {
+  final session = SessionManager.instance;
+  return [
+    if (session.hasEgyptianRegistration) Routes.egyptianSchedulesReadOnly,
+    if (session.hasGulfRegistration) Routes.lessonsManagement,
   ];
 }

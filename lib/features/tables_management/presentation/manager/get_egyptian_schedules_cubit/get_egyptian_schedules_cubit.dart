@@ -3,9 +3,12 @@ import 'package:bnan_app/features/tables_management/presentation/manager/get_egy
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetEgyptianSchedulesCubit extends Cubit<GetEgyptianSchedulesState> {
-  GetEgyptianSchedulesCubit(this.repo) : super(GetEgyptianSchedulesInitial());
+  GetEgyptianSchedulesCubit(this.repo, {this.studentId})
+    : super(GetEgyptianSchedulesInitial());
 
   final TableManagementRepo repo;
+  final String? studentId;
+  int _requestId = 0;
 
   Future<void> getEgyptianSchedules({String? gradeId}) async {
     emit(GetEgyptianSchedulesLoading());
@@ -16,5 +19,24 @@ class GetEgyptianSchedulesCubit extends Cubit<GetEgyptianSchedulesState> {
       (failure) => emit(GetEgyptianSchedulesFailure(failure.message)),
       (response) => emit(GetEgyptianSchedulesSuccess(response)),
     );
+  }
+
+  Future<void> getMyEgyptianSchedule() async {
+    final requestId = ++_requestId;
+    emit(GetEgyptianSchedulesLoading());
+
+    final result = await repo.getMyEgyptianSchedule(studentId: studentId);
+    if (isClosed || requestId != _requestId) return;
+
+    result.fold(
+      (failure) => emit(GetEgyptianSchedulesFailure(failure.message)),
+      (response) => emit(GetEgyptianSchedulesSuccess(response)),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _requestId++;
+    return super.close();
   }
 }

@@ -48,6 +48,49 @@ void main() {
     expect(result.data.classrooms.single.entries, isEmpty);
   });
 
+  test('accepts empty students and classrooms safely', () {
+    final emptyStudents = GulfSchedulesResponse.fromJson({
+      'data': {'students': <Object>[]},
+    });
+    final emptyClassrooms = GulfSchedulesResponse.fromJson({
+      'data': {
+        'students': [
+          {'classrooms': <Object>[]},
+        ],
+      },
+    });
+
+    expect(emptyStudents.data.classrooms, isEmpty);
+    expect(emptyClassrooms.data.classrooms, isEmpty);
+  });
+
+  test('parses conflict and nullable classroom relations safely', () {
+    final classroom = GulfSchedulesResponse.fromJson({
+      'data': {
+        'students': [
+          {
+            'classrooms': [
+              {
+                'id': 'class-1',
+                'grade': null,
+                'curriculum': null,
+                'subject': null,
+                'classroomSubject': null,
+                'hasSubjectConflict': true,
+              },
+            ],
+          },
+        ],
+      },
+    }).data.classrooms.single;
+
+    expect(classroom.grade, isNull);
+    expect(classroom.curriculum, isNull);
+    expect(classroom.subject, isNull);
+    expect(classroom.classroomSubjectId, isNull);
+    expect(classroom.hasSubjectConflict, isTrue);
+  });
+
   test('parses every classroom from the wrapped student contract', () {
     final classrooms = List.generate(
       70,
@@ -91,6 +134,17 @@ void main() {
         {'day': 'tuesday', 'startTime': '09:30'},
       ],
     });
+  });
+
+  test('schedule entry ignores endTime from a response', () {
+    final entry = GulfScheduleEntry.fromJson({
+      'day': 'Monday',
+      'startTime': '09:30',
+      'endTime': '10:30',
+    });
+
+    expect(entry.day, 'monday');
+    expect(entry.toJson(), {'day': 'monday', 'startTime': '09:30'});
   });
 }
 

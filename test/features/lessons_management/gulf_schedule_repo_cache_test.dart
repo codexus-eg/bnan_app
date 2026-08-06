@@ -19,6 +19,20 @@ void main() {
     expect((await repo.getMyGulfSchedule()).isRight(), isTrue);
     expect(api.getCalls, 1);
   });
+
+  test('keeps the cache separate for each selected child', () async {
+    final api = _ImmediateApi();
+    final repo = GulfScheduleRepoImpl(api);
+
+    await repo.getMyGulfSchedule(studentId: 'child-1');
+    await repo.getMyGulfSchedule(studentId: 'child-1');
+    await repo.getMyGulfSchedule(studentId: 'child-2');
+
+    expect(api.queries, [
+      {'studentId': 'child-1'},
+      {'studentId': 'child-2'},
+    ]);
+  });
 }
 
 const _response = {
@@ -33,6 +47,7 @@ const _response = {
 class _GatedApi implements ApiConsumer {
   final response = Completer<Object>();
   int getCalls = 0;
+  final queries = <Map<String, dynamic>?>[];
 
   @override
   Future<dynamic> get(
@@ -42,7 +57,26 @@ class _GatedApi implements ApiConsumer {
     bool isProtected = false,
   }) {
     getCalls++;
+    queries.add(queryParameter);
     return response.future;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _ImmediateApi implements ApiConsumer {
+  final queries = <Map<String, dynamic>?>[];
+
+  @override
+  Future<dynamic> get(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameter,
+    bool isProtected = false,
+  }) async {
+    queries.add(queryParameter);
+    return _response;
   }
 
   @override

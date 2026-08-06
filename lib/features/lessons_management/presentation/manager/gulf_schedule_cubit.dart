@@ -5,8 +5,11 @@ import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_s
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GulfScheduleCubit extends Cubit<GulfScheduleState> {
-  GulfScheduleCubit(this.repo) : super(const GulfScheduleState());
+  GulfScheduleCubit(this.repo, {this.canManage = true, this.studentId})
+    : super(const GulfScheduleState());
   final GulfScheduleRepo repo;
+  final bool canManage;
+  final String? studentId;
   int _loadGeneration = 0;
   static const _days = {
     'saturday',
@@ -40,6 +43,7 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
     required String day,
     required String startTime,
   }) async {
+    if (!canManage) return false;
     final classroom = state.selectedClassroom;
     if (state.isSaving || classroom == null) return false;
     final entries = [...classroom.entries];
@@ -70,6 +74,7 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
   }
 
   Future<bool> deleteEntry(String day) async {
+    if (!canManage) return false;
     final classroom = state.selectedClassroom;
     if (state.isSaving || classroom == null || classroom.schedule == null) {
       return false;
@@ -104,7 +109,7 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
         state.copyWith(status: GulfScheduleLoadStatus.loading, loadError: null),
       );
     }
-    final result = await repo.getMyGulfSchedule();
+    final result = await repo.getMyGulfSchedule(studentId: studentId);
     if (isClosed || generation != _loadGeneration) return;
     result.fold(
       (failure) => emit(

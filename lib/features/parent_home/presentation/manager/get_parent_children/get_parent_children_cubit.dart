@@ -15,7 +15,22 @@ class GetParentChildrenCubit extends Cubit<GetParentChildrenState> {
 
     result.fold(
       (failure) => emit(GetParentChildrenFailure(failure.message)),
-      (response) => emit(GetParentChildrenSuccess(response.data)),
+      (response) => emit(
+        GetParentChildrenSuccess(
+          response.data,
+          selectedChildId: response.data.firstOrNull?.id,
+        ),
+      ),
     );
+  }
+
+  void selectChild(String childId) {
+    final current = state;
+    if (current is! GetParentChildrenSuccess ||
+        childId == current.selectedChildId ||
+        !current.children.any((child) => child.id == childId)) {
+      return;
+    }
+    emit(GetParentChildrenSuccess(current.children, selectedChildId: childId));
   }
 }

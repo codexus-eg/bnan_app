@@ -14,12 +14,11 @@ class AuthResponseModel {
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'];
 
-    final userJson = data is Map<String, dynamic> &&
-            data['user'] is Map<String, dynamic>
-        ? data['user'] as Map<String, dynamic>
-        : data is Map<String, dynamic>
-            ? data
-            : <String, dynamic>{};
+    final dataJson = data is Map<String, dynamic> ? data : <String, dynamic>{};
+    final nestedUser = dataJson['user'];
+    final userJson = nestedUser is Map<String, dynamic>
+        ? {...dataJson, ...nestedUser}
+        : dataJson;
 
     return AuthResponseModel(
       success: json['success'] == true,

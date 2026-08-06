@@ -6,6 +6,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_bottom_nav_bar.dart';
+import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_drawer_items.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,22 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _onDrawerItemTap(int index) {
-    final bottomIndex = drawerToBottomNavIndex[index];
+    final scheduleRoutes = teacherScheduleRoutes();
+    const scheduleStartIndex = 2;
+    final scheduleIndex = index - scheduleStartIndex;
 
     _closeDrawer();
+
+    if (scheduleIndex >= 0 && scheduleIndex < scheduleRoutes.length) {
+      _goHomeTab();
+      MyNavigator.goTo(context, scheduleRoutes[scheduleIndex]);
+      return;
+    }
+
+    final legacyIndex = index < scheduleStartIndex
+        ? index
+        : index - scheduleRoutes.length + 1;
+    final bottomIndex = drawerToBottomNavIndex[legacyIndex];
 
     if (bottomIndex != null) {
       _changeIndex(bottomIndex);
@@ -61,13 +75,11 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     }
 
     _goHomeTab();
-    _navigateFromDrawer(index);
+    _navigateFromDrawer(legacyIndex);
   }
 
   void _navigateFromDrawer(int index) {
-    if (index == 2) {
-      MyNavigator.goTo(context, Routes.lessonsManagement);
-    } else if (index == 4) {
+    if (index == 4) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);

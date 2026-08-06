@@ -23,6 +23,7 @@ abstract class Routes {
   static const String adminHome = '/adminHome';
   static const String supervisorHome = '/supervisorHome';
   static const String parentHome = '/parentHome';
+  static const String parentSchedule = '/parentSchedule';
   static const String teacherSections = '/teacherSections';
   static const String certificatesManagement = '/certificatesManagement';
   static const String teacherRegistrationRequest =
@@ -41,6 +42,9 @@ abstract class Routes {
   static const String classRoomManagement = '/classRoomManagement';
   static const String curriculumManagement = '/curriculumManagement';
   static const String tablesManagement = '/tablesManagement';
+  static const String egyptianSchedulesReadOnly = '/egyptianSchedulesReadOnly';
+  static const String gulfStudentScheduleReadOnly =
+      '/gulfStudentScheduleReadOnly';
   static const String lessonsManagement = '/lessonsManagement';
   static const String teacherApplication = '/teacherApplication';
   static const String registrationRequests = '/registrationRequests';
