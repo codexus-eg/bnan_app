@@ -6,11 +6,17 @@ import 'package:flutter/services.dart';
 class ClassroomDocumentsView extends StatelessWidget {
   const ClassroomDocumentsView({
     super.key,
-    required this.classroomId,
+    required this.roomId,
+    required this.roomType,
+    required this.currentUserRole,
+    this.classroomId,
     this.classroomName,
   });
 
-  final String classroomId;
+  final String roomId;
+  final String? roomType;
+  final String? currentUserRole;
+  final String? classroomId;
   final String? classroomName;
 
   @override
@@ -22,6 +28,9 @@ class ClassroomDocumentsView extends StatelessWidget {
       ),
       child: Scaffold(
         body: ClassroomDocumentsBody(
+          roomId: roomId,
+          roomType: roomType,
+          currentUserRole: currentUserRole,
           classroomId: classroomId,
           classroomName: classroomName,
         ),

@@ -2,6 +2,7 @@ import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
 import 'package:flutter/material.dart';
 
@@ -9,12 +10,16 @@ class ChatHeader extends StatelessWidget {
   const ChatHeader({
     super.key,
     required this.chatTitle,
+    required this.roomId,
     this.roomType,
     this.classroomId,
+    this.currentUserRole,
   });
   final String chatTitle;
+  final String roomId;
   final String? roomType;
   final String? classroomId;
+  final String? currentUserRole;
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +52,21 @@ class ChatHeader extends StatelessWidget {
               ),
             ),
             Expanded(child: UserInfo(chatTitle: chatTitle)),
-            if (roomType == 'classroom' &&
-                classroomId?.trim().isNotEmpty == true)
+            if (ClassroomDocumentsAccess.canMessages(
+              roomType: roomType,
+              roomId: roomId,
+              role: currentUserRole,
+            ))
               IconButton(
                 key: const Key('classroomDocumentsButton'),
                 onPressed: () => MyNavigator.goTo(
                   context,
                   Routes.classroomDocuments,
                   extra: ClassroomDocumentsRouteArgs(
-                    classroomId: classroomId!.trim(),
+                    roomId: roomId.trim(),
+                    roomType: roomType,
+                    currentUserRole: currentUserRole,
+                    classroomId: classroomId?.trim(),
                     classroomName: chatTitle,
                   ),
                 ),

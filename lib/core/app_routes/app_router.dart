@@ -7,9 +7,11 @@ import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_c
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/message_documents_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/views/classroom_documents_view.dart';
+import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
@@ -210,6 +212,8 @@ GoRouter buildRouter() {
                 roomType: args.roomType,
                 classroomId: args.classroomId,
                 classroomName: args.classroomName,
+                currentUserRole:
+                    args.currentUserRole ?? SessionManager.instance.userRole,
               ),
             ),
           );
@@ -220,18 +224,37 @@ GoRouter buildRouter() {
         path: Routes.classroomDocuments,
         pageBuilder: (context, state) {
           final args = state.extra as ClassroomDocumentsRouteArgs;
+          final canPrivileged =
+              ClassroomDocumentsAccess.canRecordingsAndReports(
+                roomType: args.roomType,
+                classroomId: args.classroomId,
+                role: args.currentUserRole,
+              );
+          final messageDocuments = BlocProvider(
+            create: (_) => getIt<MessageDocumentsCubit>(),
+            child: ClassroomDocumentsView(
+              roomId: args.roomId,
+              roomType: args.roomType,
+              currentUserRole: args.currentUserRole,
+              classroomId: args.classroomId,
+              classroomName: args.classroomName,
+            ),
+          );
           return buildTransitionPages(
             key: state.pageKey,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (_) => getIt<ClassroomRecordingsCubit>()),
-                BlocProvider(create: (_) => getIt<ClassroomSummariesCubit>()),
-              ],
-              child: ClassroomDocumentsView(
-                classroomId: args.classroomId,
-                classroomName: args.classroomName,
-              ),
-            ),
+            child: canPrivileged
+                ? MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) => getIt<ClassroomRecordingsCubit>(),
+                      ),
+                      BlocProvider(
+                        create: (_) => getIt<ClassroomSummariesCubit>(),
+                      ),
+                    ],
+                    child: messageDocuments,
+                  )
+                : messageDocuments,
           );
         },
       ),

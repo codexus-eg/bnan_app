@@ -3,6 +3,7 @@ import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_chat_card.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_state.dart';
@@ -57,6 +58,7 @@ class GroupsBody extends StatelessWidget {
                           roomType: room.type,
                           classroomId: room.classroomId,
                           classroomName: room.displayName,
+                          currentUserRole: SessionManager.instance.userRole,
                         ),
                       );
                     },

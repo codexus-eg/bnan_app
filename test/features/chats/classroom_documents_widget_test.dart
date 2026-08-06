@@ -11,32 +11,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  testWidgets('documents action appears only for classroom with valid id', (
+  testWidgets('documents action appears for supported roles in classroom', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      _app(
-        const ChatHeader(
-          chatTitle: 'Class',
-          roomType: 'classroom',
-          classroomId: 'c1',
-        ),
-      ),
-    );
-    expect(find.byKey(const Key('classroomDocumentsButton')), findsOneWidget);
-
-    for (final data in <(String, String?)>[
-      ('classroom', null),
-      ('teacher_parent', 'c1'),
-      ('teacher_student', 'c1'),
-      ('support', 'c1'),
+    for (final role in [
+      'admin',
+      'supervisor',
+      'teacher',
+      'student',
+      'parent',
     ]) {
       await tester.pumpWidget(
         _app(
           ChatHeader(
             chatTitle: 'Class',
+            roomId: 'room-id',
+            roomType: 'classroom',
+            currentUserRole: role,
+          ),
+        ),
+      );
+      expect(find.byKey(const Key('classroomDocumentsButton')), findsOneWidget);
+    }
+  });
+
+  testWidgets('documents action hides for private or missing room id', (
+    tester,
+  ) async {
+    for (final data in <(String, String)>[
+      ('teacher_parent', 'room'),
+      ('teacher_student', 'room'),
+      ('support', 'room'),
+      ('classroom', ' '),
+    ]) {
+      await tester.pumpWidget(
+        _app(
+          ChatHeader(
+            chatTitle: 'Class',
+            roomId: data.$2,
             roomType: data.$1,
-            classroomId: data.$2,
+            currentUserRole: 'student',
           ),
         ),
       );
@@ -55,8 +69,10 @@ void main() {
           builder: (_, __) => const Scaffold(
             body: ChatHeader(
               chatTitle: 'Class',
+              roomId: 'room-id',
               roomType: 'classroom',
               classroomId: 'classroom-id',
+              currentUserRole: 'teacher',
             ),
           ),
         ),
@@ -85,6 +101,7 @@ void main() {
     await tester.tap(find.byKey(const Key('classroomDocumentsButton')));
     await tester.pumpAndSettle();
     final args = received as ClassroomDocumentsRouteArgs;
+    expect(args.roomId, 'room-id');
     expect(args.classroomId, 'classroom-id');
     expect(args.classroomId, isNot('room-id'));
   });

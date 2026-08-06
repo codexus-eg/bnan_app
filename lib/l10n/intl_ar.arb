@@ -1065,5 +1065,14 @@
     "noRecordingsAvailable": "لا توجد تسجيلات متاحة حتى الآن",
     "noReportsAvailable": "لا توجد تقارير متاحة حتى الآن",
     "noSummaryContent": "لا يوجد محتوى متاح لهذا الملخص",
-    "unableToOpenLink": "تعذر فتح الرابط"
+    "unableToOpenLink": "تعذر فتح الرابط",
+    "messages": "الرسائل",
+    "messageDocuments": "مستندات الرسائل",
+    "noMessageDocumentsAvailable": "لا توجد مستندات في الرسائل حتى الآن",
+    "openFile": "فتح الملف",
+    "openLink": "فتح الرابط",
+    "unableToOpenFile": "تعذر فتح الملف",
+    "unableToOpenDocument": "تعذر فتح المستند",
+    "unableToOpenSessionRecording": "تعذر فتح تسجيل الحصة",
+    "invalidLink": "رابط غير صالح"
 }

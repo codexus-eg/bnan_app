@@ -1,18 +1,20 @@
-import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
-import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
-import 'package:bnan_app/features/chats/presentation/views/widgets/documents/classroom_documents_header.dart';
-import 'package:bnan_app/features/chats/presentation/views/widgets/documents/documents_tab_content.dart';
-import 'package:bnan_app/features/chats/presentation/views/widgets/documents/documents_tabs.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_documents_tab.dart';
+import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/documents/classroom_documents_content.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/documents/documents_tab_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClassroomDocumentsBody extends StatefulWidget {
   const ClassroomDocumentsBody({
     super.key,
-    required this.classroomId,
+    required this.roomId,
+    required this.roomType,
+    required this.currentUserRole,
+    this.classroomId,
     this.classroomName,
   });
-  final String classroomId;
+  final String roomId;
+  final String? roomType, currentUserRole, classroomId;
   final String? classroomName;
 
   @override
@@ -20,33 +22,43 @@ class ClassroomDocumentsBody extends StatefulWidget {
 }
 
 class _ClassroomDocumentsBodyState extends State<ClassroomDocumentsBody> {
-  int selected = 0;
+  late final List<ClassroomDocumentsTab> tabs;
+  late ClassroomDocumentsTab selected;
 
   @override
   void initState() {
     super.initState();
-    context.read<ClassroomRecordingsCubit>().load(widget.classroomId);
+    final privileged = ClassroomDocumentsAccess.canRecordingsAndReports(
+      roomType: widget.roomType,
+      classroomId: widget.classroomId,
+      role: widget.currentUserRole,
+    );
+    tabs = privileged
+        ? ClassroomDocumentsTab.values
+        : const [ClassroomDocumentsTab.messages];
+    selected = tabs.first;
+    loadDocumentsTab(
+      context,
+      selected,
+      roomId: widget.roomId,
+      classroomId: widget.classroomId,
+    );
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      const ClassroomDocumentsHeader(),
-      DocumentsTabs(
-        selected: selected,
-        changed: (value) {
-          setState(() => selected = value);
-          if (value == 1) {
-            context.read<ClassroomSummariesCubit>().load(widget.classroomId);
-          }
-        },
-      ),
-      Expanded(
-        child: DocumentsTabContent(
-          classroomId: widget.classroomId,
-          tab: selected,
-        ),
-      ),
-    ],
+  Widget build(BuildContext context) => ClassroomDocumentsContent(
+    tabs: tabs,
+    selected: selected,
+    roomId: widget.roomId,
+    classroomId: widget.classroomId,
+    changed: (value) {
+      setState(() => selected = value);
+      loadDocumentsTab(
+        context,
+        value,
+        roomId: widget.roomId,
+        classroomId: widget.classroomId,
+      );
+    },
   );
 }

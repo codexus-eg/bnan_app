@@ -3,12 +3,14 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/chats/data/models/classroom_summary_item_model.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/documents/document_link_opener.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/documents/summary_next_steps.dart';
+import 'package:bnan_app/features/chats/presentation/utils/classroom_document_opener.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SummaryDetailsContent extends StatelessWidget {
-  const SummaryDetailsContent({super.key, required this.item});
+  const SummaryDetailsContent({super.key, required this.item, this.opener});
   final ClassroomSummaryItemModel item;
+  final ClassroomDocumentOpener? opener;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,12 @@ class SummaryDetailsContent extends StatelessWidget {
           const SizedBox(height: 24),
           CustomAppButton(
             text: S.of(context).openDocument,
-            onPressed: () => openDocumentLink(context, summary!.docUrl),
+            onPressed: () => openDocumentLink(
+              context,
+              summary!.docUrl,
+              kind: DocumentLinkKind.document,
+              opener: opener,
+            ),
           ),
         ],
       ],
