@@ -2,20 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class ChatVideoPlayerView extends StatefulWidget {
-  const ChatVideoPlayerView({
-    super.key,
-    required this.videoUrl,
-  });
+  const ChatVideoPlayerView({super.key, required this.videoUrl});
 
   final String videoUrl;
 
   @override
-  State<ChatVideoPlayerView> createState() =>
-      _ChatVideoPlayerViewState();
+  State<ChatVideoPlayerView> createState() => _ChatVideoPlayerViewState();
 }
 
-class _ChatVideoPlayerViewState
-    extends State<ChatVideoPlayerView> {
+class _ChatVideoPlayerViewState extends State<ChatVideoPlayerView> {
   late final VideoPlayerController _controller;
 
   bool _isInitialized = false;
@@ -27,9 +22,7 @@ class _ChatVideoPlayerViewState
   }
 
   Future<void> _initializeVideo() async {
-    _controller = VideoPlayerController.networkUrl(
-      Uri.parse(widget.videoUrl),
-    );
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
 
     try {
       await _controller.initialize();
@@ -74,9 +67,7 @@ class _ChatVideoPlayerViewState
                   ],
                 ),
               )
-            : const CircularProgressIndicator(
-                color: Colors.white,
-              ),
+            : const CircularProgressIndicator(color: Colors.white),
       ),
     );
   }

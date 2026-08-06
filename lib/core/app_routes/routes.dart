@@ -13,6 +13,7 @@ abstract class Routes {
   static const String home = '/home';
   static const String notification = '/notification';
   static const String chat = '/chat';
+  static const String classroomDocuments = '/classroomDocuments';
   static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
   static const String updatePhone = '/updatePhone';

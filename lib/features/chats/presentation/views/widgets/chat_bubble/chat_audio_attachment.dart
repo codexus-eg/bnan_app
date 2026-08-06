@@ -14,8 +14,7 @@ class ChatAudioAttachment extends StatefulWidget {
   final bool isMe;
 
   @override
-  State<ChatAudioAttachment> createState() =>
-      _ChatAudioAttachmentState();
+  State<ChatAudioAttachment> createState() => _ChatAudioAttachmentState();
 }
 
 class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
@@ -34,9 +33,7 @@ class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
 
   Future<void> _initializePlayer() async {
     try {
-      final duration = await _player.setUrl(
-        widget.attachment.fileUrl,
-      );
+      final duration = await _player.setUrl(widget.attachment.fileUrl);
 
       _duration = duration ?? Duration.zero;
 
@@ -83,9 +80,7 @@ class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
         IconButton(
           onPressed: _isInitialized ? _togglePlay : null,
           icon: Icon(
-            _isPlaying
-                ? Icons.pause_rounded
-                : Icons.play_arrow_rounded,
+            _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
             color: foregroundColor,
           ),
         ),
@@ -95,19 +90,14 @@ class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
             max: _sliderMax,
             onChanged: _isInitialized
                 ? (value) {
-                    _player.seek(
-                      Duration(milliseconds: value.toInt()),
-                    );
+                    _player.seek(Duration(milliseconds: value.toInt()));
                   }
                 : null,
           ),
         ),
         Text(
           _formatDuration(_position),
-          style: TextStyle(
-            color: foregroundColor,
-            fontSize: 11,
-          ),
+          style: TextStyle(color: foregroundColor, fontSize: 11),
         ),
       ],
     );

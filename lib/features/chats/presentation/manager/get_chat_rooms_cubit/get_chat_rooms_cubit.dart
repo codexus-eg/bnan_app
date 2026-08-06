@@ -14,18 +14,10 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
 
     result.fold(
       (failure) {
-        emit(
-          GetChatRoomsFailure(
-            errorMessage: failure.message,
-          ),
-        );
+        emit(GetChatRoomsFailure(errorMessage: failure.message));
       },
       (response) {
-        emit(
-          GetChatRoomsSuccess(
-            rooms: response.rooms,
-          ),
-        );
+        emit(GetChatRoomsSuccess(rooms: response.rooms));
       },
     );
   }

@@ -5,10 +5,8 @@ import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_c
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
-  GetRoomMessagesCubit(
-    this.chatRepo,
-    this.socketService,
-  ) : super(GetRoomMessagesInitial());
+  GetRoomMessagesCubit(this.chatRepo, this.socketService)
+    : super(GetRoomMessagesInitial());
 
   final ChatRepo chatRepo;
   final SocketService socketService;
@@ -17,9 +15,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
 
   String? _currentRoomId;
 
-  Future<void> initializeChat({
-    required String roomId,
-  }) async {
+  Future<void> initializeChat({required String roomId}) async {
     _currentRoomId = roomId;
 
     _registerSocketListeners();
@@ -31,22 +27,14 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     await getRoomMessages(roomId: roomId);
   }
 
-  Future<void> getRoomMessages({
-    required String roomId,
-  }) async {
+  Future<void> getRoomMessages({required String roomId}) async {
     emit(GetRoomMessagesLoading());
 
-    final result = await chatRepo.getRoomMessages(
-      roomId: roomId,
-    );
+    final result = await chatRepo.getRoomMessages(roomId: roomId);
 
     result.fold(
       (failure) {
-        emit(
-          GetRoomMessagesFailure(
-            errorMessage: failure.message,
-          ),
-        );
+        emit(GetRoomMessagesFailure(errorMessage: failure.message));
       },
       (response) {
         _messages
@@ -105,18 +93,14 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   }
 
   void _deleteMessage(String messageId) {
-    _messages.removeWhere(
-      (message) => message.id == messageId,
-    );
+    _messages.removeWhere((message) => message.id == messageId);
 
     _emitMessages();
   }
 
   void _emitMessages() {
     emit(
-      GetRoomMessagesSuccess(
-        messages: List<ChatMessageModel>.from(_messages),
-      ),
+      GetRoomMessagesSuccess(messages: List<ChatMessageModel>.from(_messages)),
     );
   }
 

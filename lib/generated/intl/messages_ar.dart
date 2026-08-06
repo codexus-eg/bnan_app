@@ -159,6 +159,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "all": MessageLookupByLibrary.simpleMessage("الكل"),
     "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
     "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
+    "allDocuments": MessageLookupByLibrary.simpleMessage("جميع المستندات"),
     "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
     "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
@@ -790,6 +791,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
     "nextLevelPointsText": m16,
+    "nextSteps": MessageLookupByLibrary.simpleMessage("الخطوات التالية"),
     "no": MessageLookupByLibrary.simpleMessage("لا"),
     "noActiveAccountsFound": MessageLookupByLibrary.simpleMessage(
       "لا توجد حسابات مفعلة",
@@ -880,6 +882,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
       "لا توجد خطط لهذا الأسبوع",
     ),
+    "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد تسجيلات متاحة حتى الآن",
+    ),
+    "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد تقارير متاحة حتى الآن",
+    ),
     "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
       "لم تتم إضافة مواعيد لهذا الفصل بعد",
     ),
@@ -915,6 +923,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "لا توجد مواد متاحة لهذا الطالب",
     ),
     "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
+    "noSummaryContent": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد محتوى متاح لهذا الملخص",
+    ),
     "noSupervisorsFound": MessageLookupByLibrary.simpleMessage(
       "لا يوجد مشرفون",
     ),
@@ -965,6 +976,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "onboardingTitle3": MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
     "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
+    "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
+    "openRecording": MessageLookupByLibrary.simpleMessage("فتح التسجيل"),
     "openSessionLink": MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
     "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
     "other": MessageLookupByLibrary.simpleMessage("أخرى"),
@@ -1179,6 +1192,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyGroupSubtitle": MessageLookupByLibrary.simpleMessage(
       "الرياضيات - مجموعة جاهزة",
     ),
+    "recordings": MessageLookupByLibrary.simpleMessage("التسجيلات"),
     "registerAsParent": MessageLookupByLibrary.simpleMessage(
       "التسجيل كولي أمر",
     ),
@@ -1201,6 +1215,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remainingDays": m21,
     "remainingHours": m22,
     "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
+    "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
     "requestAccepted": MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
     "requestNewLesson": MessageLookupByLibrary.simpleMessage("طلب درس جديد"),
     "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
@@ -1338,6 +1353,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sending": MessageLookupByLibrary.simpleMessage("جاري الإرسال..."),
     "services": MessageLookupByLibrary.simpleMessage("الخدمات"),
+    "sessionRecording": MessageLookupByLibrary.simpleMessage("تسجيل الحصة"),
     "sessionStartUnauthorized": MessageLookupByLibrary.simpleMessage(
       "غير مصرح لك ببدء الحصة",
     ),
@@ -1349,6 +1365,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sessionSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
       "بيانات المادة غير متاحة",
     ),
+    "sessionSummary": MessageLookupByLibrary.simpleMessage("ملخص الحصة"),
     "sessions": MessageLookupByLibrary.simpleMessage("حصة"),
     "sessionsThisMonth": MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
     "shortVideoLinkOptional": MessageLookupByLibrary.simpleMessage(
@@ -1559,6 +1576,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "تعذر تحميل الملف ",
     ),
+    "unableToOpenLink": MessageLookupByLibrary.simpleMessage("تعذر فتح الرابط"),
     "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
       "تعذر فتح إيصال الدفع",
     ),

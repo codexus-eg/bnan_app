@@ -15,9 +15,7 @@ class ChatAttachmentModel {
 
   factory ChatAttachmentModel.fromJson(Map<String, dynamic> json) {
     return ChatAttachmentModel(
-      id: json['id']?.toString() ??
-          json['_id']?.toString() ??
-          '',
+      id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
       fileName: json['fileName']?.toString() ?? '',
       fileUrl: json['fileUrl']?.toString() ?? '',
       mimeType: json['mimeType']?.toString() ?? '',

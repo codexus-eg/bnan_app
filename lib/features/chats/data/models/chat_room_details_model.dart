@@ -33,9 +33,7 @@ class ChatRoomDetailsModel {
           .toList(),
       isActive: json['isActive'] == true,
       lastMessage: json['lastMessage']?.toString(),
-      lastMessageAt: DateTime.tryParse(
-        json['lastMessageAt']?.toString() ?? '',
-      ),
+      lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
     );
   }
 }

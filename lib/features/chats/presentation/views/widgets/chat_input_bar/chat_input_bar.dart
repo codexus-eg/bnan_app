@@ -25,10 +25,7 @@ part 'chat_recording_widget.dart';
 part 'chat_input_helpers.dart';
 
 class ChatInputBar extends StatefulWidget {
-  const ChatInputBar({
-    super.key,
-    required this.roomId,
-  });
+  const ChatInputBar({super.key, required this.roomId});
 
   final String roomId;
 

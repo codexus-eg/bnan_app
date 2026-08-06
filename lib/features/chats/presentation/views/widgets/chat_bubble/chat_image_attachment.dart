@@ -41,9 +41,7 @@ class ChatImageAttachment extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ChatImagePreview(
-          imageUrl: attachment.fileUrl,
-        ),
+        builder: (_) => ChatImagePreview(imageUrl: attachment.fileUrl),
       ),
     );
   }
@@ -61,9 +59,7 @@ class ChatImageAttachment extends StatelessWidget {
       color: ColorManager.grey9D9D.withAlpha(30),
       child: CircularProgressIndicator(
         strokeWidth: 2,
-        color: isMe
-            ? ColorManager.white
-            : ColorManager.mainColor14,
+        color: isMe ? ColorManager.white : ColorManager.mainColor14,
       ),
     );
   }
@@ -75,11 +71,9 @@ class ChatImageAttachment extends StatelessWidget {
       color: ColorManager.grey9D9D.withAlpha(30),
       child: Text(
         'تعذر تحميل الصورة',
-        style: StylesManager.styleRegular14(context).copyWith(
-          color: isMe
-              ? ColorManager.white
-              : ColorManager.black,
-        ),
+        style: StylesManager.styleRegular14(
+          context,
+        ).copyWith(color: isMe ? ColorManager.white : ColorManager.black),
       ),
     );
   }

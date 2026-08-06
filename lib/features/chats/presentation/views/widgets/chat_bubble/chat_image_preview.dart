@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ChatImagePreview extends StatelessWidget {
-  const ChatImagePreview({
-    super.key,
-    required this.imageUrl,
-  });
+  const ChatImagePreview({super.key, required this.imageUrl});
 
   final String imageUrl;
 
@@ -20,10 +17,7 @@ class ChatImagePreview extends StatelessWidget {
         child: InteractiveViewer(
           minScale: 1,
           maxScale: 5,
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.contain,
-          ),
+          child: Image.network(imageUrl, fit: BoxFit.contain),
         ),
       ),
     );

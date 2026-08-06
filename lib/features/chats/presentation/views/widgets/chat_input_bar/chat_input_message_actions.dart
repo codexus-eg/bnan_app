@@ -16,17 +16,17 @@ extension ChatInputMessageActions on _ChatInputBarState {
 
     if (paths.isNotEmpty) {
       await context.read<SendMessageCubit>().sendFiles(
-            roomId: widget.roomId,
-            filePaths: paths,
-            text: text.isEmpty ? null : text,
-          );
+        roomId: widget.roomId,
+        filePaths: paths,
+        text: text.isEmpty ? null : text,
+      );
       return;
     }
 
     await context.read<SendMessageCubit>().sendTextMessage(
-          roomId: widget.roomId,
-          text: text,
-        );
+      roomId: widget.roomId,
+      text: text,
+    );
   }
 
   Future<void> pickFiles() async {
@@ -40,9 +40,7 @@ extension ChatInputMessageActions on _ChatInputBarState {
 
       if (!mounted || result == null) return;
 
-      final files = result.files
-          .where((file) => file.path != null)
-          .toList();
+      final files = result.files.where((file) => file.path != null).toList();
 
       if (files.isEmpty) {
         showErrorMessage('تعذر الوصول إلى الملفات المختارة');

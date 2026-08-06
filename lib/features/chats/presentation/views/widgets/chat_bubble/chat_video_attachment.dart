@@ -44,9 +44,7 @@ class ChatVideoAttachment extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ChatVideoPlayerView(
-          videoUrl: attachment.fileUrl,
-        ),
+        builder: (_) => ChatVideoPlayerView(videoUrl: attachment.fileUrl),
       ),
     );
   }

@@ -15,28 +15,19 @@ class ChatAttachmentsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (attachments.length == 1) {
-      return ChatAttachmentItem(
-        attachment: attachments.first,
-        isMe: isMe,
-      );
+      return ChatAttachmentItem(attachment: attachments.first, isMe: isMe);
     }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        attachments.length,
-        (index) {
-          return Padding(
-            padding: EdgeInsetsDirectional.only(
-              bottom: index == attachments.length - 1 ? 0 : 8,
-            ),
-            child: ChatAttachmentItem(
-              attachment: attachments[index],
-              isMe: isMe,
-            ),
-          );
-        },
-      ),
+      children: List.generate(attachments.length, (index) {
+        return Padding(
+          padding: EdgeInsetsDirectional.only(
+            bottom: index == attachments.length - 1 ? 0 : 8,
+          ),
+          child: ChatAttachmentItem(attachment: attachments[index], isMe: isMe),
+        );
+      }),
     );
   }
 }

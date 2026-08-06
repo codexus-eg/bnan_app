@@ -6,6 +6,7 @@ import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_state.dart';
+import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,7 +49,16 @@ class GroupsBody extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(bottom: 12),
                   child: InkWell(
                     onTap: () {
-                      MyNavigator.goTo(context, Routes.chat, extra: room.id);
+                      MyNavigator.goTo(
+                        context,
+                        Routes.chat,
+                        extra: ChatRouteArgs(
+                          roomId: room.id,
+                          roomType: room.type,
+                          classroomId: room.classroomId,
+                          classroomName: room.displayName,
+                        ),
+                      );
                     },
                     child: CustomChatCard(
                       title: room.displayName,

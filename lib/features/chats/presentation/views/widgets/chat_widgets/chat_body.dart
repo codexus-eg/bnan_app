@@ -11,15 +11,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatBody extends StatelessWidget {
-  const ChatBody({super.key, required this.roomId});
+  const ChatBody({
+    super.key,
+    required this.roomId,
+    this.roomType,
+    this.classroomId,
+    this.classroomName,
+  });
 
   final String roomId;
+  final String? roomType;
+  final String? classroomId;
+  final String? classroomName;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-         ChatHeader(chatTitle: '',),
+        ChatHeader(
+          chatTitle: classroomName ?? '',
+          roomType: roomType,
+          classroomId: classroomId,
+        ),
         Expanded(
           child: BlocBuilder<GetRoomMessagesCubit, GetRoomMessagesState>(
             builder: (context, state) {
@@ -50,7 +63,7 @@ class ChatBody extends StatelessWidget {
             },
           ),
         ),
-         ChatInputBar(roomId: roomId),
+        ChatInputBar(roomId: roomId),
       ],
     );
   }

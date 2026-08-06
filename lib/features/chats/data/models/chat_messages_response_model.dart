@@ -11,9 +11,7 @@ class ChatMessagesResponseModel {
     required this.messages,
   });
 
-  factory ChatMessagesResponseModel.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  factory ChatMessagesResponseModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'] as List<dynamic>? ?? [];
 
     return ChatMessagesResponseModel(
@@ -22,9 +20,8 @@ class ChatMessagesResponseModel {
       messages: data
           .whereType<Map>()
           .map(
-            (message) => ChatMessageModel.fromJson(
-              Map<String, dynamic>.from(message),
-            ),
+            (message) =>
+                ChatMessageModel.fromJson(Map<String, dynamic>.from(message)),
           )
           .toList(),
     );

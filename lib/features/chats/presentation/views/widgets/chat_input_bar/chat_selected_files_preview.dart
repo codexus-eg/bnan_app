@@ -21,11 +21,7 @@ class _ChatSelectedFilesPreview extends StatelessWidget {
       height: 90,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsetsDirectional.only(
-          start: 8,
-          end: 8,
-          bottom: 12,
-        ),
+        padding: const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 12),
         itemCount: files.length,
         separatorBuilder: (_, __) {
           return const SizedBox(width: 8);

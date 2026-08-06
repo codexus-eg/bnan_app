@@ -67,7 +67,6 @@ extension ChatInputBuild on _ChatInputBarState {
   }
 }
 
-
 extension ChatInputActionsRow on _ChatInputBarState {
   Widget buildActionsRow(bool isLoading) {
     return Row(

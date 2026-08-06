@@ -32,18 +32,10 @@ class SendMessageCubit extends Cubit<SendMessageState> {
 
     result.fold(
       (failure) {
-        emit(
-          SendMessageFailure(
-            errorMessage: failure.message,
-          ),
-        );
+        emit(SendMessageFailure(errorMessage: failure.message));
       },
       (response) {
-        emit(
-          SendMessageSuccess(
-            message: response.message,
-          ),
-        );
+        emit(SendMessageSuccess(message: response.message));
       },
     );
   }
@@ -52,10 +44,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
     required String roomId,
     required String text,
   }) async {
-    await sendMessage(
-      roomId: roomId,
-      text: text,
-    );
+    await sendMessage(roomId: roomId, text: text);
   }
 
   Future<void> sendFiles({
@@ -63,23 +52,14 @@ class SendMessageCubit extends Cubit<SendMessageState> {
     required List<String> filePaths,
     String? text,
   }) async {
-    await sendMessage(
-      roomId: roomId,
-      text: text,
-      attachmentPaths: filePaths,
-    );
+    await sendMessage(roomId: roomId, text: text, attachmentPaths: filePaths);
   }
 
   Future<void> sendVoice({
     required String roomId,
     required String voicePath,
   }) async {
-    await sendMessage(
-      roomId: roomId,
-      attachmentPaths: [
-        voicePath,
-      ],
-    );
+    await sendMessage(roomId: roomId, attachmentPaths: [voicePath]);
   }
 
   void resetState() {
