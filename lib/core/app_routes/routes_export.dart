@@ -31,6 +31,7 @@ export 'package:bnan_app/features/splash_and_onboarding/presentation/views/splas
 
 export 'package:bnan_app/features/student_groups/presentation/views/student_groups_view.dart';
 export 'package:bnan_app/features/student_groups/presentation/views/request_lesson_view.dart';
+export 'package:bnan_app/features/student_schedule/presentation/views/gulf_student_schedule_read_only_view.dart';
 
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:go_router/go_router.dart';
@@ -56,9 +57,11 @@ export 'package:bnan_app/features/grades_management/presentation/views/grades_ma
 export 'package:bnan_app/features/curriculum_management/presentation/views/curriculum_management_view.dart';
 export 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
+export 'package:bnan_app/features/parent_home/presentation/views/parent_schedule_view.dart';
 export 'package:bnan_app/features/registration_requests/presentation/view/registration_requests_view.dart';
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 export 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
+export 'package:bnan_app/features/tables_management/presentation/views/egyptian_schedules_read_only_view.dart';
 export 'package:bnan_app/features/teacher_application/presentation/views/teacher_application_view.dart';
 export 'package:bnan_app/features/certificates_management/presentation/views/certificates_management_view.dart';
 export 'package:bnan_app/features/teacher_groups/presentation/views/teacher_sections_view.dart';

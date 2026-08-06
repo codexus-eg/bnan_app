@@ -121,7 +121,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('18:00'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Delete'));
+    expect(find.byKey(const Key('deleteLessonIcon')), findsOneWidget);
+    expect(find.text('Delete'), findsNothing);
+    await tester.tap(find.byKey(const Key('deleteLessonIcon')));
     await tester.pumpAndSettle();
     expect(repo.lastOperation, 'delete');
     expect(find.text('Edit schedule entry'), findsNothing);
@@ -138,6 +140,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Add Lesson'));
     await tester.pumpAndSettle();
+    expect(find.byKey(const Key('deleteLessonIcon')), findsNothing);
     await tester.tap(find.text('Start time').last);
     await tester.pumpAndSettle();
     await tester.tap(find.text('OK'));

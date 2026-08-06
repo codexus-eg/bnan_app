@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/network/api_consumer.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/features/parent_home/data/models/get_parent_children_response_model.dart';
 import 'package:bnan_app/features/parent_home/data/repo/parent_home_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,21 +11,42 @@ void main() {
       'data': [
         {
           'id': 'child-1',
+          'userId': 'user-1',
           'fullName': 'Egyptian Test Student 2',
+          'registrationMode': 'egyptian',
           'classroom': {
             'id': 'classroom-1',
             'name': 'First A',
             'grade': {'name': 'First Grade'},
           },
         },
-        {'id': 'child-2', 'fullName': 'Without Classroom'},
+        {
+          'id': 'child-2',
+          'fullName': 'Without Classroom',
+          'registrationMode': 'gulf',
+        },
       ],
     });
 
     expect(response.status, 'success');
     expect(response.data, hasLength(2));
     expect(response.data.first.classroom?.grade?.name, 'First Grade');
+    expect(response.data.first.id, 'child-1');
+    expect(response.data.first.registrationMode, RegistrationMode.egyptian);
+    expect(response.data.last.registrationMode, RegistrationMode.gulf);
     expect(response.data.last.classroom, isNull);
+  });
+
+  test('missing and unknown child registration modes parse as null', () {
+    expect(
+      GetParentChildrenResponseModel.fromJson({
+        'data': [
+          {'id': 'one'},
+          {'id': 'two', 'registrationMode': 'unknown'},
+        ],
+      }).data.map((child) => child.registrationMode),
+      everyElement(isNull),
+    );
   });
 
   test('missing or invalid data parses as an empty list', () {

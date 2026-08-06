@@ -33,7 +33,7 @@ class RegisterAccountTypesList extends StatelessWidget {
           title: S.of(context).applyAsTeacher,
           subtitle: S.of(context).applyAsTeacherSubtitle,
           icon: ImageManager.teacherIcon,
-          onTap: () {},
+          onTap: () => MyNavigator.goTo(context, Routes.teacherRegistration),
         ),
         const SizedBox(height: 18),
         CustomTextSpanLogin(),

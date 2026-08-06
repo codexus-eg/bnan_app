@@ -15,13 +15,18 @@ class GulfSchedulesData {
   const GulfSchedulesData({required this.classrooms});
   final List<GulfClassroom> classrooms;
 
-  factory GulfSchedulesData.fromJson(Map<String, dynamic> json) =>
-      GulfSchedulesData(
-        classrooms: _maps(json['classrooms'])
-            .map(GulfClassroom.fromJson)
-            .where((item) => item.id.isNotEmpty)
-            .toList(growable: false),
-      );
+  factory GulfSchedulesData.fromJson(Map<String, dynamic> json) {
+    final students = _maps(json['students']);
+    final classrooms = students.isNotEmpty
+        ? _maps(students.first['classrooms'])
+        : _maps(json['classrooms']);
+    return GulfSchedulesData(
+      classrooms: classrooms
+          .map(GulfClassroom.fromJson)
+          .where((item) => item.id.isNotEmpty)
+          .toList(growable: false),
+    );
+  }
 }
 
 class GulfClassroom {
@@ -33,6 +38,7 @@ class GulfClassroom {
     this.subject,
     this.schedule,
     this.classroomSubject,
+    this.hasSubjectConflict = false,
   });
 
   final String id, name;
@@ -41,6 +47,7 @@ class GulfClassroom {
   final GulfSubject? subject;
   final GulfSchedule? schedule;
   final String? classroomSubject;
+  final bool hasSubjectConflict;
 
   String? get classroomSubjectId =>
       _nonEmpty(schedule?.classroomSubject) ?? _nonEmpty(classroomSubject);
@@ -55,6 +62,7 @@ class GulfClassroom {
     subject: _nullable(json['subject'], GulfSubject.fromJson),
     schedule: _nullable(json['schedule'], GulfSchedule.fromJson),
     classroomSubject: _referenceId(json['classroomSubject']),
+    hasSubjectConflict: json['hasSubjectConflict'] == true,
   );
 }
 
@@ -87,11 +95,14 @@ class GulfSchedule {
     required this.classroomSubject,
     required this.entries,
     required this.isActive,
+    this.createdAt,
+    this.updatedAt,
   });
 
   final String id, classroomSubject;
   final List<GulfScheduleEntry> entries;
   final bool isActive;
+  final String? createdAt, updatedAt;
 
   factory GulfSchedule.fromJson(Map<String, dynamic> json) => GulfSchedule(
     id: _id(json),
@@ -101,6 +112,8 @@ class GulfSchedule {
         .where((item) => item.isValid)
         .toList(growable: false),
     isActive: json['isActive'] != false,
+    createdAt: _nonEmpty(_string(json['createdAt'])),
+    updatedAt: _nonEmpty(_string(json['updatedAt'])),
   );
 }
 

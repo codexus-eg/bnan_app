@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_body.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_student_bottom_nav_bar.dart';
@@ -39,7 +40,15 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   };
 
   void _changeBottomNavIndex(int index) {
+    if (index == 1 && _studentScheduleRoute == null) return;
     setState(() => currentIndex = index);
+  }
+
+  String? get _studentScheduleRoute {
+    final session = SessionManager.instance;
+    if (session.isEgyptianStudent) return Routes.egyptianSchedulesReadOnly;
+    if (session.isGulfStudent) return Routes.gulfStudentScheduleReadOnly;
+    return null;
   }
 
   void _goHomeTab() {
@@ -59,6 +68,12 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
 
     _closeDrawer();
 
+    if (bottomNavIndex == 1) {
+      final route = _studentScheduleRoute;
+      if (route != null) MyNavigator.goTo(context, route);
+      return;
+    }
+
     if (bottomNavIndex != null) {
       _changeBottomNavIndex(bottomNavIndex);
       return;
@@ -74,7 +89,11 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     } else if (index == groupsDrawerIndex) {
       MyNavigator.goTo(context, Routes.studentGroups);
     } else if (index == plansDrawerIndex) {
-      MyNavigator.goTo(context, Routes.plans);
+      MyNavigator.goTo(
+        context,
+        Routes.plans,
+        extra: widget.loggedUser.isGulfStudent,
+      );
     } else if (index == notificationDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == evaluationsDrawerIndex) {

@@ -23,6 +23,7 @@ class FakePlansRepo implements PlansRepo {
       <Completer<Either<Failure, ParentChildrenPlansResponseModel>>>[];
   int dailyCalls = 0;
   int uploadCalls = 0;
+  int weeklyCalls = 0;
 
   @override
   Future<Either<Failure, ParentChildrenResponseModel>> getParentChildren() =>
@@ -35,8 +36,11 @@ class FakePlansRepo implements PlansRepo {
   @override
   Future<Either<Failure, WeeklyPlansResponseModel>> getPlansByWeek({
     required String classroomId,
-    required int week,
-  }) => weekly.removeAt(0).future;
+    int? week,
+  }) {
+    weeklyCalls++;
+    return weekly.removeAt(0).future;
+  }
 
   @override
   Future<Either<Failure, TermPlansResponseModel>> getTermPlans({

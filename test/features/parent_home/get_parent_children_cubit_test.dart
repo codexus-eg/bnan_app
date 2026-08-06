@@ -36,6 +36,35 @@ void main() {
 
     await expectation;
     expect(repo.calls, 1);
+    expect(
+      (cubit.state as GetParentChildrenSuccess).selectedChildId,
+      'child-1',
+    );
+    await cubit.close();
+  });
+
+  test('selects children by id and ignores missing ids', () async {
+    const children = [
+      ParentChildModel(id: 'child-1'),
+      ParentChildModel(id: 'child-2'),
+    ];
+    final cubit = GetParentChildrenCubit(
+      _FakeParentHomeRepo(
+        const Right(GetParentChildrenResponseModel(data: children)),
+      ),
+    );
+    await cubit.getParentChildren();
+
+    cubit.selectChild('missing');
+    expect(
+      (cubit.state as GetParentChildrenSuccess).selectedChildId,
+      'child-1',
+    );
+    cubit.selectChild('child-2');
+    expect(
+      (cubit.state as GetParentChildrenSuccess).selectedChildId,
+      'child-2',
+    );
     await cubit.close();
   });
 

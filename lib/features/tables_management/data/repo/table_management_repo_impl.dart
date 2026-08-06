@@ -30,6 +30,20 @@ class TableManagementRepoImpl implements TableManagementRepo {
   }
 
   @override
+  Future<Either<Failure, EgyptianSchedulesResponseModel>>
+  getMyEgyptianSchedule({String? studentId}) {
+    final id = studentId?.trim();
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.myEgyptianSchedule,
+        queryParameter: id == null || id.isEmpty ? null : {'studentId': id},
+        isProtected: true,
+      );
+      return EgyptianSchedulesResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
   Future<Either<Failure, EgyptianScheduleResponseModel>>
   getEgyptianScheduleByClassroom(String classroomId) {
     final id = classroomId.trim();

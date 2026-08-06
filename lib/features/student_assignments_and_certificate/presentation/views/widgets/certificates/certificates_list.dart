@@ -15,10 +15,7 @@ class CertificatesList extends StatelessWidget {
         itemCount: certificates.length,
         separatorBuilder: (_, __) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
-          return CertificateCard(
-            certificate: certificates[index],
-            onDownloadTap: () {},
-          );
+          return CertificateCard(certificate: certificates[index]);
         },
       ),
     );

@@ -48,6 +48,81 @@ void main() {
     expect(result.data.classrooms.single.entries, isEmpty);
   });
 
+  test('accepts empty students and classrooms safely', () {
+    final emptyStudents = GulfSchedulesResponse.fromJson({
+      'data': {'students': <Object>[]},
+    });
+    final emptyClassrooms = GulfSchedulesResponse.fromJson({
+      'data': {
+        'students': [
+          {'classrooms': <Object>[]},
+        ],
+      },
+    });
+
+    expect(emptyStudents.data.classrooms, isEmpty);
+    expect(emptyClassrooms.data.classrooms, isEmpty);
+  });
+
+  test('parses conflict and nullable classroom relations safely', () {
+    final classroom = GulfSchedulesResponse.fromJson({
+      'data': {
+        'students': [
+          {
+            'classrooms': [
+              {
+                'id': 'class-1',
+                'grade': null,
+                'curriculum': null,
+                'subject': null,
+                'classroomSubject': null,
+                'hasSubjectConflict': true,
+              },
+            ],
+          },
+        ],
+      },
+    }).data.classrooms.single;
+
+    expect(classroom.grade, isNull);
+    expect(classroom.curriculum, isNull);
+    expect(classroom.subject, isNull);
+    expect(classroom.classroomSubjectId, isNull);
+    expect(classroom.hasSubjectConflict, isTrue);
+  });
+
+  test('parses every classroom from the wrapped student contract', () {
+    final classrooms = List.generate(
+      70,
+      (index) => {
+        'id': 'class-$index',
+        'hasSubjectConflict': index == 0,
+        'schedule': {
+          'id': 'schedule-$index',
+          'classroomSubject': 'link-$index',
+          'entries': [
+            {'day': 'sunday', 'startTime': '18:00'},
+          ],
+          'createdAt': '2026-08-01T10:00:00.000Z',
+          'updatedAt': '2026-08-05T10:00:00.000Z',
+        },
+      },
+    );
+    final result = GulfSchedulesResponse.fromJson({
+      'success': true,
+      'data': {
+        'students': [
+          {'classrooms': classrooms},
+        ],
+      },
+    });
+
+    expect(result.data.classrooms, hasLength(70));
+    expect(result.data.classrooms.first.hasSubjectConflict, isTrue);
+    expect(result.data.classrooms.last.schedule?.createdAt, isNotNull);
+    expect(result.data.classrooms.last.schedule?.updatedAt, isNotNull);
+  });
+
   test('request sends classroomSubject and day/startTime only', () {
     const request = GulfScheduleRequest(
       classroomSubject: 'link-1',
@@ -59,6 +134,17 @@ void main() {
         {'day': 'tuesday', 'startTime': '09:30'},
       ],
     });
+  });
+
+  test('schedule entry ignores endTime from a response', () {
+    final entry = GulfScheduleEntry.fromJson({
+      'day': 'Monday',
+      'startTime': '09:30',
+      'endTime': '10:30',
+    });
+
+    expect(entry.day, 'monday');
+    expect(entry.toJson(), {'day': 'monday', 'startTime': '09:30'});
   });
 }
 

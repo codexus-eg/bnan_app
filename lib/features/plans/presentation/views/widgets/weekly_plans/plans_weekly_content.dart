@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_state.dart';
@@ -68,6 +69,9 @@ class _PlansWeeklyContentState extends State<PlansWeeklyContent> {
     return BlocBuilder<GetWeeklyPlansCubit, GetWeeklyPlansState>(
       builder: (context, state) => switch (state) {
         GetWeeklyPlansSuccess() => _success(context, state),
+        GetWeeklyPlansEmpty() => NoDataWidget(
+          title: S.of(context).noPlansAvailable,
+        ),
         GetWeeklyPlansFailure() => _failure(context, state),
         _ => _table(context, _lastPlan ?? _placeholder(context), loading: true),
       },

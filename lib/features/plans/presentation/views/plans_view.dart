@@ -8,14 +8,23 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PlansView extends StatelessWidget {
-  const PlansView({super.key, this.showEmpty = false, this.uploadFilePicker});
+  const PlansView({
+    super.key,
+    this.showEmpty = false,
+    this.uploadFilePicker,
+    this.isGulfStudent = false,
+  });
 
   final bool showEmpty;
   final PlansFilePicker? uploadFilePicker;
+  final bool isGulfStudent;
 
   @override
   Widget build(BuildContext context) {
-    final policy = PlansAccessPolicy.fromRole(SessionManager.instance.userRole);
+    final policy = PlansAccessPolicy.fromRole(
+      SessionManager.instance.userRole,
+      isGulfStudent: isGulfStudent,
+    );
     final title = policy.isReadOnly
         ? S.of(context).dailyPlansTitle
         : S.of(context).plansTitle;

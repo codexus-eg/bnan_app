@@ -21,7 +21,7 @@ class HomePageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final pages = [
       StudentHomePage(onMenuTap: onMenuTap, userName: userName),
-      ScheduleBody(),
+      const ScheduleBody(),
       AssignmentsBody(),
       CertificatesBody(),
       StudentProfileBody(),

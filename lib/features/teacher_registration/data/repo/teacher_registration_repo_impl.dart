@@ -43,6 +43,8 @@ class TeacherRegistrationRepoImpl implements TeacherRegistrationRepo {
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
       userName: authResponse.user.fullName,
+      registrationMode: authResponse.user.registrationMode,
+      registrationModes: authResponse.user.registrationModes,
     );
   }
 }

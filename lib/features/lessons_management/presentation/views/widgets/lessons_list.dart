@@ -6,7 +6,7 @@ class LessonsList extends StatelessWidget {
   const LessonsList({super.key, required this.lessons, required this.onTap});
 
   final List<LessonUiModel> lessons;
-  final ValueChanged<LessonUiModel> onTap;
+  final ValueChanged<LessonUiModel>? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class LessonsList extends StatelessWidget {
       itemCount: lessons.length,
       itemBuilder: (context, index) => LessonCard(
         lesson: lessons[index],
-        onTap: () => onTap(lessons[index]),
+        onTap: onTap == null ? null : () => onTap!(lessons[index]),
       ),
       separatorBuilder: (context, index) => const SizedBox(height: 8),
     );

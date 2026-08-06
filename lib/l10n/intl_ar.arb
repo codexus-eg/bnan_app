@@ -213,6 +213,15 @@
     "requestNewLesson": "طلب درس جديد",
     "myGroups": "مجموعاتي",
     "certificates": "الشهادات",
+    "noCertificatesAvailable": "لا توجد شهادات متاحة حتى الآن",
+    "studentCertificate": "شهادة الطالب",
+    "monthlyCertificateTitle": "شهادة شهر {month}",
+    "@monthlyCertificateTitle": {
+        "placeholders": {
+            "month": {}
+        }
+    },
+    "certificateFileUnavailable": "ملف الشهادة غير متاح",
     "PackagesandSubscriptions": "الباقات والاشتراكات",
     "subscriptions": "الاشتراكات",
     "reviews": "التقييمات",
@@ -830,7 +839,7 @@
     "gulfScheduleEntryAdded": "تمت إضافة الموعد",
     "gulfScheduleEntryUpdated": "تم تعديل الموعد",
     "gulfScheduleEntryDeleted": "تم حذف الموعد",
-    "gulfClassroomSubjectUnavailable": "لا يمكن إنشاء الجدول لأن ارتباط المادة بالفصل غير متاح",
+    "gulfClassroomSubjectUnavailable": "بيانات مادة الفصل تحتاج إلى مراجعة الإدارة",
     "startSession": "بدء الحصة",
     "sessionStarting": "جارٍ بدء الحصة",
     "sessionStarted": "تم بدء الحصة",

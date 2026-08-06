@@ -12,6 +12,7 @@ class LoggedUserModel {
   final List<String> subjects;
   final String createdAt;
   final String updatedAt;
+  final String? studentMode;
 
   const LoggedUserModel({
     required this.id,
@@ -22,9 +23,11 @@ class LoggedUserModel {
     required this.subjects,
     required this.createdAt,
     required this.updatedAt,
+    this.studentMode,
   });
   String get firstTwoNames => NameHelper.getFirstTwoNames(user.fullName);
   String get gradeName => grade?.name ?? '';
+  bool get isGulfStudent => studentMode?.toLowerCase() == 'gulf';
 
   factory LoggedUserModel.fromJson(Map<String, dynamic> json) {
     return LoggedUserModel(
@@ -33,13 +36,14 @@ class LoggedUserModel {
       parent: json['parent'] == null
           ? null
           : LoggedUserParentModel.fromJson(json['parent']),
-      curriculum: json['curriculum'],
+      curriculum: _curriculumId(json['curriculum']),
       grade: json['grade'] == null
           ? null
           : LoggedUserGradeModel.fromJson(json['grade']),
       subjects: List<String>.from(json['subjects'] ?? []),
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
+      studentMode: _studentMode(json),
     );
   }
 
@@ -53,6 +57,7 @@ class LoggedUserModel {
       'subjects': subjects,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      if (studentMode != null) 'mode': studentMode,
     };
   }
 
@@ -73,6 +78,22 @@ class LoggedUserModel {
       updatedAt: '',
     );
   }
+}
+
+String? _studentMode(Map<String, dynamic> json) {
+  final curriculum = json['curriculum'];
+  final value =
+      json['mode'] ??
+      json['studentMode'] ??
+      (curriculum is Map ? curriculum['baseCurriculum'] : null);
+  final normalized = value?.toString().trim().toLowerCase();
+  return normalized == 'gulf' || normalized == 'egyptian' ? normalized : null;
+}
+
+String? _curriculumId(Object? value) {
+  if (value is String) return value;
+  if (value is Map) return (value['id'] ?? value['_id'])?.toString();
+  return null;
 }
 
 class LoggedUserInfoModel {

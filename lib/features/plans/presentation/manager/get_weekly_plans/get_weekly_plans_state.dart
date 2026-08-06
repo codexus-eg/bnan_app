@@ -6,6 +6,8 @@ final class GetWeeklyPlansInitial extends GetWeeklyPlansState {}
 
 final class GetWeeklyPlansLoading extends GetWeeklyPlansState {}
 
+final class GetWeeklyPlansEmpty extends GetWeeklyPlansState {}
+
 final class GetWeeklyPlansSuccess extends GetWeeklyPlansState {
   GetWeeklyPlansSuccess(this.response);
 

@@ -34,6 +34,8 @@ void main() {
   });
 
   test('read methods use the documented endpoints', () async {
+    await repo.getPlansByWeek(classroomId: 'classroom');
+    expect(api.path, '/classrooms/classroom/plans');
     await repo.getPlansByWeek(classroomId: 'classroom', week: 3);
     expect(api.path, '/classrooms/classroom/plans/week/3');
     await repo.getTermPlans(classroomId: 'classroom');

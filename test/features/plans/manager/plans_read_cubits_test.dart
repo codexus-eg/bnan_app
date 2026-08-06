@@ -30,7 +30,26 @@ void main() {
     first.complete(Left(Failure(message: 'stale')));
     await oldRequest;
 
-    expect(cubit.state, isA<GetWeeklyPlansSuccess>());
+    expect(cubit.state, isA<GetWeeklyPlansEmpty>());
+    await cubit.close();
+  });
+
+  test('weekly cubit caches a classroom and returned week', () async {
+    final repo = FakePlansRepo();
+    repo.weekly.add(
+      Completer()..complete(
+        const Right(
+          WeeklyPlansResponseModel(data: WeeklyPlansDataModel(week: 2)),
+        ),
+      ),
+    );
+    final cubit = GetWeeklyPlansCubit(repo);
+
+    await cubit.getPlansByWeek(classroomId: 'classroom');
+    await cubit.getPlansByWeek(classroomId: 'classroom', week: 2);
+
+    expect(repo.weeklyCalls, 1);
+    expect(cubit.state, isA<GetWeeklyPlansEmpty>());
     await cubit.close();
   });
 

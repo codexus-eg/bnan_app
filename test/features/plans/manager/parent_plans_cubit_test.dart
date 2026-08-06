@@ -43,7 +43,7 @@ void main() {
 
     cubit.selectWeek(2);
     expect(cubit.currentPlan?.week, 2);
-    expect(cubit.state, isA<GetParentPlansSuccess>());
+    expect(cubit.state, isA<GetParentPlansEmpty>());
     await cubit.close();
   });
 }

@@ -13,6 +13,7 @@ abstract class EndPoints {
   static const String updateLoggedUserName = '/users/me/name';
   static const String updateLoggedUserPhone = '/users/me/phone';
   static const String myAssignments = '/students/me/assignments';
+  static const String myCertificates = '/certificates/my';
   static const String curriculums = '/curriculums';
   static const String studentSubscription = '/students/me/subscription';
   static const String myEnrollments = '/students/me/enrollments';
@@ -27,6 +28,7 @@ abstract class EndPoints {
   static const String teachingAssignments = '/teachers/teaching-assignments';
   static const String classrooms = '/classrooms';
   static const String egyptianSchedules = '/egyptianSchedules';
+  static const String myEgyptianSchedule = '$egyptianSchedules/mySchedule';
   static const String subjects = '/subjects';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
@@ -317,6 +319,10 @@ abstract class EndPoints {
 
   static String plansByWeek({required String classroomId, required int week}) {
     return '$classrooms/$classroomId/plans/week/$week';
+  }
+
+  static String classroomPlans(String classroomId) {
+    return '$classrooms/$classroomId/plans';
   }
 
   static String termPlans(String classroomId) {

@@ -24,6 +24,19 @@ void main() {
     await cubit.close();
   });
 
+  test('one load keeps every classroom with one repository request', () async {
+    final repo = FakeGulfScheduleRepo(
+      classrooms: List.generate(70, (index) => gulfClassroom(id: 'c-$index')),
+    );
+    final cubit = GulfScheduleCubit(repo);
+
+    await cubit.load();
+
+    expect(repo.loadCalls, 1);
+    expect(cubit.state.classrooms, hasLength(70));
+    await cubit.close();
+  });
+
   test('first entry uses POST with explicit classroomSubject', () async {
     final repo = FakeGulfScheduleRepo(
       classrooms: [gulfClassroom(withSchedule: false)],

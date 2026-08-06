@@ -6,6 +6,8 @@ final class GetEgyptianSchedulesInitial extends GetEgyptianSchedulesState {}
 
 final class GetEgyptianSchedulesLoading extends GetEgyptianSchedulesState {}
 
+final class GetEgyptianSchedulesEmpty extends GetEgyptianSchedulesState {}
+
 final class GetEgyptianSchedulesSuccess extends GetEgyptianSchedulesState {
   final EgyptianSchedulesResponseModel response;
 

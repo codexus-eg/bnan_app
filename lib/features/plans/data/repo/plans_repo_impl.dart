@@ -80,11 +80,13 @@ class PlansRepoImpl implements PlansRepo {
   @override
   Future<Either<Failure, WeeklyPlansResponseModel>> getPlansByWeek({
     required String classroomId,
-    required int week,
+    int? week,
   }) {
     return repoGuard(() async {
       final response = await apiConsumer.get(
-        EndPoints.plansByWeek(classroomId: classroomId, week: week),
+        week == null
+            ? EndPoints.classroomPlans(classroomId)
+            : EndPoints.plansByWeek(classroomId: classroomId, week: week),
         isProtected: true,
       );
       return WeeklyPlansResponseModel.fromJson(asMap(response));

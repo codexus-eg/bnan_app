@@ -1,20 +1,37 @@
 import 'egyptian_schedule_classroom_model.dart';
+import 'egyptian_schedule_reference_model.dart';
 
 class EgyptianScheduleModel {
-  const EgyptianScheduleModel({this.id, this.classroom, this.image});
+  const EgyptianScheduleModel({
+    this.id,
+    this.classroom,
+    this.grade,
+    this.curriculum,
+    this.image,
+  });
 
   final String? id;
   final EgyptianScheduleClassroomModel? classroom;
+  final EgyptianScheduleReferenceModel? grade;
+  final EgyptianScheduleReferenceModel? curriculum;
   final String? image;
 
   factory EgyptianScheduleModel.fromJson(Map<String, dynamic> json) {
     final classroomMap = _mapOf(json['classroom']);
+    final gradeMap = _mapOf(json['grade']);
+    final curriculumMap = _mapOf(json['curriculum']);
 
     return EgyptianScheduleModel(
       id: _text(json['id'] ?? json['_id']),
       classroom: classroomMap == null
           ? null
           : EgyptianScheduleClassroomModel.fromJson(classroomMap),
+      grade: gradeMap == null
+          ? null
+          : EgyptianScheduleReferenceModel.fromJson(gradeMap),
+      curriculum: curriculumMap == null
+          ? null
+          : EgyptianScheduleReferenceModel.fromJson(curriculumMap),
       image: _text(json['image']),
     );
   }

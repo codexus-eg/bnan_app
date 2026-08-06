@@ -10,6 +10,7 @@ class PlansAccessPolicy {
     required this.canUploadPlan,
     required this.showTeacherFieldInAddDialog,
     required this.isReadOnly,
+    this.isGulfStudent = false,
   });
 
   final bool showClassroomFilter;
@@ -22,8 +23,12 @@ class PlansAccessPolicy {
   final bool canUploadPlan;
   final bool showTeacherFieldInAddDialog;
   final bool isReadOnly;
+  final bool isGulfStudent;
 
-  factory PlansAccessPolicy.fromRole(String? role) {
+  factory PlansAccessPolicy.fromRole(
+    String? role, {
+    bool isGulfStudent = false,
+  }) {
     final normalizedRole = role?.trim().toLowerCase();
     final isSupervisor = normalizedRole == 'supervisor';
     final isAdmin = normalizedRole == 'admin';
@@ -41,6 +46,7 @@ class PlansAccessPolicy {
       canUploadPlan: canManage,
       showTeacherFieldInAddDialog: isSupervisor || isAdmin,
       isReadOnly: !canManage,
+      isGulfStudent: normalizedRole == 'student' && isGulfStudent,
     );
   }
 }

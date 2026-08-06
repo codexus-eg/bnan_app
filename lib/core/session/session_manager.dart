@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/cache/secure_cache_helper.dart';
 import 'package:bnan_app/core/cache/secure_cache_keys.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:flutter/foundation.dart';
 
@@ -13,6 +14,8 @@ class SessionManager {
   String? _userName;
   String? _accessToken;
   String? _refreshToken;
+  RegistrationMode? _registrationMode;
+  List<RegistrationMode> _registrationModes = const [];
 
   String? get userId => _userId;
   String? get userRole => _userRole;
@@ -20,6 +23,31 @@ class SessionManager {
   String? get userName => _userName;
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
+  RegistrationMode? get registrationMode => _registrationMode;
+  List<RegistrationMode> get registrationModes => _registrationModes;
+
+  bool get isEgyptianStudent =>
+      role == UserRole.student &&
+      _registrationMode == RegistrationMode.egyptian;
+  bool get isGulfStudent =>
+      role == UserRole.student && _registrationMode == RegistrationMode.gulf;
+  bool get isEgyptianSupervisor =>
+      role == UserRole.supervisor &&
+      _registrationMode == RegistrationMode.egyptian;
+  bool get isGulfSupervisor =>
+      role == UserRole.supervisor && _registrationMode == RegistrationMode.gulf;
+  bool get hasEgyptianRegistration => switch (role) {
+    UserRole.student ||
+    UserRole.supervisor => _registrationMode == RegistrationMode.egyptian,
+    UserRole.teacher => _registrationModes.contains(RegistrationMode.egyptian),
+    _ => false,
+  };
+  bool get hasGulfRegistration => switch (role) {
+    UserRole.student ||
+    UserRole.supervisor => _registrationMode == RegistrationMode.gulf,
+    UserRole.teacher => _registrationModes.contains(RegistrationMode.gulf),
+    _ => false,
+  };
 
   Future<void> saveSession({
     required String accessToken,
@@ -27,6 +55,8 @@ class SessionManager {
     String? userId,
     String? userRole,
     String? userName,
+    RegistrationMode? registrationMode,
+    List<RegistrationMode> registrationModes = const [],
   }) async {
     debugPrint('SessionManager.saveSession started');
 
@@ -35,6 +65,8 @@ class SessionManager {
     _userId = userId;
     _userRole = userRole;
     _userName = userName;
+    _registrationMode = registrationMode;
+    _registrationModes = List.unmodifiable(registrationModes);
 
     await SecureCacheHelper.saveData(
       key: SecureCacheKeys.accessToken,
@@ -70,6 +102,9 @@ class SessionManager {
         value: userName,
       );
     }
+
+    await _saveOptionalMode(registrationMode);
+    await _saveModes(registrationModes);
   }
 
   Future<void> loadSession() async {
@@ -85,6 +120,16 @@ class SessionManager {
 
     _userRole = await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
     _userName = await SecureCacheHelper.getData(key: SecureCacheKeys.userName);
+    _registrationMode = RegistrationMode.fromValue(
+      await SecureCacheHelper.getData(key: SecureCacheKeys.registrationMode),
+    );
+    _registrationModes = List.unmodifiable(
+      RegistrationMode.fromList(
+        (await SecureCacheHelper.getData(
+          key: SecureCacheKeys.registrationModes,
+        ))?.split(','),
+      ),
+    );
   }
 
   Future<String?> getAccessToken() async {
@@ -125,8 +170,34 @@ class SessionManager {
     _userId = null;
     _userRole = null;
     _userName = null;
+    _registrationMode = null;
+    _registrationModes = const [];
 
     await SecureCacheHelper.clearAll();
     debugPrint('SessionManager.clearSession completed');
+  }
+
+  Future<void> _saveOptionalMode(RegistrationMode? mode) async {
+    if (mode == null) {
+      return SecureCacheHelper.removeData(
+        key: SecureCacheKeys.registrationMode,
+      );
+    }
+    await SecureCacheHelper.saveData(
+      key: SecureCacheKeys.registrationMode,
+      value: mode.name,
+    );
+  }
+
+  Future<void> _saveModes(List<RegistrationMode> modes) async {
+    if (modes.isEmpty) {
+      return SecureCacheHelper.removeData(
+        key: SecureCacheKeys.registrationModes,
+      );
+    }
+    await SecureCacheHelper.saveData(
+      key: SecureCacheKeys.registrationModes,
+      value: modes.map((mode) => mode.name).join(','),
+    );
   }
 }
