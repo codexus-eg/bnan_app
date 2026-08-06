@@ -8,6 +8,7 @@ import 'package:bnan_app/features/tables_management/data/models/egyptian_schedul
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedules_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 import 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedules_cubit/get_egyptian_schedules_cubit.dart';
+import 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedules_cubit/get_egyptian_schedules_state.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/egyptian_schedules_read_only_view.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/widgets/table_card_section.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/widgets/table_schedules_content.dart';
@@ -53,7 +54,15 @@ void main() {
 
     await tester.pumpWidget(_app(cubit, const EgyptianSchedulesReadOnlyView()));
 
+    expect(cubit.state, isA<GetEgyptianSchedulesEmpty>());
     expect(find.byType(NoDataWidget), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(NoDataWidget),
+        matching: find.byType(Center),
+      ),
+      findsWidgets,
+    );
   });
 
   testWidgets('failure retry repeats only the read operation', (tester) async {

@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bnan_app/core/shared_widget/custom_file_picker_field.dart';
+import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_cell.dart';
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_container.dart';
 import 'package:bnan_app/core/shared_widget/custom_table/custom_table_row.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_details_response_model.dart';
@@ -18,11 +20,13 @@ import 'package:bnan_app/features/plans/data/models/elapsed_weeks_response_model
 import 'package:bnan_app/features/plans/data/models/create_daily_plan_request_model.dart';
 import 'package:bnan_app/features/plans/data/models/create_plan_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/plan_classroom_model.dart';
+import 'package:bnan_app/features/plans/data/models/parent_plan_child_model.dart';
 import 'package:bnan_app/features/plans/data/models/term_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/repo/plans_repo.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_cubit.dart';
+import 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_state.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_term_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
@@ -80,6 +84,31 @@ void main() {
     expect(find.byType(PlansManagementBody), findsNothing);
   });
 
+  testWidgets('parent no-data is centered below unchanged filters', (
+    tester,
+  ) async {
+    final cubit = _SeedParentPlansCubit()..seedEmpty();
+    addTearDown(cubit.close);
+    await tester.pumpWidget(
+      _localizedApp(
+        BlocProvider<GetParentPlansCubit>.value(
+          value: cubit,
+          child: PlansParentBody(policy: PlansAccessPolicy.fromRole('parent')),
+        ),
+      ),
+    );
+
+    expect(find.byType(CustomDropdown), findsNWidgets(2));
+    expect(find.byType(NoDataWidget), findsOneWidget);
+    final filtersBottom = tester
+        .getBottomRight(find.byType(CustomDropdown).last)
+        .dy;
+    expect(
+      tester.getCenter(find.byType(NoDataWidget)).dy,
+      greaterThan(filtersBottom),
+    );
+  });
+
   testWidgets('initial classrooms state keeps filters and table visible', (
     tester,
   ) async {
@@ -122,14 +151,34 @@ void main() {
     expect(find.text('Week 2'), findsNothing);
   });
 
-  testWidgets('empty week keeps headers and day rows visible', (tester) async {
+  testWidgets('empty supervisor classrooms shows no-data without requests', (
+    tester,
+  ) async {
+    final repo = _PlansRepo();
+    await _pumpPlans(
+      tester,
+      'supervisor',
+      plansRepo: repo,
+      supervisorClassrooms: const [],
+    );
+
+    expect(find.byType(NoDataWidget), findsOneWidget);
+    expect(find.byType(CustomDropdown), findsNothing);
+    expect(find.byType(AppSkeletonizer), findsNothing);
+    expect(repo.elapsedRequests, isEmpty);
+    expect(repo.weekRequests, isEmpty);
+  });
+
+  testWidgets('empty week shows centered no-data under filters', (
+    tester,
+  ) async {
     final repo = _PlansRepo()
       ..weeklyResult = const Right(WeeklyPlansResponseModel());
     await _pumpPlans(tester, 'teacher', plansRepo: repo);
 
-    expect(find.byType(CustomTableContainer), findsOneWidget);
-    expect(find.byType(CustomTableRow), findsWidgets);
-    expect(find.text('Sunday'), findsOneWidget);
+    expect(find.byType(NoDataWidget), findsOneWidget);
+    expect(find.byType(CustomDropdown), findsNWidgets(2));
+    expect(find.byType(CustomTableContainer), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -572,6 +621,7 @@ Future<void> _pumpPlans(
   Locale locale = const Locale('en'),
   _PlansRepo? plansRepo,
   List<TeacherClassroomModel>? teacherClassrooms,
+  List<SupervisorClassroomModel>? supervisorClassrooms,
   PlansFilePicker? uploadFilePicker,
   bool startClassrooms = true,
   bool settle = true,
@@ -595,7 +645,9 @@ Future<void> _pumpPlans(
     ),
     'supervisor' => BlocProvider(
       create: (_) {
-        final cubit = GetSupervisorClassroomsCubit(_SupervisorRepo());
+        final cubit = GetSupervisorClassroomsCubit(
+          _SupervisorRepo(supervisorClassrooms),
+        );
         if (startClassrooms) cubit.getMyClassrooms();
         return cubit;
       },
@@ -676,13 +728,41 @@ class _StudentGroupsRepo implements StudentGroupsRepo {
 }
 
 class _SupervisorRepo implements SupervisorManagementRepo {
+  const _SupervisorRepo([this.classrooms]);
+
+  final List<SupervisorClassroomModel>? classrooms;
+
   @override
   Future<Either<Failure, GetSupervisorClassroomsResponseModel>>
   getMyClassrooms() async => Right(
-    const GetSupervisorClassroomsResponseModel(
-      data: [SupervisorClassroomModel(id: 'classroom', name: 'Class A')],
+    GetSupervisorClassroomsResponseModel(
+      data:
+          classrooms ??
+          const [SupervisorClassroomModel(id: 'classroom', name: 'Class A')],
     ),
   );
+}
+
+Widget _localizedApp(Widget child) => MaterialApp(
+  localizationsDelegates: const [
+    S.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: S.delegate.supportedLocales,
+  home: Scaffold(body: child),
+);
+
+class _SeedParentPlansCubit extends GetParentPlansCubit {
+  _SeedParentPlansCubit() : super(_PlansRepo());
+
+  void seedEmpty() {
+    children = const [ParentPlanChildModel(id: 'child', fullName: 'Child')];
+    selectedChildId = 'child';
+    selectedChildName = 'Child';
+    emit(GetParentPlansEmpty());
+  }
 }
 
 class _AssignmentsRepo implements AssignmentsRepo {

@@ -17,7 +17,7 @@ class GetWeeklyPlansCubit extends Cubit<GetWeeklyPlansState> {
     _activeWeek = week;
     final cached = _cache[_key(classroomId, week)];
     if (cached != null) {
-      emit(GetWeeklyPlansSuccess(cached));
+      _emitResponse(cached);
       return;
     }
     final requestId = ++_requestId;
@@ -41,9 +41,15 @@ class GetWeeklyPlansCubit extends Cubit<GetWeeklyPlansState> {
       if (response.data.week > 0) {
         _cache[_key(classroomId, response.data.week)] = response;
       }
-      emit(GetWeeklyPlansSuccess(response));
+      _emitResponse(response);
     });
   }
+
+  void _emitResponse(WeeklyPlansResponseModel response) => emit(
+    response.data.subjects.isEmpty
+        ? GetWeeklyPlansEmpty()
+        : GetWeeklyPlansSuccess(response),
+  );
 
   String _key(String classroomId, int? week) => '$classroomId:${week ?? 0}';
 }

@@ -57,7 +57,7 @@ class GetParentPlansCubit extends Cubit<GetParentPlansState> {
     final response = _childrenResponse(result);
     if (response == null) return;
     children = response.data;
-    if (children.isEmpty) return emit(GetParentPlansSuccess());
+    if (children.isEmpty) return emit(GetParentPlansEmpty());
     selectedChildId = children.first.id;
     selectedChildName = children.first.fullName;
     await _loadPlans(requestId, selectInitialWeek: true);
@@ -77,7 +77,7 @@ class GetParentPlansCubit extends Cubit<GetParentPlansState> {
       selectedChildId = child.id;
       selectedChildName = child.fullName;
       _selectCurrentPlan();
-      emit(GetParentPlansSuccess());
+      _emitCurrent();
       return;
     }
   }
@@ -86,7 +86,7 @@ class GetParentPlansCubit extends Cubit<GetParentPlansState> {
     if (week == null || week < 1 || week == selectedWeek) return;
     selectedWeek = week;
     _selectCurrentPlan();
-    emit(GetParentPlansSuccess());
+    _emitCurrent();
   }
 
   Future<void> _loadPlans(
@@ -100,8 +100,14 @@ class GetParentPlansCubit extends Cubit<GetParentPlansState> {
     allChildrenPlans = response.data;
     if (selectInitialWeek) _selectFirstAvailableWeek();
     _selectCurrentPlan();
-    emit(GetParentPlansSuccess());
+    _emitCurrent();
   }
+
+  void _emitCurrent() => emit(
+    currentPlan == null || currentPlan!.subjects.isEmpty
+        ? GetParentPlansEmpty()
+        : GetParentPlansSuccess(),
+  );
 
   void _selectFirstAvailableWeek() {
     for (final plan in allChildrenPlans) {

@@ -23,15 +23,20 @@ class WeeklyEvaluationsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     if (policy.isParent) return _listener(context, null);
     return PlansClassroomsSource(
-      builder: (context, state, _) {
+      builder: (context, state, retry) {
         final classrooms = state is PlansClassroomsSuccess
             ? state.classrooms
             : null;
-        if (classrooms != null) _syncClassrooms(context, classrooms);
+        final isEmpty = state is PlansClassroomsEmpty;
+        if (classrooms != null || isEmpty) {
+          _syncClassrooms(context, classrooms ?? const []);
+        }
         return _listener(
           context,
           classrooms,
+          classroomsEmpty: isEmpty,
           sourceError: state is PlansClassroomsFailure ? state.message : null,
+          sourceRetry: retry,
         );
       },
     );
@@ -40,7 +45,9 @@ class WeeklyEvaluationsBody extends StatelessWidget {
   Widget _listener(
     BuildContext context,
     List<PlanClassroomOption>? classrooms, {
+    bool classroomsEmpty = false,
     String? sourceError,
+    VoidCallback? sourceRetry,
   }) => BlocConsumer<WeeklyEvaluationsCubit, WeeklyEvaluationsState>(
     listenWhen: (_, state) => state is EvaluationSaved,
     listener: (context, _) => showCustomSnackBar(
@@ -48,17 +55,28 @@ class WeeklyEvaluationsBody extends StatelessWidget {
       S.of(context).evaluationSavedSuccessfully,
       true,
     ),
-    builder: (context, state) =>
-        _content(context, state, classrooms, sourceError),
+    builder: (context, state) => _content(
+      context,
+      state,
+      classrooms,
+      classroomsEmpty,
+      sourceError,
+      sourceRetry,
+    ),
   );
 
   Widget _content(
     BuildContext context,
     WeeklyEvaluationsState state,
     List<PlanClassroomOption>? classrooms,
+    bool classroomsEmpty,
     String? sourceError,
+    VoidCallback? sourceRetry,
   ) {
     final cubit = context.read<WeeklyEvaluationsCubit>();
+    if (classroomsEmpty) {
+      return Center(child: NoDataWidget(title: S.of(context).noDataAvailable));
+    }
     final response = cubit.response;
     final students = response == null
         ? null
@@ -85,7 +103,14 @@ class WeeklyEvaluationsBody extends StatelessWidget {
           WeeklyEvaluationFilters(cubit: cubit, classrooms: classrooms),
           const SizedBox(height: 16),
           Expanded(
-            child: _result(context, state, cubit, students, sourceError),
+            child: _result(
+              context,
+              state,
+              cubit,
+              students,
+              sourceError,
+              sourceRetry,
+            ),
           ),
         ],
       ),
@@ -98,10 +123,14 @@ class WeeklyEvaluationsBody extends StatelessWidget {
     WeeklyEvaluationsCubit cubit,
     WeeklyEvaluationsStudents? students,
     String? sourceError,
+    VoidCallback? sourceRetry,
   ) {
     final response = cubit.response;
     if (sourceError != null) {
-      return WeeklyEvaluationsFailure(message: sourceError);
+      return WeeklyEvaluationsFailure(
+        message: sourceError,
+        onRetry: sourceRetry,
+      );
     }
     if (_isInitialLoading(state) && response == null) {
       return const SingleChildScrollView(
@@ -109,7 +138,10 @@ class WeeklyEvaluationsBody extends StatelessWidget {
       );
     }
     if (state is EvaluationsFailure) {
-      return WeeklyEvaluationsFailure(message: state.message);
+      return WeeklyEvaluationsFailure(
+        message: state.message,
+        onRetry: cubit.retry,
+      );
     }
     if (response == null) {
       return Center(child: NoDataWidget(title: _emptyTitle(context, cubit)));

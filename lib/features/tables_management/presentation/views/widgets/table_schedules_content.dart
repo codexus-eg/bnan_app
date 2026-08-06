@@ -26,6 +26,7 @@ class TableSchedulesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GetEgyptianSchedulesCubit, GetEgyptianSchedulesState>(
       builder: (context, state) {
+        if (state is GetEgyptianSchedulesEmpty) return const NoDataWidget();
         if (state is GetEgyptianSchedulesFailure) {
           if (onRetry != null) {
             return TableSchedulesFailure(
@@ -45,8 +46,6 @@ class TableSchedulesContent extends StatelessWidget {
         final schedules = state is GetEgyptianSchedulesSuccess
             ? state.response.schedules
             : EgyptianScheduleModel.placeholders;
-
-        if (!isLoading && schedules.isEmpty) return const NoDataWidget();
 
         return AppSkeletonizer(
           isLoading: isLoading,

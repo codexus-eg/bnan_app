@@ -5,11 +5,16 @@ import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_s
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GulfScheduleCubit extends Cubit<GulfScheduleState> {
-  GulfScheduleCubit(this.repo, {this.canManage = true, this.studentId})
-    : super(const GulfScheduleState());
+  GulfScheduleCubit(
+    this.repo, {
+    this.canManage = true,
+    this.studentId,
+    this.emptySuccessFallback = const [],
+  }) : super(const GulfScheduleState());
   final GulfScheduleRepo repo;
   final bool canManage;
   final String? studentId;
+  final List<GulfClassroom> emptySuccessFallback;
   int _loadGeneration = 0;
   static const _days = {
     'saturday',
@@ -119,7 +124,10 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
         ),
       ),
       (response) {
-        final classrooms = response.data.classrooms;
+        final realClassrooms = response.data.classrooms;
+        final classrooms = realClassrooms.isEmpty
+            ? emptySuccessFallback
+            : realClassrooms;
         final previous = state.selectedClassroomId;
         final selected = classrooms.any((item) => item.id == previous)
             ? previous

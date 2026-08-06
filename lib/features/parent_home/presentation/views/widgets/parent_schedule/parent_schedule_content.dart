@@ -28,7 +28,7 @@ class ParentScheduleContent extends StatelessWidget {
             getIt<TableManagementRepo>(),
             studentId: studentId,
           )..getMyEgyptianSchedule(),
-          child: const EgyptianSchedulesReadOnlyBody(),
+          child: const EgyptianSchedulesReadOnlyBody(applyTopSafeArea: false),
         ),
         RegistrationMode.gulf => BlocProvider(
           create: (_) => GulfScheduleCubit(

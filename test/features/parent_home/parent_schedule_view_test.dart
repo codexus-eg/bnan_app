@@ -4,6 +4,7 @@ import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
+import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/attachment_preview/network_attachment_preview.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_models.dart';
@@ -18,6 +19,7 @@ import 'package:bnan_app/features/parent_home/presentation/views/parent_schedule
 import 'package:bnan_app/features/tables_management/data/models/egyptian_schedule_model.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedules_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
+import 'package:bnan_app/features/tables_management/presentation/views/widgets/table_card_section.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +59,14 @@ void main() {
     expect(egyptianRepo.studentIds, ['egypt-id']);
     expect(gulfRepo.studentIds, isEmpty);
     expect(find.byType(NetworkAttachmentPreview), findsOneWidget);
+    final verticalGap =
+        tester.getTopLeft(find.byType(TableCardSection)).dy -
+        tester
+            .getBottomRight(
+              find.byKey(const Key('parentScheduleChildDropdown')),
+            )
+            .dy;
+    expect(verticalGap, lessThan(40));
 
     await _selectChild(tester, 'Gulf Child');
     expect(egyptianRepo.studentIds, ['egypt-id']);
@@ -97,6 +107,31 @@ void main() {
     expect(find.byType(NoDataWidget), findsOneWidget);
     expect(egyptianRepo.studentIds, isEmpty);
     expect(gulfRepo.studentIds, isEmpty);
+  });
+
+  testWidgets('empty Egyptian schedule stays centered below child selector', (
+    tester,
+  ) async {
+    egyptianRepo.load = (_) async =>
+        const Right(EgyptianSchedulesResponseModel());
+    await _pump(tester);
+
+    expect(
+      find.byKey(const Key('parentScheduleChildDropdown')),
+      findsOneWidget,
+    );
+    expect(find.byType(NoDataWidget), findsOneWidget);
+    expect(find.byType(AppSkeletonizer), findsNothing);
+    expect(
+      tester.getCenter(find.byType(NoDataWidget)).dy,
+      greaterThan(
+        tester
+            .getBottomRight(
+              find.byKey(const Key('parentScheduleChildDropdown')),
+            )
+            .dy,
+      ),
+    );
   });
 
   for (final mode in RegistrationMode.values) {

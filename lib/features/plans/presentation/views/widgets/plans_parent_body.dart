@@ -20,18 +20,20 @@ class PlansParentBody extends StatelessWidget {
     return BlocBuilder<GetParentPlansCubit, GetParentPlansState>(
       builder: (context, state) {
         final cubit = context.read<GetParentPlansCubit>();
-        if (state is GetParentPlansSuccess && cubit.children.isEmpty) {
+        if (state is GetParentPlansEmpty && cubit.children.isEmpty) {
           return NoDataWidget(title: S.of(context).noChildrenAvailable);
         }
-        return ListView(
+        return Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
-          children: [
-            if (cubit.children.isNotEmpty) ...[
-              _filters(context, cubit),
-              const SizedBox(height: 16),
+          child: Column(
+            children: [
+              if (cubit.children.isNotEmpty) ...[
+                _filters(context, cubit),
+                const SizedBox(height: 16),
+              ],
+              Expanded(child: _content(context, cubit, state)),
             ],
-            _content(context, cubit, state),
-          ],
+          ),
         );
       },
     );
@@ -78,24 +80,28 @@ class PlansParentBody extends StatelessWidget {
       );
     }
     if (state is GetParentPlansLoading) {
-      return PlansWeeklyContent(
-        classroom: classroom,
-        week: cubit.selectedWeek,
-        showEmpty: false,
-        externalLoading: true,
-        titleOverride: title,
+      return SingleChildScrollView(
+        child: PlansWeeklyContent(
+          classroom: classroom,
+          week: cubit.selectedWeek,
+          showEmpty: false,
+          externalLoading: true,
+          titleOverride: title,
+        ),
       );
     }
     final response = cubit.currentWeeklyPlan;
     if (response == null || response.data.subjects.isEmpty) {
       return NoDataWidget(title: s.noPlansAvailable);
     }
-    return PlansWeeklyContent(
-      classroom: classroom,
-      week: cubit.selectedWeek,
-      showEmpty: false,
-      externalResponse: response,
-      titleOverride: title,
+    return SingleChildScrollView(
+      child: PlansWeeklyContent(
+        classroom: classroom,
+        week: cubit.selectedWeek,
+        showEmpty: false,
+        externalResponse: response,
+        titleOverride: title,
+      ),
     );
   }
 }

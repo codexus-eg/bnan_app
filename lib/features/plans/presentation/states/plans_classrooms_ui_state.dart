@@ -8,6 +8,10 @@ final class PlansClassroomsLoading extends PlansClassroomsUiState {
   const PlansClassroomsLoading();
 }
 
+final class PlansClassroomsEmpty extends PlansClassroomsUiState {
+  const PlansClassroomsEmpty();
+}
+
 final class PlansClassroomsSuccess extends PlansClassroomsUiState {
   const PlansClassroomsSuccess(this.classrooms);
 

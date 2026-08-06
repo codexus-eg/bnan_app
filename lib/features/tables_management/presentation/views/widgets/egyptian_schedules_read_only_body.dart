@@ -4,11 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EgyptianSchedulesReadOnlyBody extends StatelessWidget {
-  const EgyptianSchedulesReadOnlyBody({super.key});
+  const EgyptianSchedulesReadOnlyBody({
+    super.key,
+    this.applyTopSafeArea = true,
+  });
+
+  final bool applyTopSafeArea;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: applyTopSafeArea,
       bottom: false,
       child: TableSchedulesContent(
         canManage: false,

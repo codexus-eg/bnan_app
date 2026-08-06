@@ -2,6 +2,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_state.dart';
 import 'package:bnan_app/features/plans/presentation/mappers/plan_classroom_options_mapper.dart';
+import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/plans/presentation/states/plans_classrooms_ui_state.dart';
 import 'package:bnan_app/features/student_groups/presentation/manager/get_my_enrollments/get_my_enrollments_cubit.dart';
 import 'package:bnan_app/features/student_groups/presentation/manager/get_my_enrollments/get_my_enrollments_state.dart';
@@ -24,11 +25,7 @@ typedef PlansClassroomsBuilder =
     );
 
 class PlansClassroomsSource extends StatelessWidget {
-  const PlansClassroomsSource({
-    super.key,
-    required this.builder,
-    this.policy,
-  });
+  const PlansClassroomsSource({super.key, required this.builder, this.policy});
 
   final PlansClassroomsBuilder builder;
   final PlansAccessPolicy? policy;
@@ -55,13 +52,13 @@ class PlansClassroomsSource extends StatelessWidget {
       'admin' => BlocBuilder<ClassroomsCubit, ClassroomsState>(
         builder: (context, state) => _admin(context, state),
       ),
-      _ => builder(context, const PlansClassroomsSuccess([]), () {}),
+      _ => builder(context, const PlansClassroomsEmpty(), () {}),
     };
   }
 
   Widget _gulfStudent(BuildContext context, GulfScheduleState state) {
     final uiState = switch (state.status) {
-      GulfScheduleLoadStatus.ready => PlansClassroomsSuccess(
+      GulfScheduleLoadStatus.ready => _success(
         mapGulfScheduleToPlanOptions(state.classrooms),
       ),
       GulfScheduleLoadStatus.failure => PlansClassroomsFailure(
@@ -74,7 +71,7 @@ class PlansClassroomsSource extends StatelessWidget {
 
   Widget _teacher(BuildContext context, GetTeacherClassroomsState state) {
     final uiState = switch (state) {
-      GetTeacherClassroomsSuccess() => PlansClassroomsSuccess(
+      GetTeacherClassroomsSuccess() => _success(
         mapTeacherClassroomsToPlanOptions(state.classrooms.classrooms),
       ),
       GetTeacherClassroomsFailure() => PlansClassroomsFailure(
@@ -91,7 +88,7 @@ class PlansClassroomsSource extends StatelessWidget {
 
   Widget _student(BuildContext context, GetMyEnrollmentsState state) {
     final uiState = switch (state) {
-      GetMyEnrollmentsSuccess() => PlansClassroomsSuccess(
+      GetMyEnrollmentsSuccess() => _success(
         mapStudentEnrollmentsToPlanOptions(state.enrollments),
       ),
       GetMyEnrollmentsFailure() => PlansClassroomsFailure(state.errorMessage),
@@ -106,7 +103,7 @@ class PlansClassroomsSource extends StatelessWidget {
 
   Widget _supervisor(BuildContext context, GetSupervisorClassroomsState state) {
     final uiState = switch (state) {
-      GetSupervisorClassroomsSuccess() => PlansClassroomsSuccess(
+      GetSupervisorClassroomsSuccess() => _success(
         mapSupervisorClassroomsToPlanOptions(state.response.data),
       ),
       GetSupervisorClassroomsFailure() => PlansClassroomsFailure(
@@ -123,7 +120,7 @@ class PlansClassroomsSource extends StatelessWidget {
 
   Widget _admin(BuildContext context, ClassroomsState state) {
     final uiState = switch (state) {
-      ClassroomsSuccess() => PlansClassroomsSuccess(
+      ClassroomsSuccess() => _success(
         mapAdminClassroomsToPlanOptions(state.response.data),
       ),
       ClassroomsFailure() => PlansClassroomsFailure(state.message),
@@ -135,4 +132,9 @@ class PlansClassroomsSource extends StatelessWidget {
       context.read<ClassroomsCubit>().getClassrooms,
     );
   }
+
+  PlansClassroomsUiState _success(List<PlanClassroomOption> classrooms) =>
+      classrooms.isEmpty
+      ? const PlansClassroomsEmpty()
+      : PlansClassroomsSuccess(classrooms);
 }

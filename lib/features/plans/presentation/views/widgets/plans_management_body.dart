@@ -1,10 +1,12 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_details_cubit/classroom_details_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_elapsed_weeks/get_elapsed_weeks_state.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_term_plans/get_term_plans_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_cubit.dart';
+import 'package:bnan_app/features/plans/presentation/manager/get_weekly_plans/get_weekly_plans_state.dart';
 import 'package:bnan_app/features/plans/presentation/mappers/elapsed_weeks_selection_mapper.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
@@ -43,48 +45,64 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
   String? _classroomsRole;
   String? _requestedElapsedClassroomId;
   List<PlanClassroomOption> _availableClassrooms = const [];
+  bool _classroomsResolved = false;
 
   @override
   Widget build(BuildContext context) {
     final elapsedState = context.watch<GetElapsedWeeksCubit>().state;
+    final weeklyState = context.watch<GetWeeklyPlansCubit>().state;
     return BlocListener<GetElapsedWeeksCubit, GetElapsedWeeksState>(
       listener: _onElapsedState,
-      child: ListView(
+      child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
-        children: [
-          if (widget.policy.showManagementActions) ...[
-            PlansHeaderActions(
-              policy: widget.policy,
-              onAdd: _showAddDialog,
-              onUpload: _showUploadDialog,
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (widget.policy.showClassroomFilter)
-            PlansClassroomWeekFilters(
-              policy: widget.policy,
-              selectedClassroom: selectedClassroom,
-              selectedWeek: selectedWeek,
-              weeksCount: weeksCount,
-              elapsedState: elapsedState,
-              onClassroomChanged: (value) => _onClassroomChanged(value),
-              onWeekChanged: _onWeekChanged,
-              onRetryElapsedWeeks: _retryElapsedWeeks,
-              onClassroomsChanged: _scheduleClassroomSync,
-            ),
-          const SizedBox(height: 16),
-          PlansWeeklyContent(
-            classroom: selectedClassroom,
-            week: selectedWeek,
-            showEmpty: widget.showEmpty,
-            waitingMessage:
-                selectedClassroom != null &&
-                    elapsedState is GetElapsedWeeksSuccess &&
-                    weeksCount == 0
-                ? S.of(context).noStudyWeeksAvailable
-                : null,
-          ),
-        ],
+        child: _classroomsResolved && _availableClassrooms.isEmpty
+            ? const NoDataWidget()
+            : Column(
+                children: [
+                  if (widget.policy.showManagementActions) ...[
+                    PlansHeaderActions(
+                      policy: widget.policy,
+                      onAdd: _showAddDialog,
+                      onUpload: _showUploadDialog,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (widget.policy.showClassroomFilter)
+                    PlansClassroomWeekFilters(
+                      policy: widget.policy,
+                      selectedClassroom: selectedClassroom,
+                      selectedWeek: selectedWeek,
+                      weeksCount: weeksCount,
+                      elapsedState: elapsedState,
+                      onClassroomChanged: _onClassroomChanged,
+                      onWeekChanged: _onWeekChanged,
+                      onRetryElapsedWeeks: _retryElapsedWeeks,
+                      onClassroomsChanged: _scheduleClassroomSync,
+                    ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child:
+                        elapsedState is GetElapsedWeeksSuccess &&
+                            weeksCount == 0
+                        ? NoDataWidget(
+                            title: S.of(context).noStudyWeeksAvailable,
+                          )
+                        : weeklyState is GetWeeklyPlansEmpty
+                        ? PlansWeeklyContent(
+                            classroom: selectedClassroom,
+                            week: selectedWeek,
+                            showEmpty: widget.showEmpty,
+                          )
+                        : SingleChildScrollView(
+                            child: PlansWeeklyContent(
+                              classroom: selectedClassroom,
+                              week: selectedWeek,
+                              showEmpty: widget.showEmpty,
+                            ),
+                          ),
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -218,6 +236,7 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
 
   void _scheduleClassroomSync(List<PlanClassroomOption> classrooms) {
     _availableClassrooms = List.unmodifiable(classrooms);
+    _classroomsResolved = true;
     final role = SessionManager.instance.userRole?.trim().toLowerCase();
     final signature = classrooms.map((item) => item.id).join('|');
     final sourceChanged = _classroomsRole != role;

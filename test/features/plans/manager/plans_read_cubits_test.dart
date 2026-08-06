@@ -30,7 +30,7 @@ void main() {
     first.complete(Left(Failure(message: 'stale')));
     await oldRequest;
 
-    expect(cubit.state, isA<GetWeeklyPlansSuccess>());
+    expect(cubit.state, isA<GetWeeklyPlansEmpty>());
     await cubit.close();
   });
 
@@ -49,7 +49,7 @@ void main() {
     await cubit.getPlansByWeek(classroomId: 'classroom', week: 2);
 
     expect(repo.weeklyCalls, 1);
-    expect(cubit.state, isA<GetWeeklyPlansSuccess>());
+    expect(cubit.state, isA<GetWeeklyPlansEmpty>());
     await cubit.close();
   });
 

@@ -27,7 +27,7 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   String? formClassroomId, formStudentId;
   int _requestId = 0;
   int _formRequestId = 0;
-  String _classroomsSignature = '';
+  String? _classroomsSignature;
   bool _isSaving = false;
 
   bool get canManage => role == 'teacher' || role == 'supervisor';
