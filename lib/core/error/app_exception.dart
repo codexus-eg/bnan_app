@@ -2,9 +2,15 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:dio/dio.dart';
 
 class AppException implements Exception {
-  const AppException(this.message);
+  const AppException(
+    this.message, {
+    this.responseReceived = false,
+    this.statusCode,
+  });
 
   final String message;
+  final bool responseReceived;
+  final int? statusCode;
 
   factory AppException.fromDio(DioException dioError) {
     switch (dioError.type) {
@@ -37,35 +43,37 @@ class AppException implements Exception {
   static AppException _handleBadResponse(DioException error) {
     final statusCode = error.response?.statusCode;
     final data = error.response?.data;
+    AppException confirmed(String message) =>
+        AppException(message, responseReceived: true, statusCode: statusCode);
 
     final backendMessage = _extractBackendMessage(data);
     if (backendMessage != null) {
-      return AppException(_safeBackendMessage(backendMessage));
+      return confirmed(_safeBackendMessage(backendMessage));
     }
 
     final validationMessage = _extractValidationMessage(data);
     if (validationMessage != null) {
-      return AppException(_safeBackendMessage(validationMessage));
+      return confirmed(_safeBackendMessage(validationMessage));
     }
 
     switch (statusCode) {
       case 400:
-        return AppException(S.current.errorBadRequest);
+        return confirmed(S.current.errorBadRequest);
       case 401:
-        return AppException(S.current.errorUnauthorized);
+        return confirmed(S.current.errorUnauthorized);
       case 403:
-        return AppException(S.current.errorForbidden);
+        return confirmed(S.current.errorForbidden);
       case 404:
-        return AppException(S.current.errorNotFound);
+        return confirmed(S.current.errorNotFound);
       case 422:
-        return AppException(S.current.errorValidation);
+        return confirmed(S.current.errorValidation);
       case 500:
       case 502:
       case 503:
       case 504:
-        return AppException(S.current.errorInternalServer);
+        return confirmed(S.current.errorInternalServer);
       default:
-        return AppException(
+        return confirmed(
           S.current.errorUnknownStatusCode(statusCode?.toString() ?? '??'),
         );
     }

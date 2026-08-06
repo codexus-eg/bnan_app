@@ -45,13 +45,16 @@ GoRouter buildRouter() {
 
       GoRoute(
         path: Routes.logIn,
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) => getIt<LoginCubit>(),
-            child: const LoginView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final email = state.extra is String ? state.extra as String : null;
+          return buildTransitionPages(
+            child: BlocProvider(
+              create: (_) => getIt<LoginCubit>()..prefillEmail(email),
+              child: const LoginView(),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
 
       GoRoute(
@@ -111,6 +114,7 @@ GoRouter buildRouter() {
               child: SubscriptionView(
                 curriculumId: curriculum.id,
                 curriculumName: curriculum.title,
+                registrationMode: curriculum.registrationMode,
               ),
             ),
             key: state.pageKey,
@@ -129,9 +133,11 @@ GoRouter buildRouter() {
                       getIt<RegisterCubit>()..setRegisterFlowArgs(args),
                 ),
                 BlocProvider(
-                  create: (_) =>
-                      getIt<GetGradesCubit>()
-                        ..getCurriculumGrades(curriculumId: args.curriculumId),
+                  create: (_) => getIt<GetGradesCubit>()
+                    ..getCurriculumGrades(
+                      curriculumId: args.curriculumId,
+                      isGulf: args.isGulf,
+                    ),
                 ),
                 BlocProvider(create: (_) => getIt<GetCurriculmSubjectsCubit>()),
               ],

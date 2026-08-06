@@ -15,14 +15,20 @@ class GradeModel {
 
   factory GradeModel.fromJson(Map<String, dynamic> json) {
     return GradeModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      isActive: json['isActive'] ?? false,
-      curriculum: json['curriculum'] == null
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      isActive: json['isActive'] == true,
+      curriculum: json['curriculum'] is! Map
           ? null
-          : GradeCurriculumModel.fromJson(json['curriculum']),
+          : GradeCurriculumModel.fromJson(
+              Map<String, dynamic>.from(json['curriculum']),
+            ),
       subjects: (json['subjects'] as List? ?? [])
-          .map((item) => GradeSubjectModel.fromJson(item))
+          .whereType<Map>()
+          .map(
+            (item) =>
+                GradeSubjectModel.fromJson(Map<String, dynamic>.from(item)),
+          )
           .toList(),
     );
   }
@@ -41,26 +47,23 @@ class GradeCurriculumModel {
 
   factory GradeCurriculumModel.fromJson(Map<String, dynamic> json) {
     return GradeCurriculumModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      icon: json['icon'] ?? '',
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      icon: (json['icon'] ?? '').toString(),
     );
   }
 }
 
 class GradeSubjectModel {
-  const GradeSubjectModel({
-    required this.id,
-    required this.name,
-  });
+  const GradeSubjectModel({required this.id, required this.name});
 
   final String id;
   final String name;
 
   factory GradeSubjectModel.fromJson(Map<String, dynamic> json) {
     return GradeSubjectModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
     );
   }
 }

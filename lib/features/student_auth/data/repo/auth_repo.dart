@@ -17,6 +17,10 @@ abstract class AuthRepo {
     required String email,
     required String password,
   });
+  Future<Either<Failure, AuthResponseModel>> loginStudentAfterPayment({
+    required String email,
+    required String password,
+  });
 
   Future<Either<Failure, SimpleResponseModel>> forgotPassword({
     required String email,
@@ -38,9 +42,15 @@ abstract class AuthRepo {
   Future<Either<Failure, GradesResponseModel>> getCurriculumGrades({
     required String curriculumId,
   });
+  Future<Either<Failure, GradesResponseModel>> getGulfCurriculumGrades({
+    required String curriculumId,
+  });
 
   Future<Either<Failure, SubjectsResponseModel>> getCurriculumSubjects({
     required String curriculumId,
+    required String gradeId,
+  });
+  Future<Either<Failure, SubjectsResponseModel>> getGulfGradeSubjects({
     required String gradeId,
   });
 }

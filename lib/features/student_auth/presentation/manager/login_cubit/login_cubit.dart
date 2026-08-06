@@ -15,6 +15,11 @@ class LoginCubit extends Cubit<LoginState> {
   final passwordController = TextEditingController();
   bool isPasswordVisible = true;
 
+  void prefillEmail(String? email) {
+    final value = email?.trim();
+    if (value != null && value.isNotEmpty) emailController.text = value;
+  }
+
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
     emit(LoginPasswordVisibilityChanged());

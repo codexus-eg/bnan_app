@@ -18,12 +18,14 @@ class SubscriptionPlanCard extends StatelessWidget {
     required this.curriculumId,
     required this.curriculumName,
     this.bottomWidget,
+    this.registrationMode,
   });
 
   final PackageCardModel plan;
   final String curriculumId;
   final String curriculumName;
   final Widget? bottomWidget;
+  final String? registrationMode;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -105,7 +107,11 @@ class SubscriptionPlanCard extends StatelessWidget {
                           curriculumName: curriculumName,
                           packageId: plan.id,
                           packageName: plan.title,
-                          packagePrice: plan.priceText,
+                          packagePrice: plan.price % 1 == 0
+                              ? plan.price.toInt().toString()
+                              : plan.price.toString(),
+                          packageCurrency: plan.currency,
+                          registrationMode: registrationMode,
                         ),
                       );
                     },

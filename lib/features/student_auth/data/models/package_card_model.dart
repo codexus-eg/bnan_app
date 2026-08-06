@@ -10,6 +10,8 @@ class PackageCardModel {
   final String priceText;
   final String saveText;
   final bool isPopular;
+  final num price;
+  final String currency;
 
   const PackageCardModel({
     required this.id,
@@ -19,6 +21,8 @@ class PackageCardModel {
     required this.priceText,
     required this.saveText,
     required this.isPopular,
+    required this.price,
+    required this.currency,
   });
 
   factory PackageCardModel.fromPackage({
@@ -37,20 +41,17 @@ class PackageCardModel {
       priceText: S.of(context).currentPrice(price.toInt().toString()),
       saveText: S.of(context).saveAmount(saveValue.toInt().toString()),
       isPopular: package.isPopular ?? false,
+      price: price,
+      currency: package.currency ?? '',
     );
   }
 
-  static String _durationText(
-    BuildContext context,
-    PackageModel package,
-  ) {
+  static String _durationText(BuildContext context, PackageModel package) {
     if (package.type == 'monthly') {
       return '${package.months ?? 0} شهر';
     }
 
-    return S.of(context).trainingHours(
-      (package.hours ?? 0).toString(),
-    );
+    return S.of(context).trainingHours((package.hours ?? 0).toString());
   }
 
   static List<PackageCardModel> placeholders(BuildContext context) {
@@ -64,6 +65,8 @@ class PackageCardModel {
         priceText: S.of(context).currentPrice('300'),
         saveText: S.of(context).saveAmount('80'),
         isPopular: false,
+        price: 0,
+        currency: '',
       ),
     );
   }

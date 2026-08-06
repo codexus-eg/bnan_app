@@ -5,12 +5,14 @@ class CurriculumCardModel {
   final String title;
   final String description;
   final String iconUrl;
+  final String? registrationMode;
 
   const CurriculumCardModel({
     required this.id,
     required this.title,
     required this.description,
     required this.iconUrl,
+    this.registrationMode,
   });
 
   factory CurriculumCardModel.fromCurriculum(CurriculumModel curriculum) {
@@ -18,7 +20,8 @@ class CurriculumCardModel {
       id: curriculum.id,
       title: curriculum.name,
       description: curriculum.description,
-      iconUrl:curriculum.icon,
+      iconUrl: curriculum.icon,
+      registrationMode: curriculum.registrationMode,
     );
   }
 
@@ -29,18 +32,21 @@ class CurriculumCardModel {
         title: 'المنهج الدراسي',
         description: 'وصف مختصر للمنهج الدراسي يظهر هنا',
         iconUrl: '',
+        registrationMode: null,
       ),
       CurriculumCardModel(
         id: '',
         title: 'المنهج الدراسي',
         description: 'وصف مختصر للمنهج الدراسي يظهر هنا',
         iconUrl: '',
+        registrationMode: null,
       ),
       CurriculumCardModel(
         id: '',
         title: 'المنهج الدراسي',
         description: 'وصف مختصر للمنهج الدراسي يظهر هنا',
         iconUrl: '',
+        registrationMode: null,
       ),
     ];
   }

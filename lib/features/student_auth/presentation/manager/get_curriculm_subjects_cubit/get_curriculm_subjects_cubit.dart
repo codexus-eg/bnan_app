@@ -10,13 +10,16 @@ class GetCurriculmSubjectsCubit extends Cubit<GetCurriculmSubjectsState> {
   Future<void> getCurriculumSubjects({
     required String curriculumId,
     required String gradeId,
+    bool isGulf = false,
   }) async {
     emit(GetSubjectsLoading());
 
-    final result = await authRepo.getCurriculumSubjects(
-      curriculumId: curriculumId,
-      gradeId: gradeId,
-    );
+    final result = isGulf
+        ? await authRepo.getGulfGradeSubjects(gradeId: gradeId)
+        : await authRepo.getCurriculumSubjects(
+            curriculumId: curriculumId,
+            gradeId: gradeId,
+          );
 
     result.fold(
       (failure) => emit(GetSubjectsFailure(errorMessage: failure.message)),

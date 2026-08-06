@@ -24,6 +24,11 @@ import 'package:bnan_app/features/packages_management/data/repo/packages_repo/pa
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
+import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
+import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
+import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo_impl.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
@@ -45,6 +50,13 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<PackagesRepo>(
     () => PackagesRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<TamaraPaymentRepo>(
+    () => TamaraPaymentRepoImpl(getIt<Dio>()),
+  );
+  getIt.registerLazySingleton<GulfParentAuthRepo>(
+    () => GulfParentAuthRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<PaymentDraftStore>(PaymentDraftStore.new);
 
   getIt.registerLazySingleton<PackageActionsRepo>(
     () => PackageActionsRepoImpl(getIt<ApiConsumer>()),
@@ -175,7 +187,16 @@ void setupServiceLocator() {
 
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<AuthRepo>()));
 
-  getIt.registerFactory<RegisterCubit>(() => RegisterCubit(getIt<AuthRepo>()));
+  getIt.registerFactory<RegisterCubit>(
+    () => RegisterCubit(getIt<AuthRepo>(), getIt<GulfParentAuthRepo>()),
+  );
+  getIt.registerLazySingleton<TamaraPaymentCubit>(
+    () => TamaraPaymentCubit(
+      repo: getIt<TamaraPaymentRepo>(),
+      authRepo: getIt<AuthRepo>(),
+      store: getIt<PaymentDraftStore>(),
+    ),
+  );
 
   getIt.registerFactory<ParentRegisterCubit>(
     () => ParentRegisterCubit(getIt<ParentAuthRepo>()),

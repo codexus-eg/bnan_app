@@ -15,11 +15,13 @@ class SubscriptionGrid extends StatelessWidget {
     required this.curriculumName,
     this.bottomWidget,
     this.isSliver = true,
+    this.registrationMode,
   });
 
   final String curriculumId;
   final String curriculumName;
   final bool isSliver;
+  final String? registrationMode;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -67,6 +69,7 @@ class SubscriptionGrid extends StatelessWidget {
               packages: packages,
               curriculumId: curriculumId,
               curriculumName: curriculumName,
+              registrationMode: registrationMode,
               bottomWidget: bottomWidget,
             ),
           ),
@@ -90,12 +93,14 @@ class PackagesGrid extends StatelessWidget {
     required this.curriculumId,
     required this.curriculumName,
     this.bottomWidget,
+    this.registrationMode,
   });
 
   final List<PackageCardModel> plans;
   final List<PackageModel> packages;
   final String curriculumId;
   final String curriculumName;
+  final String? registrationMode;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -137,6 +142,7 @@ class PackagesGrid extends StatelessWidget {
       plan: plan,
       curriculumId: curriculumId,
       curriculumName: curriculumName,
+      registrationMode: registrationMode,
       bottomWidget: index < packages.length
           ? bottomWidget?.call(plan, packages[index])
           : null,
