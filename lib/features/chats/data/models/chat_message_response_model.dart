@@ -9,15 +9,11 @@ class ChatMessageResponseModel {
     required this.message,
   });
 
-  factory ChatMessageResponseModel.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  factory ChatMessageResponseModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageResponseModel(
       success: json['success'] == true,
       message: ChatMessageModel.fromJson(
-        Map<String, dynamic>.from(
-          json['data'] as Map? ?? {},
-        ),
+        Map<String, dynamic>.from(json['data'] as Map? ?? {}),
       ),
     );
   }

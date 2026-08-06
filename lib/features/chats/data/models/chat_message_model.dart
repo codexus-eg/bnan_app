@@ -57,14 +57,8 @@ class ChatMessageModel {
       id: json['id']?.toString() ?? '',
       roomId: json['room']?.toString() ?? '',
       sender: senderJson is Map
-          ? ChatSenderModel.fromJson(
-              Map<String, dynamic>.from(senderJson),
-            )
-          : const ChatSenderModel(
-              id: '',
-              fullName: '',
-              role: '',
-            ),
+          ? ChatSenderModel.fromJson(Map<String, dynamic>.from(senderJson))
+          : const ChatSenderModel(id: '', fullName: '', role: ''),
       text: json['text']?.toString() ?? '',
       attachments: attachmentsJson
           .whereType<Map>()
@@ -76,15 +70,9 @@ class ChatMessageModel {
           .toList(),
       messageType: json['messageType']?.toString() ?? 'text',
       deletedForEveryone: json['deletedForEveryone'] == true,
-      createdAt: DateTime.tryParse(
-        json['createdAt']?.toString() ?? '',
-      ),
-      updatedAt: DateTime.tryParse(
-        json['updatedAt']?.toString() ?? '',
-      ),
-      editedAt: DateTime.tryParse(
-        json['editedAt']?.toString() ?? '',
-      ),
+      createdAt: DateTime.tryParse(json['createdAt']?.toString() ?? ''),
+      updatedAt: DateTime.tryParse(json['updatedAt']?.toString() ?? ''),
+      editedAt: DateTime.tryParse(json['editedAt']?.toString() ?? ''),
     );
   }
 }

@@ -20,13 +20,9 @@ class ChatFormatters {
 
     final localDateTime = dateTime.toLocal();
 
-    final hour = localDateTime.hour
-        .toString()
-        .padLeft(2, '0');
+    final hour = localDateTime.hour.toString().padLeft(2, '0');
 
-    final minute = localDateTime.minute
-        .toString()
-        .padLeft(2, '0');
+    final minute = localDateTime.minute.toString().padLeft(2, '0');
 
     return '$hour:$minute';
   }

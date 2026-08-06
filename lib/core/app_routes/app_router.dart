@@ -5,6 +5,11 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/views/classroom_documents_view.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
@@ -183,7 +188,11 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.chat,
         pageBuilder: (context, state) {
-          final roomId = state.extra as String;
+          final extra = state.extra;
+          final args = extra is ChatRouteArgs
+              ? extra
+              : ChatRouteArgs(roomId: extra as String);
+          final roomId = args.roomId;
 
           return buildTransitionPages(
             key: state.pageKey,
@@ -196,7 +205,32 @@ GoRouter buildRouter() {
                 ),
                 BlocProvider(create: (_) => getIt<SendMessageCubit>()),
               ],
-              child: ChatView(roomId: roomId),
+              child: ChatView(
+                roomId: roomId,
+                roomType: args.roomType,
+                classroomId: args.classroomId,
+                classroomName: args.classroomName,
+              ),
+            ),
+          );
+        },
+      ),
+
+      GoRoute(
+        path: Routes.classroomDocuments,
+        pageBuilder: (context, state) {
+          final args = state.extra as ClassroomDocumentsRouteArgs;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => getIt<ClassroomRecordingsCubit>()),
+                BlocProvider(create: (_) => getIt<ClassroomSummariesCubit>()),
+              ],
+              child: ClassroomDocumentsView(
+                classroomId: args.classroomId,
+                classroomName: args.classroomName,
+              ),
             ),
           );
         },

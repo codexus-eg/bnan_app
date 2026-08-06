@@ -18,24 +18,15 @@ class ChatAttachmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (attachment.isImage) {
-      return ChatImageAttachment(
-        attachment: attachment,
-        isMe: isMe,
-      );
+      return ChatImageAttachment(attachment: attachment, isMe: isMe);
     }
 
     if (attachment.isAudio) {
-      return ChatAudioAttachment(
-        attachment: attachment,
-        isMe: isMe,
-      );
+      return ChatAudioAttachment(attachment: attachment, isMe: isMe);
     }
 
     if (attachment.isVideo) {
-      return ChatVideoAttachment(
-        attachment: attachment,
-        isMe: isMe,
-      );
+      return ChatVideoAttachment(attachment: attachment, isMe: isMe);
     }
 
     return ChatFileAttachment(

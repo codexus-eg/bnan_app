@@ -20,14 +20,12 @@ class ChatCircleButton extends StatelessWidget {
       onTap: onTap,
       child: CircleAvatar(
         radius: 20,
-        backgroundColor: isDark ? ColorManager.mainColor14 : ColorManager.greyD9D9,
+        backgroundColor: isDark
+            ? ColorManager.mainColor14
+            : ColorManager.greyD9D9,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SvgPicture.asset(
-            icon,
-            height: 24,
-            width: 24,
-          ),
+          child: SvgPicture.asset(icon, height: 24, width: 24),
         ),
       ),
     );

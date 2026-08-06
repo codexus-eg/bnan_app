@@ -1053,5 +1053,17 @@
     "noSubjectEvaluationRecordedThisWeek": "لم يتم تسجيل تقييم لهذه المادة في هذا الأسبوع",
     "noValidSubjectForClassroom": "لا توجد مادة صالحة مرتبطة بهذا الفصل",
     "evaluationStatusUnavailable": "حالة التقييم غير متاحة",
-    "noSubjectsAvailableReadOnly": "لا توجد مواد متاحة"
+    "noSubjectsAvailableReadOnly": "لا توجد مواد متاحة",
+    "allDocuments": "جميع المستندات",
+    "recordings": "التسجيلات",
+    "reports": "التقارير",
+    "sessionRecording": "تسجيل الحصة",
+    "sessionSummary": "ملخص الحصة",
+    "nextSteps": "الخطوات التالية",
+    "openRecording": "فتح التسجيل",
+    "openDocument": "فتح المستند",
+    "noRecordingsAvailable": "لا توجد تسجيلات متاحة حتى الآن",
+    "noReportsAvailable": "لا توجد تقارير متاحة حتى الآن",
+    "noSummaryContent": "لا يوجد محتوى متاح لهذا الملخص",
+    "unableToOpenLink": "تعذر فتح الرابط"
 }

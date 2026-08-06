@@ -21,9 +21,7 @@ class ChatMessageField extends StatelessWidget {
       height: 38,
       alignment: Alignment.centerRight,
       decoration: BoxDecoration(
-        color: ColorManager.blueD0DE.withAlpha(
-          (255 * .35).round(),
-        ),
+        color: ColorManager.blueD0DE.withAlpha((255 * .35).round()),
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
@@ -42,9 +40,7 @@ class ChatMessageField extends StatelessWidget {
           border: InputBorder.none,
           hintStyle: StylesManager.styleRegular12(
             context,
-          ).copyWith(
-            color: ColorManager.mainColor14,
-          ),
+          ).copyWith(color: ColorManager.mainColor14),
         ),
       ),
     );

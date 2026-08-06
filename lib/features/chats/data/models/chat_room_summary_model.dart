@@ -3,6 +3,7 @@ class ChatRoomSummaryModel {
   final String type;
   final String displayName;
   final String subtitle;
+  final String? classroomId;
   final String? lastMessage;
   final DateTime? lastMessageAt;
 
@@ -11,20 +12,30 @@ class ChatRoomSummaryModel {
     required this.type,
     required this.displayName,
     required this.subtitle,
+    this.classroomId,
     this.lastMessage,
     this.lastMessageAt,
   });
 
   factory ChatRoomSummaryModel.fromJson(Map<String, dynamic> json) {
+    String? id(Object? value) {
+      if (value is! String || value.trim().isEmpty) return null;
+      return value.trim();
+    }
+
+    final classroom = json['classroom'];
+    final directId = id(json['classroomId']);
+    final legacyId = classroom is Map
+        ? id(classroom['id']) ?? id(classroom['_id'])
+        : id(classroom);
     return ChatRoomSummaryModel(
       id: json['id']?.toString() ?? '',
       type: json['type']?.toString() ?? '',
       displayName: json['displayName']?.toString() ?? '',
       subtitle: json['subtitle']?.toString() ?? '',
+      classroomId: directId ?? legacyId,
       lastMessage: json['lastMessage']?.toString(),
-      lastMessageAt: DateTime.tryParse(
-        json['lastMessageAt']?.toString() ?? '',
-      ),
+      lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
     );
   }
 
@@ -50,6 +61,7 @@ class ChatRoomSummaryModel {
     String? type,
     String? displayName,
     String? subtitle,
+    String? classroomId,
     String? lastMessage,
     DateTime? lastMessageAt,
   }) {
@@ -58,6 +70,7 @@ class ChatRoomSummaryModel {
       type: type ?? this.type,
       displayName: displayName ?? this.displayName,
       subtitle: subtitle ?? this.subtitle,
+      classroomId: classroomId ?? this.classroomId,
       lastMessage: lastMessage ?? this.lastMessage,
       lastMessageAt: lastMessageAt ?? this.lastMessageAt,
     );

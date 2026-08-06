@@ -15,7 +15,12 @@ class ChatMessagesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: const EdgeInsetsDirectional.only(top:16,start:16,end:16,bottom : 50),
+      padding: const EdgeInsetsDirectional.only(
+        top: 16,
+        start: 16,
+        end: 16,
+        bottom: 50,
+      ),
       itemCount: messages.length,
       separatorBuilder: (_, __) => const SizedBox(height: 16),
       itemBuilder: (context, index) {

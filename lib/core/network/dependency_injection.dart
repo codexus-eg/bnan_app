@@ -4,6 +4,10 @@ import 'package:bnan_app/features/certificates_management/presentation/manager/g
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_student_subjects_cubit/get_student_subjects_cubit.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
+import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo.dart';
+import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo_impl.dart';
+import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
@@ -97,6 +101,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<ChatRepo>(
     () => ChatRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<ClassroomDocumentsRepo>(
+    () => ClassroomDocumentsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<CertificatesManagementRepo>(
     () => CertificatesManagementRepoImpl(getIt<ApiConsumer>()),
@@ -368,6 +375,12 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<SocketService>(() => SocketService());
   getIt.registerFactory<SendMessageCubit>(
     () => SendMessageCubit(getIt<ChatRepo>()),
+  );
+  getIt.registerFactory<ClassroomRecordingsCubit>(
+    () => ClassroomRecordingsCubit(getIt<ClassroomDocumentsRepo>()),
+  );
+  getIt.registerFactory<ClassroomSummariesCubit>(
+    () => ClassroomSummariesCubit(getIt<ClassroomDocumentsRepo>()),
   );
   getIt.registerFactory<GetClassroomStudentsCubit>(
     () => GetClassroomStudentsCubit(getIt()),

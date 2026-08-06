@@ -48,9 +48,7 @@ class ChatFileAttachment extends StatelessWidget {
             const SizedBox(width: 8),
             Icon(
               Icons.open_in_new,
-              color: isMe
-                  ? ColorManager.white
-                  : ColorManager.mainColor14,
+              color: isMe ? ColorManager.white : ColorManager.mainColor14,
             ),
           ],
         ),
@@ -59,16 +57,10 @@ class ChatFileAttachment extends StatelessWidget {
   }
 
   Future<void> _openFile(BuildContext context) async {
-    final opened = await FileUrlLauncher.open(
-      attachment.fileUrl,
-    );
+    final opened = await FileUrlLauncher.open(attachment.fileUrl);
 
     if (!opened && context.mounted) {
-      showCustomSnackBar(
-        context,
-        S.of(context).unableToOpenFile,
-        false,
-      );
+      showCustomSnackBar(context, S.of(context).unableToOpenFile, false);
     }
   }
 
@@ -79,9 +71,7 @@ class ChatFileAttachment extends StatelessWidget {
           : ColorManager.mainColor14.withAlpha(20),
       child: Icon(
         icon,
-        color: isMe
-            ? ColorManager.white
-            : ColorManager.mainColor14,
+        color: isMe ? ColorManager.white : ColorManager.mainColor14,
       ),
     );
   }
@@ -94,22 +84,16 @@ class ChatFileAttachment extends StatelessWidget {
           title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: StylesManager.styleRegular14(context).copyWith(
-            color: isMe
-                ? ColorManager.white
-                : ColorManager.black,
-          ),
+          style: StylesManager.styleRegular14(
+            context,
+          ).copyWith(color: isMe ? ColorManager.white : ColorManager.black),
         ),
         if (attachment.size > 0)
           Text(
-            ChatFormatters.formatFileSize(
-              attachment.size,
-            ),
+            ChatFormatters.formatFileSize(attachment.size),
             style: StylesManager.styleRegular14(context).copyWith(
               fontSize: 11,
-              color: isMe
-                  ? ColorManager.grey9D9D
-                  : ColorManager.grey7A7C,
+              color: isMe ? ColorManager.grey9D9D : ColorManager.grey7A7C,
             ),
           ),
       ],

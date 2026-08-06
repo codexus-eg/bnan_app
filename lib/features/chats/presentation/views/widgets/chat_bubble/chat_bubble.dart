@@ -36,10 +36,7 @@ class ChatBubble extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.attachments.isNotEmpty)
-              ChatAttachmentsList(
-                attachments: message.attachments,
-                isMe: isMe,
-              ),
+              ChatAttachmentsList(attachments: message.attachments, isMe: isMe),
             if (message.attachments.isNotEmpty && hasText)
               const SizedBox(height: 8),
             if (hasText) _buildMessageText(context),
@@ -68,9 +65,9 @@ class ChatBubble extends StatelessWidget {
   Widget _buildMessageText(BuildContext context) {
     return Text(
       message.text,
-      style: StylesManager.styleRegular14(context).copyWith(
-        color: isMe ? ColorManager.white : ColorManager.black,
-      ),
+      style: StylesManager.styleRegular14(
+        context,
+      ).copyWith(color: isMe ? ColorManager.white : ColorManager.black),
     );
   }
 

@@ -19,9 +19,9 @@ extension ChatInputVoiceStop on _ChatInputBarState {
       clearTextAfterSuccess = false;
 
       await context.read<SendMessageCubit>().sendVoice(
-            roomId: widget.roomId,
-            voicePath: voicePath,
-          );
+        roomId: widget.roomId,
+        voicePath: voicePath,
+      );
     } catch (_) {
       recordingTimer?.cancel();
 

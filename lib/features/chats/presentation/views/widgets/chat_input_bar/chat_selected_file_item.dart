@@ -23,9 +23,7 @@ class _ChatSelectedFileItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: ColorManager.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: ColorManager.black.withAlpha(30),
-            ),
+            border: Border.all(color: ColorManager.black.withAlpha(30)),
           ),
           child: _buildContent(),
         ),
@@ -37,11 +35,7 @@ class _ChatSelectedFileItem extends StatelessWidget {
             child: const CircleAvatar(
               radius: 11,
               backgroundColor: Colors.red,
-              child: Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 15,
-              ),
+              child: Icon(Icons.close, color: Colors.white, size: 15),
             ),
           ),
         ),

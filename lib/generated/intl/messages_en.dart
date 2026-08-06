@@ -168,6 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "all": MessageLookupByLibrary.simpleMessage("All"),
     "allClassrooms": MessageLookupByLibrary.simpleMessage("All Classrooms"),
     "allCurriculms": MessageLookupByLibrary.simpleMessage("All Curriculms"),
+    "allDocuments": MessageLookupByLibrary.simpleMessage("All Documents"),
     "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
     "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
@@ -861,6 +862,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
     "nextLevelPointsText": m16,
+    "nextSteps": MessageLookupByLibrary.simpleMessage("Next Steps"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "noActiveAccountsFound": MessageLookupByLibrary.simpleMessage(
       "No active accounts found",
@@ -951,6 +953,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
       "No plans for this week",
     ),
+    "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
+      "No recordings are available yet",
+    ),
+    "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
+      "No reports are available yet",
+    ),
     "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
       "No schedule entries have been added for this classroom yet",
     ),
@@ -986,6 +994,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "No subjects are available for this student",
     ),
     "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
+    "noSummaryContent": MessageLookupByLibrary.simpleMessage(
+      "No summary content is available",
+    ),
     "noSupervisorsFound": MessageLookupByLibrary.simpleMessage(
       "No supervisors found",
     ),
@@ -1036,6 +1047,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Success starts here",
     ),
     "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
+    "openDocument": MessageLookupByLibrary.simpleMessage("Open Document"),
+    "openRecording": MessageLookupByLibrary.simpleMessage("Open Recording"),
     "openSessionLink": MessageLookupByLibrary.simpleMessage("Open lesson link"),
     "optional": MessageLookupByLibrary.simpleMessage("Optional"),
     "other": MessageLookupByLibrary.simpleMessage("Other"),
@@ -1257,6 +1270,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyGroupSubtitle": MessageLookupByLibrary.simpleMessage(
       "Math - Ready group",
     ),
+    "recordings": MessageLookupByLibrary.simpleMessage("Recordings"),
     "registerAsParent": MessageLookupByLibrary.simpleMessage(
       "Register as Parent",
     ),
@@ -1287,6 +1301,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "remainingDays": m21,
     "remainingHours": m22,
     "remainingSessions": MessageLookupByLibrary.simpleMessage("Remaining"),
+    "reports": MessageLookupByLibrary.simpleMessage("Reports"),
     "requestAccepted": MessageLookupByLibrary.simpleMessage(
       "Your request has been accepted!",
     ),
@@ -1426,6 +1441,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendResetLink": MessageLookupByLibrary.simpleMessage("Send reset Code"),
     "sending": MessageLookupByLibrary.simpleMessage("Sending..."),
     "services": MessageLookupByLibrary.simpleMessage("Services"),
+    "sessionRecording": MessageLookupByLibrary.simpleMessage(
+      "Session Recording",
+    ),
     "sessionStartUnauthorized": MessageLookupByLibrary.simpleMessage(
       "You are not authorized to start this lesson",
     ),
@@ -1437,6 +1455,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sessionSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
       "Subject data is unavailable",
     ),
+    "sessionSummary": MessageLookupByLibrary.simpleMessage("Session Summary"),
     "sessions": MessageLookupByLibrary.simpleMessage("Sessions"),
     "sessionsThisMonth": MessageLookupByLibrary.simpleMessage(
       "Sessions This Month",
@@ -1662,6 +1681,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "unableToOpenFile": MessageLookupByLibrary.simpleMessage(
       "Unable to Open the file",
+    ),
+    "unableToOpenLink": MessageLookupByLibrary.simpleMessage(
+      "Unable to open link",
     ),
     "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
       "Unable to open payment receipt",

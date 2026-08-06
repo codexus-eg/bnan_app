@@ -20,9 +20,8 @@ class ChatRoomsResponseModel {
       rooms: data
           .whereType<Map>()
           .map(
-            (room) => ChatRoomSummaryModel.fromJson(
-              Map<String, dynamic>.from(room),
-            ),
+            (room) =>
+                ChatRoomSummaryModel.fromJson(Map<String, dynamic>.from(room)),
           )
           .toList(),
     );

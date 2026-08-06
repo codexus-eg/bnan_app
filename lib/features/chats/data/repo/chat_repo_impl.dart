@@ -23,23 +23,15 @@ class ChatRepoImpl implements ChatRepo {
     try {
       final response = await apiConsumer.post(
         EndPoints.createSupportRoom,
-        data: {
-          'userId': userId,
-        },
+        data: {'userId': userId},
         isProtected: true,
       );
 
-      return Right(
-        ChatRoomResponseModel.fromJson(response),
-      );
+      return Right(ChatRoomResponseModel.fromJson(response));
     } on AppException catch (error) {
-      return Left(
-        Failure(message: error.message),
-      );
+      return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(
-        Failure(message: S.current.unexpectedError),
-      );
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -51,17 +43,11 @@ class ChatRepoImpl implements ChatRepo {
         isProtected: true,
       );
 
-      return Right(
-        ChatRoomsResponseModel.fromJson(response),
-      );
+      return Right(ChatRoomsResponseModel.fromJson(response));
     } on AppException catch (error) {
-      return Left(
-        Failure(message: error.message),
-      );
+      return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(
-        Failure(message: S.current.unexpectedError),
-      );
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -75,17 +61,11 @@ class ChatRepoImpl implements ChatRepo {
         isProtected: true,
       );
 
-      return Right(
-        ChatRoomResponseModel.fromJson(response),
-      );
+      return Right(ChatRoomResponseModel.fromJson(response));
     } on AppException catch (error) {
-      return Left(
-        Failure(message: error.message),
-      );
+      return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(
-        Failure(message: S.current.unexpectedError),
-      );
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -99,67 +79,50 @@ class ChatRepoImpl implements ChatRepo {
         isProtected: true,
       );
 
-      return Right(
-        ChatMessagesResponseModel.fromJson(response),
-      );
+      return Right(ChatMessagesResponseModel.fromJson(response));
     } on AppException catch (error) {
-      return Left(
-        Failure(message: error.message),
-      );
+      return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(
-        Failure(message: S.current.unexpectedError),
-      );
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
- @override
-Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
-  required String roomId,
-  String? text,
-  List<String>? attachmentPaths,
-}) async {
-  try {
-    final trimmedText = text?.trim();
+  @override
+  Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
+    required String roomId,
+    String? text,
+    List<String>? attachmentPaths,
+  }) async {
+    try {
+      final trimmedText = text?.trim();
 
-    final attachments = <MultipartFile>[];
+      final attachments = <MultipartFile>[];
 
-    for (final path in attachmentPaths ?? <String>[]) {
-      attachments.add(
-        await MultipartFile.fromFile(
-          path,
-          filename: path.split('/').last,
-        ),
+      for (final path in attachmentPaths ?? <String>[]) {
+        attachments.add(
+          await MultipartFile.fromFile(path, filename: path.split('/').last),
+        );
+      }
+
+      final formData = FormData.fromMap({
+        'roomId': roomId,
+        if (trimmedText != null && trimmedText.isNotEmpty) 'text': trimmedText,
+        if (attachments.isNotEmpty) 'attachments': attachments,
+      });
+
+      final response = await apiConsumer.post(
+        EndPoints.sendMessage,
+        data: formData,
+        isProtected: true,
       );
+
+      return Right(ChatMessageResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
     }
-
-    final formData = FormData.fromMap({
-      'roomId': roomId,
-      if (trimmedText != null && trimmedText.isNotEmpty)
-        'text': trimmedText,
-      if (attachments.isNotEmpty)
-        'attachments': attachments,
-    });
-
-    final response = await apiConsumer.post(
-      EndPoints.sendMessage,
-      data: formData,
-      isProtected: true,
-    );
-
-    return Right(
-      ChatMessageResponseModel.fromJson(response),
-    );
-  } on AppException catch (error) {
-    return Left(
-      Failure(message: error.message),
-    );
-  } catch (_) {
-    return Left(
-      Failure(message: S.current.unexpectedError),
-    );
   }
-}
 
   @override
   Future<Either<Failure, ChatMessageResponseModel>> editMessage({
@@ -169,23 +132,15 @@ Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
     try {
       final response = await apiConsumer.patch(
         EndPoints.editMessage(messageId),
-        data: {
-          'text': text.trim(),
-        },
+        data: {'text': text.trim()},
         isProtected: true,
       );
 
-      return Right(
-        ChatMessageResponseModel.fromJson(response),
-      );
+      return Right(ChatMessageResponseModel.fromJson(response));
     } on AppException catch (error) {
-      return Left(
-        Failure(message: error.message),
-      );
+      return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(
-        Failure(message: S.current.unexpectedError),
-      );
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 
@@ -201,13 +156,9 @@ Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
 
       return const Right(null);
     } on AppException catch (error) {
-      return Left(
-        Failure(message: error.message),
-      );
+      return Left(Failure(message: error.message));
     } catch (_) {
-      return Left(
-        Failure(message: S.current.unexpectedError),
-      );
+      return Left(Failure(message: S.current.unexpectedError));
     }
   }
 }

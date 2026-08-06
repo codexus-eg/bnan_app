@@ -7,17 +7,13 @@ final class GetRoomMessagesInitial extends GetRoomMessagesState {}
 final class GetRoomMessagesLoading extends GetRoomMessagesState {}
 
 final class GetRoomMessagesSuccess extends GetRoomMessagesState {
-  GetRoomMessagesSuccess({
-    required this.messages,
-  });
+  GetRoomMessagesSuccess({required this.messages});
 
   final List<ChatMessageModel> messages;
 }
 
 final class GetRoomMessagesFailure extends GetRoomMessagesState {
-  GetRoomMessagesFailure({
-    required this.errorMessage,
-  });
+  GetRoomMessagesFailure({required this.errorMessage});
 
   final String errorMessage;
 }

@@ -7663,6 +7663,111 @@ class S {
       args: [],
     );
   }
+
+  /// `All Documents`
+  String get allDocuments {
+    return Intl.message(
+      'All Documents',
+      name: 'allDocuments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recordings`
+  String get recordings {
+    return Intl.message('Recordings', name: 'recordings', desc: '', args: []);
+  }
+
+  /// `Reports`
+  String get reports {
+    return Intl.message('Reports', name: 'reports', desc: '', args: []);
+  }
+
+  /// `Session Recording`
+  String get sessionRecording {
+    return Intl.message(
+      'Session Recording',
+      name: 'sessionRecording',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session Summary`
+  String get sessionSummary {
+    return Intl.message(
+      'Session Summary',
+      name: 'sessionSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next Steps`
+  String get nextSteps {
+    return Intl.message('Next Steps', name: 'nextSteps', desc: '', args: []);
+  }
+
+  /// `Open Recording`
+  String get openRecording {
+    return Intl.message(
+      'Open Recording',
+      name: 'openRecording',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open Document`
+  String get openDocument {
+    return Intl.message(
+      'Open Document',
+      name: 'openDocument',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No recordings are available yet`
+  String get noRecordingsAvailable {
+    return Intl.message(
+      'No recordings are available yet',
+      name: 'noRecordingsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No reports are available yet`
+  String get noReportsAvailable {
+    return Intl.message(
+      'No reports are available yet',
+      name: 'noReportsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No summary content is available`
+  String get noSummaryContent {
+    return Intl.message(
+      'No summary content is available',
+      name: 'noSummaryContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open link`
+  String get unableToOpenLink {
+    return Intl.message(
+      'Unable to open link',
+      name: 'unableToOpenLink',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

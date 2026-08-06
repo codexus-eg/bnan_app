@@ -2,8 +2,7 @@ part of 'chat_input_bar.dart';
 
 extension ChatInputHelpers on _ChatInputBarState {
   bool isSendingMessage() {
-    return context.read<SendMessageCubit>().state
-        is SendMessageLoading;
+    return context.read<SendMessageCubit>().state is SendMessageLoading;
   }
 
   void removeSelectedFile(int index) {
@@ -19,11 +18,7 @@ extension ChatInputHelpers on _ChatInputBarState {
   void showErrorMessage(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
-      );
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   bool isImageFile(PlatformFile file) {

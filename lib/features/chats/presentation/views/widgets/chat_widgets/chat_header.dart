@@ -1,11 +1,20 @@
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
 import 'package:flutter/material.dart';
 
 class ChatHeader extends StatelessWidget {
-  const ChatHeader({super.key, required this.chatTitle});
+  const ChatHeader({
+    super.key,
+    required this.chatTitle,
+    this.roomType,
+    this.classroomId,
+  });
   final String chatTitle;
+  final String? roomType;
+  final String? classroomId;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +46,27 @@ class ChatHeader extends StatelessWidget {
                 color: ColorManager.white,
               ),
             ),
-             UserInfo(chatTitle: chatTitle),
+            Expanded(child: UserInfo(chatTitle: chatTitle)),
+            if (roomType == 'classroom' &&
+                classroomId?.trim().isNotEmpty == true)
+              IconButton(
+                key: const Key('classroomDocumentsButton'),
+                onPressed: () => MyNavigator.goTo(
+                  context,
+                  Routes.classroomDocuments,
+                  extra: ClassroomDocumentsRouteArgs(
+                    classroomId: classroomId!.trim(),
+                    classroomName: chatTitle,
+                  ),
+                ),
+                icon: const Icon(
+                  Icons.folder_copy_outlined,
+                  color: ColorManager.white,
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 }
-

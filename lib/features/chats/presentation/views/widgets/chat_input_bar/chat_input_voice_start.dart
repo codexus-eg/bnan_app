@@ -18,9 +18,7 @@ extension ChatInputVoiceStart on _ChatInputBarState {
       if (!mounted) return;
 
       if (!hasPermission) {
-        showErrorMessage(
-          'يجب السماح باستخدام الميكروفون لتسجيل رسالة صوتية',
-        );
+        showErrorMessage('يجب السماح باستخدام الميكروفون لتسجيل رسالة صوتية');
         return;
       }
 
@@ -64,15 +62,12 @@ extension ChatInputVoiceStart on _ChatInputBarState {
   void startRecordingTimer() {
     recordingTimer?.cancel();
 
-    recordingTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) {
-        if (mounted) {
-          setState(() {
-            recordingDuration += const Duration(seconds: 1);
-          });
-        }
-      },
-    );
+    recordingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() {
+          recordingDuration += const Duration(seconds: 1);
+        });
+      }
+    });
   }
 }

@@ -1054,5 +1054,17 @@
     "noSubjectEvaluationRecordedThisWeek": "No evaluation was recorded for this subject this week",
     "noValidSubjectForClassroom": "No valid subject is linked to this classroom",
     "evaluationStatusUnavailable": "Evaluation status is unavailable",
-    "noSubjectsAvailableReadOnly": "No subjects are available"
+    "noSubjectsAvailableReadOnly": "No subjects are available",
+    "allDocuments": "All Documents",
+    "recordings": "Recordings",
+    "reports": "Reports",
+    "sessionRecording": "Session Recording",
+    "sessionSummary": "Session Summary",
+    "nextSteps": "Next Steps",
+    "openRecording": "Open Recording",
+    "openDocument": "Open Document",
+    "noRecordingsAvailable": "No recordings are available yet",
+    "noReportsAvailable": "No reports are available yet",
+    "noSummaryContent": "No summary content is available",
+    "unableToOpenLink": "Unable to open link"
 }

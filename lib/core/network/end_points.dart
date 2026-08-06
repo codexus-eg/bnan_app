@@ -263,6 +263,14 @@ abstract class EndPoints {
     return '$classrooms/$classroomId/sessions';
   }
 
+  static String classroomRecordings(String classroomId) {
+    return '$classrooms/$classroomId/recordings';
+  }
+
+  static String classroomSummaries(String classroomId) {
+    return '$classrooms/$classroomId/summaries';
+  }
+
   static String startClassroomSession(String classroomId) {
     return '${classroomSessions(classroomId)}/start';
   }

@@ -9,10 +9,7 @@ class GroupsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        headerText: S.of(context).groups,
-        iconNeeded: true,
-      ),
+      appBar: CustomAppbar(headerText: S.of(context).groups, iconNeeded: true),
       body: GroupsBody(),
     );
   }
