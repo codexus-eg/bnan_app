@@ -7,9 +7,16 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationRequestCard extends StatelessWidget {
-  const RegistrationRequestCard({super.key, required this.request});
+  const RegistrationRequestCard({
+    super.key,
+    required this.request,
+    required this.onAccept,
+    this.isAccepting = false,
+  });
 
   final RegistrationRequestModel request;
+  final Future<void> Function() onAccept;
+  final bool isAccepting;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +27,14 @@ class RegistrationRequestCard extends StatelessWidget {
           const SizedBox(height: 16),
           CustomAppButton(
             text: S.of(context).acceptRequest,
-            onPressed: () =>
-                TeacherRegistrationRequestDialogs.showAcceptRequest(
-                  context,
-                  studentName: request.studentName,
-                  onAccept: () {},
-                ),
+            isLoading: isAccepting,
+            onPressed: isAccepting
+                ? null
+                : () => TeacherRegistrationRequestDialogs.showAcceptRequest(
+                    context,
+                    studentName: request.studentName,
+                    onAccept: onAccept,
+                  ),
           ),
         ],
       ),

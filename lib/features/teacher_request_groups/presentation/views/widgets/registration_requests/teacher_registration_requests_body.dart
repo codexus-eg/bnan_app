@@ -1,37 +1,21 @@
-import 'package:bnan_app/features/teacher_request_groups/data/models/registration_request_model.dart';
-import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/registration_request_card.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_cubit.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_state.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/teacher_requests_action_listener.dart';
+import 'package:bnan_app/features/teacher_request_groups/presentation/views/widgets/registration_requests/teacher_requests_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeacherRegistrationRequestsBody extends StatelessWidget {
   const TeacherRegistrationRequestsBody({super.key});
 
-  static const requests = [
-    RegistrationRequestModel(
-      studentName: 'أحمد محمد',
-      daysAgo: 1,
-      subjectName: 'العلوم',
-      gradeName: 'الصف الخامس الابتدائي',
-      curriculumName: 'المنهج السعودي',
-      teacherName: 'البناء الضوئي',
-    ),
-    RegistrationRequestModel(
-      studentName: 'أحمد محمد',
-      daysAgo: 1,
-      subjectName: 'الرياضيات',
-      gradeName: 'الصف الثالث الابتدائي',
-      curriculumName: 'المنهج المصري',
-      teacherName: 'أريد معلمة مصرية',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsetsDirectional.all(16),
-      itemCount: requests.length,
-      itemBuilder: (context, index) {
-        return RegistrationRequestCard(request: requests[index]);
-      },
+    return BlocConsumer<
+      TeacherRegistrationRequestsCubit,
+      TeacherRegistrationRequestsState
+    >(
+      listener: handleTeacherRequestsAction,
+      builder: (context, state) => TeacherRequestsContent(state: state),
     );
   }
 }

@@ -22,6 +22,7 @@ abstract class EndPoints {
   static const String teacherProfile = '/users/teacherProfile';
   static const String assignments = '/assignments';
   static const String teacherClassrooms = '/teachers/myclassrooms';
+  static const String gulfTeacherRequests = '/gulf-teacher-requests';
   static const String supervisorMyClassrooms = '/supervisors/me/classrooms';
   static const String teacherAssignedSubjects =
       '/teachers/me/assigned-subjects';
@@ -125,6 +126,10 @@ abstract class EndPoints {
 
   static String teacherById(String teacherId) {
     return '$teachers/$teacherId';
+  }
+
+  static String acceptGulfTeacherRequest(String requestId) {
+    return '$gulfTeacherRequests/$requestId/accept';
   }
 
   static String certificateById(String certificateId) {

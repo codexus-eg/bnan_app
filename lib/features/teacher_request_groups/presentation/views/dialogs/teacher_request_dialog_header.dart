@@ -2,6 +2,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+
 class TeacherRequestDialogHeader extends StatelessWidget {
   const TeacherRequestDialogHeader({super.key, required this.studentName});
 
@@ -14,7 +15,7 @@ class TeacherRequestDialogHeader extends StatelessWidget {
       textAlign: TextAlign.center,
       style: StylesManager.styleBold16(
         context,
-      ).copyWith(color: ColorManager.black)
+      ).copyWith(color: ColorManager.black),
     );
   }
 }

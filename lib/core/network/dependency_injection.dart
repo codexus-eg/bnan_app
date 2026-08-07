@@ -67,6 +67,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<RegistrationRequestsRepo>(
     () => RegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<TeacherRegistrationRequestsRepo>(
+    () => TeacherRegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<AssignmentsRepo>(
     () => AssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
@@ -269,6 +272,11 @@ void setupServiceLocator() {
 
   getIt.registerFactory<GetRegistrationRequestsCubit>(
     () => GetRegistrationRequestsCubit(getIt<RegistrationRequestsRepo>()),
+  );
+  getIt.registerFactory<TeacherRegistrationRequestsCubit>(
+    () => TeacherRegistrationRequestsCubit(
+      getIt<TeacherRegistrationRequestsRepo>(),
+    ),
   );
 
   getIt.registerFactory<RegistrationRequestActionsCubit>(

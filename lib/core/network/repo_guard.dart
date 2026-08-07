@@ -11,6 +11,7 @@ Future<Either<Failure, T>> repoGuard<T>(Future<T> Function() request) async {
         message: error.message,
         responseReceived: error.responseReceived,
         statusCode: error.statusCode,
+        code: error.code,
       ),
     );
   } catch (error) {

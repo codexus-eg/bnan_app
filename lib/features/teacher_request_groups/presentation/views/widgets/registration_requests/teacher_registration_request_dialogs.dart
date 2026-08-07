@@ -8,10 +8,11 @@ class TeacherRegistrationRequestDialogs {
   static Future<void> showAcceptRequest(
     BuildContext context, {
     required String studentName,
-    VoidCallback? onAccept,
+    Future<void> Function()? onAccept,
   }) {
     return AppDialogs.show(
       context: context,
+      barrierDismissible: false,
       child: AcceptRegistrationRequestDialog(
         studentName: studentName,
         onAccept: onAccept,

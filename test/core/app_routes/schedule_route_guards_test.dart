@@ -15,6 +15,7 @@ void main() {
     ..._parentCases,
     ..._readOnlyCases,
     ..._studentSubjectCases,
+    ..._teacherRequestCases,
   ];
 
   setUp(() async {
@@ -197,6 +198,28 @@ const _studentSubjectCases = [
     'supervisor',
   ),
   _GuardCase('student subjects rejects admin', Routes.studentSubjects, 'admin'),
+];
+
+const _teacherRequestCases = [
+  _GuardCase(
+    'teacher requests allows Gulf teacher',
+    Routes.teacherRegistrationRequest,
+    'teacher',
+    allowed: true,
+    modes: [RegistrationMode.gulf],
+  ),
+  _GuardCase(
+    'teacher requests rejects Egyptian teacher',
+    Routes.teacherRegistrationRequest,
+    'teacher',
+    modes: [RegistrationMode.egyptian],
+  ),
+  _GuardCase(
+    'teacher requests rejects student',
+    Routes.teacherRegistrationRequest,
+    'student',
+    mode: RegistrationMode.gulf,
+  ),
 ];
 
 const _readOnlyCases = [

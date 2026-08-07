@@ -1090,6 +1090,17 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Registration request rejected successfully"),
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("Registration Requests"),
+        "noNewRegistrationRequests":
+            MessageLookupByLibrary.simpleMessage(
+                "There are no new registration requests"),
+        "teacherRequestAcceptedSuccess":
+            MessageLookupByLibrary.simpleMessage(
+                "The request was accepted and the classroom was created successfully"),
+        "teacherRequestAlreadyAssigned":
+            MessageLookupByLibrary.simpleMessage(
+                "This request was accepted by another teacher"),
+        "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
+            "The request cannot be accepted because the subject or grade teaching details changed"),
         "reject": MessageLookupByLibrary.simpleMessage("Reject"),
         "relationships": MessageLookupByLibrary.simpleMessage("Relationships"),
         "remainingDays": m21,

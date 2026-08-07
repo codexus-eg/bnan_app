@@ -64,9 +64,12 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       return;
     }
 
-    final legacyIndex = index < scheduleStartIndex
+    var legacyIndex = index < scheduleStartIndex
         ? index
         : index - scheduleRoutes.length + 1;
+    if (!SessionManager.instance.hasGulfRegistration && legacyIndex >= 6) {
+      legacyIndex++;
+    }
     final bottomIndex = drawerToBottomNavIndex[legacyIndex];
 
     if (bottomIndex != null) {
@@ -81,6 +84,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   void _navigateFromDrawer(int index) {
     if (index == 4) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
+    } else if (index == 6) {
+      MyNavigator.goTo(context, Routes.teacherRegistrationRequest);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == plansDrawerIndex) {

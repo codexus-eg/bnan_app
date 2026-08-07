@@ -1045,6 +1045,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("طلبات التسجيل"),
+        "noNewRegistrationRequests":
+            MessageLookupByLibrary.simpleMessage("لا توجد طلبات تسجيل جديدة حاليًا"),
+        "teacherRequestAcceptedSuccess":
+            MessageLookupByLibrary.simpleMessage("تم قبول الطلب وإنشاء الفصل بنجاح"),
+        "teacherRequestAlreadyAssigned":
+            MessageLookupByLibrary.simpleMessage("تم قبول هذا الطلب بواسطة معلم آخر"),
+        "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
+            "تعذر قبول الطلب لأن بيانات تدريس المادة أو الصف تغيرت"),
         "reject": MessageLookupByLibrary.simpleMessage("رفض"),
         "relationships": MessageLookupByLibrary.simpleMessage("العلاقات"),
         "remainingDays": m21,

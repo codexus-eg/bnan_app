@@ -8660,6 +8660,46 @@ class S {
     );
   }
 
+  /// `There are no new registration requests`
+  String get noNewRegistrationRequests {
+    return Intl.message(
+      'There are no new registration requests',
+      name: 'noNewRegistrationRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The request was accepted and the classroom was created successfully`
+  String get teacherRequestAcceptedSuccess {
+    return Intl.message(
+      'The request was accepted and the classroom was created successfully',
+      name: 'teacherRequestAcceptedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This request was accepted by another teacher`
+  String get teacherRequestAlreadyAssigned {
+    return Intl.message(
+      'This request was accepted by another teacher',
+      name: 'teacherRequestAlreadyAssigned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The request cannot be accepted because the subject or grade teaching details changed`
+  String get teacherRequestNotEligible {
+    return Intl.message(
+      'The request cannot be accepted because the subject or grade teaching details changed',
+      name: 'teacherRequestNotEligible',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `There are no registered children`
   String get noRegisteredChildren {
     return Intl.message(

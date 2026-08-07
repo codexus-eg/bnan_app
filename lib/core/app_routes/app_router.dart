@@ -413,8 +413,24 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.teacherRegistrationRequest,
+        redirect: (context, state) {
+          final session = SessionManager.instance;
+          final allowed =
+              session.role == UserRole.teacher && session.hasGulfRegistration;
+          if (allowed) return null;
+          return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TeacherRegistrationRequestsView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<TeacherRegistrationRequestsCubit>()..refresh(),
+              ),
+              BlocProvider(create: (_) => getIt<GetTeacherClassroomsCubit>()),
+            ],
+            child: const TeacherRegistrationRequestsView(),
+          ),
           key: state.pageKey,
         ),
       ),

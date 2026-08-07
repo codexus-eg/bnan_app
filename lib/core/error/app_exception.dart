@@ -6,11 +6,13 @@ class AppException implements Exception {
     this.message, {
     this.responseReceived = false,
     this.statusCode,
+    this.code,
   });
 
   final String message;
   final bool responseReceived;
   final int? statusCode;
+  final String? code;
 
   factory AppException.fromDio(DioException dioError) {
     switch (dioError.type) {
@@ -43,8 +45,13 @@ class AppException implements Exception {
   static AppException _handleBadResponse(DioException error) {
     final statusCode = error.response?.statusCode;
     final data = error.response?.data;
-    AppException confirmed(String message) =>
-        AppException(message, responseReceived: true, statusCode: statusCode);
+    final backendCode = _extractBackendCode(data);
+    AppException confirmed(String message) => AppException(
+      message,
+      responseReceived: true,
+      statusCode: statusCode,
+      code: backendCode,
+    );
 
     final backendMessage = _extractBackendMessage(data);
     if (backendMessage != null) {
@@ -89,6 +96,12 @@ class AppException implements Exception {
     }
 
     return null;
+  }
+
+  static String? _extractBackendCode(dynamic data) {
+    if (data is! Map) return null;
+    final code = data['code']?.toString().trim();
+    return code == null || code.isEmpty ? null : code;
   }
 
   static String? _extractValidationMessage(dynamic data) {
