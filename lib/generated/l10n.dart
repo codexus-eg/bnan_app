@@ -1730,6 +1730,56 @@ class S {
     );
   }
 
+  /// `School Subjects`
+  String get schoolSubjects {
+    return Intl.message(
+      'School Subjects',
+      name: 'schoolSubjects',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search for a subject`
+  String get searchForSubject {
+    return Intl.message(
+      'Search for a subject',
+      name: 'searchForSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects registered yet`
+  String get noSubjectsRegistered {
+    return Intl.message(
+      'No subjects registered yet',
+      name: 'noSubjectsRegistered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects match your search`
+  String get noSubjectsMatchSearch {
+    return Intl.message(
+      'No subjects match your search',
+      name: 'noSubjectsMatchSearch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load subjects`
+  String get unableToLoadSubjects {
+    return Intl.message(
+      'Unable to load subjects',
+      name: 'unableToLoadSubjects',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `There are no certificates for this student`
   String get noCertificatesForStudent {
     return Intl.message(

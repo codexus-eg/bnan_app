@@ -14,6 +14,7 @@ void main() {
     ..._lessonsCases,
     ..._parentCases,
     ..._readOnlyCases,
+    ..._studentSubjectCases,
   ];
 
   setUp(() async {
@@ -171,6 +172,31 @@ const _parentCases = [
     Routes.parentSchedule,
     'student',
   ),
+];
+
+const _studentSubjectCases = [
+  _GuardCase(
+    'student subjects allows student',
+    Routes.studentSubjects,
+    'student',
+    allowed: true,
+  ),
+  _GuardCase(
+    'student subjects rejects parent',
+    Routes.studentSubjects,
+    'parent',
+  ),
+  _GuardCase(
+    'student subjects rejects teacher',
+    Routes.studentSubjects,
+    'teacher',
+  ),
+  _GuardCase(
+    'student subjects rejects supervisor',
+    Routes.studentSubjects,
+    'supervisor',
+  ),
+  _GuardCase('student subjects rejects admin', Routes.studentSubjects, 'admin'),
 ];
 
 const _readOnlyCases = [

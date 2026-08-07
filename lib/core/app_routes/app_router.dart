@@ -285,6 +285,18 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.studentSubjects,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.student) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const StudentSubjectsView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.updatePhone,
         pageBuilder: (context, state) => buildTransitionPages(
           child: BlocProvider(

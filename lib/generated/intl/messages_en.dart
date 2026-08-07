@@ -1281,6 +1281,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Study Curricula "),
         "studyMaterials":
             MessageLookupByLibrary.simpleMessage("Study Materials"),
+        "schoolSubjects":
+            MessageLookupByLibrary.simpleMessage("School Subjects"),
+        "searchForSubject":
+            MessageLookupByLibrary.simpleMessage("Search for a subject"),
+        "noSubjectsRegistered":
+            MessageLookupByLibrary.simpleMessage("No subjects registered yet"),
+        "noSubjectsMatchSearch": MessageLookupByLibrary.simpleMessage(
+            "No subjects match your search"),
+        "unableToLoadSubjects":
+            MessageLookupByLibrary.simpleMessage("Unable to load subjects"),
         "studyPlanFor": MessageLookupByLibrary.simpleMessage("Study Plan"),
         "studyPlanTitlePrefix":
             MessageLookupByLibrary.simpleMessage("Study plan for"),

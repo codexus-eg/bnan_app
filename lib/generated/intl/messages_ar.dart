@@ -1228,6 +1228,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المناهج الدراسية "),
         "studyMaterials":
             MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
+        "schoolSubjects":
+            MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
+        "searchForSubject":
+            MessageLookupByLibrary.simpleMessage("ابحث عن مادة"),
+        "noSubjectsRegistered": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد دراسية مسجلة حتى الآن"),
+        "noSubjectsMatchSearch":
+            MessageLookupByLibrary.simpleMessage("لا توجد مواد مطابقة للبحث"),
+        "unableToLoadSubjects":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل المواد الدراسية"),
         "studyPlanFor": MessageLookupByLibrary.simpleMessage("الخطة الدراسية"),
         "studyPlanTitlePrefix":
             MessageLookupByLibrary.simpleMessage("الخطة الدراسية لـ"),

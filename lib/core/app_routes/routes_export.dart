@@ -31,6 +31,7 @@ export 'package:bnan_app/features/splash_and_onboarding/presentation/views/splas
 
 export 'package:bnan_app/features/student_groups/presentation/views/student_groups_view.dart';
 export 'package:bnan_app/features/student_groups/presentation/views/request_lesson_view.dart';
+export 'package:bnan_app/features/student_subjects/presentation/views/student_subjects_view.dart';
 export 'package:bnan_app/features/student_schedule/presentation/views/gulf_student_schedule_read_only_view.dart';
 
 export 'package:flutter_bloc/flutter_bloc.dart';

@@ -26,6 +26,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   int currentIndex = 0;
 
   static const int requestLessonDrawerIndex = 2;
+  static const int subjectsDrawerIndex = 1;
   static const int groupsDrawerIndex = 3;
   static const int plansDrawerIndex = 6;
   static const int notificationDrawerIndex = 8;
@@ -84,7 +85,9 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   }
 
   void _navigateFromDrawer(int index) {
-    if (index == requestLessonDrawerIndex) {
+    if (index == subjectsDrawerIndex) {
+      MyNavigator.goTo(context, Routes.studentSubjects);
+    } else if (index == requestLessonDrawerIndex) {
       MyNavigator.goTo(context, Routes.requestLesson);
     } else if (index == groupsDrawerIndex) {
       MyNavigator.goTo(context, Routes.studentGroups);

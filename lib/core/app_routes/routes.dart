@@ -16,6 +16,7 @@ abstract class Routes {
   static const String classroomDocuments = '/classroomDocuments';
   static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
+  static const String studentSubjects = '/studentSubjects';
   static const String updatePhone = '/updatePhone';
   static const String updateUserName = '/updateUserName';
   static const String updatePassword = '/updatePassword';
