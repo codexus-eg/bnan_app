@@ -226,6 +226,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelAssignmentMessage": m4,
         "cancelSupervisorAssignmentQuestion": m5,
         "cancelTeacherAssignmentQuestion": m6,
+        "cannotDisplayStudentCertificates":
+            MessageLookupByLibrary.simpleMessage(
+                "لا يمكن عرض شهادات هذا الطالب"),
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
@@ -723,14 +726,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا توجد شهادات متاحة حتى الآن"),
         "noCertificatesForStudent":
             MessageLookupByLibrary.simpleMessage("لا توجد شهادات لهذا الطالب"),
-        "cannotDisplayStudentCertificates": MessageLookupByLibrary.simpleMessage(
-            "لا يمكن عرض شهادات هذا الطالب"),
         "noChildrenAvailable":
             MessageLookupByLibrary.simpleMessage("لا يوجد أبناء متاحون"),
         "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
             "لا يوجد أبناء مرتبطون بهذا الحساب"),
-        "noRegisteredChildren":
-            MessageLookupByLibrary.simpleMessage("لا يوجد أبناء مسجلون"),
         "noClassroomsAvailable":
             MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
         "noClassroomsAvailableForGrade":
@@ -769,6 +768,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد حصص في اليوم المحدد"),
         "noMessageDocumentsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد مستندات في الرسائل حتى الآن"),
+        "noNewRegistrationRequests": MessageLookupByLibrary.simpleMessage(
+            "لا توجد طلبات تسجيل جديدة حاليًا"),
         "noNotifications":
             MessageLookupByLibrary.simpleMessage("لا توجد إشعارات"),
         "noPendingAssignments":
@@ -781,6 +782,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد خطط لهذا الأسبوع"),
         "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد تسجيلات متاحة حتى الآن"),
+        "noRegisteredChildren":
+            MessageLookupByLibrary.simpleMessage("لا يوجد أبناء مسجلون"),
         "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد تقارير متاحة حتى الآن"),
         "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
@@ -807,6 +810,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد مواد متاحة"),
         "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الطالب"),
+        "noSubjectsMatchSearch":
+            MessageLookupByLibrary.simpleMessage("لا توجد مواد مطابقة للبحث"),
+        "noSubjectsRegistered": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد دراسية مسجلة حتى الآن"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
         "noSummaryContent": MessageLookupByLibrary.simpleMessage(
             "لا يوجد محتوى متاح لهذا الملخص"),
@@ -1119,11 +1126,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى اختيار صورة الجدول"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "تم تعديل جدول الأسبوع القادم"),
+        "schoolSubjects":
+            MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
         "science": MessageLookupByLibrary.simpleMessage("العلوم"),
         "scoreRange": m26,
         "scoreRequired": MessageLookupByLibrary.simpleMessage("الدرجة مطلوبة"),
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
+        "searchForSubject":
+            MessageLookupByLibrary.simpleMessage("ابحث عن مادة"),
         "secondPrimaryClassroom":
             MessageLookupByLibrary.simpleMessage("الصف الثاني الابتدائي"),
         "secondSecondaryClassroom":
@@ -1298,6 +1309,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "teacherNote": MessageLookupByLibrary.simpleMessage("ملاحظة المعلم"),
         "teacherNoteText": MessageLookupByLibrary.simpleMessage(
             "ممتاز على حل الواجبات هذه المرة."),
+        "teacherRequestAcceptedSuccess": MessageLookupByLibrary.simpleMessage(
+            "تم قبول الطلب وإنشاء الفصل بنجاح"),
+        "teacherRequestAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
+            "تم قبول هذا الطلب بواسطة معلم آخر"),
+        "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
+            "تعذر قبول الطلب لأن بيانات تدريس المادة أو الصف تغيرت"),
         "teacherSarahName":
             MessageLookupByLibrary.simpleMessage("أ/ سارة عبدالله"),
         "teacherSarahShort": MessageLookupByLibrary.simpleMessage("أ/ سارة"),
@@ -1354,6 +1371,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعذر تحميل الملف"),
         "unableToLoadAttachment":
             MessageLookupByLibrary.simpleMessage("تعذر تحميل المرفق"),
+        "unableToLoadSubjects":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل المواد الدراسية"),
         "unableToOpenAttachment":
             MessageLookupByLibrary.simpleMessage("تعذر فتح المرفق"),
         "unableToOpenDocument":
@@ -1461,6 +1480,34 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("مع أ/ سارة عبدالله"),
         "years": MessageLookupByLibrary.simpleMessage("سنوات"),
         "yes": MessageLookupByLibrary.simpleMessage("نعم"),
-        "yesterday": MessageLookupByLibrary.simpleMessage("أمس")
+        "yesterday": MessageLookupByLibrary.simpleMessage("أمس"),
+        "discountCodes": MessageLookupByLibrary.simpleMessage("أكواد الخصم"),
+        "addDiscountCode": MessageLookupByLibrary.simpleMessage("إضافة كود خصم"),
+        "editDiscountCode": MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
+        "discountCode": MessageLookupByLibrary.simpleMessage("كود الخصم"),
+        "optionalDiscountCode": MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
+        "enterDiscountCode": MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),
+        "discountPercentage": MessageLookupByLibrary.simpleMessage("النسبة المئوية"),
+        "discountType": MessageLookupByLibrary.simpleMessage("النوع"),
+        "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("مدة محددة"),
+        "childrenDiscount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
+        "startDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
+        "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
+        "childrenCount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
+        "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
+        "noDiscountCodes": MessageLookupByLibrary.simpleMessage("لا توجد أكواد خصم"),
+        "deleteDiscountCode": MessageLookupByLibrary.simpleMessage("حذف كود الخصم"),
+        "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage("هل أنت متأكد من حذف كود الخصم؟"),
+        "discountCodeCreated": MessageLookupByLibrary.simpleMessage("تمت إضافة كود الخصم بنجاح"),
+        "discountCodeUpdated": MessageLookupByLibrary.simpleMessage("تم تعديل كود الخصم بنجاح"),
+        "discountCodeDeleted": MessageLookupByLibrary.simpleMessage("تم حذف كود الخصم بنجاح"),
+        "discountCodeRequired": MessageLookupByLibrary.simpleMessage("كود الخصم مطلوب"),
+        "invalidDiscountPercentage": MessageLookupByLibrary.simpleMessage("أدخل نسبة مئوية صحيحة"),
+        "discountDatesRequired": MessageLookupByLibrary.simpleMessage("تاريخ البداية والنهاية مطلوبان"),
+        "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage("لا يمكن أن يسبق تاريخ النهاية تاريخ البداية"),
+        "invalidChildrenCount": MessageLookupByLibrary.simpleMessage("أدخل عدد أبناء موجبًا"),
+        "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
+        "discountAmount": MessageLookupByLibrary.simpleMessage("الخصم"),
+        "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي")
       };
 }

@@ -13,6 +13,7 @@ abstract class EndPoints {
   static const String updateLoggedUserName = '/users/me/name';
   static const String updateLoggedUserPhone = '/users/me/phone';
   static const String myAssignments = '/students/me/assignments';
+  static const String mySubjects = '/students/me/subjects';
   static const String myCertificates = '/certificates/my';
   static const String curriculums = '/curriculums';
   static const String studentSubscription = '/students/me/subscription';
@@ -21,6 +22,7 @@ abstract class EndPoints {
   static const String teacherProfile = '/users/teacherProfile';
   static const String assignments = '/assignments';
   static const String teacherClassrooms = '/teachers/myclassrooms';
+  static const String gulfTeacherRequests = '/gulf-teacher-requests';
   static const String supervisorMyClassrooms = '/supervisors/me/classrooms';
   static const String teacherAssignedSubjects =
       '/teachers/me/assigned-subjects';
@@ -39,6 +41,8 @@ abstract class EndPoints {
       '/certificates/student-monthly/issue';
   static const String egyptianRegistrationRequests =
       '/admin/egyptian-registration-requests';
+  static const String adminDashboardStatistics = '/admin/dashboard/statistics';
+  static const String adminDiscountCodes = '/admin/discount-codes';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
@@ -74,6 +78,10 @@ abstract class EndPoints {
 
   static String packageById(String packageId) {
     return '$packages/$packageId';
+  }
+
+  static String adminDiscountCode(String id) {
+    return '$adminDiscountCodes/$id';
   }
 
   static String packagesByCurriculum(String curriculumId) {
@@ -124,6 +132,10 @@ abstract class EndPoints {
 
   static String teacherById(String teacherId) {
     return '$teachers/$teacherId';
+  }
+
+  static String acceptGulfTeacherRequest(String requestId) {
+    return '$gulfTeacherRequests/$requestId/accept';
   }
 
   static String certificateById(String certificateId) {

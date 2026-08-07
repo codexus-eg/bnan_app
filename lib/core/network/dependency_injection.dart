@@ -67,6 +67,15 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<RegistrationRequestsRepo>(
     () => RegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<AdminDashboardRepo>(
+    () => AdminDashboardRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<DiscountCodesRepo>(
+    () => DiscountCodesRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<TeacherRegistrationRequestsRepo>(
+    () => TeacherRegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<AssignmentsRepo>(
     () => AssignmentsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
@@ -87,6 +96,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<StudentCertificatesRepo>(
     () => StudentCertificatesRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<StudentSubjectsRepo>(
+    () => StudentSubjectsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<HomeStudentRepo>(
     () => HomeStudentRepoImpl(apiConsumer: getIt<ApiConsumer>()),
@@ -245,6 +257,9 @@ void setupServiceLocator() {
   getIt.registerFactory<GetCertificatesCubit>(
     () => GetCertificatesCubit(getIt<StudentCertificatesRepo>()),
   );
+  getIt.registerFactory<GetMySubjectsCubit>(
+    () => GetMySubjectsCubit(getIt<StudentSubjectsRepo>()),
+  );
   getIt.registerFactory<GetStudentSubscriptionCubit>(
     () => GetStudentSubscriptionCubit(getIt<HomeStudentRepo>()),
   );
@@ -263,6 +278,20 @@ void setupServiceLocator() {
 
   getIt.registerFactory<GetRegistrationRequestsCubit>(
     () => GetRegistrationRequestsCubit(getIt<RegistrationRequestsRepo>()),
+  );
+  getIt.registerFactory<AdminDashboardCubit>(
+    () => AdminDashboardCubit(getIt<AdminDashboardRepo>()),
+  );
+  getIt.registerFactory<DiscountCodesCubit>(
+    () => DiscountCodesCubit(getIt<DiscountCodesRepo>()),
+  );
+  getIt.registerFactory<DiscountCodeActionsCubit>(
+    () => DiscountCodeActionsCubit(getIt<DiscountCodesRepo>()),
+  );
+  getIt.registerFactory<TeacherRegistrationRequestsCubit>(
+    () => TeacherRegistrationRequestsCubit(
+      getIt<TeacherRegistrationRequestsRepo>(),
+    ),
   );
 
   getIt.registerFactory<RegistrationRequestActionsCubit>(

@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
+import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
 
 class TamaraStatusResponse {
   const TamaraStatusResponse({
@@ -9,6 +10,7 @@ class TamaraStatusResponse {
     this.studentId,
     this.subscriptionId,
     this.completedAt,
+    this.paymentSummary,
   });
 
   final String paymentId;
@@ -18,12 +20,14 @@ class TamaraStatusResponse {
   final String? studentId;
   final String? subscriptionId;
   final DateTime? completedAt;
+  final PaymentAmountSummary? paymentSummary;
 
   factory TamaraStatusResponse.fromJson(Map<String, dynamic> json) {
     final raw = json['data'];
     final data = raw is Map
         ? Map<String, dynamic>.from(raw)
         : <String, dynamic>{};
+    final summary = PaymentAmountSummary.fromJson(data);
     return TamaraStatusResponse(
       paymentId: _text(data['paymentId']) ?? '',
       status: PaymentStatus.fromValue(data['status']),
@@ -32,6 +36,9 @@ class TamaraStatusResponse {
       studentId: _text(data['studentId']),
       subscriptionId: _text(data['subscriptionId']),
       completedAt: DateTime.tryParse(_text(data['completedAt']) ?? ''),
+      paymentSummary: summary.hasAmounts || summary.hasDiscount
+          ? summary
+          : null,
     );
   }
 

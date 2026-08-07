@@ -285,6 +285,18 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.studentSubjects,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.student) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const StudentSubjectsView(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.updatePhone,
         pageBuilder: (context, state) => buildTransitionPages(
           child: BlocProvider(
@@ -324,8 +336,34 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.adminHome,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.admin) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const AdminHomeView(),
+          child: BlocProvider(
+            create: (_) => getIt<AdminDashboardCubit>()..load(),
+            child: const AdminHomeView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.discountCodes,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.admin) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<DiscountCodesCubit>()..load()),
+              BlocProvider(create: (_) => getIt<DiscountCodeActionsCubit>()),
+            ],
+            child: const DiscountCodesView(),
+          ),
           key: state.pageKey,
         ),
       ),
@@ -401,8 +439,24 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.teacherRegistrationRequest,
+        redirect: (context, state) {
+          final session = SessionManager.instance;
+          final allowed =
+              session.role == UserRole.teacher && session.hasGulfRegistration;
+          if (allowed) return null;
+          return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TeacherRegistrationRequestsView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<TeacherRegistrationRequestsCubit>()..refresh(),
+              ),
+              BlocProvider(create: (_) => getIt<GetTeacherClassroomsCubit>()),
+            ],
+            child: const TeacherRegistrationRequestsView(),
+          ),
           key: state.pageKey,
         ),
       ),

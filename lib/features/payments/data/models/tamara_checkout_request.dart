@@ -8,6 +8,7 @@ class TamaraCheckoutRequest {
     required this.curriculumId,
     required this.packageId,
     required this.address,
+    this.discountCode,
     this.locale = 'ar_SA',
   });
 
@@ -17,6 +18,7 @@ class TamaraCheckoutRequest {
   final String curriculumId;
   final String packageId;
   final PaymentAddress address;
+  final String? discountCode;
   final String locale;
 
   Map<String, dynamic> toJson() => {
@@ -24,6 +26,8 @@ class TamaraCheckoutRequest {
     'student': student.toJson(),
     'curriculum': curriculumId,
     'packageId': packageId,
+    if (discountCode?.trim().isNotEmpty == true)
+      'discountCode': discountCode!.trim(),
     'paymentAddress': address.toJson(),
     'locale': locale,
   };

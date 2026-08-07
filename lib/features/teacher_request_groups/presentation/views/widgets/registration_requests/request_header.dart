@@ -12,7 +12,7 @@ class RequestHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CustomAvatar(firstName: request.studentName,radius: 25,),
+        CustomAvatar(firstName: request.studentName, radius: 25),
         const SizedBox(width: 8),
         Expanded(child: RequestDetails(request: request)),
       ],

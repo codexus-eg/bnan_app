@@ -60,7 +60,11 @@ void main() {
     ]) {
       await _saveTeacher(testCase.$1);
       expect(teacherScheduleRoutes(), testCase.$2);
-      expect(teacherDrawerItems(context).length, 15 + testCase.$2.length);
+      final gulfItem = testCase.$1.contains(RegistrationMode.gulf) ? 1 : 0;
+      expect(
+        teacherDrawerItems(context).length,
+        14 + gulfItem + testCase.$2.length,
+      );
     }
   });
 
@@ -101,11 +105,25 @@ void main() {
     await _saveTeacher(RegistrationMode.values);
     final mixedNonScheduleTitles = teacherDrawerItems(context)
         .map((item) => item.title)
-        .where((title) => title != s.schedule && title != s.lessonsManagement)
+        .where(
+          (title) =>
+              title != s.schedule &&
+              title != s.lessonsManagement &&
+              title != s.registrationRequests,
+        )
         .toList();
 
     expect(mixedNonScheduleTitles, baseTitles);
-    expect(adminDrawerItems(context), hasLength(16));
+    expect(baseTitles, isNot(contains(s.registrationRequests)));
+    expect(
+      teacherDrawerItems(context).map((item) => item.title),
+      contains(s.registrationRequests),
+    );
+    expect(adminDrawerItems(context), hasLength(17));
+    expect(
+      adminDrawerItems(context).where((item) => item.title == s.discountCodes),
+      hasLength(1),
+    );
     expect(
       adminDrawerItems(context).where((item) => item.title == s.schedule),
       hasLength(1),

@@ -14,6 +14,10 @@ void main() {
     ..._lessonsCases,
     ..._parentCases,
     ..._readOnlyCases,
+    ..._studentSubjectCases,
+    ..._teacherRequestCases,
+    ..._adminDashboardCases,
+    ..._discountCodeCases,
   ];
 
   setUp(() async {
@@ -171,6 +175,75 @@ const _parentCases = [
     Routes.parentSchedule,
     'student',
   ),
+];
+
+const _studentSubjectCases = [
+  _GuardCase(
+    'student subjects allows student',
+    Routes.studentSubjects,
+    'student',
+    allowed: true,
+  ),
+  _GuardCase(
+    'student subjects rejects parent',
+    Routes.studentSubjects,
+    'parent',
+  ),
+  _GuardCase(
+    'student subjects rejects teacher',
+    Routes.studentSubjects,
+    'teacher',
+  ),
+  _GuardCase(
+    'student subjects rejects supervisor',
+    Routes.studentSubjects,
+    'supervisor',
+  ),
+  _GuardCase('student subjects rejects admin', Routes.studentSubjects, 'admin'),
+];
+
+const _teacherRequestCases = [
+  _GuardCase(
+    'teacher requests allows Gulf teacher',
+    Routes.teacherRegistrationRequest,
+    'teacher',
+    allowed: true,
+    modes: [RegistrationMode.gulf],
+  ),
+  _GuardCase(
+    'teacher requests rejects Egyptian teacher',
+    Routes.teacherRegistrationRequest,
+    'teacher',
+    modes: [RegistrationMode.egyptian],
+  ),
+  _GuardCase(
+    'teacher requests rejects student',
+    Routes.teacherRegistrationRequest,
+    'student',
+    mode: RegistrationMode.gulf,
+  ),
+];
+
+const _adminDashboardCases = [
+  _GuardCase(
+    'admin dashboard allows admin',
+    Routes.adminHome,
+    'admin',
+    allowed: true,
+  ),
+  _GuardCase('admin dashboard rejects teacher', Routes.adminHome, 'teacher'),
+  _GuardCase('admin dashboard rejects student', Routes.adminHome, 'student'),
+];
+
+const _discountCodeCases = [
+  _GuardCase(
+    'discount codes allows admin',
+    Routes.discountCodes,
+    'admin',
+    allowed: true,
+  ),
+  _GuardCase('discount codes rejects teacher', Routes.discountCodes, 'teacher'),
+  _GuardCase('discount codes rejects parent', Routes.discountCodes, 'parent'),
 ];
 
 const _readOnlyCases = [

@@ -11,7 +11,8 @@ class HomeStatCard extends StatelessWidget {
     required this.state,
     this.showIcon = true,
     this.titleTextAlign,
-    this.titleOverflow, this.titleColor,
+    this.titleOverflow,
+    this.titleColor,
   });
 
   final HomeStateModel state;
@@ -22,45 +23,49 @@ class HomeStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomDetailsWidgetBackground(
-      padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showIcon) ...[
-            SvgPicture.asset(
-              state.icon,
-              width: 22,
-              height: 22,
-              colorFilter: state.iconColor != null
-                  ? ColorFilter.mode(state.iconColor!, BlendMode.srcIn)
-                  : null,
+    return GestureDetector(
+      onTap: state.onTap,
+      child: CustomDetailsWidgetBackground(
+        padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (showIcon) ...[
+              SvgPicture.asset(
+                state.icon,
+                width: 22,
+                height: 22,
+                colorFilter: state.iconColor != null
+                    ? ColorFilter.mode(state.iconColor!, BlendMode.srcIn)
+                    : null,
+              ),
+              const SizedBox(height: 6),
+            ],
+            Flexible(
+              child: Text(
+                state.value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: StylesManager.styleBold20(
+                  context,
+                ).copyWith(color: ColorManager.mainColor14, height: 1.1),
+              ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
+            Flexible(
+              child: Text(
+                state.title,
+                textAlign: titleTextAlign ?? TextAlign.center,
+                maxLines: 2,
+                overflow: titleOverflow ?? TextOverflow.ellipsis,
+                style: StylesManager.styleRegular14(context).copyWith(
+                  color: titleColor ?? ColorManager.greyA8AF,
+                  height: 1.1,
+                ),
+              ),
+            ),
           ],
-          Flexible(
-            child: Text(
-              state.value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: StylesManager.styleBold20(
-                context,
-              ).copyWith(color: ColorManager.mainColor14, height: 1.1),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Flexible(
-            child: Text(
-              state.title,
-              textAlign: titleTextAlign ?? TextAlign.center,
-              maxLines: 2,
-              overflow: titleOverflow ?? TextOverflow.ellipsis,
-              style: StylesManager.styleRegular14(
-                context,
-              ).copyWith(color:titleColor?? ColorManager.greyA8AF, height: 1.1),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

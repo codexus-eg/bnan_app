@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 class RequestDetails extends StatelessWidget {
   const RequestDetails({super.key, required this.request});
-
   final RegistrationRequestModel request;
 
   @override
@@ -17,33 +16,28 @@ class RequestDetails extends StatelessWidget {
       children: [
         NameAndTime(request: request),
         const SizedBox(height: 4),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
           children: [
-            Row(
-              children: [
-                RegistrationRequestInfoRow(
-                  iconPath: ImageManager.teacherBookOneIcon,
-                  text: request.subjectName,
-                ),
-                const SizedBox(width: 8),
-                RegistrationRequestInfoRow(
-                  iconPath: ImageManager.teacherGraduationCapIcon,
-                  text: request.gradeName,
-                ),
-              ],
+            RegistrationRequestInfoRow(
+              iconPath: ImageManager.teacherBookOneIcon,
+              text: request.subjectName,
             ),
-            const SizedBox(height: 8),
+            RegistrationRequestInfoRow(
+              iconPath: ImageManager.teacherGraduationCapIcon,
+              text: request.gradeName,
+            ),
             RegistrationRequestInfoRow(
               iconPath: ImageManager.teacherCurriculm,
               text: request.curriculumName,
             ),
-            const SizedBox(height: 8),
-            RegistrationRequestInfoRow(
-              iconPath: ImageManager.teacherNote,
-              text: request.teacherName,
-              textColor: ColorManager.mainColor14,
-            ),
+            if (request.notes != null)
+              RegistrationRequestInfoRow(
+                iconPath: ImageManager.teacherNote,
+                text: request.notes!,
+                textColor: ColorManager.mainColor14,
+              ),
           ],
         ),
       ],

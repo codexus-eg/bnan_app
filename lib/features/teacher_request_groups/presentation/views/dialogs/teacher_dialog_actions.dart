@@ -3,9 +3,14 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TeacherDialogActions extends StatelessWidget {
-  const TeacherDialogActions({super.key, this.onAccept});
+  const TeacherDialogActions({
+    super.key,
+    this.onAccept,
+    this.isLoading = false,
+  });
 
-  final VoidCallback? onAccept;
+  final Future<void> Function()? onAccept;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class TeacherDialogActions extends StatelessWidget {
           child: TeacherDialogButton(
             title: S.of(context).cancel,
             isPrimary: false,
-            onTap: () => Navigator.pop(context),
+            onTap: isLoading ? null : () => Navigator.pop(context),
           ),
         ),
         const SizedBox(width: 21),
@@ -23,7 +28,8 @@ class TeacherDialogActions extends StatelessWidget {
           child: TeacherDialogButton(
             title: S.of(context).accept,
             isPrimary: true,
-            onTap: onAccept,
+            isLoading: isLoading,
+            onTap: onAccept == null ? null : () => onAccept!(),
           ),
         ),
       ],

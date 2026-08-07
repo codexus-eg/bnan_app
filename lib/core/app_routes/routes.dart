@@ -16,12 +16,14 @@ abstract class Routes {
   static const String classroomDocuments = '/classroomDocuments';
   static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
+  static const String studentSubjects = '/studentSubjects';
   static const String updatePhone = '/updatePhone';
   static const String updateUserName = '/updateUserName';
   static const String updatePassword = '/updatePassword';
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
   static const String adminHome = '/adminHome';
+  static const String discountCodes = '/discountCodes';
   static const String supervisorHome = '/supervisorHome';
   static const String parentHome = '/parentHome';
   static const String parentSchedule = '/parentSchedule';

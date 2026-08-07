@@ -26,6 +26,22 @@ void main() {
     expect(json.containsKey('currency'), isFalse);
   });
 
+  test('sends only a non-empty discount code and no calculated amounts', () {
+    final json = TamaraCheckoutRequest(
+      parentEmail: _request.parentEmail,
+      parentPassword: _request.parentPassword,
+      student: _request.student,
+      curriculumId: _request.curriculumId,
+      packageId: _request.packageId,
+      address: _request.address,
+      discountCode: ' FAMILY25 ',
+    ).toJson();
+    expect(json['discountCode'], 'FAMILY25');
+    expect(json, isNot(contains('discountAmount')));
+    expect(json, isNot(contains('finalAmount')));
+    expect(json, isNot(contains('percentage')));
+  });
+
   test('parses hours and monthly packages safely', () {
     final hours = PackageModel.fromJson({
       'type': 'hours',
@@ -55,6 +71,27 @@ void main() {
     });
     expect(checkout.checkoutUrl, isNull);
     expect(status.status, PaymentStatus.unknown);
+  });
+
+  test('parses flexible server discount amounts on checkout and status', () {
+    final json = {
+      'data': {
+        'originalAmount': '500',
+        'discountAmount': 125,
+        'finalAmount': 375.0,
+        'currency': 'SAR',
+        'discount': {
+          'code': 'FAMILY25',
+          'type': 'children',
+          'percentage': '25',
+          'childrenCount': 3.0,
+        },
+      },
+    };
+    final checkout = TamaraCheckoutResponse.fromJson(json);
+    final status = TamaraStatusResponse.fromJson(json);
+    expect(checkout.paymentSummary?.finalAmount, 375);
+    expect(status.paymentSummary?.discount?.childrenCount, 3);
   });
 
   test('persisted draft contains no parent or student password', () {

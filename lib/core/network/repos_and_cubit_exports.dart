@@ -41,6 +41,19 @@ export 'package:bnan_app/features/shared_profile/presentation/manager/update_pas
 export 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_assignment/get_assignments_cubit.dart';
 export 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/submit_assignment/submit_assignment_cubit.dart';
 export 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_certificates/get_certificates_cubit.dart';
+export 'package:bnan_app/features/student_subjects/data/repo/student_subjects_repo.dart';
+export 'package:bnan_app/features/student_subjects/data/repo/student_subjects_repo_impl.dart';
+export 'package:bnan_app/features/student_subjects/presentation/manager/get_student_subjects/get_student_subjects_cubit.dart';
+export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo.dart';
+export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo_impl.dart';
+export 'package:bnan_app/features/admin/presentation/manager/admin_dashboard_cubit.dart';
+export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo.dart';
+export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo_impl.dart';
+export 'package:bnan_app/features/discount_codes/presentation/manager/discount_codes_cubit.dart';
+export 'package:bnan_app/features/discount_codes/presentation/manager/discount_code_actions_cubit.dart';
+export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo.dart';
+export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo_impl.dart';
+export 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_cubit.dart';
 
 export 'package:bnan_app/features/home_student/presentation/manager/get_student_subscription/get_student_subscription_cubit.dart';
 export 'package:bnan_app/core/network/api_consumer.dart';
