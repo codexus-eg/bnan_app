@@ -3,5 +3,7 @@ import 'package:bnan_app/features/student_assignments_and_certificate/data/certi
 import 'package:dartz/dartz.dart';
 
 abstract class StudentCertificatesRepo {
-  Future<Either<Failure, List<CertificateModel>>> getMyCertificates();
+  Future<Either<Failure, List<CertificateModel>>> getMyCertificates({
+    String? studentId,
+  });
 }

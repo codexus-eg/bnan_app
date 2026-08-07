@@ -49,6 +49,18 @@ void main() {
     );
   });
 
+  test('child supports underscore id and fallback name and grade', () {
+    final child = GetParentChildrenResponseModel.fromJson({
+      'data': [
+        {'_id': 'child-3', 'name': 'Fallback Name', 'grade': 'Grade 3'},
+      ],
+    }).data.single;
+
+    expect(child.id, 'child-3');
+    expect(child.fullName, 'Fallback Name');
+    expect(child.grade, 'Grade 3');
+  });
+
   test('missing or invalid data parses as an empty list', () {
     expect(GetParentChildrenResponseModel.fromJson({}).data, isEmpty);
     expect(GetParentChildrenResponseModel.fromJson({'data': {}}).data, isEmpty);

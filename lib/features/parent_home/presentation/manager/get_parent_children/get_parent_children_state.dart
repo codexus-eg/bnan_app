@@ -25,3 +25,5 @@ final class GetParentChildrenFailure extends GetParentChildrenState {
 
   final String errorMessage;
 }
+
+final class GetParentChildrenUnauthorized extends GetParentChildrenState {}

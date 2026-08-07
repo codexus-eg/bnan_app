@@ -14,7 +14,11 @@ class GetParentChildrenCubit extends Cubit<GetParentChildrenState> {
     if (isClosed) return;
 
     result.fold(
-      (failure) => emit(GetParentChildrenFailure(failure.message)),
+      (failure) => emit(
+        failure.statusCode == 401
+            ? GetParentChildrenUnauthorized()
+            : GetParentChildrenFailure(failure.message),
+      ),
       (response) => emit(
         GetParentChildrenSuccess(
           response.data,

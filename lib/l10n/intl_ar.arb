@@ -214,6 +214,9 @@
     "myGroups": "مجموعاتي",
     "certificates": "الشهادات",
     "noCertificatesAvailable": "لا توجد شهادات متاحة حتى الآن",
+    "noCertificatesForStudent": "لا توجد شهادات لهذا الطالب",
+    "cannotDisplayStudentCertificates": "لا يمكن عرض شهادات هذا الطالب",
+    "noRegisteredChildren": "لا يوجد أبناء مسجلون",
     "studentCertificate": "شهادة الطالب",
     "monthlyCertificateTitle": "شهادة شهر {month}",
     "@monthlyCertificateTitle": {

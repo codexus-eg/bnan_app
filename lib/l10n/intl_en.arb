@@ -214,6 +214,9 @@
     "myGroups": "My Groups",
     "certificates": "Certificates",
     "noCertificatesAvailable": "No certificates are available yet",
+    "noCertificatesForStudent": "There are no certificates for this student",
+    "cannotDisplayStudentCertificates": "This student's certificates cannot be displayed",
+    "noRegisteredChildren": "There are no registered children",
     "studentCertificate": "Student Certificate",
     "monthlyCertificateTitle": "{month} Certificate",
     "@monthlyCertificateTitle": {

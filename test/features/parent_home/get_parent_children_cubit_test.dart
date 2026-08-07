@@ -111,6 +111,18 @@ void main() {
     expect(repo.calls, 1);
     await cubit.close();
   });
+
+  test('maps status 401 to unauthorized', () async {
+    final repo = _FakeParentHomeRepo(
+      Left(Failure(message: 'unauthorized', statusCode: 401)),
+    );
+    final cubit = GetParentChildrenCubit(repo);
+
+    await cubit.getParentChildren();
+
+    expect(cubit.state, isA<GetParentChildrenUnauthorized>());
+    await cubit.close();
+  });
 }
 
 const _emptySuccess = Right<Failure, GetParentChildrenResponseModel>(

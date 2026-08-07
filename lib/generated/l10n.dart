@@ -1730,6 +1730,26 @@ class S {
     );
   }
 
+  /// `There are no certificates for this student`
+  String get noCertificatesForStudent {
+    return Intl.message(
+      'There are no certificates for this student',
+      name: 'noCertificatesForStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This student's certificates cannot be displayed`
+  String get cannotDisplayStudentCertificates {
+    return Intl.message(
+      'This student\'s certificates cannot be displayed',
+      name: 'cannotDisplayStudentCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Student Certificate`
   String get studentCertificate {
     return Intl.message(
@@ -8585,6 +8605,16 @@ class S {
     return Intl.message(
       'No children are linked to this account',
       name: 'noChildrenLinked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no registered children`
+  String get noRegisteredChildren {
+    return Intl.message(
+      'There are no registered children',
+      name: 'noRegisteredChildren',
       desc: '',
       args: [],
     );

@@ -23,8 +23,10 @@ class ParentChildModel {
   factory ParentChildModel.fromJson(Map<String, dynamic> json) {
     final classroom = json['classroom'];
     return ParentChildModel(
-      id: json['id']?.toString() ?? '',
-      fullName: json['fullName']?.toString() ?? '',
+      id: (json['id'] ?? json['_id'])?.toString() ?? '',
+      fullName: json['fullName']?.toString(),
+      name: json['name']?.toString(),
+      grade: json['grade']?.toString(),
       registrationMode: RegistrationMode.fromValue(json['registrationMode']),
       classroom: classroom is Map
           ? ParentChildClassroomModel.fromJson(

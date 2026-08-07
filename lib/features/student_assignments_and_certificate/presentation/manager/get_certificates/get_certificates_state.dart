@@ -16,4 +16,10 @@ class GetCertificatesSuccess extends GetCertificatesState {
 
 class GetCertificatesEmpty extends GetCertificatesState {}
 
-class GetCertificatesFailure extends GetCertificatesState {}
+class GetCertificatesFailure extends GetCertificatesState {
+  const GetCertificatesFailure();
+}
+
+class GetCertificatesUnauthorized extends GetCertificatesState {}
+
+class GetCertificatesStudentNotFound extends GetCertificatesState {}

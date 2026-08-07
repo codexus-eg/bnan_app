@@ -13,10 +13,17 @@ class StudentCertificatesRepoImpl implements StudentCertificatesRepo {
   final ApiConsumer apiConsumer;
 
   @override
-  Future<Either<Failure, List<CertificateModel>>> getMyCertificates() {
+  Future<Either<Failure, List<CertificateModel>>> getMyCertificates({
+    String? studentId,
+  }) {
     return repoGuard(() async {
+      final normalizedStudentId = studentId?.trim();
       final response = await apiConsumer.get(
         EndPoints.myCertificates,
+        queryParameter:
+            normalizedStudentId == null || normalizedStudentId.isEmpty
+            ? null
+            : {'studentId': normalizedStudentId},
         isProtected: true,
       );
       final items = CertificatesResponseModel.fromJson(response).data.toList();
