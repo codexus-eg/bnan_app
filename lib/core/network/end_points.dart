@@ -42,6 +42,7 @@ abstract class EndPoints {
   static const String egyptianRegistrationRequests =
       '/admin/egyptian-registration-requests';
   static const String adminDashboardStatistics = '/admin/dashboard/statistics';
+  static const String adminDiscountCodes = '/admin/discount-codes';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
@@ -77,6 +78,10 @@ abstract class EndPoints {
 
   static String packageById(String packageId) {
     return '$packages/$packageId';
+  }
+
+  static String adminDiscountCode(String id) {
+    return '$adminDiscountCodes/$id';
   }
 
   static String packagesByCurriculum(String curriculumId) {

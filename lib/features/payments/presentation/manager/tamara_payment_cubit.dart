@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bnan_app/features/payments/data/checkout_payload_fingerprint.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
+import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
@@ -37,9 +38,11 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   bool _checkoutInFlight = false;
   bool _checkoutLaunchClaimed = false;
   bool _reconciledThisForeground = false;
+  PaymentAmountSummary? _paymentSummary;
   int _pollAttempts = 0;
 
   PaymentDraft? get draft => _draft;
+  PaymentAmountSummary? get paymentSummary => _paymentSummary;
 
   Future<void> restore() async {
     _draft = store.read();
@@ -83,6 +86,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
         ? existing!.idempotencyKey
         : keyGenerator.create();
     _checkoutInFlight = true;
+    _paymentSummary = null;
     emit(const TamaraPaymentLoading());
     _draft = _newDraft(request, key, fingerprint);
     await store.save(_draft!);
@@ -103,6 +107,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
         if (!isClosed) emit(TamaraPaymentFailure(failure.message));
       },
       (response) async {
+        _paymentSummary = response.paymentSummary;
         final status = PaymentStatus.fromValue(response.status);
         _draft = PaymentDraft(
           paymentId: response.paymentId,
@@ -196,6 +201,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     final effectiveStatus = response.status == PaymentStatus.unknown
         ? PaymentStatus.pending
         : response.status;
+    _paymentSummary = response.paymentSummary ?? _paymentSummary;
     _draft = PaymentDraft(
       paymentId: response.paymentId.isEmpty
           ? current.paymentId
@@ -370,6 +376,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       return;
     }
     _draft = null;
+    _paymentSummary = null;
     await store.clear();
   }
 

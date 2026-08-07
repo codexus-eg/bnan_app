@@ -51,6 +51,7 @@ export 'package:bnan_app/features/shared_profile/presentation/views/edit_phone_v
 export 'package:bnan_app/features/shared_profile/presentation/views/update_password_view.dart';
 export 'package:bnan_app/features/class_schedules/presentation/views/class_schedules_view.dart';
 export 'package:bnan_app/features/admin/presentation/views/admin_home_view.dart';
+export 'package:bnan_app/features/discount_codes/presentation/views/discount_codes_view.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/views/classrooms_management_view.dart';

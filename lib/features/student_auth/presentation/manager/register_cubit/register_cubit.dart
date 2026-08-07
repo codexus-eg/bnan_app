@@ -44,6 +44,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final regionController = TextEditingController();
   final addressLine1Controller = TextEditingController();
   final addressLine2Controller = TextEditingController();
+  final discountCodeController = TextEditingController();
 
   String? selectedGradeId;
   String? selectedGradeName;
@@ -144,6 +145,9 @@ class RegisterCubit extends Cubit<RegisterState> {
       ),
       curriculumId: curriculumId,
       packageId: packageId,
+      discountCode: discountCodeController.text.trim().isEmpty
+          ? null
+          : discountCodeController.text.trim(),
       address: PaymentAddress(
         city: cityController.text,
         region: regionController.text,
@@ -195,6 +199,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     regionController.dispose();
     addressLine1Controller.dispose();
     addressLine2Controller.dispose();
+    discountCodeController.dispose();
     return super.close();
   }
 }

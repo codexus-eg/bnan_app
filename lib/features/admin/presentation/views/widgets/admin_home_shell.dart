@@ -32,11 +32,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
     scaffoldKey.currentState?.closeDrawer();
   }
 
-  static const Map<int, int> drawerToBottomNavIndex = {
-    0: 0,
-    1: 1,
-    6: 3,
-  };
+  static const Map<int, int> drawerToBottomNavIndex = {0: 0, 1: 1, 6: 3};
 
   void _onDrawerItemTap(int index) {
     final bottomNavIndex = drawerToBottomNavIndex[index];
@@ -67,11 +63,11 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       MyNavigator.goTo(context, Routes.registrationRequests);
     } else if (index == 7) {
       MyNavigator.goTo(context, Routes.gradesManagement);
-    }else if (index == 8) {
+    } else if (index == 8) {
       MyNavigator.goTo(context, Routes.tablesManagement);
     } else if (index == 9) {
       MyNavigator.goTo(context, Routes.groups);
-    }else if (index == 10) {
+    } else if (index == 10) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == 11) {
       MyNavigator.goTo(context, Routes.certificatesManagement);
@@ -79,11 +75,12 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       MyNavigator.goTo(context, Routes.studentClassroomAssignment);
     } else if (index == 13) {
       MyNavigator.goTo(context, Routes.curriculumManagement);
-    }else if (index == 14) {
+    } else if (index == 14) {
       MyNavigator.goTo(context, Routes.termPlans);
-    }
-     else if (index == 15) {
+    } else if (index == 15) {
       MyNavigator.goTo(context, Routes.supervisorClassRoomAssignment);
+    } else if (index == 16) {
+      MyNavigator.goTo(context, Routes.discountCodes);
     }
   }
 

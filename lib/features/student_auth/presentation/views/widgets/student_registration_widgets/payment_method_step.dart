@@ -1,5 +1,9 @@
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_methods_options.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -10,6 +14,7 @@ class PaymentMethodStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = RegisterCubit.get(context);
+    final paymentSummary = context.watch<TamaraPaymentCubit>().paymentSummary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -28,6 +33,14 @@ class PaymentMethodStep extends StatelessWidget {
           studentsCount: '1',
           total: cubit.isGulf ? cubit.packagePrice : '160',
         ),
+        if (cubit.isGulf) ...[
+          const SizedBox(height: 16),
+          const DiscountCodeField(),
+          if (paymentSummary?.hasDiscount == true) ...[
+            const SizedBox(height: 16),
+            PaymentDiscountSummary(summary: paymentSummary!),
+          ],
+        ],
         const SizedBox(height: 16),
         const PaymentMethodsOptions(),
       ],

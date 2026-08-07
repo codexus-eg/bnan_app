@@ -350,6 +350,24 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.discountCodes,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.admin) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<DiscountCodesCubit>()..load()),
+              BlocProvider(create: (_) => getIt<DiscountCodeActionsCubit>()),
+            ],
+            child: const DiscountCodesView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.supervisorHome,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const SupervisorHomeView(),

@@ -23,6 +23,7 @@ abstract class Routes {
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
   static const String adminHome = '/adminHome';
+  static const String discountCodes = '/discountCodes';
   static const String supervisorHome = '/supervisorHome';
   static const String parentHome = '/parentHome';
   static const String parentSchedule = '/parentSchedule';

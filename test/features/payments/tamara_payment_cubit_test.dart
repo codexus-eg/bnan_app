@@ -117,6 +117,27 @@ void main() {
     await cubit.close();
   });
 
+  test('retains the payment summary returned by checkout', () async {
+    final repo = _PaymentRepo()
+      ..checkoutResponse = TamaraCheckoutResponse.fromJson({
+        'data': {
+          'paymentId': 'payment-1',
+          'checkoutUrl': _checkoutUrl,
+          'status': 'pending',
+          'originalAmount': '500',
+          'discountAmount': 125,
+          'finalAmount': 375,
+          'currency': 'SAR',
+          'discount': {'code': 'FAMILY25', 'type': 'children'},
+        },
+      });
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    expect(cubit.paymentSummary?.finalAmount, 375);
+    expect(cubit.paymentSummary?.discount?.code, 'FAMILY25');
+    await cubit.close();
+  });
+
   for (final status in [
     PaymentStatus.failed,
     PaymentStatus.cancelled,
@@ -337,6 +358,7 @@ class _PaymentRepo implements TamaraPaymentRepo {
   TamaraStatusResponse statusResponse = _status(PaymentStatus.pending);
   Completer<Either<Failure, TamaraCheckoutResponse>>? checkoutCompleter;
   Completer<Either<Failure, TamaraStatusResponse>>? statusCompleter;
+  TamaraCheckoutResponse checkoutResponse = _checkoutResponse;
 
   @override
   Future<Either<Failure, TamaraCheckoutResponse>> checkout({
@@ -346,7 +368,7 @@ class _PaymentRepo implements TamaraPaymentRepo {
     keys.add(idempotencyKey);
     if (checkoutCompleter != null) return checkoutCompleter!.future;
     if (checkoutFailure != null) return Left(checkoutFailure!);
-    return const Right(_checkoutResponse);
+    return Right(checkoutResponse);
   }
 
   @override

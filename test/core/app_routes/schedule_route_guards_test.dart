@@ -17,6 +17,7 @@ void main() {
     ..._studentSubjectCases,
     ..._teacherRequestCases,
     ..._adminDashboardCases,
+    ..._discountCodeCases,
   ];
 
   setUp(() async {
@@ -232,6 +233,17 @@ const _adminDashboardCases = [
   ),
   _GuardCase('admin dashboard rejects teacher', Routes.adminHome, 'teacher'),
   _GuardCase('admin dashboard rejects student', Routes.adminHome, 'student'),
+];
+
+const _discountCodeCases = [
+  _GuardCase(
+    'discount codes allows admin',
+    Routes.discountCodes,
+    'admin',
+    allowed: true,
+  ),
+  _GuardCase('discount codes rejects teacher', Routes.discountCodes, 'teacher'),
+  _GuardCase('discount codes rejects parent', Routes.discountCodes, 'parent'),
 ];
 
 const _readOnlyCases = [
