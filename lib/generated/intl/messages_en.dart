@@ -237,6 +237,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelAssignmentMessage": m4,
         "cancelSupervisorAssignmentQuestion": m5,
         "cancelTeacherAssignmentQuestion": m6,
+        "cannotDisplayStudentCertificates":
+            MessageLookupByLibrary.simpleMessage(
+                "This student\'s certificates cannot be displayed"),
         "cardHolderName":
             MessageLookupByLibrary.simpleMessage("Cardholder name"),
         "cardNumber": MessageLookupByLibrary.simpleMessage("Card number"),
@@ -753,14 +756,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "No certificates are available yet"),
         "noCertificatesForStudent": MessageLookupByLibrary.simpleMessage(
             "There are no certificates for this student"),
-        "cannotDisplayStudentCertificates": MessageLookupByLibrary.simpleMessage(
-            "This student's certificates cannot be displayed"),
         "noChildrenAvailable":
             MessageLookupByLibrary.simpleMessage("No children available"),
         "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
             "No children are linked to this account"),
-        "noRegisteredChildren":
-            MessageLookupByLibrary.simpleMessage("There are no registered children"),
         "noClassroomsAvailable":
             MessageLookupByLibrary.simpleMessage("No classrooms available"),
         "noClassroomsAvailableForGrade": MessageLookupByLibrary.simpleMessage(
@@ -798,6 +797,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "No lessons for the selected day"),
         "noMessageDocumentsAvailable": MessageLookupByLibrary.simpleMessage(
             "No message documents are available yet"),
+        "noNewRegistrationRequests": MessageLookupByLibrary.simpleMessage(
+            "There are no new registration requests"),
         "noNotifications":
             MessageLookupByLibrary.simpleMessage("No notifications"),
         "noPendingAssignments":
@@ -810,6 +811,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No plans for this week"),
         "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
             "No recordings are available yet"),
+        "noRegisteredChildren": MessageLookupByLibrary.simpleMessage(
+            "There are no registered children"),
         "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
             "No reports are available yet"),
         "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
@@ -836,6 +839,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No subjects are available"),
         "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
             "No subjects are available for this student"),
+        "noSubjectsMatchSearch": MessageLookupByLibrary.simpleMessage(
+            "No subjects match your search"),
+        "noSubjectsRegistered":
+            MessageLookupByLibrary.simpleMessage("No subjects registered yet"),
         "noSubmission": MessageLookupByLibrary.simpleMessage("Submitted"),
         "noSummaryContent": MessageLookupByLibrary.simpleMessage(
             "No summary content is available"),
@@ -1090,17 +1097,6 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Registration request rejected successfully"),
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("Registration Requests"),
-        "noNewRegistrationRequests":
-            MessageLookupByLibrary.simpleMessage(
-                "There are no new registration requests"),
-        "teacherRequestAcceptedSuccess":
-            MessageLookupByLibrary.simpleMessage(
-                "The request was accepted and the classroom was created successfully"),
-        "teacherRequestAlreadyAssigned":
-            MessageLookupByLibrary.simpleMessage(
-                "This request was accepted by another teacher"),
-        "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
-            "The request cannot be accepted because the subject or grade teaching details changed"),
         "reject": MessageLookupByLibrary.simpleMessage("Reject"),
         "relationships": MessageLookupByLibrary.simpleMessage("Relationships"),
         "remainingDays": m21,
@@ -1175,12 +1171,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please choose a schedule image"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "Next week schedule was updated"),
+        "schoolSubjects":
+            MessageLookupByLibrary.simpleMessage("School Subjects"),
         "science": MessageLookupByLibrary.simpleMessage("Science"),
         "scoreRange": m26,
         "scoreRequired":
             MessageLookupByLibrary.simpleMessage("Score is required"),
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("Search by name or phone"),
+        "searchForSubject":
+            MessageLookupByLibrary.simpleMessage("Search for a subject"),
         "secondPrimaryClassroom":
             MessageLookupByLibrary.simpleMessage("Second primary grade"),
         "secondSecondaryClassroom":
@@ -1292,16 +1292,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Study Curricula "),
         "studyMaterials":
             MessageLookupByLibrary.simpleMessage("Study Materials"),
-        "schoolSubjects":
-            MessageLookupByLibrary.simpleMessage("School Subjects"),
-        "searchForSubject":
-            MessageLookupByLibrary.simpleMessage("Search for a subject"),
-        "noSubjectsRegistered":
-            MessageLookupByLibrary.simpleMessage("No subjects registered yet"),
-        "noSubjectsMatchSearch": MessageLookupByLibrary.simpleMessage(
-            "No subjects match your search"),
-        "unableToLoadSubjects":
-            MessageLookupByLibrary.simpleMessage("Unable to load subjects"),
         "studyPlanFor": MessageLookupByLibrary.simpleMessage("Study Plan"),
         "studyPlanTitlePrefix":
             MessageLookupByLibrary.simpleMessage("Study plan for"),
@@ -1374,6 +1364,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "teacherNote": MessageLookupByLibrary.simpleMessage("Teacher Note"),
         "teacherNoteText": MessageLookupByLibrary.simpleMessage(
             "Excellent work on solving the assignments this time."),
+        "teacherRequestAcceptedSuccess": MessageLookupByLibrary.simpleMessage(
+            "The request was accepted and the classroom was created successfully"),
+        "teacherRequestAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
+            "This request was accepted by another teacher"),
+        "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
+            "The request cannot be accepted because the subject or grade teaching details changed"),
         "teacherSarahName":
             MessageLookupByLibrary.simpleMessage("Ms. Sarah Abdullah"),
         "teacherSarahShort": MessageLookupByLibrary.simpleMessage("Ms. Sarah"),
@@ -1432,6 +1428,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Unable to download file"),
         "unableToLoadAttachment": MessageLookupByLibrary.simpleMessage(
             "Unable to load the attachment"),
+        "unableToLoadSubjects":
+            MessageLookupByLibrary.simpleMessage("Unable to load subjects"),
         "unableToOpenAttachment": MessageLookupByLibrary.simpleMessage(
             "Unable to open the attachment"),
         "unableToOpenDocument":

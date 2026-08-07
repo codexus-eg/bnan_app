@@ -336,8 +336,16 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.adminHome,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.admin) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const AdminHomeView(),
+          child: BlocProvider(
+            create: (_) => getIt<AdminDashboardCubit>()..load(),
+            child: const AdminHomeView(),
+          ),
           key: state.pageKey,
         ),
       ),

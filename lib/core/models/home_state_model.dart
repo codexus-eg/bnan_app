@@ -7,13 +7,15 @@ class HomeStateModel {
     required this.icon,
     required this.value,
     required this.title,
-     this.iconColor,
+    this.iconColor,
+    this.onTap,
   });
 
   final String icon;
   final String value;
   final String title;
   final Color? iconColor;
+  final VoidCallback? onTap;
 }
 
 final studentHomeState = [
@@ -25,7 +27,7 @@ final studentHomeState = [
   ),
   HomeStateModel(
     icon: ImageManager.starIcon,
-    value:'4.8',
+    value: '4.8',
     title: S.current.interaction,
     iconColor: Color(0xffE6A72A),
   ),
@@ -49,7 +51,7 @@ final teacherHomeState = [
   ),
   HomeStateModel(
     icon: ImageManager.teacherBookOneIcon,
-    value:'3',
+    value: '3',
     title: S.current.subject,
   ),
 ];

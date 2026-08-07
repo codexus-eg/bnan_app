@@ -1,8 +1,3 @@
-import 'package:bnan_app/core/shared_widget/home_state/home_stats_section.dart';
-import 'package:bnan_app/features/admin/data/admin_profit_mock.dart';
-import 'package:bnan_app/features/admin/data/admin_subscription_mock.dart';
-import 'package:bnan_app/features/admin/presentation/views/widgets/admin_profit_group.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AdminProfitSection extends StatelessWidget {
@@ -10,30 +5,8 @@ class AdminProfitSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
-
-    return Column(
-      children: [
-        AdminProfitGroup(
-          title: s.dailyProfits,
-          states: adminDailyProfitStats(context),
-        ),
-        const SizedBox(height: 16),
-        AdminProfitGroup(
-          title: s.monthlyProfits,
-          states: adminMonthlyProfitStats(context),
-        ),
-        const SizedBox(height: 16),
-        HomeStatsSection(
-          states: adminSubscriptionStats(context),
-          crossAxisCount: 3,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 0,
-          childAspectRatio: .98,
-          titleTextAlign: TextAlign.center,
-          titleOverflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
+    // TODO: Re-enable revenue sections when the backend returns daily and
+    // monthly revenue grouped by currency.
+    return const SizedBox.shrink();
   }
 }

@@ -41,6 +41,7 @@ abstract class EndPoints {
       '/certificates/student-monthly/issue';
   static const String egyptianRegistrationRequests =
       '/admin/egyptian-registration-requests';
+  static const String adminDashboardStatistics = '/admin/dashboard/statistics';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';

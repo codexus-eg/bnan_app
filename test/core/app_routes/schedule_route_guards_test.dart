@@ -16,6 +16,7 @@ void main() {
     ..._readOnlyCases,
     ..._studentSubjectCases,
     ..._teacherRequestCases,
+    ..._adminDashboardCases,
   ];
 
   setUp(() async {
@@ -220,6 +221,17 @@ const _teacherRequestCases = [
     'student',
     mode: RegistrationMode.gulf,
   ),
+];
+
+const _adminDashboardCases = [
+  _GuardCase(
+    'admin dashboard allows admin',
+    Routes.adminHome,
+    'admin',
+    allowed: true,
+  ),
+  _GuardCase('admin dashboard rejects teacher', Routes.adminHome, 'teacher'),
+  _GuardCase('admin dashboard rejects student', Routes.adminHome, 'student'),
 ];
 
 const _readOnlyCases = [

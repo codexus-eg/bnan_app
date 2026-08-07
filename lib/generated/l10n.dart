@@ -1690,46 +1690,6 @@ class S {
     );
   }
 
-  /// `Request New Lesson`
-  String get requestNewLesson {
-    return Intl.message(
-      'Request New Lesson',
-      name: 'requestNewLesson',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `My Groups`
-  String get myGroups {
-    return Intl.message(
-      'My Groups',
-      name: 'myGroups',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Certificates`
-  String get certificates {
-    return Intl.message(
-      'Certificates',
-      name: 'certificates',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No certificates are available yet`
-  String get noCertificatesAvailable {
-    return Intl.message(
-      'No certificates are available yet',
-      name: 'noCertificatesAvailable',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `School Subjects`
   String get schoolSubjects {
     return Intl.message(
@@ -1780,6 +1740,46 @@ class S {
     );
   }
 
+  /// `Request New Lesson`
+  String get requestNewLesson {
+    return Intl.message(
+      'Request New Lesson',
+      name: 'requestNewLesson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Groups`
+  String get myGroups {
+    return Intl.message(
+      'My Groups',
+      name: 'myGroups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificates`
+  String get certificates {
+    return Intl.message(
+      'Certificates',
+      name: 'certificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No certificates are available yet`
+  String get noCertificatesAvailable {
+    return Intl.message(
+      'No certificates are available yet',
+      name: 'noCertificatesAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `There are no certificates for this student`
   String get noCertificatesForStudent {
     return Intl.message(
@@ -1795,6 +1795,16 @@ class S {
     return Intl.message(
       'This student\'s certificates cannot be displayed',
       name: 'cannotDisplayStudentCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no registered children`
+  String get noRegisteredChildren {
+    return Intl.message(
+      'There are no registered children',
+      name: 'noRegisteredChildren',
       desc: '',
       args: [],
     );
@@ -3325,6 +3335,46 @@ class S {
     return Intl.message(
       'Registration Requests',
       name: 'registrationRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no new registration requests`
+  String get noNewRegistrationRequests {
+    return Intl.message(
+      'There are no new registration requests',
+      name: 'noNewRegistrationRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The request was accepted and the classroom was created successfully`
+  String get teacherRequestAcceptedSuccess {
+    return Intl.message(
+      'The request was accepted and the classroom was created successfully',
+      name: 'teacherRequestAcceptedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This request was accepted by another teacher`
+  String get teacherRequestAlreadyAssigned {
+    return Intl.message(
+      'This request was accepted by another teacher',
+      name: 'teacherRequestAlreadyAssigned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The request cannot be accepted because the subject or grade teaching details changed`
+  String get teacherRequestNotEligible {
+    return Intl.message(
+      'The request cannot be accepted because the subject or grade teaching details changed',
+      name: 'teacherRequestNotEligible',
       desc: '',
       args: [],
     );
@@ -8655,56 +8705,6 @@ class S {
     return Intl.message(
       'No children are linked to this account',
       name: 'noChildrenLinked',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `There are no new registration requests`
-  String get noNewRegistrationRequests {
-    return Intl.message(
-      'There are no new registration requests',
-      name: 'noNewRegistrationRequests',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The request was accepted and the classroom was created successfully`
-  String get teacherRequestAcceptedSuccess {
-    return Intl.message(
-      'The request was accepted and the classroom was created successfully',
-      name: 'teacherRequestAcceptedSuccess',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This request was accepted by another teacher`
-  String get teacherRequestAlreadyAssigned {
-    return Intl.message(
-      'This request was accepted by another teacher',
-      name: 'teacherRequestAlreadyAssigned',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The request cannot be accepted because the subject or grade teaching details changed`
-  String get teacherRequestNotEligible {
-    return Intl.message(
-      'The request cannot be accepted because the subject or grade teaching details changed',
-      name: 'teacherRequestNotEligible',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `There are no registered children`
-  String get noRegisteredChildren {
-    return Intl.message(
-      'There are no registered children',
-      name: 'noRegisteredChildren',
       desc: '',
       args: [],
     );

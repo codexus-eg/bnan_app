@@ -44,6 +44,9 @@ export 'package:bnan_app/features/student_assignments_and_certificate/presentati
 export 'package:bnan_app/features/student_subjects/data/repo/student_subjects_repo.dart';
 export 'package:bnan_app/features/student_subjects/data/repo/student_subjects_repo_impl.dart';
 export 'package:bnan_app/features/student_subjects/presentation/manager/get_student_subjects/get_student_subjects_cubit.dart';
+export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo.dart';
+export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo_impl.dart';
+export 'package:bnan_app/features/admin/presentation/manager/admin_dashboard_cubit.dart';
 export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo.dart';
 export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo_impl.dart';
 export 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_cubit.dart';
