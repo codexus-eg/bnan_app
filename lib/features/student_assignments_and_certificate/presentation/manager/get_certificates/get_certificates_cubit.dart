@@ -6,21 +6,33 @@ class GetCertificatesCubit extends Cubit<GetCertificatesState> {
   GetCertificatesCubit(this.repo) : super(GetCertificatesInitial());
 
   final StudentCertificatesRepo repo;
-  bool _isLoading = false;
+  String? _studentId;
+  int _requestId = 0;
 
-  Future<void> getMyCertificates() async {
-    if (_isLoading) return;
-    _isLoading = true;
+  Future<void> getMyCertificates({String? studentId}) async {
+    final normalizedId = studentId?.trim();
+    _studentId = normalizedId == null || normalizedId.isEmpty
+        ? null
+        : normalizedId;
+    final requestId = ++_requestId;
     emit(GetCertificatesLoading());
-    final result = await repo.getMyCertificates();
+    final result = await repo.getMyCertificates(studentId: _studentId);
+    if (isClosed || requestId != _requestId) return;
     result.fold(
-      (_) => emit(GetCertificatesFailure()),
+      (failure) => emit(_failureState(failure.message, failure.statusCode)),
       (items) => emit(
         items.isEmpty ? GetCertificatesEmpty() : GetCertificatesSuccess(items),
       ),
     );
-    _isLoading = false;
   }
 
-  Future<void> retry() => getMyCertificates();
+  GetCertificatesState _failureState(String message, int? statusCode) {
+    if (statusCode == 401) return GetCertificatesUnauthorized();
+    if (message.contains('STUDENT_NOT_FOUND')) {
+      return GetCertificatesStudentNotFound();
+    }
+    return const GetCertificatesFailure();
+  }
+
+  Future<void> retry() => getMyCertificates(studentId: _studentId);
 }

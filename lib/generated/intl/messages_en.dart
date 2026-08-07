@@ -751,10 +751,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No available classrooms"),
         "noCertificatesAvailable": MessageLookupByLibrary.simpleMessage(
             "No certificates are available yet"),
+        "noCertificatesForStudent": MessageLookupByLibrary.simpleMessage(
+            "There are no certificates for this student"),
+        "cannotDisplayStudentCertificates": MessageLookupByLibrary.simpleMessage(
+            "This student's certificates cannot be displayed"),
         "noChildrenAvailable":
             MessageLookupByLibrary.simpleMessage("No children available"),
         "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
             "No children are linked to this account"),
+        "noRegisteredChildren":
+            MessageLookupByLibrary.simpleMessage("There are no registered children"),
         "noClassroomsAvailable":
             MessageLookupByLibrary.simpleMessage("No classrooms available"),
         "noClassroomsAvailableForGrade": MessageLookupByLibrary.simpleMessage(

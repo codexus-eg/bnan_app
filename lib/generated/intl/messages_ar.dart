@@ -721,10 +721,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
         "noCertificatesAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد شهادات متاحة حتى الآن"),
+        "noCertificatesForStudent":
+            MessageLookupByLibrary.simpleMessage("لا توجد شهادات لهذا الطالب"),
+        "cannotDisplayStudentCertificates": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن عرض شهادات هذا الطالب"),
         "noChildrenAvailable":
             MessageLookupByLibrary.simpleMessage("لا يوجد أبناء متاحون"),
         "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
             "لا يوجد أبناء مرتبطون بهذا الحساب"),
+        "noRegisteredChildren":
+            MessageLookupByLibrary.simpleMessage("لا يوجد أبناء مسجلون"),
         "noClassroomsAvailable":
             MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
         "noClassroomsAvailableForGrade":

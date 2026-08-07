@@ -17,6 +17,7 @@ import 'package:bnan_app/features/curriculum_management/presentation/manager/cur
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
@@ -611,7 +612,7 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.parentCertificates,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const ParentCertificationView(),
+          child: const CertificatesView(),
           key: state.pageKey,
         ),
       ),
