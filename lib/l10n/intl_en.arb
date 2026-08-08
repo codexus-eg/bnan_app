@@ -1115,5 +1115,7 @@
     "invalidChildrenCount": "Enter a positive children count",
     "originalAmount": "Original price",
     "discountAmount": "Discount",
-    "finalAmount": "Total"
+    "finalAmount": "Total",
+    "bonusPoints": "Bonus Points",
+    "invalidEvaluationBonus": "Bonus points must be from 0 to 5"
 }

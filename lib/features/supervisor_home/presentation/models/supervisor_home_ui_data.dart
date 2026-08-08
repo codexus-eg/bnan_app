@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/models/home_state_model.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/home_student/data/models/notification_model.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -26,11 +27,12 @@ class SupervisorHomeUiData {
           value: '20',
           title: s.evaluations,
         ),
-        HomeStateModel(
-          icon: ImageManager.crownSimple,
-          value: '--',
-          title: s.weeklyIdealStudent,
-        ),
+        if (SessionManager.instance.isEgyptianSupervisor)
+          HomeStateModel(
+            icon: ImageManager.crownSimple,
+            value: '--',
+            title: s.weeklyIdealStudent,
+          ),
       ],
       notifications: [
         NotificationModel(

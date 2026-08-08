@@ -125,6 +125,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addAction": MessageLookupByLibrary.simpleMessage("Add"),
         "addDailyPlanForStudents": MessageLookupByLibrary.simpleMessage(
             "Add a daily plan for students"),
+        "addDiscountCode":
+            MessageLookupByLibrary.simpleMessage("Add Discount Code"),
         "addLesson": MessageLookupByLibrary.simpleMessage("Add Lesson"),
         "addNewChapter":
             MessageLookupByLibrary.simpleMessage("Add New Chapter"),
@@ -224,6 +226,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "behavior": MessageLookupByLibrary.simpleMessage("Behavior"),
         "biology": MessageLookupByLibrary.simpleMessage("Biology"),
         "birthDate": MessageLookupByLibrary.simpleMessage("Birth date"),
+        "bonusPoints": MessageLookupByLibrary.simpleMessage("Bonus Points"),
         "browseSection": MessageLookupByLibrary.simpleMessage("Browse section"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "You can change the currency from the list"),
@@ -280,6 +283,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "chemistry": MessageLookupByLibrary.simpleMessage("Chemistry"),
         "child": MessageLookupByLibrary.simpleMessage("Child"),
         "children": MessageLookupByLibrary.simpleMessage("Children"),
+        "childrenCount": MessageLookupByLibrary.simpleMessage("Children count"),
+        "childrenDiscount":
+            MessageLookupByLibrary.simpleMessage("Number of children"),
         "chooseAccountType": MessageLookupByLibrary.simpleMessage(
             "Choose account type to continue"),
         "chooseClassRoom":
@@ -392,6 +398,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dashboardPassword":
             MessageLookupByLibrary.simpleMessage("Dashboard Password"),
         "dateFormatHint": MessageLookupByLibrary.simpleMessage("mm/dd/yy"),
+        "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("Date range"),
         "day": MessageLookupByLibrary.simpleMessage("Day"),
         "days": MessageLookupByLibrary.simpleMessage("Days"),
         "daysPackage": m8,
@@ -405,6 +412,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete assignment"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this assignment?"),
+        "deleteDiscountCode":
+            MessageLookupByLibrary.simpleMessage("Delete discount code"),
+        "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this discount code?"),
         "deleteGrade": MessageLookupByLibrary.simpleMessage("Delete grade"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this grade?"),
@@ -427,9 +438,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "disableUserDescription": MessageLookupByLibrary.simpleMessage(
             "They will not be able to log in until you reactivate them."),
         "disableUserQuestion": m9,
+        "discountAmount": MessageLookupByLibrary.simpleMessage("Discount"),
+        "discountCode": MessageLookupByLibrary.simpleMessage("Discount code"),
+        "discountCodeCreated": MessageLookupByLibrary.simpleMessage(
+            "Discount code created successfully"),
+        "discountCodeDeleted": MessageLookupByLibrary.simpleMessage(
+            "Discount code deleted successfully"),
+        "discountCodeRequired":
+            MessageLookupByLibrary.simpleMessage("Discount code is required"),
+        "discountCodeUpdated": MessageLookupByLibrary.simpleMessage(
+            "Discount code updated successfully"),
+        "discountCodes": MessageLookupByLibrary.simpleMessage("Discount Codes"),
+        "discountDatesRequired": MessageLookupByLibrary.simpleMessage(
+            "Start and end dates are required"),
+        "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage(
+            "End date cannot be before start date"),
+        "discountPercentage":
+            MessageLookupByLibrary.simpleMessage("Percentage"),
         "discountTitle": MessageLookupByLibrary.simpleMessage("Discount Title"),
         "discountTitleHint":
             MessageLookupByLibrary.simpleMessage("Example: Save 120 SAR"),
+        "discountType": MessageLookupByLibrary.simpleMessage("Type"),
         "discounts": MessageLookupByLibrary.simpleMessage("Deductions"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
@@ -449,6 +478,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "editCurriculum":
             MessageLookupByLibrary.simpleMessage("Edit Curriculum"),
         "editData": MessageLookupByLibrary.simpleMessage("Edit Data"),
+        "editDiscountCode":
+            MessageLookupByLibrary.simpleMessage("Edit Discount Code"),
         "editEvaluation":
             MessageLookupByLibrary.simpleMessage("Edit Evaluation"),
         "editGrade": MessageLookupByLibrary.simpleMessage("Edit Grade"),
@@ -482,8 +513,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "enableAccount": MessageLookupByLibrary.simpleMessage("Enable account"),
         "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
             "Do you want to enable this account?"),
+        "endDate": MessageLookupByLibrary.simpleMessage("End date"),
         "endTime": MessageLookupByLibrary.simpleMessage("End time"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
+        "enterDiscountCode":
+            MessageLookupByLibrary.simpleMessage("Enter discount code"),
         "errorBadCertificate":
             MessageLookupByLibrary.simpleMessage("Untrusted SSL certificate."),
         "errorBadRequest": MessageLookupByLibrary.simpleMessage("Bad request."),
@@ -551,6 +585,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "File downloaded successfully"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "Please fill in all required fields."),
+        "finalAmount": MessageLookupByLibrary.simpleMessage("Total"),
         "finalDelete": MessageLookupByLibrary.simpleMessage("Final Delete"),
         "finalDeleteDescription": MessageLookupByLibrary.simpleMessage(
             "This account will be permanently deleted from the system, including its login account and related profile data. This action cannot be undone."),
@@ -634,17 +669,24 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Appreciation Certificate - Interaction"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("Interaction Level"),
+        "invalidChildrenCount": MessageLookupByLibrary.simpleMessage(
+            "Enter a positive children count"),
         "invalidCvUrl":
             MessageLookupByLibrary.simpleMessage("The CV link is invalid"),
         "invalidData": MessageLookupByLibrary.simpleMessage(
             "Please check the entered data"),
+        "invalidDiscountPercentage":
+            MessageLookupByLibrary.simpleMessage("Enter a valid percentage"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid email address."),
+        "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
+            "Bonus points must be from 0 to 5"),
         "invalidLink": MessageLookupByLibrary.simpleMessage("Invalid link"),
         "invalidPackage":
             MessageLookupByLibrary.simpleMessage("Invalid package data"),
         "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
             "Enter a valid amount of at least 0.01"),
+        "isActive": MessageLookupByLibrary.simpleMessage("Active"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("Issue New Certificate"),
         "kuwaitiCurriculum":
@@ -774,6 +816,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No curriculums found"),
         "noDataAvailable": MessageLookupByLibrary.simpleMessage(
             "No information available now"),
+        "noDiscountCodes": MessageLookupByLibrary.simpleMessage(
+            "No discount codes are available"),
         "noEvaluationForStudent": MessageLookupByLibrary.simpleMessage(
             "No evaluation for this student"),
         "noEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
@@ -890,6 +934,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "openSessionLink":
             MessageLookupByLibrary.simpleMessage("Open lesson link"),
         "optional": MessageLookupByLibrary.simpleMessage("Optional"),
+        "optionalDiscountCode":
+            MessageLookupByLibrary.simpleMessage("Discount code (optional)"),
+        "originalAmount":
+            MessageLookupByLibrary.simpleMessage("Original price"),
         "other": MessageLookupByLibrary.simpleMessage("Other"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("4-hour package"),
         "packageCalculation": m18,
@@ -1250,6 +1298,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "specialization":
             MessageLookupByLibrary.simpleMessage("Specialization"),
         "start": MessageLookupByLibrary.simpleMessage("Start"),
+        "startDate": MessageLookupByLibrary.simpleMessage("Start date"),
         "startLessonViaZoom":
             MessageLookupByLibrary.simpleMessage("Start lesson via Zoom"),
         "startNow": MessageLookupByLibrary.simpleMessage("Start now"),
@@ -1542,34 +1591,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("With Ms. Sarah Abdullah"),
         "years": MessageLookupByLibrary.simpleMessage("Years"),
         "yes": MessageLookupByLibrary.simpleMessage("Yes"),
-        "yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
-        "discountCodes": MessageLookupByLibrary.simpleMessage("Discount Codes"),
-        "addDiscountCode": MessageLookupByLibrary.simpleMessage("Add Discount Code"),
-        "editDiscountCode": MessageLookupByLibrary.simpleMessage("Edit Discount Code"),
-        "discountCode": MessageLookupByLibrary.simpleMessage("Discount code"),
-        "optionalDiscountCode": MessageLookupByLibrary.simpleMessage("Discount code (optional)"),
-        "enterDiscountCode": MessageLookupByLibrary.simpleMessage("Enter discount code"),
-        "discountPercentage": MessageLookupByLibrary.simpleMessage("Percentage"),
-        "discountType": MessageLookupByLibrary.simpleMessage("Type"),
-        "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("Date range"),
-        "childrenDiscount": MessageLookupByLibrary.simpleMessage("Number of children"),
-        "startDate": MessageLookupByLibrary.simpleMessage("Start date"),
-        "endDate": MessageLookupByLibrary.simpleMessage("End date"),
-        "childrenCount": MessageLookupByLibrary.simpleMessage("Children count"),
-        "isActive": MessageLookupByLibrary.simpleMessage("Active"),
-        "noDiscountCodes": MessageLookupByLibrary.simpleMessage("No discount codes are available"),
-        "deleteDiscountCode": MessageLookupByLibrary.simpleMessage("Delete discount code"),
-        "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage("Are you sure you want to delete this discount code?"),
-        "discountCodeCreated": MessageLookupByLibrary.simpleMessage("Discount code created successfully"),
-        "discountCodeUpdated": MessageLookupByLibrary.simpleMessage("Discount code updated successfully"),
-        "discountCodeDeleted": MessageLookupByLibrary.simpleMessage("Discount code deleted successfully"),
-        "discountCodeRequired": MessageLookupByLibrary.simpleMessage("Discount code is required"),
-        "invalidDiscountPercentage": MessageLookupByLibrary.simpleMessage("Enter a valid percentage"),
-        "discountDatesRequired": MessageLookupByLibrary.simpleMessage("Start and end dates are required"),
-        "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage("End date cannot be before start date"),
-        "invalidChildrenCount": MessageLookupByLibrary.simpleMessage("Enter a positive children count"),
-        "originalAmount": MessageLookupByLibrary.simpleMessage("Original price"),
-        "discountAmount": MessageLookupByLibrary.simpleMessage("Discount"),
-        "finalAmount": MessageLookupByLibrary.simpleMessage("Total")
+        "yesterday": MessageLookupByLibrary.simpleMessage("Yesterday")
       };
 }

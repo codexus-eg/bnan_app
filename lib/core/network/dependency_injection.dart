@@ -70,6 +70,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AdminDashboardRepo>(
     () => AdminDashboardRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<IdealStudentRepo>(
+    () => IdealStudentRepoImpl(getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<DiscountCodesRepo>(
     () => DiscountCodesRepoImpl(getIt<ApiConsumer>()),
   );
@@ -281,6 +284,9 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<AdminDashboardCubit>(
     () => AdminDashboardCubit(getIt<AdminDashboardRepo>()),
+  );
+  getIt.registerFactory<IdealStudentCubit>(
+    () => IdealStudentCubit(getIt<IdealStudentRepo>()),
   );
   getIt.registerFactory<DiscountCodesCubit>(
     () => DiscountCodesCubit(getIt<DiscountCodesRepo>()),

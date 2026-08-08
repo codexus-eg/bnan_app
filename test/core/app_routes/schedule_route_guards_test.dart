@@ -18,6 +18,7 @@ void main() {
     ..._teacherRequestCases,
     ..._adminDashboardCases,
     ..._discountCodeCases,
+    ..._idealStudentCases,
   ];
 
   setUp(() async {
@@ -244,6 +245,57 @@ const _discountCodeCases = [
   ),
   _GuardCase('discount codes rejects teacher', Routes.discountCodes, 'teacher'),
   _GuardCase('discount codes rejects parent', Routes.discountCodes, 'parent'),
+];
+
+const _idealStudentCases = [
+  _GuardCase(
+    'ideal student allows Egyptian teacher',
+    Routes.weeklyIdealStudents,
+    'teacher',
+    allowed: true,
+    modes: [RegistrationMode.egyptian],
+  ),
+  _GuardCase(
+    'ideal student allows mixed teacher',
+    Routes.weeklyIdealStudents,
+    'teacher',
+    allowed: true,
+    modes: RegistrationMode.values,
+  ),
+  _GuardCase(
+    'ideal student rejects Gulf teacher',
+    Routes.weeklyIdealStudents,
+    'teacher',
+    modes: [RegistrationMode.gulf],
+  ),
+  _GuardCase(
+    'ideal student allows Egyptian supervisor',
+    Routes.weeklyIdealStudents,
+    'supervisor',
+    allowed: true,
+    mode: RegistrationMode.egyptian,
+  ),
+  _GuardCase(
+    'ideal student rejects Gulf supervisor',
+    Routes.weeklyIdealStudents,
+    'supervisor',
+    mode: RegistrationMode.gulf,
+  ),
+  _GuardCase(
+    'ideal student rejects admin',
+    Routes.weeklyIdealStudents,
+    'admin',
+  ),
+  _GuardCase(
+    'ideal student rejects student',
+    Routes.weeklyIdealStudents,
+    'student',
+  ),
+  _GuardCase(
+    'ideal student rejects parent',
+    Routes.weeklyIdealStudents,
+    'parent',
+  ),
 ];
 
 const _readOnlyCases = [

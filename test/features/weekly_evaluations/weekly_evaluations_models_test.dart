@@ -1,5 +1,6 @@
 import 'package:bnan_app/features/weekly_evaluations/data/models/elapsed_evaluation_weeks_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/upsert_evaluation_request_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/models/evaluation_value_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluations_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -89,6 +90,34 @@ void main() {
     expect(request.toJson(), containsPair('participation', 'very_good'));
     expect(request.toJson(), containsPair('homework', '-'));
     expect(request.toJson(), containsPair('behavior', 'acceptable'));
+  });
+
+  test('bonus uses correct key and never sends legacy names', () {
+    const request = UpsertEvaluationRequestModel(
+      student: 's',
+      classroom: 'c',
+      subject: 'x',
+      week: 2,
+      attendance: 'present',
+      participation: 'excellent',
+      homework: 'good',
+      behavior: 'good',
+      bonus: 4,
+    );
+    final json = request.toJson();
+    expect(json['bonus'], 4);
+    expect(json, isNot(contains('bouns')));
+    expect(json, isNot(contains('manualBonusPoints')));
+  });
+
+  test('bonus parsing prioritizes bonus, falls back to bouns, then zero', () {
+    expect(EvaluationValueModel.fromJson({'bonus': 4, 'bouns': 2}).bonus, 4);
+    expect(
+      EvaluationValueModel.fromJson({'bonus': null, 'bouns': '3'}).bonus,
+      3,
+    );
+    expect(EvaluationValueModel.fromJson({'bonus': 2.0}).bonus, 2);
+    expect(EvaluationValueModel.fromJson(const {}).bonus, 0);
   });
 
   test('complete response parses student subject and evaluation ids', () {

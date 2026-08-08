@@ -1,11 +1,10 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/teacher_performance/presentation/views/widgets/ideal_student_score_text.dart';
+import 'package:bnan_app/features/ideal_student/presentation/views/widgets/ideal_student_score_text.dart';
 import 'package:flutter/material.dart';
 
 class IdealStudentScoreChip extends StatelessWidget {
   const IdealStudentScoreChip({super.key, required this.points});
-
-  final int points;
+  final num points;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +14,10 @@ class IdealStudentScoreChip extends StatelessWidget {
         color: ColorManager.blueD0DE,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: IdealStudentScoreText(points: points,textColor: ColorManager.mainColor14),
+      child: IdealStudentScoreText(
+        points: points,
+        textColor: ColorManager.mainColor14,
+      ),
     );
   }
 }

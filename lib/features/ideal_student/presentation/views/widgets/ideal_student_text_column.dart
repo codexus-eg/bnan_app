@@ -8,7 +8,6 @@ class IdealStudentTextColumn extends StatelessWidget {
     required this.nameColor,
     required this.bottom,
   });
-
   final String name;
   final Color nameColor;
   final Widget bottom;

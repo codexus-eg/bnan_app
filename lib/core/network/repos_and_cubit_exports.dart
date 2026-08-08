@@ -47,6 +47,9 @@ export 'package:bnan_app/features/student_subjects/presentation/manager/get_stud
 export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo.dart';
 export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo_impl.dart';
 export 'package:bnan_app/features/admin/presentation/manager/admin_dashboard_cubit.dart';
+export 'package:bnan_app/features/ideal_student/data/repos/ideal_student_repo.dart';
+export 'package:bnan_app/features/ideal_student/data/repos/ideal_student_repo_impl.dart';
+export 'package:bnan_app/features/ideal_student/presentation/manager/ideal_student_cubit.dart';
 export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo.dart';
 export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo_impl.dart';
 export 'package:bnan_app/features/discount_codes/presentation/manager/discount_codes_cubit.dart';

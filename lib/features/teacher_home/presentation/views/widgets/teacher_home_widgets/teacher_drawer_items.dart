@@ -55,6 +55,11 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
     DrawerItemModel(title: s.notifications, icon: ImageManager.bellIcon),
     DrawerItemModel(title: s.attendance, icon: ImageManager.teacherMeetingIcon),
     DrawerItemModel(title: s.myAccount, icon: ImageManager.userProfileIcon),
+    if (SessionManager.instance.hasEgyptianRegistration)
+      DrawerItemModel(
+        title: s.weeklyIdealStudent,
+        icon: ImageManager.crownSimple,
+      ),
   ];
 }
 

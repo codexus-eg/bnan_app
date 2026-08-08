@@ -9,6 +9,7 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_state.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_dialog_context.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/evaluation_dialog_error_message.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/evaluation_bonus_field.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/evaluation_identity_fields.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/evaluation_score_fields.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -31,6 +32,7 @@ class WeeklyEvaluationForm extends StatefulWidget {
 class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _notesController;
+  late final TextEditingController _bonusController;
   int? week;
   String? classroomId, studentId, subjectId;
   String? attendance, participation, homework, behavior;
@@ -39,6 +41,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   void initState() {
     super.initState();
     _notesController = TextEditingController();
+    _bonusController = TextEditingController(text: '0');
     week = widget.data.week;
     final editor = widget.data.editor;
     if (editor == null) {
@@ -58,6 +61,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   @override
   void dispose() {
     _notesController.dispose();
+    _bonusController.dispose();
     super.dispose();
   }
 
@@ -124,6 +128,8 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
                 onHomeworkChanged: (value) => setState(() => homework = value),
                 onBehaviorChanged: (value) => setState(() => behavior = value),
               ),
+              const SizedBox(height: 16),
+              EvaluationBonusField(controller: _bonusController),
               const SizedBox(height: 16),
               CustomTextField(
                 label: s.notesText,
@@ -195,6 +201,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
     if (value.homework.isNotEmpty) homework = value.homework;
     if (value.behavior.isNotEmpty) behavior = value.behavior;
     _notesController.text = value.notes;
+    _bonusController.text = value.bonus.toString();
   }
 
   void _listen(BuildContext context, WeeklyEvaluationsState state) {
@@ -215,6 +222,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
         participation: participation!,
         homework: homework!,
         behavior: behavior!,
+        bonus: int.tryParse(_bonusController.text.trim()) ?? 0,
         notes: _notesController.text.trim(),
       ),
     );

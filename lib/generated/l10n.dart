@@ -9140,34 +9140,305 @@ class S {
     );
   }
 
-  String get discountCodes => Intl.message('Discount Codes', name: 'discountCodes');
-  String get addDiscountCode => Intl.message('Add Discount Code', name: 'addDiscountCode');
-  String get editDiscountCode => Intl.message('Edit Discount Code', name: 'editDiscountCode');
-  String get discountCode => Intl.message('Discount code', name: 'discountCode');
-  String get optionalDiscountCode => Intl.message('Discount code (optional)', name: 'optionalDiscountCode');
-  String get enterDiscountCode => Intl.message('Enter discount code', name: 'enterDiscountCode');
-  String get discountPercentage => Intl.message('Percentage', name: 'discountPercentage');
-  String get discountType => Intl.message('Type', name: 'discountType');
-  String get dateRangeDiscount => Intl.message('Date range', name: 'dateRangeDiscount');
-  String get childrenDiscount => Intl.message('Number of children', name: 'childrenDiscount');
-  String get startDate => Intl.message('Start date', name: 'startDate');
-  String get endDate => Intl.message('End date', name: 'endDate');
-  String get childrenCount => Intl.message('Children count', name: 'childrenCount');
-  String get isActive => Intl.message('Active', name: 'isActive');
-  String get noDiscountCodes => Intl.message('No discount codes are available', name: 'noDiscountCodes');
-  String get deleteDiscountCode => Intl.message('Delete discount code', name: 'deleteDiscountCode');
-  String get deleteDiscountCodeConfirmation => Intl.message('Are you sure you want to delete this discount code?', name: 'deleteDiscountCodeConfirmation');
-  String get discountCodeCreated => Intl.message('Discount code created successfully', name: 'discountCodeCreated');
-  String get discountCodeUpdated => Intl.message('Discount code updated successfully', name: 'discountCodeUpdated');
-  String get discountCodeDeleted => Intl.message('Discount code deleted successfully', name: 'discountCodeDeleted');
-  String get discountCodeRequired => Intl.message('Discount code is required', name: 'discountCodeRequired');
-  String get invalidDiscountPercentage => Intl.message('Enter a valid percentage', name: 'invalidDiscountPercentage');
-  String get discountDatesRequired => Intl.message('Start and end dates are required', name: 'discountDatesRequired');
-  String get discountEndBeforeStart => Intl.message('End date cannot be before start date', name: 'discountEndBeforeStart');
-  String get invalidChildrenCount => Intl.message('Enter a positive children count', name: 'invalidChildrenCount');
-  String get originalAmount => Intl.message('Original price', name: 'originalAmount');
-  String get discountAmount => Intl.message('Discount', name: 'discountAmount');
-  String get finalAmount => Intl.message('Total', name: 'finalAmount');
+  /// `Discount Codes`
+  String get discountCodes {
+    return Intl.message(
+      'Discount Codes',
+      name: 'discountCodes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Discount Code`
+  String get addDiscountCode {
+    return Intl.message(
+      'Add Discount Code',
+      name: 'addDiscountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Discount Code`
+  String get editDiscountCode {
+    return Intl.message(
+      'Edit Discount Code',
+      name: 'editDiscountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount code`
+  String get discountCode {
+    return Intl.message(
+      'Discount code',
+      name: 'discountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount code (optional)`
+  String get optionalDiscountCode {
+    return Intl.message(
+      'Discount code (optional)',
+      name: 'optionalDiscountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter discount code`
+  String get enterDiscountCode {
+    return Intl.message(
+      'Enter discount code',
+      name: 'enterDiscountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Percentage`
+  String get discountPercentage {
+    return Intl.message(
+      'Percentage',
+      name: 'discountPercentage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get discountType {
+    return Intl.message(
+      'Type',
+      name: 'discountType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date range`
+  String get dateRangeDiscount {
+    return Intl.message(
+      'Date range',
+      name: 'dateRangeDiscount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number of children`
+  String get childrenDiscount {
+    return Intl.message(
+      'Number of children',
+      name: 'childrenDiscount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start date`
+  String get startDate {
+    return Intl.message(
+      'Start date',
+      name: 'startDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End date`
+  String get endDate {
+    return Intl.message(
+      'End date',
+      name: 'endDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Children count`
+  String get childrenCount {
+    return Intl.message(
+      'Children count',
+      name: 'childrenCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get isActive {
+    return Intl.message(
+      'Active',
+      name: 'isActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No discount codes are available`
+  String get noDiscountCodes {
+    return Intl.message(
+      'No discount codes are available',
+      name: 'noDiscountCodes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete discount code`
+  String get deleteDiscountCode {
+    return Intl.message(
+      'Delete discount code',
+      name: 'deleteDiscountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this discount code?`
+  String get deleteDiscountCodeConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this discount code?',
+      name: 'deleteDiscountCodeConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount code created successfully`
+  String get discountCodeCreated {
+    return Intl.message(
+      'Discount code created successfully',
+      name: 'discountCodeCreated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount code updated successfully`
+  String get discountCodeUpdated {
+    return Intl.message(
+      'Discount code updated successfully',
+      name: 'discountCodeUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount code deleted successfully`
+  String get discountCodeDeleted {
+    return Intl.message(
+      'Discount code deleted successfully',
+      name: 'discountCodeDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount code is required`
+  String get discountCodeRequired {
+    return Intl.message(
+      'Discount code is required',
+      name: 'discountCodeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid percentage`
+  String get invalidDiscountPercentage {
+    return Intl.message(
+      'Enter a valid percentage',
+      name: 'invalidDiscountPercentage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start and end dates are required`
+  String get discountDatesRequired {
+    return Intl.message(
+      'Start and end dates are required',
+      name: 'discountDatesRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End date cannot be before start date`
+  String get discountEndBeforeStart {
+    return Intl.message(
+      'End date cannot be before start date',
+      name: 'discountEndBeforeStart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a positive children count`
+  String get invalidChildrenCount {
+    return Intl.message(
+      'Enter a positive children count',
+      name: 'invalidChildrenCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Original price`
+  String get originalAmount {
+    return Intl.message(
+      'Original price',
+      name: 'originalAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount`
+  String get discountAmount {
+    return Intl.message(
+      'Discount',
+      name: 'discountAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get finalAmount {
+    return Intl.message(
+      'Total',
+      name: 'finalAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bonus Points`
+  String get bonusPoints {
+    return Intl.message(
+      'Bonus Points',
+      name: 'bonusPoints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bonus points must be from 0 to 5`
+  String get invalidEvaluationBonus {
+    return Intl.message(
+      'Bonus points must be from 0 to 5',
+      name: 'invalidEvaluationBonus',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

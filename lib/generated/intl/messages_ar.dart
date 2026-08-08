@@ -123,6 +123,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addAction": MessageLookupByLibrary.simpleMessage("إضافة"),
         "addDailyPlanForStudents":
             MessageLookupByLibrary.simpleMessage("إضافة خطة يومية للطلاب"),
+        "addDiscountCode":
+            MessageLookupByLibrary.simpleMessage("إضافة كود خصم"),
         "addLesson": MessageLookupByLibrary.simpleMessage("إضافة حصة"),
         "addNewChapter": MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
         "addNewCurriculum":
@@ -214,6 +216,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "behavior": MessageLookupByLibrary.simpleMessage("السلوك"),
         "biology": MessageLookupByLibrary.simpleMessage("الأحياء"),
         "birthDate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
+        "bonusPoints": MessageLookupByLibrary.simpleMessage("النقاط الإضافية"),
         "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "يمكنك تغيير العملة من القائمة"),
@@ -268,6 +271,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chemistry": MessageLookupByLibrary.simpleMessage("الكيمياء"),
         "child": MessageLookupByLibrary.simpleMessage("الابن"),
         "children": MessageLookupByLibrary.simpleMessage("الأبناء"),
+        "childrenCount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
+        "childrenDiscount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
         "chooseAccountType":
             MessageLookupByLibrary.simpleMessage("اختر نوع الحساب للمتابعة"),
         "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
@@ -375,6 +380,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dashboardPassword": MessageLookupByLibrary.simpleMessage(
             "كلمة المرور للدخول على الداشبورد"),
         "dateFormatHint": MessageLookupByLibrary.simpleMessage("mm/dd/yy"),
+        "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("مدة محددة"),
         "day": MessageLookupByLibrary.simpleMessage("يوم"),
         "days": MessageLookupByLibrary.simpleMessage("أيام"),
         "daysPackage": m8,
@@ -387,6 +393,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد من حذف هذا الواجب؟"),
+        "deleteDiscountCode":
+            MessageLookupByLibrary.simpleMessage("حذف كود الخصم"),
+        "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف كود الخصم؟"),
         "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد أنك تريد حذف الصف"),
@@ -407,9 +417,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "disableUserDescription": MessageLookupByLibrary.simpleMessage(
             "لن يستطيع الدخول حتى تقوم بتفعيله."),
         "disableUserQuestion": m9,
+        "discountAmount": MessageLookupByLibrary.simpleMessage("الخصم"),
+        "discountCode": MessageLookupByLibrary.simpleMessage("كود الخصم"),
+        "discountCodeCreated":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة كود الخصم بنجاح"),
+        "discountCodeDeleted":
+            MessageLookupByLibrary.simpleMessage("تم حذف كود الخصم بنجاح"),
+        "discountCodeRequired":
+            MessageLookupByLibrary.simpleMessage("كود الخصم مطلوب"),
+        "discountCodeUpdated":
+            MessageLookupByLibrary.simpleMessage("تم تعديل كود الخصم بنجاح"),
+        "discountCodes": MessageLookupByLibrary.simpleMessage("أكواد الخصم"),
+        "discountDatesRequired": MessageLookupByLibrary.simpleMessage(
+            "تاريخ البداية والنهاية مطلوبان"),
+        "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية"),
+        "discountPercentage":
+            MessageLookupByLibrary.simpleMessage("النسبة المئوية"),
         "discountTitle": MessageLookupByLibrary.simpleMessage("عنوان الخصم"),
         "discountTitleHint":
             MessageLookupByLibrary.simpleMessage("مثال: وفر 120 ر.س"),
+        "discountType": MessageLookupByLibrary.simpleMessage("النوع"),
         "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
@@ -427,6 +455,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
         "editCurriculum": MessageLookupByLibrary.simpleMessage("تعديل المنهج"),
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
+        "editDiscountCode":
+            MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
         "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
         "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
         "editLesson": MessageLookupByLibrary.simpleMessage("تعديل الحصة"),
@@ -459,8 +489,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "enableAccount": MessageLookupByLibrary.simpleMessage("فك التعطيل"),
         "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل تريد فك تعطيل هذا الحساب؟"),
+        "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
         "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
         "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
+        "enterDiscountCode":
+            MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),
         "errorBadCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة SSL غير موثوقة."),
         "errorBadRequest":
@@ -526,6 +559,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم تحميل الملف بنجاح"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "يرجى ملء جميع الحقول المطلوبة."),
+        "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي"),
         "finalDelete": MessageLookupByLibrary.simpleMessage("حذف نهائي"),
         "finalDeleteDescription": MessageLookupByLibrary.simpleMessage(
             "سيتم حذف هذا الحساب نهائيًا من النظام، بما في ذلك حساب الدخول وملف البيانات المرتبط به. لا يمكن التراجع عن هذا الإجراء."),
@@ -606,17 +640,24 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شكر وتقدير - التفاعل"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
+        "invalidChildrenCount":
+            MessageLookupByLibrary.simpleMessage("أدخل عدد أبناء موجبًا"),
         "invalidCvUrl": MessageLookupByLibrary.simpleMessage(
             "رابط السيرة الذاتية غير صالح"),
         "invalidData": MessageLookupByLibrary.simpleMessage(
             "يرجى التأكد من البيانات المدخلة"),
+        "invalidDiscountPercentage":
+            MessageLookupByLibrary.simpleMessage("أدخل نسبة مئوية صحيحة"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage(
             "الرجاء إدخال عنوان بريد إلكتروني صالح."),
+        "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
+            "النقاط الإضافية يجب أن تكون من 0 إلى 5"),
         "invalidLink": MessageLookupByLibrary.simpleMessage("رابط غير صالح"),
         "invalidPackage":
             MessageLookupByLibrary.simpleMessage("بيانات الباقة غير صالحة"),
         "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
             "أدخل مبلغًا صحيحًا لا يقل عن 0.01"),
+        "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
         "kuwaitiCurriculum":
@@ -744,6 +785,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد مناهج"),
         "noDataAvailable":
             MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
+        "noDiscountCodes":
+            MessageLookupByLibrary.simpleMessage("لا توجد أكواد خصم"),
         "noEvaluationForStudent":
             MessageLookupByLibrary.simpleMessage("لا يوجد تقييم لهذا الطالب"),
         "noEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
@@ -861,6 +904,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "openSessionLink":
             MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
         "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
+        "optionalDiscountCode":
+            MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
+        "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
         "other": MessageLookupByLibrary.simpleMessage("أخرى"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
         "packageCalculation": m18,
@@ -1198,6 +1244,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),
         "specialization": MessageLookupByLibrary.simpleMessage("التخصص"),
         "start": MessageLookupByLibrary.simpleMessage("ابدأ"),
+        "startDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
         "startLessonViaZoom":
             MessageLookupByLibrary.simpleMessage("ابدأ الحصة عبر Zoom"),
         "startNow": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
@@ -1480,34 +1527,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("مع أ/ سارة عبدالله"),
         "years": MessageLookupByLibrary.simpleMessage("سنوات"),
         "yes": MessageLookupByLibrary.simpleMessage("نعم"),
-        "yesterday": MessageLookupByLibrary.simpleMessage("أمس"),
-        "discountCodes": MessageLookupByLibrary.simpleMessage("أكواد الخصم"),
-        "addDiscountCode": MessageLookupByLibrary.simpleMessage("إضافة كود خصم"),
-        "editDiscountCode": MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
-        "discountCode": MessageLookupByLibrary.simpleMessage("كود الخصم"),
-        "optionalDiscountCode": MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
-        "enterDiscountCode": MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),
-        "discountPercentage": MessageLookupByLibrary.simpleMessage("النسبة المئوية"),
-        "discountType": MessageLookupByLibrary.simpleMessage("النوع"),
-        "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("مدة محددة"),
-        "childrenDiscount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
-        "startDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
-        "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
-        "childrenCount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
-        "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
-        "noDiscountCodes": MessageLookupByLibrary.simpleMessage("لا توجد أكواد خصم"),
-        "deleteDiscountCode": MessageLookupByLibrary.simpleMessage("حذف كود الخصم"),
-        "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage("هل أنت متأكد من حذف كود الخصم؟"),
-        "discountCodeCreated": MessageLookupByLibrary.simpleMessage("تمت إضافة كود الخصم بنجاح"),
-        "discountCodeUpdated": MessageLookupByLibrary.simpleMessage("تم تعديل كود الخصم بنجاح"),
-        "discountCodeDeleted": MessageLookupByLibrary.simpleMessage("تم حذف كود الخصم بنجاح"),
-        "discountCodeRequired": MessageLookupByLibrary.simpleMessage("كود الخصم مطلوب"),
-        "invalidDiscountPercentage": MessageLookupByLibrary.simpleMessage("أدخل نسبة مئوية صحيحة"),
-        "discountDatesRequired": MessageLookupByLibrary.simpleMessage("تاريخ البداية والنهاية مطلوبان"),
-        "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage("لا يمكن أن يسبق تاريخ النهاية تاريخ البداية"),
-        "invalidChildrenCount": MessageLookupByLibrary.simpleMessage("أدخل عدد أبناء موجبًا"),
-        "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
-        "discountAmount": MessageLookupByLibrary.simpleMessage("الخصم"),
-        "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي")
+        "yesterday": MessageLookupByLibrary.simpleMessage("أمس")
       };
 }

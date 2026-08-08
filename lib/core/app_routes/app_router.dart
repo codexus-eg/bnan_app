@@ -17,6 +17,7 @@ import 'package:bnan_app/features/curriculum_management/presentation/manager/cur
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
+import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_student_access_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
@@ -502,8 +503,28 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.weeklyIdealStudents,
+        redirect: (context, state) {
+          if (IdealStudentAccessPolicy.canAccessCurrent) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const WeeklyIdealStudentView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<IdealStudentCubit>()),
+              if (SessionManager.instance.role == UserRole.teacher)
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetTeacherClassroomsCubit>()..getMyClassrooms(),
+                ),
+              if (SessionManager.instance.role == UserRole.supervisor)
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetSupervisorClassroomsCubit>()..getMyClassrooms(),
+                ),
+            ],
+            child: const WeeklyIdealStudentView(),
+          ),
           key: state.pageKey,
         ),
       ),

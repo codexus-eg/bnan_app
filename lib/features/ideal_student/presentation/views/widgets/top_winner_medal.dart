@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TopWinnerMedal extends StatelessWidget {
-  const TopWinnerMedal({super.key, required this.isCurrentUser});
-
-  final bool isCurrentUser;
+  const TopWinnerMedal({super.key, required this.name});
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +14,7 @@ class TopWinnerMedal extends StatelessWidget {
       clipBehavior: Clip.none,
       alignment: Alignment.topCenter,
       children: [
-        CustomAvatar(
-          firstName: 'مممممأ',
-          backgroundColor: ColorManager.beigeEDC,
-        ),
+        CustomAvatar(firstName: name, backgroundColor: ColorManager.beigeEDC),
         Positioned(
           top: -8,
           child: DecoratedBox(
@@ -27,13 +23,12 @@ class TopWinnerMedal extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 11,vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 1),
               child: SvgPicture.asset(
                 ImageManager.crownSimple,
                 height: 18,
                 width: 18,
-                fit: BoxFit.contain,
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   ColorManager.mainColor14,
                   BlendMode.srcIn,
                 ),

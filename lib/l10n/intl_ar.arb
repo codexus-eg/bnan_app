@@ -1114,5 +1114,7 @@
     "invalidChildrenCount": "أدخل عدد أبناء موجبًا",
     "originalAmount": "السعر الأساسي",
     "discountAmount": "الخصم",
-    "finalAmount": "الإجمالي"
+    "finalAmount": "الإجمالي",
+    "bonusPoints": "النقاط الإضافية",
+    "invalidEvaluationBonus": "النقاط الإضافية يجب أن تكون من 0 إلى 5"
 }

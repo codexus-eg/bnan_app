@@ -4,13 +4,11 @@ import 'package:flutter_svg/svg.dart';
 
 class IdealStudentRankLeadingIcon extends StatelessWidget {
   const IdealStudentRankLeadingIcon({super.key, required this.isFirst});
-
   final bool isFirst;
 
   @override
   Widget build(BuildContext context) {
     if (!isFirst) return const SizedBox(width: 18);
-
     return SvgPicture.asset(
       ImageManager.crownSimple,
       height: 20,

@@ -60,6 +60,10 @@ abstract class EndPoints {
   static const String myGulfSchedule = '$gulfSchedules/mySchedule';
   static const String tamaraCheckout = '/payment/tamara/checkout';
 
+  static String egyptianWeeklyRankings(String classroomId) {
+    return '/egyptian-weekly-rankings/$classroomId';
+  }
+
   static String updateCurriculum(String curriculumId) {
     return '$curriculums/$curriculumId';
   }
