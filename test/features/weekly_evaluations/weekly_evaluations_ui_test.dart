@@ -257,6 +257,36 @@ void main() {
       ),
     );
     expect(behavior.value, 'very_good');
+    final bonus = tester.widget<CustomTextField>(
+      find.byWidgetPredicate(
+        (widget) => widget is CustomTextField && widget.label == 'Bonus Points',
+      ),
+    );
+    expect(bonus.controller?.text, '4');
+  });
+
+  testWidgets('bonus rejects values outside zero to five', (tester) async {
+    await _pumpForm(
+      tester,
+      EvaluationDialogContext.edit(
+        const EvaluationEditorContext(
+          studentId: 'student',
+          studentName: 'Student',
+          classroomId: 'classroom',
+          classroomName: 'Class A',
+          week: 2,
+          subject: _evaluatedSubject,
+        ),
+      ),
+    );
+    final field = find.byWidgetPredicate(
+      (widget) => widget is CustomTextField && widget.label == 'Bonus Points',
+    );
+    await tester.enterText(field, '6');
+    await tester.ensureVisible(find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Bonus points must be from 0 to 5'), findsOneWidget);
   });
 
   testWidgets('first evaluation loads one student and one subject', (
@@ -408,6 +438,7 @@ const _evaluatedSubject = EvaluationSubjectModel(
     participation: 'good',
     homework: 'good',
     behavior: 'very_good',
+    bonus: 4,
   ),
 );
 Future<void> _pumpForm(

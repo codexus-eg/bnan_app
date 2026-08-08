@@ -2,7 +2,7 @@ abstract final class EvaluationJsonParser {
   static String string(Object? value) => value?.toString() ?? '';
 
   static int integer(Object? value) =>
-      value is int ? value : int.tryParse(string(value)) ?? 0;
+      value is num ? value.toInt() : num.tryParse(string(value))?.toInt() ?? 0;
 
   static bool boolean(Object? value) => value == true || value == 'true';
 

@@ -239,6 +239,39 @@ void main() {
     expect(repo.saved, isEmpty);
   });
 
+  test('bonus outside zero to five never reaches repository', () async {
+    final repo = _FakeRepo();
+    final cubit = _cubit(repo);
+    const invalid = UpsertEvaluationRequestModel(
+      student: 's',
+      classroom: 'c1',
+      subject: 'subject',
+      week: 1,
+      attendance: 'present',
+      participation: 'good',
+      homework: 'good',
+      behavior: 'good',
+      bonus: 6,
+    );
+    expect(await cubit.upsert(invalid), isFalse);
+    expect(repo.saved, isEmpty);
+  });
+
+  test('backend invalid bonus code uses localized message', () async {
+    final repo = _FakeRepo(
+      saveFailure: Failure(
+        message: 'INVALID_EVALUATION_BONUS',
+        code: 'INVALID_EVALUATION_BONUS',
+      ),
+    );
+    final cubit = _cubit(repo);
+    await cubit.upsert(_request);
+    expect(
+      (cubit.state as EvaluationSaveFailure).message,
+      'Bonus points must be from 0 to 5',
+    );
+  });
+
   test('late classroom response cannot replace newer selection', () async {
     final repo = _RaceRepo();
     final cubit = _cubit(repo);

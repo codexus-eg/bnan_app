@@ -94,6 +94,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       MyNavigator.goTo(context, Routes.certificatesManagement);
     } else if (index == 14) {
       MyNavigator.goTo(context, Routes.attendance);
+    } else if (index == 16) {
+      MyNavigator.goTo(context, Routes.weeklyIdealStudents);
     }
   }
 

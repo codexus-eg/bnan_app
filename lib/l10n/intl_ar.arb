@@ -1114,5 +1114,21 @@
     "invalidChildrenCount": "أدخل عدد أبناء موجبًا",
     "originalAmount": "السعر الأساسي",
     "discountAmount": "الخصم",
-    "finalAmount": "الإجمالي"
+    "finalAmount": "الإجمالي",
+    "bonusPoints": "النقاط الإضافية",
+    "invalidEvaluationBonus": "النقاط الإضافية يجب أن تكون من 0 إلى 5",
+    "name": "الاسم", "date": "التاريخ", "back": "رجوع",
+    "teacherPayrolls": "رواتب المعلمين", "payrollUnprepared": "لم يُجهز", "payrollDraft": "مسودة", "payrollPaid": "مدفوع", "payrollCancelled": "ملغي",
+    "payrollFilters": "فلاتر الرواتب", "payrollFromDate": "من تاريخ", "payrollToDate": "إلى تاريخ", "payrollStatus": "الحالة", "payrollAllStatuses": "كل الحالات", "payrollAllTeachers": "كل المعلمين", "payrollApplyFilters": "تطبيق الفلاتر", "payrollResetFilters": "إعادة ضبط الفلاتر",
+    "payrollNoMatchingTeachers": "لا يوجد معلمون مطابقون للفترة أو الفلاتر المحددة", "payrollGulfWork": "خليجي", "payrollEgyptianWork": "مصري", "payrollCurriculumsCount": "عدد المناهج",
+    "payrollExcludedSessions": "تم استبعاد {count} حصة لعدم اكتمال بيانات المدة", "@payrollExcludedSessions": {"placeholders": {"count": {}}},
+    "payrollCreate": "إنشاء كشف الراتب", "payrollContinueDraft": "متابعة المسودة", "payrollViewDetails": "عرض التفاصيل", "payrollTeacherDetails": "بيانات المعلم والفترة", "payrollPeriod": "الفترة",
+    "payrollSystem": "النظام", "payrollGulf": "خليجي", "payrollEgyptian": "مصري", "payrollDuration": "المدة", "payrollDurationMinutes": "المدة بالدقائق", "payrollSessionsCount": "عدد الحصص",
+    "payrollHourlyRate": "سعر الساعة", "payrollSessionRate": "سعر الحصة", "payrollAmount": "المبلغ", "payrollReviewSessions": "مراجعة الحصص", "payrollInvalidAmount": "أدخل مبلغًا صحيحًا لا يقل عن صفر",
+    "payrollAdjustments": "المكافآت والخصومات", "payrollBonus": "المكافآت", "payrollDeduction": "الخصومات", "payrollAdjustmentNote": "سبب المكافأة أو الخصم", "payrollTotal": "الإجمالي", "payrollNetTotal": "صافي الإجمالي", "payrollNegativeTotal": "لا يمكن أن يكون إجمالي الراتب سالبًا", "payrollNoWork": "لا يوجد عمل مستحق لهذا المعلم في الفترة المحددة", "payrollSaveDraft": "حفظ كمسودة",
+    "payrollPayoutDetails": "بيانات استلام الراتب", "payrollNoPayoutProfile": "لا توجد بيانات استلام. يجب إضافتها قبل تسجيل الدفع.", "payrollAddPayoutProfile": "إضافة بيانات الاستلام", "payrollEditPayoutProfile": "تعديل بيانات الاستلام", "payrollPayoutMethod": "طريقة الاستلام",
+    "payrollInstapay": "إنستا باي", "payrollWallet": "محفظة إلكترونية", "payrollBankAccount": "حساب بنكي", "payrollAccountHolder": "اسم صاحب الحساب", "payrollInstapayAddress": "عنوان إنستا باي", "payrollWalletProvider": "مزود المحفظة", "payrollWalletPhone": "رقم المحفظة", "payrollBankName": "اسم البنك", "payrollAccountNumber": "رقم الحساب", "payrollIban": "رقم الآيبان", "payrollBankDestinationRequired": "أدخل رقم الحساب أو الآيبان",
+    "payrollConfirmPayment": "تأكيد الدفع", "payrollPaidAt": "تاريخ الدفع", "payrollTransactionReference": "مرجع التحويل", "payrollTransferReceipt": "إيصال التحويل", "payrollChooseReceipt": "اختر صورة الإيصال", "payrollRemoveReceipt": "إزالة الإيصال", "payrollReceiptRequired": "إيصال التحويل مطلوب", "payrollReceiptTooLarge": "يجب ألا يتجاوز الإيصال 5 ميجابايت", "payrollReceiptInvalidType": "استخدم صورة PNG أو JPG أو JPEG أو WebP", "payrollReceiptMissing": "الملف المحدد غير متاح",
+    "payrollPaymentConfirmationTitle": "تأكيد دفع الراتب؟", "payrollPaymentConfirmationBody": "سيتم تسجيل مبلغ {total} {currency} كمدفوع، ولن يمكن تعديل كشف الراتب بعد التأكيد.", "@payrollPaymentConfirmationBody": {"placeholders": {"total": {}, "currency": {}}},
+    "payrollPaymentDetails": "تفاصيل الدفع", "payrollSessionDetails": "تفاصيل الحصص", "payrollWorkSummary": "ملخص العمل", "payrollIncluded": "داخلة في الحساب"
 }

@@ -7,6 +7,7 @@ import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluati
 import 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/generated/l10n.dart';
 
 class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   WeeklyEvaluationsCubit(this.repo, this.assignmentsRepo)
@@ -108,12 +109,18 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
       final result = await repo.upsert(request);
       if (isClosed) return false;
       var saved = false;
-      result.fold((failure) => emit(EvaluationSaveFailure(failure.message)), (
-        _,
-      ) {
-        saved = true;
-        emit(EvaluationSaved());
-      });
+      result.fold(
+        (failure) {
+          final message = failure.code == 'INVALID_EVALUATION_BONUS'
+              ? S.current.invalidEvaluationBonus
+              : failure.message;
+          emit(EvaluationSaveFailure(message));
+        },
+        (_) {
+          saved = true;
+          emit(EvaluationSaved());
+        },
+      );
       if (saved) await _loadEvaluations(++_requestId, keepData: true);
       return saved;
     } finally {
@@ -288,7 +295,9 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
       request.attendance.trim().isNotEmpty &&
       request.participation.trim().isNotEmpty &&
       request.homework.trim().isNotEmpty &&
-      request.behavior.trim().isNotEmpty;
+      request.behavior.trim().isNotEmpty &&
+      request.bonus >= 0 &&
+      request.bonus <= 5;
 
   bool _isCurrentForm(int requestId, String classroomId, [String? studentId]) =>
       !isClosed &&

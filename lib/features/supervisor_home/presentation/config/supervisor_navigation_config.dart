@@ -30,11 +30,12 @@ abstract class SupervisorNavigationConfig {
       _item(s.messages, ImageManager.chatIcon, Routes.groups),
       _item(s.attendance, ImageManager.teacherMeetingIcon, Routes.attendance),
       _item(s.plansTitle, ImageManager.calendarIcon, Routes.plans),
-      _item(
-        s.weeklyIdealStudent,
-        ImageManager.crownSimple,
-        Routes.weeklyIdealStudents,
-      ),
+      if (session.isEgyptianSupervisor)
+        _item(
+          s.weeklyIdealStudent,
+          ImageManager.crownSimple,
+          Routes.weeklyIdealStudents,
+        ),
     ];
   }
 

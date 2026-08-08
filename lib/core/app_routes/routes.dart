@@ -24,6 +24,15 @@ abstract class Routes {
   static const String teacherHome = '/teacherHome';
   static const String adminHome = '/adminHome';
   static const String discountCodes = '/discountCodes';
+  static const String teacherPayrolls = '/admin/teacher-payrolls';
+  static const String teacherPayrollCreate =
+      '/admin/teacher-payrolls/teacher/:teacherId';
+  static const String teacherPayrollSessions =
+      '/admin/teacher-payrolls/teacher/:teacherId/curriculum/:curriculumId/sessions';
+  static const String teacherPayrollDetails =
+      '/admin/teacher-payrolls/payroll/:payrollId';
+  static const String teacherPayrollPayment =
+      '/admin/teacher-payrolls/payroll/:payrollId/payment';
   static const String supervisorHome = '/supervisorHome';
   static const String parentHome = '/parentHome';
   static const String parentSchedule = '/parentSchedule';
@@ -56,4 +65,17 @@ abstract class Routes {
       '/studentClassroomAssignment';
   static const String supervisorClassRoomAssignment =
       '/supervisorClassRoomAssignment';
+
+  static String teacherPayrollCreatePath(String teacherId) =>
+      teacherPayrollCreate.replaceFirst(':teacherId', teacherId);
+  static String teacherPayrollDetailsPath(String payrollId) =>
+      teacherPayrollDetails.replaceFirst(':payrollId', payrollId);
+  static String teacherPayrollPaymentPath(String payrollId) =>
+      teacherPayrollPayment.replaceFirst(':payrollId', payrollId);
+  static String teacherPayrollSessionsPath(
+    String teacherId,
+    String curriculumId,
+  ) => teacherPayrollSessions
+      .replaceFirst(':teacherId', teacherId)
+      .replaceFirst(':curriculumId', curriculumId);
 }

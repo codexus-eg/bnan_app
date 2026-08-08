@@ -61,9 +61,10 @@ void main() {
       await _saveTeacher(testCase.$1);
       expect(teacherScheduleRoutes(), testCase.$2);
       final gulfItem = testCase.$1.contains(RegistrationMode.gulf) ? 1 : 0;
+      final idealItem = testCase.$1.contains(RegistrationMode.egyptian) ? 1 : 0;
       expect(
         teacherDrawerItems(context).length,
-        14 + gulfItem + testCase.$2.length,
+        14 + gulfItem + idealItem + testCase.$2.length,
       );
     }
   });
@@ -109,7 +110,8 @@ void main() {
           (title) =>
               title != s.schedule &&
               title != s.lessonsManagement &&
-              title != s.registrationRequests,
+              title != s.registrationRequests &&
+              title != s.weeklyIdealStudent,
         )
         .toList();
 
@@ -118,6 +120,10 @@ void main() {
     expect(
       teacherDrawerItems(context).map((item) => item.title),
       contains(s.registrationRequests),
+    );
+    expect(
+      teacherDrawerItems(context).map((item) => item.title),
+      contains(s.weeklyIdealStudent),
     );
     expect(adminDrawerItems(context), hasLength(17));
     expect(
