@@ -52,6 +52,10 @@ export 'package:bnan_app/features/shared_profile/presentation/views/update_passw
 export 'package:bnan_app/features/class_schedules/presentation/views/class_schedules_view.dart';
 export 'package:bnan_app/features/admin/presentation/views/admin_home_view.dart';
 export 'package:bnan_app/features/discount_codes/presentation/views/discount_codes_view.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payrolls_view.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payroll_details_view.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/views/payroll_payment_view.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/views/payroll_sessions_view.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/views/classrooms_management_view.dart';

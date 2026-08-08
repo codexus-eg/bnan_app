@@ -18,6 +18,7 @@ void main() {
     ..._teacherRequestCases,
     ..._adminDashboardCases,
     ..._discountCodeCases,
+    ..._payrollCases,
     ..._idealStudentCases,
   ];
 
@@ -245,6 +246,31 @@ const _discountCodeCases = [
   ),
   _GuardCase('discount codes rejects teacher', Routes.discountCodes, 'teacher'),
   _GuardCase('discount codes rejects parent', Routes.discountCodes, 'parent'),
+];
+
+const _payrollCases = [
+  _GuardCase(
+    'payroll list allows admin',
+    Routes.teacherPayrolls,
+    'admin',
+    allowed: true,
+  ),
+  _GuardCase('payroll list rejects teacher', Routes.teacherPayrolls, 'teacher'),
+  _GuardCase(
+    'payroll create rejects supervisor',
+    Routes.teacherPayrollCreate,
+    'supervisor',
+  ),
+  _GuardCase(
+    'payroll details rejects student',
+    Routes.teacherPayrollDetails,
+    'student',
+  ),
+  _GuardCase(
+    'payroll payment rejects parent',
+    Routes.teacherPayrollPayment,
+    'parent',
+  ),
 ];
 
 const _idealStudentCases = [

@@ -43,6 +43,8 @@ abstract class EndPoints {
       '/admin/egyptian-registration-requests';
   static const String adminDashboardStatistics = '/admin/dashboard/statistics';
   static const String adminDiscountCodes = '/admin/discount-codes';
+  static const String adminPayrolls = '/admin/payrolls';
+  static const String adminPayrollsPreview = '$adminPayrolls/preview';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
@@ -87,6 +89,20 @@ abstract class EndPoints {
   static String adminDiscountCode(String id) {
     return '$adminDiscountCodes/$id';
   }
+
+  static String adminPayroll(String id) => '$adminPayrolls/$id';
+
+  static String teacherPayrollPreview(String teacherId) =>
+      '$adminPayrolls/teachers/$teacherId/preview';
+
+  static String teacherPayrollSessions(String teacherId, String curriculumId) =>
+      '$adminPayrolls/teachers/$teacherId/curriculums/$curriculumId/sessions';
+
+  static String teacherPayoutProfile(String teacherId) =>
+      '$adminPayrolls/teachers/$teacherId/payout-profile';
+
+  static String payTeacherPayroll(String payrollId) =>
+      '${adminPayroll(payrollId)}/pay';
 
   static String packagesByCurriculum(String curriculumId) {
     return '$packages/curriculum/$curriculumId';

@@ -28,6 +28,7 @@ import 'package:bnan_app/features/curriculum_management/presentation/manager/get
     as curriculum_management;
 import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/supervisor_classroom_assignment_view.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
+import 'package:flutter/widgets.dart';
 import 'routes_export.dart';
 
 GoRouter buildRouter() {
@@ -366,6 +367,85 @@ GoRouter buildRouter() {
             child: const DiscountCodesView(),
           ),
           key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherPayrolls,
+        redirect: _adminOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<TeacherPayrollsCubit>(),
+            child: const TeacherPayrollsView(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherPayrollSessions,
+        redirect: _adminOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<PayrollSessionsCubit>(),
+            child: PayrollSessionsView(
+              teacherId: state.pathParameters['teacherId'] ?? '',
+              curriculumId: state.pathParameters['curriculumId'] ?? '',
+              from: state.uri.queryParameters['from'] ?? '',
+              to: state.uri.queryParameters['to'] ?? '',
+              system: state.uri.queryParameters['system'] ?? '',
+            ),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherPayrollCreate,
+        redirect: _adminOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TeacherPayrollDetailsCubit>()),
+              BlocProvider(create: (_) => getIt<TeacherPayoutProfileCubit>()),
+            ],
+            child: TeacherPayrollDetailsView(
+              teacherId: state.pathParameters['teacherId'],
+              from: state.uri.queryParameters['from'],
+              to: state.uri.queryParameters['to'],
+            ),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherPayrollPayment,
+        redirect: _adminOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TeacherPayrollDetailsCubit>()),
+              BlocProvider(create: (_) => getIt<TeacherPayoutProfileCubit>()),
+              BlocProvider(create: (_) => getIt<PayrollPaymentCubit>()),
+            ],
+            child: PayrollPaymentView(
+              payrollId: state.pathParameters['payrollId'] ?? '',
+            ),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherPayrollDetails,
+        redirect: _adminOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TeacherPayrollDetailsCubit>()),
+              BlocProvider(create: (_) => getIt<TeacherPayoutProfileCubit>()),
+            ],
+            child: TeacherPayrollDetailsView(
+              payrollId: state.pathParameters['payrollId'],
+            ),
+          ),
         ),
       ),
       GoRoute(
@@ -919,4 +999,10 @@ GoRouter buildRouter() {
       ),
     ],
   );
+}
+
+String? _adminOnly(BuildContext context, GoRouterState state) {
+  if (SessionManager.instance.role == UserRole.admin) return null;
+  return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+      Routes.splash;
 }
