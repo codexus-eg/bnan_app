@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_payment_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'fake_teacher_payroll_repo.dart';
 
 void main() {
+  setUp(() => kUseTeacherPayrollMockData = false);
+  tearDown(() => kUseTeacherPayrollMockData = true);
   test('payment success emits paid payroll', () async {
     final cubit = PayrollPaymentCubit(FakeTeacherPayrollRepo());
     await cubit.pay(

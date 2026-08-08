@@ -3,9 +3,11 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown_form_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_teacher_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/utils/payroll_date_formatter.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'payroll_filters.dart';
 
 class PayrollFiltersSheet extends StatefulWidget {
@@ -30,7 +32,6 @@ class _PayrollFiltersSheetState extends State<PayrollFiltersSheet> {
     teacherId = widget.initial.teacherId;
   }
 
-  String _date(DateTime value) => DateFormat('yyyy-MM-dd', 'en').format(value);
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
@@ -46,9 +47,19 @@ class _PayrollFiltersSheetState extends State<PayrollFiltersSheet> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                  s.payrollFilterAction,
+                  style: StylesManager.styleBold18(context),
+                ),
+              ),
+              const SizedBox(height: 20),
               CustomTextField(
                 label: s.payrollFromDate,
-                controller: TextEditingController(text: _date(from)),
+                controller: TextEditingController(
+                  text: PayrollDateFormatter.field(from),
+                ),
                 readOnly: true,
                 onTap: () async {
                   final value = await AppPickers.pickDate(
@@ -56,13 +67,20 @@ class _PayrollFiltersSheetState extends State<PayrollFiltersSheet> {
                     initialDate: from,
                     firstDate: DateTime(2020),
                   );
-                  if (value != null) setState(() => from = value);
+                  if (value != null) {
+                    setState(() {
+                      from = value;
+                      if (to.isBefore(from)) to = from;
+                    });
+                  }
                 },
               ),
               const SizedBox(height: 12),
               CustomTextField(
                 label: s.payrollToDate,
-                controller: TextEditingController(text: _date(to)),
+                controller: TextEditingController(
+                  text: PayrollDateFormatter.field(to),
+                ),
                 readOnly: true,
                 onTap: () async {
                   final value = await AppPickers.pickDate(
@@ -113,11 +131,8 @@ class _PayrollFiltersSheetState extends State<PayrollFiltersSheet> {
                 ),
               ),
               const SizedBox(height: 8),
-              CustomAppButton(
-                text: s.payrollResetFilters,
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-                onPressed: () => Navigator.pop(
+              InkWell(
+                onTap: () => Navigator.pop(
                   context,
                   PayrollFilters(
                     from: DateTime(
@@ -126,6 +141,19 @@ class _PayrollFiltersSheetState extends State<PayrollFiltersSheet> {
                       1,
                     ),
                     to: DateTime.now(),
+                  ),
+                ),
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    s.payrollResetFilters,
+                    style: StylesManager.styleBold14(
+                      context,
+                    ).copyWith(color: ColorManager.mainColor15),
                   ),
                 ),
               ),

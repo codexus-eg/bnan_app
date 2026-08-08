@@ -183,7 +183,7 @@ class _PayrollPaymentViewState extends State<PayrollPaymentView> {
 
   void _paymentListener(BuildContext context, PayrollPaymentState state) {
     if (state is PayrollPaymentSuccess) {
-      context.read<TeacherPayrollDetailsCubit>().loadPayroll(widget.payrollId);
+      context.read<TeacherPayrollDetailsCubit>().replacePayroll(state.payroll);
     }
     if (state is PayrollPaymentFailure) {
       ScaffoldMessenger.of(

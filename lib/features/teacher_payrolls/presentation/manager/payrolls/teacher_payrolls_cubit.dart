@@ -1,5 +1,7 @@
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_list_item_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_teacher_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_data.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'teacher_payrolls_state.dart';
@@ -17,6 +19,19 @@ class TeacherPayrollsCubit extends Cubit<TeacherPayrollsState> {
     String? status,
   }) async {
     if (_loading) return;
+    if (kUseTeacherPayrollMockData) {
+      _teachers = TeacherPayrollMockData.teachers;
+      final values = TeacherPayrollMockData.list.where((item) {
+        final matchesTeacher =
+            teacherId?.isNotEmpty != true || item.teacherId == teacherId;
+        final matchesStatus =
+            status?.isNotEmpty != true || item.status == status;
+        return matchesTeacher && matchesStatus;
+      }).toList();
+      _items = values;
+      emit(TeacherPayrollsSuccess(values, _teachers));
+      return;
+    }
     _loading = true;
     emit(TeacherPayrollsLoading(_items));
     if (_teachers.isEmpty) {
