@@ -665,6 +665,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("بيانات الباقة غير صالحة"),
         "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
             "أدخل مبلغًا صحيحًا لا يقل عن 0.01"),
+        "invalidPhoneNumber":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم هاتف صحيح"),
         "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),

@@ -694,6 +694,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid package data"),
         "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
             "Enter a valid amount of at least 0.01"),
+        "invalidPhoneNumber": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid phone number"),
         "isActive": MessageLookupByLibrary.simpleMessage("Active"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("Issue New Certificate"),

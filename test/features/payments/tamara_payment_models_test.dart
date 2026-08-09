@@ -4,11 +4,29 @@ import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
+import 'package:bnan_app/features/payments/data/models/tamara_return.dart';
 import 'package:bnan_app/features/student_auth/data/models/auth_response_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_student_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('parses only registered Tamara return URLs', () {
+    for (final outcome in TamaraReturnOutcome.values) {
+      final result = TamaraReturn.tryParse(
+        Uri.parse('bnanacademy://payment/tamara/${outcome.name}'),
+      );
+      expect(result?.outcome, outcome);
+    }
+    expect(
+      TamaraReturn.tryParse(Uri.parse('https://payment/tamara/success')),
+      isNull,
+    );
+    expect(
+      TamaraReturn.tryParse(Uri.parse('bnanacademy://other/tamara/success')),
+      isNull,
+    );
+  });
+
   test('parent auth token is parsed from response root', () {
     final response = AuthResponseModel.fromJson({
       'success': true,

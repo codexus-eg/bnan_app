@@ -175,8 +175,53 @@ void main() {
     await cubit.onForeground();
     await cubit.onForeground();
     expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
     await cubit.close();
   });
+
+  test('deep link is deduplicated and status remains authoritative', () async {
+    final repo = _PaymentRepo()
+      ..statusResponse = _status(PaymentStatus.pending);
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    final link = Uri.parse('bnanacademy://payment/tamara/success');
+    await cubit.handleReturn(link);
+    await cubit.handleReturn(link);
+    expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    expect(cubit.state, isA<TamaraPaymentPending>());
+    await cubit.close();
+  });
+
+  test(
+    'cold-start return reconciles without checkout opened timestamp',
+    () async {
+      final repo = _PaymentRepo()
+        ..statusResponse = _status(PaymentStatus.cancelled);
+      await store.save(
+        PaymentDraft(
+          paymentId: 'payment-1',
+          checkoutUrl: _checkoutUrl,
+          idempotencyKey: 'saved-key',
+          packageId: 'package-1',
+          curriculumId: 'curriculum-1',
+          gradeId: 'grade-1',
+          subjectIds: const ['subject-1'],
+          studentEmail: 'student@example.com',
+          paymentStartedAt: DateTime(2026),
+          lastKnownStatus: PaymentStatus.pending,
+        ),
+      );
+      final cubit = _cubit(repo, store);
+      await cubit.handleReturn(
+        Uri.parse('bnanacademy://payment/tamara/cancel'),
+      );
+      expect(repo.reconcileCalls, 1);
+      expect(repo.statusCalls, 1);
+      expect(cubit.draft?.lastKnownStatus, PaymentStatus.cancelled);
+      await cubit.close();
+    },
+  );
 
   test('checkout URL can only be claimed once before background', () async {
     final cubit = _cubit(_PaymentRepo(), store);

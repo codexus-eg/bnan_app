@@ -5,6 +5,7 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class BnanApp extends StatefulWidget {
 
 class _BnanAppState extends State<BnanApp> {
   TamaraPaymentCubit? paymentCubit;
+  String? _navigatedPaymentId;
 
   @override
   void initState() {
@@ -65,51 +67,15 @@ class _BnanAppState extends State<BnanApp> {
             state.status != PaymentStatus.completed) {
           return;
         }
+        final paymentId = cubit.draft?.paymentId ?? '';
+        if (_navigatedPaymentId == paymentId) return;
+        _navigatedPaymentId = paymentId;
         GoRouter.of(context).go(
           state.studentLoggedIn ? Routes.home : Routes.logIn,
           extra: state.studentLoggedIn ? null : cubit.draft?.studentEmail,
         );
       },
-      child: _PaymentLifecycle(cubit: cubit, child: scaledChild),
+      child: TamaraReturnObserver(cubit: cubit, child: scaledChild),
     );
   }
-}
-
-class _PaymentLifecycle extends StatefulWidget {
-  const _PaymentLifecycle({required this.cubit, required this.child});
-
-  final TamaraPaymentCubit cubit;
-  final Widget child;
-
-  @override
-  State<_PaymentLifecycle> createState() => _PaymentLifecycleState();
-}
-
-class _PaymentLifecycleState extends State<_PaymentLifecycle>
-    with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    widget.cubit.onForeground();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // TODO: Connect confirmed Tamara App/Universal Link domains here.
-      widget.cubit.onForeground();
-    } else if (state != AppLifecycleState.hidden) {
-      widget.cubit.onBackground();
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => widget.child;
 }

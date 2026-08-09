@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/phone_number_normalizer.dart';
 import 'package:bnan_app/generated/l10n.dart';
 
 abstract class MyValidator {
@@ -53,6 +54,15 @@ abstract class MyValidator {
       return S.current.invalidEmail;
     }
     return null;
+  }
+
+  static String? validatePhone(String? value, String currency) {
+    if (value == null || value.trim().isEmpty) {
+      return S.current.fieldIsRequired(S.current.phoneNumber);
+    }
+    return PhoneNumberNormalizer.normalize(value, currency: currency) == null
+        ? S.current.invalidPhoneNumber
+        : null;
   }
 
   static String? validatePassword(String? value) {

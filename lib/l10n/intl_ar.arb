@@ -128,6 +128,7 @@
     "dashboardPassword": "كلمة المرور للدخول على الداشبورد",
     "parentPasswordMinLength": "يجب ألا تقل كلمة المرور عن 6 أحرف",
     "phoneNumber": "رقم الهاتف",
+    "invalidPhoneNumber": "يرجى إدخال رقم هاتف صحيح",
     "whatsappNumber": "رقم الواتساب",
     "studentPassword": "كلمة المرور للدخول على المنصة",
     "passwordWillBeUsed": "ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع",

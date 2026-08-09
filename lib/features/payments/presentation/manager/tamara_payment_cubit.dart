@@ -7,6 +7,7 @@ import 'package:bnan_app/features/payments/data/models/payment_amount_summary.da
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
+import 'package:bnan_app/features/payments/data/models/tamara_return.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
@@ -38,6 +39,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   bool _checkoutInFlight = false;
   bool _checkoutLaunchClaimed = false;
   bool _reconciledThisForeground = false;
+  bool _reconcileInFlight = false;
+  final Set<String> _handledReturns = {};
   PaymentAmountSummary? _paymentSummary;
   int _pollAttempts = 0;
 
@@ -150,18 +153,39 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
         draft.checkoutOpenedAt == null) {
       return;
     }
-    var canPoll = false;
-    if (!_reconciledThisForeground) {
-      _reconciledThisForeground = true;
-      final result = await repo.reconcile(draft.paymentId);
-      if (isClosed) return;
-      await result.fold((_) async => canPoll = await checkStatus(), (
-        response,
-      ) async {
-        await _handleStatus(response);
-        canPoll = true;
-      });
+    await _reconcileAndCheckStatus();
+  }
+
+  Future<void> handleReturn(Uri uri) async {
+    final paymentReturn = TamaraReturn.tryParse(uri);
+    if (paymentReturn == null) return;
+    final draft = _draft ?? store.read();
+    _draft = draft;
+    if (draft == null ||
+        draft.paymentId.isEmpty ||
+        draft.lastKnownStatus != PaymentStatus.pending) {
+      return;
     }
+    final key = '${draft.paymentId}:${paymentReturn.outcome.name}';
+    if (!_handledReturns.add(key)) return;
+    await _reconcileAndCheckStatus();
+  }
+
+  Future<void> _reconcileAndCheckStatus() async {
+    final draft = _draft;
+    if (draft == null ||
+        draft.paymentId.isEmpty ||
+        draft.lastKnownStatus != PaymentStatus.pending ||
+        _reconciledThisForeground ||
+        _reconcileInFlight) {
+      return;
+    }
+    _reconciledThisForeground = true;
+    _reconcileInFlight = true;
+    await repo.reconcile(draft.paymentId);
+    _reconcileInFlight = false;
+    if (isClosed) return;
+    final canPoll = await checkStatus();
     if (canPoll && _draft?.lastKnownStatus == PaymentStatus.pending) {
       _startPolling();
     }

@@ -930,6 +930,16 @@ class S {
     );
   }
 
+  /// `Please enter a valid phone number`
+  String get invalidPhoneNumber {
+    return Intl.message(
+      'Please enter a valid phone number',
+      name: 'invalidPhoneNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `WhatsApp number`
   String get whatsappNumber {
     return Intl.message(
