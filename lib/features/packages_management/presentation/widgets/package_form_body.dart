@@ -4,6 +4,7 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_content.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_controllers.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_popular_switch.dart';
+import 'package:bnan_app/features/packages_management/presentation/widgets/package_scope_selector.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_type_selector.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,12 @@ class PackageFormBody extends StatelessWidget {
     required this.labels,
     required this.curriculumId,
     required this.packageType,
+    required this.accessScope,
+    required this.canSelectSingleSubject,
     required this.isPopular,
     required this.onCurriculumChanged,
     required this.onTypeChanged,
+    required this.onScopeChanged,
     required this.onPopularChanged,
     required this.onSave,
     required this.isLoading,
@@ -32,9 +36,12 @@ class PackageFormBody extends StatelessWidget {
   final Map<String, String> labels;
   final String? curriculumId;
   final String packageType;
+  final String accessScope;
+  final bool canSelectSingleSubject;
   final bool isPopular;
   final ValueChanged<String?> onCurriculumChanged;
   final ValueChanged<String> onTypeChanged;
+  final ValueChanged<String> onScopeChanged;
   final ValueChanged<bool> onPopularChanged;
   final VoidCallback? onSave;
   final bool isLoading;
@@ -57,12 +64,23 @@ class PackageFormBody extends StatelessWidget {
           onChanged: onCurriculumChanged,
         ),
         const SizedBox(height: 16),
-        PackageTypeSelector(value: packageType, onChanged: onTypeChanged),
+        PackageScopeSelector(
+          value: accessScope,
+          showSingleSubject: canSelectSingleSubject,
+          onChanged: onScopeChanged,
+        ),
+        const SizedBox(height: 16),
+        PackageTypeSelector(
+          value: packageType,
+          onChanged: onTypeChanged,
+          monthlyEnabled: accessScope != 'single_subject',
+        ),
         const SizedBox(height: 16),
         PackageFormContent(
           controllers: controllers,
           currency: currency,
           onCurrencyChanged: onCurrencyChanged,
+          isSingleSubject: accessScope == 'single_subject',
         ),
         const SizedBox(height: 16),
         PackagePopularSwitch(value: isPopular, onChanged: onPopularChanged),

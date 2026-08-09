@@ -26,6 +26,10 @@ class AddPackageButton extends StatelessWidget {
           for (final curriculum in curriculums)
             curriculum.id.toString(): curriculum.name,
         };
+        final registrationModes = {
+          for (final curriculum in curriculums)
+            curriculum.id.toString(): curriculum.registrationMode,
+        };
 
         return AddNewTopicButton(
           title: S.of(context).addNewPackage,
@@ -50,6 +54,7 @@ class AddPackageButton extends StatelessWidget {
                   child: PackageFormDialog(
                     curriculums: curriculumIds,
                     labels: labels,
+                    registrationModes: registrationModes,
                     onSuccess: () {
                       context.read<GetPackagesCubit>().getPackages();
                     },

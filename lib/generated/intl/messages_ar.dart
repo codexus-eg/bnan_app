@@ -164,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
         "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
         "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
+        "allSubjects": MessageLookupByLibrary.simpleMessage("كل المواد"),
         "allDocuments": MessageLookupByLibrary.simpleMessage("جميع المستندات"),
         "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
         "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
@@ -915,11 +916,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "openSessionLink":
             MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
         "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
+        "numberOfHours": MessageLookupByLibrary.simpleMessage("عدد الساعات"),
+        "numberOfHoursHint":
+            MessageLookupByLibrary.simpleMessage("مثال: 12 ساعة"),
         "optionalDiscountCode":
             MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
         "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
         "other": MessageLookupByLibrary.simpleMessage("أخرى"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
+        "packageAccessScope":
+            MessageLookupByLibrary.simpleMessage("نطاق الباقة"),
         "packageCalculation": m18,
         "packageCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة الباقة بنجاح"),
@@ -1342,6 +1348,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الخميس 07 مايو 2026"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
+        "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
         "semesterName": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
         "semesterOne": MessageLookupByLibrary.simpleMessage("فصل ١"),
         "semesterThree": MessageLookupByLibrary.simpleMessage("فصل ٣"),

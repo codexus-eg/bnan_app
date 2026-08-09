@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class PackageCardModel {
   final bool isPopular;
   final num price;
   final String currency;
+  final bool isSingleSubject;
 
   const PackageCardModel({
     required this.id,
@@ -23,6 +25,7 @@ class PackageCardModel {
     required this.isPopular,
     required this.price,
     required this.currency,
+    required this.isSingleSubject,
   });
 
   factory PackageCardModel.fromPackage({
@@ -43,6 +46,7 @@ class PackageCardModel {
       isPopular: package.isPopular ?? false,
       price: price,
       currency: package.currency ?? '',
+      isSingleSubject: package.accessScope == PackageAccessScope.singleSubject,
     );
   }
 
@@ -67,6 +71,7 @@ class PackageCardModel {
         isPopular: false,
         price: 0,
         currency: '',
+        isSingleSubject: false,
       ),
     );
   }

@@ -28,6 +28,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   String packagePrice = '';
   String packageCurrency = '';
   String? registrationMode;
+  bool isSingleSubjectPackage = false;
   String? selectedCurriculumName;
 
   final parentFormKey = GlobalKey<FormState>();
@@ -59,6 +60,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     packagePrice = args.packagePrice;
     packageCurrency = args.packageCurrency;
     registrationMode = args.registrationMode;
+    isSingleSubjectPackage = args.isSingleSubject;
   }
 
   bool get isGulf => registrationMode == 'gulf';
@@ -76,6 +78,13 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   void toggleSubject(String subjectId) {
+    if (isSingleSubjectPackage) {
+      selectedSubjectIds = selectedSubjectIds.contains(subjectId)
+          ? []
+          : [subjectId];
+      emit(RegisterStepChanged(currentStep: state.currentStep));
+      return;
+    }
     if (selectedSubjectIds.contains(subjectId)) {
       selectedSubjectIds.remove(subjectId);
     } else {

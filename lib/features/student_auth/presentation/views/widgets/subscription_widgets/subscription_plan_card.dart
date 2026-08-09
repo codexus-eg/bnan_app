@@ -6,6 +6,7 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/data/models/package_card_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/popular_badge.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/package_scope_badge.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscribe_button.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,10 @@ class SubscriptionPlanCard extends StatelessWidget {
               ),
               const SizedBox(height: 9),
               Text(plan.title, style: StylesManager.styleBold14(context)),
+              if (plan.isSingleSubject) ...[
+                const SizedBox(height: 9),
+                const PackageScopeBadge(),
+              ],
               const SizedBox(height: 9),
               Container(
                 padding: EdgeInsetsDirectional.symmetric(
@@ -112,6 +117,9 @@ class SubscriptionPlanCard extends StatelessWidget {
                               : plan.price.toString(),
                           packageCurrency: plan.currency,
                           registrationMode: registrationMode,
+                          accessScope: plan.isSingleSubject
+                              ? 'single_subject'
+                              : 'all_subjects',
                         ),
                       );
                     },

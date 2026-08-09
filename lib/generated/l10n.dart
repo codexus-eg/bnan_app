@@ -7770,6 +7770,56 @@ class S {
     );
   }
 
+  /// `Package Scope`
+  String get packageAccessScope {
+    return Intl.message(
+      'Package Scope',
+      name: 'packageAccessScope',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Subjects`
+  String get allSubjects {
+    return Intl.message(
+      'All Subjects',
+      name: 'allSubjects',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Single Subject`
+  String get singleSubject {
+    return Intl.message(
+      'Single Subject',
+      name: 'singleSubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number of Hours`
+  String get numberOfHours {
+    return Intl.message(
+      'Number of Hours',
+      name: 'numberOfHours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Example: 12 hours`
+  String get numberOfHoursHint {
+    return Intl.message(
+      'Example: 12 hours',
+      name: 'numberOfHoursHint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Monthly Package`
   String get monthlyPackage {
     return Intl.message(

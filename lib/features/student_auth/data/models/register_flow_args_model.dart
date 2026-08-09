@@ -6,6 +6,7 @@ class RegisterFlowArgsModel {
   final String packagePrice;
   final String packageCurrency;
   final String? registrationMode;
+  final String accessScope;
 
   const RegisterFlowArgsModel({
     required this.curriculumId,
@@ -15,7 +16,9 @@ class RegisterFlowArgsModel {
     required this.packagePrice,
     required this.packageCurrency,
     this.registrationMode,
+    this.accessScope = 'all_subjects',
   });
 
   bool get isGulf => registrationMode == 'gulf';
+  bool get isSingleSubject => accessScope == 'single_subject';
 }

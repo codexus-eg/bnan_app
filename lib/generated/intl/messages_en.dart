@@ -168,6 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "allClassrooms": MessageLookupByLibrary.simpleMessage("All Classrooms"),
         "allCurriculms": MessageLookupByLibrary.simpleMessage("All Curriculms"),
+        "allSubjects": MessageLookupByLibrary.simpleMessage("All Subjects"),
         "allDocuments": MessageLookupByLibrary.simpleMessage("All Documents"),
         "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
         "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
@@ -945,12 +946,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "openSessionLink":
             MessageLookupByLibrary.simpleMessage("Open lesson link"),
         "optional": MessageLookupByLibrary.simpleMessage("Optional"),
+        "numberOfHours":
+            MessageLookupByLibrary.simpleMessage("Number of Hours"),
+        "numberOfHoursHint":
+            MessageLookupByLibrary.simpleMessage("Example: 12 hours"),
         "optionalDiscountCode":
             MessageLookupByLibrary.simpleMessage("Discount code (optional)"),
         "originalAmount":
             MessageLookupByLibrary.simpleMessage("Original price"),
         "other": MessageLookupByLibrary.simpleMessage("Other"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("4-hour package"),
+        "packageAccessScope":
+            MessageLookupByLibrary.simpleMessage("Package Scope"),
         "packageCalculation": m18,
         "packageCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("Package added successfully"),
@@ -1394,6 +1401,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Thursday, 07 May 2026"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("Selected Package"),
+        "singleSubject": MessageLookupByLibrary.simpleMessage("Single Subject"),
         "semesterName": MessageLookupByLibrary.simpleMessage("Semester Name"),
         "semesterOne": MessageLookupByLibrary.simpleMessage("Semester 1"),
         "semesterThree": MessageLookupByLibrary.simpleMessage("Semester 3"),

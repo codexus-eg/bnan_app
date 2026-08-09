@@ -1,28 +1,40 @@
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PackageFormCubit extends Cubit<PackageFormState> {
   PackageFormCubit() : super(const PackageFormState());
 
-  void initialize(PackageModel? package) {
+  void initialize(
+    PackageModel? package,
+    Map<String, String?> registrationModes,
+  ) {
+    final registrationMode = registrationModes[package?.curriculum];
     emit(
       PackageFormState(
         curriculumId: package?.curriculum,
         packageId: package?.id,
         packageType: _valueOrDefault(package?.type, 'hours'),
+        accessScope: package?.accessScope ?? PackageAccessScope.allSubjects,
+        registrationMode: registrationMode,
         currency: _valueOrDefault(package?.currency, 'SAR'),
         isPopular: package?.isPopular ?? false,
       ),
     );
   }
 
-  void setCurriculum(String? id) {
+  void setCurriculum(String? id, String? registrationMode) {
+    final canKeepScope = registrationMode == 'egyptian';
     emit(
       PackageFormState(
         curriculumId: id,
         packageId: state.packageId,
-        packageType: state.packageType,
+        packageType: state.isSingleSubject ? 'hours' : state.packageType,
+        accessScope: canKeepScope
+            ? state.accessScope
+            : PackageAccessScope.allSubjects,
+        registrationMode: registrationMode,
         currency: state.currency,
         isPopular: state.isPopular,
       ),
@@ -30,7 +42,21 @@ class PackageFormCubit extends Cubit<PackageFormState> {
   }
 
   void setType(String type) {
+    if (state.isSingleSubject && type == 'monthly') return;
     emit(_copy(packageType: type));
+  }
+
+  void setAccessScope(String scope) {
+    if (scope == PackageAccessScope.singleSubject &&
+        !state.canSelectSingleSubject) {
+      return;
+    }
+    emit(
+      _copy(
+        accessScope: scope,
+        packageType: scope == PackageAccessScope.singleSubject ? 'hours' : null,
+      ),
+    );
   }
 
   void setCurrency(String currency) {
@@ -43,6 +69,7 @@ class PackageFormCubit extends Cubit<PackageFormState> {
 
   PackageFormState _copy({
     String? packageType,
+    String? accessScope,
     String? currency,
     bool? isPopular,
   }) {
@@ -50,6 +77,8 @@ class PackageFormCubit extends Cubit<PackageFormState> {
       curriculumId: state.curriculumId,
       packageId: state.packageId,
       packageType: packageType ?? state.packageType,
+      accessScope: accessScope ?? state.accessScope,
+      registrationMode: state.registrationMode,
       currency: currency ?? state.currency,
       isPopular: isPopular ?? state.isPopular,
     );
