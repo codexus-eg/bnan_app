@@ -33,6 +33,8 @@ abstract class Routes {
       '/admin/teacher-payrolls/payroll/:payrollId';
   static const String teacherPayrollPayment =
       '/admin/teacher-payrolls/payroll/:payrollId/payment';
+  static const String teacherMyPayrollReport =
+      '/teacher/my-payrolls/:payrollId';
   static const String supervisorHome = '/supervisorHome';
   static const String parentHome = '/parentHome';
   static const String parentAddChild = '/parent/children/add';
@@ -78,6 +80,9 @@ abstract class Routes {
       teacherPayrollDetails.replaceFirst(':payrollId', payrollId);
   static String teacherPayrollPaymentPath(String payrollId) =>
       teacherPayrollPayment.replaceFirst(':payrollId', payrollId);
+  static String teacherMyPayrollReportPath(String payrollId) =>
+      teacherMyPayrollReport.replaceFirst(':payrollId', payrollId);
+  static String get teacherHomePayrollsPath => '$teacherHome?tab=payrolls';
   static String teacherPayrollSessionsPath(
     String teacherId,
     String curriculumId,

@@ -333,7 +333,14 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.teacherHome,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const TeacherHomeView(),
+          child: BlocProvider(
+            create: (_) => getIt<TeacherMyPayrollsCubit>(),
+            child: TeacherHomeView(
+              initialIndex: state.uri.queryParameters['tab'] == 'payrolls'
+                  ? teacherPayrollTabIndex
+                  : 0,
+            ),
+          ),
           key: state.pageKey,
         ),
       ),
@@ -445,6 +452,19 @@ GoRouter buildRouter() {
             ],
             child: TeacherPayrollDetailsView(
               payrollId: state.pathParameters['payrollId'],
+            ),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.teacherMyPayrollReport,
+        redirect: _teacherOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<TeacherPayrollReportCubit>(),
+            child: TeacherPayrollReportView(
+              payrollId: state.pathParameters['payrollId'] ?? '',
             ),
           ),
         ),
@@ -1082,6 +1102,12 @@ GoRouter buildRouter() {
 
 String? _adminOnly(BuildContext context, GoRouterState state) {
   if (SessionManager.instance.role == UserRole.admin) return null;
+  return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+      Routes.splash;
+}
+
+String? _teacherOnly(BuildContext context, GoRouterState state) {
+  if (SessionManager.instance.role == UserRole.teacher) return null;
   return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
       Routes.splash;
 }

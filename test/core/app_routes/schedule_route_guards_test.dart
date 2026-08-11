@@ -257,6 +257,17 @@ const _payrollCases = [
   ),
   _GuardCase('payroll list rejects teacher', Routes.teacherPayrolls, 'teacher'),
   _GuardCase(
+    'teacher payroll report allows teacher',
+    Routes.teacherMyPayrollReport,
+    'teacher',
+    allowed: true,
+  ),
+  _GuardCase(
+    'teacher payroll report rejects parent',
+    Routes.teacherMyPayrollReport,
+    'parent',
+  ),
+  _GuardCase(
     'payroll create rejects supervisor',
     Routes.teacherPayrollCreate,
     'supervisor',

@@ -7,9 +7,15 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_mo
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_my_payrolls_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class TeacherPayrollRepo {
+  Future<Either<Failure, TeacherMyPayrollsModel>> getMyPayrolls({
+    String? status,
+  });
+  Future<Either<Failure, TeacherPayrollModel>> getMyPayroll(String payrollId);
+  Future<Either<Failure, PayoutProfileModel?>> getMyPayoutProfile();
   Future<Either<Failure, List<PayrollListItemModel>>> getPreviewList({
     required String from,
     required String to,

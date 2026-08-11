@@ -38,7 +38,7 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
       title: s.myGroups,
       icon: ImageManager.teacherUserProfileGroupIcon,
     ),
-    DrawerItemModel(title: s.dues, icon: ImageManager.wallet),
+    DrawerItemModel(title: s.teacherMyEarnings, icon: ImageManager.wallet),
     DrawerItemModel(
       title: s.certificates,
       icon: ImageManager.certificateBadgeIcon,

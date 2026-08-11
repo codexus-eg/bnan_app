@@ -4,8 +4,13 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PayrollStatusBadge extends StatelessWidget {
-  const PayrollStatusBadge({super.key, required this.status});
+  const PayrollStatusBadge({
+    super.key,
+    required this.status,
+    this.displayLabel,
+  });
   final String status;
+  final String? displayLabel;
   @override
   Widget build(BuildContext context) {
     final (label, background, foreground) = switch (status) {
@@ -37,7 +42,7 @@ class PayrollStatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        label,
+        displayLabel ?? label,
         style: StylesManager.styleBold12(context).copyWith(color: foreground),
       ),
     );

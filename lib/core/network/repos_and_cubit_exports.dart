@@ -61,6 +61,8 @@ export 'package:bnan_app/features/teacher_payrolls/presentation/manager/payment/
 export 'package:bnan_app/features/teacher_payrolls/presentation/manager/payrolls/teacher_payrolls_cubit.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/manager/payout/teacher_payout_profile_cubit.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/manager/sessions/payroll_sessions_cubit.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_cubit.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payroll_details/teacher_payroll_report_cubit.dart';
 export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo.dart';
 export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo_impl.dart';
 export 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_cubit.dart';

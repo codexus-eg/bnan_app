@@ -2,7 +2,8 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_list_item
 import 'package:flutter/material.dart';
 import 'payroll_list_card.dart';
 
-const _mockPayroll = PayrollListItemModel(
+// Skeleton placeholder only. Not feature mock data.
+const _skeletonPayroll = PayrollListItemModel(
   teacherId: '',
   fullName: 'Teacher name placeholder',
   email: 'teacher@example.com',
@@ -21,7 +22,7 @@ class PayrollListSkeleton extends StatelessWidget {
     itemCount: 3,
     separatorBuilder: (_, _) => const SizedBox(height: 12),
     itemBuilder: (_, _) => const PayrollListCard(
-      item: _mockPayroll,
+      item: _skeletonPayroll,
       from: '',
       to: '',
       enabled: false,

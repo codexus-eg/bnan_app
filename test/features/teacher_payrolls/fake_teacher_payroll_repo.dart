@@ -7,10 +7,27 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_mo
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_my_payrolls_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
 import 'package:dartz/dartz.dart';
 
 class FakeTeacherPayrollRepo implements TeacherPayrollRepo {
+  Either<Failure, TeacherMyPayrollsModel> myPayrolls = const Right(
+    TeacherMyPayrollsModel(summary: [], payrolls: []),
+  );
+  Either<Failure, PayoutProfileModel?> myPayoutProfile = const Right(null);
+  int myPayrollListLoads = 0;
+
+  @override
+  getMyPayrolls({String? status}) async {
+    myPayrollListLoads++;
+    return myPayrolls;
+  }
+
+  @override
+  getMyPayroll(String id) async => payroll;
+  @override
+  getMyPayoutProfile() async => myPayoutProfile;
   Either<Failure, TeacherPayrollModel> payment = Right(
     TeacherPayrollModel.fromResponse({
       'data': {'id': 'p1', 'status': 'paid'},

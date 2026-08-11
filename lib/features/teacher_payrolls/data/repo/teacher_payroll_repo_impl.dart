@@ -10,6 +10,7 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_mo
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_my_payrolls_model.dart';
 import 'teacher_payroll_repo.dart';
 
 class TeacherPayrollRepoImpl implements TeacherPayrollRepo {
@@ -19,6 +20,32 @@ class TeacherPayrollRepoImpl implements TeacherPayrollRepo {
     'from': from,
     'to': to,
   };
+  @override
+  getMyPayrolls({String? status}) => repoGuard(() async {
+    return TeacherMyPayrollsModel.fromResponse(
+      await api.get(
+        EndPoints.teacherMyPayrolls,
+        queryParameter: status == null ? null : {'status': status},
+        isProtected: true,
+      ),
+    );
+  });
+  @override
+  getMyPayroll(String payrollId) => repoGuard(() async {
+    return TeacherPayrollModel.fromResponse(
+      await api.get(EndPoints.teacherMyPayroll(payrollId), isProtected: true),
+    );
+  });
+  @override
+  getMyPayoutProfile() => repoGuard(() async {
+    final response = await api.get(
+      EndPoints.teacherMyPayoutProfile,
+      isProtected: true,
+    );
+    final root = payrollMap(response);
+    if (!root.containsKey('data') || root['data'] == null) return null;
+    return PayoutProfileModel.fromJson(root['data']);
+  });
   @override
   getPreviewList({
     required String from,

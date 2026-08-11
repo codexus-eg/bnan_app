@@ -321,6 +321,12 @@ void setupServiceLocator() {
   getIt.registerFactory<PayrollSessionsCubit>(
     () => PayrollSessionsCubit(getIt<TeacherPayrollRepo>()),
   );
+  getIt.registerFactory<TeacherMyPayrollsCubit>(
+    () => TeacherMyPayrollsCubit(getIt<TeacherPayrollRepo>()),
+  );
+  getIt.registerFactory<TeacherPayrollReportCubit>(
+    () => TeacherPayrollReportCubit(getIt<TeacherPayrollRepo>()),
+  );
   getIt.registerFactory<TeacherRegistrationRequestsCubit>(
     () => TeacherRegistrationRequestsCubit(
       getIt<TeacherRegistrationRequestsRepo>(),

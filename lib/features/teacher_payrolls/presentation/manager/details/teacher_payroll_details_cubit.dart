@@ -1,6 +1,4 @@
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_model.dart';
-import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
-import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_data.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
@@ -18,11 +16,6 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
     required String to,
   }) async {
     if (_busy) return;
-    if (kUseTeacherPayrollMockData) {
-      final payroll = TeacherPayrollMockData.forTeacher(teacherId);
-      emit(TeacherPayrollDetailsReady(payroll, payroll.payoutProfile));
-      return;
-    }
     _busy = true;
     emit(const TeacherPayrollDetailsLoading());
     final result = await repo.getTeacherPreview(
@@ -39,11 +32,6 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
 
   Future<void> loadPayroll(String id) async {
     if (_busy) return;
-    if (kUseTeacherPayrollMockData) {
-      final payroll = TeacherPayrollMockData.forPayroll(id);
-      emit(TeacherPayrollDetailsReady(payroll, payroll.payoutProfile));
-      return;
-    }
     _busy = true;
     emit(const TeacherPayrollDetailsLoading());
     final result = await repo.getPayroll(id);
@@ -69,14 +57,6 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
   Future<void> save(SavePayrollRequest request) async {
     final current = state;
     if (_busy || current is! TeacherPayrollDetailsReady) return;
-    if (kUseTeacherPayrollMockData) {
-      final payroll = TeacherPayrollMockData.savedDraft(
-        current.payroll,
-        request,
-      );
-      emit(TeacherPayrollDetailsReady(payroll, current.profile));
-      return;
-    }
     _busy = true;
     emit(
       TeacherPayrollDetailsReady(
