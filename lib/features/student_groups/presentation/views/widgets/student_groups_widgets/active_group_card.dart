@@ -11,23 +11,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ActiveGroupCard extends StatelessWidget {
-  const ActiveGroupCard({
-    super.key,
-    required this.enrollment,
-  });
+  const ActiveGroupCard({super.key, required this.enrollment});
 
   final StudentEnrollmentModel enrollment;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => MyNavigator.goTo(context, Routes.chat),
+      onTap: () => MyNavigator.goTo(context, Routes.groups),
       child: BaseGroupCard(
         child: Row(
           children: [
-            CustomIconBox(
-              title: _getFirstLetter(enrollment.classroom.name),
-            ),
+            CustomIconBox(title: _getFirstLetter(enrollment.classroom.name)),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -38,17 +33,17 @@ class ActiveGroupCard extends StatelessWidget {
                     enrollment.classroom.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StylesManager.styleBold16(context).copyWith(
-                      color: ColorManager.mainColor14,
-                    ),
+                    style: StylesManager.styleBold16(
+                      context,
+                    ).copyWith(color: ColorManager.mainColor14),
                   ),
                   Text(
                     S.of(context).groupCreatedByYou,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StylesManager.styleRegular14(context).copyWith(
-                      color: ColorManager.greyA8AF,
-                    ),
+                    style: StylesManager.styleRegular14(
+                      context,
+                    ).copyWith(color: ColorManager.greyA8AF),
                   ),
                 ],
               ),

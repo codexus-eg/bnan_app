@@ -30,7 +30,9 @@ export 'package:bnan_app/features/splash_and_onboarding/presentation/views/onboa
 export 'package:bnan_app/features/splash_and_onboarding/presentation/views/splash_view.dart';
 
 export 'package:bnan_app/features/student_groups/presentation/views/student_groups_view.dart';
-export 'package:bnan_app/features/student_groups/presentation/views/request_lesson_view.dart';
+export 'package:bnan_app/features/student_subject_requests/presentation/views/student_subject_requests_view.dart';
+export 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
+export 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
 export 'package:bnan_app/features/student_subjects/presentation/views/student_subjects_view.dart';
 export 'package:bnan_app/features/student_schedule/presentation/views/gulf_student_schedule_read_only_view.dart';
 
@@ -71,6 +73,8 @@ export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent
 export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscription_renewal_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_schedule_view.dart';
 export 'package:bnan_app/features/registration_requests/presentation/view/registration_requests_view.dart';
+export 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
+export 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_request_actions_cubit.dart';
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 export 'package:bnan_app/features/tables_management/presentation/views/tables_management_view.dart';
 export 'package:bnan_app/features/tables_management/presentation/views/egyptian_schedules_read_only_view.dart';

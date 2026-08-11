@@ -44,6 +44,7 @@ abstract class EndPoints {
   static const String adminDashboardStatistics = '/admin/dashboard/statistics';
   static const String adminDiscountCodes = '/admin/discount-codes';
   static const String adminPayrolls = '/admin/payrolls';
+  static const String adminSubjectRequests = '/admin/subject-requests';
   static const String adminPayrollsPreview = '$adminPayrolls/preview';
   static const String teacherMyPayrolls = '/teachers/me/payrolls';
   static const String teacherMyPayoutProfile = '/teachers/me/payout-profile';
@@ -72,6 +73,11 @@ abstract class EndPoints {
   static const String gulfSchedules = '/gulfSchedules';
   static const String myGulfSchedule = '$gulfSchedules/mySchedule';
   static const String tamaraCheckout = '/payment/tamara/checkout';
+  static const String studentSubjectRequests = '/gulf-student-subject-requests';
+  static const String studentSubjectRequestAvailableSubjects =
+      '$studentSubjectRequests/available-subjects';
+  static const String studentSubjectRequestCheckout =
+      '$studentSubjectRequests/checkout';
 
   static String egyptianWeeklyRankings(String classroomId) {
     return '/egyptian-weekly-rankings/$classroomId';
@@ -102,6 +108,12 @@ abstract class EndPoints {
   }
 
   static String adminPayroll(String id) => '$adminPayrolls/$id';
+
+  static String approveAdminSubjectRequest(String id) =>
+      '$adminSubjectRequests/$id/approve';
+
+  static String rejectAdminSubjectRequest(String id) =>
+      '$adminSubjectRequests/$id/reject';
 
   static String teacherMyPayroll(String id) => '$teacherMyPayrolls/$id';
 
@@ -216,6 +228,12 @@ abstract class EndPoints {
   static String tamaraStatus(String paymentId) {
     return '/payment/tamara/$paymentId/status';
   }
+
+  static String studentSubjectRequestCheckoutStatus(String paymentId) =>
+      '$studentSubjectRequestCheckout/$paymentId/status';
+
+  static String studentSubjectRequestCheckoutReconcile(String paymentId) =>
+      '$studentSubjectRequestCheckout/$paymentId/reconcile';
 
   static String egyptianRenewalStatus(String paymentId) =>
       '$egyptianSubscriptionRenewal/$paymentId/status';

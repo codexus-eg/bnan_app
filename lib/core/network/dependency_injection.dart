@@ -2,6 +2,10 @@ import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_student_subjects_cubit/get_student_subjects_cubit.dart';
+import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject_requests_repo.dart';
+import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject_requests_repo_impl.dart';
+import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_request_actions_cubit.dart';
+import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo.dart';
@@ -33,6 +37,11 @@ import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_c
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo_impl.dart';
+import 'package:bnan_app/features/student_subject_requests/data/repo/student_subject_requests_repo.dart';
+import 'package:bnan_app/features/student_subject_requests/data/repo/student_subject_requests_repo_impl.dart';
+import 'package:bnan_app/features/student_subject_requests/data/store/subject_request_payment_store.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
@@ -60,6 +69,9 @@ void setupServiceLocator() {
     () => GulfParentAuthRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<PaymentDraftStore>(PaymentDraftStore.new);
+  getIt.registerLazySingleton<SubjectRequestPaymentStore>(
+    SubjectRequestPaymentStore.new,
+  );
 
   getIt.registerLazySingleton<PackageActionsRepo>(
     () => PackageActionsRepoImpl(getIt<ApiConsumer>()),
@@ -69,6 +81,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<RegistrationRequestsRepo>(
     () => RegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<AdminSubjectRequestsRepo>(
+    () => AdminSubjectRequestsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<AdminDashboardRepo>(
     () => AdminDashboardRepoImpl(getIt<ApiConsumer>()),
@@ -114,6 +129,9 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<StudentGroupsRepo>(
     () => StudentGroupsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<StudentSubjectRequestsRepo>(
+    () => StudentSubjectRequestsRepoImpl(getIt<DioConsumer>()),
   );
   getIt.registerLazySingleton<TeacherRegistrationRepo>(
     () => TeacherRegistrationRepoImpl(apiConsumer: getIt<ApiConsumer>()),
@@ -281,6 +299,16 @@ void setupServiceLocator() {
   getIt.registerFactory<GetMyEnrollmentsCubit>(
     () => GetMyEnrollmentsCubit(getIt<StudentGroupsRepo>()),
   );
+  getIt.registerFactory<StudentSubjectRequestsCubit>(
+    () => StudentSubjectRequestsCubit(getIt<StudentSubjectRequestsRepo>()),
+  );
+  getIt.registerFactory<SubjectRequestPaymentCubit>(
+    () => SubjectRequestPaymentCubit(
+      repo: getIt<StudentSubjectRequestsRepo>(),
+      keyGenerator: IdempotencyKeyGenerator(),
+      store: getIt<SubjectRequestPaymentStore>(),
+    ),
+  );
   getIt.registerFactory<TeacherRegistrationCubit>(
     () => TeacherRegistrationCubit(getIt<TeacherRegistrationRepo>()),
   );
@@ -293,6 +321,12 @@ void setupServiceLocator() {
 
   getIt.registerFactory<GetRegistrationRequestsCubit>(
     () => GetRegistrationRequestsCubit(getIt<RegistrationRequestsRepo>()),
+  );
+  getIt.registerFactory<AdminSubjectRequestsCubit>(
+    () => AdminSubjectRequestsCubit(getIt<AdminSubjectRequestsRepo>()),
+  );
+  getIt.registerFactory<AdminSubjectRequestActionsCubit>(
+    () => AdminSubjectRequestActionsCubit(getIt<AdminSubjectRequestsRepo>()),
   );
   getIt.registerFactory<AdminDashboardCubit>(
     () => AdminDashboardCubit(getIt<AdminDashboardRepo>()),

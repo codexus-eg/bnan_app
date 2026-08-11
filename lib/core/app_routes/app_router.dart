@@ -200,11 +200,14 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.chat,
         pageBuilder: (context, state) {
-          final extra = state.extra;
-          final args = extra is ChatRouteArgs
-              ? extra
-              : ChatRouteArgs(roomId: extra as String);
-          final roomId = args.roomId;
+          final args = switch (state.extra) {
+            ChatRouteArgs value => value,
+            _ => null,
+          };
+          final roomId = state.pathParameters['roomId'];
+          if (roomId == null || roomId.isEmpty) {
+            throw StateError('Missing required chat roomId path parameter');
+          }
 
           return buildTransitionPages(
             key: state.pageKey,
@@ -219,15 +222,20 @@ GoRouter buildRouter() {
               ],
               child: ChatView(
                 roomId: roomId,
-                roomType: args.roomType,
-                classroomId: args.classroomId,
-                classroomName: args.classroomName,
+                roomType: args?.roomType,
+                classroomId: args?.classroomId,
+                classroomName: args?.classroomName,
                 currentUserRole:
-                    args.currentUserRole ?? SessionManager.instance.userRole,
+                    args?.currentUserRole ?? SessionManager.instance.userRole,
               ),
             ),
           );
         },
+      ),
+
+      GoRoute(
+        path: Routes.legacyChat,
+        redirect: (context, state) => Routes.groups,
       ),
 
       GoRoute(
@@ -282,8 +290,23 @@ GoRouter buildRouter() {
 
       GoRoute(
         path: Routes.requestLesson,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.student) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const RequestLessonView(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<StudentSubjectRequestsCubit>()..load(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<SubjectRequestPaymentCubit>()..restore(),
+              ),
+            ],
+            child: const StudentSubjectRequestsView(),
+          ),
           key: state.pageKey,
         ),
       ),
@@ -1030,6 +1053,13 @@ GoRouter buildRouter() {
               ),
               BlocProvider(
                 create: (_) => getIt<RegistrationRequestActionsCubit>(),
+              ),
+              BlocProvider(create: (_) => getIt<AdminSubjectRequestsCubit>()),
+              BlocProvider(
+                create: (context) => getIt<AdminSubjectRequestActionsCubit>()
+                  ..onRefresh = () => context
+                      .read<AdminSubjectRequestsCubit>()
+                      .load(refresh: true),
               ),
             ],
             child: const RegistrationRequestsView(),

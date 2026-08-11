@@ -28,7 +28,7 @@ abstract class SupervisorNavigationConfig {
         Routes.certificatesManagement,
       ),
       _item(s.messages, ImageManager.chatIcon, Routes.groups),
-      _item(s.attendance, ImageManager.teacherMeetingIcon, Routes.attendance),
+      _item(s.attendance, ImageManager.userCheck, Routes.attendance),
       _item(s.plansTitle, ImageManager.calendarIcon, Routes.plans),
       if (session.isEgyptianSupervisor)
         _item(
@@ -49,7 +49,7 @@ abstract class SupervisorNavigationConfig {
         ImageManager.certificateBadgeIcon,
         Routes.certificatesManagement,
       ),
-      _item(s.attendance, ImageManager.teacherMeetingIcon, Routes.attendance),
+      _item(s.attendance, ImageManager.userCheck, Routes.attendance),
     ];
   }
 
