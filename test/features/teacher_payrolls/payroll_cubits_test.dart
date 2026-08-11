@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/error/failure.dart';
-import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_payment_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
@@ -7,13 +6,15 @@ import 'package:bnan_app/features/teacher_payrolls/presentation/manager/details/
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/details/teacher_payroll_details_state.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payment/payroll_payment_cubit.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payment/payroll_payment_state.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payroll_details/teacher_payroll_report_cubit.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payroll_details/teacher_payroll_report_state.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_cubit.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'fake_teacher_payroll_repo.dart';
 
 void main() {
-  setUp(() => kUseTeacherPayrollMockData = false);
-  tearDown(() => kUseTeacherPayrollMockData = true);
   test('payment success emits paid payroll', () async {
     final cubit = PayrollPaymentCubit(FakeTeacherPayrollRepo());
     await cubit.pay(
@@ -70,5 +71,34 @@ void main() {
       ),
     );
     expect((cubit.state as TeacherPayrollDetailsReady).payroll.status, 'paid');
+  });
+  test('teacher payroll report exposes 404 as not found', () async {
+    final repo = FakeTeacherPayrollRepo()
+      ..payroll = Left(Failure(message: 'missing', statusCode: 404));
+    final cubit = TeacherPayrollReportCubit(repo);
+    await cubit.load('missing');
+    final state = cubit.state as TeacherPayrollReportFailure;
+    expect(state.notFound, isTrue);
+  });
+
+  test('teacher payroll report success returns read-only model', () async {
+    final cubit = TeacherPayrollReportCubit(FakeTeacherPayrollRepo());
+    await cubit.load('p1');
+    expect((cubit.state as TeacherPayrollReportReady).payroll.id, 'p1');
+  });
+  test('teacher payroll empty API emits ready empty state', () async {
+    final repo = FakeTeacherPayrollRepo();
+    final cubit = TeacherMyPayrollsCubit(repo);
+    await cubit.load();
+    final state = cubit.state as TeacherMyPayrollsReady;
+    expect(state.data.payrolls, isEmpty);
+    expect(repo.myPayrollListLoads, 1);
+  });
+  test('teacher payroll API failure emits failure without fallback', () async {
+    final repo = FakeTeacherPayrollRepo()
+      ..myPayrolls = Left(Failure(message: 'network failure'));
+    final cubit = TeacherMyPayrollsCubit(repo);
+    await cubit.load();
+    expect(cubit.state, isA<TeacherMyPayrollsFailure>());
   });
 }

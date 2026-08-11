@@ -56,6 +56,7 @@ export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_pa
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payroll_details_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/payroll_payment_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/payroll_sessions_view.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payroll_report_view.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/views/classrooms_management_view.dart';

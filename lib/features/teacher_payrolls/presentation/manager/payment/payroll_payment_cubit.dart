@@ -1,6 +1,4 @@
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_payment_request.dart';
-import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
-import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_data.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'payroll_payment_state.dart';
@@ -11,10 +9,6 @@ class PayrollPaymentCubit extends Cubit<PayrollPaymentState> {
   bool _paying = false;
   Future<void> pay(String id, PayrollPaymentRequest request) async {
     if (_paying) return;
-    if (kUseTeacherPayrollMockData) {
-      emit(PayrollPaymentSuccess(TeacherPayrollMockData.paidAfterQa(id)));
-      return;
-    }
     _paying = true;
     emit(const PayrollPaymentLoading());
     final result = await repo.pay(id, request);

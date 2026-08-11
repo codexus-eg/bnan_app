@@ -12,7 +12,8 @@ import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teache
 import 'package:flutter/material.dart';
 
 class TeacherHomeView extends StatefulWidget {
-  const TeacherHomeView({super.key});
+  const TeacherHomeView({super.key, this.initialIndex = 0});
+  final int initialIndex;
 
   @override
   State<TeacherHomeView> createState() => _TeacherHomeViewState();
@@ -21,19 +22,17 @@ class TeacherHomeView extends StatefulWidget {
 class _TeacherHomeViewState extends State<TeacherHomeView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int currentIndex = 0;
+  late int currentIndex;
   bool _isLoggingOut = false;
 
   static const int notificationsDrawerIndex = 13;
   static const int plansDrawerIndex = 11;
 
-  static const Map<int, int> drawerToBottomNavIndex = {
-    0: 0,
-    3: 1,
-    5: 2,
-    8: 3,
-    15: 4,
-  };
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   void _changeIndex(int index) {
     setState(() => currentIndex = index);
@@ -70,7 +69,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     if (!SessionManager.instance.hasGulfRegistration && legacyIndex >= 6) {
       legacyIndex++;
     }
-    final bottomIndex = drawerToBottomNavIndex[legacyIndex];
+    final bottomIndex = teacherDrawerToBottomNavIndex[legacyIndex];
 
     if (bottomIndex != null) {
       _changeIndex(bottomIndex);
@@ -98,6 +97,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       MyNavigator.goTo(context, Routes.weeklyIdealStudents);
     }
   }
+
+  void _onBottomNavTap(int index) => _changeIndex(index);
 
   Future<void> _logout() async {
     if (_isLoggingOut) return;
@@ -141,10 +142,19 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
           body: TeacherHomeBody(index: currentIndex, onMenuTap: _openDrawer),
           bottomNavigationBar: TeacherBottomNavBar(
             currentIndex: currentIndex,
-            onTap: _changeIndex,
+            onTap: _onBottomNavTap,
           ),
         ),
       ),
     );
   }
 }
+
+const teacherPayrollTabIndex = 3;
+const teacherDrawerToBottomNavIndex = <int, int>{
+  0: 0,
+  3: 1,
+  5: 2,
+  8: teacherPayrollTabIndex,
+  15: 4,
+};

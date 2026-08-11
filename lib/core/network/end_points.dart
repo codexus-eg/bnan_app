@@ -45,6 +45,8 @@ abstract class EndPoints {
   static const String adminDiscountCodes = '/admin/discount-codes';
   static const String adminPayrolls = '/admin/payrolls';
   static const String adminPayrollsPreview = '$adminPayrolls/preview';
+  static const String teacherMyPayrolls = '/teachers/me/payrolls';
+  static const String teacherMyPayoutProfile = '/teachers/me/payout-profile';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String getMyChatRooms = '/chats/rooms';
@@ -100,6 +102,8 @@ abstract class EndPoints {
   }
 
   static String adminPayroll(String id) => '$adminPayrolls/$id';
+
+  static String teacherMyPayroll(String id) => '$teacherMyPayrolls/$id';
 
   static String teacherPayrollPreview(String teacherId) =>
       '$adminPayrolls/teachers/$teacherId/preview';
