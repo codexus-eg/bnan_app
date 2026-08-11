@@ -18,6 +18,7 @@ import 'package:bnan_app/features/packages_management/presentation/manager/get_p
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
 import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_student_access_policy.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/assign_student_cubit/assign_student_cubit.dart';
@@ -461,6 +462,84 @@ GoRouter buildRouter() {
           child: const ParentHomeView(),
           key: state.pageKey,
         ),
+      ),
+      GoRoute(
+        path: Routes.parentAddChild,
+        redirect: (context, state) =>
+            _parentOnly(context, state) ??
+            (state.extra is ParentAddChildArgs ? null : Routes.parentHome),
+        pageBuilder: (context, state) {
+          final args = state.extra! as ParentAddChildArgs;
+          final curriculum = args.curriculum;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<ParentAddChildCubit>()..start(curriculum),
+                ),
+                BlocProvider(
+                  create: (_) => AcademicLookupsCubit(
+                    repo: getIt<AcademicLookupsRepo>(),
+                    loadClassroomsOnGrade: false,
+                    loadSubjectsWithoutClassroom: true,
+                  )..selectCurriculum(curriculum),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetPackagesCubit>()
+                        ..getPackagesByCurriculum(args.curriculumId),
+                ),
+              ],
+              child: const ParentAddChildView(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.parentSubscriptions,
+        redirect: _parentOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<GetParentSubscriptionsCubit>()..load(),
+            child: const ParentSubscriptionsView(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.parentSubscriptionRenewal,
+        redirect: (context, state) {
+          final parentRedirect = _parentOnly(context, state);
+          if (parentRedirect != null) return parentRedirect;
+          final args = state.extra;
+          final studentId = state.pathParameters['studentId'];
+          if (!isValidParentRenewalRoute(studentId: studentId, extra: args)) {
+            return Routes.parentSubscriptions;
+          }
+          return null;
+        },
+        pageBuilder: (context, state) {
+          final args = state.extra! as ParentSubscriptionRenewalArgs;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<ParentSubscriptionRenewalCubit>(param1: args),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetPackagesCubit>()
+                        ..getPackagesByCurriculum(args.curriculumId),
+                ),
+              ],
+              child: const ParentSubscriptionRenewalView(),
+            ),
+          );
+        },
       ),
       GoRoute(
         path: Routes.parentSchedule,
@@ -1003,6 +1082,12 @@ GoRouter buildRouter() {
 
 String? _adminOnly(BuildContext context, GoRouterState state) {
   if (SessionManager.instance.role == UserRole.admin) return null;
+  return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+      Routes.splash;
+}
+
+String? _parentOnly(BuildContext context, GoRouterState state) {
+  if (SessionManager.instance.role == UserRole.parent) return null;
   return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
       Routes.splash;
 }

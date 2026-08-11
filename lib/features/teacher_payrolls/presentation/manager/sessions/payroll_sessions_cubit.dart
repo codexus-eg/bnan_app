@@ -1,4 +1,6 @@
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_sessions_mock.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'payroll_sessions_state.dart';
 
@@ -11,6 +13,14 @@ class PayrollSessionsCubit extends Cubit<PayrollSessionsState> {
     required String from,
     required String to,
   }) async {
+    if (kUseTeacherPayrollMockData) {
+      emit(
+        PayrollSessionsSuccess(
+          TeacherPayrollSessionsMock.forCurriculum(curriculumId),
+        ),
+      );
+      return;
+    }
     emit(const PayrollSessionsLoading());
     final result = await repo.getSessions(
       teacherId: teacherId,

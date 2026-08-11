@@ -9,10 +9,12 @@ class PackageTypeSelector extends StatelessWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.monthlyEnabled = true,
   });
 
   final String value;
   final ValueChanged<String> onChanged;
+  final bool monthlyEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class PackageTypeSelector extends StatelessWidget {
                 context,
                 'monthly',
                 S.of(context).monthlyPackage,
+                enabled: monthlyEnabled,
               ),
             ),
             const SizedBox(width: 12),
@@ -58,29 +61,37 @@ class PackageTypeSelector extends StatelessWidget {
     );
   }
 
-  Widget buildOption(BuildContext context, String type, String title) {
+  Widget buildOption(
+    BuildContext context,
+    String type,
+    String title, {
+    bool enabled = true,
+  }) {
     final isSelected = value == type;
 
-    return InkWell(
-      onTap: () => onChanged(type),
-      child: Container(
-        height: 44,
-        decoration: BoxDecoration(
-          border: Border.all(color: ColorManager.borderColor),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SelectionCircle(isSelected: isSelected),
-            const SizedBox(width: 16),
-            Text(
-              title,
-              style: StylesManager.styleBold12(
-                context,
-              ).copyWith(color: ColorManager.black),
-            ),
-          ],
+    return Opacity(
+      opacity: enabled ? 1 : .45,
+      child: InkWell(
+        onTap: enabled ? () => onChanged(type) : null,
+        child: Container(
+          height: 44,
+          decoration: BoxDecoration(
+            border: Border.all(color: ColorManager.borderColor),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SelectionCircle(isSelected: isSelected),
+              const SizedBox(width: 16),
+              Text(
+                title,
+                style: StylesManager.styleBold12(
+                  context,
+                ).copyWith(color: ColorManager.black),
+              ),
+            ],
+          ),
         ),
       ),
     );

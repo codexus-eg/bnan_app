@@ -1,0 +1,43 @@
+import 'dart:io';
+
+import 'package:bnan_app/core/helper/file_url_launcher.dart';
+import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+class TamaraCheckoutLaunchResult {
+  const TamaraCheckoutLaunchResult({required this.opened});
+
+  final bool opened;
+}
+
+abstract class TamaraCheckoutLauncher {
+  static Future<TamaraCheckoutLaunchResult> open(
+    BuildContext context,
+    String checkoutUrl,
+  ) async {
+    if (!FileUrlLauncher.isValidWebUrl(checkoutUrl)) {
+      return const TamaraCheckoutLaunchResult(opened: false);
+    }
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      return TamaraCheckoutLaunchResult(
+        opened: await FileUrlLauncher.open(checkoutUrl),
+      );
+    }
+    try {
+      await Navigator.of(context).push<TamaraSdkOutcome>(
+        MaterialPageRoute(
+          builder: (_) => TamaraSdkCheckoutView(checkoutUrl: checkoutUrl),
+        ),
+      );
+      return const TamaraCheckoutLaunchResult(opened: true);
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint('[TamaraCheckout] SDK unavailable: ${error.runtimeType}');
+      }
+      return TamaraCheckoutLaunchResult(
+        opened: await FileUrlLauncher.open(checkoutUrl),
+      );
+    }
+  }
+}

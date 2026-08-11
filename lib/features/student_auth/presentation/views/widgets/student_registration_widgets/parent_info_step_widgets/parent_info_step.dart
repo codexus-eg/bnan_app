@@ -47,7 +47,7 @@ class ParentInfoStep extends StatelessWidget {
             keyboardType: TextInputType.phone,
             isRequired: true,
             validator: (value) =>
-                MyValidator.requiredField(value, S.of(context).phoneNumber),
+                MyValidator.validatePhone(value, cubit.packageCurrency),
           ),
           const SizedBox(height: 16),
           CustomTextField(

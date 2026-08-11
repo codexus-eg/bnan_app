@@ -24,12 +24,14 @@ class AcademicLookupsRepoImpl implements AcademicLookupsRepo {
   }
 
   @override
-  Future<Either<Failure, List<AcademicGradeModel>>> getGrades(
-    {String? curriculumId,}
-  ) {
+  Future<Either<Failure, List<AcademicGradeModel>>> getGrades({
+    String? curriculumId,
+  }) {
     return _guard(() async {
       final response = await apiConsumer.get(
-      EndPoints.getGrades(curriculumId: curriculumId),
+        curriculumId == null || curriculumId.isEmpty
+            ? EndPoints.grades
+            : EndPoints.gradesByCurriculum(curriculumId),
       );
       return _dataList(response).map(AcademicGradeModel.fromJson).toList();
     });
@@ -87,12 +89,7 @@ class AcademicLookupsRepoImpl implements AcademicLookupsRepo {
     String curriculumId,
     String gradeId,
   ) async {
-    final response = await apiConsumer.get(
-      EndPoints.curriculumSubjects(
-        curriculumId: curriculumId,
-        gradeId: gradeId,
-      ),
-    );
+    final response = await apiConsumer.get(EndPoints.gradeSubjects(gradeId));
     return _dataList(response).map(AcademicSubjectModel.fromJson).toList();
   }
 

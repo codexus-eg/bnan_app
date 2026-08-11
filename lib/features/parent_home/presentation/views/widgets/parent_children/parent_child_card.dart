@@ -7,9 +7,10 @@ import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dar
 import 'package:flutter/material.dart';
 
 class ParentChildCard extends StatelessWidget {
-  const ParentChildCard({super.key, required this.child});
+  const ParentChildCard({super.key, required this.child, this.onTap});
 
   final ParentChildModel child;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -21,36 +22,40 @@ class ParentChildCard extends StatelessWidget {
         : classroomName;
     final grade = gradeName == null || gradeName.isEmpty ? '-' : gradeName;
 
-    return CustomDetailsWidgetBackground(
-      child: Row(
-        children: [
-          CustomIconBox(imagePath: ImageManager.children),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  fullName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: StylesManager.styleBold16(
-                    context,
-                  ).copyWith(color: ColorManager.mainColor14),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '$classroom - $grade',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: StylesManager.styleRegular14(
-                    context,
-                  ).copyWith(color: ColorManager.greyA8AF),
-                ),
-              ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: CustomDetailsWidgetBackground(
+        child: Row(
+          children: [
+            CustomIconBox(imagePath: ImageManager.children),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    fullName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StylesManager.styleBold16(
+                      context,
+                    ).copyWith(color: ColorManager.mainColor14),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '$classroom - $grade',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StylesManager.styleRegular14(
+                      context,
+                    ).copyWith(color: ColorManager.greyA8AF),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,11 @@
+import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
+
 class PackageModel {
   final String? id;
   final String? name;
   final String? curriculum;
   final String? type;
+  final String accessScope;
   final int? hours;
   final int? months;
   final num? oldPrice;
@@ -20,6 +23,7 @@ class PackageModel {
     this.name,
     this.curriculum,
     this.type,
+    this.accessScope = PackageAccessScope.allSubjects,
     this.hours,
     this.months,
     this.oldPrice,
@@ -37,8 +41,10 @@ class PackageModel {
     return PackageModel(
       id: json['id']?.toString(),
       name: json['name']?.toString(),
-      curriculum: json['curriculum']?.toString(),
+      curriculum: _curriculumId(json['curriculum']),
       type: json['type']?.toString(),
+      accessScope:
+          json['accessScope']?.toString() ?? PackageAccessScope.allSubjects,
       hours: _toInt(json['hours']),
       months: _toInt(json['months']),
       oldPrice: _toNum(json['oldPrice']),
@@ -66,5 +72,13 @@ class PackageModel {
 
   static DateTime? _toDateTime(dynamic value) {
     return DateTime.tryParse(value?.toString() ?? '');
+  }
+
+  static String? _curriculumId(dynamic value) {
+    if (value is Map) {
+      final id = value['id'] ?? value['_id'];
+      return id?.toString();
+    }
+    return value?.toString();
   }
 }

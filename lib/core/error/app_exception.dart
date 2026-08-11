@@ -88,20 +88,50 @@ class AppException implements Exception {
 
   static String? _extractBackendMessage(dynamic data) {
     if (data is! Map) return null;
-
-    final message = data['message'] ?? data['error'] ?? data['code'];
-
-    if (message is String && message.trim().isNotEmpty) {
-      return message.trim();
+    final error = data['error'];
+    if (error is Map) {
+      final nested = _findText(error, const {
+        'message',
+        'detail',
+      }, allowErrorString: true);
+      if (nested != null) return nested;
     }
-
-    return null;
+    return _findText(data, const {'message', 'detail'}, allowErrorString: true);
   }
 
   static String? _extractBackendCode(dynamic data) {
     if (data is! Map) return null;
-    final code = data['code']?.toString().trim();
-    return code == null || code.isEmpty ? null : code;
+    return _findText(data, const {'code', 'errorCode', 'error_code'});
+  }
+
+  static String? _findText(
+    Map data,
+    Set<String> keys, {
+    bool allowErrorString = false,
+    int depth = 0,
+  }) {
+    if (depth > 3) return null;
+    for (final key in keys) {
+      final value = data[key];
+      if (value is String && value.trim().isNotEmpty) return value.trim();
+    }
+    if (allowErrorString && data['error'] is String) {
+      final value = (data['error'] as String).trim();
+      if (value.isNotEmpty) return value;
+    }
+    for (final key in const ['error', 'data', 'response']) {
+      final nested = data[key];
+      if (nested is Map) {
+        final value = _findText(
+          nested,
+          keys,
+          allowErrorString: allowErrorString,
+          depth: depth + 1,
+        );
+        if (value != null) return value;
+      }
+    }
+    return null;
   }
 
   static String? _extractValidationMessage(dynamic data) {

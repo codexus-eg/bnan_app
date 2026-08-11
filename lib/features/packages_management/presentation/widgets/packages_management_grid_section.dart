@@ -72,6 +72,10 @@ class PackagesManagementGridSection extends StatelessWidget {
       for (final item in lookups.state.curriculums)
         item.id.toString(): item.name,
     };
+    final registrationModes = {
+      for (final item in lookups.state.curriculums)
+        item.id.toString(): item.registrationMode,
+    };
 
     showDialog(
       context: context,
@@ -83,6 +87,7 @@ class PackagesManagementGridSection extends StatelessWidget {
         child: PackageFormDialog(
           curriculums: curriculums,
           labels: labels,
+          registrationModes: registrationModes,
           package: package,
           onSuccess: () => _refreshPackages(context),
         ),

@@ -1,9 +1,9 @@
-import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payrolls/teacher_payrolls_cubit.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payrolls/teacher_payrolls_state.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/widgets/payroll_filters.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/widgets/payroll_filters_sheet.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/widgets/payroll_filter_summary.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/widgets/payrolls_content.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +43,15 @@ class _TeacherPayrollsViewState extends State<TeacherPayrollsView> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text('${_date(filters.from)} — ${_date(filters.to)}'),
-            const SizedBox(height: 12),
-            CustomAppButton(text: s.payrollFilters, onPressed: _openFilters),
+            BlocBuilder<TeacherPayrollsCubit, TeacherPayrollsState>(
+              builder: (_, state) => PayrollFilterSummary(
+                from: filters.from,
+                to: filters.to,
+                status: _statusLabel(s),
+                teacher: _teacherLabel(state, s),
+                onTap: _openFilters,
+              ),
+            ),
             const SizedBox(height: 12),
             Expanded(
               child: PayrollsContent(
@@ -58,6 +64,24 @@ class _TeacherPayrollsViewState extends State<TeacherPayrollsView> {
         ),
       ),
     );
+  }
+
+  String _statusLabel(S s) => switch (filters.status) {
+    'unprepared' => s.payrollUnprepared,
+    'draft' => s.payrollDraft,
+    'paid' => s.payrollPaid,
+    'cancelled' => s.payrollCancelled,
+    _ => s.payrollAllStatuses,
+  };
+  String _teacherLabel(TeacherPayrollsState state, S s) {
+    if (filters.teacherId == null || state is! TeacherPayrollsSuccess) {
+      return s.payrollAllTeachers;
+    }
+    return state.teachers
+            .where((t) => t.id == filters.teacherId)
+            .map((t) => t.fullName)
+            .firstOrNull ??
+        s.payrollAllTeachers;
   }
 
   Future<void> _openFilters() async {

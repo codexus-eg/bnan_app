@@ -66,7 +66,9 @@ class PayrollListCard extends StatelessWidget {
           const SizedBox(height: 10),
         ],
         CustomAppButton(
-          text: _action(context),
+          text: item.curriculumsCount == 0
+              ? S.of(context).payrollViewDetails
+              : _action(context),
           onPressed: enabled ? () => MyNavigator.goTo(context, _path) : null,
         ),
       ],

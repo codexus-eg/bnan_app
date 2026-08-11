@@ -27,9 +27,14 @@ const parentChildrenSkeletonItems = [
 ];
 
 class ParentChildrenList extends StatelessWidget {
-  const ParentChildrenList({super.key, required this.children});
+  const ParentChildrenList({
+    super.key,
+    required this.children,
+    this.onChildTap,
+  });
 
   final List<ParentChildModel> children;
+  final ValueChanged<ParentChildModel>? onChildTap;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,10 @@ class ParentChildrenList extends StatelessWidget {
       padding: EdgeInsets.zero,
       itemCount: children.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (_, index) => ParentChildCard(child: children[index]),
+      itemBuilder: (_, index) => ParentChildCard(
+        child: children[index],
+        onTap: onChildTap == null ? null : () => onChildTap!(children[index]),
+      ),
     );
   }
 }

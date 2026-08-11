@@ -4,6 +4,9 @@ import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:flutter/foundation.dart';
 
+typedef SessionChangeListener =
+    Future<void> Function(String? previousUserId, String? nextUserId);
+
 class SessionManager {
   SessionManager._();
 
@@ -16,6 +19,7 @@ class SessionManager {
   String? _refreshToken;
   RegistrationMode? _registrationMode;
   List<RegistrationMode> _registrationModes = const [];
+  final Set<SessionChangeListener> _sessionChangeListeners = {};
 
   String? get userId => _userId;
   String? get userRole => _userRole;
@@ -25,6 +29,12 @@ class SessionManager {
   String? get refreshToken => _refreshToken;
   RegistrationMode? get registrationMode => _registrationMode;
   List<RegistrationMode> get registrationModes => _registrationModes;
+
+  void addSessionChangeListener(SessionChangeListener listener) =>
+      _sessionChangeListeners.add(listener);
+
+  void removeSessionChangeListener(SessionChangeListener listener) =>
+      _sessionChangeListeners.remove(listener);
 
   bool get isEgyptianStudent =>
       role == UserRole.student &&
@@ -59,6 +69,7 @@ class SessionManager {
     List<RegistrationMode> registrationModes = const [],
   }) async {
     debugPrint('SessionManager.saveSession started');
+    final previousUserId = _userId;
 
     _accessToken = accessToken;
     _refreshToken = refreshToken;
@@ -105,6 +116,9 @@ class SessionManager {
 
     await _saveOptionalMode(registrationMode);
     await _saveModes(registrationModes);
+    if (previousUserId != userId) {
+      await _notifySessionChanged(previousUserId, userId);
+    }
   }
 
   Future<void> loadSession() async {
@@ -164,6 +178,7 @@ class SessionManager {
 
   Future<void> clearSession() async {
     debugPrint('SessionManager.clearSession started');
+    final previousUserId = _userId;
 
     _accessToken = null;
     _refreshToken = null;
@@ -174,7 +189,14 @@ class SessionManager {
     _registrationModes = const [];
 
     await SecureCacheHelper.clearAll();
+    await _notifySessionChanged(previousUserId, null);
     debugPrint('SessionManager.clearSession completed');
+  }
+
+  Future<void> _notifySessionChanged(String? previous, String? next) async {
+    for (final listener in List.of(_sessionChangeListeners)) {
+      await listener(previous, next);
+    }
   }
 
   Future<void> _saveOptionalMode(RegistrationMode? mode) async {

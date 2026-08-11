@@ -16,12 +16,14 @@ class SubscriptionGrid extends StatelessWidget {
     this.bottomWidget,
     this.isSliver = true,
     this.registrationMode,
+    this.packageFilter,
   });
 
   final String curriculumId;
   final String curriculumName;
   final bool isSliver;
   final String? registrationMode;
+  final bool Function(PackageModel package)? packageFilter;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -46,7 +48,11 @@ class SubscriptionGrid extends StatelessWidget {
         }
 
         final packages = state is GetPackagesSuccess
-            ? state.packages.reversed.toList()
+            ? state.packages
+                  .where((item) => packageFilter?.call(item) ?? true)
+                  .toList()
+                  .reversed
+                  .toList()
             : <PackageModel>[];
 
         final plans = state is GetPackagesSuccess

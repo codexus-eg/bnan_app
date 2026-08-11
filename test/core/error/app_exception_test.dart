@@ -21,6 +21,31 @@ void main() {
     expect(exception.message, isNot('6a39bb71441c9c5929b4ed9c'));
     expect(exception.message, isNot(contains('teacherId')));
   });
+
+  test('nested backend error exposes its code and message', () {
+    final request = RequestOptions(path: '/parents/children/gulf-checkout');
+    final exception = AppException.fromDio(
+      DioException(
+        requestOptions: request,
+        type: DioExceptionType.badResponse,
+        response: Response<Map<String, dynamic>>(
+          requestOptions: request,
+          statusCode: 400,
+          data: {
+            'status': 'error',
+            'message': 'Bad Request',
+            'error': {
+              'code': 'INVALID_PAYMENT_PHONE',
+              'message': 'Parent phone is invalid.',
+            },
+          },
+        ),
+      ),
+    );
+
+    expect(exception.code, 'INVALID_PAYMENT_PHONE');
+    expect(exception.message, 'Parent phone is invalid.');
+  });
 }
 
 DioException _conflict(String? message) {

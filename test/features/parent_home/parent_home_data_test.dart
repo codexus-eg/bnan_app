@@ -14,6 +14,11 @@ void main() {
           'userId': 'user-1',
           'fullName': 'Egyptian Test Student 2',
           'registrationMode': 'egyptian',
+          'curriculum': {
+            'id': 'egyptian-curriculum',
+            'name': 'Egyptian',
+            'registrationMode': 'egyptian',
+          },
           'classroom': {
             'id': 'classroom-1',
             'name': 'First A',
@@ -33,6 +38,7 @@ void main() {
     expect(response.data.first.classroom?.grade?.name, 'First Grade');
     expect(response.data.first.id, 'child-1');
     expect(response.data.first.registrationMode, RegistrationMode.egyptian);
+    expect(response.data.first.curriculum?.id, 'egyptian-curriculum');
     expect(response.data.last.registrationMode, RegistrationMode.gulf);
     expect(response.data.last.classroom, isNull);
   });
@@ -47,6 +53,23 @@ void main() {
       }).data.map((child) => child.registrationMode),
       everyElement(isNull),
     );
+  });
+
+  test('registration mode falls back to the nested curriculum', () {
+    final child = GetParentChildrenResponseModel.fromJson({
+      'data': [
+        {
+          'id': 'gulf-child',
+          'curriculum': {
+            '_id': 'saudi-2',
+            'name': 'Saudi 2',
+            'registrationMode': 'gulf',
+          },
+        },
+      ],
+    }).data.single;
+    expect(child.curriculum?.id, 'saudi-2');
+    expect(child.registrationMode, RegistrationMode.gulf);
   });
 
   test('child supports underscore id and fallback name and grade', () {

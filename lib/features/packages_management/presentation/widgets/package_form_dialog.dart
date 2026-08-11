@@ -1,6 +1,4 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
-import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
-import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/features/packages_management/data/models/add_package_request_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/update_package_request_model.dart';
@@ -10,6 +8,7 @@ import 'package:bnan_app/features/packages_management/presentation/manager/packa
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_state.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_body.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_controllers.dart';
+import 'package:bnan_app/features/packages_management/presentation/widgets/package_form_dialog_layout.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,12 +18,14 @@ class PackageFormDialog extends StatefulWidget {
     super.key,
     required this.curriculums,
     required this.labels,
+    required this.registrationModes,
     required this.onSuccess,
     this.package,
   });
 
   final List<String> curriculums;
   final Map<String, String> labels;
+  final Map<String, String?> registrationModes;
   final VoidCallback onSuccess;
   final PackageModel? package;
 
@@ -40,7 +41,10 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
   @override
   void initState() {
     super.initState();
-    context.read<PackageFormCubit>().initialize(widget.package);
+    context.read<PackageFormCubit>().initialize(
+      widget.package,
+      widget.registrationModes,
+    );
     final package = widget.package;
     if (package != null) controllers.fillFromPackage(package);
   }
@@ -61,18 +65,9 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
             actionState is UpdatePackageLoading;
 
         return BlocBuilder<PackageFormCubit, PackageFormState>(
-          builder: (context, formState) => CustomAppDialog(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomDialogHeader(title: _title),
-                  const SizedBox(height: 18),
-                  _fields(formState, loading),
-                ],
-              ),
-            ),
+          builder: (context, formState) => PackageFormDialogLayout(
+            title: _title,
+            body: _fields(formState, loading),
           ),
         );
       },
@@ -94,11 +89,15 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
       labels: widget.labels,
       curriculumId: state.curriculumId,
       packageType: state.packageType,
+      accessScope: state.accessScope,
+      canSelectSingleSubject: state.canSelectSingleSubject,
       currency: state.currency,
       isPopular: state.isPopular,
       isLoading: loading,
-      onCurriculumChanged: cubit.setCurriculum,
+      onCurriculumChanged: (id) =>
+          cubit.setCurriculum(id, widget.registrationModes[id]),
       onTypeChanged: cubit.setType,
+      onScopeChanged: cubit.setAccessScope,
       onCurrencyChanged: (value) {
         if (value != null) cubit.setCurrency(value);
       },
@@ -213,6 +212,7 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
       name: controllers.name.text.trim(),
       curriculum: state.curriculumId!,
       type: state.packageType,
+      accessScope: state.accessScope,
       hours: state.packageType == 'hours' ? duration : null,
       months: state.packageType == 'monthly' ? duration : null,
       oldPrice: num.parse(controllers.oldPrice.text.trim()),
@@ -231,6 +231,7 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
       name: controllers.name.text.trim(),
       curriculum: state.curriculumId,
       type: state.packageType,
+      accessScope: state.accessScope,
       hours: state.packageType == 'hours' ? duration : null,
       months: state.packageType == 'monthly' ? duration : null,
       oldPrice: num.parse(controllers.oldPrice.text.trim()),

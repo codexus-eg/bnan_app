@@ -28,7 +28,10 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
           EndPoints.login,
           data: {'email': request.email, 'password': request.password},
         );
-        return _validateAndSave(AuthResponseModel.fromJson(response));
+        return _validateSaveAndSync(
+          AuthResponseModel.fromJson(response),
+          request.phone,
+        );
       } on AppException {
         final response = await api.post(
           EndPoints.registerParent,
@@ -59,5 +62,19 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
       userName: response.user.fullName,
     );
     return Right(response);
+  }
+
+  Future<Either<Failure, AuthResponseModel>> _validateSaveAndSync(
+    AuthResponseModel response,
+    String phone,
+  ) async {
+    final validated = await _validateAndSave(response);
+    if (validated.isLeft()) return validated;
+    await api.patch(
+      EndPoints.updateLoggedUserPhone,
+      data: {'phone': phone},
+      isProtected: true,
+    );
+    return validated;
   }
 }

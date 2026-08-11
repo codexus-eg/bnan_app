@@ -1,6 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
-import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
+import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 
 class RegistrationNavigationButtons extends StatelessWidget {
@@ -102,16 +102,19 @@ class RegistrationNavigationButtons extends StatelessWidget {
     }
     if (state is TamaraPaymentPending && state.shouldOpenCheckout) {
       final url = state.checkoutUrl;
-      if (url == null || !FileUrlLauncher.isValidWebUrl(url)) {
+      if (url == null) {
         showCustomSnackBar(context, 'تعذر فتح رابط الدفع', false);
         return;
       }
       final cubit = context.read<TamaraPaymentCubit>();
       if (!cubit.claimCheckoutLaunch(url)) return;
-      final opened = await FileUrlLauncher.open(url);
-      await cubit.completeCheckoutLaunch(opened: opened);
-      if (!opened && context.mounted) {
+      final result = await TamaraCheckoutLauncher.open(context, url);
+      await cubit.completeCheckoutLaunch(opened: result.opened);
+      if (!context.mounted) return;
+      if (!result.opened) {
         showCustomSnackBar(context, 'تعذر فتح رابط الدفع', false);
+      } else {
+        await cubit.onForeground();
       }
       return;
     }

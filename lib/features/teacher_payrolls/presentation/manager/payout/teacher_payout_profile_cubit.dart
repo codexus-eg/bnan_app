@@ -1,4 +1,6 @@
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_config.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/mock/teacher_payroll_mock_data.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'teacher_payout_profile_state.dart';
@@ -10,6 +12,10 @@ class TeacherPayoutProfileCubit extends Cubit<TeacherPayoutProfileState> {
   bool _saving = false;
   Future<void> save(String teacherId, PayoutProfileRequest request) async {
     if (_saving || !request.isValid) return;
+    if (kUseTeacherPayrollMockData) {
+      emit(TeacherPayoutProfileSuccess(TeacherPayrollMockData.payout(request)));
+      return;
+    }
     _saving = true;
     emit(const TeacherPayoutProfileSaving());
     final result = await repo.updatePayoutProfile(teacherId, request);

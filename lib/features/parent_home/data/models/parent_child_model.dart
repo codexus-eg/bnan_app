@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/features/parent_home/data/models/parent_child_curriculum_model.dart';
 
 class ParentChildModel {
   const ParentChildModel({
@@ -8,6 +9,7 @@ class ParentChildModel {
     this.classroom,
     String? grade,
     this.registrationMode,
+    this.curriculum,
   }) : fullName = fullName ?? name ?? '',
        _legacyGrade = grade ?? '';
 
@@ -15,6 +17,7 @@ class ParentChildModel {
   final String fullName;
   final ParentChildClassroomModel? classroom;
   final RegistrationMode? registrationMode;
+  final ParentChildCurriculumModel? curriculum;
   final String _legacyGrade;
 
   String get name => fullName;
@@ -22,12 +25,16 @@ class ParentChildModel {
 
   factory ParentChildModel.fromJson(Map<String, dynamic> json) {
     final classroom = json['classroom'];
+    final curriculum = ParentChildCurriculumModel.fromChildJson(json);
     return ParentChildModel(
       id: (json['id'] ?? json['_id'])?.toString() ?? '',
       fullName: json['fullName']?.toString(),
       name: json['name']?.toString(),
       grade: json['grade']?.toString(),
-      registrationMode: RegistrationMode.fromValue(json['registrationMode']),
+      registrationMode:
+          RegistrationMode.fromValue(json['registrationMode']) ??
+          curriculum.registrationMode,
+      curriculum: curriculum.id.isEmpty ? null : curriculum,
       classroom: classroom is Map
           ? ParentChildClassroomModel.fromJson(
               Map<String, dynamic>.from(classroom),

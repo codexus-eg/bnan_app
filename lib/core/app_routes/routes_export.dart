@@ -63,6 +63,11 @@ export 'package:bnan_app/features/grades_management/presentation/views/grades_ma
 export 'package:bnan_app/features/curriculum_management/presentation/views/curriculum_management_view.dart';
 export 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
+export 'package:bnan_app/features/parent_children/presentation/views/parent_add_child_view.dart';
+export 'package:bnan_app/features/parent_children/presentation/models/parent_add_child_args.dart';
+export 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
+export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscriptions_view.dart';
+export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscription_renewal_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_schedule_view.dart';
 export 'package:bnan_app/features/registration_requests/presentation/view/registration_requests_view.dart';
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';

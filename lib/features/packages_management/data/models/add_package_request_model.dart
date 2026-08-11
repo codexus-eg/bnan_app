@@ -2,6 +2,7 @@ class AddPackageRequestModel {
   final String name;
   final String curriculum;
   final String type;
+  final String accessScope;
   final int? hours;
   final int? months;
   final num oldPrice;
@@ -15,6 +16,7 @@ class AddPackageRequestModel {
     required this.name,
     required this.curriculum,
     required this.type,
+    required this.accessScope,
     this.hours,
     this.months,
     required this.oldPrice,
@@ -30,6 +32,7 @@ class AddPackageRequestModel {
       'name': name.trim(),
       'curriculum': curriculum,
       'type': type,
+      'accessScope': accessScope,
       'hours': hours,
       'months': months,
       'oldPrice': oldPrice,

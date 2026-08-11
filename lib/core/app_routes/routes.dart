@@ -35,6 +35,10 @@ abstract class Routes {
       '/admin/teacher-payrolls/payroll/:payrollId/payment';
   static const String supervisorHome = '/supervisorHome';
   static const String parentHome = '/parentHome';
+  static const String parentAddChild = '/parent/children/add';
+  static const String parentSubscriptions = '/parent/subscriptions';
+  static const String parentSubscriptionRenewal =
+      '/parent/subscriptions/:studentId/renew';
   static const String parentSchedule = '/parentSchedule';
   static const String teacherSections = '/teacherSections';
   static const String certificatesManagement = '/certificatesManagement';
@@ -68,6 +72,8 @@ abstract class Routes {
 
   static String teacherPayrollCreatePath(String teacherId) =>
       teacherPayrollCreate.replaceFirst(':teacherId', teacherId);
+  static String parentSubscriptionRenewalPath(String studentId) =>
+      parentSubscriptionRenewal.replaceFirst(':studentId', studentId);
   static String teacherPayrollDetailsPath(String payrollId) =>
       teacherPayrollDetails.replaceFirst(':payrollId', payrollId);
   static String teacherPayrollPaymentPath(String payrollId) =>

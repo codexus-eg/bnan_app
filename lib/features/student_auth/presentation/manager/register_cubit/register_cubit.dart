@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
+import 'package:bnan_app/core/helper/phone_number_normalizer.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
@@ -27,6 +28,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   String packagePrice = '';
   String packageCurrency = '';
   String? registrationMode;
+  bool isSingleSubjectPackage = false;
   String? selectedCurriculumName;
 
   final parentFormKey = GlobalKey<FormState>();
@@ -58,9 +60,14 @@ class RegisterCubit extends Cubit<RegisterState> {
     packagePrice = args.packagePrice;
     packageCurrency = args.packageCurrency;
     registrationMode = args.registrationMode;
+    isSingleSubjectPackage = args.isSingleSubject;
   }
 
   bool get isGulf => registrationMode == 'gulf';
+  String? get normalizedParentPhone => PhoneNumberNormalizer.normalize(
+    parentPhoneController.text,
+    currency: packageCurrency,
+  );
 
   void setGrade({required String id, required String name}) {
     selectedGradeId = id;
@@ -71,6 +78,13 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   void toggleSubject(String subjectId) {
+    if (isSingleSubjectPackage) {
+      selectedSubjectIds = selectedSubjectIds.contains(subjectId)
+          ? []
+          : [subjectId];
+      emit(RegisterStepChanged(currentStep: state.currentStep));
+      return;
+    }
     if (selectedSubjectIds.contains(subjectId)) {
       selectedSubjectIds.remove(subjectId);
     } else {
@@ -102,15 +116,17 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> authenticateParentAndContinue() async {
     if (!(parentFormKey.currentState?.validate() ?? false)) return;
+    final parentPhone = normalizedParentPhone;
+    if (parentPhone == null) return;
     emit(RegisterLoading(currentStep: state.currentStep));
     final result = await gulfParentAuthRepo.authenticate(
       ParentRegisterRequestModel(
         fullName: parentNameController.text,
         email: parentEmailController.text,
         password: parentPasswordController.text,
-        phone: parentPhoneController.text,
+        phone: parentPhone,
         whatsappNumber: parentWhatsappController.text.trim().isEmpty
-            ? parentPhoneController.text
+            ? parentPhone
             : parentWhatsappController.text,
       ),
     );
