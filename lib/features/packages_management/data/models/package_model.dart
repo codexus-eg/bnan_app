@@ -41,7 +41,7 @@ class PackageModel {
     return PackageModel(
       id: json['id']?.toString(),
       name: json['name']?.toString(),
-      curriculum: json['curriculum']?.toString(),
+      curriculum: _curriculumId(json['curriculum']),
       type: json['type']?.toString(),
       accessScope:
           json['accessScope']?.toString() ?? PackageAccessScope.allSubjects,
@@ -72,5 +72,13 @@ class PackageModel {
 
   static DateTime? _toDateTime(dynamic value) {
     return DateTime.tryParse(value?.toString() ?? '');
+  }
+
+  static String? _curriculumId(dynamic value) {
+    if (value is Map) {
+      final id = value['id'] ?? value['_id'];
+      return id?.toString();
+    }
+    return value?.toString();
   }
 }

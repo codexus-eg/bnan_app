@@ -21,7 +21,6 @@ class FileUrlLauncher {
       return await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (error) {
       debugPrint('FILE OPEN ERROR: $error');
-      debugPrint('FILE URL: $value');
 
       return false;
     }

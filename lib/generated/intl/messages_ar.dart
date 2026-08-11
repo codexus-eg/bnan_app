@@ -164,10 +164,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("الكل"),
         "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
         "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
-        "allSubjects": MessageLookupByLibrary.simpleMessage("كل المواد"),
         "allDocuments": MessageLookupByLibrary.simpleMessage("جميع المستندات"),
         "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
         "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
+        "allSubjects": MessageLookupByLibrary.simpleMessage("كل المواد"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
         "amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
@@ -891,6 +891,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "مثال: كل يوم اثنين وأربعاء الساعة 5 مساءً"),
         "notesText": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
+        "numberOfHours": MessageLookupByLibrary.simpleMessage("عدد الساعات"),
+        "numberOfHoursHint":
+            MessageLookupByLibrary.simpleMessage("مثال: 12 ساعة"),
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("كلمة المرور القديمة"),
         "oldPrice": m17,
@@ -916,9 +919,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "openSessionLink":
             MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
         "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
-        "numberOfHours": MessageLookupByLibrary.simpleMessage("عدد الساعات"),
-        "numberOfHoursHint":
-            MessageLookupByLibrary.simpleMessage("مثال: 12 ساعة"),
         "optionalDiscountCode":
             MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
         "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
@@ -955,8 +955,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "paidAmountHint": MessageLookupByLibrary.simpleMessage("مثال: 512 SAR"),
         "parent": MessageLookupByLibrary.simpleMessage("ولي الأمر"),
         "parentAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
+        "parentAddChild": MessageLookupByLibrary.simpleMessage("إضافة ابن"),
+        "parentAddChildFailed": MessageLookupByLibrary.simpleMessage(
+            "تعذر إضافة الابن الآن. حاول مرة أخرى."),
+        "parentAddChildTitle":
+            MessageLookupByLibrary.simpleMessage("إضافة ابن جديد"),
+        "parentAddressLine1": MessageLookupByLibrary.simpleMessage("العنوان"),
+        "parentAddressLine2":
+            MessageLookupByLibrary.simpleMessage("تفاصيل إضافية للعنوان"),
+        "parentBackToChildren":
+            MessageLookupByLibrary.simpleMessage("العودة إلى الأبناء"),
         "parentCertificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
+        "parentCheckPaymentStatus":
+            MessageLookupByLibrary.simpleMessage("التحقق من حالة الدفع"),
+        "parentChildAccountStep":
+            MessageLookupByLibrary.simpleMessage("بيانات الابن"),
+        "parentChildAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الابن بنجاح"),
+        "parentChildEmailUsed": MessageLookupByLibrary.simpleMessage(
+            "البريد الإلكتروني مستخدم بالفعل"),
         "parentChildren": MessageLookupByLibrary.simpleMessage("الأبناء"),
+        "parentChoosePackage": MessageLookupByLibrary.simpleMessage("اختيار"),
         "parentDailyPlans":
             MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
         "parentEvaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
@@ -971,18 +990,58 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("أدخل اسم ولي الأمر"),
         "parentNotifications":
             MessageLookupByLibrary.simpleMessage("الإشعارات"),
+        "parentOpenPaymentPage":
+            MessageLookupByLibrary.simpleMessage("فتح صفحة الدفع"),
+        "parentPackageSelected":
+            MessageLookupByLibrary.simpleMessage("تم الاختيار"),
+        "parentPackageStep":
+            MessageLookupByLibrary.simpleMessage("اختيار الباقة"),
         "parentPackagesAndSubscription":
             MessageLookupByLibrary.simpleMessage("الباقات والاشتراك"),
         "parentPasswordMinLength": MessageLookupByLibrary.simpleMessage(
             "يجب ألا تقل كلمة المرور عن 6 أحرف"),
+        "parentPaymentAddress":
+            MessageLookupByLibrary.simpleMessage("عنوان الدفع"),
+        "parentPaymentAddressRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى استكمال عنوان الدفع"),
+        "parentPaymentConfirmedWaiting": MessageLookupByLibrary.simpleMessage(
+            "تم تأكيد الدفع وهو بانتظار الاعتماد النهائي."),
+        "parentPaymentFailed": MessageLookupByLibrary.simpleMessage(
+            "لم تكتمل عملية الدفع. يمكنك المحاولة مرة أخرى."),
+        "parentPaymentMethodOptional":
+            MessageLookupByLibrary.simpleMessage("طريقة الدفع (اختياري)"),
+        "parentPaymentProcessing": MessageLookupByLibrary.simpleMessage(
+            "جاري التحقق من حالة الدفع..."),
+        "parentPaymentStatusTimeout": MessageLookupByLibrary.simpleMessage(
+            "تعذر تأكيد حالة الدفع حتى الآن."),
+        "parentPaymentStep": MessageLookupByLibrary.simpleMessage("الدفع"),
+        "parentReceiptError": MessageLookupByLibrary.simpleMessage(
+            "تعذر إرسال الإيصال. تحقق من الملف وحاول مجددًا."),
+        "parentReceiptPendingMessage": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال الإيصال وهو قيد المراجعة."),
+        "parentReceiptSelected":
+            MessageLookupByLibrary.simpleMessage("تم اختيار الإيصال"),
+        "parentReferenceNumberOptional":
+            MessageLookupByLibrary.simpleMessage("رقم المرجع (اختياري)"),
+        "parentRegion": MessageLookupByLibrary.simpleMessage("المنطقة"),
         "parentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("نموذج تسجيل ولي الأمر"),
         "parentRenew": MessageLookupByLibrary.simpleMessage("جدد"),
+        "parentRetryPayment":
+            MessageLookupByLibrary.simpleMessage("إعادة محاولة الدفع"),
+        "parentReviewStep":
+            MessageLookupByLibrary.simpleMessage("مراجعة السعر والخصم"),
         "parentRole": MessageLookupByLibrary.simpleMessage("ولي أمر"),
         "parentSchedule": MessageLookupByLibrary.simpleMessage("الجدول"),
         "parentSecondPreparatoryGrade":
             MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
         "parentShowAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "parentSingleSubjectRequired": MessageLookupByLibrary.simpleMessage(
+            "يجب اختيار مادة واحدة فقط لهذه الباقة"),
+        "parentSubjectsStep":
+            MessageLookupByLibrary.simpleMessage("اختيار المواد"),
+        "parentSubmitPayment":
+            MessageLookupByLibrary.simpleMessage("إرسال الدفع"),
         "parentSubscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
         "parentSubscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
             "اشتراك ليلى سينتهي خلال 5 أيام"),
@@ -992,6 +1051,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الاشتراكات"),
         "parentThirdPreparatoryGrade":
             MessageLookupByLibrary.simpleMessage("الصف الثالث الإعدادي"),
+        "parentUnableToOpenCheckout":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح رابط الدفع"),
+        "parentUnsupportedRegistrationMode":
+            MessageLookupByLibrary.simpleMessage(
+                "نظام التسجيل لهذا المنهج غير مدعوم."),
         "parentWelcome": MessageLookupByLibrary.simpleMessage("أهلًا بك"),
         "parentYourChildren": MessageLookupByLibrary.simpleMessage("أبناؤك"),
         "participation": MessageLookupByLibrary.simpleMessage("المشاركة"),
@@ -1243,6 +1307,33 @@ class MessageLookup extends MessageLookupByLibrary {
         "remainingDays": m23,
         "remainingHours": m24,
         "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
+        "renewSubscription":
+            MessageLookupByLibrary.simpleMessage("تجديد الاشتراك"),
+        "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
+            "هذه الباقة تشمل كل المواد ولا تحتاج إلى اختيار مادة."),
+        "renewalCompleted":
+            MessageLookupByLibrary.simpleMessage("تم تجديد الاشتراك بنجاح."),
+        "renewalCurrentSubscription":
+            MessageLookupByLibrary.simpleMessage("الاشتراك الحالي"),
+        "renewalExpiry": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
+        "renewalFailed": MessageLookupByLibrary.simpleMessage(
+            "تعذر تجديد الاشتراك. حاول مرة أخرى."),
+        "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
+            "يلزم بدء محاولة دفع جديدة. حاول مرة أخرى."),
+        "renewalPurchasedHours":
+            MessageLookupByLibrary.simpleMessage("الساعات المشتراة"),
+        "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التجديد والإيصال قيد المراجعة."),
+        "renewalRemainingHours":
+            MessageLookupByLibrary.simpleMessage("الساعات المتبقية"),
+        "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
+            "غير مسموح لك بتجديد اشتراك هذا الطالب."),
+        "renewalSubjectNotAssigned": MessageLookupByLibrary.simpleMessage(
+            "هذه المادة غير مضافة للطالب."),
+        "renewalSubscriptionStillActive": MessageLookupByLibrary.simpleMessage(
+            "الاشتراك ما زال فعالًا ولا يمكن تجديده الآن."),
+        "renewalUsedHours":
+            MessageLookupByLibrary.simpleMessage("الساعات المستخدمة"),
         "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
         "requestAccepted":
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
@@ -1348,7 +1439,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الخميس 07 مايو 2026"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
-        "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
         "semesterName": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
         "semesterOne": MessageLookupByLibrary.simpleMessage("فصل ١"),
         "semesterThree": MessageLookupByLibrary.simpleMessage("فصل ٣"),
@@ -1381,6 +1471,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
         "shortVideoLinkOptional":
             MessageLookupByLibrary.simpleMessage("رابط فيديو قصير (اختياري)"),
+        "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
         "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),
         "specialization": MessageLookupByLibrary.simpleMessage("التخصص"),
@@ -1391,6 +1482,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "startNow": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
         "startSession": MessageLookupByLibrary.simpleMessage("بدء الحصة"),
         "startTime": MessageLookupByLibrary.simpleMessage("وقت البداية"),
+        "status": MessageLookupByLibrary.simpleMessage("الحالة"),
         "student": MessageLookupByLibrary.simpleMessage("طالب"),
         "studentAssignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تعيين الطالب بنجاح"),

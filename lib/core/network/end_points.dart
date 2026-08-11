@@ -53,6 +53,15 @@ abstract class EndPoints {
   // Packages
   static const String packages = '/packages';
   static const String parentChildren = '/parents/my-childs';
+  static const String parentChildrenSubscriptions =
+      '/parents/children-subscriptions';
+  static const String egyptianSubscriptionRenewal =
+      '/subscription-renewals/egyptian';
+  static const String gulfSubscriptionRenewal = '/subscription-renewals/gulf';
+  static const String parentChildEgyptianRegistration =
+      '/parents/children/egyptian-registration';
+  static const String parentChildGulfCheckout =
+      '/parents/children/gulf-checkout';
   static const String parentChildrenPlans = '/parent/children-plans';
   static const String studentEvaluations = '/student-evaluations';
   static const String myEvaluations = '/student-evaluations/me';
@@ -203,6 +212,15 @@ abstract class EndPoints {
   static String tamaraStatus(String paymentId) {
     return '/payment/tamara/$paymentId/status';
   }
+
+  static String egyptianRenewalStatus(String paymentId) =>
+      '$egyptianSubscriptionRenewal/$paymentId/status';
+
+  static String gulfRenewalStatus(String paymentId) =>
+      '$gulfSubscriptionRenewal/$paymentId/status';
+
+  static String gulfRenewalReconcile(String paymentId) =>
+      '$gulfSubscriptionRenewal/$paymentId/reconcile';
 
   static String curriculumSubjects({
     required String curriculumId,

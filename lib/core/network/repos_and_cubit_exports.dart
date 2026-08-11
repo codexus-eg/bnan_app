@@ -145,6 +145,13 @@ export 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans
 export 'package:bnan_app/features/parent_home/data/repo/parent_home_repo.dart';
 export 'package:bnan_app/features/parent_home/data/repo/parent_home_repo_impl.dart';
 export 'package:bnan_app/features/parent_home/presentation/manager/get_parent_children/get_parent_children_cubit.dart';
+export 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo.dart';
+export 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo_impl.dart';
+export 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_cubit.dart';
+export 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
+export 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo_impl.dart';
+export 'package:bnan_app/features/parent_subscriptions/presentation/manager/get_parent_subscriptions_cubit/get_parent_subscriptions_cubit.dart';
+export 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo.dart';
 export 'package:bnan_app/features/supervisor_management/data/repo/supervisor_management_repo_impl.dart';
 export 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_cubit.dart';

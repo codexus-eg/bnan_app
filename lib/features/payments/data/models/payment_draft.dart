@@ -11,6 +11,7 @@ class PaymentDraft {
     required this.studentEmail,
     required this.paymentStartedAt,
     required this.lastKnownStatus,
+    this.ownerUserId = '',
     this.payloadFingerprint = '',
     this.checkoutUrl,
     this.checkoutOpenedAt,
@@ -28,6 +29,7 @@ class PaymentDraft {
   final DateTime paymentStartedAt;
   final PaymentStatus lastKnownStatus;
   final String payloadFingerprint;
+  final String ownerUserId;
 
   factory PaymentDraft.fromJson(Map<String, dynamic> json) => PaymentDraft(
     paymentId: json['paymentId']?.toString() ?? '',
@@ -49,6 +51,7 @@ class PaymentDraft {
         DateTime.fromMillisecondsSinceEpoch(0),
     lastKnownStatus: PaymentStatus.fromValue(json['lastKnownStatus']),
     payloadFingerprint: json['payloadFingerprint']?.toString() ?? '',
+    ownerUserId: json['ownerUserId']?.toString() ?? '',
   );
 
   Map<String, dynamic> toJson() => {
@@ -63,6 +66,7 @@ class PaymentDraft {
     'studentEmail': studentEmail,
     'paymentStartedAt': paymentStartedAt.toIso8601String(),
     'lastKnownStatus': lastKnownStatus.name,
+    'ownerUserId': ownerUserId,
     'payloadFingerprint': payloadFingerprint,
   };
 

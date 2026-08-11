@@ -10299,6 +10299,496 @@ class S {
       args: [],
     );
   }
+
+  /// `Add child`
+  String get parentAddChild {
+    return Intl.message(
+      'Add child',
+      name: 'parentAddChild',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a new child`
+  String get parentAddChildTitle {
+    return Intl.message(
+      'Add a new child',
+      name: 'parentAddChildTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Child details`
+  String get parentChildAccountStep {
+    return Intl.message(
+      'Child details',
+      name: 'parentChildAccountStep',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose package`
+  String get parentPackageStep {
+    return Intl.message(
+      'Choose package',
+      name: 'parentPackageStep',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose subjects`
+  String get parentSubjectsStep {
+    return Intl.message(
+      'Choose subjects',
+      name: 'parentSubjectsStep',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price and discount review`
+  String get parentReviewStep {
+    return Intl.message(
+      'Price and discount review',
+      name: 'parentReviewStep',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment`
+  String get parentPaymentStep {
+    return Intl.message(
+      'Payment',
+      name: 'parentPaymentStep',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose`
+  String get parentChoosePackage {
+    return Intl.message(
+      'Choose',
+      name: 'parentChoosePackage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selected`
+  String get parentPackageSelected {
+    return Intl.message(
+      'Selected',
+      name: 'parentPackageSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exactly one subject is required for this package`
+  String get parentSingleSubjectRequired {
+    return Intl.message(
+      'Exactly one subject is required for this package',
+      name: 'parentSingleSubjectRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please complete the payment address`
+  String get parentPaymentAddressRequired {
+    return Intl.message(
+      'Please complete the payment address',
+      name: 'parentPaymentAddressRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment address`
+  String get parentPaymentAddress {
+    return Intl.message(
+      'Payment address',
+      name: 'parentPaymentAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Region`
+  String get parentRegion {
+    return Intl.message(
+      'Region',
+      name: 'parentRegion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address`
+  String get parentAddressLine1 {
+    return Intl.message(
+      'Address',
+      name: 'parentAddressLine1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Additional address details`
+  String get parentAddressLine2 {
+    return Intl.message(
+      'Additional address details',
+      name: 'parentAddressLine2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment method (optional)`
+  String get parentPaymentMethodOptional {
+    return Intl.message(
+      'Payment method (optional)',
+      name: 'parentPaymentMethodOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reference number (optional)`
+  String get parentReferenceNumberOptional {
+    return Intl.message(
+      'Reference number (optional)',
+      name: 'parentReferenceNumberOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Receipt selected`
+  String get parentReceiptSelected {
+    return Intl.message(
+      'Receipt selected',
+      name: 'parentReceiptSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit payment`
+  String get parentSubmitPayment {
+    return Intl.message(
+      'Submit payment',
+      name: 'parentSubmitPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The receipt was submitted and is pending review.`
+  String get parentReceiptPendingMessage {
+    return Intl.message(
+      'The receipt was submitted and is pending review.',
+      name: 'parentReceiptPendingMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Child added successfully`
+  String get parentChildAddedSuccessfully {
+    return Intl.message(
+      'Child added successfully',
+      name: 'parentChildAddedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking payment status...`
+  String get parentPaymentProcessing {
+    return Intl.message(
+      'Checking payment status...',
+      name: 'parentPaymentProcessing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment was not completed. You can try again.`
+  String get parentPaymentFailed {
+    return Intl.message(
+      'Payment was not completed. You can try again.',
+      name: 'parentPaymentFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry payment`
+  String get parentRetryPayment {
+    return Intl.message(
+      'Retry payment',
+      name: 'parentRetryPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This email is already in use`
+  String get parentChildEmailUsed {
+    return Intl.message(
+      'This email is already in use',
+      name: 'parentChildEmailUsed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The receipt could not be submitted. Check the file and try again.`
+  String get parentReceiptError {
+    return Intl.message(
+      'The receipt could not be submitted. Check the file and try again.',
+      name: 'parentReceiptError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The child could not be added. Please try again.`
+  String get parentAddChildFailed {
+    return Intl.message(
+      'The child could not be added. Please try again.',
+      name: 'parentAddChildFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open the payment link`
+  String get parentUnableToOpenCheckout {
+    return Intl.message(
+      'Unable to open the payment link',
+      name: 'parentUnableToOpenCheckout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to children`
+  String get parentBackToChildren {
+    return Intl.message(
+      'Back to children',
+      name: 'parentBackToChildren',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renew subscription`
+  String get renewSubscription {
+    return Intl.message(
+      'Renew subscription',
+      name: 'renewSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get status {
+    return Intl.message(
+      'Status',
+      name: 'status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchased hours`
+  String get renewalPurchasedHours {
+    return Intl.message(
+      'Purchased hours',
+      name: 'renewalPurchasedHours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used hours`
+  String get renewalUsedHours {
+    return Intl.message(
+      'Used hours',
+      name: 'renewalUsedHours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remaining hours`
+  String get renewalRemainingHours {
+    return Intl.message(
+      'Remaining hours',
+      name: 'renewalRemainingHours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry date`
+  String get renewalExpiry {
+    return Intl.message(
+      'Expiry date',
+      name: 'renewalExpiry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current subscription`
+  String get renewalCurrentSubscription {
+    return Intl.message(
+      'Current subscription',
+      name: 'renewalCurrentSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This package includes all subjects; no subject selection is required.`
+  String get renewalAllSubjectsNoSelection {
+    return Intl.message(
+      'This package includes all subjects; no subject selection is required.',
+      name: 'renewalAllSubjectsNoSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This subscription is still active and cannot be renewed yet.`
+  String get renewalSubscriptionStillActive {
+    return Intl.message(
+      'This subscription is still active and cannot be renewed yet.',
+      name: 'renewalSubscriptionStillActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This subject is not assigned to the student.`
+  String get renewalSubjectNotAssigned {
+    return Intl.message(
+      'This subject is not assigned to the student.',
+      name: 'renewalSubjectNotAssigned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are not allowed to renew this student's subscription.`
+  String get renewalStudentAccessDenied {
+    return Intl.message(
+      'You are not allowed to renew this student\'s subscription.',
+      name: 'renewalStudentAccessDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The renewal request and receipt were submitted for review.`
+  String get renewalReceiptPending {
+    return Intl.message(
+      'The renewal request and receipt were submitted for review.',
+      name: 'renewalReceiptPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The subscription was renewed successfully.`
+  String get renewalCompleted {
+    return Intl.message(
+      'The subscription was renewed successfully.',
+      name: 'renewalCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The subscription could not be renewed. Please try again.`
+  String get renewalFailed {
+    return Intl.message(
+      'The subscription could not be renewed. Please try again.',
+      name: 'renewalFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A new payment attempt is required. Please try again.`
+  String get renewalIdempotencyRequired {
+    return Intl.message(
+      'A new payment attempt is required. Please try again.',
+      name: 'renewalIdempotencyRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We could not confirm the payment status yet.`
+  String get parentPaymentStatusTimeout {
+    return Intl.message(
+      'We could not confirm the payment status yet.',
+      name: 'parentPaymentStatusTimeout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check payment status`
+  String get parentCheckPaymentStatus {
+    return Intl.message(
+      'Check payment status',
+      name: 'parentCheckPaymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open payment page`
+  String get parentOpenPaymentPage {
+    return Intl.message(
+      'Open payment page',
+      name: 'parentOpenPaymentPage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment is confirmed and awaiting final approval.`
+  String get parentPaymentConfirmedWaiting {
+    return Intl.message(
+      'Payment is confirmed and awaiting final approval.',
+      name: 'parentPaymentConfirmedWaiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This curriculum registration mode is not supported.`
+  String get parentUnsupportedRegistrationMode {
+    return Intl.message(
+      'This curriculum registration mode is not supported.',
+      name: 'parentUnsupportedRegistrationMode',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

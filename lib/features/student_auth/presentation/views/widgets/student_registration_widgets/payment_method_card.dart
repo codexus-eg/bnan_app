@@ -10,12 +10,14 @@ class PaymentMethodCard extends StatelessWidget {
     required this.price,
     required this.studentsCount,
     required this.total,
+    this.currency,
   });
 
   final String packageName;
   final String price;
   final String studentsCount;
   final String total;
+  final String? currency;
 
   @override
   Widget build(BuildContext context) {
@@ -32,33 +34,34 @@ class PaymentMethodCard extends StatelessWidget {
         children: [
           Text(
             S.of(context).selectedPackage,
-            style: StylesManager.styleRegular14(context).copyWith(
-              color: ColorManager.greyA8AF,
-            ),
+            style: StylesManager.styleRegular14(
+              context,
+            ).copyWith(color: ColorManager.greyA8AF),
           ),
           const SizedBox(height: 4),
           Text(
             packageName,
-            style: StylesManager.styleBold16(context).copyWith(
-              color: ColorManager.mainColor15,
-            ),
+            style: StylesManager.styleBold16(
+              context,
+            ).copyWith(color: ColorManager.mainColor15),
           ),
           const SizedBox(height: 4),
           Text.rich(
             TextSpan(
               children: [
                 TextSpan(
-                  text: '$price ${S.of(context).sarShort} * '
+                  text:
+                      '$price ${currency ?? S.of(context).sarShort} * '
                       '$studentsCount ${S.of(context).student} = ',
-                  style: StylesManager.styleRegular14(context).copyWith(
-                    color: ColorManager.greyA8AF,
-                  ),
+                  style: StylesManager.styleRegular14(
+                    context,
+                  ).copyWith(color: ColorManager.greyA8AF),
                 ),
                 TextSpan(
-                  text: '$total ${S.of(context).sarShort}',
-                  style: StylesManager.styleBold16(context).copyWith(
-                    color: ColorManager.mainColor15,
-                  ),
+                  text: '$total ${currency ?? S.of(context).sarShort}',
+                  style: StylesManager.styleBold16(
+                    context,
+                  ).copyWith(color: ColorManager.mainColor15),
                 ),
               ],
             ),

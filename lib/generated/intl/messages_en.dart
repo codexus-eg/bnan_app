@@ -168,10 +168,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "allClassrooms": MessageLookupByLibrary.simpleMessage("All Classrooms"),
         "allCurriculms": MessageLookupByLibrary.simpleMessage("All Curriculms"),
-        "allSubjects": MessageLookupByLibrary.simpleMessage("All Subjects"),
         "allDocuments": MessageLookupByLibrary.simpleMessage("All Documents"),
         "allGrades": MessageLookupByLibrary.simpleMessage("All grades"),
         "allStudents": MessageLookupByLibrary.simpleMessage("All students"),
+        "allSubjects": MessageLookupByLibrary.simpleMessage("All Subjects"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "amount": MessageLookupByLibrary.simpleMessage("Amount"),
@@ -921,6 +921,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "Example: every Monday and Wednesday at 5 PM"),
         "notesText": MessageLookupByLibrary.simpleMessage("Notes"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "numberOfHours":
+            MessageLookupByLibrary.simpleMessage("Number of Hours"),
+        "numberOfHoursHint":
+            MessageLookupByLibrary.simpleMessage("Example: 12 hours"),
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("Old Password"),
         "oldPrice": m17,
@@ -946,10 +950,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "openSessionLink":
             MessageLookupByLibrary.simpleMessage("Open lesson link"),
         "optional": MessageLookupByLibrary.simpleMessage("Optional"),
-        "numberOfHours":
-            MessageLookupByLibrary.simpleMessage("Number of Hours"),
-        "numberOfHoursHint":
-            MessageLookupByLibrary.simpleMessage("Example: 12 hours"),
         "optionalDiscountCode":
             MessageLookupByLibrary.simpleMessage("Discount code (optional)"),
         "originalAmount":
@@ -992,9 +992,28 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Example: SAR 512"),
         "parent": MessageLookupByLibrary.simpleMessage("Parent"),
         "parentAccount": MessageLookupByLibrary.simpleMessage("My Account"),
+        "parentAddChild": MessageLookupByLibrary.simpleMessage("Add child"),
+        "parentAddChildFailed": MessageLookupByLibrary.simpleMessage(
+            "The child could not be added. Please try again."),
+        "parentAddChildTitle":
+            MessageLookupByLibrary.simpleMessage("Add a new child"),
+        "parentAddressLine1": MessageLookupByLibrary.simpleMessage("Address"),
+        "parentAddressLine2":
+            MessageLookupByLibrary.simpleMessage("Additional address details"),
+        "parentBackToChildren":
+            MessageLookupByLibrary.simpleMessage("Back to children"),
         "parentCertificates":
             MessageLookupByLibrary.simpleMessage("Certificates"),
+        "parentCheckPaymentStatus":
+            MessageLookupByLibrary.simpleMessage("Check payment status"),
+        "parentChildAccountStep":
+            MessageLookupByLibrary.simpleMessage("Child details"),
+        "parentChildAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("Child added successfully"),
+        "parentChildEmailUsed": MessageLookupByLibrary.simpleMessage(
+            "This email is already in use"),
         "parentChildren": MessageLookupByLibrary.simpleMessage("Children"),
+        "parentChoosePackage": MessageLookupByLibrary.simpleMessage("Choose"),
         "parentDailyPlans": MessageLookupByLibrary.simpleMessage("Daily Plans"),
         "parentEvaluations":
             MessageLookupByLibrary.simpleMessage("Evaluations"),
@@ -1010,18 +1029,58 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter parent name"),
         "parentNotifications":
             MessageLookupByLibrary.simpleMessage("Notifications"),
+        "parentOpenPaymentPage":
+            MessageLookupByLibrary.simpleMessage("Open payment page"),
+        "parentPackageSelected":
+            MessageLookupByLibrary.simpleMessage("Selected"),
+        "parentPackageStep":
+            MessageLookupByLibrary.simpleMessage("Choose package"),
         "parentPackagesAndSubscription":
             MessageLookupByLibrary.simpleMessage("Packages and Subscription"),
         "parentPasswordMinLength": MessageLookupByLibrary.simpleMessage(
             "Password must be at least 6 characters"),
+        "parentPaymentAddress":
+            MessageLookupByLibrary.simpleMessage("Payment address"),
+        "parentPaymentAddressRequired": MessageLookupByLibrary.simpleMessage(
+            "Please complete the payment address"),
+        "parentPaymentConfirmedWaiting": MessageLookupByLibrary.simpleMessage(
+            "Payment is confirmed and awaiting final approval."),
+        "parentPaymentFailed": MessageLookupByLibrary.simpleMessage(
+            "Payment was not completed. You can try again."),
+        "parentPaymentMethodOptional":
+            MessageLookupByLibrary.simpleMessage("Payment method (optional)"),
+        "parentPaymentProcessing":
+            MessageLookupByLibrary.simpleMessage("Checking payment status..."),
+        "parentPaymentStatusTimeout": MessageLookupByLibrary.simpleMessage(
+            "We could not confirm the payment status yet."),
+        "parentPaymentStep": MessageLookupByLibrary.simpleMessage("Payment"),
+        "parentReceiptError": MessageLookupByLibrary.simpleMessage(
+            "The receipt could not be submitted. Check the file and try again."),
+        "parentReceiptPendingMessage": MessageLookupByLibrary.simpleMessage(
+            "The receipt was submitted and is pending review."),
+        "parentReceiptSelected":
+            MessageLookupByLibrary.simpleMessage("Receipt selected"),
+        "parentReferenceNumberOptional":
+            MessageLookupByLibrary.simpleMessage("Reference number (optional)"),
+        "parentRegion": MessageLookupByLibrary.simpleMessage("Region"),
         "parentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("Parent Registration Form"),
         "parentRenew": MessageLookupByLibrary.simpleMessage("Renew"),
+        "parentRetryPayment":
+            MessageLookupByLibrary.simpleMessage("Retry payment"),
+        "parentReviewStep":
+            MessageLookupByLibrary.simpleMessage("Price and discount review"),
         "parentRole": MessageLookupByLibrary.simpleMessage("Parent"),
         "parentSchedule": MessageLookupByLibrary.simpleMessage("Schedule"),
         "parentSecondPreparatoryGrade":
             MessageLookupByLibrary.simpleMessage("Second Preparatory Grade"),
         "parentShowAll": MessageLookupByLibrary.simpleMessage("Show All"),
+        "parentSingleSubjectRequired": MessageLookupByLibrary.simpleMessage(
+            "Exactly one subject is required for this package"),
+        "parentSubjectsStep":
+            MessageLookupByLibrary.simpleMessage("Choose subjects"),
+        "parentSubmitPayment":
+            MessageLookupByLibrary.simpleMessage("Submit payment"),
         "parentSubscription":
             MessageLookupByLibrary.simpleMessage("Subscription"),
         "parentSubscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
@@ -1032,6 +1091,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Subscriptions"),
         "parentThirdPreparatoryGrade":
             MessageLookupByLibrary.simpleMessage("Third Preparatory Grade"),
+        "parentUnableToOpenCheckout": MessageLookupByLibrary.simpleMessage(
+            "Unable to open the payment link"),
+        "parentUnsupportedRegistrationMode":
+            MessageLookupByLibrary.simpleMessage(
+                "This curriculum registration mode is not supported."),
         "parentWelcome": MessageLookupByLibrary.simpleMessage("Welcome"),
         "parentYourChildren":
             MessageLookupByLibrary.simpleMessage("Your Children"),
@@ -1293,6 +1357,32 @@ class MessageLookup extends MessageLookupByLibrary {
         "remainingDays": m23,
         "remainingHours": m24,
         "remainingSessions": MessageLookupByLibrary.simpleMessage("Remaining"),
+        "renewSubscription":
+            MessageLookupByLibrary.simpleMessage("Renew subscription"),
+        "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
+            "This package includes all subjects; no subject selection is required."),
+        "renewalCompleted": MessageLookupByLibrary.simpleMessage(
+            "The subscription was renewed successfully."),
+        "renewalCurrentSubscription":
+            MessageLookupByLibrary.simpleMessage("Current subscription"),
+        "renewalExpiry": MessageLookupByLibrary.simpleMessage("Expiry date"),
+        "renewalFailed": MessageLookupByLibrary.simpleMessage(
+            "The subscription could not be renewed. Please try again."),
+        "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
+            "A new payment attempt is required. Please try again."),
+        "renewalPurchasedHours":
+            MessageLookupByLibrary.simpleMessage("Purchased hours"),
+        "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
+            "The renewal request and receipt were submitted for review."),
+        "renewalRemainingHours":
+            MessageLookupByLibrary.simpleMessage("Remaining hours"),
+        "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
+            "You are not allowed to renew this student\'s subscription."),
+        "renewalSubjectNotAssigned": MessageLookupByLibrary.simpleMessage(
+            "This subject is not assigned to the student."),
+        "renewalSubscriptionStillActive": MessageLookupByLibrary.simpleMessage(
+            "This subscription is still active and cannot be renewed yet."),
+        "renewalUsedHours": MessageLookupByLibrary.simpleMessage("Used hours"),
         "reports": MessageLookupByLibrary.simpleMessage("Reports"),
         "requestAccepted": MessageLookupByLibrary.simpleMessage(
             "Your request has been accepted!"),
@@ -1401,7 +1491,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Thursday, 07 May 2026"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("Selected Package"),
-        "singleSubject": MessageLookupByLibrary.simpleMessage("Single Subject"),
         "semesterName": MessageLookupByLibrary.simpleMessage("Semester Name"),
         "semesterOne": MessageLookupByLibrary.simpleMessage("Semester 1"),
         "semesterThree": MessageLookupByLibrary.simpleMessage("Semester 3"),
@@ -1437,6 +1526,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sessions This Month"),
         "shortVideoLinkOptional":
             MessageLookupByLibrary.simpleMessage("Short video link (optional)"),
+        "singleSubject": MessageLookupByLibrary.simpleMessage("Single Subject"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("Social Studies"),
         "specialization":
@@ -1448,6 +1538,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "startNow": MessageLookupByLibrary.simpleMessage("Start now"),
         "startSession": MessageLookupByLibrary.simpleMessage("Start lesson"),
         "startTime": MessageLookupByLibrary.simpleMessage("Start time"),
+        "status": MessageLookupByLibrary.simpleMessage("Status"),
         "student": MessageLookupByLibrary.simpleMessage("student"),
         "studentAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Student assigned successfully"),

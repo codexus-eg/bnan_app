@@ -25,6 +25,8 @@ import 'package:bnan_app/features/packages_management/presentation/manager/get_p
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
+import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo_impl.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
@@ -41,9 +43,10 @@ void setupServiceLocator() {
   // Core
   getIt.registerLazySingleton<Dio>(() => Dio());
 
-  getIt.registerLazySingleton<ApiConsumer>(
+  getIt.registerLazySingleton<DioConsumer>(
     () => DioConsumer(dio: getIt<Dio>()),
   );
+  getIt.registerLazySingleton<ApiConsumer>(() => getIt<DioConsumer>());
 
   // Repositories
 
@@ -156,6 +159,12 @@ void setupServiceLocator() {
   );
   getIt.registerLazySingleton<ParentHomeRepo>(
     () => ParentHomeRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<ParentAddChildRepo>(
+    () => ParentAddChildRepoImpl(getIt<DioConsumer>()),
+  );
+  getIt.registerLazySingleton<ParentSubscriptionsRepo>(
+    () => ParentSubscriptionsRepoImpl(getIt<DioConsumer>()),
   );
   getIt.registerLazySingleton<SupervisorManagementRepo>(
     () => SupervisorManagementRepoImpl(getIt<ApiConsumer>()),
@@ -488,6 +497,27 @@ void setupServiceLocator() {
   );
   getIt.registerFactory<GetParentChildrenCubit>(
     () => GetParentChildrenCubit(getIt<ParentHomeRepo>()),
+  );
+  getIt.registerFactory<ParentAddChildCubit>(
+    () => ParentAddChildCubit(
+      repo: getIt<ParentAddChildRepo>(),
+      keyGenerator: IdempotencyKeyGenerator(),
+      store: getIt<PaymentDraftStore>(),
+    ),
+  );
+  getIt.registerFactory<GetParentSubscriptionsCubit>(
+    () => GetParentSubscriptionsCubit(getIt<ParentSubscriptionsRepo>()),
+  );
+  getIt.registerFactoryParam<
+    ParentSubscriptionRenewalCubit,
+    ParentSubscriptionRenewalArgs,
+    void
+  >(
+    (args, _) => ParentSubscriptionRenewalCubit(
+      repo: getIt<ParentSubscriptionsRepo>(),
+      keyGenerator: IdempotencyKeyGenerator(),
+      args: args,
+    ),
   );
   getIt.registerFactory<GetSupervisorClassroomsCubit>(
     () => GetSupervisorClassroomsCubit(getIt<SupervisorManagementRepo>()),

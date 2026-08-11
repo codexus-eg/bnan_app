@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/cache/cache_helper.dart';
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
@@ -15,6 +16,7 @@ import 'package:bnan_app/features/student_auth/data/models/register_student_mode
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
@@ -22,6 +24,8 @@ void main() {
   const store = PaymentDraftStore();
 
   setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    FlutterSecureStorage.setMockInitialValues({});
     SharedPreferences.setMockInitialValues({});
     await CacheHelper.init();
   });
@@ -102,6 +106,60 @@ void main() {
     await cubit.checkout(_request);
     expect(repo.keys, ['key-1']);
     await cubit.close();
+  });
+
+  test(
+    'starting a registration flow discards an old pending payment',
+    () async {
+      final repo = _PaymentRepo();
+      final cubit = _cubit(repo, store);
+      await cubit.checkout(_request);
+      await cubit.discardStaleAttempt();
+      expect(cubit.draft, isNull);
+      expect(store.read(), isNull);
+      await cubit.close();
+    },
+  );
+
+  test('pending payment with changed payload starts a new checkout', () async {
+    final repo = _PaymentRepo();
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    repo.checkoutResponse = const TamaraCheckoutResponse(
+      paymentId: 'payment-2',
+      checkoutUrl: _checkoutUrl,
+      orderId: 'order-2',
+      status: 'pending',
+      providerStatus: 'new',
+    );
+    await cubit.checkout(_requestWith(studentEmail: 'new@example.com'));
+    expect(repo.keys, ['key-1', 'key-2']);
+    expect(cubit.draft?.paymentId, 'payment-2');
+    await cubit.close();
+  });
+
+  test('changing authenticated parent clears the pending draft', () async {
+    await SessionManager.instance.saveSession(
+      accessToken: 'parent-1-token',
+      refreshToken: '',
+      userId: 'parent-1',
+      userRole: 'parent',
+    );
+    final repo = _PaymentRepo();
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    await SessionManager.instance.saveSession(
+      accessToken: 'parent-2-token',
+      refreshToken: '',
+      userId: 'parent-2',
+      userRole: 'parent',
+    );
+    expect(cubit.draft, isNull);
+    await cubit.onForeground();
+    expect(repo.reconcileCalls, 0);
+    expect(repo.statusCalls, 0);
+    await cubit.close();
+    await SessionManager.instance.clearSession();
   });
 
   test('fast repeated taps create one checkout request', () async {
@@ -321,6 +379,19 @@ void main() {
     repo.statusCompleter!.complete(Right(_status(PaymentStatus.pending)));
     await Future.wait([first, second]);
     expect(repo.statusCalls, 1);
+    await cubit.close();
+  });
+
+  test('status response cannot replace the checkout payment id', () async {
+    final repo = _PaymentRepo()
+      ..statusResponse = const TamaraStatusResponse(
+        paymentId: 'unrelated-payment',
+        status: PaymentStatus.pending,
+      );
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    await cubit.checkStatus();
+    expect(cubit.draft?.paymentId, 'payment-1');
     await cubit.close();
   });
 
