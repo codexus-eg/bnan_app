@@ -1,67 +1,59 @@
 import 'package:bnan_app/core/shared_widget/filter_chip/custom_filter_tabs.dart';
-import 'package:bnan_app/features/registration_requests/data/models/registration_request_filter.dart';
-import 'package:bnan_app/features/registration_requests/presentation/manager/get_registration_requests_cubit/get_registration_requests_cubit.dart';
-import 'package:bnan_app/features/registration_requests/presentation/view/widgets/registration_requests_bloc_builder.dart';
+import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
+import 'package:bnan_app/features/admin_subject_requests/presentation/widgets/admin_subject_requests_section.dart';
+import 'package:bnan_app/features/registration_requests/presentation/view/widgets/registration_requests_section.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+enum AdminRequestsSection { registration, subject }
+
 class RegistrationRequestsBody extends StatefulWidget {
   const RegistrationRequestsBody({super.key});
-
   @override
   State<RegistrationRequestsBody> createState() =>
       _RegistrationRequestsBodyState();
 }
 
 class _RegistrationRequestsBodyState extends State<RegistrationRequestsBody> {
-  final ScrollController _controller = ScrollController();
+  var _section = AdminRequestsSection.registration;
 
   @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_loadMore);
-  }
+  Widget build(BuildContext context) => Column(
+    children: [
+      Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+        child: CustomFilterTabs<AdminRequestsSection>(
+          items: {
+            AdminRequestsSection.registration: S
+                .of(context)
+                .adminRegistrationRequestsSection,
+            AdminRequestsSection.subject: S
+                .of(context)
+                .adminSubjectRequestsSection,
+          },
+          selectedItem: _section,
+          onChanged: _changeSection,
+        ),
+      ),
+      Expanded(
+        child: IndexedStack(
+          index: _section.index,
+          children: const [
+            RegistrationRequestsSection(),
+            AdminSubjectRequestsSection(),
+          ],
+        ),
+      ),
+    ],
+  );
 
-  void _loadMore() {
-    if (!mounted || !_controller.hasClients) return;
-    if (_controller.position.pixels >=
-        _controller.position.maxScrollExtent - 200) {
-      context.read<GetRegistrationRequestsCubit>().loadMore();
+  void _changeSection(AdminRequestsSection section) {
+    if (section == _section) return;
+    if (section == AdminRequestsSection.subject) {
+      final cubit = context.read<AdminSubjectRequestsCubit>();
+      if (!cubit.hasLoaded) cubit.load();
     }
-  }
-
-  @override
-  void dispose() {
-    _controller
-      ..removeListener(_loadMore)
-      ..dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = context.watch<GetRegistrationRequestsCubit>();
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-          child: CustomFilterTabs<RegistrationRequestFilter>(
-            items: {
-              RegistrationRequestFilter.approved: S.of(context).activated,
-              RegistrationRequestFilter.pending: S.of(context).notActivated,
-            },
-            selectedItem: cubit.currentFilter,
-            onChanged: (filter) {
-              if (filter == cubit.currentFilter) return;
-              cubit.getRegistrationRequests(filter: filter, refresh: true);
-            },
-          ),
-        ),
-        Expanded(
-          child: RegistrationRequestsBlocBuilder(controller: _controller),
-        ),
-      ],
-    );
+    setState(() => _section = section);
   }
 }

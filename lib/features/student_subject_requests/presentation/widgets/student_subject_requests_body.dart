@@ -1,0 +1,188 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/shared_widget/shared_group_header.dart';
+import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/gulf_payment_address_fields.dart';
+import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_state.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_subjects_section.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_package_dialog.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_package_selector.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_requests_list.dart';
+import 'package:bnan_app/generated/l10n.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class StudentSubjectRequestsBody extends StatefulWidget {
+  const StudentSubjectRequestsBody({super.key});
+  @override
+  State<StudentSubjectRequestsBody> createState() =>
+      _StudentSubjectRequestsBodyState();
+}
+
+class _StudentSubjectRequestsBodyState
+    extends State<StudentSubjectRequestsBody> {
+  String city = '', region = '', line1 = '', line2 = '', discountCode = '';
+  bool get isGulf =>
+      SessionManager.instance.registrationMode == RegistrationMode.gulf;
+  bool get isEgyptian =>
+      SessionManager.instance.registrationMode == RegistrationMode.egyptian;
+  bool get hasAddress =>
+      city.trim().isNotEmpty &&
+      region.trim().isNotEmpty &&
+      line1.trim().isNotEmpty;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      SharedGroupHeader(
+        title: S.of(context).requestNewLesson,
+        path: Routes.studentGroups,
+        badgeTitle: S.of(context).myRequests,
+      ),
+      Expanded(
+        child:
+            BlocBuilder<
+              StudentSubjectRequestsCubit,
+              StudentSubjectRequestsState
+            >(builder: _buildState),
+      ),
+    ],
+  );
+
+  Widget _buildState(BuildContext context, StudentSubjectRequestsState state) {
+    if (state.availability == null) return const SizedBox.shrink();
+    final cubit = context.read<StudentSubjectRequestsCubit>();
+    final availability = state.availability!;
+    return RefreshIndicator(
+      onRefresh: () => cubit.load(refresh: true),
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          SubjectRequestSubjectsSection(
+            subjects: availability.subjects,
+            selectedId: state.selectedSubjectId,
+            onSelected: cubit.selectSubject,
+          ),
+          SubjectRequestPackageSelector(
+            selectedName: _selectedPackageName(state),
+            hasPackages: state.packages.isNotEmpty,
+            onTap: () => _selectPackage(state),
+          ),
+          const SizedBox(height: 16),
+          CustomTextField(
+            label: S.of(context).theRequiredLesson,
+            hintText: S.of(context).studentNotesExample,
+            maxLine: 4,
+            inputFormatters: [LengthLimitingTextInputFormatter(2000)],
+            onChanged: cubit.updateNotes,
+          ),
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Text(
+              S.of(context).subjectRequestNotesCounter(state.notes.length),
+              textDirection: TextDirection.ltr,
+            ),
+          ),
+          if (isGulf) ...[
+            const SizedBox(height: 16),
+            GulfPaymentAddressFields(
+              onCityChanged: (value) => city = value,
+              onRegionChanged: (value) => region = value,
+              onLine1Changed: (value) => line1 = value,
+              onLine2Changed: (value) => line2 = value,
+            ),
+            const SizedBox(height: 16),
+            CustomTextField(
+              label: S.of(context).discountCode,
+              onChanged: (value) => discountCode = value,
+            ),
+          ],
+          const SizedBox(height: 20),
+          _submitButton(state),
+          const SizedBox(height: 24),
+          SubjectRequestsList(requests: state.requests),
+        ],
+      ),
+    );
+  }
+
+  Widget _submitButton(StudentSubjectRequestsState state) =>
+      BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
+        builder: (context, payment) {
+          if (payment.phase == SubjectRequestPaymentPhase.verificationTimeout) {
+            return CustomAppButton(
+              text: S.of(context).subjectRequestVerifyPayment,
+              onPressed: context.read<SubjectRequestPaymentCubit>().verify,
+            );
+          }
+          final loading =
+              state.isSubmitting ||
+              payment.phase == SubjectRequestPaymentPhase.creatingCheckout ||
+              payment.phase == SubjectRequestPaymentPhase.verifying;
+          return CustomAppButton(
+            text: S.of(context).confirmRequest,
+            isLoading: loading,
+            onPressed: state.canSubmit ? () => _submit(state) : null,
+          );
+        },
+      );
+
+  String? _selectedPackageName(StudentSubjectRequestsState state) {
+    for (final item in state.packages) {
+      if (item.id == state.selectedPackageId) return item.name;
+    }
+    return null;
+  }
+
+  Future<void> _selectPackage(StudentSubjectRequestsState state) async {
+    final id = await SubjectRequestPackageDialog.show(
+      context,
+      packages: state.packages,
+      selectedId: state.selectedPackageId,
+    );
+    if (!mounted || id == null) return;
+    context.read<StudentSubjectRequestsCubit>().selectPackage(id);
+  }
+
+  void _submit(StudentSubjectRequestsState state) {
+    if (isEgyptian) {
+      context.read<StudentSubjectRequestsCubit>().submitEgyptian();
+      return;
+    }
+    if (!isGulf) {
+      showCustomSnackBar(context, S.of(context).errorUnknown, false);
+      return;
+    }
+    if (!hasAddress) {
+      showCustomSnackBar(
+        context,
+        S.of(context).parentPaymentAddressRequired,
+        false,
+      );
+      return;
+    }
+    context.read<SubjectRequestPaymentCubit>().checkout(
+      GulfSubjectRequestPayload(
+        subjectId: state.selectedSubjectId!,
+        packageId: state.selectedPackageId!,
+        notes: state.notes,
+        discountCode: discountCode,
+        paymentAddress: PaymentAddress(
+          city: city,
+          region: region,
+          line1: line1,
+          line2: line2,
+        ),
+      ),
+    );
+  }
+}

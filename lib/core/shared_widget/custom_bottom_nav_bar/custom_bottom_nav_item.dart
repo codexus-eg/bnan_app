@@ -28,12 +28,12 @@ class CustomBottomNavItem extends StatelessWidget {
         children: [
           SvgPicture.asset(
             imagePath,
-            height: 22,
-            width: 22,
+            height: 24,
+            width: 24,
             fit: BoxFit.contain,
             colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             title,
             maxLines: 1,

@@ -173,6 +173,7 @@ class ImageManager {
       '${_usersManagementFeature}User_02.svg';
   static const String userAdd = '${_usersManagementFeature}User_Add.svg';
   static const String plus = '${_usersManagementFeature}plus-01.svg';
+  static const String userCheck = '${_usersManagementFeature}user-check.svg';
 
 // Shared
 static const String noData = '${_sharedFeature}NDA.svg';

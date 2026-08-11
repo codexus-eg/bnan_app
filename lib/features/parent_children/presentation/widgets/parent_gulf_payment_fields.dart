@@ -1,4 +1,4 @@
-import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/gulf_payment_address_fields.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_option_tile.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -27,25 +27,12 @@ class ParentGulfPaymentFields extends StatelessWidget {
           onTap: () {},
         ),
         const SizedBox(height: 16),
-        CustomTextField(
-          label: s.city,
-          isRequired: true,
-          onChanged: onCityChanged,
+        GulfPaymentAddressFields(
+          onCityChanged: onCityChanged,
+          onRegionChanged: onRegionChanged,
+          onLine1Changed: onLine1Changed,
+          onLine2Changed: onLine2Changed,
         ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          label: s.parentRegion,
-          isRequired: true,
-          onChanged: onRegionChanged,
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(
-          label: s.parentAddressLine1,
-          isRequired: true,
-          onChanged: onLine1Changed,
-        ),
-        const SizedBox(height: 16),
-        CustomTextField(label: s.parentAddressLine2, onChanged: onLine2Changed),
       ],
     );
   }

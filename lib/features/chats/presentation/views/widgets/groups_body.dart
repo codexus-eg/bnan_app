@@ -52,9 +52,8 @@ class GroupsBody extends StatelessWidget {
                     onTap: () {
                       MyNavigator.goTo(
                         context,
-                        Routes.chat,
+                        Routes.chatPath(room.id),
                         extra: ChatRouteArgs(
-                          roomId: room.id,
                           roomType: room.type,
                           classroomId: room.classroomId,
                           classroomName: room.displayName,

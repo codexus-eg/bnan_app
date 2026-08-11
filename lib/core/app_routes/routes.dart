@@ -12,7 +12,8 @@ abstract class Routes {
   static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String notification = '/notification';
-  static const String chat = '/chat';
+  static const String chat = '/chat/:roomId';
+  static const String legacyChat = '/chat';
   static const String classroomDocuments = '/classroomDocuments';
   static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
@@ -74,6 +75,8 @@ abstract class Routes {
 
   static String teacherPayrollCreatePath(String teacherId) =>
       teacherPayrollCreate.replaceFirst(':teacherId', teacherId);
+  static String chatPath(String roomId) =>
+      chat.replaceFirst(':roomId', Uri.encodeComponent(roomId));
   static String parentSubscriptionRenewalPath(String studentId) =>
       parentSubscriptionRenewal.replaceFirst(':studentId', studentId);
   static String teacherPayrollDetailsPath(String payrollId) =>
