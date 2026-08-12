@@ -1,6 +1,6 @@
 part of 'chat_input_bar.dart';
 
-extension ChatInputBuild on _ChatInputBarState {
+extension on _ChatInputBarState {
   Widget buildChatInputBar(BuildContext context) {
     return BlocConsumer<SendMessageCubit, SendMessageState>(
       listener: handleState,
@@ -68,7 +68,7 @@ extension ChatInputBuild on _ChatInputBarState {
   }
 }
 
-extension ChatInputActionsRow on _ChatInputBarState {
+extension on _ChatInputBarState {
   Widget buildActionsRow(bool isLoading) {
     return Row(
       children: [

@@ -63,7 +63,9 @@ class GroupsBody extends StatelessWidget {
                     },
                     child: CustomChatCard(
                       title: room.displayName,
-                      subtitle: room.subtitle,
+                      subtitle: room.lastMessage?.trim().isNotEmpty == true
+                          ? room.lastMessage!
+                          : room.subtitle,
                     ),
                   ),
                 );

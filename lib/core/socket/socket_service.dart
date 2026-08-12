@@ -18,8 +18,12 @@ class SocketService {
   Future<void> connect() {
     if (_socket?.connected == true) return Future<void>.value();
 
-    return _connectFuture ??= _connect().whenComplete(() {
-      _connectFuture = null;
+    final current = _connectFuture;
+    if (current != null) return current;
+    final attempt = _connect();
+    _connectFuture = attempt;
+    return attempt.whenComplete(() {
+      if (identical(_connectFuture, attempt)) _connectFuture = null;
     });
   }
 
@@ -164,12 +168,10 @@ class SocketService {
     });
   }
 
-  void listenToNotification(
+  VoidCallback listenToNotification(
     void Function(Map<String, dynamic> notification) onNotification,
   ) {
-    _socket?.off('notification');
-
-    _socket?.on('notification', (data) {
+    return _listen('notification', (data) {
       try {
         final notification = Map<String, dynamic>.from(data);
 
@@ -178,10 +180,6 @@ class SocketService {
         debugPrint('Notification parsing error: $error');
       }
     });
-  }
-
-  void removeNotificationListener() {
-    _socket?.off('notification');
   }
 
   VoidCallback listenToReconnect(VoidCallback onReconnect) {
@@ -202,6 +200,12 @@ class SocketService {
   }
 
   void disconnect() {
+    final completer = _connectionCompleter;
+    if (completer != null && !completer.isCompleted) {
+      completer.completeError(StateError('Socket connection cancelled.'));
+    }
+    _connectionCompleter = null;
+    _connectFuture = null;
     _socket?.clearListeners();
     _socket?.disconnect();
     _socket?.dispose();

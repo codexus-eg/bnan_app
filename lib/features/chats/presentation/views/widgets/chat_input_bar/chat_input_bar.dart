@@ -44,6 +44,45 @@ class _ChatInputBarState extends State<ChatInputBar> {
   Timer? recordingTimer;
   Duration recordingDuration = Duration.zero;
 
+  void removeSelectedFile(int index) {
+    setState(() => selectedFiles.removeAt(index));
+  }
+
+  void addSelectedFiles(List<PlatformFile> files) {
+    setState(() => selectedFiles.addAll(files));
+  }
+
+  void handleSendSuccess() {
+    if (!mounted) return;
+
+    setState(() {
+      if (clearTextAfterSuccess) messageController.clear();
+      selectedFiles.clear();
+      clearTextAfterSuccess = false;
+    });
+
+    context.read<SendMessageCubit>().resetState();
+  }
+
+  void setRecordingStarted(String filePath) {
+    currentVoicePath = filePath;
+    setState(() {
+      isRecording = true;
+      recordingDuration = Duration.zero;
+    });
+  }
+
+  void resetRecordingState() {
+    setState(() {
+      isRecording = false;
+      recordingDuration = Duration.zero;
+    });
+  }
+
+  void incrementRecordingDuration() {
+    setState(() => recordingDuration += const Duration(seconds: 1));
+  }
+
   @override
   void dispose() {
     recordingTimer?.cancel();

@@ -1,14 +1,8 @@
 part of 'chat_input_bar.dart';
 
-extension ChatInputHelpers on _ChatInputBarState {
+extension on _ChatInputBarState {
   bool isSendingMessage() {
     return context.read<SendMessageCubit>().state is SendMessageLoading;
-  }
-
-  void removeSelectedFile(int index) {
-    setState(() {
-      selectedFiles.removeAt(index);
-    });
   }
 
   void handleSubmitted(String value) {

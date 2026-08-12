@@ -2,15 +2,17 @@ import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_state.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
-  GetRoomMessagesCubit(this.chatRepo, this.socketService)
+  GetRoomMessagesCubit(this.chatRepo, this.socketService, [this.notifications])
     : super(GetRoomMessagesInitial());
 
   final ChatRepo chatRepo;
   final SocketService socketService;
+  final ChatNotificationCoordinator? notifications;
 
   final List<ChatMessageModel> _messages = [];
   final List<VoidCallback> _listenerDisposers = [];
@@ -22,6 +24,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     if (normalizedRoomId.isEmpty) return;
 
     _currentRoomId = normalizedRoomId;
+    notifications?.enterRoom(normalizedRoomId);
     _messages.clear();
 
     try {
@@ -155,6 +158,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
 
     if (roomId != null) {
       socketService.leaveRoom(roomId);
+      notifications?.leaveRoom(roomId);
     }
 
     _removeSocketListeners();

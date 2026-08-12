@@ -16,6 +16,7 @@ import 'package:bnan_app/features/chats/presentation/manager/message_documents_c
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo_impl.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
@@ -491,12 +492,22 @@ void setupServiceLocator() {
     () => TeacherRequestActionsCubit(getIt()),
   );
   getIt.registerFactory<GetChatRoomsCubit>(
-    () => GetChatRoomsCubit(getIt<ChatRepo>()),
+    () => GetChatRoomsCubit(
+      getIt<ChatRepo>(),
+      getIt<ChatNotificationCoordinator>(),
+    ),
   );
   getIt.registerFactory<GetRoomMessagesCubit>(
-    () => GetRoomMessagesCubit(getIt<ChatRepo>(), getIt<SocketService>()),
+    () => GetRoomMessagesCubit(
+      getIt<ChatRepo>(),
+      getIt<SocketService>(),
+      getIt<ChatNotificationCoordinator>(),
+    ),
   );
   getIt.registerLazySingleton<SocketService>(() => SocketService());
+  getIt.registerLazySingleton<ChatNotificationCoordinator>(
+    () => ChatNotificationCoordinator(getIt<SocketService>()),
+  );
   getIt.registerFactory<SendMessageCubit>(
     () => SendMessageCubit(getIt<ChatRepo>()),
   );

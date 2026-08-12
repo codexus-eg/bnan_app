@@ -1,6 +1,6 @@
 part of 'chat_input_bar.dart';
 
-extension ChatInputVoiceStart on _ChatInputBarState {
+extension on _ChatInputBarState {
   Future<void> handleVoiceRecording() async {
     if (isSendingMessage()) return;
 
@@ -37,12 +37,7 @@ extension ChatInputVoiceStart on _ChatInputBarState {
 
       if (!mounted) return;
 
-      currentVoicePath = filePath;
-
-      setState(() {
-        isRecording = true;
-        recordingDuration = Duration.zero;
-      });
+      setRecordingStarted(filePath);
 
       startRecordingTimer();
     } catch (_) {
@@ -50,10 +45,7 @@ extension ChatInputVoiceStart on _ChatInputBarState {
 
       if (!mounted) return;
 
-      setState(() {
-        isRecording = false;
-        recordingDuration = Duration.zero;
-      });
+      resetRecordingState();
 
       showErrorMessage('تعذر بدء تسجيل الرسالة الصوتية');
     }
@@ -64,9 +56,7 @@ extension ChatInputVoiceStart on _ChatInputBarState {
 
     recordingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) {
-        setState(() {
-          recordingDuration += const Duration(seconds: 1);
-        });
+        incrementRecordingDuration();
       }
     });
   }

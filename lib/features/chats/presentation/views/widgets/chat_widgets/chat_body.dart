@@ -62,6 +62,7 @@ class ChatBody extends StatelessWidget {
                 child: ChatMessagesList(
                   messages: messages,
                   currentUserId: SessionManager.instance.userId ?? '',
+                  isLoading: isLoading,
                 ),
               );
             },
