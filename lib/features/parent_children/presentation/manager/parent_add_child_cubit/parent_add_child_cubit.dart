@@ -46,13 +46,16 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   String? _pollingPaymentId;
   final Set<String> _completedPaymentIds = {};
 
-  void start(AcademicCurriculumModel curriculum) {
+  void start(AcademicCurriculumModel? curriculum, {bool? parentHasChildren}) {
+    final hasChildren = parentHasChildren ?? curriculum != null;
     emit(
-      state.copyWith(
+      ParentAddChildState(
         phase: ParentAddChildPhase.editing,
+        parentHasChildren: hasChildren,
         curriculum: curriculum,
       ),
     );
+    if (curriculum == null) return;
     final draft = _resumableDraft(curriculum.id);
     if (draft == null) return;
     emit(
@@ -82,6 +85,19 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     ),
   );
 
+  void selectCurriculum(AcademicCurriculumModel? value) {
+    if (state.parentHasChildren || state.curriculum?.id == value?.id) return;
+    emit(
+      state.copyWith(
+        curriculum: value,
+        grade: null,
+        package: null,
+        selectedSubjectIds: const [],
+        errorMessage: null,
+      ),
+    );
+  }
+
   void selectGrade(AcademicGradeModel? value) => emit(
     state.copyWith(
       grade: value,
@@ -91,10 +107,11 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   );
 
   void selectPackage(PackageModel value) {
-    if (!ParentPackagePolicy.isValid(
-      value,
-      registrationMode: state.curriculum?.registrationMode,
-    )) {
+    if (!_packageMatchesCurriculum(value) ||
+        !ParentPackagePolicy.isValid(
+          value,
+          registrationMode: state.curriculum?.registrationMode,
+        )) {
       return emit(state.copyWith(errorMessage: S.current.invalidPackage));
     }
     emit(
@@ -169,8 +186,10 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   Future<void> submit() async {
     if (_submitting) return;
     _log('submit started; mode=${state.curriculum?.registrationMode}');
-    if (!state.hasSupportedRegistrationMode ||
+    if (state.curriculum == null ||
+        !state.hasSupportedRegistrationMode ||
         state.package == null ||
+        !_packageMatchesCurriculum(state.package!) ||
         !ParentPackagePolicy.isValid(
           state.package!,
           registrationMode: state.curriculum?.registrationMode,
@@ -532,5 +551,12 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       return S.current.errorValidation;
     }
     return S.current.parentAddChildFailed;
+  }
+
+  bool _packageMatchesCurriculum(PackageModel value) {
+    final packageCurriculum = value.curriculum?.trim();
+    return packageCurriculum == null ||
+        packageCurriculum.isEmpty ||
+        packageCurriculum == state.curriculum?.id;
   }
 }

@@ -544,20 +544,33 @@ GoRouter buildRouter() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (_) =>
-                      getIt<ParentAddChildCubit>()..start(curriculum),
+                  create: (_) => getIt<ParentAddChildCubit>()
+                    ..start(
+                      curriculum,
+                      parentHasChildren: args.parentHasChildren,
+                    ),
                 ),
                 BlocProvider(
-                  create: (_) => AcademicLookupsCubit(
-                    repo: getIt<AcademicLookupsRepo>(),
-                    loadClassroomsOnGrade: false,
-                    loadSubjectsWithoutClassroom: true,
-                  )..selectCurriculum(curriculum),
+                  create: (_) {
+                    final cubit = AcademicLookupsCubit(
+                      repo: getIt<AcademicLookupsRepo>(),
+                      loadClassroomsOnGrade: false,
+                      loadSubjectsWithoutClassroom: true,
+                    );
+                    curriculum == null
+                        ? cubit.loadCurriculums()
+                        : cubit.selectCurriculum(curriculum);
+                    return cubit;
+                  },
                 ),
                 BlocProvider(
-                  create: (_) =>
-                      getIt<GetPackagesCubit>()
-                        ..getPackagesByCurriculum(args.curriculumId),
+                  create: (_) {
+                    final cubit = getIt<GetPackagesCubit>();
+                    if (curriculum != null) {
+                      cubit.getPackagesByCurriculum(curriculum.id);
+                    }
+                    return cubit;
+                  },
                 ),
               ],
               child: const ParentAddChildView(),

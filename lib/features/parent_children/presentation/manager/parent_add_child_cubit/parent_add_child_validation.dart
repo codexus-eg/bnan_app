@@ -5,12 +5,21 @@ abstract class ParentAddChildValidation {
   static String? currentStep(ParentAddChildState state) =>
       switch (state.currentStep) {
         0 => _account(state),
-        1 => state.grade == null ? S.current.selectGrade : null,
+        1 => _academic(state),
         2 => state.package == null ? S.current.invalidPackage : null,
         3 => _subjects(state),
         5 => _payment(state),
         _ => null,
       };
+
+  static String? _academic(ParentAddChildState state) {
+    if (state.curriculum == null) {
+      return state.parentHasChildren
+          ? S.current.parentUnsupportedRegistrationMode
+          : S.current.curriculumRequired;
+    }
+    return state.grade == null ? S.current.selectGrade : null;
+  }
 
   static String? _account(ParentAddChildState state) {
     if (state.fullName.trim().length < 3) return S.current.nameCannotBeEmpty;

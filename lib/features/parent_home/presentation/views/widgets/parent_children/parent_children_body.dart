@@ -77,10 +77,6 @@ class ParentChildrenBody extends StatelessWidget {
     BuildContext context,
     List<ParentChildModel> children,
   ) async {
-    if (children.isEmpty) {
-      showCustomSnackBar(context, S.of(context).noChildrenLinked, false);
-      return;
-    }
     final args = ParentAddChildArgs.fromChildren(children);
     if (args == null) {
       showCustomSnackBar(

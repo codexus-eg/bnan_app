@@ -6,11 +6,14 @@ class GetPackagesCubit extends Cubit<GetPackagesState> {
   GetPackagesCubit(this.packagesRepo) : super(GetPackagesInitial());
 
   final PackagesRepo packagesRepo;
+  int _requestVersion = 0;
 
   Future<void> getPackages() async {
+    final version = ++_requestVersion;
     emit(GetPackagesLoading());
 
     final result = await packagesRepo.getPackages();
+    if (isClosed || version != _requestVersion) return;
 
     result.fold(
       (failure) => emit(GetPackagesFailure(failure.message)),
@@ -19,9 +22,11 @@ class GetPackagesCubit extends Cubit<GetPackagesState> {
   }
 
   Future<void> getPackagesByCurriculum(String curriculumId) async {
+    final version = ++_requestVersion;
     emit(GetPackagesLoading());
 
     final result = await packagesRepo.getPackagesByCurriculum(curriculumId);
+    if (isClosed || version != _requestVersion) return;
 
     result.fold(
       (failure) => emit(GetPackagesFailure(failure.message)),

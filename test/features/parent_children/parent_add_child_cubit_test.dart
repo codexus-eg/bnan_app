@@ -58,6 +58,22 @@ void main() {
     await gulf.close();
   });
 
+  test('existing family curriculum cannot be replaced', () async {
+    final cubit = _cubit(_Repo());
+    cubit.selectCurriculum(_gulf);
+    expect(cubit.state.curriculum, same(_egypt));
+    await cubit.close();
+  });
+
+  test('first child selects curriculum manually', () async {
+    final cubit = ParentAddChildCubit(repo: _Repo(), keyGenerator: _Keys())
+      ..start(null, parentHasChildren: false);
+    cubit.selectCurriculum(_gulf);
+    expect(cubit.state.curriculum, same(_gulf));
+    expect(cubit.state.parentHasChildren, isFalse);
+    await cubit.close();
+  });
+
   test('all subjects accepts multiple selections', () async {
     final cubit = _cubit(_Repo())
       ..selectGrade(_grade)
