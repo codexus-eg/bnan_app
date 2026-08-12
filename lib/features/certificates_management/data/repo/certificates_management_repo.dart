@@ -10,12 +10,9 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
 import 'package:dartz/dartz.dart';
 
-
 abstract class CertificatesManagementRepo {
-Future<Either<Failure, MonthlyCertificatesResponseModel>>
-    getMonthlyCertificates({
-  String? gradeId,
-});
+  Future<Either<Failure, MonthlyCertificatesResponseModel>>
+  getMonthlyCertificates({String? classroomId});
 
   Future<Either<Failure, CertificateDetailsResponseModel>> getCertificateById({
     required String certificateId,
@@ -38,14 +35,12 @@ Future<Either<Failure, MonthlyCertificatesResponseModel>>
   Future<Either<Failure, void>> deleteMonthlyCertificate({
     required String certificateId,
   });
-  Future<Either<Failure, ClassroomStudentsResponseModel>>
-    getClassroomStudents({
-  required String classroomId,
-});
+  Future<Either<Failure, ClassroomStudentsResponseModel>> getClassroomStudents({
+    required String classroomId,
+  });
 
-Future<Either<Failure, StudentSubjectsResponseModel>>
-    getStudentSubjects({
-  required String classroomId,
-  required String studentId,
-});
+  Future<Either<Failure, StudentSubjectsResponseModel>> getStudentSubjects({
+    required String classroomId,
+    required String studentId,
+  });
 }

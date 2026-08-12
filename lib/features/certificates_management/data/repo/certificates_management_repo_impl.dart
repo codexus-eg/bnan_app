@@ -22,10 +22,10 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   final ApiConsumer apiConsumer;
   @override
   Future<Either<Failure, MonthlyCertificatesResponseModel>>
-  getMonthlyCertificates({String? gradeId}) async {
+  getMonthlyCertificates({String? classroomId}) async {
     try {
       final response = await apiConsumer.get(
-        EndPoints.monthlyCertificates(gradeId: gradeId),
+        EndPoints.monthlyCertificates(classroomId: classroomId),
         isProtected: true,
       );
 

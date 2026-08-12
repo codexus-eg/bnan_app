@@ -4,21 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetMonthlyCertificatesCubit extends Cubit<GetMonthlyCertificatesState> {
   GetMonthlyCertificatesCubit(this.repo)
-      : super(GetMonthlyCertificatesInitial());
+    : super(GetMonthlyCertificatesInitial());
 
   final CertificatesManagementRepo repo;
 
-  static GetMonthlyCertificatesCubit get(context) =>
-      BlocProvider.of(context);
+  static GetMonthlyCertificatesCubit get(context) => BlocProvider.of(context);
 
-  Future<void> getMonthlyCertificates({
-    String? gradeId,
-  }) async {
+  Future<void> getMonthlyCertificates({String? classroomId}) async {
     emit(GetMonthlyCertificatesLoading());
 
-    final result = await repo.getMonthlyCertificates(
-      gradeId: gradeId,
-    );
+    final result = await repo.getMonthlyCertificates(classroomId: classroomId);
 
     result.fold(
       (failure) => emit(GetMonthlyCertificatesFailure(failure.message)),
