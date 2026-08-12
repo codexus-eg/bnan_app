@@ -696,6 +696,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "hoursPackage": m14,
         "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
             "How do you deal with a weak student?"),
+        "idealTeacher": MessageLookupByLibrary.simpleMessage("Ideal Teacher"),
+        "idealTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("Ideal Teacher Certificate"),
+        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Ideal teacher certificate issued successfully"),
         "inactive": MessageLookupByLibrary.simpleMessage("InActive"),
         "instapay": MessageLookupByLibrary.simpleMessage("InstaPay"),
         "interaction": MessageLookupByLibrary.simpleMessage("Interaction"),
@@ -724,6 +729,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidPhoneNumber": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid phone number"),
         "isActive": MessageLookupByLibrary.simpleMessage("Active"),
+        "issueCertificate":
+            MessageLookupByLibrary.simpleMessage("Issue Certificate"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("Issue New Certificate"),
         "kuwaitiCurriculum":
@@ -930,6 +937,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "No summary content is available"),
         "noSupervisorsFound":
             MessageLookupByLibrary.simpleMessage("No supervisors found"),
+        "noTeachersAvailable":
+            MessageLookupByLibrary.simpleMessage("No teachers are available"),
         "noTermPlansAvailable":
             MessageLookupByLibrary.simpleMessage("No term plans available"),
         "noUnassignedStudents":
@@ -1506,6 +1515,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
             "Select a grade to view attendance data"),
+        "selectIdealTeacher":
+            MessageLookupByLibrary.simpleMessage("Select the ideal teacher"),
         "selectLesson": MessageLookupByLibrary.simpleMessage("Select lesson"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("Select Student"),
         "selectStudentFirst":
@@ -1916,17 +1927,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Weekly Ideal Student"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "Weekly Ideal Students Ranking"),
-        "idealTeacher": MessageLookupByLibrary.simpleMessage("Ideal Teacher"),
-        "selectIdealTeacher":
-            MessageLookupByLibrary.simpleMessage("Select the ideal teacher"),
-        "issueCertificate":
-            MessageLookupByLibrary.simpleMessage("Issue Certificate"),
-        "noTeachersAvailable":
-            MessageLookupByLibrary.simpleMessage("No teachers are available"),
-        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
-            "Ideal teacher certificate issued successfully"),
-        "idealTeacherCertificate":
-            MessageLookupByLibrary.simpleMessage("Ideal Teacher Certificate"),
         "weeklyLessons": m39,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("Weekly Plans"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),

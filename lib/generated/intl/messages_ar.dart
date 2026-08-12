@@ -668,6 +668,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "hoursPackage": m14,
         "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
             "كيف تتعامل مع طالب ضعيف المستوى؟"),
+        "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
+        "idealTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
+        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم إصدار شهادة المعلم المثالي بنجاح"),
         "inactive": MessageLookupByLibrary.simpleMessage("غير نشطة"),
         "instapay": MessageLookupByLibrary.simpleMessage("إنستاباي"),
         "interaction": MessageLookupByLibrary.simpleMessage("التفاعل"),
@@ -695,6 +700,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalidPhoneNumber":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم هاتف صحيح"),
         "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
+        "issueCertificate":
+            MessageLookupByLibrary.simpleMessage("إصدار الشهادة"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
         "kuwaitiCurriculum":
@@ -900,6 +907,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا يوجد محتوى متاح لهذا الملخص"),
         "noSupervisorsFound":
             MessageLookupByLibrary.simpleMessage("لا يوجد مشرفون"),
+        "noTeachersAvailable":
+            MessageLookupByLibrary.simpleMessage("لا يوجد معلمون متاحون"),
         "noTermPlansAvailable":
             MessageLookupByLibrary.simpleMessage("لا توجد خطط ترم متاحة"),
         "noUnassignedStudents":
@@ -1454,6 +1463,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
             "اختر الصف لعرض بيانات الحضور"),
+        "selectIdealTeacher":
+            MessageLookupByLibrary.simpleMessage("اختر المعلم المثالي"),
         "selectLesson": MessageLookupByLibrary.simpleMessage("اختر الحصة"),
         "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
         "selectStudentFirst":
@@ -1852,17 +1863,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الطالب المثالي للأسبوع"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "ترتيب الطلاب المثاليين هذا الأسبوع"),
-        "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
-        "selectIdealTeacher":
-            MessageLookupByLibrary.simpleMessage("اختر المعلم المثالي"),
-        "issueCertificate":
-            MessageLookupByLibrary.simpleMessage("إصدار الشهادة"),
-        "noTeachersAvailable":
-            MessageLookupByLibrary.simpleMessage("لا يوجد معلمون متاحون"),
-        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
-            "تم إصدار شهادة المعلم المثالي بنجاح"),
-        "idealTeacherCertificate":
-            MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
         "weeklyLessons": m39,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),

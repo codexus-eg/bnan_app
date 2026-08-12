@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application>
+        <activity android:name="co.tamara.sdk.TamaraPaymentActivity"
+            android:theme="@style/TamaraAppTheme"/>
+        <activity android:name="co.tamara.sdk.TamaraInformationActivity"
+            android:theme="@style/TamaraAppTheme"/>
+        <activity android:name="co.tamara.sdk.TamaraWidgetActivity"
+            android:theme="@style/TamaraAppTheme"/>
+    </application>
+</manifest>

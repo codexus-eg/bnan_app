@@ -500,7 +500,7 @@ packages:
     source: hosted
     version: "0.7.7+1"
   flutter_native_splash:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_native_splash
       sha256: "4fb9f4113350d3a80841ce05ebf1976a36de622af7d19aca0ca9a9911c7ff002"
@@ -1381,10 +1381,9 @@ packages:
   tamara_flutter_sdk:
     dependency: "direct main"
     description:
-      name: tamara_flutter_sdk
-      sha256: aa88e60781a1fe05173c6ab7d0580618098476f5284fd135a48fca5cf6d65445
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/tamara_flutter_sdk"
+      relative: true
+    source: path
     version: "1.0.17"
   term_glyph:
     dependency: transitive
