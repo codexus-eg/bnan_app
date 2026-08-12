@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/push_notifications/data/models/chat_push_intent.dart';
-import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -12,20 +10,23 @@ import 'package:flutter/foundation.dart';
 class PushNotificationService {
   PushNotificationService({
     required this.firebaseAvailable,
-    required FirebaseMessaging messaging,
-    required LocalPushNotifications local,
+    required PushMessaging messaging,
     required PushTokenRegistrar registrar,
     required ChatNotificationCoordinator chat,
+    Stream<RemoteMessage>? foregroundMessages,
+    Stream<RemoteMessage>? openedMessages,
   }) : _messaging = messaging,
-       _local = local,
        _registrar = registrar,
-       _chat = chat;
+       _chat = chat,
+       _foregroundMessages = foregroundMessages ?? FirebaseMessaging.onMessage,
+       _openedMessages = openedMessages ?? FirebaseMessaging.onMessageOpenedApp;
 
   final bool firebaseAvailable;
-  final FirebaseMessaging _messaging;
-  final LocalPushNotifications _local;
+  final PushMessaging _messaging;
   final PushTokenRegistrar _registrar;
   final ChatNotificationCoordinator _chat;
+  final Stream<RemoteMessage> _foregroundMessages;
+  final Stream<RemoteMessage> _openedMessages;
   final _opened = StreamController<ChatPushIntent>.broadcast();
   final Set<String> _navigationIds = {};
   final List<StreamSubscription<dynamic>> _subscriptions = [];
@@ -37,16 +38,14 @@ class PushNotificationService {
   Future<void> initialize() async {
     if (!firebaseAvailable || _initialized) return;
     _initialized = true;
-    await _local.initialize(_handleLocalPayload);
     _subscriptions.addAll([
-      FirebaseMessaging.onMessage.listen(_handleForeground),
-      FirebaseMessaging.onMessageOpenedApp.listen(_handleOpened),
-      _messaging.onTokenRefresh.listen(_handleTokenRefresh),
+      _foregroundMessages.listen(_handleForeground),
+      _openedMessages.listen(_handleOpened),
+      _messaging.tokenRefresh.listen(_handleTokenRefresh),
     ]);
-    SessionManager.instance.addSessionChangeListener(_onSessionChanged);
+    SessionManager.instance.addAccessTokenChangeListener(_onTokenChanged);
     SessionManager.instance.addBeforeClearListener(_beforeSessionClear);
     _handleOpened(await _messaging.getInitialMessage());
-    _handleLocalPayload(await _local.initialPayload());
     if (SessionManager.instance.accessToken?.isNotEmpty == true) {
       unawaited(_registrar.registerCurrent());
     }
@@ -54,38 +53,19 @@ class PushNotificationService {
 
   Future<void> _handleForeground(RemoteMessage message) async {
     final intent = _intent(message);
-    if (intent == null ||
-        !_chat.claimPushAlert(
-          messageId: intent.dedupKey,
-          roomId: intent.roomId,
-          senderId: intent.senderId,
-        )) {
-      return;
-    }
-    await _local.show(intent, message.data);
+    if (intent == null) return;
+    _chat.handlePush(
+      messageId: intent.dedupKey,
+      roomId: intent.roomId,
+      senderId: intent.senderId,
+      title: intent.title,
+      body: intent.body,
+    );
   }
 
   void _handleOpened(RemoteMessage? message) {
     if (message != null) {
       _queueOrOpen(_intent(message));
-    }
-  }
-
-  void _handleLocalPayload(String? payload) {
-    if (payload == null || payload.isEmpty) return;
-    try {
-      final data = Map<String, dynamic>.from(jsonDecode(payload) as Map);
-      _queueOrOpen(
-        ChatPushIntent.tryParse(
-          data,
-          title: data['_title']?.toString() ?? '',
-          body: data['_body']?.toString() ?? '',
-        ),
-      );
-    } catch (error) {
-      if (kDebugMode) {
-        debugPrint('Invalid local push payload: ${error.runtimeType}');
-      }
     }
   }
 
@@ -117,12 +97,12 @@ class PushNotificationService {
     }
   }
 
-  Future<void> _onSessionChanged(String? previous, String? next) async {
-    if (next?.trim().isEmpty != false) return;
+  void _onTokenChanged(String? token) {
+    if (token?.trim().isEmpty != false) return;
     final pending = _pending;
     _pending = null;
     _queueOrOpen(pending);
-    await _registrar.registerCurrent();
+    unawaited(_registrar.registerCurrent());
   }
 
   Future<void> _beforeSessionClear() => _registrar.deleteCurrent();
@@ -131,7 +111,7 @@ class PushNotificationService {
     for (final subscription in _subscriptions) {
       await subscription.cancel();
     }
-    SessionManager.instance.removeSessionChangeListener(_onSessionChanged);
+    SessionManager.instance.removeAccessTokenChangeListener(_onTokenChanged);
     SessionManager.instance.removeBeforeClearListener(_beforeSessionClear);
     await _opened.close();
   }

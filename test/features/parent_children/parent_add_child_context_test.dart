@@ -5,6 +5,12 @@ import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dar
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('no children starts first-child flow without a curriculum', () {
+    final args = ParentAddChildArgs.fromChildren(const [])!;
+    expect(args.parentHasChildren, isFalse);
+    expect(args.curriculum, isNull);
+  });
+
   test('one child provides the parent curriculum context', () {
     final args = ParentAddChildArgs.fromChildren([_children.first])!;
     expect(args.curriculumId, 'egyptian-curriculum');
@@ -24,6 +30,16 @@ void main() {
   test('missing curriculum context cannot start add-child', () {
     expect(
       ParentAddChildArgs.fromChildren(const [ParentChildModel(id: 'child')]),
+      isNull,
+    );
+  });
+
+  test('one missing context invalidates otherwise matching children', () {
+    expect(
+      ParentAddChildArgs.fromChildren([
+        _matchingChildren.first,
+        const ParentChildModel(id: 'missing'),
+      ]),
       isNull,
     );
   });

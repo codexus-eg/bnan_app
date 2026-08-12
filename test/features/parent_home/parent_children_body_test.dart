@@ -150,6 +150,18 @@ void main() {
     expect(find.text('Select Child'), findsNothing);
   });
 
+  testWidgets('Add child opens first-child flow when the list is empty', (
+    tester,
+  ) async {
+    final cubit = await _successCubit(const []);
+    addTearDown(cubit.close);
+    final captured = await _tapAddChild(tester, cubit);
+
+    expect(captured.parentHasChildren, isFalse);
+    expect(captured.curriculum, isNull);
+    expect(find.text('Add Child Destination'), findsOneWidget);
+  });
+
   testWidgets('Add child opens directly with multiple matching children', (
     tester,
   ) async {

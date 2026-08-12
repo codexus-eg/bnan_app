@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
-import 'package:bnan_app/features/grades_management/data/models/grade_model.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';

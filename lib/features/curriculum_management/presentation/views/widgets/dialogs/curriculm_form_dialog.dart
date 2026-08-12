@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bnan_app/core/helper/file_picker_helper.dart';
-import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';

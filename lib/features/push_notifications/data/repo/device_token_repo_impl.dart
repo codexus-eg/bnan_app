@@ -17,10 +17,10 @@ class DeviceTokenRepoImpl implements DeviceTokenRepo {
   }
 
   @override
-  Future<void> delete({required String token, required String deviceId}) async {
+  Future<void> delete({required String token}) async {
     await _api.delete(
       EndPoints.deviceToken,
-      data: {'token': token, 'deviceId': deviceId},
+      data: {'token': token},
       isProtected: true,
     );
   }

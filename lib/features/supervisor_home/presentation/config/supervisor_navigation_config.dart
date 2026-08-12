@@ -41,6 +41,7 @@ abstract class SupervisorNavigationConfig {
           ImageManager.crownSimple,
           Routes.weeklyIdealStudents,
         ),
+      _item(s.idealTeacher, ImageManager.crownSimple, Routes.idealTeacher),
     ];
   }
 

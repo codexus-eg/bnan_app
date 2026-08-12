@@ -28,6 +28,7 @@ class ParentAddChildState {
     this.email = '',
     this.password = '',
     this.confirmPassword = '',
+    this.parentHasChildren = false,
     this.curriculum,
     this.grade,
     this.package,
@@ -51,6 +52,7 @@ class ParentAddChildState {
   final ParentAddChildPhase phase;
   final int currentStep;
   final String fullName, email, password, confirmPassword;
+  final bool parentHasChildren;
   final AcademicCurriculumModel? curriculum;
   final AcademicGradeModel? grade;
   final PackageModel? package;
@@ -78,6 +80,7 @@ class ParentAddChildState {
     String? email,
     String? password,
     String? confirmPassword,
+    bool? parentHasChildren,
     Object? curriculum = _unset,
     Object? grade = _unset,
     Object? package = _unset,
@@ -103,6 +106,7 @@ class ParentAddChildState {
     email: email ?? this.email,
     password: password ?? this.password,
     confirmPassword: confirmPassword ?? this.confirmPassword,
+    parentHasChildren: parentHasChildren ?? this.parentHasChildren,
     curriculum: identical(curriculum, _unset)
         ? this.curriculum
         : curriculum as AcademicCurriculumModel?,

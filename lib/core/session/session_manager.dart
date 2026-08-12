@@ -49,6 +49,9 @@ class SessionManager {
   void addAccessTokenChangeListener(AccessTokenChangeListener listener) =>
       _accessTokenChangeListeners.add(listener);
 
+  void removeAccessTokenChangeListener(AccessTokenChangeListener listener) =>
+      _accessTokenChangeListeners.remove(listener);
+
   bool get isEgyptianStudent =>
       role == UserRole.student &&
       _registrationMode == RegistrationMode.egyptian;
@@ -177,6 +180,7 @@ class SessionManager {
   }
 
   Future<void> clearTokens() async {
+    await _notifyBeforeSessionClear();
     _accessToken = null;
     _refreshToken = null;
     await SecureCacheHelper.removeData(key: SecureCacheKeys.accessToken);
@@ -210,13 +214,7 @@ class SessionManager {
     debugPrint('SessionManager.clearSession started');
     final previousUserId = _userId;
 
-    for (final listener in List.of(_beforeClearListeners)) {
-      try {
-        await listener();
-      } catch (error) {
-        debugPrint('Before session clear hook failed: ${error.runtimeType}');
-      }
-    }
+    await _notifyBeforeSessionClear();
 
     _accessToken = null;
     _refreshToken = null;
@@ -234,6 +232,17 @@ class SessionManager {
   Future<void> _notifySessionChanged(String? previous, String? next) async {
     for (final listener in List.of(_sessionChangeListeners)) {
       await listener(previous, next);
+    }
+  }
+
+  Future<void> _notifyBeforeSessionClear() async {
+    if (_accessToken?.isNotEmpty != true) return;
+    for (final listener in List.of(_beforeClearListeners)) {
+      try {
+        await listener();
+      } catch (error) {
+        debugPrint('Before session clear hook failed: ${error.runtimeType}');
+      }
     }
   }
 

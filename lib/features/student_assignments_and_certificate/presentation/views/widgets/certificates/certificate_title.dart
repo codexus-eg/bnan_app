@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 
 String certificateTitle(BuildContext context, CertificateModel certificate) {
   final s = S.of(context);
+  if (certificate.certificateType == 'ideal_teacher') {
+    return s.idealTeacherCertificate;
+  }
   final month = certificate.period.month;
   if (certificate.certificateType != 'student_monthly' ||
       month < 1 ||

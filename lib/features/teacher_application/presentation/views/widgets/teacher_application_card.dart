@@ -1,10 +1,8 @@
-import 'package:bnan_app/core/helper/clipboard_helper.dart';
 import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/action_chip.dart';
 import 'package:bnan_app/core/shared_widget/card_header.dart';
 import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
-import 'package:bnan_app/core/shared_widget/copy_icon_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/shared_widget/info_text.dart';
 import 'package:bnan_app/core/shared_widget/status_action_button.dart';

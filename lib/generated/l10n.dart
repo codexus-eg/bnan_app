@@ -5000,6 +5000,66 @@ class S {
     );
   }
 
+  /// `Ideal Teacher`
+  String get idealTeacher {
+    return Intl.message(
+      'Ideal Teacher',
+      name: 'idealTeacher',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select the ideal teacher`
+  String get selectIdealTeacher {
+    return Intl.message(
+      'Select the ideal teacher',
+      name: 'selectIdealTeacher',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Issue Certificate`
+  String get issueCertificate {
+    return Intl.message(
+      'Issue Certificate',
+      name: 'issueCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No teachers are available`
+  String get noTeachersAvailable {
+    return Intl.message(
+      'No teachers are available',
+      name: 'noTeachersAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal teacher certificate issued successfully`
+  String get idealTeacherIssuedSuccessfully {
+    return Intl.message(
+      'Ideal teacher certificate issued successfully',
+      name: 'idealTeacherIssuedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal Teacher Certificate`
+  String get idealTeacherCertificate {
+    return Intl.message(
+      'Ideal Teacher Certificate',
+      name: 'idealTeacherCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Weekly Evaluations`
   String get weeklyEvaluations {
     return Intl.message(

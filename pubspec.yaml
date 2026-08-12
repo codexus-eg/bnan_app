@@ -67,7 +67,10 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   url_launcher: ^6.3.1
-  tamara_flutter_sdk: ^1.0.17
+  # Tamara Flutter SDK 1.0.17 patched for Kotlin 2.2 / Dagger metadata compatibility.
+  # Replace with the official package when Tamara publishes an upstream fix.
+  tamara_flutter_sdk:
+    path: packages/tamara_flutter_sdk
   app_links: ^6.4.1
   socket_io_client: ^3.1.2
   record: ^6.2.1
@@ -77,6 +80,7 @@ dependencies:
   firebase_core: ^4.13.0
   firebase_messaging: ^16.5.0
   flutter_local_notifications: ^20.1.0
+  flutter_native_splash: ^2.4.7
   package_info_plus: ^9.0.1
   uuid: ^4.6.0
 
@@ -92,7 +96,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  flutter_native_splash: ^2.4.7
   flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the

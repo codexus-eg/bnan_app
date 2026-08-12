@@ -20,7 +20,7 @@ import 'package:bnan_app/features/chats/presentation/notifications/chat_notifica
 import 'package:bnan_app/features/push_notifications/data/installation_id_store.dart';
 import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo.dart';
 import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo_impl.dart';
-import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_notification_service.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo.dart';
@@ -53,7 +53,6 @@ import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final getIt = GetIt.instance;
 
@@ -103,6 +102,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<IdealStudentRepo>(
     () => IdealStudentRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<SupervisorIdealTeacherRepo>(
+    () => SupervisorIdealTeacherRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<DiscountCodesRepo>(
     () => DiscountCodesRepoImpl(getIt<ApiConsumer>()),
@@ -341,6 +343,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<IdealStudentCubit>(
     () => IdealStudentCubit(getIt<IdealStudentRepo>()),
   );
+  getIt.registerFactory<SupervisorIdealTeacherCubit>(
+    () => SupervisorIdealTeacherCubit(getIt<SupervisorIdealTeacherRepo>()),
+  );
   getIt.registerFactory<DiscountCodesCubit>(
     () => DiscountCodesCubit(getIt<DiscountCodesRepo>()),
   );
@@ -515,12 +520,12 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => ChatNotificationCoordinator(getIt<SocketService>()),
   );
   if (firebaseAvailable) {
-    getIt.registerLazySingleton<LocalPushNotifications>(
-      () => LocalPushNotifications(FlutterLocalNotificationsPlugin()),
+    getIt.registerLazySingleton<PushMessaging>(
+      () => FirebasePushMessaging(FirebaseMessaging.instance),
     );
     getIt.registerLazySingleton<PushTokenRegistrar>(
       () => PushTokenRegistrar(
-        FirebaseMessaging.instance,
+        getIt<PushMessaging>(),
         getIt<DeviceTokenRepo>(),
         getIt<InstallationIdStore>(),
       ),
@@ -528,8 +533,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     getIt.registerLazySingleton<PushNotificationService>(
       () => PushNotificationService(
         firebaseAvailable: true,
-        messaging: FirebaseMessaging.instance,
-        local: getIt<LocalPushNotifications>(),
+        messaging: getIt<PushMessaging>(),
         registrar: getIt<PushTokenRegistrar>(),
         chat: getIt<ChatNotificationCoordinator>(),
       ),
