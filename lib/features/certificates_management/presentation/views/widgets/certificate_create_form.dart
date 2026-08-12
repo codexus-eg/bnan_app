@@ -3,8 +3,6 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/academic_lookups/data/models/academic_lookup_selection.dart';
-import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic_lookup_dropdowns.dart';
 import 'package:bnan_app/features/certificates_management/data/models/requests/certificate_subject_request_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/requests/create_monthly_certificate_request_model.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/create_monthly_certificate_cubit/create_monthly_certificate_cubit.dart';
@@ -14,6 +12,7 @@ import 'package:bnan_app/features/certificates_management/presentation/manager/g
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_student_subjects_cubit/get_student_subjects_cubit.dart';
 import 'package:bnan_app/features/certificates_management/presentation/views/widgets/certificate_student_dropdown.dart';
 import 'package:bnan_app/features/certificates_management/presentation/views/widgets/certificate_subjects_section.dart';
+import 'package:bnan_app/features/certificates_management/presentation/views/widgets/supervisor_classroom_dropdown.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,12 +48,9 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
       children: [
         CustomDialogHeader(title: widget.title),
         const SizedBox(height: 16),
-        AcademicLookupDropdowns(
-          showCurriculum: true,
-          showGrade: true,
-          showClassroom: true,
-          showSubject: false,
-          onSelectionChanged: _onAcademicSelectionChanged,
+        SupervisorClassroomDropdown(
+          selectedId: classroomId,
+          onChanged: (classroom) => _onClassroomChanged(classroom?.id),
         ),
         const SizedBox(height: 16),
         CertificateStudentDropdown(
@@ -69,7 +65,10 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
           ).copyWith(color: ColorManager.mainColor14),
         ),
         const SizedBox(height: 8),
-        CertificateSubjectsSection(onChanged: _onSubjectsChanged),
+        CertificateSubjectsSection(
+          key: ValueKey(selectedStudentId),
+          onChanged: _onSubjectsChanged,
+        ),
         const SizedBox(height: 16),
         if (formError != null) ...[_buildError(), const SizedBox(height: 8)],
         _buildSaveButton(),
@@ -104,8 +103,8 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
     );
   }
 
-  void _onAcademicSelectionChanged(AcademicLookupSelection selection) {
-    final newClassroomId = selection.classroomId?.trim();
+  void _onClassroomChanged(String? value) {
+    final newClassroomId = value?.trim();
 
     if (newClassroomId == classroomId) return;
 
@@ -143,7 +142,13 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
   }
 
   void _save() {
+    final selectedClassroomId = classroomId?.trim();
     final studentId = selectedStudentId?.trim();
+
+    if (selectedClassroomId == null || selectedClassroomId.isEmpty) {
+      _setError(S.of(context).classroomRequired);
+      return;
+    }
 
     if (studentId == null || studentId.isEmpty) {
       _setError(S.of(context).pleaseSelectStudent);
@@ -157,6 +162,7 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
 
     context.read<CreateMonthlyCertificateCubit>().createMonthlyCertificate(
       request: CreateMonthlyCertificateRequestModel(
+        classroomId: selectedClassroomId,
         studentId: studentId,
         subjects: subjectRequests,
       ),

@@ -25,8 +25,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   late int currentIndex;
   bool _isLoggingOut = false;
 
-  static const int notificationsDrawerIndex = 13;
-  static const int plansDrawerIndex = 11;
+  static const int notificationsDrawerIndex = 12;
+  static const int plansDrawerIndex = 10;
 
   @override
   void initState() {
@@ -89,11 +89,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == plansDrawerIndex) {
       MyNavigator.goTo(context, Routes.plans);
-    } else if (index == 9) {
-      MyNavigator.goTo(context, Routes.certificatesManagement);
-    } else if (index == 14) {
+    } else if (index == 13) {
       MyNavigator.goTo(context, Routes.attendance);
-    } else if (index == 16) {
+    } else if (index == 15) {
       MyNavigator.goTo(context, Routes.weeklyIdealStudents);
     }
   }
@@ -156,5 +154,5 @@ const teacherDrawerToBottomNavIndex = <int, int>{
   3: 1,
   5: 2,
   8: teacherPayrollTabIndex,
-  15: 4,
+  14: 4,
 };

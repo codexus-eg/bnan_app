@@ -163,12 +163,12 @@ abstract class EndPoints {
     return '/messages/$messageId';
   }
 
-  static String monthlyCertificates({String? gradeId}) {
-    if (gradeId == null || gradeId.isEmpty) {
+  static String monthlyCertificates({String? classroomId}) {
+    if (classroomId == null || classroomId.isEmpty) {
       return '/certificates/monthly';
     }
 
-    return '/certificates/monthly?gradeId=$gradeId';
+    return '/certificates/monthly?classroomId=$classroomId';
   }
 
   static String teachersByStatus(String status) {

@@ -39,10 +39,6 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
       icon: ImageManager.teacherUserProfileGroupIcon,
     ),
     DrawerItemModel(title: s.teacherMyEarnings, icon: ImageManager.wallet),
-    DrawerItemModel(
-      title: s.certificates,
-      icon: ImageManager.certificateBadgeIcon,
-    ),
     DrawerItemModel(title: s.performance, icon: ImageManager.arrowGrowthIcon),
     DrawerItemModel(
       title: s.weeklyPlans,

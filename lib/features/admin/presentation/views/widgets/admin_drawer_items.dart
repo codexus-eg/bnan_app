@@ -38,10 +38,6 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       icon: ImageManager.parentChatConversationCircleIcon,
     ),
     DrawerItemModel(title: s.notifications, icon: ImageManager.bellIcon),
-    DrawerItemModel(
-      title: s.certificates,
-      icon: ImageManager.certificateBadgeIcon,
-    ),
     DrawerItemModel(title: s.assignStudent, icon: ImageManager.userAdd),
     DrawerItemModel(title: s.curriculum, icon: ImageManager.bellIcon),
     DrawerItemModel(title: s.termPlan, icon: ImageManager.tableIcon),

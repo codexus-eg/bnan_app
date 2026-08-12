@@ -605,6 +605,11 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.certificatesManagement,
+        redirect: (context, state) {
+          if (SessionManager.instance.role == UserRole.supervisor) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
         pageBuilder: (context, state) => buildTransitionPages(
           child: MultiBlocProvider(
             providers: [
@@ -618,11 +623,8 @@ GoRouter buildRouter() {
               ),
 
               BlocProvider(
-                create: (_) => AcademicLookupsCubit(
-                  repo: getIt<AcademicLookupsRepo>(),
-                  loadClassroomsOnGrade: false,
-                  loadSubjectsWithoutClassroom: false,
-                )..loadGrades(),
+                create: (_) =>
+                    getIt<GetSupervisorClassroomsCubit>()..getMyClassrooms(),
               ),
               BlocProvider(create: (_) => getIt<GetCertificateDetailsCubit>()),
               BlocProvider(
