@@ -4,12 +4,26 @@ class SubjectRequestPayment {
     required this.status,
     this.checkoutUrl,
     this.subjectRequestId,
+    this.orderId,
+    this.providerStatus,
+    this.originalAmount,
+    this.discountAmount,
+    this.finalAmount,
+    this.currency,
+    this.discount,
   });
 
   final String paymentId;
   final SubjectRequestPaymentStatus status;
   final String? checkoutUrl;
   final String? subjectRequestId;
+  final String? orderId;
+  final String? providerStatus;
+  final num? originalAmount;
+  final num? discountAmount;
+  final num? finalAmount;
+  final String? currency;
+  final Map<String, dynamic>? discount;
 
   factory SubjectRequestPayment.fromJson(Map<String, dynamic> json) {
     final raw = json['data'];
@@ -19,6 +33,15 @@ class SubjectRequestPayment {
       status: SubjectRequestPaymentStatus.fromValue(data['status']),
       checkoutUrl: _text(data['checkoutUrl']),
       subjectRequestId: _text(data['subjectRequestId']),
+      orderId: _text(data['orderId']),
+      providerStatus: _text(data['providerStatus']),
+      originalAmount: _number(data['originalAmount']),
+      discountAmount: _number(data['discountAmount']),
+      finalAmount: _number(data['finalAmount']),
+      currency: _text(data['currency']),
+      discount: data['discount'] is Map
+          ? Map<String, dynamic>.from(data['discount'] as Map)
+          : null,
     );
   }
 }
@@ -49,3 +72,5 @@ enum SubjectRequestPaymentStatus {
 
 String? _text(dynamic value) =>
     value?.toString().trim().isEmpty == false ? value.toString().trim() : null;
+num? _number(dynamic value) =>
+    value is num ? value : num.tryParse(value?.toString() ?? '');

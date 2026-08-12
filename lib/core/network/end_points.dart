@@ -7,6 +7,7 @@ abstract class EndPoints {
   static const String verifyResetCode = '/auth/verifyResetCode';
   static const String resetPassword = '/auth/resetPassword';
   static const String updatePassword = '/auth/updatePassword';
+  static const String deviceToken = '/devices/token';
   static const String registerTeacher = '/auth/register-teacher';
   static const String registerParent = '/auth/register-parent';
   static const String getLoggedUser = '/users/me';

@@ -36,9 +36,6 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       context.read<SubjectRequestPaymentCubit>().tamaraReturned();
-      if (context.read<SubjectRequestPaymentCubit>().state.payment != null) {
-        context.read<StudentSubjectRequestsCubit>().load(refresh: true);
-      }
     }
   }
 
@@ -101,11 +98,19 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
       final url = state.payment?.checkoutUrl;
       if (url == null) return;
       final result = await TamaraCheckoutLauncher.open(context, url);
-      if (result.opened && context.mounted) {
+      if (!context.mounted) return;
+      if (result.opened) {
         await context.read<SubjectRequestPaymentCubit>().tamaraReturned();
+      } else {
+        context.read<SubjectRequestPaymentCubit>().checkoutLaunchFailed(
+          S.of(context).errorUnknown,
+        );
       }
     } else if (state.phase == SubjectRequestPaymentPhase.completed) {
       await context.read<StudentSubjectRequestsCubit>().paymentCompleted();
+      if (context.mounted) {
+        context.read<SubjectRequestPaymentCubit>().completeHandling();
+      }
     } else if (state.phase == SubjectRequestPaymentPhase.verificationTimeout) {
       showCustomSnackBar(
         context,

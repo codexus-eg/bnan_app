@@ -11,6 +11,8 @@ import 'package:bnan_app/features/chats/presentation/notifications/chat_notifica
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
+import 'package:bnan_app/features/push_notifications/data/models/chat_push_intent.dart';
+import 'package:bnan_app/features/push_notifications/presentation/push_notification_service.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,8 +31,10 @@ class _BnanAppState extends State<BnanApp> {
   String? _navigatedPaymentId;
   late final GoRouter _router;
   late final ChatNotificationCoordinator _chatNotifications;
+  PushNotificationService? _pushNotifications;
   final _messengerKey = GlobalKey<ScaffoldMessengerState>();
   StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
+  StreamSubscription<ChatPushIntent>? _pushNavigationSubscription;
 
   @override
   void initState() {
@@ -41,6 +45,13 @@ class _BnanAppState extends State<BnanApp> {
       _showChatNotification,
     );
     unawaited(_chatNotifications.initialize());
+    if (getIt.isRegistered<PushNotificationService>()) {
+      _pushNotifications = getIt<PushNotificationService>();
+      _pushNavigationSubscription = _pushNotifications!.opened.listen(
+        _openChatPush,
+      );
+      unawaited(_pushNotifications!.initialize());
+    }
     if (getIt.isRegistered<TamaraPaymentCubit>()) {
       paymentCubit = getIt<TamaraPaymentCubit>()..restore();
     }
@@ -92,9 +103,21 @@ class _BnanAppState extends State<BnanApp> {
       );
   }
 
+  void _openChatPush(ChatPushIntent intent) {
+    final route = ChatNotificationRoute.path(intent.roomId);
+    if (route == null ||
+        _router.routeInformationProvider.value.uri.path == route) {
+      return;
+    }
+    _router.push(route);
+  }
+
   @override
   void dispose() {
     unawaited(_chatNotificationSubscription?.cancel());
+    unawaited(_pushNavigationSubscription?.cancel());
+    final pushNotifications = _pushNotifications;
+    if (pushNotifications != null) unawaited(pushNotifications.dispose());
     unawaited(_chatNotifications.dispose());
     _router.dispose();
     super.dispose();

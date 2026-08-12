@@ -124,10 +124,18 @@ class _StudentSubjectRequestsBodyState
               onPressed: context.read<SubjectRequestPaymentCubit>().verify,
             );
           }
+          if (payment.phase == SubjectRequestPaymentPhase.terminalFailure) {
+            return CustomAppButton(
+              text: S.of(context).retry,
+              onPressed: state.canSubmit ? () => _submit(state) : null,
+            );
+          }
           final loading =
               state.isSubmitting ||
               payment.phase == SubjectRequestPaymentPhase.creatingCheckout ||
-              payment.phase == SubjectRequestPaymentPhase.verifying;
+              payment.phase == SubjectRequestPaymentPhase.openingTamara ||
+              payment.phase == SubjectRequestPaymentPhase.verifying ||
+              payment.phase == SubjectRequestPaymentPhase.completed;
           return CustomAppButton(
             text: S.of(context).confirmRequest,
             isLoading: loading,

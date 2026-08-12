@@ -85,11 +85,22 @@ class ChatNotificationCoordinator {
   }
 
   void handleNotification(Map<String, dynamic> payload) {
-    _handle(
-      ChatNotificationEvent.fromNotification(
-        ChatNotificationModel.fromJson(payload),
-      ),
-    );
+    final notification = ChatNotificationModel.fromJson(payload);
+    if (!notification.isChatMessage) return;
+    _handle(ChatNotificationEvent.fromNotification(notification));
+  }
+
+  bool claimPushAlert({
+    required String messageId,
+    required String roomId,
+    required String senderId,
+  }) {
+    final id = messageId.trim();
+    if (id.isEmpty || !_notifiedIds.add(id)) return false;
+    _trimDedupSets();
+    final userId = _currentUserId()?.trim() ?? '';
+    if (senderId.trim().isNotEmpty && senderId.trim() == userId) return false;
+    return roomId.trim().isNotEmpty && roomId.trim() != _currentRoomId;
   }
 
   void _handle(ChatNotificationEvent event) {

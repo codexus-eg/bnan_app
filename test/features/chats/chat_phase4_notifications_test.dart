@@ -2,6 +2,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/chats/data/models/chat_attachment_model.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
+import 'package:bnan_app/features/chats/data/models/chat_notification_model.dart';
 import 'package:bnan_app/features/chats/data/models/chat_messages_response_model.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 import 'package:bnan_app/features/chats/data/models/chat_rooms_response_model.dart';
@@ -16,6 +17,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('socket parser recognizes current FCM-shaped chat data', () {
+    final notification = ChatNotificationModel.fromJson({
+      'data': {
+        'type': 'notification',
+        'key': 'NEW_MESSAGE',
+        'notificationType': 'chat',
+        'messageId': 'm1',
+        'roomId': 'r1',
+        'senderId': 's1',
+      },
+    });
+    expect(notification.isChatMessage, isTrue);
+    expect(notification.data.roomId, 'r1');
+    expect(notification.data.messageId, 'm1');
+  });
+
   test(
     'incoming outside current room alerts once and deduplicates id',
     () async {
@@ -93,7 +110,7 @@ void main() {
     );
 
     coordinator.handleNotification({
-      'key': 'chat-message',
+      'key': 'NEW_MESSAGE',
       'resource': {'id': 'message-id', 'model': 'Message'},
       'data': {
         'room': {'_id': 'room/id'},
