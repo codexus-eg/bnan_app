@@ -90,6 +90,25 @@ class ChatNotificationCoordinator {
     _handle(ChatNotificationEvent.fromNotification(notification));
   }
 
+  void handlePush({
+    required String messageId,
+    required String roomId,
+    required String senderId,
+    required String title,
+    required String body,
+  }) {
+    _handle(
+      ChatNotificationEvent.fromPush(
+        messageId: messageId,
+        roomId: roomId,
+        senderId: senderId,
+        senderName: title,
+        message: body,
+      ),
+      updateRoom: false,
+    );
+  }
+
   bool claimPushAlert({
     required String messageId,
     required String roomId,
@@ -103,11 +122,11 @@ class ChatNotificationCoordinator {
     return roomId.trim().isNotEmpty && roomId.trim() != _currentRoomId;
   }
 
-  void _handle(ChatNotificationEvent event) {
+  void _handle(ChatNotificationEvent event, {bool updateRoom = true}) {
     final id = event.messageId.trim();
     if (id.isEmpty) return;
 
-    if (event.roomId.isNotEmpty && _roomUpdateIds.add(id)) {
+    if (updateRoom && event.roomId.isNotEmpty && _roomUpdateIds.add(id)) {
       _roomEvents.add(event);
     }
     if (!_notifiedIds.add(id)) return;

@@ -49,4 +49,19 @@ class ChatNotificationEvent {
       createdAt: DateTime.now(),
     );
   }
+
+  factory ChatNotificationEvent.fromPush({
+    required String messageId,
+    required String roomId,
+    required String senderId,
+    required String senderName,
+    required String message,
+  }) => ChatNotificationEvent(
+    messageId: messageId,
+    roomId: roomId,
+    senderId: senderId,
+    senderName: senderName,
+    message: message,
+    createdAt: DateTime.now(),
+  );
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "315615272268",
+    "project_id": "bnan-academy",
+    "storage_bucket": "bnan-academy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315615272268:android:cf24e74fd40950b9fd43e9",
+        "android_client_info": {
+          "package_name": "com.bnanacademy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBese_AFycfbdprg6tWZjyPwvR3GViyzdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315615272268:android:70cf02baedee1253fd43e9",
+        "android_client_info": {
+          "package_name": "com.example.bnan_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBese_AFycfbdprg6tWZjyPwvR3GViyzdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

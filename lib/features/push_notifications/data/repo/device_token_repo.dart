@@ -2,5 +2,5 @@ import 'package:bnan_app/features/push_notifications/data/models/device_token_pa
 
 abstract interface class DeviceTokenRepo {
   Future<void> register(DeviceTokenPayload payload);
-  Future<void> delete({required String token, required String deviceId});
+  Future<void> delete({required String token});
 }

@@ -1,4 +1,4 @@
-package com.example.bnan_app
+package com.bnanacademy.app
 
 import io.flutter.embedding.android.FlutterActivity
 

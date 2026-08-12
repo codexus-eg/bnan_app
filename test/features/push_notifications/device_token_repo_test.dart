@@ -16,10 +16,10 @@ void main() {
         appVersion: '1.0.0',
       ),
     );
-    await repo.delete(token: 'token', deviceId: 'device');
+    await repo.delete(token: 'token');
     expect(api.paths, [EndPoints.deviceToken, EndPoints.deviceToken]);
     expect(api.protected, everyElement(isTrue));
-    expect(api.bodies.last, {'token': 'token', 'deviceId': 'device'});
+    expect(api.bodies.last, {'token': 'token'});
   });
 }
 

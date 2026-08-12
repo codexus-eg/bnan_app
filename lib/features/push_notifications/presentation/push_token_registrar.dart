@@ -5,13 +5,13 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/push_notifications/data/installation_id_store.dart';
 import 'package:bnan_app/features/push_notifications/data/models/device_token_payload.dart';
 import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class PushTokenRegistrar {
   PushTokenRegistrar(this._messaging, this._repo, this._installationIds);
-  final FirebaseMessaging _messaging;
+  final PushMessaging _messaging;
   final DeviceTokenRepo _repo;
   final InstallationIdStore _installationIds;
   static const _permissionKey = 'push_permission_requested';
@@ -62,10 +62,7 @@ class PushTokenRegistrar {
     try {
       final token = await _messaging.getToken();
       if (token?.isNotEmpty == true) {
-        await _repo.delete(
-          token: token!,
-          deviceId: await _installationIds.getOrCreate(),
-        );
+        await _repo.delete(token: token!);
       }
     } catch (error) {
       _debug('Push token deletion failed', error);
@@ -78,7 +75,7 @@ class PushTokenRegistrar {
 
   Future<void> _requestPermissionOnce() async {
     if (CacheHelper.getData(key: _permissionKey) == true) return;
-    await _messaging.requestPermission(alert: true, badge: true, sound: true);
+    await _messaging.requestPermission();
     await CacheHelper.saveData(key: _permissionKey, value: true);
   }
 

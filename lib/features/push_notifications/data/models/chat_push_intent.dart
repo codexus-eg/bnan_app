@@ -11,7 +11,11 @@ class ChatPushIntent {
   });
 
   final String roomId, messageId, senderId, notificationId, title, body;
-  String get dedupKey => notificationId.isNotEmpty ? notificationId : messageId;
+  String get dedupKey => notificationId.isNotEmpty
+      ? notificationId
+      : messageId.isNotEmpty
+      ? messageId
+      : '$roomId|$senderId|$body';
 
   static ChatPushIntent? tryParse(
     Map<String, dynamic> data, {
@@ -23,7 +27,10 @@ class ChatPushIntent {
     if (key != 'NEW_MESSAGE' && type != 'chat') return null;
     final fallback = _params(data['params']);
     final roomId = _text(
-      data['roomId'] ?? fallback['roomId'] ?? fallback['chatId'],
+      data['resourceId'] ??
+          fallback['roomId'] ??
+          fallback['chatId'] ??
+          data['roomId'],
     );
     if (roomId.isEmpty) return null;
     return ChatPushIntent(
