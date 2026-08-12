@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/models/home_state_model.dart';
-import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/assets.dart';
-import 'package:bnan_app/features/home_student/data/models/notification_model.dart';
+import 'package:bnan_app/features/dashboard/data/models/dashboard_notification.dart';
+import 'package:bnan_app/features/dashboard/data/models/supervisor_dashboard_model.dart';
 import 'package:bnan_app/generated/l10n.dart';
 
 class SupervisorHomeUiData {
@@ -9,47 +9,34 @@ class SupervisorHomeUiData {
     required this.summary,
     required this.notifications,
   });
-
   final List<HomeStateModel> summary;
-  final List<NotificationModel> notifications;
+  final List<DashboardNotification> notifications;
 
-  factory SupervisorHomeUiData.mock(S s) {
-    // TODO: Replace these values with the supervisor dashboard response.
+  factory SupervisorHomeUiData.fromDashboard(
+    S s,
+    SupervisorDashboardModel data,
+  ) {
+    final ideal = data.idealTeacher;
     return SupervisorHomeUiData(
       summary: [
         HomeStateModel(
           icon: ImageManager.teacherBookTwoIcon,
-          value: '4',
+          value: '${data.classrooms}',
           title: s.classes,
         ),
         HomeStateModel(
           icon: ImageManager.fileCheckIcon,
-          value: '20',
+          value: '${data.evaluations}',
           title: s.evaluations,
         ),
-        if (SessionManager.instance.isEgyptianSupervisor)
+        if (ideal != null)
           HomeStateModel(
             icon: ImageManager.crownSimple,
-            value: '--',
-            title: s.weeklyIdealStudent,
+            value: '${ideal.points}',
+            title: ideal.fullName,
           ),
       ],
-      notifications: [
-        NotificationModel(
-          title: s.supervisorAssignedNotification,
-          time: s.today,
-          isUnread: true,
-        ),
-        NotificationModel(
-          title: s.weeklyEvaluationAddedNotification,
-          time: s.today,
-          isUnread: true,
-        ),
-        NotificationModel(
-          title: s.newClassMessageNotification,
-          time: s.yesterday,
-        ),
-      ],
+      notifications: data.notifications,
     );
   }
 }

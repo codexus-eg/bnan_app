@@ -98,8 +98,8 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerLazySingleton<AdminSubjectRequestsRepo>(
     () => AdminSubjectRequestsRepoImpl(getIt<ApiConsumer>()),
   );
-  getIt.registerLazySingleton<AdminDashboardRepo>(
-    () => AdminDashboardRepoImpl(getIt<ApiConsumer>()),
+  getIt.registerLazySingleton<DashboardRepo>(
+    () => DashboardRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<IdealStudentRepo>(
     () => IdealStudentRepoImpl(getIt<ApiConsumer>()),
@@ -136,9 +136,6 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<StudentSubjectsRepo>(
     () => StudentSubjectsRepoImpl(getIt<ApiConsumer>()),
-  );
-  getIt.registerLazySingleton<HomeStudentRepo>(
-    () => HomeStudentRepoImpl(apiConsumer: getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<StudentGroupsRepo>(
     () => StudentGroupsRepoImpl(apiConsumer: getIt<ApiConsumer>()),
@@ -306,9 +303,6 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<GetMySubjectsCubit>(
     () => GetMySubjectsCubit(getIt<StudentSubjectsRepo>()),
   );
-  getIt.registerFactory<GetStudentSubscriptionCubit>(
-    () => GetStudentSubscriptionCubit(getIt<HomeStudentRepo>()),
-  );
   getIt.registerFactory<GetMyEnrollmentsCubit>(
     () => GetMyEnrollmentsCubit(getIt<StudentGroupsRepo>()),
   );
@@ -341,8 +335,8 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<AdminSubjectRequestActionsCubit>(
     () => AdminSubjectRequestActionsCubit(getIt<AdminSubjectRequestsRepo>()),
   );
-  getIt.registerFactory<AdminDashboardCubit>(
-    () => AdminDashboardCubit(getIt<AdminDashboardRepo>()),
+  getIt.registerFactoryParam<DashboardCubit, DashboardRole, void>(
+    (role, _) => DashboardCubit(getIt<DashboardRepo>(), role),
   );
   getIt.registerFactory<IdealStudentCubit>(
     () => IdealStudentCubit(getIt<IdealStudentRepo>()),

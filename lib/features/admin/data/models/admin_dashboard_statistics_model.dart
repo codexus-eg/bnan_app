@@ -26,7 +26,11 @@ class AdminDashboardStatisticsModel {
 
   factory AdminDashboardStatisticsModel.fromResponse(Object? response) {
     final data = adminMap(adminMap(response)['data']);
-    final json = adminMap(data['statistics']);
+    return AdminDashboardStatisticsModel.fromJson(data['statistics']);
+  }
+
+  factory AdminDashboardStatisticsModel.fromJson(Object? value) {
+    final json = adminMap(value);
     return AdminDashboardStatisticsModel(
       totalStudents: adminInt(json['totalStudents']),
       pendingStudentRegistrations: adminInt(

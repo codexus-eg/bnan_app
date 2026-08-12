@@ -9,6 +9,8 @@ import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_body.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 
 class ParentHomeView extends StatefulWidget {
   const ParentHomeView({super.key});
@@ -34,6 +36,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
   };
 
   void _changeIndex(int index) {
+    if (index == 0 && currentIndex != 0) {
+      context.read<DashboardCubit>().refresh();
+    }
     setState(() => currentIndex = index);
   }
 

@@ -5,6 +5,7 @@ import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor
 import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_navigation_item.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:bnan_app/features/dashboard/data/models/dashboard_notification.dart';
 
 class SupervisorHomeScaffold extends StatelessWidget {
   const SupervisorHomeScaffold({
@@ -18,6 +19,8 @@ class SupervisorHomeScaffold extends StatelessWidget {
     required this.onDrawerTap,
     required this.onBottomTap,
     required this.onLogoutTap,
+    required this.loading,
+    required this.onNotificationTap,
   });
 
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -29,6 +32,8 @@ class SupervisorHomeScaffold extends StatelessWidget {
   final ValueChanged<int> onDrawerTap;
   final ValueChanged<int> onBottomTap;
   final VoidCallback onLogoutTap;
+  final bool loading;
+  final ValueChanged<DashboardNotification> onNotificationTap;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +52,8 @@ class SupervisorHomeScaffold extends StatelessWidget {
           userName: userName,
           data: data,
           onMenuTap: () => scaffoldKey.currentState?.openDrawer(),
+          loading: loading,
+          onNotificationTap: onNotificationTap,
         ),
         bottomNavigationBar: CustomBottomNavBar(
           items: bottomItems.map((item) => item.toBottomItem()).toList(),

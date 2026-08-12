@@ -6,47 +6,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TeacherNoteCard extends StatelessWidget {
-  const TeacherNoteCard({super.key});
+  const TeacherNoteCard({super.key, required this.note});
+  final String note;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsetsDirectional.all(8),
-      decoration: BoxDecoration(
-        color: ColorManager.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            ImageManager.starOutlinedIcon,
-            width: 24,
-            height: 24,
-    
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsetsDirectional.all(8),
+    decoration: BoxDecoration(
+      color: ColorManager.white,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Row(
+      children: [
+        SvgPicture.asset(ImageManager.starOutlinedIcon, width: 24, height: 24),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                S.of(context).teacherNote,
+                style: StylesManager.styleBold14(
+                  context,
+                ).copyWith(color: ColorManager.mainColor14),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                note,
+                style: StylesManager.styleRegular12(
+                  context,
+                ).copyWith(color: ColorManager.greyA8AF),
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).teacherNote,
-                  style: StylesManager.styleBold14(context).copyWith(
-                    color: ColorManager.mainColor14,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  S.of(context).teacherNoteText,
-                  style: StylesManager.styleRegular12(context).copyWith(
-                    color: ColorManager.greyA8AF,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }

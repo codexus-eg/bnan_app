@@ -2,12 +2,20 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_preview_cards.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
 import 'package:flutter/material.dart';
 
 class ParentChildrenSection extends StatelessWidget {
-  const ParentChildrenSection({super.key, required this.onShowAll});
+  const ParentChildrenSection({
+    super.key,
+    required this.onShowAll,
+    required this.children,
+    required this.loading,
+  });
 
   final VoidCallback onShowAll;
+  final List<ParentChildModel> children;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +45,7 @@ class ParentChildrenSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        const ParentChildrenPreviewCards(),
+        ParentChildrenPreviewCards(children: children, loading: loading),
       ],
     );
   }
