@@ -3,6 +3,7 @@ abstract class EndPoints {
   static String get socketUrl => 'https://bnan.0xcode7.xyz';
   static const String register = '/auth/register';
   static const String login = '/auth/login';
+  static const String refreshToken = '/auth/refresh-token';
   static const String forgotPassword = '/auth/forgotPassword';
   static const String verifyResetCode = '/auth/verifyResetCode';
   static const String resetPassword = '/auth/resetPassword';

@@ -1,4 +1,3 @@
-import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/features/dashboard/data/models/dashboard_data.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
@@ -23,7 +22,6 @@ class DashboardBuilder<T extends DashboardData> extends StatelessWidget {
           if (state is DashboardRefreshFailure) {
             showCustomSnackBar(context, state.message, false);
           }
-          if (state is DashboardSessionInvalid) AppLogout.perform(context);
         },
         builder: (context, state) {
           if (state is DashboardFailure) {

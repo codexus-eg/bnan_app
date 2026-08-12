@@ -5,10 +5,12 @@ class AuthResponseModel {
     required this.success,
     required this.token,
     required this.user,
+    this.refreshToken = '',
   });
 
   final bool success;
   final String token;
+  final String refreshToken;
   final AuthUserModel user;
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class AuthResponseModel {
     return AuthResponseModel(
       success: json['success'] == true,
       token: (json['token'] ?? '').toString(),
+      refreshToken: (json['refreshToken'] ?? '').toString(),
       user: AuthUserModel.fromJson(userJson),
     );
   }

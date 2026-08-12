@@ -31,9 +31,6 @@ class DashboardCubit extends Cubit<DashboardState> {
   }
 
   void _emitFailure(DashboardData? old, String message, int? code) {
-    if (code == 401 || code == 403) {
-      return emit(DashboardSessionInvalid(message));
-    }
     emit(
       old == null
           ? DashboardFailure(message, code)

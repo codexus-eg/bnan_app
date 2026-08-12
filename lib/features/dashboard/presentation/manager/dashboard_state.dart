@@ -29,8 +29,3 @@ final class DashboardFailure extends DashboardState {
   final String message;
   final int? statusCode;
 }
-
-final class DashboardSessionInvalid extends DashboardState {
-  DashboardSessionInvalid(this.message);
-  final String message;
-}

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 typedef SessionChangeListener =
     Future<void> Function(String? previousUserId, String? nextUserId);
 typedef SessionWillClearListener = Future<void> Function();
+typedef AccessTokenChangeListener = void Function(String? accessToken);
 
 class SessionManager {
   SessionManager._();
@@ -22,6 +23,7 @@ class SessionManager {
   List<RegistrationMode> _registrationModes = const [];
   final Set<SessionChangeListener> _sessionChangeListeners = {};
   final Set<SessionWillClearListener> _beforeClearListeners = {};
+  final Set<AccessTokenChangeListener> _accessTokenChangeListeners = {};
 
   String? get userId => _userId;
   String? get userRole => _userRole;
@@ -43,6 +45,9 @@ class SessionManager {
 
   void removeBeforeClearListener(SessionWillClearListener listener) =>
       _beforeClearListeners.remove(listener);
+
+  void addAccessTokenChangeListener(AccessTokenChangeListener listener) =>
+      _accessTokenChangeListeners.add(listener);
 
   bool get isEgyptianStudent =>
       role == UserRole.student &&
@@ -79,25 +84,13 @@ class SessionManager {
     debugPrint('SessionManager.saveSession started');
     final previousUserId = _userId;
 
-    _accessToken = accessToken;
-    _refreshToken = refreshToken;
     _userId = userId;
     _userRole = userRole;
     _userName = userName;
     _registrationMode = registrationMode;
     _registrationModes = List.unmodifiable(registrationModes);
 
-    await SecureCacheHelper.saveData(
-      key: SecureCacheKeys.accessToken,
-      value: accessToken,
-    );
-    debugPrint('Access token write completed');
-
-    await SecureCacheHelper.saveData(
-      key: SecureCacheKeys.refreshToken,
-      value: refreshToken,
-    );
-    debugPrint('Refresh token write completed');
+    await saveTokens(accessToken: accessToken, refreshToken: refreshToken);
 
     if (userId != null) {
       await SecureCacheHelper.saveData(
@@ -162,6 +155,35 @@ class SessionManager {
   Future<String?> getRefreshToken() async {
     return _refreshToken ??
         await SecureCacheHelper.getData(key: SecureCacheKeys.refreshToken);
+  }
+
+  Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {
+    await SecureCacheHelper.saveData(
+      key: SecureCacheKeys.refreshToken,
+      value: refreshToken,
+    );
+    await SecureCacheHelper.saveData(
+      key: SecureCacheKeys.accessToken,
+      value: accessToken,
+    );
+    _refreshToken = refreshToken;
+    _accessToken = accessToken;
+    for (final listener in List.of(_accessTokenChangeListeners)) {
+      listener(accessToken);
+    }
+  }
+
+  Future<void> clearTokens() async {
+    _accessToken = null;
+    _refreshToken = null;
+    await SecureCacheHelper.removeData(key: SecureCacheKeys.accessToken);
+    await SecureCacheHelper.removeData(key: SecureCacheKeys.refreshToken);
+    for (final listener in List.of(_accessTokenChangeListeners)) {
+      listener(null);
+    }
   }
 
   Future<String?> getUserId() async {
