@@ -26,6 +26,9 @@ abstract class EndPoints {
   static const String teacherClassrooms = '/teachers/myclassrooms';
   static const String gulfTeacherRequests = '/gulf-teacher-requests';
   static const String supervisorMyClassrooms = '/supervisors/me/classrooms';
+  static const String supervisorTeachers = '/supervisors/me/teachers';
+  static const String supervisorIdealTeachers =
+      '/supervisors/me/ideal-teachers';
   static const String teacherAssignedSubjects =
       '/teachers/me/assigned-subjects';
   static const String users = '/users';

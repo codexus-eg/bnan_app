@@ -1852,6 +1852,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الطالب المثالي للأسبوع"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "ترتيب الطلاب المثاليين هذا الأسبوع"),
+        "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
+        "selectIdealTeacher":
+            MessageLookupByLibrary.simpleMessage("اختر المعلم المثالي"),
+        "issueCertificate":
+            MessageLookupByLibrary.simpleMessage("إصدار الشهادة"),
+        "noTeachersAvailable":
+            MessageLookupByLibrary.simpleMessage("لا يوجد معلمون متاحون"),
+        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم إصدار شهادة المعلم المثالي بنجاح"),
+        "idealTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
         "weeklyLessons": m39,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),

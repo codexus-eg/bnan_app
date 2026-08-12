@@ -50,6 +50,10 @@ void main() {
       drawer.where((item) => item.route == Routes.weeklyIdealStudents),
       hasLength(1),
     );
+    expect(
+      drawer.where((item) => item.route == Routes.idealTeacher),
+      hasLength(1),
+    );
   });
 
   test('Gulf supervisor sees only lessons management', () async {
@@ -68,6 +72,10 @@ void main() {
       drawer.where((item) => item.route == Routes.weeklyIdealStudents),
       isEmpty,
     );
+    expect(
+      drawer.where((item) => item.route == Routes.idealTeacher),
+      hasLength(1),
+    );
   });
 
   test('supervisor without a mode sees neither schedule item', () async {
@@ -85,6 +93,10 @@ void main() {
     expect(
       drawer.where((item) => item.route == Routes.weeklyIdealStudents),
       isEmpty,
+    );
+    expect(
+      drawer.where((item) => item.route == Routes.idealTeacher),
+      hasLength(1),
     );
   });
 }

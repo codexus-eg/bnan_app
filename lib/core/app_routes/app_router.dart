@@ -18,6 +18,7 @@ import 'package:bnan_app/features/packages_management/presentation/manager/get_p
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
 import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_student_access_policy.dart';
+import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teacher_access_policy.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
@@ -766,6 +767,21 @@ GoRouter buildRouter() {
                 ),
             ],
             child: const WeeklyIdealStudentView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.idealTeacher,
+        redirect: (context, state) {
+          if (IdealTeacherAccessPolicy.canAccessCurrent) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) => getIt<SupervisorIdealTeacherCubit>(),
+            child: const IdealTeacherView(),
           ),
           key: state.pageKey,
         ),

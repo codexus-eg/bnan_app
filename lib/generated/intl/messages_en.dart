@@ -1916,6 +1916,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Weekly Ideal Student"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "Weekly Ideal Students Ranking"),
+        "idealTeacher": MessageLookupByLibrary.simpleMessage("Ideal Teacher"),
+        "selectIdealTeacher":
+            MessageLookupByLibrary.simpleMessage("Select the ideal teacher"),
+        "issueCertificate":
+            MessageLookupByLibrary.simpleMessage("Issue Certificate"),
+        "noTeachersAvailable":
+            MessageLookupByLibrary.simpleMessage("No teachers are available"),
+        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Ideal teacher certificate issued successfully"),
+        "idealTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("Ideal Teacher Certificate"),
         "weeklyLessons": m39,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("Weekly Plans"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("Welcome"),

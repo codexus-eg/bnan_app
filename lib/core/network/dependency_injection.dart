@@ -103,6 +103,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerLazySingleton<IdealStudentRepo>(
     () => IdealStudentRepoImpl(getIt<ApiConsumer>()),
   );
+  getIt.registerLazySingleton<SupervisorIdealTeacherRepo>(
+    () => SupervisorIdealTeacherRepoImpl(getIt<ApiConsumer>()),
+  );
   getIt.registerLazySingleton<DiscountCodesRepo>(
     () => DiscountCodesRepoImpl(getIt<ApiConsumer>()),
   );
@@ -339,6 +342,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerFactory<IdealStudentCubit>(
     () => IdealStudentCubit(getIt<IdealStudentRepo>()),
+  );
+  getIt.registerFactory<SupervisorIdealTeacherCubit>(
+    () => SupervisorIdealTeacherCubit(getIt<SupervisorIdealTeacherRepo>()),
   );
   getIt.registerFactory<DiscountCodesCubit>(
     () => DiscountCodesCubit(getIt<DiscountCodesRepo>()),
