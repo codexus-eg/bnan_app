@@ -4,6 +4,8 @@ class SubjectRequestPaymentDraft {
     required this.idempotencyKey,
     required this.subjectId,
     required this.packageId,
+    required this.payloadFingerprint,
+    required this.ownerUserId,
     this.checkoutUrl,
   });
 
@@ -12,6 +14,8 @@ class SubjectRequestPaymentDraft {
   final String idempotencyKey;
   final String subjectId;
   final String packageId;
+  final String payloadFingerprint;
+  final String ownerUserId;
   final String? checkoutUrl;
 
   Map<String, dynamic> toJson() => {
@@ -20,6 +24,8 @@ class SubjectRequestPaymentDraft {
     'idempotencyKey': idempotencyKey,
     'subjectId': subjectId,
     'packageId': packageId,
+    'payloadFingerprint': payloadFingerprint,
+    'ownerUserId': ownerUserId,
     'checkoutUrl': checkoutUrl,
   };
 
@@ -29,6 +35,8 @@ class SubjectRequestPaymentDraft {
         idempotencyKey: (json['idempotencyKey'] ?? '').toString(),
         subjectId: (json['subjectId'] ?? '').toString(),
         packageId: (json['packageId'] ?? '').toString(),
+        payloadFingerprint: (json['payloadFingerprint'] ?? '').toString(),
+        ownerUserId: (json['ownerUserId'] ?? '').toString(),
         checkoutUrl: json['checkoutUrl']?.toString(),
       );
 }

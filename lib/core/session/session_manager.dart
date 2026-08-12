@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 typedef SessionChangeListener =
     Future<void> Function(String? previousUserId, String? nextUserId);
+typedef SessionWillClearListener = Future<void> Function();
 
 class SessionManager {
   SessionManager._();
@@ -20,6 +21,7 @@ class SessionManager {
   RegistrationMode? _registrationMode;
   List<RegistrationMode> _registrationModes = const [];
   final Set<SessionChangeListener> _sessionChangeListeners = {};
+  final Set<SessionWillClearListener> _beforeClearListeners = {};
 
   String? get userId => _userId;
   String? get userRole => _userRole;
@@ -35,6 +37,12 @@ class SessionManager {
 
   void removeSessionChangeListener(SessionChangeListener listener) =>
       _sessionChangeListeners.remove(listener);
+
+  void addBeforeClearListener(SessionWillClearListener listener) =>
+      _beforeClearListeners.add(listener);
+
+  void removeBeforeClearListener(SessionWillClearListener listener) =>
+      _beforeClearListeners.remove(listener);
 
   bool get isEgyptianStudent =>
       role == UserRole.student &&
@@ -179,6 +187,14 @@ class SessionManager {
   Future<void> clearSession() async {
     debugPrint('SessionManager.clearSession started');
     final previousUserId = _userId;
+
+    for (final listener in List.of(_beforeClearListeners)) {
+      try {
+        await listener();
+      } catch (error) {
+        debugPrint('Before session clear hook failed: ${error.runtimeType}');
+      }
+    }
 
     _accessToken = null;
     _refreshToken = null;

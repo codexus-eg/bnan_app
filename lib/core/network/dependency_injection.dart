@@ -17,6 +17,12 @@ import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubi
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
+import 'package:bnan_app/features/push_notifications/data/installation_id_store.dart';
+import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo.dart';
+import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo_impl.dart';
+import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/features/push_notifications/presentation/push_notification_service.dart';
+import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo_impl.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
@@ -46,10 +52,12 @@ import 'package:bnan_app/features/student_subject_requests/presentation/manager/
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final getIt = GetIt.instance;
 
-void setupServiceLocator() {
+void setupServiceLocator({bool firebaseAvailable = false}) {
   // Core
   getIt.registerLazySingleton<Dio>(() => Dio());
 
@@ -57,6 +65,10 @@ void setupServiceLocator() {
     () => DioConsumer(dio: getIt<Dio>()),
   );
   getIt.registerLazySingleton<ApiConsumer>(() => getIt<DioConsumer>());
+  getIt.registerLazySingleton<DeviceTokenRepo>(
+    () => DeviceTokenRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<InstallationIdStore>(InstallationIdStore.new);
 
   // Repositories
 
@@ -508,6 +520,27 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<ChatNotificationCoordinator>(
     () => ChatNotificationCoordinator(getIt<SocketService>()),
   );
+  if (firebaseAvailable) {
+    getIt.registerLazySingleton<LocalPushNotifications>(
+      () => LocalPushNotifications(FlutterLocalNotificationsPlugin()),
+    );
+    getIt.registerLazySingleton<PushTokenRegistrar>(
+      () => PushTokenRegistrar(
+        FirebaseMessaging.instance,
+        getIt<DeviceTokenRepo>(),
+        getIt<InstallationIdStore>(),
+      ),
+    );
+    getIt.registerLazySingleton<PushNotificationService>(
+      () => PushNotificationService(
+        firebaseAvailable: true,
+        messaging: FirebaseMessaging.instance,
+        local: getIt<LocalPushNotifications>(),
+        registrar: getIt<PushTokenRegistrar>(),
+        chat: getIt<ChatNotificationCoordinator>(),
+      ),
+    );
+  }
   getIt.registerFactory<SendMessageCubit>(
     () => SendMessageCubit(getIt<ChatRepo>()),
   );

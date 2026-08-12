@@ -33,6 +33,23 @@ void main() {
       expect(json.containsKey('notes'), isFalse);
     });
 
+    test('checkout response safely parses numeric amount variants', () {
+      final payment = SubjectRequestPayment.fromJson({
+        'data': {
+          'paymentId': 'pay-1',
+          'status': 'pending',
+          'originalAmount': 300,
+          'discountAmount': '50.5',
+          'finalAmount': 249.5,
+          'currency': 'SAR',
+        },
+      });
+      expect(payment.originalAmount, 300);
+      expect(payment.discountAmount, 50.5);
+      expect(payment.finalAmount, 249.5);
+      expect(payment.currency, 'SAR');
+    });
+
     test('Gulf checkout uses singular subjectId', () {
       final json = const GulfSubjectRequestPayload(
         subjectId: 's1',
@@ -200,6 +217,7 @@ void main() {
         await cubit.submitEgyptian();
         expect(repo.availableCalls, 2);
         expect(repo.requestCalls, 2);
+        expect(cubit.state.message, 'duplicate');
         await cubit.close();
       },
     );
@@ -207,6 +225,22 @@ void main() {
 
   group('subject request payment cubit', () {
     test('network timeout retry preserves idempotency key', () async {
+      final store = MemoryPaymentStore();
+      final repo = FakeRepo()
+        ..checkoutResults.add(
+          Left(Failure(message: 'timeout', responseReceived: false)),
+        )
+        ..checkoutResults.add(Right(_payment()));
+      final cubit = _paymentCubit(repo, store: store);
+      await cubit.checkout(_gulfPayload());
+      expect(store.draft?.paymentId, isEmpty);
+      expect(store.draft?.idempotencyKey, 'key-1');
+      await cubit.checkout(_gulfPayload());
+      expect(repo.checkoutKeys, ['key-1', 'key-1']);
+      await cubit.close();
+    });
+
+    test('changed checkout payload gets a new key after timeout', () async {
       final repo = FakeRepo()
         ..checkoutResults.add(
           Left(Failure(message: 'timeout', responseReceived: false)),
@@ -214,10 +248,24 @@ void main() {
         ..checkoutResults.add(Right(_payment()));
       final cubit = _paymentCubit(repo);
       await cubit.checkout(_gulfPayload());
-      await cubit.checkout(_gulfPayload());
-      expect(repo.checkoutKeys, ['key-1', 'key-1']);
+      await cubit.checkout(_gulfPayload(notes: 'changed'));
+      expect(repo.checkoutKeys, ['key-1', 'key-2']);
       await cubit.close();
     });
+
+    test(
+      'failed launcher reopens saved checkout without another API',
+      () async {
+        final repo = FakeRepo()..checkoutResults.add(Right(_payment()));
+        final cubit = _paymentCubit(repo);
+        await cubit.checkout(_gulfPayload());
+        cubit.checkoutLaunchFailed('cannot open');
+        await cubit.checkout(_gulfPayload());
+        expect(repo.checkoutKeys, ['key-1']);
+        expect(cubit.state.phase, SubjectRequestPaymentPhase.openingTamara);
+        await cubit.close();
+      },
+    );
 
     test('terminal failure allows new attempt with new key', () async {
       final repo = FakeRepo()
@@ -275,17 +323,16 @@ void main() {
     });
 
     test(
-      'completed payment clears feature draft after request id exists',
+      'completed payment clears feature draft without subscription',
       () async {
         final store = MemoryPaymentStore();
         final repo = FakeRepo()
           ..checkoutResults.add(Right(_payment()))
           ..reconcileResults.add(
-            Right(
+            const Right(
               SubjectRequestPayment(
                 paymentId: 'pay-1',
                 status: SubjectRequestPaymentStatus.completed,
-                subjectRequestId: 'request-1',
               ),
             ),
           );
@@ -312,16 +359,19 @@ SubjectRequestPaymentCubit _paymentCubit(
   maxPollAttempts: maxPollAttempts,
 );
 
-GulfSubjectRequestPayload _gulfPayload({String subjectId = 'enabled'}) =>
-    GulfSubjectRequestPayload(
-      subjectId: subjectId,
-      packageId: 'valid',
-      paymentAddress: const PaymentAddress(
-        city: 'Riyadh',
-        region: 'Riyadh',
-        line1: 'Road',
-      ),
-    );
+GulfSubjectRequestPayload _gulfPayload({
+  String subjectId = 'enabled',
+  String? notes,
+}) => GulfSubjectRequestPayload(
+  subjectId: subjectId,
+  packageId: 'valid',
+  notes: notes,
+  paymentAddress: const PaymentAddress(
+    city: 'Riyadh',
+    region: 'Riyadh',
+    line1: 'Road',
+  ),
+);
 
 SubjectRequestPayment _payment([
   String id = 'pay-1',

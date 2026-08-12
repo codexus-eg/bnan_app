@@ -4,6 +4,10 @@ import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.d
 import 'package:crypto/crypto.dart';
 
 String checkoutPayloadFingerprint(TamaraCheckoutRequest request) {
-  final payloadBytes = utf8.encode(jsonEncode(request.toJson()));
+  return checkoutMapFingerprint(request.toJson());
+}
+
+String checkoutMapFingerprint(Map<String, dynamic> payload) {
+  final payloadBytes = utf8.encode(jsonEncode(payload));
   return sha256.convert(payloadBytes).toString();
 }

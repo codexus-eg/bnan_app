@@ -17,6 +17,10 @@
 		</array>
 		<key>UIFileSharingEnabled</key>
 		<true/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>remote-notification</string>
+		</array>
 		<key>LSSupportsOpeningDocumentsInPlace</key>
 		<true/>
 	    <key>NSMicrophoneUsageDescription</key>

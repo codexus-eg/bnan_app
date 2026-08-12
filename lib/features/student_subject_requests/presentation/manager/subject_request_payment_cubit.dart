@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/features/payments/data/checkout_payload_fingerprint.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payment.dart';
@@ -30,9 +32,14 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
 
   Future<void> restore() async {
     final draft = _store.read();
-    if (draft == null || draft.paymentId.isEmpty) return;
+    if (draft == null) return;
+    if (draft.ownerUserId != _ownerUserId) {
+      await _store.clear();
+      return;
+    }
     _key = draft.idempotencyKey;
-    _fingerprint = '${draft.subjectId}|${draft.packageId}';
+    _fingerprint = draft.payloadFingerprint;
+    if (draft.paymentId.isEmpty) return;
     emit(
       SubjectRequestPaymentState(
         phase: SubjectRequestPaymentPhase.verifying,
@@ -47,8 +54,20 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   }
 
   Future<void> checkout(GulfSubjectRequestPayload payload) async {
-    if (state.phase == SubjectRequestPaymentPhase.creatingCheckout) return;
-    final fingerprint = '${payload.subjectId}|${payload.packageId}';
+    if (_isBusy) return;
+    final fingerprint = checkoutMapFingerprint(payload.toJson());
+    final currentPayment = state.payment;
+    if (currentPayment?.status.isProcessing == true) {
+      if (_fingerprint == fingerprint) {
+        emit(
+          SubjectRequestPaymentState(
+            phase: SubjectRequestPaymentPhase.openingTamara,
+            payment: currentPayment,
+          ),
+        );
+      }
+      return;
+    }
     if (_key == null || _fingerprint != fingerprint) {
       _key = _keys.create();
       _fingerprint = fingerprint;
@@ -58,13 +77,27 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
         phase: SubjectRequestPaymentPhase.creatingCheckout,
       ),
     );
+    final pendingDraft = SubjectRequestPaymentDraft(
+      paymentId: '',
+      idempotencyKey: _key!,
+      subjectId: payload.subjectId,
+      packageId: payload.packageId,
+      payloadFingerprint: fingerprint,
+      ownerUserId: _ownerUserId,
+    );
+    await _store.save(pendingDraft);
+    if (isClosed) return;
     final result = await _repo.checkout(
       payload: payload,
       idempotencyKey: _key!,
     );
     await result.fold(
       (failure) async {
-        if (failure.responseReceived) _resetAttempt();
+        if (failure.responseReceived) {
+          _resetAttempt();
+          await _store.clear();
+        }
+        if (isClosed) return;
         emit(
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.failure,
@@ -79,9 +112,12 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
             idempotencyKey: _key!,
             subjectId: payload.subjectId,
             packageId: payload.packageId,
+            payloadFingerprint: fingerprint,
+            ownerUserId: _ownerUserId,
             checkoutUrl: payment.checkoutUrl,
           ),
         );
+        if (isClosed) return;
         emit(
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.openingTamara,
@@ -98,6 +134,23 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       return Future.value();
     }
     return verify(reconcileFirst: true);
+  }
+
+  void checkoutLaunchFailed(String message) {
+    if (state.phase != SubjectRequestPaymentPhase.openingTamara) return;
+    emit(
+      SubjectRequestPaymentState(
+        phase: SubjectRequestPaymentPhase.failure,
+        payment: state.payment,
+        message: message,
+      ),
+    );
+  }
+
+  void completeHandling() {
+    if (state.phase == SubjectRequestPaymentPhase.completed) {
+      emit(const SubjectRequestPaymentState());
+    }
   }
 
   Future<void> verify({bool reconcileFirst = false}) async {
@@ -140,7 +193,9 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       if (isClosed) return;
       if (payment.status == SubjectRequestPaymentStatus.completed) {
         _polling = false;
-        if (payment.subjectRequestId?.isNotEmpty == true) await _store.clear();
+        await _store.clear();
+        _resetAttempt();
+        if (isClosed) return;
         emit(
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.completed,
@@ -150,7 +205,8 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       } else if (payment.status.isTerminal) {
         _polling = false;
         await _store.clear();
-        if (payment.status.allowsNewAttempt) _resetAttempt();
+        _resetAttempt();
+        if (isClosed) return;
         emit(
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.terminalFailure,
@@ -165,6 +221,14 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     _key = null;
     _fingerprint = null;
   }
+
+  bool get _isBusy =>
+      state.phase == SubjectRequestPaymentPhase.creatingCheckout ||
+      state.phase == SubjectRequestPaymentPhase.openingTamara ||
+      state.phase == SubjectRequestPaymentPhase.verifying ||
+      state.phase == SubjectRequestPaymentPhase.completed;
+
+  String get _ownerUserId => SessionManager.instance.userId?.trim() ?? '';
 
   @override
   Future<void> close() {

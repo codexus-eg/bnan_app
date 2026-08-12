@@ -119,9 +119,12 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
     );
     await result.fold(
       (failure) async {
-        emit(state.copyWith(isSubmitting: false, message: failure.message));
         if (failure.code == 'SUBJECT_ALREADY_REQUESTED') {
+          final message = failure.message;
           await load(refresh: true);
+          if (!isClosed) emit(state.copyWith(message: message));
+        } else {
+          emit(state.copyWith(isSubmitting: false, message: failure.message));
         }
       },
       (_) async {

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 class ChatNotificationModel {
   final String type;
   final String key;
+  final String notificationType;
   final ChatNotificationResourceModel resource;
   final ChatNotificationDataModel data;
   final ChatLocalizedTextModel title;
@@ -9,6 +12,7 @@ class ChatNotificationModel {
   const ChatNotificationModel({
     required this.type,
     required this.key,
+    required this.notificationType,
     required this.resource,
     required this.data,
     required this.title,
@@ -17,12 +21,20 @@ class ChatNotificationModel {
 
   factory ChatNotificationModel.fromJson(Map<String, dynamic> json) {
     final rawData = Map<String, dynamic>.from(json['data'] as Map? ?? {});
+    final params = _params(rawData['params']);
+    for (final key in ['roomId', 'messageId', 'senderId']) {
+      rawData.putIfAbsent(key, () => params[key]);
+    }
     for (final key in ['roomId', 'room', 'messageId', 'senderId', 'sender']) {
       rawData.putIfAbsent(key, () => json[key]);
     }
     return ChatNotificationModel(
       type: json['type']?.toString() ?? '',
-      key: json['key']?.toString() ?? '',
+      key: (json['key'] ?? rawData['key'])?.toString() ?? '',
+      notificationType:
+          (json['notificationType'] ?? rawData['notificationType'])
+              ?.toString() ??
+          '',
       resource: ChatNotificationResourceModel.fromJson(
         Map<String, dynamic>.from(json['resource'] as Map? ?? {}),
       ),
@@ -34,6 +46,19 @@ class ChatNotificationModel {
         Map<String, dynamic>.from(json['body'] as Map? ?? {}),
       ),
     );
+  }
+
+  bool get isChatMessage =>
+      key.trim().toUpperCase() == 'NEW_MESSAGE' ||
+      notificationType.trim().toLowerCase() == 'chat';
+
+  static Map<String, dynamic> _params(dynamic value) {
+    try {
+      final decoded = value is String ? jsonDecode(value) : value;
+      return decoded is Map ? Map<String, dynamic>.from(decoded) : {};
+    } catch (_) {
+      return {};
+    }
   }
 }
 
