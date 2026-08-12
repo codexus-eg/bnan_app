@@ -151,7 +151,7 @@ void main() {
     expect(find.text('Week 2'), findsNothing);
   });
 
-  testWidgets('empty supervisor classrooms shows no-data without requests', (
+  testWidgets('empty supervisor classrooms keeps actions and filters', (
     tester,
   ) async {
     final repo = _PlansRepo();
@@ -163,7 +163,9 @@ void main() {
     );
 
     expect(find.byType(NoDataWidget), findsOneWidget);
-    expect(find.byType(CustomDropdown), findsNothing);
+    expect(find.byType(CustomDropdown), findsNWidgets(2));
+    expect(find.text('Add a daily plan for students'), findsOneWidget);
+    expect(find.text('Upload study plan'), findsOneWidget);
     expect(find.byType(AppSkeletonizer), findsNothing);
     expect(repo.elapsedRequests, isEmpty);
     expect(repo.weekRequests, isEmpty);

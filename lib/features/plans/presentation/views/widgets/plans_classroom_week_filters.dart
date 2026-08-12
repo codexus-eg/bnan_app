@@ -51,7 +51,7 @@ class PlansClassroomWeekFilters extends StatelessWidget {
         null,
         S.of(context).loadingClassrooms,
       ),
-      PlansClassroomsEmpty() => _empty(),
+      PlansClassroomsEmpty() => _empty(context),
       PlansClassroomsFailure() => Column(
         children: [
           _filters(context, null, S.of(context).chooseClassRoom),
@@ -62,9 +62,9 @@ class PlansClassroomWeekFilters extends StatelessWidget {
     };
   }
 
-  Widget _empty() {
+  Widget _empty(BuildContext context) {
     onClassroomsChanged(const []);
-    return const SizedBox.shrink();
+    return _filters(context, const [], S.of(context).chooseClassRoom);
   }
 
   Widget _success(BuildContext context, List<PlanClassroomOption> classrooms) {

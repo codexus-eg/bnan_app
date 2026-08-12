@@ -50,5 +50,6 @@ List<DrawerItemModel> studentDrawerItems(BuildContext context) {
       title: S.of(context).myAccount,
       icon: ImageManager.userProfileIcon,
     ),
+    DrawerItemModel(title: S.of(context).messages, icon: ImageManager.chatIcon),
   ];
 }

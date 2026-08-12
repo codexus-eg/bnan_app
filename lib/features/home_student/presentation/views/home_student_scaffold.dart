@@ -6,6 +6,7 @@ import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_body.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_student_bottom_nav_bar.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/home_student_drawer.dart';
+import 'package:bnan_app/features/chats/presentation/navigation/chat_role_navigation.dart';
 import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -101,6 +102,8 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == evaluationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
+    } else if (index == ChatRoleNavigation.studentDrawerIndex) {
+      MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
     }
   }
 

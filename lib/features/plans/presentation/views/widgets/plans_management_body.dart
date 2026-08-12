@@ -55,54 +55,50 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
       listener: _onElapsedState,
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
-        child: _classroomsResolved && _availableClassrooms.isEmpty
-            ? const NoDataWidget()
-            : Column(
-                children: [
-                  if (widget.policy.showManagementActions) ...[
-                    PlansHeaderActions(
-                      policy: widget.policy,
-                      onAdd: _showAddDialog,
-                      onUpload: _showUploadDialog,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  if (widget.policy.showClassroomFilter)
-                    PlansClassroomWeekFilters(
-                      policy: widget.policy,
-                      selectedClassroom: selectedClassroom,
-                      selectedWeek: selectedWeek,
-                      weeksCount: weeksCount,
-                      elapsedState: elapsedState,
-                      onClassroomChanged: _onClassroomChanged,
-                      onWeekChanged: _onWeekChanged,
-                      onRetryElapsedWeeks: _retryElapsedWeeks,
-                      onClassroomsChanged: _scheduleClassroomSync,
-                    ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child:
-                        elapsedState is GetElapsedWeeksSuccess &&
-                            weeksCount == 0
-                        ? NoDataWidget(
-                            title: S.of(context).noStudyWeeksAvailable,
-                          )
-                        : weeklyState is GetWeeklyPlansEmpty
-                        ? PlansWeeklyContent(
-                            classroom: selectedClassroom,
-                            week: selectedWeek,
-                            showEmpty: widget.showEmpty,
-                          )
-                        : SingleChildScrollView(
-                            child: PlansWeeklyContent(
-                              classroom: selectedClassroom,
-                              week: selectedWeek,
-                              showEmpty: widget.showEmpty,
-                            ),
-                          ),
-                  ),
-                ],
+        child: Column(
+          children: [
+            if (widget.policy.showManagementActions) ...[
+              PlansHeaderActions(
+                policy: widget.policy,
+                onAdd: _showAddDialog,
+                onUpload: _showUploadDialog,
               ),
+              const SizedBox(height: 16),
+            ],
+            if (widget.policy.showClassroomFilter)
+              PlansClassroomWeekFilters(
+                policy: widget.policy,
+                selectedClassroom: selectedClassroom,
+                selectedWeek: selectedWeek,
+                weeksCount: weeksCount,
+                elapsedState: elapsedState,
+                onClassroomChanged: _onClassroomChanged,
+                onWeekChanged: _onWeekChanged,
+                onRetryElapsedWeeks: _retryElapsedWeeks,
+                onClassroomsChanged: _scheduleClassroomSync,
+              ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _classroomsResolved && _availableClassrooms.isEmpty
+                  ? const NoDataWidget()
+                  : elapsedState is GetElapsedWeeksSuccess && weeksCount == 0
+                  ? NoDataWidget(title: S.of(context).noStudyWeeksAvailable)
+                  : weeklyState is GetWeeklyPlansEmpty
+                  ? PlansWeeklyContent(
+                      classroom: selectedClassroom,
+                      week: selectedWeek,
+                      showEmpty: widget.showEmpty,
+                    )
+                  : SingleChildScrollView(
+                      child: PlansWeeklyContent(
+                        classroom: selectedClassroom,
+                        week: selectedWeek,
+                        showEmpty: widget.showEmpty,
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

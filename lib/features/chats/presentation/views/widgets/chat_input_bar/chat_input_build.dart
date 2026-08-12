@@ -29,6 +29,7 @@ extension ChatInputBuild on _ChatInputBarState {
 
   void handleState(BuildContext context, SendMessageState state) {
     if (state is SendMessageSuccess) {
+      context.read<GetRoomMessagesCubit>().addConfirmedMessage(state.message);
       handleSendSuccess();
     }
 

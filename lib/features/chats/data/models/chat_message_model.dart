@@ -55,7 +55,7 @@ class ChatMessageModel {
 
     return ChatMessageModel(
       id: json['id']?.toString() ?? '',
-      roomId: json['room']?.toString() ?? '',
+      roomId: _parseRoomId(json['room'] ?? json['roomId']),
       sender: senderJson is Map
           ? ChatSenderModel.fromJson(Map<String, dynamic>.from(senderJson))
           : const ChatSenderModel(id: '', fullName: '', role: ''),
@@ -74,5 +74,13 @@ class ChatMessageModel {
       updatedAt: DateTime.tryParse(json['updatedAt']?.toString() ?? ''),
       editedAt: DateTime.tryParse(json['editedAt']?.toString() ?? ''),
     );
+  }
+
+  static String _parseRoomId(dynamic room) {
+    if (room is Map) {
+      return room['id']?.toString() ?? room['_id']?.toString() ?? '';
+    }
+
+    return room?.toString() ?? '';
   }
 }

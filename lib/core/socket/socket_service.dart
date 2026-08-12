@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
@@ -6,38 +8,69 @@ import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketService {
   Socket? _socket;
+  Future<void>? _connectFuture;
+  Completer<void>? _connectionCompleter;
 
   Socket? get socket => _socket;
 
   bool get isConnected => _socket?.connected ?? false;
 
-  Future<void> connect() async {
+  Future<void> connect() {
+    if (_socket?.connected == true) return Future<void>.value();
+
+    return _connectFuture ??= _connect().whenComplete(() {
+      _connectFuture = null;
+    });
+  }
+
+  Future<void> _connect() async {
     if (_socket?.connected == true) return;
 
     final token = await SessionManager.instance.getAccessToken();
 
-    if (token == null || token.isEmpty) return;
+    if (token == null || token.isEmpty) {
+      throw StateError('Cannot connect chat socket without an access token.');
+    }
 
-    _socket = io(
-      EndPoints.socketUrl,
-      OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .setAuth({'token': token})
-          .enableReconnection()
-          .setReconnectionAttempts(5)
-          .setReconnectionDelay(1000)
-          .build(),
-    );
+    if (_socket == null) {
+      _socket = io(
+        EndPoints.socketUrl,
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setAuth({'token': token})
+            .enableReconnection()
+            .setReconnectionAttempts(5)
+            .setReconnectionDelay(1000)
+            .build(),
+      );
 
-    _registerConnectionListeners();
+      _registerConnectionListeners();
+    }
+
+    if (_socket?.connected == true) return;
+
+    final completer = Completer<void>();
+    _connectionCompleter = completer;
 
     _socket?.connect();
+
+    try {
+      await completer.future.timeout(const Duration(seconds: 20));
+    } finally {
+      if (identical(_connectionCompleter, completer)) {
+        _connectionCompleter = null;
+      }
+    }
   }
 
   void _registerConnectionListeners() {
     _socket?.onConnect((_) {
       debugPrint('Socket connected: ${_socket?.id}');
+      final completer = _connectionCompleter;
+      if (completer != null && !completer.isCompleted) {
+        completer.complete();
+      }
     });
 
     _socket?.onDisconnect((_) {
@@ -69,28 +102,22 @@ class SocketService {
     _socket?.emit('leaveRoom', roomId);
   }
 
-  void listenToJoinedRoom(void Function(String roomId) onJoined) {
-    _socket?.off('joinedRoom');
-
-    _socket?.on('joinedRoom', (data) {
+  VoidCallback listenToJoinedRoom(void Function(String roomId) onJoined) {
+    return _listen('joinedRoom', (data) {
       onJoined(data.toString());
     });
   }
 
-  void listenToLeftRoom(void Function(String roomId) onLeft) {
-    _socket?.off('leftRoom');
-
-    _socket?.on('leftRoom', (data) {
+  VoidCallback listenToLeftRoom(void Function(String roomId) onLeft) {
+    return _listen('leftRoom', (data) {
       onLeft(data.toString());
     });
   }
 
-  void listenToNewMessage(
+  VoidCallback listenToNewMessage(
     void Function(ChatMessageModel message) onNewMessage,
   ) {
-    _socket?.off('newMessage');
-
-    _socket?.on('newMessage', (data) {
+    return _listen('newMessage', (data) {
       try {
         final json = Map<String, dynamic>.from(data);
 
@@ -103,12 +130,10 @@ class SocketService {
     });
   }
 
-  void listenToMessageEdited(
+  VoidCallback listenToMessageEdited(
     void Function(ChatMessageModel message) onMessageEdited,
   ) {
-    _socket?.off('messageEdited');
-
-    _socket?.on('messageEdited', (data) {
+    return _listen('messageEdited', (data) {
       try {
         final json = Map<String, dynamic>.from(data);
 
@@ -121,12 +146,10 @@ class SocketService {
     });
   }
 
-  void listenToMessageDeleted(
+  VoidCallback listenToMessageDeleted(
     void Function(String messageId) onMessageDeleted,
   ) {
-    _socket?.off('messageDeleted');
-
-    _socket?.on('messageDeleted', (data) {
+    return _listen('messageDeleted', (data) {
       try {
         final json = Map<String, dynamic>.from(data);
 
@@ -157,16 +180,25 @@ class SocketService {
     });
   }
 
-  void removeChatListeners() {
-    _socket?.off('joinedRoom');
-    _socket?.off('leftRoom');
-    _socket?.off('newMessage');
-    _socket?.off('messageEdited');
-    _socket?.off('messageDeleted');
-  }
-
   void removeNotificationListener() {
     _socket?.off('notification');
+  }
+
+  VoidCallback listenToReconnect(VoidCallback onReconnect) {
+    final socket = _socket;
+    if (socket == null) return () {};
+
+    void listener(dynamic _) => onReconnect();
+    socket.onReconnect(listener);
+    return () => socket.io.off('reconnect', listener);
+  }
+
+  VoidCallback _listen(String event, void Function(dynamic data) listener) {
+    final socket = _socket;
+    if (socket == null) return () {};
+
+    socket.on(event, listener);
+    return () => socket.off(event, listener);
   }
 
   void disconnect() {
