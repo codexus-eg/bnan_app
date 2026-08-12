@@ -39,7 +39,7 @@ class TeacherRegistrationRepoImpl implements TeacherRegistrationRepo {
 
     await SessionManager.instance.saveSession(
       accessToken: authResponse.token,
-      refreshToken: '',
+      refreshToken: authResponse.refreshToken,
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
       userName: authResponse.user.fullName,

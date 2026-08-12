@@ -56,7 +56,7 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
     }
     await SessionManager.instance.saveSession(
       accessToken: response.token,
-      refreshToken: '',
+      refreshToken: response.refreshToken,
       userId: response.user.id,
       userRole: response.user.role,
       userName: response.user.fullName,

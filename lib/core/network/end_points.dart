@@ -3,11 +3,13 @@ abstract class EndPoints {
   static String get socketUrl => 'https://bnan.0xcode7.xyz';
   static const String register = '/auth/register';
   static const String login = '/auth/login';
+  static const String refreshToken = '/auth/refresh-token';
   static const String forgotPassword = '/auth/forgotPassword';
   static const String verifyResetCode = '/auth/verifyResetCode';
   static const String resetPassword = '/auth/resetPassword';
   static const String updatePassword = '/auth/updatePassword';
   static const String deviceToken = '/devices/token';
+  static const String dashboard = '/dashboard';
   static const String registerTeacher = '/auth/register-teacher';
   static const String registerParent = '/auth/register-parent';
   static const String getLoggedUser = '/users/me';
@@ -17,7 +19,6 @@ abstract class EndPoints {
   static const String mySubjects = '/students/me/subjects';
   static const String myCertificates = '/certificates/my';
   static const String curriculums = '/curriculums';
-  static const String studentSubscription = '/students/me/subscription';
   static const String myEnrollments = '/students/me/enrollments';
   static const String teacherCurriculums = '/teachers/mycurriculums';
   static const String teacherProfile = '/users/teacherProfile';
@@ -42,7 +43,6 @@ abstract class EndPoints {
       '/certificates/student-monthly/issue';
   static const String egyptianRegistrationRequests =
       '/admin/egyptian-registration-requests';
-  static const String adminDashboardStatistics = '/admin/dashboard/statistics';
   static const String adminDiscountCodes = '/admin/discount-codes';
   static const String adminPayrolls = '/admin/payrolls';
   static const String adminSubjectRequests = '/admin/subject-requests';

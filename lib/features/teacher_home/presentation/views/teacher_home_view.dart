@@ -10,6 +10,8 @@ import 'package:bnan_app/features/chats/presentation/navigation/chat_role_naviga
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_drawer_items.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class TeacherHomeView extends StatefulWidget {
@@ -36,6 +38,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _changeIndex(int index) {
+    if (index == 0 && currentIndex != 0) {
+      context.read<DashboardCubit>().refresh();
+    }
     setState(() => currentIndex = index);
   }
 

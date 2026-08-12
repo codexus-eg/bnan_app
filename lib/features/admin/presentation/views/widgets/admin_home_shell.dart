@@ -9,7 +9,9 @@ import 'package:bnan_app/features/admin/presentation/views/widgets/admin_bottom_
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_body.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_drawer.dart';
 import 'package:bnan_app/features/chats/presentation/navigation/chat_role_navigation.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminHomeShell extends StatefulWidget {
   const AdminHomeShell({super.key});
@@ -26,7 +28,13 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
   static const int classesDrawerIndex = 5;
   static const int notificationsDrawerIndex = 10;
 
-  void _changeIndex(int index) => setState(() => currentIndex = index);
+  void _changeIndex(int index) {
+    if (index == 0 && currentIndex != 0) {
+      context.read<DashboardCubit>().refresh();
+    }
+    setState(() => currentIndex = index);
+  }
+
   void _goHomeTab() => setState(() => currentIndex = 0);
   void _openDrawer() => scaffoldKey.currentState?.openDrawer();
   void _closeDrawer() {

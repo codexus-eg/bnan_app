@@ -37,7 +37,7 @@ class ParentAuthRepoImpl implements ParentAuthRepo {
     if (!response.hasToken) return;
     await SessionManager.instance.saveSession(
       accessToken: response.token,
-      refreshToken: '',
+      refreshToken: response.refreshToken,
       userId: response.data.id,
       userRole: response.data.role,
       userName: response.data.fullName,

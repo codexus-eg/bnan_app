@@ -4,6 +4,7 @@ import 'package:bnan_app/core/app_routes/app_router.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/theme_helper.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/core/session/session_invalidator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
@@ -35,11 +36,15 @@ class _BnanAppState extends State<BnanApp> {
   final _messengerKey = GlobalKey<ScaffoldMessengerState>();
   StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
   StreamSubscription<ChatPushIntent>? _pushNavigationSubscription;
+  StreamSubscription<void>? _sessionExpiredSubscription;
 
   @override
   void initState() {
     super.initState();
     _router = buildRouter();
+    _sessionExpiredSubscription = SessionInvalidator.instance.expired.listen(
+      (_) => _openLoginAfterSessionExpiry(),
+    );
     _chatNotifications = getIt<ChatNotificationCoordinator>();
     _chatNotificationSubscription = _chatNotifications.foregroundEvents.listen(
       _showChatNotification,
@@ -112,10 +117,16 @@ class _BnanAppState extends State<BnanApp> {
     _router.push(route);
   }
 
+  void _openLoginAfterSessionExpiry() {
+    if (_router.routeInformationProvider.value.uri.path == Routes.logIn) return;
+    _router.go(Routes.logIn);
+  }
+
   @override
   void dispose() {
     unawaited(_chatNotificationSubscription?.cancel());
     unawaited(_pushNavigationSubscription?.cancel());
+    unawaited(_sessionExpiredSubscription?.cancel());
     final pushNotifications = _pushNotifications;
     if (pushNotifications != null) unawaited(pushNotifications.dispose());
     unawaited(_chatNotifications.dispose());

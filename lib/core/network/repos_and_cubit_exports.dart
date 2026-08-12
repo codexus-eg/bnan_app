@@ -20,8 +20,6 @@ export 'package:bnan_app/features/registration_requests/presentation/manager/get
 export 'package:bnan_app/features/registration_requests/presentation/manager/registration_request_actions_cubit/registration_request_actions_cubit.dart';
 export 'package:bnan_app/features/registration_requests/presentation/manager/registration_request_actions_cubit/registration_request_actions_state.dart';
 
-export 'package:bnan_app/features/home_student/data/repo/home_student_repo/home_student_repo.dart';
-export 'package:bnan_app/features/home_student/data/repo/home_student_repo/home_student_repo_imple.dart';
 export 'package:bnan_app/features/splash_and_onboarding/presentation/manager/onboarding_cubit/onboarding_cubit.dart';
 
 export 'package:bnan_app/features/student_auth/presentation/manager/login_cubit/login_cubit.dart';
@@ -44,9 +42,10 @@ export 'package:bnan_app/features/student_assignments_and_certificate/presentati
 export 'package:bnan_app/features/student_subjects/data/repo/student_subjects_repo.dart';
 export 'package:bnan_app/features/student_subjects/data/repo/student_subjects_repo_impl.dart';
 export 'package:bnan_app/features/student_subjects/presentation/manager/get_student_subjects/get_student_subjects_cubit.dart';
-export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo.dart';
-export 'package:bnan_app/features/admin/data/repo/admin_dashboard_repo_impl.dart';
-export 'package:bnan_app/features/admin/presentation/manager/admin_dashboard_cubit.dart';
+export 'package:bnan_app/features/dashboard/data/models/dashboard_data.dart';
+export 'package:bnan_app/features/dashboard/data/repo/dashboard_repo.dart';
+export 'package:bnan_app/features/dashboard/data/repo/dashboard_repo_impl.dart';
+export 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 export 'package:bnan_app/features/ideal_student/data/repos/ideal_student_repo.dart';
 export 'package:bnan_app/features/ideal_student/data/repos/ideal_student_repo_impl.dart';
 export 'package:bnan_app/features/ideal_student/presentation/manager/ideal_student_cubit.dart';
@@ -67,7 +66,6 @@ export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_regis
 export 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo_impl.dart';
 export 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_cubit.dart';
 
-export 'package:bnan_app/features/home_student/presentation/manager/get_student_subscription/get_student_subscription_cubit.dart';
 export 'package:bnan_app/core/network/api_consumer.dart';
 export 'package:bnan_app/core/network/dio_consumer.dart';
 export 'package:bnan_app/features/student_groups/data/repo/student_groups_repo/student_groups_repo.dart';

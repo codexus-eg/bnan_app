@@ -139,7 +139,14 @@ class AuthRepoImpl implements AuthRepo {
         data: {'email': email, 'newPassword': newPassword},
       );
 
-      return Right(SimpleResponseModel.fromJson(response));
+      final result = SimpleResponseModel.fromJson(response);
+      if (result.hasTokenPair) {
+        await SessionManager.instance.saveTokens(
+          accessToken: result.token,
+          refreshToken: result.refreshToken,
+        );
+      }
+      return Right(result);
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {
@@ -253,7 +260,7 @@ class AuthRepoImpl implements AuthRepo {
 
     await SessionManager.instance.saveSession(
       accessToken: authResponse.token,
-      refreshToken: '',
+      refreshToken: authResponse.refreshToken,
       userId: authResponse.user.id,
       userRole: authResponse.user.role,
       userName: authResponse.user.fullName,

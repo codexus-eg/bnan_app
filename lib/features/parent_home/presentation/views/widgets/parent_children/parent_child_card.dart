@@ -15,12 +15,12 @@ class ParentChildCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fullName = child.fullName.trim().isEmpty ? '-' : child.fullName;
-    final classroomName = child.classroom?.name.trim();
-    final gradeName = child.classroom?.grade?.name.trim();
-    final classroom = classroomName == null || classroomName.isEmpty
-        ? '-'
-        : classroomName;
-    final grade = gradeName == null || gradeName.isEmpty ? '-' : gradeName;
+    final curriculumName = child.curriculum?.name.trim();
+    final gradeName = child.grade.trim();
+    final curriculum = curriculumName?.isNotEmpty == true
+        ? curriculumName!
+        : '-';
+    final grade = gradeName.isEmpty ? '-' : gradeName;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -44,7 +44,7 @@ class ParentChildCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '$classroom - $grade',
+                    '$curriculum - $grade',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: StylesManager.styleRegular14(

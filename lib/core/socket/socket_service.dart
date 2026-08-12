@@ -7,6 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketService {
+  SocketService() {
+    SessionManager.instance.addAccessTokenChangeListener(_updateAuthToken);
+  }
+
   Socket? _socket;
   Future<void>? _connectFuture;
   Completer<void>? _connectionCompleter;
@@ -14,6 +18,10 @@ class SocketService {
   Socket? get socket => _socket;
 
   bool get isConnected => _socket?.connected ?? false;
+
+  void _updateAuthToken(String? token) {
+    if (token?.isNotEmpty == true) _socket?.auth = {'token': token};
+  }
 
   Future<void> connect() {
     if (_socket?.connected == true) return Future<void>.value();

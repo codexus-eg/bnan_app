@@ -11,6 +11,8 @@ import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.d
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 
 class HomeStudentScaffold extends StatefulWidget {
   const HomeStudentScaffold({super.key, required this.loggedUser});
@@ -43,6 +45,9 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
 
   void _changeBottomNavIndex(int index) {
     if (index == 1 && _studentScheduleRoute == null) return;
+    if (index == 0 && currentIndex != 0) {
+      context.read<DashboardCubit>().refresh();
+    }
     setState(() => currentIndex = index);
   }
 

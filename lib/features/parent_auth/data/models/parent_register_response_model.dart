@@ -5,10 +5,12 @@ class ParentRegisterResponseModel {
     required this.success,
     required this.token,
     required this.data,
+    this.refreshToken = '',
   });
 
   final bool success;
   final String token;
+  final String refreshToken;
   final ParentRegisterUserModel data;
 
   factory ParentRegisterResponseModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +18,7 @@ class ParentRegisterResponseModel {
     return ParentRegisterResponseModel(
       success: json['success'] == true,
       token: (json['token'] ?? '').toString(),
+      refreshToken: (json['refreshToken'] ?? '').toString(),
       data: ParentRegisterUserModel.fromJson(
         rawData is Map<String, dynamic> ? rawData : <String, dynamic>{},
       ),

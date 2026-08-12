@@ -181,8 +181,17 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.home,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (context) => getIt<StudentProfileCubit>()..getLoggedUser(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<StudentProfileCubit>()..getLoggedUser(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    getIt<DashboardCubit>(param1: DashboardRole.student)
+                      ..load(),
+              ),
+            ],
             child: const HomeStudentView(),
           ),
           key: state.pageKey,
@@ -356,8 +365,15 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.teacherHome,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) => getIt<TeacherMyPayrollsCubit>(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TeacherMyPayrollsCubit>()),
+              BlocProvider(
+                create: (_) =>
+                    getIt<DashboardCubit>(param1: DashboardRole.teacher)
+                      ..load(),
+              ),
+            ],
             child: TeacherHomeView(
               initialIndex: state.uri.queryParameters['tab'] == 'payrolls'
                   ? teacherPayrollTabIndex
@@ -376,7 +392,8 @@ GoRouter buildRouter() {
         },
         pageBuilder: (context, state) => buildTransitionPages(
           child: BlocProvider(
-            create: (_) => getIt<AdminDashboardCubit>()..load(),
+            create: (_) =>
+                getIt<DashboardCubit>(param1: DashboardRole.admin)..load(),
             child: const AdminHomeView(),
           ),
           key: state.pageKey,
@@ -495,14 +512,22 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.supervisorHome,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const SupervisorHomeView(),
+          child: BlocProvider(
+            create: (_) =>
+                getIt<DashboardCubit>(param1: DashboardRole.supervisor)..load(),
+            child: const SupervisorHomeView(),
+          ),
           key: state.pageKey,
         ),
       ),
       GoRoute(
         path: Routes.parentHome,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: const ParentHomeView(),
+          child: BlocProvider(
+            create: (_) =>
+                getIt<DashboardCubit>(param1: DashboardRole.parent)..load(),
+            child: const ParentHomeView(),
+          ),
           key: state.pageKey,
         ),
       ),

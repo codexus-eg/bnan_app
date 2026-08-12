@@ -11,9 +11,7 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 
 class StudentProfileRepoImpl implements StudentProfileRepo {
-  const StudentProfileRepoImpl({
-    required this.apiConsumer,
-  });
+  const StudentProfileRepoImpl({required this.apiConsumer});
 
   final ApiConsumer apiConsumer;
 
@@ -86,7 +84,14 @@ class StudentProfileRepoImpl implements StudentProfileRepo {
         },
       );
 
-      return Right(SimpleResponseModel.fromJson(response));
+      final result = SimpleResponseModel.fromJson(response);
+      if (result.hasTokenPair) {
+        await SessionManager.instance.saveTokens(
+          accessToken: result.token,
+          refreshToken: result.refreshToken,
+        );
+      }
+      return Right(result);
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
     } catch (_) {

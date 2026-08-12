@@ -4,33 +4,45 @@ import 'package:bnan_app/features/parent_home/data/models/parent_child_curriculu
 class ParentChildModel {
   const ParentChildModel({
     this.id = '',
+    this.userId = '',
     String? fullName,
     String? name,
     this.classroom,
     String? grade,
     this.registrationMode,
     this.curriculum,
+    this.directGrade,
   }) : fullName = fullName ?? name ?? '',
        _legacyGrade = grade ?? '';
 
   final String id;
+  final String userId;
   final String fullName;
   final ParentChildClassroomModel? classroom;
   final RegistrationMode? registrationMode;
   final ParentChildCurriculumModel? curriculum;
+  final ParentChildGradeModel? directGrade;
   final String _legacyGrade;
 
   String get name => fullName;
-  String get grade => classroom?.grade?.name ?? _legacyGrade;
+  String get grade =>
+      directGrade?.name ?? classroom?.grade?.name ?? _legacyGrade;
 
   factory ParentChildModel.fromJson(Map<String, dynamic> json) {
     final classroom = json['classroom'];
+    final directGrade = json['grade'];
     final curriculum = ParentChildCurriculumModel.fromChildJson(json);
     return ParentChildModel(
       id: (json['id'] ?? json['_id'])?.toString() ?? '',
+      userId: json['userId']?.toString() ?? '',
       fullName: json['fullName']?.toString(),
       name: json['name']?.toString(),
-      grade: json['grade']?.toString(),
+      grade: directGrade is Map ? null : directGrade?.toString(),
+      directGrade: directGrade is Map
+          ? ParentChildGradeModel.fromJson(
+              Map<String, dynamic>.from(directGrade),
+            )
+          : null,
       registrationMode:
           RegistrationMode.fromValue(json['registrationMode']) ??
           curriculum.registrationMode,

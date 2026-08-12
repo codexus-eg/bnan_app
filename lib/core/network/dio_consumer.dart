@@ -1,15 +1,27 @@
 import 'package:bnan_app/core/cache/cache_data.dart';
 import 'package:bnan_app/core/error/app_exception.dart';
+import 'package:bnan_app/core/network/authenticated_interceptor.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
-import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/network/token_refresh_coordinator.dart';
+import 'package:bnan_app/core/network/token_store.dart';
+import 'package:bnan_app/core/session/session_invalidator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioConsumer extends ApiConsumer {
   DioConsumer({required this.dio}) {
-    dio.options = BaseOptions(
+    dio.options = _baseOptions();
+
+    _addAuthInterceptor();
+    _addDebugLogger();
+  }
+
+  final Dio dio;
+
+  BaseOptions _baseOptions() {
+    return BaseOptions(
       baseUrl: EndPoints.baseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 60),
@@ -19,41 +31,26 @@ class DioConsumer extends ApiConsumer {
         'Content-Type': 'application/json',
       },
     );
-
-    _addHeadersInterceptor();
-    _addDebugLogger();
   }
 
-  final Dio dio;
-
-  void _addHeadersInterceptor() {
+  void _addAuthInterceptor() {
+    final tokens = const SessionTokenStore();
+    final refreshDio = Dio(_baseOptions());
     dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final isProtected = options.extra['isProtected'] == true;
-
+        onRequest: (options, handler) {
           options.headers['lang'] = CacheData.language ?? 'ar';
-
-          if (!isProtected) {
-            return handler.next(options);
-          }
-
-          final token = await SessionManager.instance.getAccessToken();
-
-          if (token == null || token.isEmpty) {
-            return handler.reject(
-              DioException(
-                requestOptions: options,
-                type: DioExceptionType.cancel,
-                error: 'Unauthorized request',
-              ),
-            );
-          }
-
-          options.headers['Authorization'] = 'Bearer $token';
-
-          return handler.next(options);
+          handler.next(options);
         },
+      ),
+    );
+    dio.interceptors.add(
+      AuthenticatedInterceptor(
+        dio: dio,
+        tokens: tokens,
+        refresh: TokenRefreshCoordinator(dio: refreshDio, tokens: tokens),
+        invalidate: SessionInvalidator.instance.invalidate,
+        isInvalidating: () => SessionInvalidator.instance.isInvalidating,
       ),
     );
   }
