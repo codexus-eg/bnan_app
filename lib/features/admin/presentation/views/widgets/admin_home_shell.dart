@@ -8,6 +8,7 @@ import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_bottom_nav_bar.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_body.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_drawer.dart';
+import 'package:bnan_app/features/chats/presentation/navigation/chat_role_navigation.dart';
 import 'package:flutter/material.dart';
 
 class AdminHomeShell extends StatefulWidget {
@@ -65,8 +66,8 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       MyNavigator.goTo(context, Routes.gradesManagement);
     } else if (index == 8) {
       MyNavigator.goTo(context, Routes.tablesManagement);
-    } else if (index == 9) {
-      MyNavigator.goTo(context, Routes.groups);
+    } else if (index == ChatRoleNavigation.adminDrawerIndex) {
+      MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
     } else if (index == 10) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == 11) {

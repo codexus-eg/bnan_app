@@ -4,12 +4,17 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class GroupsView extends StatelessWidget {
-  const GroupsView({super.key});
+  const GroupsView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).groups, iconNeeded: true),
+      appBar: CustomAppbar(
+        headerText: S.of(context).groups,
+        iconNeeded: showBackButton,
+      ),
       body: GroupsBody(),
     );
   }

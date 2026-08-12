@@ -1,6 +1,6 @@
 part of 'chat_input_bar.dart';
 
-extension ChatInputMessageActions on _ChatInputBarState {
+extension on _ChatInputBarState {
   Future<void> sendMessage() async {
     if (isSendingMessage() || isRecording) return;
 
@@ -47,23 +47,11 @@ extension ChatInputMessageActions on _ChatInputBarState {
         return;
       }
 
-      setState(() => selectedFiles.addAll(files));
+      addSelectedFiles(files);
     } catch (_) {
       if (mounted) {
         showErrorMessage('حدث خطأ أثناء اختيار الملفات');
       }
     }
-  }
-
-  void handleSendSuccess() {
-    if (!mounted) return;
-
-    setState(() {
-      if (clearTextAfterSuccess) messageController.clear();
-      selectedFiles.clear();
-      clearTextAfterSuccess = false;
-    });
-
-    context.read<SendMessageCubit>().resetState();
   }
 }

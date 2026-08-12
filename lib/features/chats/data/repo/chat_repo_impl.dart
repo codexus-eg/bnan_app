@@ -99,9 +99,7 @@ class ChatRepoImpl implements ChatRepo {
       final attachments = <MultipartFile>[];
 
       for (final path in attachmentPaths ?? <String>[]) {
-        attachments.add(
-          await MultipartFile.fromFile(path, filename: path.split('/').last),
-        );
+        attachments.add(await MultipartFile.fromFile(path));
       }
 
       final formData = FormData.fromMap({

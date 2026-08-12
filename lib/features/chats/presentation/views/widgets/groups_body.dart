@@ -1,4 +1,3 @@
-import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_chat_card.dart';
@@ -7,7 +6,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_state.dart';
-import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/navigation/chat_room_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,20 +49,23 @@ class GroupsBody extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(bottom: 12),
                   child: InkWell(
                     onTap: () {
+                      final path = ChatRoomNavigation.path(room);
+                      if (path == null) return;
+
                       MyNavigator.goTo(
                         context,
-                        Routes.chatPath(room.id),
-                        extra: ChatRouteArgs(
-                          roomType: room.type,
-                          classroomId: room.classroomId,
-                          classroomName: room.displayName,
+                        path,
+                        extra: ChatRoomNavigation.arguments(
+                          room,
                           currentUserRole: SessionManager.instance.userRole,
                         ),
                       );
                     },
                     child: CustomChatCard(
                       title: room.displayName,
-                      subtitle: room.subtitle,
+                      subtitle: room.lastMessage?.trim().isNotEmpty == true
+                          ? room.lastMessage!
+                          : room.subtitle,
                     ),
                   ),
                 );

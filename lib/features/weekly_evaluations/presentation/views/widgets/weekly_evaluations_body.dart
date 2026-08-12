@@ -74,11 +74,8 @@ class WeeklyEvaluationsBody extends StatelessWidget {
     VoidCallback? sourceRetry,
   ) {
     final cubit = context.read<WeeklyEvaluationsCubit>();
-    if (classroomsEmpty) {
-      return Center(child: NoDataWidget(title: S.of(context).noDataAvailable));
-    }
     final response = cubit.response;
-    final students = response == null
+    final students = classroomsEmpty || response == null
         ? null
         : WeeklyEvaluationsStudents(
             policy: policy,
@@ -108,6 +105,7 @@ class WeeklyEvaluationsBody extends StatelessWidget {
               state,
               cubit,
               students,
+              classroomsEmpty,
               sourceError,
               sourceRetry,
             ),
@@ -122,10 +120,14 @@ class WeeklyEvaluationsBody extends StatelessWidget {
     WeeklyEvaluationsState state,
     WeeklyEvaluationsCubit cubit,
     WeeklyEvaluationsStudents? students,
+    bool classroomsEmpty,
     String? sourceError,
     VoidCallback? sourceRetry,
   ) {
     final response = cubit.response;
+    if (classroomsEmpty) {
+      return Center(child: NoDataWidget(title: S.of(context).noDataAvailable));
+    }
     if (sourceError != null) {
       return WeeklyEvaluationsFailure(
         message: sourceError,

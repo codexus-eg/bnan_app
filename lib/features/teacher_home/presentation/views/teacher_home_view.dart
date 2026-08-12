@@ -6,6 +6,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_bottom_nav_bar.dart';
+import 'package:bnan_app/features/chats/presentation/navigation/chat_role_navigation.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_drawer_items.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
@@ -51,11 +52,17 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _onDrawerItemTap(int index) {
+    final drawerItemCount = teacherDrawerItems(context).length;
     final scheduleRoutes = teacherScheduleRoutes();
     const scheduleStartIndex = 2;
     final scheduleIndex = index - scheduleStartIndex;
 
     _closeDrawer();
+
+    if (ChatRoleNavigation.isTeacherMessagesIndex(index, drawerItemCount)) {
+      MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
+      return;
+    }
 
     if (scheduleIndex >= 0 && scheduleIndex < scheduleRoutes.length) {
       _goHomeTab();

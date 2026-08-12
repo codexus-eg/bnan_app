@@ -3,6 +3,7 @@ import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_attachment_model.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_attachment_url.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_formatters.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +15,14 @@ class ChatFileAttachment extends StatelessWidget {
     required this.isMe,
     required this.icon,
     required this.title,
+    this.opener,
   });
 
   final ChatAttachmentModel attachment;
   final bool isMe;
   final IconData icon;
   final String title;
+  final Future<bool> Function(String url)? opener;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,18 @@ class ChatFileAttachment extends StatelessWidget {
   }
 
   Future<void> _openFile(BuildContext context) async {
-    final opened = await FileUrlLauncher.open(attachment.fileUrl);
+    final uri = ChatAttachmentUrl.resolve(attachment.fileUrl);
+    if (uri == null) {
+      showCustomSnackBar(context, S.of(context).invalidLink, false);
+      return;
+    }
+
+    var opened = false;
+    try {
+      opened = await (opener ?? FileUrlLauncher.open)(uri.toString());
+    } catch (_) {
+      opened = false;
+    }
 
     if (!opened && context.mounted) {
       showCustomSnackBar(context, S.of(context).unableToOpenFile, false);

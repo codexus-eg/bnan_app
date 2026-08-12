@@ -1,10 +1,9 @@
-library chat_input_bar;
-
 import 'dart:async';
 import 'dart:io';
 
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_state.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_circle_button.dart';
@@ -45,12 +44,59 @@ class _ChatInputBarState extends State<ChatInputBar> {
   Timer? recordingTimer;
   Duration recordingDuration = Duration.zero;
 
+  void removeSelectedFile(int index) {
+    setState(() => selectedFiles.removeAt(index));
+  }
+
+  void addSelectedFiles(List<PlatformFile> files) {
+    setState(() => selectedFiles.addAll(files));
+  }
+
+  void handleSendSuccess() {
+    if (!mounted) return;
+
+    setState(() {
+      if (clearTextAfterSuccess) messageController.clear();
+      selectedFiles.clear();
+      clearTextAfterSuccess = false;
+    });
+
+    context.read<SendMessageCubit>().resetState();
+  }
+
+  void setRecordingStarted(String filePath) {
+    currentVoicePath = filePath;
+    setState(() {
+      isRecording = true;
+      recordingDuration = Duration.zero;
+    });
+  }
+
+  void resetRecordingState() {
+    setState(() {
+      isRecording = false;
+      recordingDuration = Duration.zero;
+    });
+  }
+
+  void incrementRecordingDuration() {
+    setState(() => recordingDuration += const Duration(seconds: 1));
+  }
+
   @override
   void dispose() {
     recordingTimer?.cancel();
     messageController.dispose();
-    audioRecorder.dispose();
+    unawaited(_disposeRecorder());
     super.dispose();
+  }
+
+  Future<void> _disposeRecorder() async {
+    try {
+      if (isRecording) await audioRecorder.cancel();
+    } finally {
+      await audioRecorder.dispose();
+    }
   }
 
   @override

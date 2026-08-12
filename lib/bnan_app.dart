@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/app_routes/app_router.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/theme_helper.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_route.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
@@ -22,10 +27,20 @@ class BnanApp extends StatefulWidget {
 class _BnanAppState extends State<BnanApp> {
   TamaraPaymentCubit? paymentCubit;
   String? _navigatedPaymentId;
+  late final GoRouter _router;
+  late final ChatNotificationCoordinator _chatNotifications;
+  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
+  StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
 
   @override
   void initState() {
     super.initState();
+    _router = buildRouter();
+    _chatNotifications = getIt<ChatNotificationCoordinator>();
+    _chatNotificationSubscription = _chatNotifications.foregroundEvents.listen(
+      _showChatNotification,
+    );
+    unawaited(_chatNotifications.initialize());
     if (getIt.isRegistered<TamaraPaymentCubit>()) {
       paymentCubit = getIt<TamaraPaymentCubit>()..restore();
     }
@@ -45,11 +60,44 @@ class _BnanAppState extends State<BnanApp> {
       supportedLocales: S.delegate.supportedLocales,
       locale: const Locale('ar'),
       title: 'Bnan App',
-      routerConfig: buildRouter(),
+      scaffoldMessengerKey: _messengerKey,
+      routerConfig: _router,
       theme: ThemeHelper.getTheme(),
     );
     final cubit = paymentCubit;
     return cubit == null ? app : BlocProvider.value(value: cubit, child: app);
+  }
+
+  void _showChatNotification(ChatNotificationEvent event) {
+    final messenger = _messengerKey.currentState;
+    if (messenger == null) return;
+    final route = ChatNotificationRoute.path(event.roomId);
+    final sender = event.senderName.isEmpty
+        ? S.current.messages
+        : event.senderName;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            event.message.isEmpty ? sender : '$sender\n${event.message}',
+          ),
+          action: route == null
+              ? null
+              : SnackBarAction(
+                  label: S.current.openLink,
+                  onPressed: () => _router.push(route),
+                ),
+        ),
+      );
+  }
+
+  @override
+  void dispose() {
+    unawaited(_chatNotificationSubscription?.cancel());
+    unawaited(_chatNotifications.dispose());
+    _router.dispose();
+    super.dispose();
   }
 
   Widget _builder(BuildContext context, Widget? child) {

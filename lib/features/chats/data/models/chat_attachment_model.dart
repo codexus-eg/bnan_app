@@ -31,13 +31,22 @@ class ChatAttachmentModel {
     return int.tryParse(value?.toString() ?? '') ?? 0;
   }
 
-  bool get isImage => mimeType.startsWith('image/');
+  String get _type => mimeType.toLowerCase().trim();
+  String get _extension => fileName.toLowerCase().split('.').last;
 
-  bool get isVideo => mimeType.startsWith('video/');
+  bool get isImage =>
+      _type.startsWith('image/') ||
+      const {'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'}.contains(_extension);
 
-  bool get isAudio => mimeType.startsWith('audio/');
+  bool get isVideo =>
+      _type.startsWith('video/') ||
+      const {'mp4', 'mov', 'webm', 'mkv'}.contains(_extension);
 
-  bool get isPdf => mimeType == 'application/pdf';
+  bool get isAudio =>
+      _type.startsWith('audio/') ||
+      const {'m4a', 'mp3', 'wav', 'aac', 'ogg'}.contains(_extension);
+
+  bool get isPdf => _type == 'application/pdf' || _extension == 'pdf';
 
   bool get isFile => !isImage && !isVideo && !isAudio;
 }

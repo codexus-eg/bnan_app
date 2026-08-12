@@ -56,6 +56,7 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
         title: s.weeklyIdealStudent,
         icon: ImageManager.crownSimple,
       ),
+    DrawerItemModel(title: s.messages, icon: ImageManager.chatIcon),
   ];
 }
 

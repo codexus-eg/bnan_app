@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_attachment_model.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_attachment_url.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_audio_playback_coordinator.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -8,10 +13,12 @@ class ChatAudioAttachment extends StatefulWidget {
     super.key,
     required this.attachment,
     required this.isMe,
+    this.coordinator,
   });
 
   final ChatAttachmentModel attachment;
   final bool isMe;
+  final ChatAudioPlaybackCoordinator? coordinator;
 
   @override
   State<ChatAudioAttachment> createState() => _ChatAudioAttachmentState();
@@ -19,122 +26,133 @@ class ChatAudioAttachment extends StatefulWidget {
 
 class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
   final AudioPlayer _player = AudioPlayer();
-
+  late final ChatAudioPlaybackCoordinator _coordinator;
+  StreamSubscription<Duration>? _positionSubscription;
+  StreamSubscription<PlayerState>? _stateSubscription;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
   bool _isPlaying = false;
   bool _isInitialized = false;
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
+    _coordinator = widget.coordinator ?? chatAudioPlaybackCoordinator;
     _initializePlayer();
   }
 
   Future<void> _initializePlayer() async {
+    final uri = ChatAttachmentUrl.resolve(widget.attachment.fileUrl);
+    if (uri == null) {
+      _hasError = true;
+      return;
+    }
     try {
-      final duration = await _player.setUrl(widget.attachment.fileUrl);
+      _duration =
+          await _player.setUrl(
+            uri.toString(),
+            headers: ChatAttachmentUrl.headersFor(uri),
+          ) ??
+          Duration.zero;
+      _positionSubscription = _player.positionStream.listen(_onPosition);
+      _stateSubscription = _player.playerStateStream.listen(_onPlayerState);
+      if (mounted) setState(() => _isInitialized = true);
+    } catch (_) {
+      if (mounted) setState(() => _hasError = true);
+    }
+  }
 
-      _duration = duration ?? Duration.zero;
+  void _onPosition(Duration position) {
+    if (mounted) setState(() => _position = position);
+  }
 
-      _player.positionStream.listen((position) {
-        if (!mounted) return;
-
-        setState(() {
-          _position = position;
-        });
-      });
-
-      _player.playerStateStream.listen((state) {
-        if (!mounted) return;
-
-        setState(() {
-          _isPlaying = state.playing;
-        });
-
-        if (state.processingState == ProcessingState.completed) {
-          _player.seek(Duration.zero);
-          _player.pause();
-        }
-      });
-
-      if (!mounted) return;
-
-      setState(() {
-        _isInitialized = true;
-      });
-    } catch (error) {
-      debugPrint('AUDIO PLAYER ERROR: $error');
-      debugPrint('AUDIO URL: ${widget.attachment.fileUrl}');
+  void _onPlayerState(PlayerState state) {
+    if (!mounted) return;
+    setState(() => _isPlaying = state.playing);
+    if (state.processingState == ProcessingState.completed) {
+      _coordinator.release(this);
+      _player.seek(Duration.zero);
+      _player.pause();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final foregroundColor = widget.isMe
-        ? ColorManager.white
-        : ColorManager.mainColor14;
-
+    final color = widget.isMe ? ColorManager.white : ColorManager.mainColor14;
+    if (_hasError) {
+      return Row(
+        children: [
+          Icon(Icons.error_outline, color: color),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              S.of(context).unableToLoadAttachment,
+              style: TextStyle(color: color, fontSize: 11),
+            ),
+          ),
+        ],
+      );
+    }
     return Row(
       children: [
         IconButton(
           onPressed: _isInitialized ? _togglePlay : null,
           icon: Icon(
             _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-            color: foregroundColor,
+            color: color,
           ),
         ),
         Expanded(
           child: Slider(
             value: _sliderValue,
             max: _sliderMax,
-            onChanged: _isInitialized
-                ? (value) {
-                    _player.seek(Duration(milliseconds: value.toInt()));
-                  }
-                : null,
+            onChanged: _isInitialized ? _seek : null,
           ),
         ),
         Text(
           _formatDuration(_position),
-          style: TextStyle(color: foregroundColor, fontSize: 11),
+          style: TextStyle(color: color, fontSize: 11),
         ),
       ],
     );
   }
 
-  double get _sliderValue {
-    if (_duration == Duration.zero) return 0;
+  void _seek(double value) =>
+      _player.seek(Duration(milliseconds: value.toInt()));
 
-    return _position.inMilliseconds
-        .clamp(0, _duration.inMilliseconds)
-        .toDouble();
-  }
+  double get _sliderValue => _duration == Duration.zero
+      ? 0
+      : _position.inMilliseconds.clamp(0, _duration.inMilliseconds).toDouble();
 
-  double get _sliderMax {
-    if (_duration.inMilliseconds <= 0) return 1;
-
-    return _duration.inMilliseconds.toDouble();
-  }
+  double get _sliderMax =>
+      _duration.inMilliseconds <= 0 ? 1 : _duration.inMilliseconds.toDouble();
 
   Future<void> _togglePlay() async {
-    if (_isPlaying) {
-      await _player.pause();
-    } else {
-      await _player.play();
+    try {
+      if (_isPlaying) {
+        await _player.pause();
+        _coordinator.release(this);
+      } else {
+        await _coordinator.activate(this, _player.pause);
+        await _player.play();
+      }
+    } catch (_) {
+      _coordinator.release(this);
+      if (mounted) setState(() => _hasError = true);
     }
   }
 
-  String _formatDuration(Duration duration) {
-    final minutes = duration.inMinutes;
-    final seconds = duration.inSeconds.remainder(60);
-
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  String _formatDuration(Duration value) {
+    return '${value.inMinutes}:${value.inSeconds.remainder(60).toString().padLeft(2, '0')}';
   }
 
   @override
   void dispose() {
-    _player.dispose();
+    _coordinator.release(this);
+    unawaited(_positionSubscription?.cancel());
+    unawaited(_stateSubscription?.cancel());
+    unawaited(_player.dispose());
     super.dispose();
   }
 }

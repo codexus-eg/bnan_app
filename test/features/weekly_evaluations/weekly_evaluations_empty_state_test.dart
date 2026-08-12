@@ -35,7 +35,7 @@ void main() {
   });
   tearDown(() => SessionManager.instance.clearSession());
 
-  testWidgets('empty classrooms replaces loading skeleton with no-data', (
+  testWidgets('empty classrooms keeps actions and filters above no-data', (
     tester,
   ) async {
     final source = _SupervisorRepo.pending();
@@ -48,8 +48,16 @@ void main() {
 
     expect(find.byType(NoDataWidget), findsOneWidget);
     expect(find.byType(AppSkeletonizer), findsNothing);
-    expect(find.byType(CustomDropdown), findsNothing);
+    expect(find.byType(CustomDropdown), findsNWidgets(2));
+    expect(find.text('Add New Evaluation'), findsOneWidget);
     expect(evaluations.weekCalls, 0);
+    final filtersBottom = tester
+        .getBottomRight(find.byType(CustomDropdown).last)
+        .dy;
+    expect(
+      tester.getCenter(find.byType(NoDataWidget)).dy,
+      greaterThan(filtersBottom),
+    );
   });
 
   testWidgets('empty evaluations keep filters and show centered no-data', (

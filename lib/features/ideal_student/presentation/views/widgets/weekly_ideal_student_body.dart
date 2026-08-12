@@ -50,17 +50,27 @@ class _WeeklyIdealStudentBodyState extends State<WeeklyIdealStudentBody> {
             onRetry: retry,
           );
         }
-        if (source is PlansClassroomsEmpty) return const NoDataWidget();
+        final sourceEmpty = source is PlansClassroomsEmpty;
         final classrooms = source is PlansClassroomsSuccess
             ? source.classrooms
+            : sourceEmpty
+            ? const <PlanClassroomOption>[]
             : null;
         if (classrooms != null) _syncClassrooms(classrooms);
-        return _content(classrooms, source is PlansClassroomsLoading);
+        return _content(
+          classrooms,
+          source is PlansClassroomsLoading,
+          sourceEmpty,
+        );
       },
     );
   }
 
-  Widget _content(List<PlanClassroomOption>? classrooms, bool sourceLoading) {
+  Widget _content(
+    List<PlanClassroomOption>? classrooms,
+    bool sourceLoading,
+    bool sourceEmpty,
+  ) {
     return BlocConsumer<IdealStudentCubit, IdealStudentState>(
       listener: (context, state) {
         if (state is IdealStudentRefreshFailure ||
@@ -80,7 +90,7 @@ class _WeeklyIdealStudentBodyState extends State<WeeklyIdealStudentBody> {
               child: _classroomFilter(classrooms),
             ),
             const SizedBox(height: 8),
-            Expanded(child: _result(state, sourceLoading)),
+            Expanded(child: _result(state, sourceLoading, sourceEmpty)),
           ],
         ),
       ),
@@ -105,8 +115,13 @@ class _WeeklyIdealStudentBodyState extends State<WeeklyIdealStudentBody> {
     );
   }
 
-  Widget _result(IdealStudentState state, bool sourceLoading) {
+  Widget _result(
+    IdealStudentState state,
+    bool sourceLoading,
+    bool sourceEmpty,
+  ) {
     final cubit = context.read<IdealStudentCubit>();
+    if (sourceEmpty) return const NoDataWidget();
     if (state is IdealStudentFailure) {
       return WeeklyEvaluationsFailure(
         message: state.message,

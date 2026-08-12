@@ -1,6 +1,6 @@
 part of 'chat_input_bar.dart';
 
-extension ChatInputVoiceStop on _ChatInputBarState {
+extension on _ChatInputBarState {
   Future<void> stopAndSendVoice() async {
     try {
       recordingTimer?.cancel();
@@ -55,12 +55,5 @@ extension ChatInputVoiceStop on _ChatInputBarState {
     if (mounted) {
       resetRecordingState();
     }
-  }
-
-  void resetRecordingState() {
-    setState(() {
-      isRecording = false;
-      recordingDuration = Duration.zero;
-    });
   }
 }
