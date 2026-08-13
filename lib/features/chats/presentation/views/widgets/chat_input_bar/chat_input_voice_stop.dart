@@ -8,20 +8,24 @@ extension on _ChatInputBarState {
 
       if (!mounted) return;
 
-      resetRecordingState();
-      currentVoicePath = null;
-
       if (voicePath == null || voicePath.isEmpty) {
+        resetRecordingState();
         showErrorMessage('تعذر حفظ الرسالة الصوتية');
         return;
       }
 
+      final voiceFile = File(voicePath);
+      addSelectedFiles([
+        PlatformFile(
+          name: voiceFile.uri.pathSegments.last,
+          path: voicePath,
+          size: await voiceFile.length(),
+        ),
+      ]);
+      resetRecordingState();
+      currentVoicePath = null;
       clearTextAfterSuccess = false;
-
-      await context.read<SendMessageCubit>().sendVoice(
-        roomId: widget.roomId,
-        voicePath: voicePath,
-      );
+      await sendMessage();
     } catch (_) {
       recordingTimer?.cancel();
 

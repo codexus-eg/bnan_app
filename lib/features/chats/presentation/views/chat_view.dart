@@ -28,7 +28,7 @@ class ChatView extends StatelessWidget {
         statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: ChatBody(
           roomId: roomId,
           roomType: roomType,

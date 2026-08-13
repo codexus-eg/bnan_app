@@ -78,7 +78,7 @@ class _ChatBodyState extends State<ChatBody> {
             },
           ),
         ),
-        ChatInputBar(roomId: widget.roomId),
+        SafeArea(top: false, child: ChatInputBar(roomId: widget.roomId)),
       ],
     );
   }

@@ -41,17 +41,7 @@ extension on _ChatInputBarState {
   }
 
   EdgeInsetsGeometry buildPadding(BuildContext context) {
-    final keyboard = MediaQuery.of(context).viewInsets.bottom;
-    final safeBottom = MediaQuery.of(context).viewPadding.bottom;
-
-    return EdgeInsetsDirectional.only(
-      start: 8,
-      top: 12,
-      end: 9,
-      bottom: keyboard > 0
-          ? (keyboard - safeBottom - 30).clamp(0.0, double.infinity)
-          : MediaQuery.sizeOf(context).height * (27 / 812),
-    );
+    return const EdgeInsetsDirectional.fromSTEB(8, 12, 9, 12);
   }
 
   BoxDecoration buildDecoration() {
@@ -103,6 +93,7 @@ extension on _ChatInputBarState {
           ChatCircleButton(
             icon: ImageManager.tablerSendIcon,
             isDark: true,
+            isLoading: isLoading,
             onTap: isLoading ? () {} : sendMessage,
           ),
         ],

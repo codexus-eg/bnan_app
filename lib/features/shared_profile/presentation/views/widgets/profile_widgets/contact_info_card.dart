@@ -36,12 +36,13 @@ class ContactInfoCard extends StatelessWidget {
           icon: ImageManager.annotationTyping,
           onEdit: () => _edit(context, Routes.updateUserName),
         ),
-        ProfileInfoRow(
-          label: S.of(context).phoneNumber,
-          value: phone,
-          icon: ImageManager.phoneIcon,
-          onEdit: () => _edit(context, Routes.updatePhone),
-        ),
+        if (phone.trim().isNotEmpty)
+          ProfileInfoRow(
+            label: S.of(context).phoneNumber,
+            value: phone,
+            icon: ImageManager.phoneIcon,
+            onEdit: () => _edit(context, Routes.updatePhone),
+          ),
       ],
     );
   }

@@ -121,6 +121,21 @@ void main() {
       await cubit.close();
     });
 
+    test('messages stay ordered by createdAt after live upserts', () async {
+      final socket = _FakeSocketService();
+      final cubit = GetRoomMessagesCubit(_FakeChatRepo(), socket);
+      await cubit.initializeChat(roomId: 'room-1');
+
+      socket.emitNewMessage(_message('later', minute: 2));
+      socket.emitNewMessage(_message('earlier', minute: 1));
+
+      expect(_messages(cubit).map((message) => message.id), [
+        'earlier',
+        'later',
+      ]);
+      await cubit.close();
+    });
+
     test('dispose removes only registered callbacks and leaves room', () async {
       final socket = _FakeSocketService();
       final cubit = GetRoomMessagesCubit(_FakeChatRepo(), socket);
@@ -150,13 +165,29 @@ void main() {
       'room-2',
     );
   });
+
+  test('message and sender parse backend _id and fullName', () {
+    final message = ChatMessageModel.fromJson({
+      '_id': 'message-1',
+      'room': 'room-1',
+      'sender': {'_id': 'sender-1', 'fullName': 'Ahmed', 'role': 'teacher'},
+    });
+
+    expect(message.id, 'message-1');
+    expect(message.sender.id, 'sender-1');
+    expect(message.sender.fullName, 'Ahmed');
+  });
 }
 
 List<ChatMessageModel> _messages(GetRoomMessagesCubit cubit) {
   return (cubit.state as GetRoomMessagesSuccess).messages;
 }
 
-ChatMessageModel _message(String id, {String roomId = 'room-1'}) {
+ChatMessageModel _message(
+  String id, {
+  String roomId = 'room-1',
+  int minute = 0,
+}) {
   return ChatMessageModel(
     id: id,
     roomId: roomId,
@@ -169,7 +200,7 @@ ChatMessageModel _message(String id, {String roomId = 'room-1'}) {
     attachments: const [],
     messageType: 'text',
     deletedForEveryone: false,
-    createdAt: DateTime.utc(2026),
+    createdAt: DateTime.utc(2026).add(Duration(minutes: minute)),
   );
 }
 

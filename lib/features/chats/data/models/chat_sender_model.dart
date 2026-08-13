@@ -11,7 +11,7 @@ class ChatSenderModel {
 
   factory ChatSenderModel.fromJson(Map<String, dynamic> json) {
     return ChatSenderModel(
-      id: json['id']?.toString() ?? '',
+      id: (json['id'] ?? json['_id'])?.toString() ?? '',
       fullName: json['fullName']?.toString() ?? '',
       role: json['role']?.toString() ?? '',
     );

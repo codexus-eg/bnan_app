@@ -9,6 +9,7 @@ import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_route.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_foreground_notification.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
@@ -37,6 +38,8 @@ class _BnanAppState extends State<BnanApp> {
   StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
   StreamSubscription<ChatPushIntent>? _pushNavigationSubscription;
   StreamSubscription<void>? _sessionExpiredSubscription;
+  OverlayEntry? _chatNotificationEntry;
+  Timer? _chatNotificationTimer;
 
   @override
   void initState() {
@@ -85,27 +88,43 @@ class _BnanAppState extends State<BnanApp> {
   }
 
   void _showChatNotification(ChatNotificationEvent event) {
-    final messenger = _messengerKey.currentState;
-    if (messenger == null) return;
+    final context = _messengerKey.currentContext;
+    final overlay = context == null
+        ? null
+        : Overlay.maybeOf(context, rootOverlay: true);
+    if (overlay == null) return;
     final route = ChatNotificationRoute.path(event.roomId);
     final sender = event.senderName.isEmpty
         ? S.current.messages
         : event.senderName;
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            event.message.isEmpty ? sender : '$sender\n${event.message}',
-          ),
-          action: route == null
-              ? null
-              : SnackBarAction(
-                  label: S.current.openLink,
-                  onPressed: () => _router.push(route),
-                ),
+    _dismissChatNotification();
+    _chatNotificationEntry = OverlayEntry(
+      builder: (context) => PositionedDirectional(
+        top: MediaQuery.paddingOf(context).top + 8,
+        start: 12,
+        end: 12,
+        child: ChatForegroundNotification(
+          sender: sender,
+          preview: event.message,
+          onTap: () {
+            _dismissChatNotification();
+            if (route != null) _router.push(route);
+          },
         ),
-      );
+      ),
+    );
+    overlay.insert(_chatNotificationEntry!);
+    _chatNotificationTimer = Timer(
+      const Duration(seconds: 4),
+      _dismissChatNotification,
+    );
+  }
+
+  void _dismissChatNotification() {
+    _chatNotificationTimer?.cancel();
+    _chatNotificationTimer = null;
+    _chatNotificationEntry?.remove();
+    _chatNotificationEntry = null;
   }
 
   void _openChatPush(ChatPushIntent intent) {
@@ -124,6 +143,7 @@ class _BnanAppState extends State<BnanApp> {
 
   @override
   void dispose() {
+    _dismissChatNotification();
     unawaited(_chatNotificationSubscription?.cancel());
     unawaited(_pushNavigationSubscription?.cancel());
     unawaited(_sessionExpiredSubscription?.cancel());

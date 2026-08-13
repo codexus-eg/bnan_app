@@ -36,7 +36,8 @@ class GradesManagementBody extends StatelessWidget {
               bottom: 8,
             ),
           ),
-          Expanded(
+          Flexible(
+            fit: FlexFit.loose,
             child:
                 BlocBuilder<GetGradesmanagementCubit, GetGradesManagementState>(
                   builder: (context, state) {
@@ -62,6 +63,7 @@ class GradesManagementBody extends StatelessWidget {
                           vertical: 16,
                         ),
                         child: ListView.builder(
+                          shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           itemCount: grades.length,
                           itemBuilder: (context, index) {

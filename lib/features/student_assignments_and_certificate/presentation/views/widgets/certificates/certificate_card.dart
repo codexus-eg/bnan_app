@@ -35,7 +35,8 @@ class CertificateCard extends StatelessWidget {
                     style: StylesManager.styleBold14(context),
                   ),
                 ),
-                CertificateDownloadIcon(onTap: () => _download(context)),
+                if (certificate.pdfPath.trim().isNotEmpty)
+                  CertificateDownloadIcon(onTap: () => _download(context)),
               ],
             ),
           ),

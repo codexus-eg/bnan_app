@@ -140,6 +140,24 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     } else {
       messages[index] = message;
     }
+    _sortByCreatedAt(messages);
+  }
+
+  void _sortByCreatedAt(List<ChatMessageModel> messages) {
+    final indexed = messages.indexed.toList();
+    indexed.sort((left, right) {
+      final leftDate = left.$2.createdAt;
+      final rightDate = right.$2.createdAt;
+      if (leftDate == null) {
+        return rightDate == null ? left.$1.compareTo(right.$1) : 1;
+      }
+      if (rightDate == null) return -1;
+      final byDate = leftDate.compareTo(rightDate);
+      return byDate != 0 ? byDate : left.$1.compareTo(right.$1);
+    });
+    messages
+      ..clear()
+      ..addAll(indexed.map((entry) => entry.$2));
   }
 
   bool _belongsToCurrentRoom(ChatMessageModel message) {

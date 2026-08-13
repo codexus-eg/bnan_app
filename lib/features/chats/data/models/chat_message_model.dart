@@ -54,7 +54,7 @@ class ChatMessageModel {
     final attachmentsJson = json['attachments'] as List<dynamic>? ?? [];
 
     return ChatMessageModel(
-      id: json['id']?.toString() ?? '',
+      id: (json['id'] ?? json['_id'])?.toString() ?? '',
       roomId: _parseRoomId(json['room'] ?? json['roomId']),
       sender: senderJson is Map
           ? ChatSenderModel.fromJson(Map<String, dynamic>.from(senderJson))

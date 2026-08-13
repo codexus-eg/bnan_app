@@ -17,7 +17,10 @@ class ChatBubble extends StatelessWidget {
   final String currentUserId;
   final bool highlighted;
 
-  bool get isMe => message.sender.id == currentUserId;
+  bool get isMe {
+    final userId = currentUserId.trim();
+    return userId.isNotEmpty && message.sender.id.trim() == userId;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,15 @@ class ChatBubble extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (!isMe && message.sender.fullName.trim().isNotEmpty) ...[
+              Text(
+                message.sender.fullName.trim(),
+                style: StylesManager.styleMedium14(
+                  context,
+                ).copyWith(color: ColorManager.mainColor14),
+              ),
+              const SizedBox(height: 4),
+            ],
             if (message.attachments.isNotEmpty)
               ChatAttachmentsList(attachments: message.attachments, isMe: isMe),
             if (message.attachments.isNotEmpty && hasText)

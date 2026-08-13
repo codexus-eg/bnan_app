@@ -18,17 +18,33 @@ void main() {
 
     await expectLater(request, completes);
   });
+
+  test('prevents duplicate submit while request is pending', () async {
+    final repo = _PendingSendRepo();
+    final cubit = SendMessageCubit(repo);
+    final first = cubit.sendTextMessage(roomId: 'room', text: 'hello');
+    final second = cubit.sendTextMessage(roomId: 'room', text: 'hello');
+
+    expect(repo.calls, 1);
+    repo.complete();
+    await Future.wait([first, second]);
+    await cubit.close();
+  });
 }
 
 class _PendingSendRepo implements ChatRepo {
   final result = Completer<Either<Failure, ChatMessageResponseModel>>();
+  int calls = 0;
 
   @override
   Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
     required String roomId,
     String? text,
     List<String>? attachmentPaths,
-  }) => result.future;
+  }) {
+    calls++;
+    return result.future;
+  }
 
   void complete() => result.complete(Left(Failure(message: 'closed')));
 

@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/widgets/assignments/assignment_action_button.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CertificateDownloadIcon extends StatefulWidget {
   const CertificateDownloadIcon({super.key, required this.onTap});
@@ -17,19 +18,20 @@ class _CertificateDownloadIconState extends State<CertificateDownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: isLoading ? null : _download,
-      behavior: HitTestBehavior.opaque,
+    return SizedBox(
+      width: 130,
+      height: 36,
       child: isLoading
-          ? const SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
+          ? const Center(
+              child: SizedBox.square(
+                dimension: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
             )
-          : SvgPicture.asset(
-              ImageManager.downloadIcon,
-              height: 20,
-              width: 20,
-              fit: BoxFit.contain,
+          : AssignmentActionButton(
+              text: S.of(context).download,
+              icon: ImageManager.downloadIcon,
+              onTap: _download,
             ),
     );
   }

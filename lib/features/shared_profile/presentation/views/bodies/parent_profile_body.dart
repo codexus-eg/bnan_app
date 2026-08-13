@@ -36,12 +36,15 @@ class ParentProfileBody extends StatelessWidget {
         final name = profile?.fullName.trim().isNotEmpty == true
             ? profile!.fullName
             : CurrentUserUi.name(context);
+        final apiPhone = profile?.phone.trim();
         return AppSkeletonizer(
           isLoading: state is StudentProfileStateLoading,
           child: ProfileLayout(
             fullName: name,
             email: profile?.email ?? session.userEmail ?? '',
-            phone: profile?.phone ?? session.userPhone ?? '',
+            phone: apiPhone?.isNotEmpty == true
+                ? apiPhone!
+                : session.userPhone ?? '',
             roleLabel: CurrentUserUi.role(context),
             subtitle: CurrentUserUi.role(context),
             onRefresh: () =>
