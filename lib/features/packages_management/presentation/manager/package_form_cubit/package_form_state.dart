@@ -20,6 +20,8 @@ class PackageFormState {
   final bool isPopular;
 
   bool get isEdit => packageId?.isNotEmpty == true;
+  bool get isGulf => registrationMode?.trim().toLowerCase() == 'gulf';
+  String get effectivePackageType => isGulf ? 'hours' : packageType;
   bool get canSelectSingleSubject => registrationMode == 'egyptian';
   bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
 }

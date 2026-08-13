@@ -10,18 +10,17 @@ class AdminSubjectRequestsRepoImpl implements AdminSubjectRequestsRepo {
   final ApiConsumer _api;
 
   @override
-  getRequests({required String status, int page = 1, int limit = 20}) =>
-      repoGuard(
-        () async => AdminSubjectRequestsPage.fromJson(
-          asMap(
-            await _api.get(
-              EndPoints.adminSubjectRequests,
-              queryParameter: {'status': status, 'page': page, 'limit': limit},
-              isProtected: true,
-            ),
-          ),
+  getRequests({int page = 1, int limit = 20}) => repoGuard(
+    () async => AdminSubjectRequestsPage.fromJson(
+      asMap(
+        await _api.get(
+          EndPoints.adminSubjectRequests,
+          queryParameter: {'page': page, 'limit': limit},
+          isProtected: true,
         ),
-      );
+      ),
+    ),
+  );
 
   @override
   approve({

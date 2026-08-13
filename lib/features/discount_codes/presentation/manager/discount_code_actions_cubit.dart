@@ -10,34 +10,43 @@ class DiscountCodeActionsCubit extends Cubit<DiscountCodeActionsState> {
   bool _busy = false;
 
   Future<void> save(DiscountCodeRequest request, {String? id}) async {
-    if (_busy) return;
+    if (isClosed || _busy) return;
     _busy = true;
     emit(const DiscountCodeActionLoading());
-    final result = id == null
-        ? await repo.create(request)
-        : await repo.update(id, request);
-    _busy = false;
-    result.fold((failure) => emit(DiscountCodeActionFailure(failure.message)), (
-      code,
-    ) {
-      final saved = code.code.isEmpty
-          ? request.toModel(id: id ?? '')
-          : id != null && code.id.isEmpty
-          ? code.withId(id)
-          : code;
-      emit(DiscountCodeSaved(saved));
-    });
+    try {
+      final result = id == null
+          ? await repo.create(request)
+          : await repo.update(id, request);
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(DiscountCodeActionFailure(failure.message)),
+        (code) {
+          final saved = code.code.isEmpty
+              ? request.toModel(id: id ?? '')
+              : id != null && code.id.isEmpty
+              ? code.withId(id)
+              : code;
+          emit(DiscountCodeSaved(saved));
+        },
+      );
+    } finally {
+      _busy = false;
+    }
   }
 
   Future<void> delete(String id) async {
-    if (_busy) return;
+    if (isClosed || _busy) return;
     _busy = true;
     emit(const DiscountCodeActionLoading());
-    final result = await repo.delete(id);
-    _busy = false;
-    result.fold(
-      (failure) => emit(DiscountCodeActionFailure(failure.message)),
-      (_) => emit(DiscountCodeDeleted(id)),
-    );
+    try {
+      final result = await repo.delete(id);
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(DiscountCodeActionFailure(failure.message)),
+        (_) => emit(DiscountCodeDeleted(id)),
+      );
+    } finally {
+      _busy = false;
+    }
   }
 }

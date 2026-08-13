@@ -6,11 +6,15 @@ class ClassroomsCubit extends Cubit<ClassroomsState> {
   ClassroomsCubit(this.classroomsRepo) : super(ClassroomsInitial());
 
   final ClassroomsRepo classroomsRepo;
+  int _requestVersion = 0;
 
   Future<void> getClassrooms() async {
+    if (isClosed) return;
+    final version = ++_requestVersion;
     emit(ClassroomsLoading());
 
     final result = await classroomsRepo.getClassrooms();
+    if (isClosed || version != _requestVersion) return;
     result.fold(
       (failure) => emit(ClassroomsFailure(failure.message)),
       (response) => emit(ClassroomsSuccess(response)),

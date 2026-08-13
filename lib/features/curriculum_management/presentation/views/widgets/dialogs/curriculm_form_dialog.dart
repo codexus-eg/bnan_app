@@ -85,7 +85,8 @@ class _CurriculumFormDialogState extends State<CurriculumFormDialog> {
               state is CreateCurriculumLoading ||
               state is UpdateCurriculumLoading;
 
-          return Padding(
+          return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsetsDirectional.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,

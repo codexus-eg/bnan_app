@@ -45,7 +45,8 @@ class UserDialogs {
   }
 
   static Future<void> showResetPassword(BuildContext context, UserItem user) {
-    final cubit = context.read<UsersManagementCubit>();
+    final cubit = context.read<UsersManagementCubit>()
+      ..prepareAction(UsersManagementAction.password);
     return AppDialogs.show(
       context: context,
       child: BlocProvider.value(
@@ -56,7 +57,8 @@ class UserDialogs {
   }
 
   static Future<void> showDisable(BuildContext context, UserItem user) {
-    final cubit = context.read<UsersManagementCubit>();
+    final cubit = context.read<UsersManagementCubit>()
+      ..prepareAction(UsersManagementAction.status);
     return AppDialogs.show(
       context: context,
       child: BlocProvider.value(
@@ -67,7 +69,8 @@ class UserDialogs {
   }
 
   static Future<void> showDelete(BuildContext context, UserItem user) {
-    final cubit = context.read<UsersManagementCubit>();
+    final cubit = context.read<UsersManagementCubit>()
+      ..prepareAction(UsersManagementAction.delete);
     return AppDialogs.show(
       context: context,
       child: BlocProvider.value(

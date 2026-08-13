@@ -16,14 +16,23 @@ class CustomDialogHeader extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style:style?? StylesManager.styleBold16(
-              context,
-            ).copyWith(color: ColorManager.black),
+            style:
+                style ??
+                StylesManager.styleBold16(
+                  context,
+                ).copyWith(color: ColorManager.black),
           ),
         ),
-        InkWell(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.close, size: 22),
+        Semantics(
+          button: true,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.pop(context),
+            child: const SizedBox.square(
+              dimension: 48,
+              child: Icon(Icons.close, size: 22),
+            ),
+          ),
         ),
       ],
     );

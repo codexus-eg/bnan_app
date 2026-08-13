@@ -7,11 +7,15 @@ class GetCurriculumsCubit extends Cubit<GetCurriculumsState> {
     : super(GetCurriculumsInitial());
 
   final CurriculumManagementRepo curriculumManagementRepo;
+  int _requestVersion = 0;
 
   Future<void> getCurriculums() async {
+    if (isClosed) return;
+    final version = ++_requestVersion;
     emit(GetCurriculumsLoading());
 
     final result = await curriculumManagementRepo.getCurriculums();
+    if (isClosed || version != _requestVersion) return;
 
     result.fold(
       (failure) => emit(GetCurriculumsFailure(failure.message)),

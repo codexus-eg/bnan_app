@@ -1,6 +1,7 @@
 import 'package:bnan_app/features/discount_codes/data/models/discount_code_model.dart';
 import 'package:bnan_app/features/discount_codes/data/models/discount_code_request.dart';
 import 'package:bnan_app/features/discount_codes/data/models/discount_codes_parser.dart';
+import 'package:bnan_app/features/discount_codes/data/models/discount_date_range_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -50,5 +51,41 @@ void main() {
     ).toJson();
     expect(json, isNot(contains('startsAt')));
     expect(json, isNot(contains('endsAt')));
+  });
+
+  test('expired active code is not effectively active', () {
+    const code = DiscountCodeModel(
+      id: 'expired',
+      code: 'OLD',
+      type: DiscountCodeType.dateRange,
+      percentage: 10,
+      isActive: true,
+      endsAt: null,
+    );
+    final expired = DiscountCodeModel(
+      id: code.id,
+      code: code.code,
+      type: code.type,
+      percentage: code.percentage,
+      isActive: code.isActive,
+      endsAt: DateTime(2026, 8, 12, 23, 59),
+    );
+
+    expect(expired.isEffectivelyActiveAt(DateTime(2026, 8, 13)), isFalse);
+  });
+
+  test('today is valid and date comparisons ignore time of day', () {
+    final today = DateTime(2026, 8, 13);
+    expect(
+      DiscountDateRangePolicy.isExpired(
+        DateTime(2026, 8, 13, 0, 1),
+        now: DateTime(2026, 8, 13, 23, 59),
+      ),
+      isFalse,
+    );
+    expect(
+      DiscountDateRangePolicy.endsBeforeStart(DateTime(2026, 8, 14), today),
+      isTrue,
+    );
   });
 }

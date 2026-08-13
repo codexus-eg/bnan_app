@@ -55,24 +55,33 @@ class ClassroomsManagementBody extends StatelessWidget {
 
               return AppSkeletonizer(
                 isLoading: isLoading,
-                child: ListView.separated(
-                  padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 24),
-                  itemBuilder: (context, index) {
-                    final classroomItem = classrooms[index];
-                    return ClassroomsManagementCard(
-                      classroomItem: classroomItem,
-                      onView: () => showDialog(
-                        context: context,
-                        builder: (_) => ClassroomDetailsDialog(
-                          classroomItem: classroomItem,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      16,
+                      16,
+                      16,
+                      24,
+                    ),
+                    itemBuilder: (context, index) {
+                      final classroomItem = classrooms[index];
+                      return ClassroomsManagementCard(
+                        classroomItem: classroomItem,
+                        onView: () => showDialog(
+                          context: context,
+                          builder: (_) => ClassroomDetailsDialog(
+                            classroomItem: classroomItem,
+                          ),
                         ),
-                      ),
-                      onEdit: () =>
-                          _showEditClassroomDialog(context, classroomItem),
-                    );
-                  },
-                  separatorBuilder: (_, _) => const SizedBox(height: 16),
-                  itemCount: classrooms.length,
+                        onEdit: () =>
+                            _showEditClassroomDialog(context, classroomItem),
+                      );
+                    },
+                    separatorBuilder: (_, _) => const SizedBox(height: 16),
+                    itemCount: classrooms.length,
+                  ),
                 ),
               );
             },
@@ -106,7 +115,7 @@ class ClassroomsManagementBody extends StatelessWidget {
       ),
     );
 
-    if (result == true) {
+    if (result == true && context.mounted) {
       classroomsCubit.getClassrooms();
     }
   }
@@ -126,7 +135,7 @@ class ClassroomsManagementBody extends StatelessWidget {
       ),
     );
 
-    if (result == true) {
+    if (result == true && context.mounted) {
       classroomsCubit.getClassrooms();
     }
   }

@@ -123,8 +123,7 @@ class _FormDialogState extends State<FormDialog> {
         final isLoading =
             state is UsersActionLoading && _isCurrentAction(state.action);
         final failure =
-            state is UsersActionFailure &&
-                state.action == UsersManagementAction.create
+            state is UsersActionFailure && _isCurrentAction(state.action)
             ? state.message
             : null;
         return Column(

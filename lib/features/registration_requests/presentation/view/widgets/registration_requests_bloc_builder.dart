@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
-import 'package:bnan_app/features/registration_requests/data/models/registration_request_filter.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart'
     as registration_models;
 import 'package:bnan_app/features/registration_requests/presentation/manager/get_registration_requests_cubit/get_registration_requests_cubit.dart';
@@ -49,12 +48,8 @@ class RegistrationRequestsBlocBuilder extends StatelessWidget {
 
         final currentRequests = _requestsFrom(state);
         if (currentRequests.isEmpty) {
-          final message =
-              cubit.currentFilter == RegistrationRequestFilter.approved
-              ? S.of(context).noActiveAccountsFound
-              : S.of(context).noInactiveAccountsFound;
           return RegistrationRequestsEmpty(
-            message: message,
+            message: S.of(context).noDataAvailable,
             onRefresh: refresh,
           );
         }

@@ -24,9 +24,11 @@ class ClassroomActionsCubit extends Cubit<ClassroomActionsState> {
     String classroomId,
     ClassroomRequestModel model,
   ) async {
+    if (isClosed || state is UpdateClassroomLoading) return;
     emit(UpdateClassroomLoading());
 
     final result = await classroomsRepo.updateClassroom(classroomId, model);
+    if (isClosed) return;
     result.fold(
       (failure) => emit(UpdateClassroomFailure(failure.message)),
       (_) => emit(UpdateClassroomSuccess()),

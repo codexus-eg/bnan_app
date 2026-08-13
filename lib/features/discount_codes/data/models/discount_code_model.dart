@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/discount_codes/data/models/discount_date_range_policy.dart';
+
 enum DiscountCodeType {
   dateRange('date_range'),
   children('children');
@@ -29,6 +31,12 @@ class DiscountCodeModel {
   final DateTime? startsAt;
   final DateTime? endsAt;
   final int? childrenCount;
+
+  bool isExpiredAt(DateTime now) =>
+      type == DiscountCodeType.dateRange &&
+      DiscountDateRangePolicy.isExpired(endsAt?.toLocal(), now: now);
+
+  bool isEffectivelyActiveAt(DateTime now) => isActive && !isExpiredAt(now);
 
   factory DiscountCodeModel.fromJson(Map<String, dynamic> json) {
     return DiscountCodeModel(

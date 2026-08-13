@@ -21,9 +21,10 @@ class GetSubjectsCubit extends Cubit<GetSubjectsState> {
   Future<void> getSubjects() => refreshSubjects();
 
   Future<void> refreshSubjects() async {
-    if (state is GetSubjectsLoading || _isLoadingMore) return;
+    if (isClosed || state is GetSubjectsLoading || _isLoadingMore) return;
     emit(GetSubjectsLoading());
     final result = await subjectsRepo.getSubjects(page: 1, limit: limit);
+    if (isClosed) return;
     result.fold(
       (failure) => emit(GetSubjectsFailure(errorMessage: failure.message)),
       (response) {
@@ -38,11 +39,17 @@ class GetSubjectsCubit extends Cubit<GetSubjectsState> {
   }
 
   Future<void> loadMore() async {
-    if (_isLoadingMore || !_hasMore || state is GetSubjectsLoading) return;
+    if (isClosed ||
+        _isLoadingMore ||
+        !_hasMore ||
+        state is GetSubjectsLoading) {
+      return;
+    }
     _isLoadingMore = true;
     emit(GetSubjectsLoadingMore(subjects: subjects));
     final nextPage = _currentPage + 1;
     final result = await subjectsRepo.getSubjects(page: nextPage, limit: limit);
+    if (isClosed) return;
     result.fold(
       (failure) {
         _isLoadingMore = false;

@@ -16,9 +16,11 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   StreamSubscription<ChatNotificationEvent>? _notificationSubscription;
 
   Future<void> getChatRooms() async {
+    if (isClosed) return;
     emit(GetChatRoomsLoading());
 
     final result = await chatRepo.getChatRooms();
+    if (isClosed) return;
 
     result.fold(
       (failure) {
@@ -31,6 +33,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   }
 
   void _updateRoom(ChatNotificationEvent event) {
+    if (isClosed) return;
     final current = state;
     if (current is! GetChatRoomsSuccess) return;
     final index = current.rooms.indexWhere((room) => room.id == event.roomId);

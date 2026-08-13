@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/app_routes/routes_export.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/presentation/mappers/admin_package_card_mapper.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
@@ -28,6 +29,7 @@ class PackagesManagementGridSection extends StatelessWidget {
         curriculumId: curriculumId,
         curriculumName: curriculumName,
         isSliver: false,
+        planMapper: AdminPackageCardMapper.fromPackage,
         bottomWidget: (plan, package) {
           return PackageAdminActions(
             plan: plan,
