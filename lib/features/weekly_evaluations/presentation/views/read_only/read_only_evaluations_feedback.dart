@@ -16,10 +16,7 @@ class ReadOnlyEvaluationsFeedback extends StatelessWidget {
   Widget build(BuildContext context) {
     if (state.isLoading) {
       return const SingleChildScrollView(
-        child: WeeklyEvaluationsSkeleton(
-          showActions: false,
-          showFilter: false,
-        ),
+        child: WeeklyEvaluationsSkeleton(showActions: false, showFilter: false),
       );
     }
     if (state.status == ReadOnlyEvaluationsStatus.failure) {
@@ -35,6 +32,7 @@ class ReadOnlyEvaluationsFeedback extends StatelessWidget {
         state.children.isEmpty) {
       return s.noChildrenLinked;
     }
+    if (state.hasNoClassroom) return s.noClassroomsAvailable;
     return switch (state.data?.mode) {
       EvaluationMode.gulf => s.noClassroomsAvailable,
       EvaluationMode.egyptian => s.noSubjectsAvailableReadOnly,

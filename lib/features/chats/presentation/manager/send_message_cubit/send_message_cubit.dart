@@ -12,6 +12,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
     String? text,
     List<String>? attachmentPaths,
   }) async {
+    if (isClosed) return;
     final trimmedText = text?.trim();
 
     final hasText = trimmedText != null && trimmedText.isNotEmpty;
@@ -29,6 +30,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
       text: hasText ? trimmedText : null,
       attachmentPaths: hasAttachments ? attachmentPaths : null,
     );
+    if (isClosed) return;
 
     result.fold(
       (failure) {
@@ -63,6 +65,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
   }
 
   void resetState() {
+    if (isClosed) return;
     emit(SendMessageInitial());
   }
 }

@@ -13,6 +13,7 @@ import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dar
 import 'package:bnan_app/features/parent_home/presentation/manager/get_parent_children/get_parent_children_state.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_failure.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_list.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +93,10 @@ class ParentChildrenBody extends StatelessWidget {
       extra: args,
     );
     if (result == ParentFlowResult.completed && context.mounted) {
-      context.read<GetParentChildrenCubit>().getParentChildren();
+      await Future.wait([
+        context.read<GetParentChildrenCubit>().getParentChildren(),
+        context.read<DashboardCubit>().refresh(),
+      ]);
     }
   }
 }

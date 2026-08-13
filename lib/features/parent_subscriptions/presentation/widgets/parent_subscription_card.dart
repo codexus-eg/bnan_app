@@ -45,14 +45,13 @@ class ParentSubscriptionCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        if (subscription.isSingleSubject)
-          _line(
-            context,
-            S.of(context).subjects,
-            subscription.subject?.name ?? '-',
-          ),
-        _line(context, S.of(context).packageType, subscription.packageType),
-        _line(context, S.of(context).status, subscription.status),
+        if (subscription.isSingleSubject &&
+            subscription.subject?.name.trim().isNotEmpty == true)
+          _line(context, S.of(context).subjects, subscription.subject!.name),
+        if (subscription.packageType.trim().isNotEmpty)
+          _line(context, S.of(context).packageType, subscription.packageType),
+        if (subscription.status.trim().isNotEmpty)
+          _line(context, S.of(context).status, subscription.status),
         if (subscription.packageType == 'hours') ...[
           _line(
             context,
@@ -70,17 +69,27 @@ class ParentSubscriptionCard extends StatelessWidget {
             _number(subscription.remainingHours),
           ),
         ],
+        if (subscription.startDate != null)
+          _line(
+            context,
+            S.of(context).startDate,
+            _date(subscription.startDate!),
+          ),
         if (subscription.endDate != null)
           _line(
             context,
             S.of(context).renewalExpiry,
-            subscription.endDate!.toLocal().toString().split(' ').first,
+            _date(subscription.endDate!),
           ),
         if (subscription.price != null)
           _line(
             context,
             S.of(context).packagePrice,
-            '${_number(subscription.price!)} ${subscription.currency ?? ''}',
+            [
+              _number(subscription.price!),
+              if (subscription.currency?.trim().isNotEmpty == true)
+                subscription.currency!.trim(),
+            ].join(' '),
           ),
         if (showRenew &&
             subscription.canRenew &&
@@ -118,7 +127,7 @@ class ParentSubscriptionCard extends StatelessWidget {
         const SizedBox(width: 8),
         Flexible(
           child: Text(
-            value.isEmpty ? '-' : value,
+            value,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.end,
@@ -130,4 +139,6 @@ class ParentSubscriptionCard extends StatelessWidget {
   );
   String _number(num value) =>
       value % 1 == 0 ? value.toInt().toString() : value.toString();
+  String _date(DateTime value) =>
+      value.toLocal().toIso8601String().split('T').first;
 }

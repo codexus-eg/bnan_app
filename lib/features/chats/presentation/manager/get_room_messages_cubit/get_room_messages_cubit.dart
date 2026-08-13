@@ -20,6 +20,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   String? _currentRoomId;
 
   Future<void> initializeChat({required String roomId}) async {
+    if (isClosed) return;
     final normalizedRoomId = roomId.trim();
     if (normalizedRoomId.isEmpty) return;
 
@@ -30,9 +31,12 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     try {
       await socketService.connect();
     } catch (error) {
-      emit(GetRoomMessagesFailure(errorMessage: error.toString()));
+      if (!isClosed) {
+        emit(GetRoomMessagesFailure(errorMessage: error.toString()));
+      }
       return;
     }
+    if (isClosed) return;
 
     _registerSocketListeners();
     socketService.joinRoom(normalizedRoomId);
@@ -41,9 +45,11 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   }
 
   Future<void> getRoomMessages({required String roomId}) async {
+    if (isClosed) return;
     emit(GetRoomMessagesLoading());
 
     final result = await chatRepo.getRoomMessages(roomId: roomId);
+    if (isClosed) return;
 
     result.fold(
       (failure) {
@@ -100,6 +106,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   }
 
   void _emitMessages() {
+    if (isClosed) return;
     emit(
       GetRoomMessagesSuccess(messages: List<ChatMessageModel>.from(_messages)),
     );

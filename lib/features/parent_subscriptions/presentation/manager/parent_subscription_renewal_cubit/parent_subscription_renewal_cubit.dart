@@ -187,13 +187,16 @@ class ParentSubscriptionRenewalCubit
         (await repo.gulfReconcile(
           id,
         )).fold((_) {}, (value) => response = value);
+        if (isClosed) return;
         if (response == null || !response!.status.isTerminal) {
           (await repo.gulfStatus(id)).fold((_) {}, (value) => response = value);
+          if (isClosed) return;
         }
       } else {
         (await repo.egyptianStatus(
           id,
         )).fold((_) {}, (value) => response = value);
+        if (isClosed) return;
       }
       if (response != null) await _handle(response!);
     } finally {
@@ -221,6 +224,7 @@ class ParentSubscriptionRenewalCubit
         receiptImage: state.receipt!,
       ),
     );
+    if (isClosed) return;
     result.fold(
       (failure) {
         emit(
@@ -279,6 +283,7 @@ class ParentSubscriptionRenewalCubit
       request: request,
       idempotencyKey: _attempt.keyFor(request.toJson()),
     );
+    if (isClosed) return;
     result.fold(
       (failure) {
         if (failure.responseReceived) _attempt.startNew();

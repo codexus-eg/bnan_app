@@ -281,10 +281,12 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     _checkingPayment = true;
     try {
       final reconciled = await repo.reconcile(id);
+      if (isClosed) return;
       TamaraStatusResponse? response;
       reconciled.fold((_) {}, (value) => response = value);
       if (response == null || !response!.status.isTerminal) {
         final status = await repo.status(id);
+        if (isClosed) return;
         status.fold((_) {}, (value) => response = value);
       }
       if (response != null) await _handlePaymentStatus(response!);
@@ -316,6 +318,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     _log('Egyptian request model built');
     _log('Egyptian repository call started');
     final result = await repo.registerEgyptian(request);
+    if (isClosed) return;
     _log('Egyptian repository call completed');
     result.fold(
       (failure) {
@@ -359,12 +362,14 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       ),
     );
     final key = await _beginAttempt(request);
+    if (isClosed) return;
     _log('idempotency attempt prepared');
     _log('combined checkout started');
     final result = await repo.checkoutGulf(
       request: request,
       idempotencyKey: key,
     );
+    if (isClosed) return;
     await result.fold(
       (failure) async {
         _log(
@@ -376,6 +381,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       (checkout) async {
         _log('checkout response accepted; paymentId present');
         await _saveCheckout(request, checkout.paymentId, checkout.checkoutUrl!);
+        if (isClosed) return;
         emit(
           state.copyWith(
             phase: ParentAddChildPhase.processingPayment,
@@ -436,6 +442,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
           : response.paymentId;
       if (id == null || !_completedPaymentIds.add(id)) return;
       await store?.clear();
+      if (isClosed) return;
       emit(
         state.copyWith(
           phase: ParentAddChildPhase.completed,

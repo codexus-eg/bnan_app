@@ -14,6 +14,7 @@ void main() {
           'userId': 'user-1',
           'fullName': 'Egyptian Test Student 2',
           'registrationMode': 'egyptian',
+          'accountStatus': 'active',
           'curriculum': {
             'id': 'egyptian-curriculum',
             'name': 'Egyptian',
@@ -39,8 +40,22 @@ void main() {
     expect(response.data.first.id, 'child-1');
     expect(response.data.first.registrationMode, RegistrationMode.egyptian);
     expect(response.data.first.curriculum?.id, 'egyptian-curriculum');
+    expect(response.data.first.isActive, isTrue);
     expect(response.data.last.registrationMode, RegistrationMode.gulf);
     expect(response.data.last.classroom, isNull);
+  });
+
+  test('child activation uses accountStatus without inferring unknowns', () {
+    final children = GetParentChildrenResponseModel.fromJson({
+      'data': [
+        {'id': 'active', 'accountStatus': 'active'},
+        {'id': 'inactive', 'accountStatus': 'inactive'},
+        {'id': 'unknown', 'accountStatus': 'pending'},
+        {'id': 'missing'},
+      ],
+    }).data;
+
+    expect(children.map((child) => child.isActive), [true, false, null, null]);
   });
 
   test('missing and unknown child registration modes parse as null', () {

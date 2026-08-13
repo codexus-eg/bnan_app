@@ -6,6 +6,7 @@ import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/paren
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
 
 class ReadOnlyWeeklyEvaluationsCubit
     extends Cubit<ReadOnlyWeeklyEvaluationsState> {
@@ -57,6 +58,7 @@ class ReadOnlyWeeklyEvaluationsCubit
           return;
         }
         final childId = stableChildren.first.id;
+        final child = stableChildren.first;
         emit(
           state.copyWith(
             children: stableChildren,
@@ -64,6 +66,10 @@ class ReadOnlyWeeklyEvaluationsCubit
             hasLoadedChildren: true,
           ),
         );
+        if (_hasNoClassroom(child)) {
+          _emitNoClassroom();
+          return;
+        }
         final evaluationsId = ++_requestId;
         await _loadEvaluations(
           requestId: evaluationsId,
@@ -82,6 +88,7 @@ class ReadOnlyWeeklyEvaluationsCubit
       return;
     }
     final requestId = ++_requestId;
+    final child = state.children.firstWhere((item) => item.id == id);
     emit(
       state.copyWith(
         selectedChildId: id,
@@ -90,8 +97,13 @@ class ReadOnlyWeeklyEvaluationsCubit
         isChangingChild: true,
         isChangingWeek: false,
         failureMessage: null,
+        hasNoClassroom: false,
       ),
     );
+    if (_hasNoClassroom(child)) {
+      _emitNoClassroom();
+      return;
+    }
     await _loadEvaluations(
       requestId: requestId,
       studentId: id,
@@ -178,6 +190,7 @@ class ReadOnlyWeeklyEvaluationsCubit
           maxAvailableWeek: nextMax == 0 ? null : nextMax,
           data: data,
           failureMessage: null,
+          hasNoClassroom: false,
         ),
       );
     });
@@ -188,6 +201,21 @@ class ReadOnlyWeeklyEvaluationsCubit
     EvaluationMode.egyptian => data.subjects.isEmpty,
     EvaluationMode.unknown => data.classrooms.isEmpty && data.subjects.isEmpty,
   };
+
+  bool _hasNoClassroom(ParentEvaluationChildModel child) =>
+      child.registrationMode == RegistrationMode.gulf && !child.hasClassroom;
+
+  void _emitNoClassroom() => emit(
+    state.copyWith(
+      status: ReadOnlyEvaluationsStatus.empty,
+      isLoading: false,
+      isChangingChild: false,
+      isChangingWeek: false,
+      data: null,
+      failureMessage: null,
+      hasNoClassroom: true,
+    ),
+  );
 
   void _emitFailure(String message) => emit(
     state.copyWith(

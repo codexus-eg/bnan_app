@@ -13,6 +13,7 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_o
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
 
 void main() {
   group('student', () {
@@ -115,6 +116,21 @@ void main() {
       await cubit.loadForParent();
       expect(cubit.state.selectedChildId, 'child-1');
       expect(repo.calls.single.studentId, 'child-1');
+    });
+
+    test('gulf child without classroom emits empty without request', () async {
+      const child = ParentEvaluationChildModel(
+        id: 'gulf-child',
+        registrationMode: RegistrationMode.gulf,
+      );
+      final repo = _FakeReadRepo(children: const [child]);
+      final cubit = ReadOnlyWeeklyEvaluationsCubit(repo);
+
+      await cubit.loadForParent();
+
+      expect(repo.calls, isEmpty);
+      expect(cubit.state.status, ReadOnlyEvaluationsStatus.empty);
+      expect(cubit.state.hasNoClassroom, isTrue);
     });
 
     test('selectChild resets max week from the new child response', () async {

@@ -19,11 +19,13 @@ class ReadOnlyWeeklyEvaluationsState {
     this.hasLoadedChildren = false,
     this.isChangingChild = false,
     this.isChangingWeek = false,
+    this.hasNoClassroom = false,
   });
 
   final ReadOnlyEvaluationsRole? role;
   final ReadOnlyEvaluationsStatus status;
   final bool isLoading, hasLoadedChildren, isChangingChild, isChangingWeek;
+  final bool hasNoClassroom;
   final List<ParentEvaluationChildModel> children;
   final String? selectedChildId, failureMessage;
   final int? selectedWeek, maxAvailableWeek;
@@ -42,6 +44,7 @@ class ReadOnlyWeeklyEvaluationsState {
     bool? hasLoadedChildren,
     bool? isChangingChild,
     bool? isChangingWeek,
+    bool? hasNoClassroom,
   }) => ReadOnlyWeeklyEvaluationsState(
     role: role ?? this.role,
     status: status ?? this.status,
@@ -63,6 +66,7 @@ class ReadOnlyWeeklyEvaluationsState {
     hasLoadedChildren: hasLoadedChildren ?? this.hasLoadedChildren,
     isChangingChild: isChangingChild ?? this.isChangingChild,
     isChangingWeek: isChangingWeek ?? this.isChangingWeek,
+    hasNoClassroom: hasNoClassroom ?? this.hasNoClassroom,
   );
 }
 
