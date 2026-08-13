@@ -125,7 +125,7 @@ void main() {
       teacherDrawerItems(context).map((item) => item.title),
       contains(s.weeklyIdealStudent),
     );
-    expect(adminDrawerItems(context), hasLength(17));
+    expect(adminDrawerItems(context), hasLength(18));
     expect(
       adminDrawerItems(context).where((item) => item.title == s.discountCodes),
       hasLength(1),

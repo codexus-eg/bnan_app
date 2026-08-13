@@ -51,6 +51,7 @@ abstract class Routes {
   static const String teacherPerformance = '/teacherPerformance';
   static const String weeklyIdealStudents = '/weeklyIdealStudents';
   static const String idealTeacher = '/idealTeacher';
+  static const String idealSupervisor = '/idealSupervisor';
   static const String weeklyEvaluations = '/weeklyEvaluations';
   static const String attendance = '/attendance';
   static const String classSchedules = '/classSchedules';

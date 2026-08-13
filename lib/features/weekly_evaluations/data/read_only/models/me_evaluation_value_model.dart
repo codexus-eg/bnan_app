@@ -7,6 +7,7 @@ class MeEvaluationValueModel {
     this.participation,
     this.homework,
     this.behavior,
+    this.bonus = 0,
     this.notes,
     this.createdByRole,
     this.updatedByRole,
@@ -15,6 +16,7 @@ class MeEvaluationValueModel {
   });
 
   final String? id, attendance, participation, homework, behavior, notes;
+  final int bonus;
   final String? createdByRole, updatedByRole, createdAt, updatedAt;
 
   factory MeEvaluationValueModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,8 @@ class MeEvaluationValueModel {
       participation: read('participation'),
       homework: read('homework'),
       behavior: read('behavior'),
+      bonus:
+          ReadEvaluationJsonParser.integer(json['bonus'] ?? json['bouns']) ?? 0,
       notes: read('notes'),
       createdByRole: read('createdByRole'),
       updatedByRole: read('updatedByRole'),

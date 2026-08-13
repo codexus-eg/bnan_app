@@ -5060,6 +5060,96 @@ class S {
     );
   }
 
+  /// `Ideal Supervisor`
+  String get idealSupervisor {
+    return Intl.message(
+      'Ideal Supervisor',
+      name: 'idealSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select the ideal supervisor`
+  String get selectIdealSupervisor {
+    return Intl.message(
+      'Select the ideal supervisor',
+      name: 'selectIdealSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal supervisor certificate issued successfully`
+  String get idealSupervisorIssuedSuccessfully {
+    return Intl.message(
+      'Ideal supervisor certificate issued successfully',
+      name: 'idealSupervisorIssuedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal Supervisor Certificate`
+  String get idealSupervisorCertificate {
+    return Intl.message(
+      'Ideal Supervisor Certificate',
+      name: 'idealSupervisorCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select at least one valid supervisor`
+  String get invalidIdealSupervisorSelection {
+    return Intl.message(
+      'Select at least one valid supervisor',
+      name: 'invalidIdealSupervisorSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected supervisor no longer exists`
+  String get supervisorNotFound {
+    return Intl.message(
+      'The selected supervisor no longer exists',
+      name: 'supervisorNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected account is not a supervisor`
+  String get invalidCertificateRecipient {
+    return Intl.message(
+      'The selected account is not a supervisor',
+      name: 'invalidCertificateRecipient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected supervisor is not active`
+  String get supervisorNotActive {
+    return Intl.message(
+      'The selected supervisor is not active',
+      name: 'supervisorNotActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An ideal supervisor certificate was already issued this month`
+  String get idealSupervisorCertificateAlreadyExists {
+    return Intl.message(
+      'An ideal supervisor certificate was already issued this month',
+      name: 'idealSupervisorCertificateAlreadyExists',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Weekly Evaluations`
   String get weeklyEvaluations {
     return Intl.message(

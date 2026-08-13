@@ -8,9 +8,11 @@ void main() {
     final api = _Api();
     await IdealStudentRepoImpl(
       api,
-    ).getWeeklyRanking(classroomId: 'classroom-1', page: 2, limit: 20);
-    expect(api.path, EndPoints.egyptianWeeklyRankings('classroom-1'));
-    expect(api.query, {'page': 2, 'limit': 20});
+    ).getWeeklyRanking(classroomId: 'abc123', page: 1, limit: 20);
+    expect(api.path, EndPoints.classroomWeeklyRanking('abc123'));
+    expect(api.path, '/classrooms/abc123/weekly-ranking');
+    expect(api.path, isNot('/egyptian-weekly-rankings/abc123'));
+    expect(api.query, {'page': 1, 'limit': 20});
     expect(api.protected, isTrue);
   });
 }

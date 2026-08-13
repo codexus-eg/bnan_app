@@ -46,4 +46,18 @@ void main() {
     expect(item.previewImagePath, isEmpty);
     expect(item.pdfPath, isEmpty);
   });
+
+  test('accepts ideal supervisor type and supervisor recipient type', () {
+    final item = CertificatesResponseModel.fromJson({
+      'data': [
+        {
+          '_id': 'certificate-1',
+          'certificateType': 'ideal_supervisor',
+          'recipientType': 'supervisor',
+        },
+      ],
+    }).data.single;
+    expect(item.certificateType, 'ideal_supervisor');
+    expect(item.id, 'certificate-1');
+  });
 }

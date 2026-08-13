@@ -52,6 +52,9 @@ export 'package:bnan_app/features/ideal_student/presentation/manager/ideal_stude
 export 'package:bnan_app/features/ideal_teacher/data/repos/supervisor_ideal_teacher_repo.dart';
 export 'package:bnan_app/features/ideal_teacher/data/repos/supervisor_ideal_teacher_repo_impl.dart';
 export 'package:bnan_app/features/ideal_teacher/presentation/manager/supervisor_ideal_teacher_cubit.dart';
+export 'package:bnan_app/features/ideal_supervisor/data/repos/admin_ideal_supervisor_repo.dart';
+export 'package:bnan_app/features/ideal_supervisor/data/repos/admin_ideal_supervisor_repo_impl.dart';
+export 'package:bnan_app/features/ideal_supervisor/presentation/manager/admin_ideal_supervisor_cubit.dart';
 export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo.dart';
 export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo_impl.dart';
 export 'package:bnan_app/features/discount_codes/presentation/manager/discount_codes_cubit.dart';

@@ -15,6 +15,7 @@ import 'package:bnan_app/features/certificates_management/data/models/student_su
 import 'package:bnan_app/features/certificates_management/data/repo/certificates_management_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   const CertificatesManagementRepoImpl(this.apiConsumer);
@@ -57,14 +58,37 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
     required CreateMonthlyCertificateRequestModel request,
   }) {
     return repoGuard(() async {
+      final endpoint = EndPoints.createMonthlyStudentCertificate(
+        request.studentId,
+      );
+      final body = request.toJson();
+      _logCreateRequest(endpoint, request, body);
       final response = await apiConsumer.post(
-        EndPoints.studentMonthlyCertificates,
-        data: request.toJson(),
+        endpoint,
+        data: body,
         isProtected: true,
       );
 
       return CreateMonthlyCertificateResponseModel.fromJson(asMap(response));
     });
+  }
+
+  void _logCreateRequest(
+    String endpoint,
+    CreateMonthlyCertificateRequestModel request,
+    Map<String, dynamic> body,
+  ) {
+    if (!kDebugMode) return;
+    debugPrint('Certificate create endpoint: ${EndPoints.baseUrl}$endpoint');
+    debugPrint('Certificate create studentId path param: ${request.studentId}');
+    debugPrint('Certificate create subjects count: ${request.subjects.length}');
+    for (final subject in request.subjects) {
+      debugPrint(
+        'subjectId=${subject.subjectId}, scoreType=${subject.score.runtimeType}, '
+        'maxScoreType=${subject.maxScore.runtimeType}',
+      );
+    }
+    debugPrint('Certificate create body keys: ${body.keys.toList()}');
   }
 
   @override

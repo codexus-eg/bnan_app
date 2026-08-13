@@ -102,12 +102,17 @@ void main() {
       expect(cubit.state.hasLoadedChildren, isTrue);
     });
 
-    test('one child is selected and its id is omitted', () async {
-      final repo = _FakeReadRepo(children: const [_child1]);
+    test('one child sends student profile id instead of user id', () async {
+      const child = ParentEvaluationChildModel(
+        id: 'student-profile-1',
+        userId: 'user-1',
+      );
+      final repo = _FakeReadRepo(children: const [child]);
       final cubit = ReadOnlyWeeklyEvaluationsCubit(repo);
       await cubit.loadForParent();
-      expect(cubit.state.selectedChildId, 'child-1');
-      expect(repo.calls.single.studentId, isNull);
+      expect(cubit.state.selectedChildId, 'student-profile-1');
+      expect(repo.calls.single.studentId, 'student-profile-1');
+      expect(repo.calls.single.studentId, isNot('user-1'));
     });
 
     test('multiple children select first and send its id', () async {
@@ -159,12 +164,12 @@ void main() {
       expect(repo.calls, hasLength(1));
     });
 
-    test('one-child parent week request omits student id', () async {
+    test('one-child parent week request sends student profile id', () async {
       final repo = _FakeReadRepo(children: const [_child1]);
       final cubit = ReadOnlyWeeklyEvaluationsCubit(repo);
       await cubit.loadForParent();
       await cubit.selectWeek(2);
-      expect(repo.calls.last, (week: 2, studentId: null));
+      expect(repo.calls.last, (week: 2, studentId: 'child-1'));
     });
 
     test('multi-child parent week request sends selected child', () async {

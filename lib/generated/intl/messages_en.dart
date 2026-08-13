@@ -696,6 +696,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "hoursPackage": m14,
         "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
             "How do you deal with a weak student?"),
+        "idealSupervisor":
+            MessageLookupByLibrary.simpleMessage("Ideal Supervisor"),
+        "idealSupervisorCertificate": MessageLookupByLibrary.simpleMessage(
+            "Ideal Supervisor Certificate"),
+        "idealSupervisorCertificateAlreadyExists":
+            MessageLookupByLibrary.simpleMessage(
+                "An ideal supervisor certificate was already issued this month"),
+        "idealSupervisorIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Ideal supervisor certificate issued successfully"),
         "idealTeacher": MessageLookupByLibrary.simpleMessage("Ideal Teacher"),
         "idealTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("Ideal Teacher Certificate"),
@@ -709,6 +719,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Appreciation Certificate - Interaction"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("Interaction Level"),
+        "invalidCertificateRecipient": MessageLookupByLibrary.simpleMessage(
+            "The selected account is not a supervisor"),
         "invalidChildrenCount": MessageLookupByLibrary.simpleMessage(
             "Enter a positive children count"),
         "invalidCvUrl":
@@ -721,6 +733,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter a valid email address."),
         "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
             "Bonus points must be from 0 to 5"),
+        "invalidIdealSupervisorSelection": MessageLookupByLibrary.simpleMessage(
+            "Select at least one valid supervisor"),
         "invalidLink": MessageLookupByLibrary.simpleMessage("Invalid link"),
         "invalidPackage":
             MessageLookupByLibrary.simpleMessage("Invalid package data"),
@@ -1515,6 +1529,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectGrade": MessageLookupByLibrary.simpleMessage("Select grade"),
         "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
             "Select a grade to view attendance data"),
+        "selectIdealSupervisor":
+            MessageLookupByLibrary.simpleMessage("Select the ideal supervisor"),
         "selectIdealTeacher":
             MessageLookupByLibrary.simpleMessage("Select the ideal teacher"),
         "selectLesson": MessageLookupByLibrary.simpleMessage("Select lesson"),
@@ -1677,6 +1693,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "You were assigned as supervisor for third grade"),
         "supervisorAssignment":
             MessageLookupByLibrary.simpleMessage("Supervisor Assignment"),
+        "supervisorNotActive": MessageLookupByLibrary.simpleMessage(
+            "The selected supervisor is not active"),
+        "supervisorNotFound": MessageLookupByLibrary.simpleMessage(
+            "The selected supervisor no longer exists"),
         "supervisorRequired":
             MessageLookupByLibrary.simpleMessage("Supervisor is required"),
         "supervisorSaraAhmed":

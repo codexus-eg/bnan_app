@@ -5,6 +5,7 @@ import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/me_we
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/parent_evaluation_child_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_state.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_evaluations_request_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
 
@@ -71,10 +72,7 @@ class ReadOnlyWeeklyEvaluationsCubit
           return;
         }
         final evaluationsId = ++_requestId;
-        await _loadEvaluations(
-          requestId: evaluationsId,
-          studentId: stableChildren.length > 1 ? childId : null,
-        );
+        await _loadEvaluations(requestId: evaluationsId, studentId: childId);
       },
     );
   }
@@ -120,9 +118,7 @@ class ReadOnlyWeeklyEvaluationsCubit
       return;
     }
     final requestId = ++_requestId;
-    final studentId =
-        state.role == ReadOnlyEvaluationsRole.parent &&
-            state.children.length > 1
+    final studentId = state.role == ReadOnlyEvaluationsRole.parent
         ? state.selectedChildId
         : null;
     emit(
@@ -152,9 +148,7 @@ class ReadOnlyWeeklyEvaluationsCubit
     await _loadEvaluations(
       requestId: requestId,
       week: state.selectedWeek,
-      studentId:
-          state.role == ReadOnlyEvaluationsRole.parent &&
-              state.children.length > 1
+      studentId: state.role == ReadOnlyEvaluationsRole.parent
           ? state.selectedChildId
           : null,
     );
@@ -166,6 +160,13 @@ class ReadOnlyWeeklyEvaluationsCubit
     String? studentId,
     bool resetMaxAvailableWeek = false,
   }) async {
+    final child = _selectedChild(studentId);
+    logReadOnlyEvaluationsRequest(
+      role: state.role?.name ?? 'unknown',
+      studentProfileId: studentId,
+      userId: child?.userId,
+      week: week,
+    );
     final result = await repo.getMyEvaluations(
       week: week,
       studentId: studentId,
@@ -204,6 +205,13 @@ class ReadOnlyWeeklyEvaluationsCubit
 
   bool _hasNoClassroom(ParentEvaluationChildModel child) =>
       child.registrationMode == RegistrationMode.gulf && !child.hasClassroom;
+
+  ParentEvaluationChildModel? _selectedChild(String? studentId) {
+    for (final child in state.children) {
+      if (child.id == studentId) return child;
+    }
+    return null;
+  }
 
   void _emitNoClassroom() => emit(
     state.copyWith(

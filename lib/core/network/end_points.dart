@@ -40,6 +40,7 @@ abstract class EndPoints {
   static const String grades = '/grades';
   static const String teachers = '/teachers';
   static const String supervisors = '/supervisors';
+  static const String adminIdealSupervisors = '/supervisors/ideal-supervisors';
   static const String studentMonthlyCertificates =
       '/certificates/student-monthly/';
   static const String issueMonthlyCertificates =
@@ -83,8 +84,8 @@ abstract class EndPoints {
   static const String studentSubjectRequestCheckout =
       '$studentSubjectRequests/checkout';
 
-  static String egyptianWeeklyRankings(String classroomId) {
-    return '/egyptian-weekly-rankings/$classroomId';
+  static String classroomWeeklyRanking(String classroomId) {
+    return '$classrooms/$classroomId/weekly-ranking';
   }
 
   static String updateCurriculum(String curriculumId) {
@@ -173,6 +174,10 @@ abstract class EndPoints {
     }
 
     return '/certificates/monthly?classroomId=$classroomId';
+  }
+
+  static String createMonthlyStudentCertificate(String studentId) {
+    return '/certificates/monthly/student/$studentId';
   }
 
   static String teachersByStatus(String status) {

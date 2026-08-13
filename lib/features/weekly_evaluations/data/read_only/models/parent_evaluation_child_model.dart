@@ -5,13 +5,14 @@ import 'package:bnan_app/core/enums/registration_mode.dart';
 class ParentEvaluationChildModel {
   const ParentEvaluationChildModel({
     this.id = '',
+    this.userId = '',
     this.fullName = '',
     this.classroom,
     this.classrooms = const [],
     this.registrationMode,
   });
 
-  final String id, fullName;
+  final String id, userId, fullName;
   final ReadEvaluationReferenceModel? classroom;
   final List<ReadEvaluationReferenceModel> classrooms;
   final RegistrationMode? registrationMode;
@@ -21,6 +22,7 @@ class ParentEvaluationChildModel {
   factory ParentEvaluationChildModel.fromJson(Map<String, dynamic> json) =>
       ParentEvaluationChildModel(
         id: ReadEvaluationJsonParser.id(json),
+        userId: ReadEvaluationJsonParser.string(json['userId']),
         fullName: ReadEvaluationJsonParser.string(
           json['fullName'] ?? json['name'],
         ),

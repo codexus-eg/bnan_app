@@ -668,6 +668,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "hoursPackage": m14,
         "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
             "كيف تتعامل مع طالب ضعيف المستوى؟"),
+        "idealSupervisor":
+            MessageLookupByLibrary.simpleMessage("المشرف المثالي"),
+        "idealSupervisorCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة المشرف المثالي"),
+        "idealSupervisorCertificateAlreadyExists":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إصدار شهادة المشرف المثالي لهذا الشهر بالفعل"),
+        "idealSupervisorIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إصدار شهادة المشرف المثالي بنجاح"),
         "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
         "idealTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
@@ -680,6 +690,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شكر وتقدير - التفاعل"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
+        "invalidCertificateRecipient":
+            MessageLookupByLibrary.simpleMessage("الحساب المحدد ليس مشرفًا"),
         "invalidChildrenCount":
             MessageLookupByLibrary.simpleMessage("أدخل عدد أبناء موجبًا"),
         "invalidCvUrl": MessageLookupByLibrary.simpleMessage(
@@ -692,6 +704,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال عنوان بريد إلكتروني صالح."),
         "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
             "النقاط الإضافية يجب أن تكون من 0 إلى 5"),
+        "invalidIdealSupervisorSelection": MessageLookupByLibrary.simpleMessage(
+            "اختر مشرفًا صالحًا واحدًا على الأقل"),
         "invalidLink": MessageLookupByLibrary.simpleMessage("رابط غير صالح"),
         "invalidPackage":
             MessageLookupByLibrary.simpleMessage("بيانات الباقة غير صالحة"),
@@ -1463,6 +1477,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
             "اختر الصف لعرض بيانات الحضور"),
+        "selectIdealSupervisor":
+            MessageLookupByLibrary.simpleMessage("اختر المشرف المثالي"),
         "selectIdealTeacher":
             MessageLookupByLibrary.simpleMessage("اختر المعلم المثالي"),
         "selectLesson": MessageLookupByLibrary.simpleMessage("اختر الحصة"),
@@ -1618,6 +1634,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "تم تعيينك مشرفًا في الصف الثالث"),
         "supervisorAssignment":
             MessageLookupByLibrary.simpleMessage("توظيف المشرف"),
+        "supervisorNotActive":
+            MessageLookupByLibrary.simpleMessage("حساب المشرف المحدد غير نشط"),
+        "supervisorNotFound": MessageLookupByLibrary.simpleMessage(
+            "المشرف المحدد لم يعد موجودًا"),
         "supervisorRequired":
             MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
         "supervisorSaraAhmed":
