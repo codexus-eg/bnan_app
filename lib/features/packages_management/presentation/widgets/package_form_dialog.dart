@@ -91,6 +91,7 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
       packageType: state.packageType,
       accessScope: state.accessScope,
       canSelectSingleSubject: state.canSelectSingleSubject,
+      showMonthly: !state.isGulf,
       currency: state.currency,
       isPopular: state.isPopular,
       isLoading: loading,
@@ -175,6 +176,7 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
     final newPrice = num.tryParse(controllers.newPrice.text.trim());
 
     if (state.curriculumId?.isEmpty ?? true) return 'curriculum';
+    if (state.isGulf && state.packageType != 'hours') return 'packageType';
     if (controllers.name.text.trim().isEmpty) return 'name';
     if (duration == null || duration <= 0) return 'duration';
     if (oldPrice == null || oldPrice < 0) return 'oldPrice';
@@ -200,6 +202,8 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
         return S.of(context).newPriceMustBeLessThanOldPrice;
       case 'currency':
         return S.of(context).currencyRequired;
+      case 'packageType':
+        return S.of(context).invalidPackage;
       default:
         return S.of(context).invalidData;
     }
@@ -207,14 +211,15 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
 
   AddPackageRequestModel _addRequest(PackageFormState state) {
     final duration = int.parse(controllers.duration.text.trim());
+    final type = state.effectivePackageType;
 
     return AddPackageRequestModel(
       name: controllers.name.text.trim(),
       curriculum: state.curriculumId!,
-      type: state.packageType,
+      type: type,
       accessScope: state.accessScope,
-      hours: state.packageType == 'hours' ? duration : null,
-      months: state.packageType == 'monthly' ? duration : null,
+      hours: type == 'hours' ? duration : null,
+      months: type == 'monthly' ? duration : null,
       oldPrice: num.parse(controllers.oldPrice.text.trim()),
       price: num.parse(controllers.newPrice.text.trim()),
       currency: state.currency,
@@ -226,14 +231,15 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
 
   UpdatePackageRequestModel _updateRequest(PackageFormState state) {
     final duration = int.parse(controllers.duration.text.trim());
+    final type = state.effectivePackageType;
 
     return UpdatePackageRequestModel(
       name: controllers.name.text.trim(),
       curriculum: state.curriculumId,
-      type: state.packageType,
+      type: type,
       accessScope: state.accessScope,
-      hours: state.packageType == 'hours' ? duration : null,
-      months: state.packageType == 'monthly' ? duration : null,
+      hours: type == 'hours' ? duration : null,
+      months: type == 'monthly' ? duration : null,
       oldPrice: num.parse(controllers.oldPrice.text.trim()),
       price: num.parse(controllers.newPrice.text.trim()),
       currency: state.currency,

@@ -5,6 +5,7 @@ import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/discount_codes/data/models/discount_code_model.dart';
 import 'package:bnan_app/features/discount_codes/data/models/discount_code_request.dart';
+import 'package:bnan_app/features/discount_codes/data/models/discount_date_range_policy.dart';
 import 'package:bnan_app/features/discount_codes/presentation/manager/discount_code_actions_cubit.dart';
 import 'package:bnan_app/features/discount_codes/presentation/manager/discount_code_actions_state.dart';
 import 'package:bnan_app/features/discount_codes/presentation/manager/discount_codes_cubit.dart';
@@ -88,6 +89,7 @@ class _DiscountCodeFormDialogState extends State<DiscountCodeFormDialog> {
                 Text(error!, style: const TextStyle(color: ColorManager.red)),
                 const SizedBox(height: 8),
               ],
+              const SizedBox(height: 16),
               CustomAppButton(
                 text: S.of(context).confirm,
                 isLoading: state is DiscountCodeActionLoading,
@@ -129,8 +131,14 @@ class _DiscountCodeFormDialogState extends State<DiscountCodeFormDialog> {
     if (type == DiscountCodeType.dateRange && (start == null || end == null)) {
       return s.discountDatesRequired;
     }
-    if (start != null && end != null && end!.isBefore(start!)) {
+    if (start != null &&
+        end != null &&
+        DiscountDateRangePolicy.endsBeforeStart(start!, end!)) {
       return s.discountEndBeforeStart;
+    }
+    if (type == DiscountCodeType.dateRange &&
+        DiscountDateRangePolicy.isExpired(end)) {
+      return s.inactive;
     }
     final count = int.tryParse(children.text.trim());
     if (type == DiscountCodeType.children && (count == null || count <= 0)) {

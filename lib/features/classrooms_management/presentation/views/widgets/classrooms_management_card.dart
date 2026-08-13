@@ -27,6 +27,7 @@ class ClassroomsManagementCard extends StatelessWidget {
 
     return CustomDetailsWidgetBackground(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(

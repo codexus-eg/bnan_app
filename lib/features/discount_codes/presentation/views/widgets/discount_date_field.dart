@@ -33,7 +33,7 @@ class DiscountDateField extends StatelessWidget {
           firstDate: firstDate,
           lastDate: DateTime(2100),
         );
-        if (date != null) onChanged(date);
+        if (date != null && context.mounted) onChanged(date);
       },
     );
   }

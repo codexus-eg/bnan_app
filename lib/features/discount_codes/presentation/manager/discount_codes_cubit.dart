@@ -10,19 +10,23 @@ class DiscountCodesCubit extends Cubit<DiscountCodesState> {
   bool _loading = false;
 
   Future<void> load() async {
-    if (_loading) return;
+    if (isClosed || _loading) return;
     _loading = true;
     emit(const DiscountCodesLoading());
-    final result = await repo.getAll();
-    _loading = false;
-    result.fold((failure) => emit(DiscountCodesFailure(failure.message)), (
-      codes,
-    ) {
-      _codes
-        ..clear()
-        ..addAll(codes);
-      emit(DiscountCodesSuccess(List.unmodifiable(_codes)));
-    });
+    try {
+      final result = await repo.getAll();
+      if (isClosed) return;
+      result.fold((failure) => emit(DiscountCodesFailure(failure.message)), (
+        codes,
+      ) {
+        _codes
+          ..clear()
+          ..addAll(codes);
+        emit(DiscountCodesSuccess(List.unmodifiable(_codes)));
+      });
+    } finally {
+      _loading = false;
+    }
   }
 
   void upsert(DiscountCodeModel code) {

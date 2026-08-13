@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class AdminSubjectRequestsRepo {
   Future<Either<Failure, AdminSubjectRequestsPage>> getRequests({
-    required String status,
     int page = 1,
     int limit = 20,
   });

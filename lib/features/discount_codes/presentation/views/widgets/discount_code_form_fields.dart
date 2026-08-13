@@ -81,6 +81,7 @@ class DiscountCodeFormFields extends StatelessWidget {
             keyboardType: TextInputType.number,
             isRequired: true,
           ),
+        const SizedBox(height: 16),
         DiscountActiveSwitch(
           label: s.isActive,
           value: active,

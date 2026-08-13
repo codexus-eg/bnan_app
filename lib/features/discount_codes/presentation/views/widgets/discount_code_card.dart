@@ -17,6 +17,7 @@ class DiscountCodeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final isActive = code.isEffectivelyActiveAt(DateTime.now());
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -62,15 +63,15 @@ class DiscountCodeCard extends StatelessWidget {
                 color: ColorManager.orangeED,
               ),
               DiscountCodeBadge(
-                text: code.isActive ? s.active : s.inactive,
-                color: code.isActive
+                text: isActive ? s.active : s.inactive,
+                color: isActive
                     ? ColorManager.mainColor14
                     : ColorManager.greyA8AF,
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(_details(context), style: StylesManager.styleRegular14(context)),
+          ..._details(context),
         ],
       ),
     );
@@ -89,10 +90,12 @@ class DiscountCodeCard extends StatelessWidget {
     ),
   );
 
-  String _details(BuildContext context) {
+  List<Widget> _details(BuildContext context) {
     final s = S.of(context);
     if (code.type == DiscountCodeType.children) {
-      return '${s.childrenCount}: ${code.childrenCount ?? '-'}';
+      return [
+        _detail(context, '${s.childrenCount}: ${code.childrenCount ?? '-'}'),
+      ];
     }
     final locale = MaterialLocalizations.of(context);
     final start = code.startsAt == null
@@ -101,6 +104,13 @@ class DiscountCodeCard extends StatelessWidget {
     final end = code.endsAt == null
         ? '-'
         : locale.formatShortDate(code.endsAt!.toLocal());
-    return '${s.startDate}: $start  •  ${s.endDate}: $end';
+    return [
+      _detail(context, '${s.startDate}: $start'),
+      const SizedBox(height: 4),
+      _detail(context, '${s.endDate}: $end'),
+    ];
   }
+
+  Widget _detail(BuildContext context, String text) =>
+      Text(text, style: StylesManager.styleRegular14(context));
 }

@@ -17,6 +17,7 @@ class SubscriptionGrid extends StatelessWidget {
     this.isSliver = true,
     this.registrationMode,
     this.packageFilter,
+    this.planMapper,
   });
 
   final String curriculumId;
@@ -24,6 +25,7 @@ class SubscriptionGrid extends StatelessWidget {
   final bool isSliver;
   final String? registrationMode;
   final bool Function(PackageModel package)? packageFilter;
+  final PackageCardModel Function(BuildContext, PackageModel)? planMapper;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -58,10 +60,12 @@ class SubscriptionGrid extends StatelessWidget {
         final plans = state is GetPackagesSuccess
             ? packages
                   .map(
-                    (package) => PackageCardModel.fromPackage(
-                      context: context,
-                      package: package,
-                    ),
+                    (package) =>
+                        planMapper?.call(context, package) ??
+                        PackageCardModel.fromPackage(
+                          context: context,
+                          package: package,
+                        ),
                   )
                   .toList()
             : PackageCardModel.placeholders(context);

@@ -11,9 +11,11 @@ class CurriculumActionsCubit extends Cubit<CurriculumActionsState> {
   final CurriculumManagementRepo curriculumManagementRepo;
 
   Future<void> createCurriculum(CreateCurriculumRequestModel request) async {
+    if (isClosed || state is CreateCurriculumLoading) return;
     emit(CreateCurriculumLoading());
 
     final result = await curriculumManagementRepo.createCurriculum(request);
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(CreateCurriculumFailure(failure.message)),
@@ -25,12 +27,14 @@ class CurriculumActionsCubit extends Cubit<CurriculumActionsState> {
     required String curriculumId,
     required UpdateCurriculumRequestModel request,
   }) async {
+    if (isClosed || state is UpdateCurriculumLoading) return;
     emit(UpdateCurriculumLoading());
 
     final result = await curriculumManagementRepo.updateCurriculum(
       curriculumId: curriculumId,
       request: request,
     );
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(UpdateCurriculumFailure(failure.message)),

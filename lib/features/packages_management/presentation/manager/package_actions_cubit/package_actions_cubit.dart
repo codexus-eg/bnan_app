@@ -5,15 +5,16 @@ import 'package:bnan_app/features/packages_management/presentation/manager/packa
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PackageActionsCubit extends Cubit<PackageActionsState> {
-  PackageActionsCubit(this.packageActionsRepo)
-      : super(PackageActionsInitial());
+  PackageActionsCubit(this.packageActionsRepo) : super(PackageActionsInitial());
 
   final PackageActionsRepo packageActionsRepo;
 
   Future<void> createPackage(AddPackageRequestModel model) async {
+    if (isClosed || state is CreatePackageLoading) return;
     emit(CreatePackageLoading());
 
     final result = await packageActionsRepo.createPackage(model);
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(CreatePackageFailure(failure.message)),
@@ -25,12 +26,14 @@ class PackageActionsCubit extends Cubit<PackageActionsState> {
     required String packageId,
     required UpdatePackageRequestModel model,
   }) async {
+    if (isClosed || state is UpdatePackageLoading) return;
     emit(UpdatePackageLoading());
 
     final result = await packageActionsRepo.updatePackage(
       packageId: packageId,
       model: model,
     );
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(UpdatePackageFailure(failure.message)),
@@ -39,9 +42,11 @@ class PackageActionsCubit extends Cubit<PackageActionsState> {
   }
 
   Future<void> deletePackage(String packageId) async {
+    if (isClosed || state is DeletePackageLoading) return;
     emit(DeletePackageLoading());
 
     final result = await packageActionsRepo.deletePackage(packageId);
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(DeletePackageFailure(failure.message)),

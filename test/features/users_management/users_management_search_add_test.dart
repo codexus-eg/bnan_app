@@ -8,6 +8,7 @@ import 'package:bnan_app/features/users_management/data/models/users_pagination_
 import 'package:bnan_app/features/users_management/data/models/users_response_model.dart';
 import 'package:bnan_app/features/users_management/data/repo/users_management_repo.dart';
 import 'package:bnan_app/features/users_management/presentation/manager/users_management_cubit/users_management_cubit.dart';
+import 'package:bnan_app/features/users_management/presentation/widgets/dialogs/confirm_dialog.dart';
 import 'package:bnan_app/features/users_management/presentation/widgets/users_management_body.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
@@ -17,6 +18,74 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('status confirmation has Yes/No only and executes once', (
+    tester,
+  ) async {
+    final repo = _UsersRepo()..pages.add(_response([]));
+    final cubit = UsersManagementCubit(repo);
+    await tester.pumpWidget(_confirmApp(cubit));
+
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+    expect(find.text(S.current.save), findsNothing);
+    expect(find.text(S.current.yes), findsOneWidget);
+    expect(find.text(S.current.no), findsOneWidget);
+
+    await tester.tap(find.text(S.current.yes));
+    await tester.tap(find.text(S.current.yes), warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(repo.statusCalls, 1);
+    expect(find.byType(ConfirmDialog), findsNothing);
+    await cubit.close();
+  });
+
+  testWidgets('status failure is visible and cleared for a new dialog', (
+    tester,
+  ) async {
+    final repo = _UsersRepo()
+      ..statusResult = Left(Failure(message: 'status failed'));
+    final cubit = UsersManagementCubit(repo);
+    await tester.pumpWidget(_confirmApp(cubit));
+
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(S.current.yes));
+    await tester.pumpAndSettle();
+    expect(find.text('status failed'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+    expect(find.text('status failed'), findsNothing);
+    await cubit.close();
+  });
+
+  testWidgets('closing status dialog during request does not pop the page', (
+    tester,
+  ) async {
+    final repo = _UsersRepo()
+      ..pages.add(_response([]))
+      ..pendingStatus = Completer();
+    final cubit = UsersManagementCubit(repo);
+    await tester.pumpWidget(_confirmApp(cubit));
+
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(S.current.yes));
+    await tester.pump();
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    repo.pendingStatus!.complete(
+      Right(UserResponseModel(success: true, user: _user('1', 'User'))),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Open'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await cubit.close();
+  });
+
   testWidgets('typing and clearing search use a 400ms debounce', (
     tester,
   ) async {
@@ -169,6 +238,35 @@ Widget _bodyApp(UsersManagementCubit cubit) {
   );
 }
 
+Widget _confirmApp(UsersManagementCubit cubit) => BlocProvider.value(
+  value: cubit,
+  child: MaterialApp(
+    locale: const Locale('en'),
+    localizationsDelegates: const [
+      S.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: S.delegate.supportedLocales,
+    home: Builder(
+      builder: (context) => TextButton(
+        onPressed: () {
+          cubit.prepareAction(UsersManagementAction.status);
+          showDialog(
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: cubit,
+              child: ConfirmDialog.disable(user: _user('1', 'User')),
+            ),
+          );
+        },
+        child: const Text('Open'),
+      ),
+    ),
+  ),
+);
+
 Future<void> _attachForm(WidgetTester tester, UsersManagementCubit cubit) {
   cubit.setSelectedRole('student');
   return tester.pumpWidget(
@@ -196,6 +294,9 @@ class _UsersRepo implements UsersManagementRepo {
   final pending = <String, Completer<Either<Failure, UsersResponseModel>>>{};
   UserItem? createdUser;
   bool _deferred = false;
+  int statusCalls = 0;
+  Either<Failure, UserResponseModel>? statusResult;
+  Completer<Either<Failure, UserResponseModel>>? pendingStatus;
 
   void deferSearches() => _deferred = true;
 
@@ -221,6 +322,17 @@ class _UsersRepo implements UsersManagementRepo {
     required AddUserRequestModel request,
   }) async {
     return Right(UserResponseModel(success: true, user: createdUser));
+  }
+
+  @override
+  Future<Either<Failure, UserResponseModel>> updateUserStatus({
+    required String userId,
+    required String status,
+  }) async {
+    statusCalls++;
+    return pendingStatus?.future ??
+        statusResult ??
+        Right(UserResponseModel(success: true, user: _user(userId, 'User')));
   }
 
   @override

@@ -23,12 +23,14 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   int _lastPage = 1;
   bool _isLoadingMore = false;
   int _requestId = 0;
+  int _detailsRequestId = 0;
   String _search = '';
   String? _role;
 
   bool get canLoadMore => !_isLoadingMore && _currentPage < _lastPage;
 
   Future<void> getUsers({bool refresh = false, bool emitLoading = true}) async {
+    if (isClosed) return;
     final requestId = ++_requestId;
     _isLoadingMore = false;
     if (refresh) _resetPagination();
@@ -69,7 +71,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   }
 
   Future<void> loadMore() async {
-    if (!canLoadMore) return;
+    if (isClosed || !canLoadMore) return;
     _isLoadingMore = true;
     final requestId = _requestId;
     final nextPage = _currentPage + 1;
@@ -102,9 +104,12 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   }
 
   Future<void> getUserDetails({required String userId}) async {
+    if (isClosed) return;
+    final requestId = ++_detailsRequestId;
     emit(const GetUserDetailsLoading());
 
     final result = await usersManagementRepo.getUserDetails(userId: userId);
+    if (isClosed || requestId != _detailsRequestId) return;
     result.fold((failure) => emit(GetUserDetailsFailure(failure.message)), (
       response,
     ) {
@@ -116,11 +121,18 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   void prepareAdd() {
     selectedUser = null;
     selectedRole = null;
+    prepareAction(UsersManagementAction.create);
   }
 
   void prepareEdit(UserItem user) {
     selectedUser = user;
     selectedRole = user.roles;
+    prepareAction(UsersManagementAction.update);
+  }
+
+  void prepareAction(UsersManagementAction action) {
+    if (isClosed || _isActionLoading(action)) return;
+    emit(UsersActionIdle(action: action));
   }
 
   void setSelectedRole(String role) {
@@ -132,10 +144,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     required String password,
     required String curriculumId,
   }) async {
-    if (state is UsersActionLoading &&
-        (state as UsersActionLoading).action == UsersManagementAction.create) {
-      return;
-    }
+    if (isClosed || _isActionLoading(UsersManagementAction.create)) return;
     if (formKey.currentState?.validate() != true) return;
     final role = selectedRole?.trim() ?? '';
     final selectedCurriculumId = curriculumId.trim();
@@ -152,6 +161,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
         curriculumId: selectedCurriculumId,
       ),
     );
+    if (isClosed) return;
 
     await result.fold(
       (failure) async => emit(
@@ -179,6 +189,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     required String userId,
     required UserItem user,
   }) async {
+    if (isClosed || _isActionLoading(UsersManagementAction.update)) return;
     if (formKey.currentState?.validate() != true) return;
 
     emit(const UsersActionLoading(action: UsersManagementAction.update));
@@ -186,6 +197,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       userId: userId,
       user: _withoutRole(user),
     );
+    if (isClosed) return;
 
     await result.fold(
       (failure) async => emit(
@@ -206,6 +218,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     required String userId,
     required String password,
   }) async {
+    if (isClosed || _isActionLoading(UsersManagementAction.password)) return;
     if (formKey.currentState?.validate() != true) return;
 
     emit(const UsersActionLoading(action: UsersManagementAction.password));
@@ -213,6 +226,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       userId: userId,
       password: password,
     );
+    if (isClosed) return;
 
     await result.fold(
       (failure) async => emit(
@@ -229,6 +243,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   }
 
   Future<void> updateUserStatus({required UserItem user}) async {
+    if (isClosed || _isActionLoading(UsersManagementAction.status)) return;
     final currentStatus = user.status.toLowerCase();
     final nextStatus = currentStatus == 'active' ? 'inactive' : 'active';
 
@@ -237,6 +252,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       userId: user.id,
       status: nextStatus,
     );
+    if (isClosed) return;
 
     await result.fold(
       (failure) async => emit(
@@ -254,8 +270,10 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
   }
 
   Future<void> deleteUser({required String userId}) async {
+    if (isClosed || _isActionLoading(UsersManagementAction.delete)) return;
     emit(const UsersActionLoading(action: UsersManagementAction.delete));
     final result = await usersManagementRepo.deleteUser(userId: userId);
+    if (isClosed) return;
 
     await result.fold(
       (failure) async => emit(
@@ -288,6 +306,11 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       curriculum: user.curriculum,
       grade: user.grade,
     );
+  }
+
+  bool _isActionLoading(UsersManagementAction action) {
+    final current = state;
+    return current is UsersActionLoading && current.action == action;
   }
 
   UserItem _withoutRole(UserItem user) => _withRole(user, '');

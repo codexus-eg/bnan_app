@@ -10,6 +10,12 @@ class UsersManagementInitial extends UsersManagementState {
 
 enum UsersManagementAction { create, update, password, status, delete }
 
+class UsersActionIdle extends UsersManagementState {
+  const UsersActionIdle({required this.action});
+
+  final UsersManagementAction action;
+}
+
 class GetUsersLoading extends UsersManagementState {
   const GetUsersLoading();
 }

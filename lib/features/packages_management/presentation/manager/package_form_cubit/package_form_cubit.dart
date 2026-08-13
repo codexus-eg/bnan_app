@@ -11,11 +11,12 @@ class PackageFormCubit extends Cubit<PackageFormState> {
     Map<String, String?> registrationModes,
   ) {
     final registrationMode = registrationModes[package?.curriculum];
+    final isGulf = registrationMode?.trim().toLowerCase() == 'gulf';
     emit(
       PackageFormState(
         curriculumId: package?.curriculum,
         packageId: package?.id,
-        packageType: _valueOrDefault(package?.type, 'hours'),
+        packageType: isGulf ? 'hours' : _valueOrDefault(package?.type, 'hours'),
         accessScope: package?.accessScope ?? PackageAccessScope.allSubjects,
         registrationMode: registrationMode,
         currency: _valueOrDefault(package?.currency, 'SAR'),
@@ -26,11 +27,14 @@ class PackageFormCubit extends Cubit<PackageFormState> {
 
   void setCurriculum(String? id, String? registrationMode) {
     final canKeepScope = registrationMode == 'egyptian';
+    final isGulf = registrationMode?.trim().toLowerCase() == 'gulf';
     emit(
       PackageFormState(
         curriculumId: id,
         packageId: state.packageId,
-        packageType: state.isSingleSubject ? 'hours' : state.packageType,
+        packageType: isGulf || state.isSingleSubject
+            ? 'hours'
+            : state.packageType,
         accessScope: canKeepScope
             ? state.accessScope
             : PackageAccessScope.allSubjects,
@@ -42,7 +46,7 @@ class PackageFormCubit extends Cubit<PackageFormState> {
   }
 
   void setType(String type) {
-    if (state.isSingleSubject && type == 'monthly') return;
+    if ((state.isGulf || state.isSingleSubject) && type == 'monthly') return;
     emit(_copy(packageType: type));
   }
 
