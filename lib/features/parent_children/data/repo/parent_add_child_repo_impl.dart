@@ -17,16 +17,25 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
   final Dio dio;
 
   @override
-  registerEgyptian(ParentAddChildEgyptianRequest request) => repoGuard(
-    () async => ParentAddChildSubmission.fromJson(
-      _map(
-        await _post(
-          EndPoints.parentChildEgyptianRegistration,
-          data: await request.toFormData(),
-        ),
-      ),
-    ),
-  );
+  registerEgyptian(ParentAddChildEgyptianRequest request) async {
+    _log('Egyptian repository entered');
+    final result = await repoGuard(() async {
+      _log('Egyptian FormData creation started');
+      final data = await request.toFormData();
+      _log('Egyptian FormData creation completed');
+      final response = await _post(
+        EndPoints.parentChildEgyptianRegistration,
+        data: data,
+      );
+      _log('Egyptian response parsing started');
+      return ParentAddChildSubmission.fromJson(_map(response));
+    });
+    result.fold(
+      (failure) => _log('Egyptian repository error: ${failure.message}'),
+      (_) => _log('Egyptian repository success'),
+    );
+    return result;
+  }
 
   @override
   checkoutGulf({
@@ -82,6 +91,9 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
     Map<String, dynamic>? headers,
   }) async {
     try {
+      if (path == EndPoints.parentChildEgyptianRegistration) {
+        _log('Egyptian Dio POST started; endpoint=$path');
+      }
       final response = await dio.post(
         path,
         data: data,
@@ -90,11 +102,19 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
       if (path == EndPoints.parentChildGulfCheckout) {
         _log('combined response HTTP ${response.statusCode}');
       }
+      if (path == EndPoints.parentChildEgyptianRegistration) {
+        _log('Egyptian Dio response received; status=${response.statusCode}');
+      }
       return response.data;
     } on DioException catch (error) {
       final exception = AppException.fromDio(error);
       if (path == EndPoints.parentChildGulfCheckout) {
         _logBadResponse(error, exception);
+      }
+      if (path == EndPoints.parentChildEgyptianRegistration) {
+        _log(
+          'Egyptian Dio error: ${error.type}; status=${error.response?.statusCode}',
+        );
       }
       throw exception;
     }

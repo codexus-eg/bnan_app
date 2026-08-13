@@ -42,31 +42,27 @@ class TeacherProfileModel {
     return TeacherProfileModel(
       id: '',
       user: TeacherProfileUserModel.placeholder(),
-      phone: '+20 101 655 789',
-      specialization: 'معلمة الرياضيات',
+      phone: '',
+      specialization: '',
       curriculums: const [],
-      grades: 4,
+      grades: 0,
       subjects: const [],
-      classrooms: 8,
-      students: 12,
+      classrooms: 0,
+      students: 0,
     );
   }
 
   factory TeacherProfileModel.fromJson(Map<String, dynamic> json) {
     return TeacherProfileModel(
-      id: json['_id'] ?? '',
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
       user: TeacherProfileUserModel.fromJson(json['user'] ?? {}),
       phone: json['phone'] ?? '',
       specialization: json['specialization'] ?? '',
-      curriculums: (json['curriculums'] as List? ?? [])
-          .map((item) => TeacherProfileItemModel.fromJson(item))
-          .toList(),
-      grades: json['grades'] ?? 0,
-      subjects: (json['subjects'] as List? ?? [])
-          .map((item) => TeacherProfileItemModel.fromJson(item))
-          .toList(),
-      classrooms: json['classrooms'] ?? 0,
-      students: json['students'] ?? 0,
+      curriculums: _items(json['curriculums']),
+      grades: _count(json['grades']),
+      subjects: _items(json['subjects']),
+      classrooms: _count(json['classrooms']),
+      students: _count(json['students']),
     );
   }
 }
@@ -83,18 +79,14 @@ class TeacherProfileUserModel {
   });
 
   factory TeacherProfileUserModel.placeholder() {
-    return TeacherProfileUserModel(
-      id: '',
-      fullName: 'أ/ سارة عبدالله',
-      email: 'sara@gmail.com',
-    );
+    return TeacherProfileUserModel(id: '', fullName: '', email: '');
   }
 
   factory TeacherProfileUserModel.fromJson(Map<String, dynamic> json) {
     return TeacherProfileUserModel(
-      id: json['_id'] ?? '',
-      fullName: json['fullName'] ?? '',
-      email: json['email'] ?? '',
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      fullName: json['fullName']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
     );
   }
 }
@@ -103,10 +95,7 @@ class TeacherProfileItemModel {
   final String id;
   final String name;
 
-  TeacherProfileItemModel({
-    required this.id,
-    required this.name,
-  });
+  TeacherProfileItemModel({required this.id, required this.name});
 
   factory TeacherProfileItemModel.fromJson(Map<String, dynamic> json) {
     return TeacherProfileItemModel(
@@ -114,4 +103,25 @@ class TeacherProfileItemModel {
       name: json['name'] ?? '',
     );
   }
+}
+
+int _count(Object? value) {
+  if (value is num) return value.toInt();
+  if (value is List) return value.length;
+  return int.tryParse(value?.toString() ?? '') ?? 0;
+}
+
+List<TeacherProfileItemModel> _items(Object? value) {
+  if (value is! List) return const [];
+  return value
+      .map((item) {
+        if (item is Map<String, dynamic>) {
+          return TeacherProfileItemModel.fromJson(item);
+        }
+        return TeacherProfileItemModel(
+          id: item.toString(),
+          name: item.toString(),
+        );
+      })
+      .toList(growable: false);
 }

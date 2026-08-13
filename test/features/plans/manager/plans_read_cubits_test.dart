@@ -53,6 +53,31 @@ void main() {
     await cubit.close();
   });
 
+  test('weekly refresh bypasses the cached classroom and week', () async {
+    final repo = FakePlansRepo();
+    repo.weekly.addAll([
+      Completer()..complete(const Right(WeeklyPlansResponseModel())),
+      Completer()..complete(
+        const Right(
+          WeeklyPlansResponseModel(
+            data: WeeklyPlansDataModel(
+              subjects: [WeeklyPlanSubjectModel(id: 'new-plan', name: 'Math')],
+            ),
+          ),
+        ),
+      ),
+    ]);
+    final cubit = GetWeeklyPlansCubit(repo);
+
+    await cubit.getPlansByWeek(classroomId: 'classroom', week: 2);
+    await cubit.refreshPlansByWeek(classroomId: 'classroom', week: 2);
+
+    expect(repo.weeklyCalls, 2);
+    final state = cubit.state as GetWeeklyPlansSuccess;
+    expect(state.response.data.subjects.single.id, 'new-plan');
+    await cubit.close();
+  });
+
   test('elapsed weeks cubit ignores an older classroom response', () async {
     final repo = FakePlansRepo();
     final first = Completer<Either<Failure, ElapsedWeeksResponseModel>>();

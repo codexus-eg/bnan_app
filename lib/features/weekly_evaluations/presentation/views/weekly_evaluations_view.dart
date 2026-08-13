@@ -8,7 +8,9 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class WeeklyEvaluationsView extends StatelessWidget {
-  const WeeklyEvaluationsView({super.key});
+  const WeeklyEvaluationsView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,10 @@ class WeeklyEvaluationsView extends StatelessWidget {
       SessionManager.instance.userRole,
     );
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).weeklyEvaluations),
+      appBar: CustomAppbar(
+        headerText: S.of(context).weeklyEvaluations,
+        iconNeeded: showBackButton,
+      ),
       body: role == UserRole.student || role == UserRole.parent
           ? const ReadOnlyWeeklyEvaluationsBody()
           : WeeklyEvaluationsBody(policy: policy),

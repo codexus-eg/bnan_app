@@ -70,6 +70,25 @@ void main() {
       },
     );
 
+    test(
+      'REST and Socket messages with the same normalized id merge',
+      () async {
+        final repo = _FakeChatRepo(
+          response: _response([_message('message-1 ')]),
+        );
+        final socket = _FakeSocketService();
+        final cubit = GetRoomMessagesCubit(repo, socket);
+
+        await cubit.initializeChat(roomId: 'room-1');
+        socket.emitNewMessage(_message('message-1'));
+
+        expect(_messages(cubit), hasLength(1));
+        expect(_messages(cubit).single.id, 'message-1');
+
+        await cubit.close();
+      },
+    );
+
     test('live message is retained when history completes later', () async {
       final history = Completer<Either<Failure, ChatMessagesResponseModel>>();
       final repo = _FakeChatRepo(history: history);
@@ -163,15 +182,16 @@ ChatMessagesResponseModel _response(List<ChatMessageModel> messages) {
 }
 
 class _FakeChatRepo implements ChatRepo {
-  _FakeChatRepo({this.history});
+  _FakeChatRepo({this.history, this.response});
 
   final Completer<Either<Failure, ChatMessagesResponseModel>>? history;
+  final ChatMessagesResponseModel? response;
 
   @override
   Future<Either<Failure, ChatMessagesResponseModel>> getRoomMessages({
     required String roomId,
   }) async {
-    return history?.future ?? Right(_response([]));
+    return history?.future ?? Right(response ?? _response([]));
   }
 
   @override

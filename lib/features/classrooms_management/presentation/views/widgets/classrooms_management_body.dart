@@ -13,6 +13,7 @@ import 'package:bnan_app/features/classrooms_management/presentation/views/widge
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/add_classroom_dialog.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/classroom_details_dialog.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/edit_classroom_dialog.dart';
+import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/get_supervisors/get_supervisors_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,6 +97,9 @@ class ClassroomsManagementBody extends StatelessWidget {
               loadClassroomsOnGrade: false,
               loadSubjectsWithoutClassroom: false,
             ),
+          ),
+          BlocProvider(
+            create: (_) => getIt<GetSupervisorsCubit>()..getSupervisors(),
           ),
         ],
         child: const AddClassroomDialog(),

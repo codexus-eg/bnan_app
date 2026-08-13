@@ -7,6 +7,7 @@ class ParentRegisterUserModel {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    this.phone,
   });
 
   final String id;
@@ -16,6 +17,7 @@ class ParentRegisterUserModel {
   final String status;
   final String createdAt;
   final String updatedAt;
+  final String? phone;
 
   factory ParentRegisterUserModel.fromJson(Map<String, dynamic> json) {
     return ParentRegisterUserModel(
@@ -26,6 +28,7 @@ class ParentRegisterUserModel {
       status: (json['status'] ?? '').toString(),
       createdAt: (json['createdAt'] ?? '').toString(),
       updatedAt: (json['updatedAt'] ?? '').toString(),
+      phone: json['phone']?.toString(),
     );
   }
 }

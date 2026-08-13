@@ -38,6 +38,27 @@ void main() {
     expect(response.pagination.page, 1);
     expect(response.dataQuality.reasons, isEmpty);
   });
+
+  test('flat student identity and legacy bonus fields remain compatible', () {
+    final response = IdealStudentRankingResponse.fromJson({
+      'data': {
+        'status': 'final',
+        'ranking': [
+          {
+            'studentId': 'student-flat',
+            'fullName': 'Flat Student',
+            'weeklyPoints': 70,
+            'bouns': 3,
+            'rank': 1,
+          },
+        ],
+      },
+    });
+
+    expect(response.ranking.single.studentId, 'student-flat');
+    expect(response.ranking.single.name, 'Flat Student');
+    expect(response.ranking.single.bonusPoints, 3);
+  });
 }
 
 Map<String, dynamic> _item({Object? rank, Object? weekly, Object? bonus}) => {

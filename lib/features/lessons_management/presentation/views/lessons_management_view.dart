@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LessonsManagementView extends StatelessWidget {
-  const LessonsManagementView({super.key});
+  const LessonsManagementView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class LessonsManagementView extends StatelessWidget {
               child: Scaffold(
                 appBar: CustomAppbar(
                   headerText: S.of(context).lessonsManagement,
-                  iconNeeded: true,
+                  iconNeeded: showBackButton,
                 ),
                 body: const LessonsManagementBody(),
               ),

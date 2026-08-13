@@ -71,7 +71,7 @@ class AddDailyPlanSelectFields extends StatelessWidget {
 
   (String, Map<String, String>) _subjects(BuildContext context) {
     final s = S.of(context);
-    if (policy.showTeacherFieldInAddDialog) {
+    if (policy.usesClassroomSubjectsInAddDialog) {
       final state = context.watch<GetClassroomSubjectsCubit>().state;
       if (state is GetClassroomSubjectsLoading) return (s.loading, const {});
       if (state is GetClassroomSubjectsFailure) {

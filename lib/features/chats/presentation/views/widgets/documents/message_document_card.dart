@@ -1,16 +1,14 @@
 import 'package:bnan_app/features/chats/presentation/models/message_document_item.dart';
-import 'package:bnan_app/features/chats/presentation/utils/classroom_document_opener.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_formatters.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/documents/document_card_shell.dart';
-import 'package:bnan_app/features/chats/presentation/views/widgets/documents/document_link_opener.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/documents/message_document_icon.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class MessageDocumentCard extends StatelessWidget {
-  const MessageDocumentCard({super.key, required this.item, this.opener});
+  const MessageDocumentCard({super.key, required this.item, this.onTap});
   final MessageDocumentItem item;
-  final ClassroomDocumentOpener? opener;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class MessageDocumentCard extends StatelessWidget {
       preview: item.fileName.isNotEmpty && item.messageTitle.isNotEmpty
           ? item.messageTitle
           : null,
-      onTap: () => openDocumentLink(context, item.url, opener: opener),
+      onTap: onTap,
     );
   }
 

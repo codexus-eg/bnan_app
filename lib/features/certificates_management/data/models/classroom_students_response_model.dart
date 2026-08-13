@@ -39,7 +39,7 @@ class ClassroomStudentModel {
     Map<String, dynamic> json,
   ) {
     return ClassroomStudentModel(
-      id: json['id'] as String?,
+      id: (json['studentId'] ?? json['id'] ?? json['_id'])?.toString(),
       fullName: json['fullName'] as String?,
     );
   }

@@ -4,12 +4,17 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class WeeklyIdealStudentView extends StatelessWidget {
-  const WeeklyIdealStudentView({super.key});
+  const WeeklyIdealStudentView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).weeklyIdealStudent),
+      appBar: CustomAppbar(
+        headerText: S.of(context).weeklyIdealStudent,
+        iconNeeded: showBackButton,
+      ),
       body: const WeeklyIdealStudentBody(),
     );
   }

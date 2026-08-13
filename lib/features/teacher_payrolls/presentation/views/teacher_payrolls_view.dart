@@ -31,7 +31,9 @@ class _TeacherPayrollsViewState extends State<TeacherPayrollsView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _load();
+    });
   }
 
   @override
@@ -95,9 +97,8 @@ class _TeacherPayrollsViewState extends State<TeacherPayrollsView> {
       builder: (_) =>
           PayrollFiltersSheet(initial: filters, teachers: teachers.cast()),
     );
-    if (value != null) {
-      setState(() => filters = value);
-      await _load();
-    }
+    if (!mounted || value == null) return;
+    setState(() => filters = value);
+    await _load();
   }
 }

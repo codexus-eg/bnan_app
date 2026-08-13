@@ -130,11 +130,13 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
 
   void _loadSubjects(String classroomId) {
     if (!widget.policy.canAddDailyPlan) return;
-    if (widget.policy.showTeacherFieldInAddDialog) {
+    if (widget.policy.usesClassroomSubjectsInAddDialog) {
       context.read<GetClassroomSubjectsCubit>().getClassroomSubjects(
         classroomId: classroomId,
       );
-      context.read<ClassroomDetailsCubit>().getClassroomDetails(classroomId);
+      if (widget.policy.showTeacherFieldInAddDialog) {
+        context.read<ClassroomDetailsCubit>().getClassroomDetails(classroomId);
+      }
       return;
     }
     context.read<GetTeacherAssignedSubjectsCubit>().getTeacherAssignedSubjects(
@@ -158,7 +160,7 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
       S.of(context).dailyPlanCreatedSuccessfully,
       true,
     );
-    context.read<GetWeeklyPlansCubit>().getPlansByWeek(
+    context.read<GetWeeklyPlansCubit>().refreshPlansByWeek(
       classroomId: classroom.id,
       week: week,
     );

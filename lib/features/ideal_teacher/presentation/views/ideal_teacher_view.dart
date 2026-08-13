@@ -4,11 +4,16 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class IdealTeacherView extends StatelessWidget {
-  const IdealTeacherView({super.key});
+  const IdealTeacherView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: CustomAppbar(headerText: S.of(context).idealTeacher),
+    appBar: CustomAppbar(
+      headerText: S.of(context).idealTeacher,
+      iconNeeded: showBackButton,
+    ),
     body: const IdealTeacherBody(),
   );
 }

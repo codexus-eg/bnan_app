@@ -98,7 +98,7 @@ class IdealStudentCubit extends Cubit<IdealStudentState> {
 
   void _apply(IdealStudentRankingResponse value, int newPage, bool append) {
     response = value;
-    idealStudent = value.idealStudent;
+    idealStudent = value.idealStudent ?? _winnerFrom(value.ranking);
     page = value.pagination.page;
     pages = value.pagination.pages;
     if (!append) _ranking.clear();
@@ -125,4 +125,16 @@ class IdealStudentCubit extends Cubit<IdealStudentState> {
 
   bool _isCurrent(int id, String classroomId) =>
       !isClosed && id == _requestId && selectedClassroom?.id == classroomId;
+
+  IdealStudentItemModel? _winnerFrom(List<IdealStudentItemModel> ranking) {
+    if (ranking.isEmpty) return null;
+    final ranked = ranking.where((item) => item.rank > 0).toList();
+    if (ranked.isNotEmpty) {
+      ranked.sort((left, right) => left.rank.compareTo(right.rank));
+      return ranked.first;
+    }
+    return ranking.reduce(
+      (left, right) => left.weeklyPoints >= right.weeklyPoints ? left : right,
+    );
+  }
 }

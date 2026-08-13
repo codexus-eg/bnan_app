@@ -126,7 +126,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     final id = message.id.trim();
     final index = id.isEmpty
         ? -1
-        : messages.indexWhere((current) => current.id == id);
+        : messages.indexWhere((current) => current.id.trim() == id);
 
     if (index == -1) {
       messages.add(message);

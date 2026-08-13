@@ -53,16 +53,15 @@ void main() {
     expect(launcher.urls, [url]);
   });
 
-  testWidgets('message PDF card opens attachment URL unchanged', (
-    tester,
-  ) async {
+  testWidgets('message PDF card targets its original message', (tester) async {
     const url = 'https://example.com/message-file.pdf';
-    final launcher = _Launcher();
+    var taps = 0;
     await tester.pumpWidget(
       _app(
         MessageDocumentCard(
           item: const MessageDocumentItem(
             id: 'item',
+            messageId: 'message-7',
             url: url,
             fileName: 'message-file.pdf',
             messageTitle: '',
@@ -72,13 +71,13 @@ void main() {
             createdAt: null,
             isExternalLink: false,
           ),
-          opener: ClassroomDocumentOpener(launcher),
+          onTap: () => taps++,
         ),
       ),
     );
     await tester.tap(find.text('message-file.pdf'));
     await tester.pump();
-    expect(launcher.urls, [url]);
+    expect(taps, 1);
   });
 
   testWidgets('missing recording does not launch and shows translated error', (

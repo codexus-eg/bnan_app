@@ -9,25 +9,63 @@ class TeacherPayrollsCubit extends Cubit<TeacherPayrollsState> {
   final TeacherPayrollRepo repo;
   List<PayrollListItemModel> _items = const [];
   List<PayrollTeacherModel> _teachers = const [];
-  bool _loading = false;
+  Future<void>? _activeLoad;
+  String? _activeRequestKey;
+  int _requestVersion = 0;
+
   Future<void> load({
     required String from,
     required String to,
     String? teacherId,
     String? status,
+  }) {
+    if (isClosed) return Future.value();
+    final requestKey = '$from|$to|${teacherId ?? ''}|${status ?? ''}';
+    final activeLoad = _activeLoad;
+    if (_activeRequestKey == requestKey && activeLoad != null) {
+      return activeLoad;
+    }
+
+    final version = ++_requestVersion;
+    late final Future<void> operation;
+    operation =
+        _performLoad(
+          from: from,
+          to: to,
+          teacherId: teacherId,
+          status: status,
+          version: version,
+        ).whenComplete(() {
+          if (identical(_activeLoad, operation)) {
+            _activeLoad = null;
+            _activeRequestKey = null;
+          }
+        });
+    _activeRequestKey = requestKey;
+    _activeLoad = operation;
+    return operation;
+  }
+
+  Future<void> _performLoad({
+    required String from,
+    required String to,
+    required int version,
+    String? teacherId,
+    String? status,
   }) async {
-    if (_loading) return;
-    _loading = true;
+    if (!_canEmit(version)) return;
     emit(TeacherPayrollsLoading(_items));
     if (_teachers.isEmpty) {
-      (await repo.getTeachers()).fold((_) {}, (v) => _teachers = v);
+      final teachersResult = await repo.getTeachers();
+      if (!_canEmit(version)) return;
+      teachersResult.fold((_) {}, (value) => _teachers = value);
     }
     final result = await repo.getPreviewList(
       from: from,
       to: to,
       teacherId: teacherId,
     );
-    _loading = false;
+    if (!_canEmit(version)) return;
     result.fold((f) => emit(TeacherPayrollsFailure(f.message, _items)), (v) {
       final filtered = status?.isNotEmpty == true
           ? v.where((item) => item.status == status).toList()
@@ -36,4 +74,6 @@ class TeacherPayrollsCubit extends Cubit<TeacherPayrollsState> {
       emit(TeacherPayrollsSuccess(filtered, _teachers));
     });
   }
+
+  bool _canEmit(int version) => !isClosed && version == _requestVersion;
 }

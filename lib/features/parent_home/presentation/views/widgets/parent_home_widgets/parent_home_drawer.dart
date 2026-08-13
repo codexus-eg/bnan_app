@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer.dart';
+import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_drawer_items.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ParentHomeDrawer extends StatelessWidget {
@@ -16,8 +16,8 @@ class ParentHomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomAppDrawer(
-      userName: 'أ/ خالد عبدالله',
-      userSubtitle: S.of(context).parentGuardian,
+      userName: CurrentUserUi.name(context),
+      userSubtitle: CurrentUserUi.role(context),
       items: parentDrawerItems(context),
       selectedIndex: 0,
       onItemTap: onItemTap,

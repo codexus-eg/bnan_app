@@ -8,6 +8,7 @@ class LoggedUserModel {
   final LoggedUserInfoModel user;
   final LoggedUserParentModel? parent;
   final String? curriculum;
+  final String? curriculumName;
   final LoggedUserGradeModel? grade;
   final List<String> subjects;
   final String createdAt;
@@ -19,6 +20,7 @@ class LoggedUserModel {
     required this.user,
     required this.parent,
     required this.curriculum,
+    this.curriculumName,
     required this.grade,
     required this.subjects,
     required this.createdAt,
@@ -32,15 +34,16 @@ class LoggedUserModel {
   factory LoggedUserModel.fromJson(Map<String, dynamic> json) {
     return LoggedUserModel(
       id: json['id'] ?? '',
-      user: LoggedUserInfoModel.fromJson(json['user'] ?? {}),
+      user: LoggedUserInfoModel.fromJson(_userJson(json)),
       parent: json['parent'] == null
           ? null
           : LoggedUserParentModel.fromJson(json['parent']),
       curriculum: _curriculumId(json['curriculum']),
+      curriculumName: _curriculumName(json['curriculum']),
       grade: json['grade'] == null
           ? null
           : LoggedUserGradeModel.fromJson(json['grade']),
-      subjects: List<String>.from(json['subjects'] ?? []),
+      subjects: _subjectNames(json['subjects']),
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
       studentMode: _studentMode(json),
@@ -53,6 +56,7 @@ class LoggedUserModel {
       'user': user.toJson(),
       'parent': parent?.toJson(),
       'curriculum': curriculum,
+      if (curriculumName != null) 'curriculumName': curriculumName,
       'grade': grade?.toJson(),
       'subjects': subjects,
       'createdAt': createdAt,
@@ -61,18 +65,22 @@ class LoggedUserModel {
     };
   }
 
-  factory LoggedUserModel.placeholder() {
-    return const LoggedUserModel(
+  factory LoggedUserModel.placeholder({
+    String fullName = '',
+    String email = '',
+    String role = 'student',
+  }) {
+    return LoggedUserModel(
       id: '',
       user: LoggedUserInfoModel(
         id: '',
-        fullName: 'اسم الطالب',
-        email: 'student@email.com',
-        role: 'student',
+        fullName: fullName,
+        email: email,
+        role: role,
       ),
-      parent: LoggedUserParentModel(id: '', phone: '+20 100 000 0000'),
-      curriculum: 'المنهج',
-      grade: LoggedUserGradeModel(id: '', name: 'الصف الدراسي'),
+      parent: null,
+      curriculum: null,
+      grade: null,
       subjects: [],
       createdAt: '',
       updatedAt: '',
@@ -85,6 +93,7 @@ String? _studentMode(Map<String, dynamic> json) {
   final value =
       json['mode'] ??
       json['studentMode'] ??
+      json['registrationMode'] ??
       (curriculum is Map ? curriculum['baseCurriculum'] : null);
   final normalized = value?.toString().trim().toLowerCase();
   return normalized == 'gulf' || normalized == 'egyptian' ? normalized : null;
@@ -101,12 +110,14 @@ class LoggedUserInfoModel {
   final String fullName;
   final String email;
   final String role;
+  final String phone;
 
   const LoggedUserInfoModel({
     required this.id,
     required this.fullName,
     required this.email,
     required this.role,
+    this.phone = '',
   });
 
   factory LoggedUserInfoModel.fromJson(Map<String, dynamic> json) {
@@ -115,10 +126,41 @@ class LoggedUserInfoModel {
       fullName: json['fullName'] ?? '',
       email: json['email'] ?? '',
       role: json['role'] ?? '',
+      phone: json['phone']?.toString() ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'fullName': fullName, 'email': email, 'role': role};
+    return {
+      'id': id,
+      'fullName': fullName,
+      'email': email,
+      'role': role,
+      'phone': phone,
+    };
   }
+}
+
+Map<String, dynamic> _userJson(Map<String, dynamic> json) {
+  final user = json['user'];
+  if (user is Map<String, dynamic>) return user;
+  return json;
+}
+
+String? _curriculumName(Object? value) {
+  if (value is Map) return value['name']?.toString();
+  return null;
+}
+
+List<String> _subjectNames(Object? value) {
+  if (value is! List) return const [];
+  return value
+      .map((item) {
+        if (item is Map) {
+          return (item['name'] ?? item['id'] ?? item['_id']).toString();
+        }
+        return item.toString();
+      })
+      .where((item) => item.trim().isNotEmpty)
+      .toList(growable: false);
 }

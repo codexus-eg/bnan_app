@@ -48,6 +48,24 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
       children: [
         CustomDialogHeader(title: widget.title),
         const SizedBox(height: 16),
+        Flexible(
+          child: SingleChildScrollView(
+            key: const Key('certificateCreateFieldsScroll'),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: _buildFields(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        if (formError != null) ...[_buildError(), const SizedBox(height: 8)],
+        _buildSaveButton(),
+      ],
+    );
+  }
+
+  Widget _buildFields() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         SupervisorClassroomDropdown(
           selectedId: classroomId,
           onChanged: (classroom) => _onClassroomChanged(classroom?.id),
@@ -69,9 +87,6 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
           key: ValueKey(selectedStudentId),
           onChanged: _onSubjectsChanged,
         ),
-        const SizedBox(height: 16),
-        if (formError != null) ...[_buildError(), const SizedBox(height: 8)],
-        _buildSaveButton(),
       ],
     );
   }

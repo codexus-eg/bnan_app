@@ -45,6 +45,11 @@ class GetWeeklyPlansCubit extends Cubit<GetWeeklyPlansState> {
     });
   }
 
+  Future<void> refreshPlansByWeek({required String classroomId, int? week}) {
+    _cache.remove(_key(classroomId, week));
+    return getPlansByWeek(classroomId: classroomId, week: week);
+  }
+
   void _emitResponse(WeeklyPlansResponseModel response) => emit(
     response.data.subjects.isEmpty
         ? GetWeeklyPlansEmpty()

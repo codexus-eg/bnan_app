@@ -22,14 +22,19 @@ class IdealStudentItemModel {
   num get points => weeklyPoints;
 
   factory IdealStudentItemModel.fromJson(Map<String, dynamic> json) {
-    final student = IdealStudentJsonParser.map(json['student']);
+    final nested = IdealStudentJsonParser.map(json['student']);
+    final student = nested.isEmpty ? json : nested;
     return IdealStudentItemModel(
-      studentId: IdealStudentJsonParser.text(student['id'] ?? student['_id']),
+      studentId: IdealStudentJsonParser.text(
+        student['studentId'] ?? student['id'] ?? student['_id'],
+      ),
       userId: IdealStudentJsonParser.text(student['userId']),
-      name: IdealStudentJsonParser.text(student['fullName']),
+      name: IdealStudentJsonParser.text(student['fullName'] ?? student['name']),
       weeklyPoints: IdealStudentJsonParser.number(json['weeklyPoints']),
       automatedPoints: IdealStudentJsonParser.number(json['automatedPoints']),
-      bonusPoints: IdealStudentJsonParser.number(json['bonusPoints']),
+      bonusPoints: IdealStudentJsonParser.number(
+        json['bonusPoints'] ?? json['bonus'] ?? json['bouns'],
+      ),
       rank: IdealStudentJsonParser.integer(json['rank']),
       isQualifiedForIdealStudent: IdealStudentJsonParser.boolean(
         json['isQualifiedForIdealStudent'],

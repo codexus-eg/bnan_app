@@ -194,10 +194,21 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
           state.package!,
           registrationMode: state.curriculum?.registrationMode,
         )) {
+      _log('submit rejected: invalid package or registration mode');
       return emit(state.copyWith(errorMessage: S.current.invalidPackage));
     }
     final error = ParentAddChildValidation.currentStep(state);
-    if (error != null) return emit(state.copyWith(errorMessage: error));
+    if (error != null) {
+      _log('submit rejected: current-step validation failed');
+      return emit(state.copyWith(errorMessage: error));
+    }
+    if (!state.isGulf) {
+      _log('egyptian validation passed');
+      _log(
+        'receipt ${state.receipt == null ? 'null' : 'ready'}; '
+        'exists=${state.receipt?.existsSync() ?? false}',
+      );
+    }
     _submitting = true;
     try {
       if (state.isGulf) {
@@ -205,6 +216,10 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       } else {
         await _submitEgyptian();
       }
+    } catch (error, stackTrace) {
+      _log('cubit error: $error');
+      if (kDebugMode) debugPrintStack(stackTrace: stackTrace);
+      rethrow;
     } finally {
       _submitting = false;
     }
@@ -288,25 +303,34 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
 
   Future<void> _submitEgyptian() async {
     emit(state.copyWith(phase: ParentAddChildPhase.submitting));
-    final result = await repo.registerEgyptian(
-      ParentAddChildEgyptianRequest(
-        student: _student(),
-        curriculumId: state.curriculum!.id,
-        packageId: state.package!.id!,
-        receiptImage: state.receipt!,
-        discountCode: state.discountCode,
-        method: state.paymentMethod,
-        referenceNumber: state.referenceNumber,
-      ),
+    _log('state emitted: submitting');
+    final request = ParentAddChildEgyptianRequest(
+      student: _student(),
+      curriculumId: state.curriculum!.id,
+      packageId: state.package!.id!,
+      receiptImage: state.receipt!,
+      discountCode: state.discountCode,
+      method: state.paymentMethod,
+      referenceNumber: state.referenceNumber,
     );
+    _log('Egyptian request model built');
+    _log('Egyptian repository call started');
+    final result = await repo.registerEgyptian(request);
+    _log('Egyptian repository call completed');
     result.fold(
-      (failure) => _fail(failure.message),
-      (_) => emit(
-        state.copyWith(
-          phase: ParentAddChildPhase.pendingReview,
-          errorMessage: null,
-        ),
-      ),
+      (failure) {
+        _log('Egyptian submission failure: ${failure.message}');
+        _fail(failure.message);
+      },
+      (_) {
+        _log('Egyptian submission success');
+        emit(
+          state.copyWith(
+            phase: ParentAddChildPhase.pendingReview,
+            errorMessage: null,
+          ),
+        );
+      },
     );
   }
 

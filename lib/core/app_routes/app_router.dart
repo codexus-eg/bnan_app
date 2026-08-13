@@ -524,9 +524,16 @@ GoRouter buildRouter() {
       GoRoute(
         path: Routes.parentHome,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<DashboardCubit>(param1: DashboardRole.parent)..load(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<DashboardCubit>(param1: DashboardRole.parent)..load(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<StudentProfileCubit>()..getLoggedUser(),
+              ),
+            ],
             child: const ParentHomeView(),
           ),
           key: state.pageKey,
@@ -534,47 +541,23 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.parentAddChild,
-        redirect: (context, state) =>
-            _parentOnly(context, state) ??
-            (state.extra is ParentAddChildArgs ? null : Routes.parentHome),
+        redirect: _parentOnly,
         pageBuilder: (context, state) {
-          final args = state.extra! as ParentAddChildArgs;
-          final curriculum = args.curriculum;
+          final initialArgs = state.extra is ParentAddChildArgs
+              ? state.extra as ParentAddChildArgs
+              : null;
           return buildTransitionPages(
             key: state.pageKey,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (_) => getIt<ParentAddChildCubit>()
-                    ..start(
-                      curriculum,
-                      parentHasChildren: args.parentHasChildren,
-                    ),
-                ),
-                BlocProvider(
-                  create: (_) {
-                    final cubit = AcademicLookupsCubit(
-                      repo: getIt<AcademicLookupsRepo>(),
-                      loadClassroomsOnGrade: false,
-                      loadSubjectsWithoutClassroom: true,
-                    );
-                    curriculum == null
-                        ? cubit.loadCurriculums()
-                        : cubit.selectCurriculum(curriculum);
-                    return cubit;
-                  },
-                ),
-                BlocProvider(
-                  create: (_) {
-                    final cubit = getIt<GetPackagesCubit>();
-                    if (curriculum != null) {
-                      cubit.getPackagesByCurriculum(curriculum.id);
-                    }
-                    return cubit;
-                  },
-                ),
-              ],
-              child: const ParentAddChildView(),
+            child: BlocProvider(
+              create: (_) {
+                final cubit = getIt<GetParentChildrenCubit>();
+                if (initialArgs == null) cubit.getParentChildren();
+                return cubit;
+              },
+              child: ParentAddChildRouteGate(
+                initialArgs: initialArgs,
+                builder: _buildParentAddChildFlow,
+              ),
             ),
           );
         },
@@ -1183,6 +1166,42 @@ GoRouter buildRouter() {
         ),
       ),
     ],
+  );
+}
+
+Widget _buildParentAddChildFlow(BuildContext context, ParentAddChildArgs args) {
+  final curriculum = args.curriculum;
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (_) =>
+            getIt<ParentAddChildCubit>()
+              ..start(curriculum, parentHasChildren: args.parentHasChildren),
+      ),
+      BlocProvider(
+        create: (_) {
+          final cubit = AcademicLookupsCubit(
+            repo: getIt<AcademicLookupsRepo>(),
+            loadClassroomsOnGrade: false,
+            loadSubjectsWithoutClassroom: true,
+          );
+          curriculum == null
+              ? cubit.loadCurriculums()
+              : cubit.selectCurriculum(curriculum);
+          return cubit;
+        },
+      ),
+      BlocProvider(
+        create: (_) {
+          final cubit = getIt<GetPackagesCubit>();
+          if (curriculum != null) {
+            cubit.getPackagesByCurriculum(curriculum.id);
+          }
+          return cubit;
+        },
+      ),
+    ],
+    child: const ParentAddChildView(),
   );
 }
 

@@ -10,7 +10,7 @@ import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChatBody extends StatelessWidget {
+class ChatBody extends StatefulWidget {
   const ChatBody({
     super.key,
     required this.roomId,
@@ -27,15 +27,24 @@ class ChatBody extends StatelessWidget {
   final String? currentUserRole;
 
   @override
+  State<ChatBody> createState() => _ChatBodyState();
+}
+
+class _ChatBodyState extends State<ChatBody> {
+  final messagesKey = GlobalKey<ChatMessagesListState>();
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ChatHeader(
-          chatTitle: classroomName ?? '',
-          roomId: roomId,
-          roomType: roomType,
-          classroomId: classroomId,
-          currentUserRole: currentUserRole,
+          chatTitle: widget.classroomName ?? '',
+          roomId: widget.roomId,
+          roomType: widget.roomType,
+          classroomId: widget.classroomId,
+          currentUserRole: widget.currentUserRole,
+          onMessageTarget: (id) =>
+              messagesKey.currentState?.scrollToMessage(id),
         ),
         Expanded(
           child: BlocBuilder<GetRoomMessagesCubit, GetRoomMessagesState>(
@@ -60,6 +69,7 @@ class ChatBody extends StatelessWidget {
               return AppSkeletonizer(
                 isLoading: isLoading,
                 child: ChatMessagesList(
+                  key: messagesKey,
                   messages: messages,
                   currentUserId: SessionManager.instance.userId ?? '',
                   isLoading: isLoading,
@@ -68,7 +78,7 @@ class ChatBody extends StatelessWidget {
             },
           ),
         ),
-        ChatInputBar(roomId: roomId),
+        ChatInputBar(roomId: widget.roomId),
       ],
     );
   }

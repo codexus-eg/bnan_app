@@ -7,6 +7,7 @@ class AuthUserModel {
     required this.email,
     required this.role,
     required this.status,
+    this.phone,
     this.registrationMode,
     this.registrationModes = const [],
   });
@@ -16,6 +17,7 @@ class AuthUserModel {
   final String email;
   final String role;
   final String status;
+  final String? phone;
   final RegistrationMode? registrationMode;
   final List<RegistrationMode> registrationModes;
 
@@ -26,6 +28,7 @@ class AuthUserModel {
       email: (json['email'] ?? '').toString(),
       role: (json['role'] ?? '').toString(),
       status: (json['status'] ?? '').toString(),
+      phone: json['phone']?.toString(),
       registrationMode: RegistrationMode.fromValue(json['registrationMode']),
       registrationModes: RegistrationMode.fromList(json['registrationModes']),
     );
@@ -38,6 +41,7 @@ class AuthUserModel {
       'email': email,
       'role': role,
       'status': status,
+      'phone': phone,
       'registrationMode': registrationMode?.name,
       'registrationModes': registrationModes.map((mode) => mode.name).toList(),
     };

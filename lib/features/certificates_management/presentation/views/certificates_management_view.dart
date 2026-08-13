@@ -4,14 +4,16 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CertificatesManagementView extends StatelessWidget {
-  const CertificatesManagementView({super.key});
+  const CertificatesManagementView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(
         headerText: S.of(context).certificates,
-        iconNeeded: true,
+        iconNeeded: showBackButton,
       ),
       body: CertificatesManagementBody(),
     );

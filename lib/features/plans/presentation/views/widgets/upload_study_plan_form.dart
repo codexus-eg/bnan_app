@@ -99,7 +99,7 @@ class _UploadStudyPlanFormState extends State<UploadStudyPlanForm> {
 
   (String, Map<String, String>) _subjects(BuildContext context) {
     final s = S.of(context);
-    if (widget.policy.showTeacherFieldInAddDialog) {
+    if (widget.policy.usesClassroomSubjectsInAddDialog) {
       final state = context.watch<GetClassroomSubjectsCubit>().state;
       if (state is GetClassroomSubjectsLoading) return (s.loading, const {});
       if (state is GetClassroomSubjectsFailure) {
@@ -142,7 +142,7 @@ class _UploadStudyPlanFormState extends State<UploadStudyPlanForm> {
   void _loadSubjects() {
     final classroomId = _classroom?.id;
     if (!mounted || classroomId == null) return;
-    if (widget.policy.showTeacherFieldInAddDialog) {
+    if (widget.policy.usesClassroomSubjectsInAddDialog) {
       context.read<GetClassroomSubjectsCubit>().getClassroomSubjects(
         classroomId: classroomId,
       );

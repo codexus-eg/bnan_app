@@ -67,6 +67,7 @@ export 'package:bnan_app/features/curriculum_management/presentation/views/curri
 export 'package:bnan_app/features/parent_certificates/presentation/views/parent_certification_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_home_view.dart';
 export 'package:bnan_app/features/parent_children/presentation/views/parent_add_child_view.dart';
+export 'package:bnan_app/features/parent_children/presentation/views/parent_add_child_route_gate.dart';
 export 'package:bnan_app/features/parent_children/presentation/models/parent_add_child_args.dart';
 export 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscriptions_view.dart';

@@ -48,7 +48,11 @@ void main() {
           {
             'id': 'subject',
             'plans': [
-              {'day': 'Wednesday', 'sessionContent': 'lesson'},
+              {
+                'day': 'Wednesday',
+                'sessionContent': 'lesson',
+                'teacher': {'id': 'assigned-teacher'},
+              },
             ],
           },
         ],

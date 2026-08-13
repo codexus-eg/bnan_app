@@ -7,11 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomChatCard extends StatelessWidget {
-  const CustomChatCard({super.key,required this.title, required this.subtitle, this.subtitleStyle});
+  const CustomChatCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    this.subtitleStyle,
+  });
 
-  final String title,subtitle;
+  final String title, subtitle;
   final TextStyle? subtitleStyle;
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,26 +26,35 @@ class CustomChatCard extends StatelessWidget {
           children: [
             CustomAvatar(firstName: title, radius: 25),
             const SizedBox(width: 7),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: StylesManager.styleBold16(
-                    context,
-                  ).copyWith(color: ColorManager.mainColor14),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  subtitle,
-                  style:subtitleStyle ?? StylesManager.styleRegular14(
-                    context,
-                  ).copyWith(color: ColorManager.greyA8AF),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StylesManager.styleBold16(
+                      context,
+                    ).copyWith(color: ColorManager.mainColor14),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style:
+                        subtitleStyle ??
+                        StylesManager.styleRegular14(
+                          context,
+                        ).copyWith(color: ColorManager.greyA8AF),
+                  ),
+                ],
+              ),
             ),
-            Spacer(),
+            const SizedBox(width: 8),
             SvgPicture.asset(ImageManager.chatIcon),
           ],
         ),

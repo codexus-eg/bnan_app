@@ -15,6 +15,8 @@ class UserInfo extends StatelessWidget {
       children: [
         Text(
           chatTitle,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: StylesManager.styleBold20(
             context,
           ).copyWith(color: ColorManager.white),

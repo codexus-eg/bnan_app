@@ -4,12 +4,17 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class EgyptianSchedulesReadOnlyView extends StatelessWidget {
-  const EgyptianSchedulesReadOnlyView({super.key});
+  const EgyptianSchedulesReadOnlyView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).schedule),
+      appBar: CustomAppbar(
+        headerText: S.of(context).schedule,
+        iconNeeded: showBackButton,
+      ),
       body: const EgyptianSchedulesReadOnlyBody(),
     );
   }
