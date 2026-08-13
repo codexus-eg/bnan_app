@@ -10,10 +10,12 @@ class ChatBubble extends StatelessWidget {
     super.key,
     required this.message,
     required this.currentUserId,
+    this.highlighted = false,
   });
 
   final ChatMessageModel message;
   final String currentUserId;
+  final bool highlighted;
 
   bool get isMe => message.sender.id == currentUserId;
 
@@ -25,7 +27,8 @@ class ChatBubble extends StatelessWidget {
       alignment: isMe
           ? AlignmentDirectional.centerEnd
           : AlignmentDirectional.centerStart,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.sizeOf(context).width * .70,
         ),
@@ -59,12 +62,17 @@ class ChatBubble extends StatelessWidget {
           offset: const Offset(0, 4),
         ),
       ],
+      border: highlighted
+          ? Border.all(color: ColorManager.orangeE6, width: 2)
+          : null,
     );
   }
 
   Widget _buildMessageText(BuildContext context) {
     return Text(
       message.text,
+      softWrap: true,
+      overflow: TextOverflow.visible,
       style: StylesManager.styleRegular14(
         context,
       ).copyWith(color: isMe ? ColorManager.white : ColorManager.black),

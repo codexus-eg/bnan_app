@@ -46,7 +46,7 @@ class AttendanceStudent {
   factory AttendanceStudent.fromJson(Map<String, dynamic> json) {
     final student = _map(json['student']) ?? _map(json['user']) ?? json;
     return AttendanceStudent(
-      id: _text(student['id'] ?? student['_id']),
+      id: _text(student['studentId'] ?? student['id'] ?? student['_id']),
       name: _text(student['fullName'] ?? student['name']),
     );
   }

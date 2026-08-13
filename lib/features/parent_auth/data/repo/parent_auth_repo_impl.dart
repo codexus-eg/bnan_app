@@ -41,6 +41,8 @@ class ParentAuthRepoImpl implements ParentAuthRepo {
       userId: response.data.id,
       userRole: response.data.role,
       userName: response.data.fullName,
+      userEmail: response.data.email,
+      userPhone: response.data.phone,
     );
   }
 }

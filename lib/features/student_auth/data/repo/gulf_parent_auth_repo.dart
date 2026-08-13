@@ -60,6 +60,8 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
       userId: response.user.id,
       userRole: response.user.role,
       userName: response.user.fullName,
+      userEmail: response.user.email,
+      userPhone: response.user.phone,
     );
     return Right(response);
   }

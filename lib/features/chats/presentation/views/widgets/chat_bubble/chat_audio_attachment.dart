@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_attachment_model.dart';
 import 'package:bnan_app/features/chats/presentation/utils/chat_attachment_url.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_audio_player_controller.dart';
 import 'package:bnan_app/features/chats/presentation/utils/chat_audio_playback_coordinator.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -14,18 +16,20 @@ class ChatAudioAttachment extends StatefulWidget {
     required this.attachment,
     required this.isMe,
     this.coordinator,
+    this.player,
   });
 
   final ChatAttachmentModel attachment;
   final bool isMe;
   final ChatAudioPlaybackCoordinator? coordinator;
+  final ChatAudioPlayerController? player;
 
   @override
   State<ChatAudioAttachment> createState() => _ChatAudioAttachmentState();
 }
 
 class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
-  final AudioPlayer _player = AudioPlayer();
+  late final ChatAudioPlayerController _player;
   late final ChatAudioPlaybackCoordinator _coordinator;
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<PlayerState>? _stateSubscription;
@@ -38,6 +42,7 @@ class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
   @override
   void initState() {
     super.initState();
+    _player = widget.player ?? JustAudioPlayerController();
     _coordinator = widget.coordinator ?? chatAudioPlaybackCoordinator;
     _initializePlayer();
   }
@@ -49,16 +54,25 @@ class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
       return;
     }
     try {
+      if (kDebugMode) {
+        debugPrint('[ChatAudioAttachment] final media URL: $uri');
+      }
       _duration =
           await _player.setUrl(
             uri.toString(),
-            headers: ChatAttachmentUrl.headersFor(uri),
+            ChatAttachmentUrl.headersFor(uri),
           ) ??
           Duration.zero;
       _positionSubscription = _player.positionStream.listen(_onPosition);
       _stateSubscription = _player.playerStateStream.listen(_onPlayerState);
       if (mounted) setState(() => _isInitialized = true);
-    } catch (_) {
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint(
+          '[ChatAudioAttachment] player initialization failed: '
+          '${error.runtimeType}',
+        );
+      }
       if (mounted) setState(() => _hasError = true);
     }
   }
@@ -137,8 +151,13 @@ class _ChatAudioAttachmentState extends State<ChatAudioAttachment> {
         await _coordinator.activate(this, _player.pause);
         await _player.play();
       }
-    } catch (_) {
+    } catch (error) {
       _coordinator.release(this);
+      if (kDebugMode) {
+        debugPrint(
+          '[ChatAudioAttachment] playback failed: ${error.runtimeType}',
+        );
+      }
       if (mounted) setState(() => _hasError = true);
     }
   }

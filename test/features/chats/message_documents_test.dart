@@ -27,16 +27,21 @@ void main() {
         _message(
           attachment: _attachment('', 'https://x.test/image', 'image/png'),
         ),
+        _message(
+          attachment: _attachment('relative.pdf', '/uploads/relative.pdf', ''),
+        ),
         _message(attachment: _attachment('missing.pdf', '', 'application/pdf')),
         _message(text: 'https://zoom.us/rec/share/example'),
       ];
       final items = MessageDocumentMapper.fromMessages(messages);
-      expect(items, hasLength(3));
+      expect(items, hasLength(4));
+      expect(items[0].messageId, messages[1].id);
       expect(
         items.map((item) => item.url),
         containsAll([
           'https://x.test/a.pdf',
           'https://x.test/image',
+          '/uploads/relative.pdf',
           'https://zoom.us/rec/share/example',
         ]),
       );
@@ -56,6 +61,15 @@ void main() {
     expect(item.fileName, isEmpty);
     expect(item.senderName, isEmpty);
     expect(item.createdAt, isNull);
+  });
+
+  test('duplicate filenames retain distinct source message identities', () {
+    final items = MessageDocumentMapper.fromMessages([
+      _messageWithId('message-a', _attachment('same.pdf', 'https://x/a', '')),
+      _messageWithId('message-b', _attachment('same.pdf', 'https://x/b', '')),
+    ]);
+
+    expect(items.map((item) => item.messageId), ['message-a', 'message-b']);
   });
 
   test(
@@ -108,6 +122,21 @@ ChatMessageModel _message({String text = '', ChatAttachmentModel? attachment}) {
     deletedForEveryone: false,
   );
 }
+
+ChatMessageModel _messageWithId(String id, ChatAttachmentModel attachment) =>
+    ChatMessageModel(
+      id: id,
+      roomId: 'room-id',
+      sender: const ChatSenderModel(
+        id: 's',
+        fullName: 'Teacher',
+        role: 'teacher',
+      ),
+      text: '',
+      attachments: [attachment],
+      messageType: 'file',
+      deletedForEveryone: false,
+    );
 
 ChatAttachmentModel _attachment(String name, String url, String mime) {
   return ChatAttachmentModel(

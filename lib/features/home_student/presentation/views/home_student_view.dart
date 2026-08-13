@@ -4,6 +4,7 @@ import 'package:bnan_app/features/shared_profile/presentation/manager/student_pr
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 
 class HomeStudentView extends StatelessWidget {
   const HomeStudentView({super.key});
@@ -11,21 +12,24 @@ class HomeStudentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocSelector<
-        StudentProfileCubit,
-        StudentProfileState,
-        LoggedUserModel
+      StudentProfileCubit,
+      StudentProfileState,
+      LoggedUserModel
     >(
       selector: (state) {
         if (state is StudentProfileStateSuccess) {
           return state.loggedUser;
         }
 
-        return LoggedUserModel.placeholder();
+        final user = SessionManager.instance.currentUser;
+        return LoggedUserModel.placeholder(
+          fullName: user?.fullName ?? '',
+          email: user?.email ?? '',
+          role: user?.role ?? 'student',
+        );
       },
       builder: (context, loggedUser) {
-        return HomeStudentScaffold(
-          loggedUser: loggedUser,
-        );
+        return HomeStudentScaffold(loggedUser: loggedUser);
       },
     );
   }

@@ -214,6 +214,7 @@ void main() {
     expect(find.byType(CustomTableCell), findsWidgets);
     expect(find.text('Week 2'), findsOneWidget);
     expect(find.text('Thursday'), findsOneWidget);
+    expect(find.text('Lesson'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -236,14 +237,21 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('supervisor add dialog includes teacher selector', (
+  testWidgets('supervisor creates a daily plan without a teacher selector', (
     tester,
   ) async {
-    await _pumpPlans(tester, 'supervisor');
-    await tester.tap(find.text('Add a daily plan for students'));
+    final repo = _PlansRepo();
+    await _pumpPlans(tester, 'supervisor', plansRepo: repo);
+    await _openAndFillDailyPlan(tester);
+
+    expect(find.text('Select teacher'), findsNothing);
+    await tester.tap(find.text('Add').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('Select teacher'), findsOneWidget);
+    final request = repo.dailyRequests.single.$3.toJson();
+    expect(request, isNot(contains('teacher')));
+    expect(request, isNot(contains('teacherId')));
+    expect(request['type'], 'day');
     expect(tester.takeException(), isNull);
   });
 
@@ -307,6 +315,10 @@ void main() {
     final repo = _PlansRepo();
     await _pumpPlans(tester, 'teacher', plansRepo: repo);
     await _selectWeek(tester, 3);
+    final requestsBefore = repo.weekRequests.length;
+    repo.weeklyResult = Right(
+      _weeklyResponse(3, lesson: 'Newly created lesson'),
+    );
 
     await _openAndFillDailyPlan(tester);
     await tester.tap(find.text('Add').last);
@@ -320,7 +332,9 @@ void main() {
     expect(call.$3.sessionAssignment, 'New homework');
     expect(find.byType(AddDailyPlanDialog), findsNothing);
     expect(find.text('Daily plan added successfully'), findsOneWidget);
+    expect(repo.weekRequests.length, requestsBefore + 1);
     expect(repo.weekRequests.last, ('classroom', 3));
+    expect(find.text('Newly created lesson'), findsOneWidget);
     expect(find.text('Week 3'), findsOneWidget);
   });
 
@@ -942,18 +956,21 @@ class _PlansRepo implements PlansRepo {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-WeeklyPlansResponseModel _weeklyResponse(int week) => WeeklyPlansResponseModel(
+WeeklyPlansResponseModel _weeklyResponse(
+  int week, {
+  String lesson = 'Lesson',
+}) => WeeklyPlansResponseModel(
   data: WeeklyPlansDataModel(
     classroom: const PlanClassroomModel(id: 'classroom', name: 'Class A'),
     week: week,
-    subjects: const [
+    subjects: [
       WeeklyPlanSubjectModel(
         id: 'math',
         name: 'Math',
         plans: [
           DailyPlanItemModel(
             day: 'Sunday',
-            sessionContent: 'Lesson',
+            sessionContent: lesson,
             sessionAssignment: 'Homework',
           ),
         ],

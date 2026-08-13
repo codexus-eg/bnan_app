@@ -8,12 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AttendanceView extends StatelessWidget {
-  const AttendanceView({super.key});
+  const AttendanceView({super.key, this.showBackButton = true});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).attendanceRegistration),
+      appBar: CustomAppbar(
+        headerText: S.of(context).attendanceRegistration,
+        iconNeeded: showBackButton,
+      ),
       body: SafeArea(
         child: BlocConsumer<AttendanceCubit, AttendanceState>(
           listenWhen: (previous, current) =>

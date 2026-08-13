@@ -41,7 +41,10 @@ class MessageDocumentsTab extends StatelessWidget {
           return DocumentsList(
             count: items.length,
             refresh: () => cubit.load(roomId, refresh: true),
-            builder: (_, index) => MessageDocumentCard(item: items[index]),
+            builder: (_, index) => MessageDocumentCard(
+              item: items[index],
+              onTap: () => Navigator.of(context).pop(items[index].messageId),
+            ),
           );
         },
       );

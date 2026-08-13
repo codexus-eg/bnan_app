@@ -54,6 +54,39 @@ void main() {
     await cubit.close();
   });
 
+  test(
+    'valid ranking is shown when the separate ideal student is null',
+    () async {
+      final cubit = IdealStudentCubit(
+        _Repo([_response(status: 'final', ideal: false)]),
+      );
+
+      await cubit.selectClassroom(_classA);
+
+      expect(cubit.state, isA<IdealStudentLoaded>());
+      expect(cubit.ranking, hasLength(1));
+      expect(cubit.idealStudent?.name, 'Student 1');
+      await cubit.close();
+    },
+  );
+
+  test('winner fallback uses rank instead of response list order', () async {
+    final response = IdealStudentRankingResponse.fromJson({
+      'data': {
+        'status': 'final',
+        'idealStudent': null,
+        'ranking': [_rankedItem('Second', 2), _rankedItem('First', 1)],
+      },
+    });
+    final cubit = IdealStudentCubit(_Repo([response]));
+
+    await cubit.selectClassroom(_classA);
+
+    expect(cubit.state, isA<IdealStudentLoaded>());
+    expect(cubit.idealStudent?.name, 'First');
+    await cubit.close();
+  });
+
   test('initial failure emits retryable failure', () async {
     final cubit = IdealStudentCubit(_FailureRepo());
     await cubit.selectClassroom(_classA);
@@ -84,6 +117,12 @@ Map<String, dynamic> _item(String name) => {
   'rank': 1,
   'student': {'id': name, 'fullName': name},
   'weeklyPoints': 90,
+};
+
+Map<String, dynamic> _rankedItem(String name, int rank) => {
+  'rank': rank,
+  'student': {'id': name, 'fullName': name},
+  'weeklyPoints': 90 - rank,
 };
 
 class _Repo implements IdealStudentRepo {

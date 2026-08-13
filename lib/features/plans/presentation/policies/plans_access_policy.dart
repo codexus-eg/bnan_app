@@ -9,6 +9,7 @@ class PlansAccessPolicy {
     required this.canDeletePlan,
     required this.canUploadPlan,
     required this.showTeacherFieldInAddDialog,
+    required this.usesClassroomSubjectsInAddDialog,
     required this.isReadOnly,
     this.isGulfStudent = false,
   });
@@ -22,6 +23,7 @@ class PlansAccessPolicy {
   final bool canDeletePlan;
   final bool canUploadPlan;
   final bool showTeacherFieldInAddDialog;
+  final bool usesClassroomSubjectsInAddDialog;
   final bool isReadOnly;
   final bool isGulfStudent;
 
@@ -44,7 +46,8 @@ class PlansAccessPolicy {
       canEditPlan: canManage,
       canDeletePlan: canManage,
       canUploadPlan: canManage,
-      showTeacherFieldInAddDialog: isSupervisor || isAdmin,
+      showTeacherFieldInAddDialog: isAdmin,
+      usesClassroomSubjectsInAddDialog: isSupervisor || isAdmin,
       isReadOnly: !canManage,
       isGulfStudent: normalizedRole == 'student' && isGulfStudent,
     );

@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/attendance/data/models/attendance_lookup_models.dart';
 import 'package:bnan_app/features/attendance/data/models/attendance_models.dart';
 import 'package:bnan_app/features/attendance/data/models/attendance_status.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,6 +20,22 @@ void main() {
     expect(record.studentId, 'student-1');
     expect(record.status, AttendanceStatus.late);
   });
+
+  test(
+    'classroom roster student parses studentId and ignores null attendance',
+    () {
+      final student = AttendanceStudent.fromJson({
+        'studentId': '6a7d0a927733da367ed26f07',
+        'fullName': 'salmon',
+        'attendance': null,
+      });
+
+      expect(student.id, '6a7d0a927733da367ed26f07');
+      expect(student.name, 'salmon');
+      expect(AttendanceStudent.fromJson({'id': 'legacy-id'}).id, 'legacy-id');
+      expect(AttendanceStudent.fromJson({'_id': 'mongo-id'}).id, 'mongo-id');
+    },
+  );
 
   test('bulk request removes duplicate and empty student ids', () {
     final request = BulkAttendanceRequest(

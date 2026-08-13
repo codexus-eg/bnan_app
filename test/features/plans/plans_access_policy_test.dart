@@ -2,14 +2,15 @@ import 'package:bnan_app/features/plans/presentation/policies/plans_access_polic
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('supervisor can manage plans and select a teacher', () {
+  test('supervisor manages plans without selecting a teacher', () {
     final policy = PlansAccessPolicy.fromRole('supervisor');
 
     expect(policy.showManagementActions, isTrue);
     expect(policy.canEditPlan, isTrue);
     expect(policy.canDeletePlan, isTrue);
     expect(policy.showClassroomFilter, isTrue);
-    expect(policy.showTeacherFieldInAddDialog, isTrue);
+    expect(policy.showTeacherFieldInAddDialog, isFalse);
+    expect(policy.usesClassroomSubjectsInAddDialog, isTrue);
     expect(policy.isReadOnly, isFalse);
   });
 
@@ -21,6 +22,7 @@ void main() {
     expect(policy.canDeletePlan, isTrue);
     expect(policy.showClassroomFilter, isTrue);
     expect(policy.showTeacherFieldInAddDialog, isFalse);
+    expect(policy.usesClassroomSubjectsInAddDialog, isFalse);
     expect(policy.isReadOnly, isFalse);
   });
 
@@ -31,6 +33,7 @@ void main() {
     expect(policy.canAddDailyPlan, isTrue);
     expect(policy.canUploadPlan, isTrue);
     expect(policy.showTeacherFieldInAddDialog, isTrue);
+    expect(policy.usesClassroomSubjectsInAddDialog, isTrue);
     expect(policy.isReadOnly, isFalse);
   });
 

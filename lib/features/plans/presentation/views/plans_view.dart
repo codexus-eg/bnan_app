@@ -13,11 +13,13 @@ class PlansView extends StatelessWidget {
     this.showEmpty = false,
     this.uploadFilePicker,
     this.isGulfStudent = false,
+    this.showBackButton = true,
   });
 
   final bool showEmpty;
   final PlansFilePicker? uploadFilePicker;
   final bool isGulfStudent;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class PlansView extends StatelessWidget {
         : S.of(context).plansTitle;
     return Scaffold(
       backgroundColor: ColorManager.white,
-      appBar: CustomAppbar(headerText: title),
+      appBar: CustomAppbar(headerText: title, iconNeeded: showBackButton),
       body: PlansViewBody(
         policy: policy,
         showEmpty: showEmpty,

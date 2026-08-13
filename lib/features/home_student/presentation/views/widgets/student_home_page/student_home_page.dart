@@ -56,9 +56,7 @@ class StudentHomePage extends StatelessWidget {
     builder: (context, data, loading) => Column(
       children: [
         HomeAppBar(
-          userName: data.student.fullName.isEmpty
-              ? userName
-              : data.student.fullName,
+          userName: userName,
           onMenuTap: onMenuTap,
           onNotificationTap: () =>
               MyNavigator.goTo(context, Routes.notification),

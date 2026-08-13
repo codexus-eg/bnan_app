@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/features/chats/data/models/chat_attachment_model.dart';
+import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/presentation/utils/chat_attachment_url.dart';
 import 'package:bnan_app/features/chats/presentation/utils/chat_audio_playback_coordinator.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_audio_player_controller.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_audio_attachment.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_file_attachment.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_image_attachment.dart';
@@ -15,6 +17,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:just_audio/just_audio.dart';
 
 void main() {
   group('attachment URL handling', () {
@@ -30,6 +33,21 @@ void main() {
       expect(
         ChatAttachmentUrl.resolve('https://cdn.example.com/a.png').toString(),
         'https://cdn.example.com/a.png',
+      );
+    });
+
+    test('replaces backend loopback media origins with production HTTPS', () {
+      expect(
+        ChatAttachmentUrl.resolve(
+          'http://127.0.0.1:3000/uploads/voice.m4a?version=1',
+        ).toString(),
+        'https://bnan.0xcode7.xyz/uploads/voice.m4a?version=1',
+      );
+      expect(
+        ChatAttachmentUrl.resolve(
+          'http://localhost:3000/uploads/voice.m4a',
+        ).toString(),
+        'https://bnan.0xcode7.xyz/uploads/voice.m4a',
       );
     });
 
@@ -59,6 +77,28 @@ void main() {
     expect(_attachment('report.pdf', '', 'x').isPdf, isTrue);
     expect(_attachment('report.docx', '', 'x').isFile, isTrue);
     expect(_attachment('notes.txt', 'text/plain', 'x').isFile, isTrue);
+  });
+
+  test('REST and socket message JSON classify m4a voice identically', () {
+    final json = {
+      'id': 'message',
+      'room': 'room',
+      'sender': <String, dynamic>{},
+      'messageType': 'attachment',
+      'attachments': [
+        {
+          'id': 'voice',
+          'fileName': 'voice_1.m4a',
+          'fileUrl': '/uploads/voice_1.m4a',
+          'mimeType': 'application/octet-stream',
+        },
+      ],
+    };
+
+    final history = ChatMessageModel.fromJson(json);
+    final live = ChatMessageModel.fromJson(Map<String, dynamic>.from(json));
+    expect(history.attachments.single.isAudio, isTrue);
+    expect(live.attachments.single.isAudio, isTrue);
   });
 
   testWidgets('image tap opens preview and invalid URL is safe', (
@@ -170,6 +210,51 @@ void main() {
     expect(find.text('Unable to load the attachment'), findsOneWidget);
   });
 
+  testWidgets('audio tap plays the resolved URL with backend auth headers', (
+    tester,
+  ) async {
+    final player = _AudioPlayer();
+    await tester.pumpWidget(
+      _app(
+        ChatAudioAttachment(
+          attachment: _attachment('voice.m4a', 'audio/mp4', '/voice/a.m4a'),
+          isMe: false,
+          player: player,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.play_arrow_rounded));
+    await tester.pump();
+
+    expect(player.url, 'https://bnan.0xcode7.xyz/voice/a.m4a');
+    expect(
+      player.headers,
+      ChatAttachmentUrl.headersFor(
+        Uri.parse('https://bnan.0xcode7.xyz/voice/a.m4a'),
+      ),
+    );
+    expect(player.playCalls, 1);
+  });
+
+  testWidgets('audio player source failure shows error without crashing', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        ChatAudioAttachment(
+          attachment: _attachment('voice.m4a', 'audio/mp4', '/voice/a.m4a'),
+          isMe: false,
+          player: _AudioPlayer(failSource: true),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Unable to load the attachment'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('video initialization failure leaves loading state', (
     tester,
   ) async {
@@ -239,6 +324,34 @@ class _UploadApi implements ApiConsumer {
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _AudioPlayer implements ChatAudioPlayerController {
+  _AudioPlayer({this.failSource = false});
+  final bool failSource;
+  String? url;
+  Map<String, String> headers = const {};
+  int playCalls = 0;
+  @override
+  Stream<Duration> get positionStream => const Stream.empty();
+  @override
+  Stream<PlayerState> get playerStateStream => const Stream.empty();
+  @override
+  Future<Duration?> setUrl(String url, Map<String, String> headers) async {
+    if (failSource) throw StateError('source failed');
+    this.url = url;
+    this.headers = headers;
+    return const Duration(seconds: 3);
+  }
+
+  @override
+  Future<void> play() async => playCalls++;
+  @override
+  Future<void> pause() async {}
+  @override
+  Future<void> seek(Duration position) async {}
+  @override
+  Future<void> dispose() async {}
 }
 
 Widget _app(Widget child) => MaterialApp(

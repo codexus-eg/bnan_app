@@ -1,5 +1,31 @@
 part of 'chat_messages_list.dart';
 
+List<ChatMessageModel> _displayMessages(List<ChatMessageModel> messages) {
+  final seenIds = <String>{};
+  final duplicateIds = <String>{};
+  final uniqueMessages = <ChatMessageModel>[];
+
+  for (final message in _orderedMessages(messages)) {
+    final id = message.id.trim();
+    if (id.isEmpty || seenIds.add(id)) {
+      uniqueMessages.add(message);
+    } else {
+      duplicateIds.add(id);
+    }
+  }
+
+  assert(() {
+    if (duplicateIds.isNotEmpty) {
+      debugPrint(
+        'Chat messages: total=${messages.length}, '
+        'uniqueIds=${seenIds.length}, duplicateIds=$duplicateIds',
+      );
+    }
+    return true;
+  }());
+  return uniqueMessages;
+}
+
 List<ChatMessageModel> _orderedMessages(List<ChatMessageModel> messages) {
   if (messages.length < 2 ||
       messages.any((message) => message.createdAt == null)) {

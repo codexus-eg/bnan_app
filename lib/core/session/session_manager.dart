@@ -2,6 +2,7 @@ import 'package:bnan_app/core/cache/secure_cache_helper.dart';
 import 'package:bnan_app/core/cache/secure_cache_keys.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/current_user.dart';
 import 'package:flutter/foundation.dart';
 
 typedef SessionChangeListener =
@@ -14,9 +15,7 @@ class SessionManager {
 
   static final SessionManager instance = SessionManager._();
 
-  String? _userId;
-  String? _userRole;
-  String? _userName;
+  CurrentUser? _currentUser;
   String? _accessToken;
   String? _refreshToken;
   RegistrationMode? _registrationMode;
@@ -25,10 +24,13 @@ class SessionManager {
   final Set<SessionWillClearListener> _beforeClearListeners = {};
   final Set<AccessTokenChangeListener> _accessTokenChangeListeners = {};
 
-  String? get userId => _userId;
-  String? get userRole => _userRole;
-  UserRole? get role => UserRole.fromValue(_userRole);
-  String? get userName => _userName;
+  CurrentUser? get currentUser => _currentUser;
+  String? get userId => _currentUser?.id;
+  String? get userRole => _currentUser?.role;
+  UserRole? get role => UserRole.fromValue(userRole);
+  String? get userName => _currentUser?.fullName;
+  String? get userEmail => _currentUser?.email;
+  String? get userPhone => _currentUser?.phone;
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
   RegistrationMode? get registrationMode => _registrationMode;
@@ -81,47 +83,38 @@ class SessionManager {
     String? userId,
     String? userRole,
     String? userName,
+    String? userEmail,
+    String? userPhone,
     RegistrationMode? registrationMode,
     List<RegistrationMode> registrationModes = const [],
   }) async {
     debugPrint('SessionManager.saveSession started');
-    final previousUserId = _userId;
+    final previousUserId = this.userId;
 
-    _userId = userId;
-    _userRole = userRole;
-    _userName = userName;
+    _currentUser = CurrentUser(
+      id: _present(userId),
+      role: _present(userRole),
+      fullName: _present(userName),
+      email: _present(userEmail),
+      phone: _present(userPhone),
+      registrationMode: registrationMode,
+      registrationModes: List.unmodifiable(registrationModes),
+    );
     _registrationMode = registrationMode;
     _registrationModes = List.unmodifiable(registrationModes);
 
     await saveTokens(accessToken: accessToken, refreshToken: refreshToken);
 
-    if (userId != null) {
-      await SecureCacheHelper.saveData(
-        key: SecureCacheKeys.userId,
-        value: userId,
-      );
-      debugPrint('User id write completed');
-    }
-
-    if (userRole != null) {
-      await SecureCacheHelper.saveData(
-        key: SecureCacheKeys.userRole,
-        value: userRole,
-      );
-      debugPrint('User role write completed');
-    }
-
-    if (userName != null) {
-      await SecureCacheHelper.saveData(
-        key: SecureCacheKeys.userName,
-        value: userName,
-      );
-    }
+    await _saveOptional(SecureCacheKeys.userId, _currentUser?.id);
+    await _saveOptional(SecureCacheKeys.userRole, _currentUser?.role);
+    await _saveOptional(SecureCacheKeys.userName, _currentUser?.fullName);
+    await _saveOptional(SecureCacheKeys.userEmail, _currentUser?.email);
+    await _saveOptional(SecureCacheKeys.userPhone, _currentUser?.phone);
 
     await _saveOptionalMode(registrationMode);
     await _saveModes(registrationModes);
-    if (previousUserId != userId) {
-      await _notifySessionChanged(previousUserId, userId);
+    if (previousUserId != this.userId) {
+      await _notifySessionChanged(previousUserId, this.userId);
     }
   }
 
@@ -134,20 +127,25 @@ class SessionManager {
       key: SecureCacheKeys.refreshToken,
     );
 
-    _userId = await SecureCacheHelper.getData(key: SecureCacheKeys.userId);
-
-    _userRole = await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
-    _userName = await SecureCacheHelper.getData(key: SecureCacheKeys.userName);
-    _registrationMode = RegistrationMode.fromValue(
+    final mode = RegistrationMode.fromValue(
       await SecureCacheHelper.getData(key: SecureCacheKeys.registrationMode),
     );
-    _registrationModes = List.unmodifiable(
-      RegistrationMode.fromList(
-        (await SecureCacheHelper.getData(
-          key: SecureCacheKeys.registrationModes,
-        ))?.split(','),
-      ),
+    final modes = RegistrationMode.fromList(
+      (await SecureCacheHelper.getData(
+        key: SecureCacheKeys.registrationModes,
+      ))?.split(','),
     );
+    _currentUser = CurrentUser(
+      id: await SecureCacheHelper.getData(key: SecureCacheKeys.userId),
+      role: await SecureCacheHelper.getData(key: SecureCacheKeys.userRole),
+      fullName: await SecureCacheHelper.getData(key: SecureCacheKeys.userName),
+      email: await SecureCacheHelper.getData(key: SecureCacheKeys.userEmail),
+      phone: await SecureCacheHelper.getData(key: SecureCacheKeys.userPhone),
+      registrationMode: mode,
+      registrationModes: List.unmodifiable(modes),
+    );
+    _registrationMode = mode;
+    _registrationModes = List.unmodifiable(modes);
   }
 
   Future<String?> getAccessToken() async {
@@ -191,17 +189,17 @@ class SessionManager {
   }
 
   Future<String?> getUserId() async {
-    return _userId ??
+    return userId ??
         await SecureCacheHelper.getData(key: SecureCacheKeys.userId);
   }
 
   Future<String?> getUserRole() async {
-    return _userRole ??
+    return userRole ??
         await SecureCacheHelper.getData(key: SecureCacheKeys.userRole);
   }
 
   Future<String?> getUserName() async {
-    return _userName ??
+    return userName ??
         await SecureCacheHelper.getData(key: SecureCacheKeys.userName);
   }
 
@@ -212,15 +210,13 @@ class SessionManager {
 
   Future<void> clearSession() async {
     debugPrint('SessionManager.clearSession started');
-    final previousUserId = _userId;
+    final previousUserId = userId;
 
     await _notifyBeforeSessionClear();
 
     _accessToken = null;
     _refreshToken = null;
-    _userId = null;
-    _userRole = null;
-    _userName = null;
+    _currentUser = null;
     _registrationMode = null;
     _registrationModes = const [];
 
@@ -269,4 +265,38 @@ class SessionManager {
       value: modes.map((mode) => mode.name).join(','),
     );
   }
+
+  Future<void> mergeCurrentUser({
+    String? id,
+    String? fullName,
+    String? email,
+    String? phone,
+    String? role,
+  }) async {
+    final current = _currentUser;
+    if (current == null) return;
+    _currentUser = current.merge(
+      id: id,
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      role: role,
+    );
+    await _saveOptional(SecureCacheKeys.userId, _currentUser?.id);
+    await _saveOptional(SecureCacheKeys.userRole, _currentUser?.role);
+    await _saveOptional(SecureCacheKeys.userName, _currentUser?.fullName);
+    await _saveOptional(SecureCacheKeys.userEmail, _currentUser?.email);
+    await _saveOptional(SecureCacheKeys.userPhone, _currentUser?.phone);
+  }
+
+  Future<void> _saveOptional(String key, String? value) {
+    return value == null
+        ? SecureCacheHelper.removeData(key: key)
+        : SecureCacheHelper.saveData(key: key, value: value);
+  }
+}
+
+String? _present(String? value) {
+  final trimmed = value?.trim();
+  return trimmed?.isNotEmpty == true ? trimmed : null;
 }

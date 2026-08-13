@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/models/home_state_model.dart';
-import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/home_appbar.dart';
 import 'package:bnan_app/core/shared_widget/home_state/home_stats_section.dart';
@@ -22,7 +22,7 @@ class TeacherHomePage extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       HomeAppBar(
-        userName: SessionManager.instance.userName ?? S.of(context).teacher,
+        userName: CurrentUserUi.name(context),
         onMenuTap: onMenuTap,
         onNotificationTap: () => MyNavigator.goTo(context, Routes.notification),
       ),

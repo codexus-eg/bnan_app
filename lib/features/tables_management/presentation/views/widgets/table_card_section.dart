@@ -24,7 +24,7 @@ class TableCardSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final classroomName =
         schedule.classroom?.name ?? S.of(context).classSchedulesManagement;
-    final scheduleId = schedule.id ?? '';
+    final scheduleId = schedule.curriculum?.name ?? '';
     final academicDetails = [
       schedule.grade?.name,
       schedule.curriculum?.name,

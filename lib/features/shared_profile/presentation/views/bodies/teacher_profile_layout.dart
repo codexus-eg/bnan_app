@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_cubit.dart';
 import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/custom_teacher_extra_widget.dart';
@@ -16,10 +17,16 @@ class TeacherProfileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProfileLayout(
-      fullName: profile.user.fullName,
-      email: profile.user.email,
-      phone: profile.phone,
-      roleLabel: S.of(context).teacher,
+      fullName: profile.user.fullName.trim().isEmpty
+          ? CurrentUserUi.name(context)
+          : profile.user.fullName,
+      email: profile.user.email.trim().isEmpty
+          ? SessionManager.instance.userEmail ?? ''
+          : profile.user.email,
+      phone: profile.phone.trim().isEmpty
+          ? SessionManager.instance.userPhone ?? ''
+          : profile.phone,
+      roleLabel: CurrentUserUi.role(context),
       subtitle: _subtitle(context),
       extraWidget: CustomTeacherExtraWidget(profile: profile),
       onRefresh: () => TeacherProfileCubit.get(context).getTeacherProfile(),

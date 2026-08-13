@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/core/shared_widget/custom_dropdown_form_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
@@ -10,6 +9,7 @@ import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_request_model.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_state.dart';
+import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/add_classroom_supervisor_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,7 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
   final formKey = GlobalKey<FormState>();
   final classNameController = TextEditingController();
   AcademicLookupSelection selection = const AcademicLookupSelection();
-  String? supervisor;
+  String? supervisorId;
   String? validationMessage;
 
   @override
@@ -80,14 +80,12 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  CustomDropdownFormField(
-                    label: s.theSupervisor,
-                    labelColor: ColorManager.mainColor14,
-                    hint: s.supervisor,
-                    hintStyle: getStyle(context),
-                    items: const ['سلمى', 'رقية'],
-                    value: supervisor,
-                    onChanged: (value) => setState(() => supervisor = value),
+                  AddClassroomSupervisorField(
+                    value: supervisorId,
+                    onChanged: (value) => setState(() {
+                      supervisorId = value;
+                      validationMessage = null;
+                    }),
                   ),
                   if (validationMessage != null) ...[
                     const SizedBox(height: 16),
@@ -116,7 +114,9 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
   void submit() {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
-    if (selection.curriculumId == null || selection.gradeId == null) {
+    if (selection.curriculumId == null ||
+        selection.gradeId == null ||
+        supervisorId == null) {
       setState(() => validationMessage = S.current.fillAllRequiredFields);
       return;
     }
@@ -126,6 +126,7 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
         name: classNameController.text.trim(),
         curriculumId: selection.curriculumId,
         gradeId: selection.gradeId,
+        supervisorId: supervisorId,
       ),
     );
   }

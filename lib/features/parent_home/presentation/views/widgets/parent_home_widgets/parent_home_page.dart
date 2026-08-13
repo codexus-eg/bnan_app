@@ -1,6 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
-import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/home_appbar.dart';
 import 'package:bnan_app/features/dashboard/data/models/parent_dashboard_model.dart';
@@ -9,7 +9,6 @@ import 'package:bnan_app/features/dashboard/presentation/widgets/dashboard_build
 import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_children_section.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_stats_section.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,8 +24,7 @@ class ParentHomePage extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       HomeAppBar(
-        userName:
-            SessionManager.instance.userName ?? S.of(context).parentGuardian,
+        userName: CurrentUserUi.name(context),
         onMenuTap: onMenuTap,
         onNotificationTap: () => MyNavigator.goTo(context, Routes.notification),
       ),

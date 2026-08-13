@@ -13,7 +13,8 @@ abstract final class ChatAttachmentUrl {
     final parsed = Uri.tryParse(value);
     if (parsed == null) return null;
     if (parsed.hasScheme) {
-      return _isWebUri(parsed) ? parsed : null;
+      final resolved = _replaceLoopbackOrigin(parsed);
+      return _isWebUri(resolved) ? resolved : null;
     }
     if (value.startsWith('//')) return null;
 
@@ -36,5 +37,17 @@ abstract final class ChatAttachmentUrl {
   static bool _isWebUri(Uri uri) {
     return (uri.scheme == 'http' || uri.scheme == 'https') &&
         uri.host.isNotEmpty;
+  }
+
+  static Uri _replaceLoopbackOrigin(Uri uri) {
+    if (!const {'127.0.0.1', 'localhost', '::1'}.contains(uri.host)) return uri;
+    return Uri(
+      scheme: _backendOrigin.scheme,
+      host: _backendOrigin.host,
+      port: _backendOrigin.hasPort ? _backendOrigin.port : null,
+      path: uri.path,
+      query: uri.hasQuery ? uri.query : null,
+      fragment: uri.hasFragment ? uri.fragment : null,
+    );
   }
 }

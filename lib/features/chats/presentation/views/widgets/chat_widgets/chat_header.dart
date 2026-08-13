@@ -14,12 +14,14 @@ class ChatHeader extends StatelessWidget {
     this.roomType,
     this.classroomId,
     this.currentUserRole,
+    this.onMessageTarget,
   });
   final String chatTitle;
   final String roomId;
   final String? roomType;
   final String? classroomId;
   final String? currentUserRole;
+  final ValueChanged<String>? onMessageTarget;
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +61,7 @@ class ChatHeader extends StatelessWidget {
             ))
               IconButton(
                 key: const Key('classroomDocumentsButton'),
-                onPressed: () => MyNavigator.goTo(
-                  context,
-                  Routes.classroomDocuments,
-                  extra: ClassroomDocumentsRouteArgs(
-                    roomId: roomId.trim(),
-                    roomType: roomType,
-                    currentUserRole: currentUserRole,
-                    classroomId: classroomId?.trim(),
-                    classroomName: chatTitle,
-                  ),
-                ),
+                onPressed: () => _openDocuments(context),
                 icon: const Icon(
                   Icons.folder_copy_outlined,
                   color: ColorManager.white,
@@ -79,5 +71,20 @@ class ChatHeader extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _openDocuments(BuildContext context) async {
+    final messageId = await MyNavigator.goTo<String>(
+      context,
+      Routes.classroomDocuments,
+      extra: ClassroomDocumentsRouteArgs(
+        roomId: roomId.trim(),
+        roomType: roomType,
+        currentUserRole: currentUserRole,
+        classroomId: classroomId?.trim(),
+        classroomName: chatTitle,
+      ),
+    );
+    if (messageId?.trim().isNotEmpty == true) onMessageTarget?.call(messageId!);
   }
 }

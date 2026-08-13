@@ -1,6 +1,7 @@
 class MessageDocumentItem {
   const MessageDocumentItem({
     required this.id,
+    required this.messageId,
     required this.url,
     required this.fileName,
     required this.messageTitle,
@@ -12,6 +13,7 @@ class MessageDocumentItem {
   });
 
   final String id;
+  final String messageId;
   final String url;
   final String fileName;
   final String messageTitle;

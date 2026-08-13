@@ -4,15 +4,16 @@ import 'package:bnan_app/features/classrooms_management/presentation/manager/cla
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClassroomActionsCubit extends Cubit<ClassroomActionsState> {
-  ClassroomActionsCubit(this.classroomsRepo)
-      : super(ClassroomActionsInitial());
+  ClassroomActionsCubit(this.classroomsRepo) : super(ClassroomActionsInitial());
 
   final ClassroomsRepo classroomsRepo;
 
   Future<void> createClassroom(ClassroomRequestModel model) async {
+    if (isClosed || state is CreateClassroomLoading) return;
     emit(CreateClassroomLoading());
 
     final result = await classroomsRepo.createClassroom(model);
+    if (isClosed) return;
     result.fold(
       (failure) => emit(CreateClassroomFailure(failure.message)),
       (_) => emit(CreateClassroomSuccess()),

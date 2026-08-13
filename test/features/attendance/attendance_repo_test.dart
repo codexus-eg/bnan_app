@@ -6,6 +6,32 @@ import 'package:bnan_app/features/attendance/data/repo/attendance_repo_impl.dart
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test(
+    'classroom roster keeps a studentId student with null attendance',
+    () async {
+      final api = _Api()
+        ..response = {
+          'success': true,
+          'results': 1,
+          'data': [
+            {
+              'studentId': '6a7d0a927733da367ed26f07',
+              'fullName': 'salmon',
+              'attendance': null,
+            },
+          ],
+        };
+
+      final result = await AttendanceRepoImpl(api).getStudents('classroom-1');
+      final students = result.getOrElse(() => const []);
+
+      expect(api.path, EndPoints.classroomStudents('classroom-1'));
+      expect(students, hasLength(1));
+      expect(students.single.id, '6a7d0a927733da367ed26f07');
+      expect(students.single.name, 'salmon');
+    },
+  );
+
   test('bulk uses one request with the real session id', () async {
     final api = _Api()..response = {'data': <Object>[]};
     final repo = AttendanceRepoImpl(api);
@@ -69,7 +95,12 @@ class _Api implements ApiConsumer {
     Object? data,
     Map<String, dynamic>? queryParameter,
     bool isProtected = false,
-  }) async => response;
+  }) async {
+    method = 'GET';
+    this.path = path;
+    return response;
+  }
+
   @override
   Future<dynamic> patch(
     String path, {

@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/presentation/models/message_document_item.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_attachment_url.dart';
 
 class MessageDocumentMapper {
   const MessageDocumentMapper._();
@@ -17,9 +18,10 @@ class MessageDocumentMapper {
     if (message.deletedForEveryone) return;
     for (final attachment in message.attachments) {
       final url = attachment.fileUrl.trim();
-      if (!FileUrlLauncher.isValidWebUrl(url)) continue;
+      if (ChatAttachmentUrl.resolve(url) == null) continue;
       yield MessageDocumentItem(
         id: '${message.id}:${attachment.id}',
+        messageId: message.id,
         url: url,
         fileName: attachment.fileName.trim(),
         messageTitle: message.text.trim(),
@@ -34,6 +36,7 @@ class MessageDocumentMapper {
     if (FileUrlLauncher.isValidWebUrl(text)) {
       yield MessageDocumentItem(
         id: '${message.id}:link',
+        messageId: message.id,
         url: text,
         fileName: '',
         messageTitle: text,
