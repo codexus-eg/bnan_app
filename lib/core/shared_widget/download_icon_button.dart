@@ -1,4 +1,4 @@
-import 'package:bnan_app/core/shared_widget/download_feedback_banner.dart';
+import 'package:bnan_app/core/shared_widget/app_top_feedback/app_top_feedback.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/device_file_saver.dart';
@@ -33,59 +33,67 @@ class _DownloadIconButtonState extends State<DownloadIconButton> {
     onPressed: _isLoading || !widget.enabled || widget.url.trim().isEmpty
         ? null
         : _download,
-    icon: _isLoading
-        ? const SizedBox.square(
-            dimension: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-        : SvgPicture.asset(
-            ImageManager.downloadIcon,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              ColorManager.mainColor14,
-              BlendMode.srcIn,
-            ),
-          ),
+    icon: SvgPicture.asset(
+      ImageManager.downloadIcon,
+      width: 24,
+      height: 24,
+      colorFilter: const ColorFilter.mode(
+        ColorManager.mainColor14,
+        BlendMode.srcIn,
+      ),
+    ),
   );
 
   Future<void> _download() async {
     setState(() => _isLoading = true);
+    final certificate = (widget.fileName ?? widget.url).toLowerCase().contains(
+      'certificate',
+    );
+    final s = S.of(context);
+    final feedback = AppTopFeedback.show(
+      context,
+      type: AppTopFeedbackType.loading,
+      title: certificate ? s.savingCertificate : s.savingFile,
+      dedupKey: 'file-download',
+      showClose: false,
+    );
     final result = await FileDownloader.download(
       url: widget.url,
       fileName: widget.fileName ?? _nameFrom(widget.url),
     );
-    if (!mounted) return;
+    if (!mounted) {
+      AppTopFeedback.dismiss(feedback);
+      return;
+    }
     setState(() => _isLoading = false);
-    if (result.status == DownloadSaveStatus.cancelled) return;
+    if (result.status == DownloadSaveStatus.cancelled) {
+      AppTopFeedback.dismiss(feedback);
+      return;
+    }
     final success = result.status == DownloadSaveStatus.saved;
-    final s = S.of(context);
-    final certificate = (widget.fileName ?? widget.url).toLowerCase().contains(
-      'certificate',
-    );
-    showDownloadFeedbackBanner(
+    AppTopFeedback.replace(
       context,
-      message: success
+      feedback,
+      title: success
           ? certificate
                 ? s.certificateSavedSuccessfully
                 : s.fileSavedSuccessfully
           : s.unableToDownloadFile,
-      success: success,
-      location: success && result.location != null
-          ? s.savedInLocation(result.location!)
-          : null,
-      openLabel: s.openAction,
-      onOpen: success && result.canOpen ? () => _open(result) : null,
+      type: success ? AppTopFeedbackType.success : AppTopFeedbackType.error,
+      body: success ? result.location : s.tryAgain,
+      actionLabel: s.openAction,
+      onAction: success && result.canOpen ? () => _open(result) : null,
     );
   }
 
   Future<void> _open(DownloadSaveResult result) async {
     final opened = await DeviceFileSaver.open(result);
     if (!mounted || opened) return;
-    showDownloadFeedbackBanner(
+    AppTopFeedback.show(
       context,
-      message: S.of(context).unableToOpenFile,
-      success: false,
+      title: S.of(context).unableToOpenFile,
+      body: S.of(context).tryAgain,
+      type: AppTopFeedbackType.error,
     );
   }
 

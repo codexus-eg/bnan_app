@@ -96,6 +96,7 @@ class ChatNotificationCoordinator {
     required String senderId,
     required String title,
     required String body,
+    String roomName = '',
   }) {
     _handle(
       ChatNotificationEvent.fromPush(
@@ -104,6 +105,7 @@ class ChatNotificationCoordinator {
         senderId: senderId,
         senderName: title,
         message: body,
+        roomName: roomName,
       ),
       updateRoom: false,
     );

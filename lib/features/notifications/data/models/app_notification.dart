@@ -45,6 +45,14 @@ class AppNotification {
     navigation['screen'] ??= json['screen'];
     navigation['target'] ??= json['target'];
     navigation['params'] ??= json['params'];
+    final params = NotificationNavigation.decodeParams(navigation['params']);
+    final sources = [json, data];
+    for (final source in sources) {
+      for (final key in const ['roomId', 'roomName', 'chatName', 'name']) {
+        if (source[key] != null) params.putIfAbsent(key, () => source[key]);
+      }
+    }
+    navigation['params'] = params;
     return AppNotification(
       id: _string(json['id'] ?? json['notificationId']),
       type: _string(json['type'] ?? json['notificationType']),

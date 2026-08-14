@@ -22,7 +22,7 @@ class StudentProfileDetails extends StatelessWidget {
           label: label,
           value: value!,
           icon: ImageManager.bookIcon,
-          iconColor: ColorManager.grey7D7D,
+          iconColor: ColorManager.greyA8AF,
         ),
       );
     }

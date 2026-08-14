@@ -313,6 +313,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم حفظ الشهادة بنجاح",
     ),
+    "savingCertificate": MessageLookupByLibrary.simpleMessage(
+      "جاري حفظ الشهادة...",
+    ),
     "certificateUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم تعديل الشهادة بنجاح",
     ),
@@ -343,6 +346,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ممتاز، لا تنسى مراجعة الفصل الثالث قبل الحصة.",
     ),
     "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
+    "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
     "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
       "تحقق من بريدك الإلكتروني ",
     ),
@@ -671,6 +675,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم حفظ الملف بنجاح",
     ),
+    "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
     "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "يرجى ملء جميع الحقول المطلوبة.",
     ),
@@ -1767,6 +1772,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveAmount": m28,
     "saveChanges": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
     "savedInLocation": m29,
+    "tryAgain": MessageLookupByLibrary.simpleMessage("حاول مرة أخرى"),
     "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
     "scheduleCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تمت إضافة الجدول بنجاح",

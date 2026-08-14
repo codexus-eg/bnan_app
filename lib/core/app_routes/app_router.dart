@@ -34,8 +34,9 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_o
 import 'package:flutter/widgets.dart';
 import 'routes_export.dart';
 
-GoRouter buildRouter() {
+GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
   return GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: Routes.splash,
     routes: [
       GoRoute(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -15,12 +17,12 @@ class NotificationCard extends StatelessWidget {
   final AppNotification notification;
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: () {
-      context.read<NotificationsCubit>().markRead(notification);
-      final route = getIt<NotificationNavigationService>().resolve(
-        notification,
-      );
-      if (route != '/notification') context.push(route);
+    onTap: () async {
+      unawaited(context.read<NotificationsCubit>().markRead(notification));
+      final destination = await getIt<NotificationNavigationService>()
+          .resolveDestination(notification);
+      if (!context.mounted || destination.path == '/notification') return;
+      context.push(destination.path, extra: destination.extra);
     },
     child: Container(
       padding: const EdgeInsets.all(12),

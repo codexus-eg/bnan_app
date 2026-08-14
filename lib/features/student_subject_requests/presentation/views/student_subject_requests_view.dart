@@ -1,13 +1,14 @@
 import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_state.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/student_subject_requests_body.dart';
-import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_skeleton.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,7 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    appBar: CustomAppbar(headerText: S.of(context).requestNewLesson),
     body: MultiBlocListener(
       listeners: [
         BlocListener<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
@@ -63,7 +65,11 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
           BlocBuilder<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
             builder: (context, state) {
               if (state.phase == SubjectRequestsPhase.loading) {
-                return const SubjectRequestSkeleton();
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: ColorManager.mainColor14,
+                  ),
+                );
               }
               if (state.phase == SubjectRequestsPhase.failure &&
                   state.availability == null) {

@@ -5,11 +5,10 @@ import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/theme_helper.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/session_invalidator.dart';
+import 'package:bnan_app/core/shared_widget/app_top_feedback/app_top_feedback.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
-import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_route.dart';
-import 'package:bnan_app/features/chats/presentation/notifications/chat_foreground_notification.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
@@ -37,17 +36,17 @@ class _BnanAppState extends State<BnanApp> {
   late final ChatNotificationCoordinator _chatNotifications;
   late final NotificationsCubit _notifications;
   PushNotificationService? _pushNotifications;
-  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
+  final _navigatorKey = GlobalKey<NavigatorState>();
   StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
+  StreamSubscription<AppNotification>? _notificationFeedbackSubscription;
   StreamSubscription<AppNotification>? _notificationNavigationSubscription;
   StreamSubscription<void>? _sessionExpiredSubscription;
-  OverlayEntry? _chatNotificationEntry;
-  Timer? _chatNotificationTimer;
+  AppTopFeedbackHandle? _chatFeedback;
 
   @override
   void initState() {
     super.initState();
-    _router = buildRouter();
+    _router = buildRouter(navigatorKey: _navigatorKey);
     _sessionExpiredSubscription = SessionInvalidator.instance.expired.listen(
       (_) => _openLoginAfterSessionExpiry(),
     );
@@ -57,6 +56,9 @@ class _BnanAppState extends State<BnanApp> {
     );
     unawaited(_chatNotifications.initialize());
     _notifications = getIt<NotificationsCubit>();
+    _notificationFeedbackSubscription = _notifications.incoming.listen(
+      _showForegroundNotification,
+    );
     unawaited(_notifications.initialize());
     if (getIt.isRegistered<PushNotificationService>()) {
       _pushNotifications = getIt<PushNotificationService>();
@@ -86,7 +88,6 @@ class _BnanAppState extends State<BnanApp> {
       supportedLocales: S.delegate.supportedLocales,
       locale: const Locale('ar'),
       title: 'Bnan App',
-      scaffoldMessengerKey: _messengerKey,
       routerConfig: _router,
       theme: ThemeHelper.getTheme(),
     );
@@ -98,50 +99,76 @@ class _BnanAppState extends State<BnanApp> {
   }
 
   void _showChatNotification(ChatNotificationEvent event) {
-    final context = _messengerKey.currentContext;
-    final overlay = context == null
-        ? null
-        : Overlay.maybeOf(context, rootOverlay: true);
-    if (overlay == null) return;
-    final route = ChatNotificationRoute.path(event.roomId);
+    final context = _navigatorKey.currentContext;
+    final overlay = _navigatorKey.currentState?.overlay;
+    if (context == null || overlay == null) return;
     final sender = event.senderName.isEmpty
         ? S.current.messages
         : event.senderName;
     _dismissChatNotification();
-    _chatNotificationEntry = OverlayEntry(
-      builder: (context) => PositionedDirectional(
-        top: MediaQuery.paddingOf(context).top + 8,
-        start: 12,
-        end: 12,
-        child: ChatForegroundNotification(
-          sender: sender,
-          preview: event.message,
-          onTap: () {
-            _dismissChatNotification();
-            if (route != null) _router.push(route);
-          },
-        ),
-      ),
-    );
-    overlay.insert(_chatNotificationEntry!);
-    _chatNotificationTimer = Timer(
-      const Duration(seconds: 4),
-      _dismissChatNotification,
+    _chatFeedback = AppTopFeedback.show(
+      context,
+      overlay: overlay,
+      type: AppTopFeedbackType.notification,
+      title: event.roomName.isEmpty ? sender : event.roomName,
+      body: event.roomName.isEmpty
+          ? event.message
+          : '$sender: ${event.message}',
+      dedupKey: 'chat:${event.messageId}',
+      onTap: event.roomId.isEmpty
+          ? null
+          : () => unawaited(_openNotification(_chatEventNotification(event))),
     );
   }
 
   void _dismissChatNotification() {
-    _chatNotificationTimer?.cancel();
-    _chatNotificationTimer = null;
-    _chatNotificationEntry?.remove();
-    _chatNotificationEntry = null;
+    final feedback = _chatFeedback;
+    _chatFeedback = null;
+    if (feedback != null) AppTopFeedback.dismiss(feedback);
   }
 
-  void _openNotification(AppNotification notification) {
-    final route = getIt<NotificationNavigationService>().resolve(notification);
-    if (_router.routeInformationProvider.value.uri.path == route) return;
-    _router.push(route);
+  void _showForegroundNotification(AppNotification notification) {
+    if (notification.key.trim().toUpperCase() == 'NEW_MESSAGE') return;
+    final context = _navigatorKey.currentContext;
+    final overlay = _navigatorKey.currentState?.overlay;
+    if (context == null || overlay == null) return;
+    AppTopFeedback.show(
+      context,
+      overlay: overlay,
+      type: AppTopFeedbackType.notification,
+      title: notification.title.isEmpty
+          ? S.current.notifications
+          : notification.title,
+      body: notification.body,
+      dedupKey: notification.id.isEmpty
+          ? '${notification.key}|${notification.createdAt}'
+          : notification.id,
+      onTap: () => unawaited(_openNotification(notification)),
+    );
   }
+
+  Future<void> _openNotification(AppNotification notification) async {
+    final destination = await getIt<NotificationNavigationService>()
+        .resolveDestination(notification);
+    if (_router.routeInformationProvider.value.uri.path == destination.path) {
+      return;
+    }
+    _router.push(destination.path, extra: destination.extra);
+  }
+
+  AppNotification _chatEventNotification(ChatNotificationEvent event) =>
+      AppNotification.fromJson({
+        'id': event.messageId,
+        'key': 'NEW_MESSAGE',
+        'type': 'chat',
+        'navigation': {
+          'screen': 'chat_room',
+          'params': {
+            'roomId': event.roomId,
+            if (event.roomName.isNotEmpty) 'roomName': event.roomName,
+          },
+        },
+      });
 
   void _openLoginAfterSessionExpiry() {
     if (_router.routeInformationProvider.value.uri.path == Routes.logIn) return;
@@ -152,6 +179,7 @@ class _BnanAppState extends State<BnanApp> {
   void dispose() {
     _dismissChatNotification();
     unawaited(_chatNotificationSubscription?.cancel());
+    unawaited(_notificationFeedbackSubscription?.cancel());
     unawaited(_notificationNavigationSubscription?.cancel());
     unawaited(_sessionExpiredSubscription?.cancel());
     final pushNotifications = _pushNotifications;

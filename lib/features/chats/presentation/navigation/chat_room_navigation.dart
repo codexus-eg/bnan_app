@@ -11,11 +11,12 @@ abstract final class ChatRoomNavigation {
   static ChatRouteArgs arguments(
     ChatRoomSummaryModel room, {
     required String? currentUserRole,
+    String? displayName,
   }) {
     return ChatRouteArgs(
       roomType: room.type,
       classroomId: room.classroomId,
-      classroomName: room.displayName,
+      classroomName: displayName ?? room.displayName,
       currentUserRole: currentUserRole,
     );
   }

@@ -1259,6 +1259,9 @@
     "adminSubjectRequestMethodOptional": "Payment method (optional)",
     "fileSavedSuccessfully": "File saved successfully",
     "certificateSavedSuccessfully": "Certificate saved successfully",
+    "savingFile": "Saving file...",
+    "savingCertificate": "Saving certificate...",
+    "tryAgain": "Try again",
     "savedInLocation": "Saved in: {location}",
     "@savedInLocation": {"placeholders": {"location": {}}},
     "openAction": "Open",
@@ -1281,5 +1284,6 @@
     "notificationAdmin": "Administration",
     "notificationSupervisor": "Supervision",
     "notificationPush": "Device notifications",
-    "notificationInApp": "In-app notifications"
+    "notificationInApp": "In-app notifications",
+    "chatTitleFallback": "Conversation"
 }

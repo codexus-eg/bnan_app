@@ -2,7 +2,6 @@ import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
-import 'package:bnan_app/core/shared_widget/shared_group_header.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
@@ -29,18 +28,10 @@ class _StudentSubjectRequestsBodyState
   String discountCode = '';
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      SharedGroupHeader(title: S.of(context).requestNewLesson),
-      Expanded(
-        child:
-            BlocBuilder<
-              StudentSubjectRequestsCubit,
-              StudentSubjectRequestsState
-            >(builder: _buildState),
-      ),
-    ],
-  );
+  Widget build(BuildContext context) =>
+      BlocBuilder<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
+        builder: _buildState,
+      );
 
   Widget _buildState(BuildContext context, StudentSubjectRequestsState state) {
     if (state.availability == null) return const SizedBox.shrink();

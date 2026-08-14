@@ -9,6 +9,7 @@ import 'package:bnan_app/features/chats/presentation/views/widgets/chat_input_ba
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_messages_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/features/chats/presentation/utils/chat_title.dart';
 
 class ChatBody extends StatefulWidget {
   const ChatBody({
@@ -38,7 +39,7 @@ class _ChatBodyState extends State<ChatBody> {
     return Column(
       children: [
         ChatHeader(
-          chatTitle: widget.classroomName ?? '',
+          chatTitle: resolveChatTitle(context, widget.classroomName),
           roomId: widget.roomId,
           roomType: widget.roomType,
           classroomId: widget.classroomId,

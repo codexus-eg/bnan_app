@@ -332,6 +332,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Certificate saved successfully",
     ),
+    "savingCertificate": MessageLookupByLibrary.simpleMessage(
+      "Saving certificate...",
+    ),
     "certificateUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Certificate updated successfully",
     ),
@@ -362,6 +365,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Excellent. Don’t forget to review chapter three before the lesson.",
     ),
     "chatMsg4": MessageLookupByLibrary.simpleMessage("Okay, I’ll start now"),
+    "chatTitleFallback": MessageLookupByLibrary.simpleMessage("Conversation"),
     "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
       "Check your email ",
     ),
@@ -742,6 +746,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "File saved successfully",
     ),
+    "savingFile": MessageLookupByLibrary.simpleMessage("Saving file..."),
     "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Please fill in all required fields.",
     ),
@@ -1879,6 +1884,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveAmount": m28,
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save Changes"),
     "savedInLocation": m29,
+    "tryAgain": MessageLookupByLibrary.simpleMessage("Try again"),
     "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
     "scheduleCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Schedule added successfully",

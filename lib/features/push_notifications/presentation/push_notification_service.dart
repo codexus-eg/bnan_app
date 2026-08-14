@@ -55,8 +55,6 @@ class PushNotificationService {
       _foregroundMessages.listen(_handleForeground),
       _openedMessages.listen(_handleOpened),
       _messaging.tokenRefresh.listen(_handleTokenRefresh),
-      if (_notifications != null)
-        _notifications.incoming.listen(_showLocalNotification),
     ]);
     await _localNotifications?.initialize(_handleLocalPayload);
     final initialLocalPayload = await _localNotifications?.initialPayload();
@@ -84,6 +82,7 @@ class PushNotificationService {
       senderId: intent.senderId,
       title: intent.title,
       body: intent.body,
+      roomName: intent.roomName,
     );
   }
 
@@ -106,20 +105,6 @@ class PushNotificationService {
     data['_body'] = message.notification?.body;
     final value = AppNotification.fromJson(data);
     return value.id.isEmpty && value.key.isEmpty ? null : value;
-  }
-
-  Future<void> _showLocalNotification(AppNotification value) async {
-    if (value.navigation.params['roomId'] == _chat.currentRoomId ||
-        value.resourceId == _chat.currentRoomId) {
-      return;
-    }
-    try {
-      await _localNotifications?.showNotification(value);
-    } catch (error) {
-      if (kDebugMode) {
-        debugPrint('Local notification failed: ${error.runtimeType}');
-      }
-    }
   }
 
   void _handleLocalPayload(String payload) {

@@ -8,6 +8,7 @@ import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject
 import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_request_actions_cubit.dart';
 import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
+import 'package:bnan_app/features/chats/data/cache/chat_rooms_cache.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
 import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo.dart';
 import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo_impl.dart';
@@ -85,8 +86,15 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => NotificationsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<RecentNotificationIds>(RecentNotificationIds.new);
+  getIt.registerLazySingleton<ChatRoomsCache>(
+    () => ChatRoomsCache(SessionManager.instance),
+  );
   getIt.registerLazySingleton<NotificationNavigationService>(
-    () => NotificationNavigationService(SessionManager.instance),
+    () => NotificationNavigationService(
+      SessionManager.instance,
+      chatRepo: getIt<ChatRepo>(),
+      roomsCache: getIt<ChatRoomsCache>(),
+    ),
   );
 
   // Repositories
@@ -542,6 +550,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => GetChatRoomsCubit(
       getIt<ChatRepo>(),
       getIt<ChatNotificationCoordinator>(),
+      getIt<ChatRoomsCache>(),
     ),
   );
   getIt.registerFactory<GetRoomMessagesCubit>(

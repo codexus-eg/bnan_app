@@ -9,6 +9,7 @@ class ChatNotificationEvent {
     required this.senderName,
     required this.message,
     required this.createdAt,
+    this.roomName = '',
   });
 
   final String messageId;
@@ -17,6 +18,7 @@ class ChatNotificationEvent {
   final String senderName;
   final String message;
   final DateTime createdAt;
+  final String roomName;
 
   factory ChatNotificationEvent.fromMessage(ChatMessageModel message) {
     final attachmentName = message.attachments.firstOrNull?.fileName ?? '';
@@ -47,6 +49,7 @@ class ChatNotificationEvent {
       senderName: data.senderName.trim(),
       message: data.message.trim(),
       createdAt: DateTime.now(),
+      roomName: data.roomName.trim(),
     );
   }
 
@@ -56,6 +59,7 @@ class ChatNotificationEvent {
     required String senderId,
     required String senderName,
     required String message,
+    String roomName = '',
   }) => ChatNotificationEvent(
     messageId: messageId,
     roomId: roomId,
@@ -63,5 +67,6 @@ class ChatNotificationEvent {
     senderName: senderName,
     message: message,
     createdAt: DateTime.now(),
+    roomName: roomName.trim(),
   );
 }

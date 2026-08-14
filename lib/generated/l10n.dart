@@ -10169,6 +10169,31 @@ class S {
     );
   }
 
+  /// `Saving file...`
+  String get savingFile {
+    return Intl.message(
+      'Saving file...',
+      name: 'savingFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saving certificate...`
+  String get savingCertificate {
+    return Intl.message(
+      'Saving certificate...',
+      name: 'savingCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try again`
+  String get tryAgain {
+    return Intl.message('Try again', name: 'tryAgain', desc: '', args: []);
+  }
+
   /// `Saved in: {location}`
   String savedInLocation(Object location) {
     return Intl.message(
@@ -10349,6 +10374,16 @@ class S {
     return Intl.message(
       'In-app notifications',
       name: 'notificationInApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Conversation`
+  String get chatTitleFallback {
+    return Intl.message(
+      'Conversation',
+      name: 'chatTitleFallback',
       desc: '',
       args: [],
     );

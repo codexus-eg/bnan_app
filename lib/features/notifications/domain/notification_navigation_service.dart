@@ -1,21 +1,37 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/features/chats/data/cache/chat_rooms_cache.dart';
+import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
+import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
+import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/navigation/chat_room_navigation.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
+import 'package:bnan_app/features/notifications/domain/notification_destination.dart';
 import 'package:flutter/foundation.dart';
 
 class NotificationNavigationService {
-  const NotificationNavigationService(this._session);
+  const NotificationNavigationService(
+    this._session, {
+    ChatRepo? chatRepo,
+    ChatRoomsCache? roomsCache,
+  }) : _chatRepo = chatRepo,
+       _roomsCache = roomsCache;
   final SessionManager _session;
+  final ChatRepo? _chatRepo;
+  final ChatRoomsCache? _roomsCache;
+
+  Future<NotificationDestination> resolveDestination(
+    AppNotification notification,
+  ) async {
+    if (_screen(notification) == 'chat_room') {
+      return _chatDestination(notification);
+    }
+    return NotificationDestination(resolve(notification));
+  }
 
   String resolve(AppNotification notification) {
-    final screen =
-        (notification.navigation.screen ??
-                notification.navigation.target ??
-                _eventScreens[notification.key] ??
-                '')
-            .trim()
-            .toLowerCase();
+    final screen = _screen(notification);
     final params = notification.navigation.params;
     final resourceId = notification.resourceId;
     final route = switch (screen) {
@@ -37,6 +53,48 @@ class NotificationNavigationService {
     if (route != null) return route;
     if (kDebugMode) debugPrint('Unsupported notification target: $screen');
     return Routes.notification;
+  }
+
+  String _screen(AppNotification value) =>
+      (value.navigation.screen ??
+              value.navigation.target ??
+              _eventScreens[value.key] ??
+              '')
+          .trim()
+          .toLowerCase();
+
+  Future<NotificationDestination> _chatDestination(
+    AppNotification notification,
+  ) async {
+    final params = notification.navigation.params;
+    final roomId = _text(params['roomId'] ?? notification.resourceId);
+    if (roomId == null) {
+      return const NotificationDestination(Routes.notification);
+    }
+    final payloadName = _roomName(params);
+    var room = _roomsCache?.find(roomId);
+    if (room == null && payloadName == null) {
+      room = await _loadRoom(roomId);
+    }
+    final name = payloadName ?? _text(room?.displayName);
+    final args = room == null
+        ? ChatRouteArgs(classroomName: name, currentUserRole: _session.userRole)
+        : ChatRoomNavigation.arguments(
+            room,
+            currentUserRole: _session.userRole,
+            displayName: name,
+          );
+    return NotificationDestination(Routes.chatPath(roomId), extra: args);
+  }
+
+  Future<ChatRoomSummaryModel?> _loadRoom(String roomId) async {
+    final repo = _chatRepo;
+    if (repo == null) return null;
+    final result = await repo.getChatRooms();
+    return result.fold((_) => null, (response) {
+      _roomsCache?.replace(response.rooms);
+      return _roomsCache?.find(roomId) ?? _findRoom(response.rooms, roomId);
+    });
   }
 
   String? _required(String Function(String) build, dynamic value) {
@@ -93,3 +151,26 @@ const _eventScreens = <String, String>{
   'SUPERVISOR_CLASSROOM_ASSIGNED': 'supervisor_classrooms',
   'SUPERVISOR_CLASSROOM_UNASSIGNED': 'supervisor_classrooms',
 };
+
+String? _roomName(Map<String, dynamic> params) {
+  for (final key in const ['roomName', 'chatName', 'name', 'title']) {
+    final value = _text(params[key]);
+    if (value != null) return value;
+  }
+  return null;
+}
+
+String? _text(dynamic value) {
+  final text = value?.toString().trim();
+  return text?.isNotEmpty == true ? text : null;
+}
+
+ChatRoomSummaryModel? _findRoom(
+  Iterable<ChatRoomSummaryModel> rooms,
+  String roomId,
+) {
+  for (final room in rooms) {
+    if (room.id.trim() == roomId) return room;
+  }
+  return null;
+}
