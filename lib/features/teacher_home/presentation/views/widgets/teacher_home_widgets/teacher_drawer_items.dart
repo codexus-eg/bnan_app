@@ -29,7 +29,7 @@ List<DrawerItemModel> teacherDrawerItems(BuildContext context) {
     ),
     DrawerItemModel(title: s.evaluations, icon: ImageManager.starIcon),
     DrawerItemModel(title: s.assignments, icon: ImageManager.fileIcon),
-    if (SessionManager.instance.hasGulfRegistration)
+    if (SessionManager.instance.canAccessTeacherSubjectRequests)
       DrawerItemModel(
         title: s.registrationRequests,
         icon: ImageManager.fileQuestionIcon,

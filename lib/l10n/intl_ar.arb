@@ -1250,6 +1250,7 @@
     "adminSubjectRequestApproved": "تمت الموافقة على طلب المادة",
     "adminSubjectRequestRejectedSuccess": "تم رفض طلب المادة",
     "adminSubjectRequestRequestedAt": "تاريخ الطلب",
+    "adminSubjectRequestPrice": "السعر",
     "adminSubjectRequestReferenceNumber": "رقم المرجع (اختياري)",
     "adminSubjectRequestPaymentNotes": "ملاحظات الدفع (اختياري)",
     "adminSubjectRequestAmountOptional": "المبلغ (اختياري)",

@@ -1251,6 +1251,7 @@
     "adminSubjectRequestApproved": "Subject request approved",
     "adminSubjectRequestRejectedSuccess": "Subject request rejected",
     "adminSubjectRequestRequestedAt": "Requested at",
+    "adminSubjectRequestPrice": "Price",
     "adminSubjectRequestReferenceNumber": "Reference number (optional)",
     "adminSubjectRequestPaymentNotes": "Payment notes (optional)",
     "adminSubjectRequestAmountOptional": "Amount (optional)",

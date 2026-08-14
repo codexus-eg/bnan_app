@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
@@ -20,6 +21,8 @@ class StudentSubjectRequestsView extends StatefulWidget {
 
 class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     with WidgetsBindingObserver {
+  bool _paymentRestoreChecked = false;
+
   @override
   void initState() {
     super.initState();
@@ -45,20 +48,12 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
       listeners: [
         BlocListener<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
           listenWhen: (old, next) =>
-              old.message != next.message &&
-              next.message != null &&
-              next.availability != null,
-          listener: (context, state) {
-            final success =
-                state.message == 'subject_request_submitted' ||
-                state.message == 'subject_request_payment_completed';
-            final message = state.message == 'subject_request_submitted'
-                ? S.of(context).subjectRequestSubmitted
-                : state.message == 'subject_request_payment_completed'
-                ? S.of(context).subjectRequestPaymentCompleted
-                : state.message!;
-            showCustomSnackBar(context, message, success);
-          },
+              old.availability?.registrationMode !=
+                  next.availability?.registrationMode ||
+              (old.message != next.message &&
+                  next.message != null &&
+                  next.availability != null),
+          listener: _onStudentState,
         ),
         BlocListener<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
           listener: _onPayment,
@@ -120,5 +115,28 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     } else if (state.message != null) {
       showCustomSnackBar(context, state.message!, false);
     }
+  }
+
+  Future<void> _onStudentState(
+    BuildContext context,
+    StudentSubjectRequestsState state,
+  ) async {
+    if (!_paymentRestoreChecked && state.availability != null) {
+      _paymentRestoreChecked = true;
+      if (state.availability!.registrationMode == RegistrationMode.gulf) {
+        await context.read<SubjectRequestPaymentCubit>().restore();
+        if (!context.mounted) return;
+      }
+    }
+    if (state.message == null) return;
+    final success =
+        state.message == 'subject_request_submitted' ||
+        state.message == 'subject_request_payment_completed';
+    final message = state.message == 'subject_request_submitted'
+        ? S.of(context).subjectRequestSubmitted
+        : state.message == 'subject_request_payment_completed'
+        ? S.of(context).subjectRequestPaymentCompleted
+        : state.message!;
+    showCustomSnackBar(context, message, success);
   }
 }

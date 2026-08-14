@@ -12,12 +12,14 @@ class SubmitAssignmentCubit extends Cubit<SubmitAssignmentState> {
     required String assignmentId,
     required String filePath,
   }) async {
+    if (isClosed) return;
     emit(SubmitAssignmentLoading(assignmentId: assignmentId));
 
     final result = await assignmentsRepo.submitAssignment(
       assignmentId: assignmentId,
       filePath: filePath,
     );
+    if (isClosed) return;
 
     result.fold(
       (failure) {

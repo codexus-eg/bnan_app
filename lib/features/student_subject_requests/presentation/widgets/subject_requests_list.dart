@@ -1,7 +1,10 @@
-import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/student_subject_request.dart';
-import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_status_label.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_card.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -21,35 +24,31 @@ class SubjectRequestsList extends StatelessWidget {
           style: StylesManager.styleBold14(context),
         ),
         const SizedBox(height: 8),
-        ...requests.map(
-          (request) => Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: ColorManager.white,
-              border: Border.all(color: ColorManager.borderColor),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  request.subject?.name ?? '',
-                  style: StylesManager.styleBold14(context),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subjectRequestStatusLabel(s, request.status),
-                  style: StylesManager.styleRegular14(
-                    context,
-                  ).copyWith(color: ColorManager.mainColor14),
-                ),
-              ],
-            ),
-          ),
-        ),
+        ...requests.map((request) => _card(context, request)),
       ],
+    );
+  }
+
+  Widget _card(BuildContext context, StudentSubjectRequest request) {
+    final assigned = request.status == 'assigned';
+    final classroomId = request.classroom?.id.trim() ?? '';
+    final roomId = request.chatRoom?.id.trim() ?? '';
+    return SubjectRequestCard(
+      request: request,
+      onClassroom: assigned && classroomId.isNotEmpty
+          ? () => MyNavigator.goTo(context, Routes.studentGroups)
+          : null,
+      onChat: assigned && roomId.isNotEmpty
+          ? () => MyNavigator.goTo(
+              context,
+              Routes.chatPath(roomId),
+              extra: ChatRouteArgs(
+                classroomId: classroomId,
+                classroomName: request.classroom?.name,
+                currentUserRole: SessionManager.instance.userRole,
+              ),
+            )
+          : null,
     );
   }
 }

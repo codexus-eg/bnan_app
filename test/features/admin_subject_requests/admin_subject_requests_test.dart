@@ -25,6 +25,28 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('parses nested student user name and subject object name', () {
+    final request = AdminSubjectRequestModel.fromJson({
+      'id': 'request-1',
+      'student': {
+        'user': {'fullName': 'Salmon'},
+      },
+      'subject': {'_id': 'subject-1', 'name': 'Arabic'},
+    });
+
+    expect(request.studentName, 'Salmon');
+    expect(request.subject, 'Arabic');
+  });
+
+  test('does not expose a subject id as its display name', () {
+    final request = AdminSubjectRequestModel.fromJson({
+      'id': 'request-1',
+      'subject': '64b123456789012345678901',
+    });
+
+    expect(request.subject, isNull);
+  });
+
   test(
     'fetch uses protected page/limit query without status and parses pagination',
     () async {

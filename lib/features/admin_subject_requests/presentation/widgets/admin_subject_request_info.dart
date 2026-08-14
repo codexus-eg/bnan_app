@@ -21,6 +21,11 @@ class AdminSubjectRequestInfo extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
+              if (request.studentName.trim().isNotEmpty)
+                ClassMetaRow(
+                  label: s.studentName,
+                  value: request.studentName.trim(),
+                ),
               ClassMetaRow(
                 label: s.curriculum,
                 value: request.curriculum ?? '-',
@@ -33,7 +38,7 @@ class AdminSubjectRequestInfo extends StatelessWidget {
               ),
               if (request.price != null)
                 ClassMetaRow(
-                  label: s.packagePrice,
+                  label: s.adminSubjectRequestPrice,
                   value: '${request.price} ${request.currency ?? ''}'.trim(),
                 ),
               if (request.notes != null)

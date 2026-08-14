@@ -1,7 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
-import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/shared_group_header.dart';
@@ -31,10 +30,6 @@ class StudentSubjectRequestsBody extends StatefulWidget {
 class _StudentSubjectRequestsBodyState
     extends State<StudentSubjectRequestsBody> {
   String city = '', region = '', line1 = '', line2 = '', discountCode = '';
-  bool get isGulf =>
-      SessionManager.instance.registrationMode == RegistrationMode.gulf;
-  bool get isEgyptian =>
-      SessionManager.instance.registrationMode == RegistrationMode.egyptian;
   bool get hasAddress =>
       city.trim().isNotEmpty &&
       region.trim().isNotEmpty &&
@@ -62,6 +57,7 @@ class _StudentSubjectRequestsBodyState
     if (state.availability == null) return const SizedBox.shrink();
     final cubit = context.read<StudentSubjectRequestsCubit>();
     final availability = state.availability!;
+    final registrationMode = availability.registrationMode;
     return RefreshIndicator(
       onRefresh: () => cubit.load(refresh: true),
       child: ListView(
@@ -75,6 +71,7 @@ class _StudentSubjectRequestsBodyState
           SubjectRequestPackageSelector(
             selectedName: _selectedPackageName(state),
             hasPackages: state.packages.isNotEmpty,
+            enabled: state.selectedSubjectId != null,
             onTap: () => _selectPackage(state),
           ),
           const SizedBox(height: 16),
@@ -92,7 +89,7 @@ class _StudentSubjectRequestsBodyState
               textDirection: TextDirection.ltr,
             ),
           ),
-          if (isGulf) ...[
+          if (registrationMode == RegistrationMode.gulf) ...[
             const SizedBox(height: 16),
             GulfPaymentAddressFields(
               onCityChanged: (value) => city = value,
@@ -107,7 +104,7 @@ class _StudentSubjectRequestsBodyState
             ),
           ],
           const SizedBox(height: 20),
-          _submitButton(state),
+          _submitButton(state, registrationMode),
           const SizedBox(height: 24),
           SubjectRequestsList(requests: state.requests),
         ],
@@ -115,34 +112,40 @@ class _StudentSubjectRequestsBodyState
     );
   }
 
-  Widget _submitButton(StudentSubjectRequestsState state) =>
-      BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
-        builder: (context, payment) {
-          if (payment.phase == SubjectRequestPaymentPhase.verificationTimeout) {
-            return CustomAppButton(
-              text: S.of(context).subjectRequestVerifyPayment,
-              onPressed: context.read<SubjectRequestPaymentCubit>().verify,
-            );
-          }
-          if (payment.phase == SubjectRequestPaymentPhase.terminalFailure) {
-            return CustomAppButton(
-              text: S.of(context).retry,
-              onPressed: state.canSubmit ? () => _submit(state) : null,
-            );
-          }
-          final loading =
-              state.isSubmitting ||
-              payment.phase == SubjectRequestPaymentPhase.creatingCheckout ||
-              payment.phase == SubjectRequestPaymentPhase.openingTamara ||
-              payment.phase == SubjectRequestPaymentPhase.verifying ||
-              payment.phase == SubjectRequestPaymentPhase.completed;
-          return CustomAppButton(
-            text: S.of(context).confirmRequest,
-            isLoading: loading,
-            onPressed: state.canSubmit ? () => _submit(state) : null,
-          );
-        },
+  Widget _submitButton(
+    StudentSubjectRequestsState state,
+    RegistrationMode registrationMode,
+  ) => BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
+    builder: (context, payment) {
+      if (payment.phase == SubjectRequestPaymentPhase.verificationTimeout) {
+        return CustomAppButton(
+          text: S.of(context).subjectRequestVerifyPayment,
+          onPressed: context.read<SubjectRequestPaymentCubit>().verify,
+        );
+      }
+      if (payment.phase == SubjectRequestPaymentPhase.terminalFailure) {
+        return CustomAppButton(
+          text: S.of(context).retry,
+          onPressed: state.canSubmit
+              ? () => _submit(state, registrationMode)
+              : null,
+        );
+      }
+      final loading =
+          state.isSubmitting ||
+          payment.phase == SubjectRequestPaymentPhase.creatingCheckout ||
+          payment.phase == SubjectRequestPaymentPhase.openingTamara ||
+          payment.phase == SubjectRequestPaymentPhase.verifying ||
+          payment.phase == SubjectRequestPaymentPhase.completed;
+      return CustomAppButton(
+        text: S.of(context).confirmRequest,
+        isLoading: loading,
+        onPressed: state.canSubmit
+            ? () => _submit(state, registrationMode)
+            : null,
       );
+    },
+  );
 
   String? _selectedPackageName(StudentSubjectRequestsState state) {
     for (final item in state.packages) {
@@ -161,13 +164,12 @@ class _StudentSubjectRequestsBodyState
     context.read<StudentSubjectRequestsCubit>().selectPackage(id);
   }
 
-  void _submit(StudentSubjectRequestsState state) {
-    if (isEgyptian) {
+  void _submit(
+    StudentSubjectRequestsState state,
+    RegistrationMode registrationMode,
+  ) {
+    if (registrationMode == RegistrationMode.egyptian) {
       context.read<StudentSubjectRequestsCubit>().submitEgyptian();
-      return;
-    }
-    if (!isGulf) {
-      showCustomSnackBar(context, S.of(context).errorUnknown, false);
       return;
     }
     if (!hasAddress) {

@@ -8,13 +8,16 @@ class GetAssignmentsCubit extends Cubit<GetAssignmentsState> {
   final StudentAssignmentsRepo repo;
 
   Future<void> getMyAssignments() async {
+    if (isClosed) return;
     emit(GetAssignmentsLoading());
 
     final result = await repo.getMyAssignments();
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(GetAssignmentsFailure(errorMessage: failure.message)),
-      (response) => emit(GetAssignmentsSuccess(assignments: response.assignments)),
+      (response) =>
+          emit(GetAssignmentsSuccess(assignments: response.assignments)),
     );
   }
 }

@@ -312,9 +312,7 @@ GoRouter buildRouter() {
               BlocProvider(
                 create: (_) => getIt<StudentSubjectRequestsCubit>()..load(),
               ),
-              BlocProvider(
-                create: (_) => getIt<SubjectRequestPaymentCubit>()..restore(),
-              ),
+              BlocProvider(create: (_) => getIt<SubjectRequestPaymentCubit>()),
             ],
             child: const StudentSubjectRequestsView(),
           ),
@@ -669,8 +667,7 @@ GoRouter buildRouter() {
         path: Routes.teacherRegistrationRequest,
         redirect: (context, state) {
           final session = SessionManager.instance;
-          final allowed =
-              session.role == UserRole.teacher && session.hasGulfRegistration;
+          final allowed = session.canAccessTeacherSubjectRequests;
           if (allowed) return null;
           return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
         },

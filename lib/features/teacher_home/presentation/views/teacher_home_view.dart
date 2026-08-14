@@ -78,7 +78,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     var legacyIndex = index < scheduleStartIndex
         ? index
         : index - scheduleRoutes.length + 1;
-    if (!SessionManager.instance.hasGulfRegistration && legacyIndex >= 6) {
+    if (!SessionManager.instance.canAccessTeacherSubjectRequests &&
+        legacyIndex >= 6) {
       legacyIndex++;
     }
     final bottomIndex = teacherDrawerToBottomNavIndex[legacyIndex];

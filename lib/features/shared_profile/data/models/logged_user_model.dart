@@ -43,7 +43,7 @@ class LoggedUserModel {
       grade: json['grade'] == null
           ? null
           : LoggedUserGradeModel.fromJson(json['grade']),
-      subjects: _subjectNames(json['subjects']),
+      subjects: _subjectNames(json['subjects'], grade: json['grade']),
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
       studentMode: _studentMode(json),
@@ -152,15 +152,34 @@ String? _curriculumName(Object? value) {
   return null;
 }
 
-List<String> _subjectNames(Object? value) {
+List<String> _subjectNames(Object? value, {Object? grade}) {
   if (value is! List) return const [];
+
+  final gradeSubjects = grade is Map && grade['subjects'] is List
+      ? grade['subjects'] as List
+      : const [];
+
   return value
       .map((item) {
         if (item is Map) {
-          return (item['name'] ?? item['id'] ?? item['_id']).toString();
+          return (item['name'] ?? item['id'] ?? item['_id'])?.toString().trim();
         }
-        return item.toString();
+
+        final subjectId = item.toString();
+
+        for (final gradeSubject in gradeSubjects) {
+          if (gradeSubject is Map) {
+            final id = (gradeSubject['id'] ?? gradeSubject['_id'])?.toString();
+
+            if (id == subjectId) {
+              return gradeSubject['name']?.toString().trim();
+            }
+          }
+        }
+
+        return subjectId.trim();
       })
-      .where((item) => item.trim().isNotEmpty)
+      .whereType<String>()
+      .where((item) => item.isNotEmpty)
       .toList(growable: false);
 }

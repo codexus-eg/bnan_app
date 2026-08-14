@@ -76,6 +76,9 @@ class SessionManager {
     UserRole.teacher => _registrationModes.contains(RegistrationMode.gulf),
     _ => false,
   };
+  bool get canAccessTeacherSubjectRequests =>
+      role == UserRole.teacher &&
+      (hasEgyptianRegistration || hasGulfRegistration);
 
   Future<void> saveSession({
     required String accessToken,

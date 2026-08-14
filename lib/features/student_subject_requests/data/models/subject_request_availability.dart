@@ -1,22 +1,34 @@
+import 'package:bnan_app/core/enums/registration_mode.dart';
+
 class SubjectRequestAvailability {
   const SubjectRequestAvailability({
     required this.curriculum,
     required this.grade,
     required this.subjects,
+    required this.registrationMode,
   });
 
   final SubjectRequestLookup curriculum;
   final SubjectRequestLookup grade;
   final List<AvailableSubject> subjects;
+  final RegistrationMode registrationMode;
 
   factory SubjectRequestAvailability.fromJson(Map<String, dynamic> json) {
     final data = _map(json['data']);
+    final curriculum = _map(data['curriculum']);
+    final registrationMode = RegistrationMode.fromValue(
+      curriculum['registrationMode'],
+    );
+    if (registrationMode == null) {
+      throw const FormatException('Missing curriculum.registrationMode');
+    }
     return SubjectRequestAvailability(
-      curriculum: SubjectRequestLookup.fromJson(_map(data['curriculum'])),
+      curriculum: SubjectRequestLookup.fromJson(curriculum),
       grade: SubjectRequestLookup.fromJson(_map(data['grade'])),
       subjects: _list(
         data['subjects'],
       ).map((item) => AvailableSubject.fromJson(_map(item))).toList(),
+      registrationMode: registrationMode,
     );
   }
 }
@@ -29,7 +41,8 @@ class SubjectRequestLookup {
   factory SubjectRequestLookup.fromJson(Map<String, dynamic> json) =>
       SubjectRequestLookup(
         id: (json['id'] ?? json['_id'] ?? '').toString(),
-        name: (json['name'] ?? '').toString(),
+        name: (json['name'] ?? json['fullName'] ?? json['displayName'] ?? '')
+            .toString(),
       );
 }
 

@@ -34,6 +34,10 @@ class _AdminSubjectRequestsSectionState
   }
 
   @override
-  Widget build(BuildContext context) =>
-      AdminSubjectRequestsBuilder(controller: _controller);
+  Widget build(BuildContext context) => Column(
+    children: [
+      const SizedBox(height: 16),
+      Expanded(child: AdminSubjectRequestsBuilder(controller: _controller)),
+    ],
+  );
 }

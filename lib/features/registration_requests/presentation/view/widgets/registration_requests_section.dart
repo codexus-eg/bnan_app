@@ -34,7 +34,10 @@ class _RegistrationRequestsSectionState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return RegistrationRequestsBlocBuilder(controller: _controller);
-  }
+  Widget build(BuildContext context) => Column(
+    children: [
+      const SizedBox(height: 16),
+      Expanded(child: RegistrationRequestsBlocBuilder(controller: _controller)),
+    ],
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
 import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/profile_info_row.dart';
 import 'package:bnan_app/features/shared_profile/presentation/views/widgets/profile_widgets/profile_section_card.dart';
@@ -21,6 +22,7 @@ class StudentProfileDetails extends StatelessWidget {
           label: label,
           value: value!,
           icon: ImageManager.bookIcon,
+          iconColor: ColorManager.grey7D7D,
         ),
       );
     }
