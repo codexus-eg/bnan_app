@@ -674,6 +674,7 @@
     "parentNotifications": "Notifications",
     "parentSubscription": "Subscription",
     "parentSubscriptions": "Subscriptions",
+    "childrenSubscriptions": "Children subscriptions",
     "parentPackagesAndSubscription": "Packages and Subscription",
     "parentMessages": "Messages",
     "parentDailyPlans": "Daily Plans",
@@ -1255,5 +1256,10 @@
     "adminSubjectRequestReferenceNumber": "Reference number (optional)",
     "adminSubjectRequestPaymentNotes": "Payment notes (optional)",
     "adminSubjectRequestAmountOptional": "Amount (optional)",
-    "adminSubjectRequestMethodOptional": "Payment method (optional)"
+    "adminSubjectRequestMethodOptional": "Payment method (optional)",
+    "fileSavedSuccessfully": "File saved successfully",
+    "certificateSavedSuccessfully": "Certificate saved successfully",
+    "savedInLocation": "Saved in: {location}",
+    "@savedInLocation": {"placeholders": {"location": {}}},
+    "openAction": "Open"
 }

@@ -17,9 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Gulf address stays scrollable on a small screen with keyboard', (
-    tester,
-  ) async {
+  testWidgets('Gulf registration hides Tamara address fields', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await CacheHelper.init();
     tester.view.physicalSize = const Size(320, 568);
@@ -43,17 +41,10 @@ void main() {
       ..nextStep();
 
     await tester.pumpWidget(_app(auth, register));
-    final lastField = find.byType(TextFormField).last;
-    tester.view.viewInsets = const FakeViewPadding(bottom: 260);
-    await tester.pump();
-    await tester.drag(
-      find.byType(CustomScrollView),
-      const Offset(0, -1200),
-    );
-    await tester.pumpAndSettle();
-
+    expect(find.text(S.current.city), findsNothing);
+    expect(find.text('المنطقة'), findsNothing);
+    expect(find.text('العنوان'), findsNothing);
     expect(tester.takeException(), isNull);
-    expect(tester.getBottomLeft(lastField).dy, lessThanOrEqualTo(308));
   });
 }
 

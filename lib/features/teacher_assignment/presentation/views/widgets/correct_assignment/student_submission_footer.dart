@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/download_icon_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -56,10 +57,7 @@ class StudentSubmissionFooter extends StatelessWidget {
             ).copyWith(color: ColorManager.mainColor14),
           ),
         ),
-        SvgPicture.asset(
-          ImageManager.downloadIcon,
-          colorFilter: ColorFilter.mode(ColorManager.greyA8AF, BlendMode.srcIn),
-        ),
+        DownloadIconButton(url: attachment, fileName: _fileName(attachment)),
       ],
     );
   }

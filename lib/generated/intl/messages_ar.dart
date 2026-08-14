@@ -108,6 +108,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m39(count) => "${count} محاضرة أسبوعية";
 
+  static String m40(location) => "مكان الحفظ: ${location}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "Packages": MessageLookupByLibrary.simpleMessage("باقات"),
@@ -297,6 +299,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "certificateDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم حذف الشهادة بنجاح",
+    ),
+    "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم حفظ الشهادة بنجاح",
     ),
     "certificateFileUnavailable": MessageLookupByLibrary.simpleMessage(
       "ملف الشهادة غير متاح",
@@ -655,6 +660,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "fileDownloadedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم تحميل الملف بنجاح",
+    ),
+    "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم حفظ الملف بنجاح",
     ),
     "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "يرجى ملء جميع الحقول المطلوبة.",
@@ -1131,6 +1139,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "onboardingTitle3": MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
     "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
+    "openAction": MessageLookupByLibrary.simpleMessage("فتح"),
     "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
     "openFile": MessageLookupByLibrary.simpleMessage("فتح الملف"),
     "openLink": MessageLookupByLibrary.simpleMessage("فتح الرابط"),
@@ -1297,6 +1306,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "جدده الآن لتجنب التعليق",
     ),
     "parentSubscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
+    "childrenSubscriptions": MessageLookupByLibrary.simpleMessage(
+      "اشتراكات الأبناء",
+    ),
     "parentThirdPreparatoryGrade": MessageLookupByLibrary.simpleMessage(
       "الصف الثالث الإعدادي",
     ),
@@ -1883,6 +1895,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subjectRequestAdminReview": MessageLookupByLibrary.simpleMessage(
       "قيد مراجعة الإدارة",
     ),
+    "savedInLocation": m40,
     "subjectRequestAssigned": MessageLookupByLibrary.simpleMessage(
       "تم تعيين المدرس",
     ),

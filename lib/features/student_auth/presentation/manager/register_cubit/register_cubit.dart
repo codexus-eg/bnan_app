@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
 import 'package:bnan_app/core/helper/phone_number_normalizer.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
@@ -42,10 +43,6 @@ class RegisterCubit extends Cubit<RegisterState> {
   final studentPasswordController = TextEditingController();
   final studentNameController = TextEditingController();
   final studentEmailController = TextEditingController();
-  final cityController = TextEditingController();
-  final regionController = TextEditingController();
-  final addressLine1Controller = TextEditingController();
-  final addressLine2Controller = TextEditingController();
   final discountCodeController = TextEditingController();
 
   String? selectedGradeId;
@@ -164,11 +161,11 @@ class RegisterCubit extends Cubit<RegisterState> {
       discountCode: discountCodeController.text.trim().isEmpty
           ? null
           : discountCodeController.text.trim(),
-      address: PaymentAddress(
-        city: cityController.text,
-        region: regionController.text,
-        line1: addressLine1Controller.text,
-        line2: addressLine2Controller.text,
+      address: const PaymentAddress(
+        city: TamaraDefaultAddress.city,
+        region: TamaraDefaultAddress.region,
+        line1: TamaraDefaultAddress.line1,
+        line2: TamaraDefaultAddress.line2,
       ),
     );
   }
@@ -211,10 +208,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     studentPasswordController.dispose();
     studentNameController.dispose();
     studentEmailController.dispose();
-    cityController.dispose();
-    regionController.dispose();
-    addressLine1Controller.dispose();
-    addressLine2Controller.dispose();
     discountCodeController.dispose();
     return super.close();
   }

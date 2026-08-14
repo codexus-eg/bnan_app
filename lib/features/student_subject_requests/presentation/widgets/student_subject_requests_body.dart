@@ -1,11 +1,9 @@
-import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
-import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/shared_group_header.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
-import 'package:bnan_app/features/payments/presentation/widgets/gulf_payment_address_fields.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
@@ -14,7 +12,6 @@ import 'package:bnan_app/features/student_subject_requests/presentation/manager/
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_subjects_section.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_package_dialog.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_package_selector.dart';
-import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_requests_list.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,20 +26,12 @@ class StudentSubjectRequestsBody extends StatefulWidget {
 
 class _StudentSubjectRequestsBodyState
     extends State<StudentSubjectRequestsBody> {
-  String city = '', region = '', line1 = '', line2 = '', discountCode = '';
-  bool get hasAddress =>
-      city.trim().isNotEmpty &&
-      region.trim().isNotEmpty &&
-      line1.trim().isNotEmpty;
+  String discountCode = '';
 
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      SharedGroupHeader(
-        title: S.of(context).requestNewLesson,
-        path: Routes.studentGroups,
-        badgeTitle: S.of(context).myRequests,
-      ),
+      SharedGroupHeader(title: S.of(context).requestNewLesson),
       Expanded(
         child:
             BlocBuilder<
@@ -91,13 +80,6 @@ class _StudentSubjectRequestsBodyState
           ),
           if (registrationMode == RegistrationMode.gulf) ...[
             const SizedBox(height: 16),
-            GulfPaymentAddressFields(
-              onCityChanged: (value) => city = value,
-              onRegionChanged: (value) => region = value,
-              onLine1Changed: (value) => line1 = value,
-              onLine2Changed: (value) => line2 = value,
-            ),
-            const SizedBox(height: 16),
             CustomTextField(
               label: S.of(context).discountCode,
               onChanged: (value) => discountCode = value,
@@ -105,8 +87,6 @@ class _StudentSubjectRequestsBodyState
           ],
           const SizedBox(height: 20),
           _submitButton(state, registrationMode),
-          const SizedBox(height: 24),
-          SubjectRequestsList(requests: state.requests),
         ],
       ),
     );
@@ -172,25 +152,17 @@ class _StudentSubjectRequestsBodyState
       context.read<StudentSubjectRequestsCubit>().submitEgyptian();
       return;
     }
-    if (!hasAddress) {
-      showCustomSnackBar(
-        context,
-        S.of(context).parentPaymentAddressRequired,
-        false,
-      );
-      return;
-    }
     context.read<SubjectRequestPaymentCubit>().checkout(
       GulfSubjectRequestPayload(
         subjectId: state.selectedSubjectId!,
         packageId: state.selectedPackageId!,
         notes: state.notes,
         discountCode: discountCode,
-        paymentAddress: PaymentAddress(
-          city: city,
-          region: region,
-          line1: line1,
-          line2: line2,
+        paymentAddress: const PaymentAddress(
+          city: TamaraDefaultAddress.city,
+          region: TamaraDefaultAddress.region,
+          line1: TamaraDefaultAddress.line1,
+          line2: TamaraDefaultAddress.line2,
         ),
       ),
     );

@@ -17,6 +17,7 @@ abstract class EndPoints {
   static const String updateLoggedUserPhone = '/users/me/phone';
   static const String myAssignments = '/students/me/assignments';
   static const String mySubjects = '/students/me/subjects';
+  static const String studentHome = '/students/me/home';
   static const String myCertificates = '/certificates/my';
   static const String curriculums = '/curriculums';
   static const String myEnrollments = '/students/me/enrollments';

@@ -31,17 +31,17 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
 
   static const int requestLessonDrawerIndex = 2;
   static const int subjectsDrawerIndex = 1;
-  static const int groupsDrawerIndex = 3;
-  static const int plansDrawerIndex = 6;
-  static const int notificationDrawerIndex = 8;
-  static const int evaluationsDrawerIndex = 9;
+  static const int plansDrawerIndex = 5;
+  static const int notificationDrawerIndex = 7;
+  static const int evaluationsDrawerIndex = 8;
+  static const int subscriptionsDrawerIndex = 6;
 
   static const Map<int, int> drawerToBottomNavIndex = {
     0: 0,
-    5: 1,
-    10: 2,
-    4: 3,
-    11: 4,
+    4: 1,
+    9: 2,
+    3: 3,
+    10: 4,
   };
 
   void _changeBottomNavIndex(int index) {
@@ -96,8 +96,6 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
       MyNavigator.goTo(context, Routes.studentSubjects);
     } else if (index == requestLessonDrawerIndex) {
       MyNavigator.goTo(context, Routes.requestLesson);
-    } else if (index == groupsDrawerIndex) {
-      MyNavigator.goTo(context, Routes.studentGroups);
     } else if (index == plansDrawerIndex) {
       MyNavigator.goTo(
         context,
@@ -108,6 +106,8 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == evaluationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
+    } else if (index == subscriptionsDrawerIndex) {
+      MyNavigator.goTo(context, Routes.studentSubscriptions);
     } else if (index == ChatRoleNavigation.studentDrawerIndex) {
       MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
     }

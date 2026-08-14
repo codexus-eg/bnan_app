@@ -64,7 +64,15 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       );
       return;
     }
-    final result = await TamaraCheckoutLauncher.open(context, url);
+    final cubit = context.read<ParentAddChildCubit>();
+    final result = await TamaraCheckoutLauncher.open(
+      context,
+      url,
+      completionStream: cubit.stream.map(
+        (value) => value.phase == ParentAddChildPhase.completed,
+      ),
+      isCompleted: () => cubit.state.phase == ParentAddChildPhase.completed,
+    );
     if (!context.mounted) return;
     if (!result.opened) {
       context.read<ParentAddChildCubit>().checkoutOpenFailed();

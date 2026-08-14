@@ -11,12 +11,7 @@ class RenewalPaymentStep extends StatelessWidget {
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
     final state = context.watch<ParentSubscriptionRenewalCubit>().state;
     return state.isGulf
-        ? ParentGulfPaymentFields(
-            onCityChanged: (v) => cubit.updateAddress(city: v),
-            onRegionChanged: (v) => cubit.updateAddress(region: v),
-            onLine1Changed: (v) => cubit.updateAddress(line1: v),
-            onLine2Changed: (v) => cubit.updateAddress(line2: v),
-          )
+        ? const ParentGulfPaymentFields()
         : ParentEgyptianPaymentFields(
             receipt: state.receipt,
             onReceiptChanged: (v) => cubit.updateEgyptian(receipt: v),

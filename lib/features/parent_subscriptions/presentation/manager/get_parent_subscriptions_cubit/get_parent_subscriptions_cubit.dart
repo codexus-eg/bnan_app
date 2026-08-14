@@ -11,6 +11,7 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
   final ParentSubscriptionsRepo repo;
 
   Future<void> load() async {
+    if (isClosed) return;
     final previous = state is GetParentSubscriptionsSuccess
         ? (state as GetParentSubscriptionsSuccess).selectedChildId
         : null;
@@ -19,6 +20,7 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
     if (isClosed) return;
     result.fold(
       (failure) {
+        if (isClosed) return;
         _log('final state emitted: failure');
         emit(
           GetParentSubscriptionsFailure(
@@ -27,6 +29,7 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
         );
       },
       (response) {
+        if (isClosed) return;
         final firstSubscribed = response.children
             .where((child) => child.subscriptions.isNotEmpty)
             .firstOrNull;

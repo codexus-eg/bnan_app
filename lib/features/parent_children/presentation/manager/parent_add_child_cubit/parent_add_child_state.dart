@@ -37,10 +37,6 @@ class ParentAddChildState {
     this.paymentMethod = '',
     this.referenceNumber = '',
     this.receipt,
-    this.city = '',
-    this.region = '',
-    this.addressLine1 = '',
-    this.addressLine2 = '',
     this.paymentId,
     this.checkoutUrl,
     this.paymentSummary,
@@ -59,7 +55,6 @@ class ParentAddChildState {
   final List<String> selectedSubjectIds;
   final String discountCode, paymentMethod, referenceNumber;
   final File? receipt;
-  final String city, region, addressLine1, addressLine2;
   final String? paymentId, checkoutUrl, errorMessage;
   final PaymentAmountSummary? paymentSummary;
   final PaymentStatus? paymentStatus;
@@ -89,10 +84,6 @@ class ParentAddChildState {
     String? paymentMethod,
     String? referenceNumber,
     Object? receipt = _unset,
-    String? city,
-    String? region,
-    String? addressLine1,
-    String? addressLine2,
     Object? paymentId = _unset,
     Object? checkoutUrl = _unset,
     Object? paymentSummary = _unset,
@@ -119,10 +110,6 @@ class ParentAddChildState {
     paymentMethod: paymentMethod ?? this.paymentMethod,
     referenceNumber: referenceNumber ?? this.referenceNumber,
     receipt: identical(receipt, _unset) ? this.receipt : receipt as File?,
-    city: city ?? this.city,
-    region: region ?? this.region,
-    addressLine1: addressLine1 ?? this.addressLine1,
-    addressLine2: addressLine2 ?? this.addressLine2,
     paymentId: identical(paymentId, _unset)
         ? this.paymentId
         : paymentId as String?,

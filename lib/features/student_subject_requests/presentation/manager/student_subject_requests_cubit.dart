@@ -40,8 +40,6 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
           availability.curriculum.id,
         );
         if (isClosed) return;
-        final requestsResult = await _repo.getRequests();
-        if (isClosed) return;
         packagesResult.fold(
           (failure) {
             if (isClosed) return;
@@ -68,31 +66,16 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
             final keepPackage =
                 selectedPackageId != null &&
                 filteredPackages.any((item) => item.id == selectedPackageId);
-            requestsResult.fold(
-              (failure) {
-                if (isClosed) return;
-                emit(
-                  state.copyWith(
-                    phase: SubjectRequestsPhase.failure,
-                    isRefreshing: false,
-                    message: failure.message,
-                  ),
-                );
-              },
-              (requests) {
-                if (isClosed) return;
-                emit(
-                  state.copyWith(
-                    phase: SubjectRequestsPhase.ready,
-                    availability: availability,
-                    packages: filteredPackages,
-                    requests: requests,
-                    isRefreshing: false,
-                    clearSubject: !keepSubject,
-                    clearPackage: !keepPackage,
-                  ),
-                );
-              },
+            if (isClosed) return;
+            emit(
+              state.copyWith(
+                phase: SubjectRequestsPhase.ready,
+                availability: availability,
+                packages: filteredPackages,
+                isRefreshing: false,
+                clearSubject: !keepSubject,
+                clearPackage: !keepPackage,
+              ),
             );
           },
         );

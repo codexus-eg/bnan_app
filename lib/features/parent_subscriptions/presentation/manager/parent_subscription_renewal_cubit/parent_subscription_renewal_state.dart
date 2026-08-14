@@ -27,10 +27,6 @@ class ParentSubscriptionRenewalState {
     this.method = '',
     this.referenceNumber = '',
     this.receipt,
-    this.city = '',
-    this.region = '',
-    this.line1 = '',
-    this.line2 = '',
     this.paymentId,
     this.checkoutUrl,
     this.status,
@@ -43,13 +39,7 @@ class ParentSubscriptionRenewalState {
   final int currentStep;
   final PackageModel? package;
   final String? subjectId, paymentId, checkoutUrl, errorMessage;
-  final String discountCode,
-      method,
-      referenceNumber,
-      city,
-      region,
-      line1,
-      line2;
+  final String discountCode, method, referenceNumber;
   final File? receipt;
   final RenewalPaymentStatus? status;
   final PaymentAmountSummary? paymentSummary;
@@ -71,10 +61,6 @@ class ParentSubscriptionRenewalState {
     String? method,
     String? referenceNumber,
     Object? receipt = _unset,
-    String? city,
-    String? region,
-    String? line1,
-    String? line2,
     Object? paymentId = _unset,
     Object? checkoutUrl = _unset,
     Object? status = _unset,
@@ -95,10 +81,6 @@ class ParentSubscriptionRenewalState {
     method: method ?? this.method,
     referenceNumber: referenceNumber ?? this.referenceNumber,
     receipt: identical(receipt, _unset) ? this.receipt : receipt as File?,
-    city: city ?? this.city,
-    region: region ?? this.region,
-    line1: line1 ?? this.line1,
-    line2: line2 ?? this.line2,
     paymentId: identical(paymentId, _unset)
         ? this.paymentId
         : paymentId as String?,

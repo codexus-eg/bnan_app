@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_curriculum_model.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_grade_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
@@ -145,21 +146,6 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       paymentMethod: method,
       referenceNumber: referenceNumber,
       receipt: receipt ?? state.receipt,
-      errorMessage: null,
-    ),
-  );
-
-  void updateAddress({
-    String? city,
-    String? region,
-    String? line1,
-    String? line2,
-  }) => emit(
-    state.copyWith(
-      city: city,
-      region: region,
-      addressLine1: line1,
-      addressLine2: line2,
       errorMessage: null,
     ),
   );
@@ -354,11 +340,11 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       curriculumId: state.curriculum!.id,
       packageId: state.package!.id!,
       discountCode: state.discountCode,
-      paymentAddress: ParentPaymentAddress(
-        city: state.city,
-        region: state.region,
-        line1: state.addressLine1,
-        line2: state.addressLine2,
+      paymentAddress: const ParentPaymentAddress(
+        city: TamaraDefaultAddress.city,
+        region: TamaraDefaultAddress.region,
+        line1: TamaraDefaultAddress.line1,
+        line2: TamaraDefaultAddress.line2,
       ),
     );
     final key = await _beginAttempt(request);

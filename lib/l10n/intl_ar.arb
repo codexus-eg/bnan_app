@@ -674,6 +674,7 @@
     "parentNotifications": "الإشعارات",
     "parentSubscription": "الاشتراك",
     "parentSubscriptions": "الاشتراكات",
+    "childrenSubscriptions": "اشتراكات الأبناء",
     "parentPackagesAndSubscription": "الباقات والاشتراك",
     "parentMessages": "الرسائل",
     "parentDailyPlans": "الخطط اليومية",
@@ -1254,5 +1255,10 @@
     "adminSubjectRequestReferenceNumber": "رقم المرجع (اختياري)",
     "adminSubjectRequestPaymentNotes": "ملاحظات الدفع (اختياري)",
     "adminSubjectRequestAmountOptional": "المبلغ (اختياري)",
-    "adminSubjectRequestMethodOptional": "طريقة الدفع (اختياري)"
+    "adminSubjectRequestMethodOptional": "طريقة الدفع (اختياري)",
+    "fileSavedSuccessfully": "تم حفظ الملف بنجاح",
+    "certificateSavedSuccessfully": "تم حفظ الشهادة بنجاح",
+    "savedInLocation": "مكان الحفظ: {location}",
+    "@savedInLocation": {"placeholders": {"location": {}}},
+    "openAction": "فتح"
 }

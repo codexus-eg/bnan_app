@@ -53,4 +53,29 @@ void main() {
     expect(result.outcome, ParentPaymentPollOutcome.terminal);
     expect(maxActive, 1);
   });
+
+  test('reconcile runs once before repeated status polling', () async {
+    var reconcileCalls = 0;
+    var statusCalls = 0;
+    final result =
+        await const ParentPaymentPoller<int>(
+          interval: Duration.zero,
+          maxAttempts: 3,
+        ).poll(
+          reconcile: () async {
+            reconcileCalls++;
+            return const Right(0);
+          },
+          status: () async {
+            statusCalls++;
+            return Right(statusCalls == 3 ? 1 : 0);
+          },
+          isTerminal: (value) => value == 1,
+          canContinue: () => true,
+        );
+
+    expect(result.outcome, ParentPaymentPollOutcome.terminal);
+    expect(reconcileCalls, 1);
+    expect(statusCalls, 3);
+  });
 }

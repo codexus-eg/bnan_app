@@ -45,6 +45,20 @@ void main() {
       isFalse,
     );
     expect(isValidParentRenewalRoute(studentId: 'child', extra: _args), isTrue);
+    expect(
+      isValidParentRenewalRoute(
+        studentId: 'child',
+        extra: ParentSubscriptionRenewalArgs(
+          studentId: 'child',
+          curriculumId: 'curriculum',
+          subscription: _subscription,
+          subjects: const [],
+          registrationMode: 'egyptian',
+          isParent: false,
+        ),
+      ),
+      isFalse,
+    );
   });
 }
 

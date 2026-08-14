@@ -154,35 +154,6 @@ class StudentInfoStep extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const StudentNotesWidget(),
-          if (registerCubit.isGulf) ...[
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.cityController,
-              label: S.of(context).city,
-              isRequired: true,
-              validator: (value) =>
-                  MyValidator.requiredField(value, S.of(context).city),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.regionController,
-              label: 'المنطقة',
-              isRequired: true,
-              validator: (value) => MyValidator.requiredField(value, 'المنطقة'),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.addressLine1Controller,
-              label: 'العنوان',
-              isRequired: true,
-              validator: (value) => MyValidator.requiredField(value, 'العنوان'),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.addressLine2Controller,
-              label: 'تفاصيل إضافية للعنوان',
-            ),
-          ],
         ],
       ),
     );

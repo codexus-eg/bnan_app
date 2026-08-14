@@ -49,6 +49,10 @@ import 'package:bnan_app/features/student_subject_requests/data/repo/student_sub
 import 'package:bnan_app/features/student_subject_requests/data/store/subject_request_payment_store.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
+import 'package:bnan_app/features/student_subscriptions/data/repo/student_subscriptions_repo.dart';
+import 'package:bnan_app/features/student_subscriptions/data/repo/student_subscriptions_repo_impl.dart';
+import 'package:bnan_app/features/student_subscriptions/presentation/manager/student_subscriptions_cubit.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_payment_store.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
@@ -84,6 +88,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerLazySingleton<SubjectRequestPaymentStore>(
     SubjectRequestPaymentStore.new,
   );
+  getIt.registerLazySingleton<RenewalPaymentStore>(RenewalPaymentStore.new);
 
   getIt.registerLazySingleton<PackageActionsRepo>(
     () => PackageActionsRepoImpl(getIt<ApiConsumer>()),
@@ -147,6 +152,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<StudentSubjectRequestsRepo>(
     () => StudentSubjectRequestsRepoImpl(getIt<DioConsumer>()),
+  );
+  getIt.registerLazySingleton<StudentSubscriptionsRepo>(
+    () => StudentSubscriptionsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<TeacherRegistrationRepo>(
     () => TeacherRegistrationRepoImpl(apiConsumer: getIt<ApiConsumer>()),
@@ -313,6 +321,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerFactory<StudentSubjectRequestsCubit>(
     () => StudentSubjectRequestsCubit(getIt<StudentSubjectRequestsRepo>()),
+  );
+  getIt.registerFactory<StudentSubscriptionsCubit>(
+    () => StudentSubscriptionsCubit(getIt<StudentSubscriptionsRepo>()),
   );
   getIt.registerFactory<SubjectRequestPaymentCubit>(
     () => SubjectRequestPaymentCubit(
@@ -608,6 +619,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
       repo: getIt<ParentSubscriptionsRepo>(),
       keyGenerator: IdempotencyKeyGenerator(),
       args: args,
+      store: getIt<RenewalPaymentStore>(),
     ),
   );
   getIt.registerFactory<GetSupervisorClassroomsCubit>(

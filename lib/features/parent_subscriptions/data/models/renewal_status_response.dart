@@ -2,6 +2,8 @@ import 'package:bnan_app/features/payments/data/models/payment_amount_summary.da
 
 enum RenewalPaymentStatus {
   pending,
+  authorized,
+  captured,
   confirmed,
   completed,
   rejected,
@@ -24,11 +26,13 @@ class RenewalStatusResponse {
     required this.status,
     this.checkoutUrl,
     this.paymentSummary,
+    this.message,
   });
   final String paymentId;
   final RenewalPaymentStatus status;
   final String? checkoutUrl;
   final PaymentAmountSummary? paymentSummary;
+  final String? message;
 
   factory RenewalStatusResponse.fromJson(Map<String, dynamic> json) {
     final raw = json['data'];
@@ -41,6 +45,12 @@ class RenewalStatusResponse {
       paymentSummary: summary.hasAmounts || summary.hasDiscount
           ? summary
           : null,
+      message: _optionalText(data['message'] ?? json['message']),
     );
   }
+}
+
+String? _optionalText(dynamic value) {
+  final text = value?.toString().trim();
+  return text?.isNotEmpty == true ? text : null;
 }

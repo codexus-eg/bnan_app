@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_return.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -6,10 +8,44 @@ import 'package:tamara_flutter_sdk/tamara_checkout.dart';
 
 enum TamaraSdkOutcome { success, failure, cancel }
 
-class TamaraSdkCheckoutView extends StatelessWidget {
-  const TamaraSdkCheckoutView({super.key, required this.checkoutUrl});
+class TamaraSdkCheckoutView extends StatefulWidget {
+  const TamaraSdkCheckoutView({
+    super.key,
+    required this.checkoutUrl,
+    this.completionStream,
+    this.isCompleted,
+  });
 
   final String checkoutUrl;
+  final Stream<bool>? completionStream;
+  final bool Function()? isCompleted;
+
+  @override
+  State<TamaraSdkCheckoutView> createState() => _TamaraSdkCheckoutViewState();
+}
+
+class _TamaraSdkCheckoutViewState extends State<TamaraSdkCheckoutView> {
+  StreamSubscription<bool>? _completionSubscription;
+  bool _paymentCompletionHandled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _completionSubscription = widget.completionStream?.listen((completed) {
+      if (completed) _close(TamaraSdkOutcome.success);
+    });
+    if (widget.isCompleted?.call() == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _close(TamaraSdkOutcome.success);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _completionSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -17,13 +53,13 @@ class TamaraSdkCheckoutView extends StatelessWidget {
     body: SafeArea(
       child: SizedBox.expand(
         child: TamaraCheckout(
-          checkoutUrl,
+          widget.checkoutUrl,
           _returnUrl(TamaraReturnOutcome.success),
           _returnUrl(TamaraReturnOutcome.failure),
           _returnUrl(TamaraReturnOutcome.cancel),
-          onPaymentSuccess: () => _close(context, TamaraSdkOutcome.success),
-          onPaymentFailed: () => _close(context, TamaraSdkOutcome.failure),
-          onPaymentCanceled: () => _close(context, TamaraSdkOutcome.cancel),
+          onPaymentSuccess: () {},
+          onPaymentFailed: () => _close(TamaraSdkOutcome.failure),
+          onPaymentCanceled: () => _close(TamaraSdkOutcome.cancel),
         ),
       ),
     ),
@@ -32,7 +68,9 @@ class TamaraSdkCheckoutView extends StatelessWidget {
   String _returnUrl(TamaraReturnOutcome outcome) =>
       '${TamaraReturn.scheme}://${TamaraReturn.host}/tamara/${outcome.name}';
 
-  void _close(BuildContext context, TamaraSdkOutcome outcome) {
-    if (context.mounted) Navigator.of(context).pop(outcome);
+  void _close(TamaraSdkOutcome outcome) {
+    if (_paymentCompletionHandled || !mounted) return;
+    _paymentCompletionHandled = true;
+    Navigator.of(context).pop(outcome);
   }
 }

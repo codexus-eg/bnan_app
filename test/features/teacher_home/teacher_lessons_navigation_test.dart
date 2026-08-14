@@ -140,7 +140,14 @@ void main() {
       ).where((item) => item.title == s.lessonsManagement),
       isEmpty,
     );
-    expect(studentDrawerItems(context), hasLength(12));
+    final studentItems = studentDrawerItems(context);
+    expect(studentItems, hasLength(12));
+    expect(studentItems.where((item) => item.title == s.myGroups), isEmpty);
+    expect(
+      studentItems.where((item) => item.title == s.requestNewLesson),
+      hasLength(1),
+    );
+    expect(studentItems.last.title, s.messages);
     expect(parentDrawerItems(context), hasLength(10));
   });
 }

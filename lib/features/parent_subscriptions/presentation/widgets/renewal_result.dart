@@ -8,6 +8,7 @@ import 'package:bnan_app/features/parent_subscriptions/presentation/manager/pare
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
 
 class RenewalResult extends StatelessWidget {
   const RenewalResult({super.key, required this.state});
@@ -43,9 +44,9 @@ class RenewalResult extends StatelessWidget {
               textAlign: TextAlign.center,
               style: StylesManager.styleBold16(context),
             ),
-            if (state.status != null) ...[
-              const SizedBox(height: 8),
-              Text(state.status!.name),
+            if (state.paymentSummary != null) ...[
+              const SizedBox(height: 16),
+              PaymentDiscountSummary(summary: state.paymentSummary!),
             ],
             const SizedBox(height: 24),
             if (completed || pending)

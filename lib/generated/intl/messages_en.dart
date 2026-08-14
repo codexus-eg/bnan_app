@@ -111,6 +111,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m39(count) => "${count} weekly lessons";
 
+  static String m40(location) => "Saved in: ${location}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "Packages": MessageLookupByLibrary.simpleMessage("Packages"),
@@ -316,6 +318,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "certificateDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Certificate deleted successfully",
+    ),
+    "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Certificate saved successfully",
     ),
     "certificateFileUnavailable": MessageLookupByLibrary.simpleMessage(
       "Certificate file is unavailable",
@@ -726,6 +731,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "fileDownloadedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "File downloaded successfully",
+    ),
+    "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "File saved successfully",
     ),
     "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Please fill in all required fields.",
@@ -1216,6 +1224,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Success starts here",
     ),
     "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
+    "openAction": MessageLookupByLibrary.simpleMessage("Open"),
     "openDocument": MessageLookupByLibrary.simpleMessage("Open Document"),
     "openFile": MessageLookupByLibrary.simpleMessage("Open File"),
     "openLink": MessageLookupByLibrary.simpleMessage("Open Link"),
@@ -1388,6 +1397,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "parentSubscriptions": MessageLookupByLibrary.simpleMessage(
       "Subscriptions",
+    ),
+    "childrenSubscriptions": MessageLookupByLibrary.simpleMessage(
+      "Children subscriptions",
     ),
     "parentThirdPreparatoryGrade": MessageLookupByLibrary.simpleMessage(
       "Third Preparatory Grade",
@@ -1997,6 +2009,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "subjectRequestAdminReview": MessageLookupByLibrary.simpleMessage(
       "Awaiting admin review",
     ),
+    "savedInLocation": m40,
     "subjectRequestAssigned": MessageLookupByLibrary.simpleMessage(
       "Teacher assigned",
     ),

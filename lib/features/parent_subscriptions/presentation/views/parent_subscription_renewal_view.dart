@@ -56,9 +56,19 @@ class _State extends State<ParentSubscriptionRenewalView>
   ) async {
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
+    final cubit = context.read<ParentSubscriptionRenewalCubit>();
     final result = url == null
         ? const TamaraCheckoutLaunchResult(opened: false)
-        : await TamaraCheckoutLauncher.open(context, url);
+        : await TamaraCheckoutLauncher.open(
+            context,
+            url,
+            completionStream: cubit.stream.map(
+              (value) => value.phase == ParentRenewalPhase.completed,
+            ),
+            isCompleted: () =>
+                cubit.state.phase == ParentRenewalPhase.completed,
+            onOpened: cubit.reconcilePayment,
+          );
     if (!context.mounted) return;
     if (!result.opened) {
       context.read<ParentSubscriptionRenewalCubit>().checkoutOpenFailed();

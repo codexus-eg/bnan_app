@@ -27,6 +27,8 @@
         <string>نحتاج إلى استخدام الميكروفون لتسجيل الرسائل الصوتية</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Select a payment receipt image</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>نحتاج إلى إذنك لحفظ الصور والشهادات على جهازك.</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

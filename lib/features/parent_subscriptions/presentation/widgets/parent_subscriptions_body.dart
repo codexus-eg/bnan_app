@@ -18,7 +18,7 @@ class ParentSubscriptionsBody extends StatelessWidget {
     child: Column(
       children: [
         CustomAppbar(
-          headerText: S.of(context).parentSubscriptions,
+          headerText: S.of(context).childrenSubscriptions,
           iconNeeded: false,
         ),
         Expanded(

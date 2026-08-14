@@ -38,7 +38,7 @@ class ParentPaymentPoller<T> {
         );
       }
       T? response;
-      if (reconcile != null) {
+      if (reconcile != null && attempt == 0) {
         (await reconcile()).fold((_) {}, (value) => response = value);
       }
       if (response == null || !isTerminal(response as T)) {

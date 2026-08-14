@@ -18,7 +18,7 @@ class RenewalStepContent extends StatelessWidget {
       0 => ParentSubscriptionCard(
         child: ParentChildSubscriptionsModel(
           studentId: args.studentId,
-          studentName: '',
+          studentName: args.studentName,
           subscriptions: [args.subscription],
           subjects: args.subjects,
         ),

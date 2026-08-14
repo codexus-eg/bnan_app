@@ -1,5 +1,5 @@
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
-import 'package:bnan_app/features/packages_management/data/models/package_type.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/policies/subscription_renewal_policy.dart';
 
 class ParentSubscriptionSubjectModel {
   const ParentSubscriptionSubjectModel({required this.id, required this.name});
@@ -28,6 +28,11 @@ class ParentChildSubscriptionModel {
     this.price,
     this.currency,
     this.renewalAllowed,
+    this.planKind = '',
+    this.remainingValue,
+    this.hasRemainingHours = false,
+    this.hasPurchasedHours = false,
+    this.hasUsedHours = false,
   });
 
   final String id, packageId, packageName, curriculumId;
@@ -38,19 +43,26 @@ class ParentChildSubscriptionModel {
   final String? currency;
   final DateTime? startDate, endDate;
   final bool? renewalAllowed;
+  final String planKind;
+  final num? remainingValue;
+  final bool hasRemainingHours;
+  final bool hasPurchasedHours, hasUsedHours;
 
   num get usedHours =>
       usedHoursValue ??
       (purchasedHours - remainingHours).clamp(0, double.infinity);
+  bool get isHoursPlan =>
+      hasRemainingHours || packageType == 'hours' || planKind == 'gulf';
   bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
-  bool get canRenew {
-    if (renewalAllowed != null) return renewalAllowed!;
-    if (packageType == PackageType.hours) return remainingHours <= 0;
-    if (packageType == PackageType.monthly) {
-      return endDate != null && !endDate!.isAfter(DateTime.now());
-    }
-    return status == 'expired' || status == 'completed';
-  }
+  bool get canRenew => canRenewSubscription(
+    packageType: packageType,
+    planKind: planKind,
+    remainingHours: hasRemainingHours ? remainingHours : null,
+    remainingValue: remainingValue,
+    endDate: endDate,
+    status: status,
+    serverAllowed: renewalAllowed,
+  );
 
   factory ParentChildSubscriptionModel.fromJson(
     Map<String, dynamic> json, {
@@ -59,12 +71,22 @@ class ParentChildSubscriptionModel {
     final package = _map(json['package']);
     final subject = _map(json['subject']);
     final period = _map(json['period']);
+    final summary = _map(json['summary']);
+    final remaining = _map(json['remaining']);
+    final summarySubject = _map(summary['subject']);
+    final rawRemainingHours =
+        json['remainingHours'] ?? summary['remainingHours'];
+    final rawPurchasedHours =
+        json['purchasedHours'] ?? package['hours'] ?? summary['totalHours'];
+    final rawUsedHours = json['usedHours'] ?? summary['usedHours'];
     return ParentChildSubscriptionModel(
       id: _id(json),
       packageId: _id(package).isNotEmpty
           ? _id(package)
           : _text(json['packageId']),
-      packageName: _text(package['name'] ?? json['packageName']),
+      packageName: _text(
+        package['name'] ?? json['packageName'] ?? summary['packageName'],
+      ),
       curriculumId:
           _nestedId(
             json['curriculum'] ?? json['curriculumId'] ?? package['curriculum'],
@@ -76,16 +98,26 @@ class ParentChildSubscriptionModel {
             )
           : curriculumIdFallback,
       accessScope: _text(
-        json['accessScope'] ?? package['accessScope'],
+        json['accessScope'] ?? package['accessScope'] ?? summary['accessScope'],
         PackageAccessScope.allSubjects,
       ),
-      packageType: _text(json['packageType'] ?? package['type']),
-      subject: subject.isEmpty
+      packageType: _text(
+        json['packageType'] ?? package['type'] ?? summary['packageType'],
+      ),
+      subject: subject.isEmpty && summarySubject.isEmpty
           ? null
-          : ParentSubscriptionSubjectModel.fromJson(subject),
-      purchasedHours: _number(json['purchasedHours'] ?? package['hours']),
-      remainingHours: _number(json['remainingHours']),
-      usedHoursValue: _nullableNumber(json['usedHours']),
+          : ParentSubscriptionSubjectModel.fromJson(
+              subject.isEmpty ? summarySubject : subject,
+            ),
+      purchasedHours: _number(rawPurchasedHours),
+      hasPurchasedHours: rawPurchasedHours != null,
+      remainingHours: _number(rawRemainingHours),
+      hasRemainingHours: rawRemainingHours != null,
+      remainingValue: _nullableNumber(remaining['value']),
+      usedHoursValue: _nullableNumber(rawUsedHours),
+      hasUsedHours:
+          rawUsedHours != null ||
+          rawPurchasedHours != null && rawRemainingHours != null,
       status: _text(json['status']),
       startDate: _date(json['startDate'] ?? period['start']),
       endDate: _date(json['expiryDate'] ?? json['endDate'] ?? period['end']),
@@ -94,6 +126,7 @@ class ParentChildSubscriptionModel {
       renewalAllowed: json['renewalAllowed'] is bool
           ? json['renewalAllowed'] as bool
           : null,
+      planKind: _text(json['planKind'] ?? summary['planKind']),
     );
   }
 }
@@ -120,9 +153,10 @@ class ParentChildSubscriptionsModel {
     final rawList = json['subscriptions'];
     final listSubscriptions = rawList is List
         ? rawList
+              .whereType<Map>()
               .map(
                 (item) => ParentChildSubscriptionModel.fromJson(
-                  Map<String, dynamic>.from(item as Map),
+                  Map<String, dynamic>.from(item),
                   curriculumIdFallback: curriculumId,
                 ),
               )
@@ -166,6 +200,28 @@ class ParentChildSubscriptionsModel {
       ),
       subscriptions: List.unmodifiable(subscriptions),
       subjects: List.unmodifiable(subjects.where((item) => item.id.isNotEmpty)),
+    );
+  }
+
+  factory ParentChildSubscriptionsModel.fromStudentHome(
+    Map<String, dynamic> json, {
+    List<ParentSubscriptionSubjectModel> subjects = const [],
+  }) {
+    final data = _map(json['data']);
+    final student = _map(data['student']);
+    final parsed = ParentChildSubscriptionsModel.fromJson({
+      'student': student,
+      'subscriptions': data['subscriptions'] ?? student['subscriptions'],
+      'subscription': data['subscription'] ?? student['subscription'],
+    });
+    return ParentChildSubscriptionsModel(
+      studentId: parsed.studentId,
+      studentName: parsed.studentName,
+      registrationMode: parsed.registrationMode,
+      subscriptions: parsed.subscriptions,
+      subjects: subjects.isEmpty
+          ? parsed.subjects
+          : List.unmodifiable(subjects),
     );
   }
 }

@@ -92,7 +92,17 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     if (state.phase == SubjectRequestPaymentPhase.openingTamara) {
       final url = state.payment?.checkoutUrl;
       if (url == null) return;
-      final result = await TamaraCheckoutLauncher.open(context, url);
+      final cubit = context.read<SubjectRequestPaymentCubit>();
+      final result = await TamaraCheckoutLauncher.open(
+        context,
+        url,
+        completionStream: cubit.stream.map(
+          (value) => value.phase == SubjectRequestPaymentPhase.completed,
+        ),
+        isCompleted: () =>
+            cubit.state.phase == SubjectRequestPaymentPhase.completed,
+        onOpened: cubit.tamaraReturned,
+      );
       if (!context.mounted) return;
       if (result.opened) {
         await context.read<SubjectRequestPaymentCubit>().tamaraReturned();

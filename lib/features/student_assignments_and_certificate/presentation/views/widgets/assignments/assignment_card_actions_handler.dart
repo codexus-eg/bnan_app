@@ -1,4 +1,3 @@
-import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/manager/get_assignment/get_assignments_cubit.dart';
@@ -43,21 +42,8 @@ class AssignmentCardActionsHandler extends StatelessWidget {
         return AssignmentActionButtons(
           showSubmit: showSubmit,
           isLoading: isLoading || isSubmitting,
-          onDownload: () async {
-            if (isLoading) return;
-
-            final isOpened = await FileUrlLauncher.open(assignment.attachment);
-
-            if (!context.mounted) return;
-
-            if (!isOpened) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(content: Text(S.of(context).unableToOpenFile)),
-                );
-            }
-          },
+          downloadUrl: assignment.attachment,
+          downloadFileName: _attachmentName(assignment),
           onSubmit: () async {
             if (isLoading || isSubmitting) return;
 
@@ -66,13 +52,12 @@ class AssignmentCardActionsHandler extends StatelessWidget {
               allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
             );
 
+            if (!context.mounted) return;
             final filePath = result?.files.single.path;
             if (filePath == null) {
               showCustomSnackBar(context, S.current.pleaseSelectFile, false);
               return;
             }
-
-            if (!context.mounted) return;
 
             context.read<SubmitAssignmentCubit>().submitAssignment(
               assignmentId: assignment.id,
@@ -82,5 +67,12 @@ class AssignmentCardActionsHandler extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _attachmentName(AssignmentModel value) {
+    final segments = Uri.tryParse(value.attachment)?.pathSegments;
+    return segments?.isNotEmpty == true
+        ? segments!.last
+        : '${value.title.trim().isEmpty ? 'assignment' : value.title}.pdf';
   }
 }

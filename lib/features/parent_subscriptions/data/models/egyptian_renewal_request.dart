@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 class EgyptianRenewalRequest {
   const EgyptianRenewalRequest({
-    required this.studentId,
+    this.studentId,
     required this.packageId,
     required this.receiptImage,
     this.subjectId,
@@ -11,12 +11,13 @@ class EgyptianRenewalRequest {
     this.method,
     this.referenceNumber,
   });
-  final String studentId, packageId;
+  final String? studentId;
+  final String packageId;
   final String? subjectId, discountCode, method, referenceNumber;
   final File receiptImage;
 
   Future<FormData> toFormData() async => FormData.fromMap({
-    'studentId': studentId,
+    if (_has(studentId)) 'studentId': studentId!.trim(),
     'packageId': packageId,
     if (_has(subjectId)) 'subjectId': subjectId!.trim(),
     if (_has(discountCode)) 'discountCode': discountCode!.trim(),

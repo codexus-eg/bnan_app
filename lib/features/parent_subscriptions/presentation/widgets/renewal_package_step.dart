@@ -1,7 +1,7 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
-import 'package:bnan_app/features/parent_children/presentation/policies/parent_package_policy.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/policies/renewal_package_policy.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscription_grid.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +17,11 @@ class RenewalPackageStep extends StatelessWidget {
       curriculumName: '',
       isSliver: false,
       registrationMode: state.args.registrationMode,
-      packageFilter: (item) =>
-          ParentPackagePolicy.isVisible(
-            item,
-            registrationMode: state.args.registrationMode,
-          ) &&
-          item.curriculum == state.args.curriculumId,
+      packageFilter: (item) => RenewalPackagePolicy.isVisible(
+        item,
+        registrationMode: state.args.registrationMode,
+        curriculumId: state.args.curriculumId,
+      ),
       bottomWidget: (_, item) {
         final selected = state.package?.id == item.id;
         return CustomAppButton(

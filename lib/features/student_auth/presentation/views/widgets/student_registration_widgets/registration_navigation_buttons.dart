@@ -108,7 +108,23 @@ class RegistrationNavigationButtons extends StatelessWidget {
       }
       final cubit = context.read<TamaraPaymentCubit>();
       if (!cubit.claimCheckoutLaunch(url)) return;
-      final result = await TamaraCheckoutLauncher.open(context, url);
+      final result = await TamaraCheckoutLauncher.open(
+        context,
+        url,
+        completionStream: cubit.stream.map(
+          (value) =>
+              value is TamaraPaymentResult &&
+              value.status == PaymentStatus.completed,
+        ),
+        isCompleted: () =>
+            cubit.state is TamaraPaymentResult &&
+            (cubit.state as TamaraPaymentResult).status ==
+                PaymentStatus.completed,
+        onOpened: () async {
+          await cubit.completeCheckoutLaunch(opened: true);
+          await cubit.onForeground();
+        },
+      );
       await cubit.completeCheckoutLaunch(opened: result.opened);
       if (!context.mounted) return;
       if (!result.opened) {

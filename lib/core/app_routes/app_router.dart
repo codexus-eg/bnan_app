@@ -320,6 +320,57 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.studentSubscriptions,
+        redirect: (context, state) =>
+            SessionManager.instance.role == UserRole.student
+            ? null
+            : HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+                  Routes.splash,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<StudentSubscriptionsCubit>()..load(),
+            child: const StudentSubscriptionsView(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.studentSubscriptionRenewal,
+        redirect: (context, state) {
+          if (SessionManager.instance.role != UserRole.student) {
+            return HomeRouteResolver.forRole(
+                  SessionManager.instance.userRole,
+                ) ??
+                Routes.splash;
+          }
+          final extra = state.extra;
+          return extra is ParentSubscriptionRenewalArgs && !extra.isParent
+              ? null
+              : Routes.studentSubscriptions;
+        },
+        pageBuilder: (context, state) {
+          final args = state.extra! as ParentSubscriptionRenewalArgs;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<ParentSubscriptionRenewalCubit>(param1: args)
+                        ..restore(),
+                ),
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetPackagesCubit>()
+                        ..getPackagesByCurriculum(args.curriculumId),
+                ),
+              ],
+              child: const ParentSubscriptionRenewalView(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
         path: Routes.studentSubjects,
         redirect: (context, state) {
           if (SessionManager.instance.role == UserRole.student) return null;
@@ -592,7 +643,8 @@ GoRouter buildRouter() {
               providers: [
                 BlocProvider(
                   create: (_) =>
-                      getIt<ParentSubscriptionRenewalCubit>(param1: args),
+                      getIt<ParentSubscriptionRenewalCubit>(param1: args)
+                        ..restore(),
                 ),
                 BlocProvider(
                   create: (_) =>

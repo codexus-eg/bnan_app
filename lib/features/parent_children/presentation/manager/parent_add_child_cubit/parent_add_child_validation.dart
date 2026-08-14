@@ -47,14 +47,6 @@ abstract class ParentAddChildValidation {
     if (!state.isGulf && state.receipt == null) {
       return S.current.paymentReceiptRequired;
     }
-    if (state.isGulf &&
-        [
-          state.city,
-          state.region,
-          state.addressLine1,
-        ].any((value) => value.trim().isEmpty)) {
-      return S.current.parentPaymentAddressRequired;
-    }
     return null;
   }
 }

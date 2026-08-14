@@ -68,4 +68,33 @@ void main() {
     expect(subscription.remainingHours, 3.5);
     expect(subscription.usedHours, 6.5);
   });
+
+  test('renewal uses numeric expiry data before textual status', () {
+    final response = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'student': {'id': 'student-1'},
+          'subscriptions': [
+            {
+              'id': 'hours',
+              'packageType': 'hours',
+              'remainingHours': '0',
+              'status': 'active',
+            },
+            {
+              'id': 'monthly',
+              'planKind': 'egyptian_monthly',
+              'remaining': {'value': 0},
+              'status': 'active',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(
+      response.children.single.subscriptions.every((item) => item.canRenew),
+      isTrue,
+    );
+  });
 }

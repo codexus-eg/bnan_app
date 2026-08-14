@@ -18,11 +18,13 @@ class ParentSubscriptionCard extends StatelessWidget {
     required this.subscription,
     this.onRenewed,
     this.showRenew = true,
+    this.isParent = true,
   });
   final ParentChildSubscriptionsModel child;
   final ParentChildSubscriptionModel subscription;
   final VoidCallback? onRenewed;
   final bool showRenew;
+  final bool isParent;
 
   @override
   Widget build(BuildContext context) => CustomDetailsWidgetBackground(
@@ -48,26 +50,29 @@ class ParentSubscriptionCard extends StatelessWidget {
         if (subscription.isSingleSubject &&
             subscription.subject?.name.trim().isNotEmpty == true)
           _line(context, S.of(context).subjects, subscription.subject!.name),
-        if (subscription.packageType.trim().isNotEmpty)
-          _line(context, S.of(context).packageType, subscription.packageType),
+        if (_typeLabel(context).isNotEmpty)
+          _line(context, S.of(context).packageType, _typeLabel(context)),
         if (subscription.status.trim().isNotEmpty)
-          _line(context, S.of(context).status, subscription.status),
-        if (subscription.packageType == 'hours') ...[
-          _line(
-            context,
-            S.of(context).renewalPurchasedHours,
-            _number(subscription.purchasedHours),
-          ),
-          _line(
-            context,
-            S.of(context).renewalUsedHours,
-            _number(subscription.usedHours),
-          ),
-          _line(
-            context,
-            S.of(context).renewalRemainingHours,
-            _number(subscription.remainingHours),
-          ),
+          _line(context, S.of(context).status, _statusLabel(context)),
+        if (subscription.isHoursPlan) ...[
+          if (subscription.hasPurchasedHours)
+            _line(
+              context,
+              S.of(context).renewalPurchasedHours,
+              _number(subscription.purchasedHours),
+            ),
+          if (subscription.hasUsedHours)
+            _line(
+              context,
+              S.of(context).renewalUsedHours,
+              _number(subscription.usedHours),
+            ),
+          if (subscription.hasRemainingHours)
+            _line(
+              context,
+              S.of(context).renewalRemainingHours,
+              _number(subscription.remainingHours),
+            ),
         ],
         if (subscription.startDate != null)
           _line(
@@ -100,13 +105,17 @@ class ParentSubscriptionCard extends StatelessWidget {
             onPressed: () async {
               final result = await MyNavigator.goTo<ParentFlowResult>(
                 context,
-                Routes.parentSubscriptionRenewalPath(child.studentId),
+                isParent
+                    ? Routes.parentSubscriptionRenewalPath(child.studentId)
+                    : Routes.studentSubscriptionRenewal,
                 extra: ParentSubscriptionRenewalArgs(
                   studentId: child.studentId,
                   curriculumId: subscription.curriculumId,
                   subscription: subscription,
                   subjects: child.subjects,
                   registrationMode: child.registrationMode ?? '',
+                  studentName: child.studentName,
+                  isParent: isParent,
                 ),
               );
               if (result == ParentFlowResult.completed) onRenewed?.call();
@@ -141,4 +150,22 @@ class ParentSubscriptionCard extends StatelessWidget {
       value % 1 == 0 ? value.toInt().toString() : value.toString();
   String _date(DateTime value) =>
       value.toLocal().toIso8601String().split('T').first;
+
+  String _typeLabel(BuildContext context) {
+    final value = subscription.packageType.trim().toLowerCase();
+    if (value == 'hours' || subscription.planKind == 'gulf') {
+      return S.of(context).packageHoursType;
+    }
+    if (value == 'monthly' || subscription.planKind == 'egyptian_monthly') {
+      return S.of(context).monthlyPackage;
+    }
+    return value;
+  }
+
+  String _statusLabel(BuildContext context) =>
+      switch (subscription.status.trim().toLowerCase()) {
+        'active' => S.of(context).active,
+        'expired' || 'completed' => S.of(context).finished,
+        final value => value,
+      };
 }

@@ -4669,6 +4669,16 @@ class S {
     );
   }
 
+  /// `Children subscriptions`
+  String get childrenSubscriptions {
+    return Intl.message(
+      'Children subscriptions',
+      name: 'childrenSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Packages and Subscription`
   String get parentPackagesAndSubscription {
     return Intl.message(
@@ -6722,6 +6732,41 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `File saved successfully`
+  String get fileSavedSuccessfully {
+    return Intl.message(
+      'File saved successfully',
+      name: 'fileSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate saved successfully`
+  String get certificateSavedSuccessfully {
+    return Intl.message(
+      'Certificate saved successfully',
+      name: 'certificateSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved in: $location`
+  String savedInLocation(Object location) {
+    return Intl.message(
+      'Saved in: $location',
+      name: 'savedInLocation',
+      desc: '',
+      args: [location],
+    );
+  }
+
+  /// `Open`
+  String get openAction {
+    return Intl.message('Open', name: 'openAction', desc: '', args: []);
   }
 
   /// `Unable to download file`

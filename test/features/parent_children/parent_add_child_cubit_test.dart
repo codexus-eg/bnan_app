@@ -356,7 +356,6 @@ ParentAddChildCubit _readyGulf(
   cubit.toggleSubject('subject-1');
   expect(cubit.nextStep(), isTrue);
   expect(cubit.nextStep(), isTrue);
-  cubit.updateAddress(city: 'Riyadh', region: 'Riyadh', line1: 'Street 1');
   return cubit;
 }
 

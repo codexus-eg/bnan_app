@@ -222,13 +222,13 @@ void main() {
       },
     );
 
-    test('completed payment reloads subjects and requests', () async {
+    test('completed payment reloads creation availability only', () async {
       final repo = FakeRepo();
       final cubit = StudentSubjectRequestsCubit(repo);
       await cubit.load();
       await cubit.paymentCompleted();
       expect(repo.availableCalls, 2);
-      expect(repo.requestCalls, 2);
+      expect(repo.requestCalls, 0);
       await cubit.close();
     });
 
@@ -273,30 +273,27 @@ void main() {
       await cubit.close();
     });
 
-    test(
-      'SUBJECT_ALREADY_REQUESTED refreshes availability and requests',
-      () async {
-        final repo = FakeRepo()
-          ..submitResult = Left(
-            Failure(
-              message: 'duplicate',
-              statusCode: 409,
-              code: 'SUBJECT_ALREADY_REQUESTED',
-              responseReceived: true,
-            ),
-          );
-        final cubit = StudentSubjectRequestsCubit(repo);
-        await cubit.load();
-        cubit.selectSubject('enabled');
-        cubit.selectPackage('valid');
-        await cubit.submitEgyptian();
-        expect(repo.availableCalls, 2);
-        expect(repo.requestCalls, 2);
-        expect(cubit.state.message, 'duplicate');
-        expect(cubit.state.isSubmitting, isFalse);
-        await cubit.close();
-      },
-    );
+    test('SUBJECT_ALREADY_REQUESTED refreshes creation availability', () async {
+      final repo = FakeRepo()
+        ..submitResult = Left(
+          Failure(
+            message: 'duplicate',
+            statusCode: 409,
+            code: 'SUBJECT_ALREADY_REQUESTED',
+            responseReceived: true,
+          ),
+        );
+      final cubit = StudentSubjectRequestsCubit(repo);
+      await cubit.load();
+      cubit.selectSubject('enabled');
+      cubit.selectPackage('valid');
+      await cubit.submitEgyptian();
+      expect(repo.availableCalls, 2);
+      expect(repo.requestCalls, 0);
+      expect(cubit.state.message, 'duplicate');
+      expect(cubit.state.isSubmitting, isFalse);
+      await cubit.close();
+    });
 
     test('Egyptian success resets submitting state', () async {
       final cubit = StudentSubjectRequestsCubit(FakeRepo());
