@@ -37,9 +37,10 @@ class ParentAddChildBody extends StatelessWidget {
                   title: S.of(context).parentAddChildTitle,
                   subtitle: S.of(context).pleaseFillRequiredInfo,
                   currentStep: state.currentStep + 1,
-                  listLength: 6,
+                  listLength: state.lastStep + 1,
                   stepHeader: headers[state.currentStep],
                   textColor: ColorManager.mainColor14,
+                  showHeader: false,
                 ),
               ),
               SliverPadding(
@@ -74,11 +75,12 @@ class ParentAddChildBody extends StatelessWidget {
   }
 
   List<String> _headers(BuildContext context) => [
-    S.of(context).parentChildAccountStep,
-    S.of(context).grade,
     S.of(context).parentPackageStep,
+    S.of(context).grade,
+    S.of(context).parentChildAccountStep,
     S.of(context).parentSubjectsStep,
     S.of(context).parentReviewStep,
-    S.of(context).parentPaymentStep,
+    if (context.read<ParentAddChildCubit>().state.isGulf)
+      S.of(context).parentPaymentStep,
   ];
 }

@@ -20,6 +20,7 @@ class SubscriptionPlanCard extends StatelessWidget {
     required this.curriculumName,
     this.bottomWidget,
     this.registrationMode,
+    this.isSelected = false,
   });
 
   final PackageCardModel plan;
@@ -27,12 +28,14 @@ class SubscriptionPlanCard extends StatelessWidget {
   final String curriculumName;
   final Widget? bottomWidget;
   final String? registrationMode;
+  final bool isSelected;
   @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
+          height: 340,
           width: double.infinity,
           padding: const EdgeInsetsDirectional.only(
             start: 8,
@@ -43,7 +46,7 @@ class SubscriptionPlanCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: ColorManager.greyF8F9,
             border: Border.all(
-              color: plan.isPopular
+              color: plan.isPopular || isSelected
                   ? ColorManager.mainColor14
                   : Colors.transparent,
             ),
@@ -67,11 +70,25 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 9),
-              Text(plan.title, style: StylesManager.styleBold14(context)),
-              if (plan.isSingleSubject) ...[
-                const SizedBox(height: 9),
-                const PackageScopeBadge(),
-              ],
+              SizedBox(
+                height: 36,
+                child: Center(
+                  child: Text(
+                    plan.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: StylesManager.styleBold14(context),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 9),
+              SizedBox(
+                height: 28,
+                child: plan.isSingleSubject
+                    ? const Center(child: PackageScopeBadge())
+                    : null,
+              ),
               const SizedBox(height: 9),
               Container(
                 padding: EdgeInsetsDirectional.symmetric(
@@ -84,25 +101,54 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
                 child: Text(
                   plan.durationText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: StylesManager.styleBold8(context),
                 ),
               ),
               const SizedBox(height: 14),
-              Text(
-                plan.oldPriceText,
-                style: StylesManager.styleRegular12(context).copyWith(
-                  decoration: TextDecoration.lineThrough,
-                  color: ColorManager.greyA8AF,
+              SizedBox(
+                height: 18,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    plan.oldPriceText,
+                    style: StylesManager.styleRegular12(context).copyWith(
+                      decoration: TextDecoration.lineThrough,
+                      color: ColorManager.greyA8AF,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 9),
-              Text(plan.priceText, style: StylesManager.styleBold24(context)),
+              SizedBox(
+                height: 34,
+                width: double.infinity,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    plan.priceText,
+                    style: StylesManager.styleBold24(context),
+                  ),
+                ),
+              ),
               const SizedBox(height: 9),
-              Text(plan.saveText, style: StylesManager.styleBold8(context)),
-              const SizedBox(height: 9),
+              SizedBox(
+                height: 28,
+                child: Center(
+                  child: Text(
+                    plan.saveText,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: StylesManager.styleBold8(context),
+                  ),
+                ),
+              ),
+              const Spacer(),
               bottomWidget ??
                   SubscribeButton(
-                    text: S.of(context).subscribeNow,
+                    text: S.of(context).parentChoosePackage,
                     onTap: () {
                       MyNavigator.goTo(
                         context,

@@ -1,5 +1,3 @@
-import 'package:bnan_app/core/app_routes/routes.dart';
-import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -26,8 +24,8 @@ class RegistrationNavigationButtons extends StatelessWidget {
         children: [
           CustomAppButton(
             backgroundColor: step == 4 ? ColorManager.orangeED : null,
-            text: step == 5
-                ? S.of(context).confirm
+            text: !RegisterCubit.get(context).isGulf && step == 4
+                ? S.of(context).submitRegistrationRequest
                 : step == 4
                 ? S.of(context).goToPayment
                 : S.of(context).next,
@@ -36,11 +34,24 @@ class RegistrationNavigationButtons extends StatelessWidget {
                 paymentState is TamaraPaymentLoading,
             onPressed: () async {
               final cubit = RegisterCubit.get(context);
-              if (step == 5) {
-                MyNavigator.goToOffAll(context, Routes.logIn);
-                return;
-              }
               if (!cubit.isGulf) {
+                if (step == 1 &&
+                    !(cubit.parentFormKey.currentState?.validate() ?? false)) {
+                  return;
+                }
+                if (step == 3 && !cubit.validateStudent()) {
+                  showCustomSnackBar(
+                    context,
+                    S.of(context).errorValidation,
+                    false,
+                  );
+                  return;
+                }
+                if (step == 4) {
+                  final request = cubit.buildRegisterRequest();
+                  if (request != null) await cubit.register(request: request);
+                  return;
+                }
                 cubit.nextStep();
                 return;
               }
@@ -74,7 +85,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
               cubit.nextStep();
             },
           ),
-          if (step > 1 && step < 5) ...[
+          if (step > 1 && paymentState is! TamaraPaymentPending) ...[
             const SizedBox(height: 16),
             CustomAppButton(
               text: S.of(context).previous,

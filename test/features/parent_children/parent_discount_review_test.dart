@@ -1,7 +1,10 @@
 import 'package:bnan_app/features/academic_lookups/data/models/academic_curriculum_model.dart';
+import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo.dart';
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_cubit.dart';
+import 'package:bnan_app/features/parent_children/presentation/widgets/child_account_step.dart';
 import 'package:bnan_app/features/parent_children/presentation/widgets/parent_price_review_step.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
@@ -36,10 +39,41 @@ void main() {
           ..selectPackage(_package);
     await tester.pumpWidget(
       _app(
-        BlocProvider.value(value: cubit, child: const ParentPriceReviewStep()),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: cubit),
+            BlocProvider(
+              create: (_) => AcademicLookupsCubit(repo: _LookupRepo()),
+            ),
+          ],
+          child: const ParentPriceReviewStep(),
+        ),
       ),
     );
     expect(tester.takeException(), isNull);
+    await cubit.close();
+  });
+
+  testWidgets('child account fields restore values from cubit state', (
+    tester,
+  ) async {
+    final cubit =
+        ParentAddChildCubit(
+          repo: _AddRepo(),
+          keyGenerator: IdempotencyKeyGenerator(),
+        )..updateAccount(
+          fullName: 'Student Name',
+          email: 'student@example.com',
+          password: 'Password1',
+        );
+    await tester.pumpWidget(
+      _app(BlocProvider.value(value: cubit, child: const ChildAccountStep())),
+    );
+    final values = tester
+        .widgetList<EditableText>(find.byType(EditableText))
+        .map((field) => field.controller.text);
+    expect(values, containsAll(['Student Name', 'student@example.com']));
+    expect(find.text(S.current.confirmPasswordLabel), findsNothing);
     await cubit.close();
   });
 
@@ -99,6 +133,11 @@ const _args = ParentSubscriptionRenewalArgs(
 );
 
 class _AddRepo implements ParentAddChildRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _LookupRepo implements AcademicLookupsRepo {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

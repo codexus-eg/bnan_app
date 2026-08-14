@@ -13,9 +13,9 @@ class ParentAddChildStepContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (step) {
-    0 => const ChildAccountStep(),
+    0 => const ParentPackageStep(),
     1 => const ParentGradeStep(),
-    2 => const ParentPackageStep(),
+    2 => const ChildAccountStep(),
     3 => const ParentSubjectsStep(),
     4 => const ParentPriceReviewStep(),
     _ => const ParentPaymentStep(),

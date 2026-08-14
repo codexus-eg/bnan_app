@@ -2,6 +2,7 @@ import 'package:bnan_app/features/parent_children/presentation/manager/parent_ad
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
+import 'package:bnan_app/features/parent_children/presentation/widgets/parent_review_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +16,8 @@ class ParentPriceReviewStep extends StatelessWidget {
     final price = _format(package.price ?? 0);
     return Column(
       children: [
+        const ParentReviewDetails(),
+        const SizedBox(height: 8),
         PaymentMethodCard(
           packageName: package.name ?? '',
           price: price,

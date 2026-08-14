@@ -71,20 +71,15 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     unawaited(checkPaymentStatus());
   }
 
-  void updateAccount({
-    String? fullName,
-    String? email,
-    String? password,
-    String? confirmPassword,
-  }) => emit(
-    state.copyWith(
-      fullName: fullName,
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      errorMessage: null,
-    ),
-  );
+  void updateAccount({String? fullName, String? email, String? password}) =>
+      emit(
+        state.copyWith(
+          fullName: fullName,
+          email: email,
+          password: password,
+          errorMessage: null,
+        ),
+      );
 
   void selectCurriculum(AcademicCurriculumModel? value) {
     if (state.parentHasChildren || state.curriculum?.id == value?.id) return;
@@ -156,7 +151,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       emit(state.copyWith(errorMessage: error));
       return false;
     }
-    if (state.currentStep < 5) {
+    if (state.currentStep < state.lastStep) {
       emit(state.copyWith(currentStep: state.currentStep + 1));
     }
     return true;
@@ -187,13 +182,6 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     if (error != null) {
       _log('submit rejected: current-step validation failed');
       return emit(state.copyWith(errorMessage: error));
-    }
-    if (!state.isGulf) {
-      _log('egyptian validation passed');
-      _log(
-        'receipt ${state.receipt == null ? 'null' : 'ready'}; '
-        'exists=${state.receipt?.existsSync() ?? false}',
-      );
     }
     _submitting = true;
     try {
@@ -296,10 +284,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       student: _student(),
       curriculumId: state.curriculum!.id,
       packageId: state.package!.id!,
-      receiptImage: state.receipt!,
       discountCode: state.discountCode,
-      method: state.paymentMethod,
-      referenceNumber: state.referenceNumber,
     );
     _log('Egyptian request model built');
     _log('Egyptian repository call started');

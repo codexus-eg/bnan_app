@@ -4,6 +4,7 @@ import 'package:bnan_app/core/helper/phone_number_normalizer.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/register_parent_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_student_model.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
@@ -21,7 +22,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   static RegisterCubit get(context) => BlocProvider.of(context);
 
   static const int firstStep = 1;
-  static const int lastStep = 5;
+  int get lastStep => 4;
   String curriculumId = '';
   String curriculumName = '';
   String packageId = '';
@@ -61,6 +62,8 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   bool get isGulf => registrationMode == 'gulf';
+  bool _authenticating = false;
+  bool _submitting = false;
   String? get normalizedParentPhone => PhoneNumberNormalizer.normalize(
     parentPhoneController.text,
     currency: packageCurrency,
@@ -111,31 +114,73 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 
+  bool validateStudent() {
+    final validForm = studentFormKey.currentState?.validate() ?? false;
+    final validSubjects = isSingleSubjectPackage
+        ? selectedSubjectIds.length == 1
+        : selectedSubjectIds.isNotEmpty;
+    return validForm && selectedGradeId != null && validSubjects;
+  }
+
+  RegisterRequestModel? buildRegisterRequest() {
+    final phone = normalizedParentPhone;
+    final subjectCount = selectedSubjectIds.length;
+    final validSubjects = isSingleSubjectPackage
+        ? subjectCount == 1
+        : subjectCount > 0;
+    if (phone == null || selectedGradeId == null || !validSubjects) return null;
+    return RegisterRequestModel(
+      parent: RegisterParentModel(
+        fullName: parentNameController.text.trim(),
+        email: parentEmailController.text.trim(),
+        phone: phone,
+        password: parentPasswordController.text,
+        whatsappNumber: parentWhatsappController.text.trim(),
+      ),
+      student: RegisterStudentModel(
+        fullName: studentNameController.text.trim(),
+        email: studentEmailController.text.trim(),
+        password: studentPasswordController.text,
+        grade: selectedGradeId!,
+        subjects: List.unmodifiable(selectedSubjectIds),
+      ),
+      curriculum: curriculumId,
+      packageId: packageId,
+    );
+  }
+
   Future<void> authenticateParentAndContinue() async {
+    if (_authenticating) return;
     if (!(parentFormKey.currentState?.validate() ?? false)) return;
     final parentPhone = normalizedParentPhone;
     if (parentPhone == null) return;
+    _authenticating = true;
     emit(RegisterLoading(currentStep: state.currentStep));
-    final result = await gulfParentAuthRepo.authenticate(
-      ParentRegisterRequestModel(
-        fullName: parentNameController.text,
-        email: parentEmailController.text,
-        password: parentPasswordController.text,
-        phone: parentPhone,
-        whatsappNumber: parentWhatsappController.text.trim().isEmpty
-            ? parentPhone
-            : parentWhatsappController.text,
-      ),
-    );
-    result.fold(
-      (failure) => emit(
-        RegisterFailure(
-          errorMessage: failure.message,
-          currentStep: state.currentStep,
+    try {
+      final result = await gulfParentAuthRepo.authenticate(
+        ParentRegisterRequestModel(
+          fullName: parentNameController.text,
+          email: parentEmailController.text,
+          password: parentPasswordController.text,
+          phone: parentPhone,
+          whatsappNumber: parentWhatsappController.text.trim().isEmpty
+              ? parentPhone
+              : parentWhatsappController.text,
         ),
-      ),
-      (_) => nextStep(),
-    );
+      );
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(
+          RegisterFailure(
+            errorMessage: failure.message,
+            currentStep: state.currentStep,
+          ),
+        ),
+        (_) => nextStep(),
+      );
+    } finally {
+      _authenticating = false;
+    }
   }
 
   TamaraCheckoutRequest? buildTamaraRequest({bool validateForm = true}) {
@@ -177,25 +222,27 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   Future<void> register({required RegisterRequestModel request}) async {
-    emit(RegisterLoading(currentStep: state.currentStep));
-
-    final result = await authRepo.register(request: request);
-
-    result.fold(
-      (failure) {
-        emit(
+    if (_submitting) return;
+    _submitting = true;
+    final currentStep = state.currentStep;
+    emit(RegisterLoading(currentStep: currentStep));
+    try {
+      final result = await authRepo.register(request: request);
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(
           RegisterFailure(
             errorMessage: failure.message,
-            currentStep: state.currentStep,
+            currentStep: currentStep,
           ),
-        );
-      },
-      (response) {
-        emit(
-          RegisterSuccess(user: response.user, currentStep: state.currentStep),
-        );
-      },
-    );
+        ),
+        (response) => emit(
+          RegisterSuccess(user: response.user, currentStep: currentStep),
+        ),
+      );
+    } finally {
+      _submitting = false;
+    }
   }
 
   @override

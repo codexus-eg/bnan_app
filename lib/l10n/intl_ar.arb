@@ -118,6 +118,7 @@
     "twelveHoursPlan": "باقة الـ 12 ساعة",
     "egpCurrency": "جنيه مصري (ج.م)",
     "qarCurrency": "ريال قطري (ر.ق)",
+    "qarShort": "ر.ق",
     "studentRegistrationForm": "نموذج تسجيل الطالب",
     "pleaseFillRequiredInfo": "يرجى ملء جميع الحقول المطلوبة",
     "parentInfo": "معلومات ولي الأمر",
@@ -1284,5 +1285,9 @@
     "notificationSupervisor": "الإشراف",
     "notificationPush": "إشعارات الجهاز",
     "notificationInApp": "الإشعارات داخل التطبيق",
-    "chatTitleFallback": "المحادثة"
+    "chatTitleFallback": "المحادثة",
+    "reviewRequest": "مراجعة الطلب",
+    "submitRegistrationRequest": "إرسال طلب التسجيل",
+    "registrationRequestSuccessMessage": "تم إرسال طلب التسجيل بنجاح. ستتواصل معك الإدارة عبر واتساب لاستكمال إجراءات الاشتراك والتفعيل.",
+    "done": "تم"
 }

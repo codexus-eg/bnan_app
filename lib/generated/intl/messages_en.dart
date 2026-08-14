@@ -366,6 +366,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chatMsg4": MessageLookupByLibrary.simpleMessage("Okay, I’ll start now"),
     "chatTitleFallback": MessageLookupByLibrary.simpleMessage("Conversation"),
+    "done": MessageLookupByLibrary.simpleMessage("Done"),
+    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
+      "The registration request was sent successfully. Administration will contact you via WhatsApp to complete the subscription and activation.",
+    ),
+    "reviewRequest": MessageLookupByLibrary.simpleMessage("Review request"),
+    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
+      "Submit registration request",
+    ),
     "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
       "Check your email ",
     ),
@@ -1729,6 +1737,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "primaryGradeFive": MessageLookupByLibrary.simpleMessage("Grade 5 Primary"),
     "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
     "qarCurrency": MessageLookupByLibrary.simpleMessage("Qatari Riyal (QAR)"),
+    "qarShort": MessageLookupByLibrary.simpleMessage("QAR"),
     "qatariCurriculum": MessageLookupByLibrary.simpleMessage(
       "Qatari Curriculum",
     ),

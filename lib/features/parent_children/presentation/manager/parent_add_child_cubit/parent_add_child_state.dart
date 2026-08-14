@@ -27,7 +27,6 @@ class ParentAddChildState {
     this.fullName = '',
     this.email = '',
     this.password = '',
-    this.confirmPassword = '',
     this.parentHasChildren = false,
     this.curriculum,
     this.grade,
@@ -47,7 +46,7 @@ class ParentAddChildState {
 
   final ParentAddChildPhase phase;
   final int currentStep;
-  final String fullName, email, password, confirmPassword;
+  final String fullName, email, password;
   final bool parentHasChildren;
   final AcademicCurriculumModel? curriculum;
   final AcademicGradeModel? grade;
@@ -64,6 +63,7 @@ class ParentAddChildState {
   bool get hasSupportedRegistrationMode =>
       curriculum?.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
+  int get lastStep => isGulf ? 5 : 4;
   bool get isBusy =>
       phase == ParentAddChildPhase.submitting ||
       phase == ParentAddChildPhase.processingPayment;
@@ -74,7 +74,6 @@ class ParentAddChildState {
     String? fullName,
     String? email,
     String? password,
-    String? confirmPassword,
     bool? parentHasChildren,
     Object? curriculum = _unset,
     Object? grade = _unset,
@@ -96,7 +95,6 @@ class ParentAddChildState {
     fullName: fullName ?? this.fullName,
     email: email ?? this.email,
     password: password ?? this.password,
-    confirmPassword: confirmPassword ?? this.confirmPassword,
     parentHasChildren: parentHasChildren ?? this.parentHasChildren,
     curriculum: identical(curriculum, _unset)
         ? this.curriculum

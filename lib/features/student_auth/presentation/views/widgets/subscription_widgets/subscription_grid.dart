@@ -20,6 +20,7 @@ class SubscriptionGrid extends StatelessWidget {
     this.registrationMode,
     this.packageFilter,
     this.planMapper,
+    this.selectedPackageId,
   });
 
   final String curriculumId;
@@ -28,6 +29,7 @@ class SubscriptionGrid extends StatelessWidget {
   final String? registrationMode;
   final bool Function(PackageModel package)? packageFilter;
   final PackageCardModel Function(BuildContext, PackageModel)? planMapper;
+  final String? selectedPackageId;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -98,6 +100,7 @@ class SubscriptionGrid extends StatelessWidget {
               curriculumName: curriculumName,
               registrationMode: registrationMode,
               bottomWidget: bottomWidget,
+              selectedPackageId: selectedPackageId,
             ),
           ),
         );
@@ -121,6 +124,7 @@ class PackagesGrid extends StatelessWidget {
     required this.curriculumName,
     this.bottomWidget,
     this.registrationMode,
+    this.selectedPackageId,
   });
 
   final List<PackageCardModel> plans;
@@ -128,6 +132,7 @@ class PackagesGrid extends StatelessWidget {
   final String curriculumId;
   final String curriculumName;
   final String? registrationMode;
+  final String? selectedPackageId;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -170,6 +175,7 @@ class PackagesGrid extends StatelessWidget {
       curriculumId: curriculumId,
       curriculumName: curriculumName,
       registrationMode: registrationMode,
+      isSelected: plan.id == selectedPackageId,
       bottomWidget: index < packages.length
           ? bottomWidget?.call(plan, packages[index])
           : null,

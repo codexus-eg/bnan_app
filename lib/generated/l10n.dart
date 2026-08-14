@@ -794,6 +794,11 @@ class S {
     );
   }
 
+  /// `QAR`
+  String get qarShort {
+    return Intl.message('QAR', name: 'qarShort', desc: '', args: []);
+  }
+
   /// `Student Registration Form`
   String get studentRegistrationForm {
     return Intl.message(
@@ -10388,6 +10393,25 @@ class S {
       args: [],
     );
   }
+
+  String get reviewRequest =>
+      Intl.message('Review request', name: 'reviewRequest', desc: '', args: []);
+
+  String get submitRegistrationRequest => Intl.message(
+    'Submit registration request',
+    name: 'submitRegistrationRequest',
+    desc: '',
+    args: [],
+  );
+
+  String get registrationRequestSuccessMessage => Intl.message(
+    'The registration request was sent successfully. Administration will contact you via WhatsApp to complete the subscription and activation.',
+    name: 'registrationRequestSuccessMessage',
+    desc: '',
+    args: [],
+  );
+
+  String get done => Intl.message('Done', name: 'done', desc: '', args: []);
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

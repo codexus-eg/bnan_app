@@ -347,6 +347,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
     "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
+    "done": MessageLookupByLibrary.simpleMessage("تم"),
+    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
+      "تم إرسال طلب التسجيل بنجاح. ستتواصل معك الإدارة عبر واتساب لاستكمال إجراءات الاشتراك والتفعيل.",
+    ),
+    "reviewRequest": MessageLookupByLibrary.simpleMessage("مراجعة الطلب"),
+    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
+      "إرسال طلب التسجيل",
+    ),
     "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
       "تحقق من بريدك الإلكتروني ",
     ),
@@ -1631,6 +1639,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
     "qarCurrency": MessageLookupByLibrary.simpleMessage("ريال قطري (ر.ق)"),
+    "qarShort": MessageLookupByLibrary.simpleMessage("ر.ق"),
     "qatariCurriculum": MessageLookupByLibrary.simpleMessage("المنهج القطري"),
     "qatariCurriculumDesc": MessageLookupByLibrary.simpleMessage(
       "منهج معتمد من وزارة التربية والتعليم في قطر، ويشمل المراحل الأساسية حتى الثانوية.",

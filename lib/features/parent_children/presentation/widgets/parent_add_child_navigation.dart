@@ -12,11 +12,15 @@ class ParentAddChildNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ParentAddChildCubit>();
     final state = context.watch<ParentAddChildCubit>().state;
-    final isLast = state.currentStep == 5;
+    final isLast = state.currentStep == state.lastStep;
     return Column(
       children: [
         CustomAppButton(
-          text: isLast ? S.of(context).parentSubmitPayment : S.of(context).next,
+          text: isLast
+              ? state.isGulf
+                    ? S.of(context).parentSubmitPayment
+                    : S.of(context).submitRegistrationRequest
+              : S.of(context).next,
           isLoading: state.isBusy,
           onPressed: isLast ? cubit.submit : cubit.nextStep,
         ),

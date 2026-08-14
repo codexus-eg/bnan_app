@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
     super.key,
     this.label,
     this.hintText,
+    this.initialValue,
     this.controller,
     this.keyboardType,
     this.obscureText = false,
@@ -28,6 +29,7 @@ class CustomTextField extends StatelessWidget {
 
   final String? label, addLabel;
   final String? hintText;
+  final String? initialValue;
   final TextStyle? hintStyle;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
@@ -84,6 +86,7 @@ class CustomTextField extends StatelessWidget {
         ConstrainedBox(
           constraints: BoxConstraints(minHeight: isMultiLine ? 0 : 40),
           child: TextFormField(
+            initialValue: controller == null ? initialValue : null,
             onTap: onTap,
             textInputAction: isMultiLine
                 ? TextInputAction.newline

@@ -33,8 +33,6 @@ class AuthRepoImpl implements AuthRepo {
       );
 
       final authResponse = AuthResponseModel.fromJson(response);
-      await _saveSession(authResponse);
-
       return Right(authResponse);
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
@@ -223,12 +221,7 @@ class AuthRepoImpl implements AuthRepo {
     required String gradeId,
   }) async {
     try {
-      final response = await apiConsumer.get(
-        EndPoints.curriculumSubjects(
-          curriculumId: '6a1b56274fdcd300239c9877',
-          gradeId: gradeId,
-        ),
-      );
+      final response = await apiConsumer.get(EndPoints.gradeSubjects(gradeId));
 
       return Right(SubjectsResponseModel.fromJson(response));
     } on AppException catch (error) {

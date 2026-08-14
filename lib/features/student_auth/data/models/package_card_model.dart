@@ -1,5 +1,6 @@
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
+import 'package:bnan_app/core/helper/currency_formatter.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -40,9 +41,14 @@ class PackageCardModel {
       id: package.id ?? '',
       title: package.name ?? '',
       durationText: _durationText(context, package),
-      oldPriceText: S.of(context).oldPrice(oldPrice.toInt().toString()),
-      priceText: S.of(context).currentPrice(price.toInt().toString()),
-      saveText: S.of(context).saveAmount(saveValue.toInt().toString()),
+      oldPriceText: package.oldPrice == null
+          ? ''
+          : CurrencyFormatter.amount(context, oldPrice, package.currency),
+      priceText: CurrencyFormatter.amount(context, price, package.currency),
+      saveText: saveValue <= 0
+          ? ''
+          : '${S.of(context).save} '
+                '${CurrencyFormatter.amount(context, saveValue, package.currency)}',
       isPopular: package.isPopular ?? false,
       price: price,
       currency: package.currency ?? '',

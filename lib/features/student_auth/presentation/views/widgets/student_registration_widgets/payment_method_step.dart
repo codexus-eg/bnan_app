@@ -6,7 +6,6 @@ import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_c
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
-import 'package:bnan_app/generated/l10n.dart';
 
 class PaymentMethodStep extends StatelessWidget {
   const PaymentMethodStep({super.key});
@@ -26,12 +25,11 @@ class PaymentMethodStep extends StatelessWidget {
         // ),
         // const SizedBox(height: 16),
         PaymentMethodCard(
-          packageName: cubit.isGulf
-              ? cubit.packageName
-              : S.of(context).package4Hours,
-          price: cubit.isGulf ? cubit.packagePrice : '160',
+          packageName: cubit.packageName,
+          price: cubit.packagePrice,
           studentsCount: '1',
-          total: cubit.isGulf ? cubit.packagePrice : '160',
+          total: cubit.packagePrice,
+          currency: cubit.packageCurrency,
         ),
         if (cubit.isGulf) ...[
           const SizedBox(height: 16),

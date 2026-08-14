@@ -4,6 +4,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/register_cub
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_navigation_buttons.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_step_content.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_success.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,17 +14,20 @@ class StudentRegistrationBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> stepHeaderText = [
+    final cubit = context.read<RegisterCubit>();
+    final stepHeaderText = [
       S.of(context).parentInfo,
       S.of(context).curriculumSelection,
       S.of(context).studentInfo,
-      S.of(context).paymentMethod,
-      S.of(context).paymentInfo,
+      cubit.isGulf ? S.of(context).paymentMethod : S.of(context).reviewRequest,
     ];
     return SafeArea(
       bottom: false,
       child: BlocBuilder<RegisterCubit, RegisterState>(
         builder: (context, state) {
+          if (state is RegisterSuccess && !cubit.isGulf) {
+            return const RegistrationSuccess();
+          }
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -32,8 +36,8 @@ class StudentRegistrationBody extends StatelessWidget {
                   subtitle: S.of(context).pleaseFillRequiredInfo,
                   currentStep: state.currentStep,
                   textColor: ColorManager.mainColor14,
-                  listLength: 5,
-                  stepHeader: stepHeaderText[state.currentStep-1],
+                  listLength: cubit.lastStep,
+                  stepHeader: stepHeaderText[state.currentStep - 1],
                 ),
               ),
               // const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -57,6 +61,16 @@ class StudentRegistrationBody extends StatelessWidget {
                   ),
                 ),
               ),
+              if (state is RegisterFailure)
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      state.errorMessage,
+                      style: TextStyle(color: ColorManager.red),
+                    ),
+                  ),
+                ),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               const SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 16),

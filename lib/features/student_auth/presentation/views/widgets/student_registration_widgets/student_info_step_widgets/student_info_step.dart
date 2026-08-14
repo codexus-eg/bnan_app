@@ -5,6 +5,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/get_curricul
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/shared_widget/custom_password_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_info_step_widgets/student_notes_widget.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_info_step_widgets/subjects_list.dart';
@@ -125,13 +126,10 @@ class StudentInfoStep extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   validator: MyValidator.validateEmail,
                 ),
-                CustomTextField(
+                CustomPasswordField(
                   controller: registerCubit.studentPasswordController,
                   label: S.of(context).studentPasswordField,
                   hintText: S.of(context).passwordHint,
-                  isRequired: true,
-                  obscureText: true,
-                  validator: MyValidator.validateStrongPassword,
                 ),
               ];
               if (constraints.maxWidth < 360) {

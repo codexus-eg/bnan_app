@@ -15,24 +15,17 @@ class SubscriptionHeader extends StatelessWidget {
             children: [
               TextSpan(
                 text: S.of(context).Packages,
-                style: StylesManager.styleBold20(context).copyWith(
-                  color: ColorManager.mainColor14,
-                ),
+                style: StylesManager.styleBold20(
+                  context,
+                ).copyWith(color: ColorManager.mainColor14),
               ),
               TextSpan(
                 text: ' ${S.of(context).subscription}',
-                style: StylesManager.styleBold20(context).copyWith(
-                  color: ColorManager.secondaryColor,
-                ),
+                style: StylesManager.styleBold20(
+                  context,
+                ).copyWith(color: ColorManager.secondaryColor),
               ),
             ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          S.of(context).canChangeCurrency,
-          style: StylesManager.styleBold14(context).copyWith(
-            color: ColorManager.greyA8AF,
           ),
         ),
       ],

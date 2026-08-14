@@ -23,7 +23,7 @@ class ParentAddChildResult extends StatelessWidget {
     final message = processing
         ? S.of(context).parentPaymentProcessing
         : pending
-        ? S.of(context).parentReceiptPendingMessage
+        ? S.of(context).registrationRequestSuccessMessage
         : success
         ? S.of(context).parentChildAddedSuccessfully
         : unknown

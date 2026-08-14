@@ -112,6 +112,7 @@
     "twelveHoursPlan": "12-hour package",
     "egpCurrency": "Egyptian Pound (EGP)",
     "qarCurrency": "Qatari Riyal (QAR)",
+    "qarShort": "QAR",
     "studentRegistrationForm": "Student Registration Form",
     "pleaseFillRequiredInfo": "Please fill in all required fields",
     "parentInfo": "Parent Information",
@@ -1285,5 +1286,9 @@
     "notificationSupervisor": "Supervision",
     "notificationPush": "Device notifications",
     "notificationInApp": "In-app notifications",
-    "chatTitleFallback": "Conversation"
+    "chatTitleFallback": "Conversation",
+    "reviewRequest": "Review request",
+    "submitRegistrationRequest": "Submit registration request",
+    "registrationRequestSuccessMessage": "The registration request was sent successfully. Administration will contact you via WhatsApp to complete the subscription and activation.",
+    "done": "Done"
 }

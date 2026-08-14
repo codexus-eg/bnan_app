@@ -6,12 +6,15 @@ class GetCurriculmSubjectsCubit extends Cubit<GetCurriculmSubjectsState> {
   GetCurriculmSubjectsCubit(this.authRepo) : super(GetSubjectsInitial());
 
   final AuthRepo authRepo;
+  int _requestVersion = 0;
 
   Future<void> getCurriculumSubjects({
     required String curriculumId,
     required String gradeId,
     bool isGulf = false,
   }) async {
+    if (isClosed) return;
+    final version = ++_requestVersion;
     emit(GetSubjectsLoading());
 
     final result = isGulf
@@ -20,6 +23,7 @@ class GetCurriculmSubjectsCubit extends Cubit<GetCurriculmSubjectsState> {
             curriculumId: curriculumId,
             gradeId: gradeId,
           );
+    if (isClosed || version != _requestVersion) return;
 
     result.fold(
       (failure) => emit(GetSubjectsFailure(errorMessage: failure.message)),

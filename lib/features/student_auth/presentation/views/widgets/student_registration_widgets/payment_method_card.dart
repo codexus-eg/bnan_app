@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/helper/currency_formatter.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class PaymentMethodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final symbol = CurrencyFormatter.symbol(context, currency);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -51,14 +53,14 @@ class PaymentMethodCard extends StatelessWidget {
               children: [
                 TextSpan(
                   text:
-                      '$price ${currency ?? S.of(context).sarShort} * '
+                      '$price $symbol * '
                       '$studentsCount ${S.of(context).student} = ',
                   style: StylesManager.styleRegular14(
                     context,
                   ).copyWith(color: ColorManager.greyA8AF),
                 ),
                 TextSpan(
-                  text: '$total ${currency ?? S.of(context).sarShort}',
+                  text: '$total $symbol',
                   style: StylesManager.styleBold16(
                     context,
                   ).copyWith(color: ColorManager.mainColor15),

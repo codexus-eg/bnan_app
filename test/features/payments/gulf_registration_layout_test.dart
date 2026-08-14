@@ -17,7 +17,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Gulf registration hides Tamara address fields', (tester) async {
+  testWidgets('Gulf payment shows SAR and no Tamara address fields', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     await CacheHelper.init();
     tester.view.physicalSize = const Size(320, 568);
@@ -38,12 +40,14 @@ void main() {
         ),
       )
       ..nextStep()
+      ..nextStep()
       ..nextStep();
 
     await tester.pumpWidget(_app(auth, register));
     expect(find.text(S.current.city), findsNothing);
     expect(find.text('المنطقة'), findsNothing);
     expect(find.text('العنوان'), findsNothing);
+    expect(find.textContaining('ريال'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 }
