@@ -12,6 +12,7 @@ abstract class Routes {
   static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String notification = '/notification';
+  static const String notificationSettings = '/notification/settings';
   static const String chat = '/chat/:roomId';
   static const String legacyChat = '/chat';
   static const String classroomDocuments = '/classroomDocuments';

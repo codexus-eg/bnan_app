@@ -9,6 +9,9 @@ abstract class EndPoints {
   static const String resetPassword = '/auth/resetPassword';
   static const String updatePassword = '/auth/updatePassword';
   static const String deviceToken = '/devices/token';
+  static const String notifications = '/notifications';
+  static const String notificationsRead = '/notifications/read';
+  static const String notificationPreferences = '/notification-preferences/me';
   static const String dashboard = '/dashboard';
   static const String registerTeacher = '/auth/register-teacher';
   static const String registerParent = '/auth/register-parent';

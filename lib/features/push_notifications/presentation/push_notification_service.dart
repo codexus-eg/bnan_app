@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
+import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
 import 'package:bnan_app/features/push_notifications/data/models/chat_push_intent.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
+import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
@@ -13,11 +17,15 @@ class PushNotificationService {
     required PushMessaging messaging,
     required PushTokenRegistrar registrar,
     required ChatNotificationCoordinator chat,
+    NotificationsCubit? notifications,
+    LocalPushNotifications? localNotifications,
     Stream<RemoteMessage>? foregroundMessages,
     Stream<RemoteMessage>? openedMessages,
   }) : _messaging = messaging,
        _registrar = registrar,
        _chat = chat,
+       _notifications = notifications,
+       _localNotifications = localNotifications,
        _foregroundMessages = foregroundMessages ?? FirebaseMessaging.onMessage,
        _openedMessages = openedMessages ?? FirebaseMessaging.onMessageOpenedApp;
 
@@ -25,15 +33,20 @@ class PushNotificationService {
   final PushMessaging _messaging;
   final PushTokenRegistrar _registrar;
   final ChatNotificationCoordinator _chat;
+  final NotificationsCubit? _notifications;
+  final LocalPushNotifications? _localNotifications;
   final Stream<RemoteMessage> _foregroundMessages;
   final Stream<RemoteMessage> _openedMessages;
   final _opened = StreamController<ChatPushIntent>.broadcast();
+  final _notificationOpened = StreamController<AppNotification>.broadcast();
   final Set<String> _navigationIds = {};
   final List<StreamSubscription<dynamic>> _subscriptions = [];
   ChatPushIntent? _pending;
+  AppNotification? _pendingNotification;
   bool _initialized = false;
 
   Stream<ChatPushIntent> get opened => _opened.stream;
+  Stream<AppNotification> get notificationOpened => _notificationOpened.stream;
 
   Future<void> initialize() async {
     if (!firebaseAvailable || _initialized) return;
@@ -42,7 +55,14 @@ class PushNotificationService {
       _foregroundMessages.listen(_handleForeground),
       _openedMessages.listen(_handleOpened),
       _messaging.tokenRefresh.listen(_handleTokenRefresh),
+      if (_notifications != null)
+        _notifications.incoming.listen(_showLocalNotification),
     ]);
+    await _localNotifications?.initialize(_handleLocalPayload);
+    final initialLocalPayload = await _localNotifications?.initialPayload();
+    if (initialLocalPayload?.isNotEmpty == true) {
+      _handleLocalPayload(initialLocalPayload!);
+    }
     SessionManager.instance.addAccessTokenChangeListener(_onTokenChanged);
     SessionManager.instance.addBeforeClearListener(_beforeSessionClear);
     _handleOpened(await _messaging.getInitialMessage());
@@ -52,6 +72,10 @@ class PushNotificationService {
   }
 
   Future<void> _handleForeground(RemoteMessage message) async {
+    final notification = _notification(message);
+    if (notification != null) {
+      _notifications?.ingest(notification);
+    }
     final intent = _intent(message);
     if (intent == null) return;
     _chat.handlePush(
@@ -65,6 +89,7 @@ class PushNotificationService {
 
   void _handleOpened(RemoteMessage? message) {
     if (message != null) {
+      _queueOrOpenNotification(_notification(message));
       _queueOrOpen(_intent(message));
     }
   }
@@ -74,6 +99,52 @@ class PushNotificationService {
     title: message.notification?.title ?? '',
     body: message.notification?.body ?? '',
   );
+
+  AppNotification? _notification(RemoteMessage message) {
+    final data = <String, dynamic>{...message.data};
+    data['_title'] = message.notification?.title;
+    data['_body'] = message.notification?.body;
+    final value = AppNotification.fromJson(data);
+    return value.id.isEmpty && value.key.isEmpty ? null : value;
+  }
+
+  Future<void> _showLocalNotification(AppNotification value) async {
+    if (value.navigation.params['roomId'] == _chat.currentRoomId ||
+        value.resourceId == _chat.currentRoomId) {
+      return;
+    }
+    try {
+      await _localNotifications?.showNotification(value);
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint('Local notification failed: ${error.runtimeType}');
+      }
+    }
+  }
+
+  void _handleLocalPayload(String payload) {
+    try {
+      final value = jsonDecode(payload);
+      if (value is Map) {
+        _queueOrOpenNotification(
+          AppNotification.fromJson(Map<String, dynamic>.from(value)),
+        );
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint('Notification payload failed: ${error.runtimeType}');
+      }
+    }
+  }
+
+  void _queueOrOpenNotification(AppNotification? value) {
+    if (value == null) return;
+    if (SessionManager.instance.accessToken?.isNotEmpty != true) {
+      _pendingNotification = value;
+      return;
+    }
+    _notificationOpened.add(value);
+  }
 
   void _queueOrOpen(ChatPushIntent? intent) {
     if (intent == null || intent.roomId == _chat.currentRoomId) return;
@@ -102,6 +173,9 @@ class PushNotificationService {
     final pending = _pending;
     _pending = null;
     _queueOrOpen(pending);
+    final pendingNotification = _pendingNotification;
+    _pendingNotification = null;
+    _queueOrOpenNotification(pendingNotification);
     unawaited(_registrar.registerCurrent());
   }
 
@@ -114,5 +188,6 @@ class PushNotificationService {
     SessionManager.instance.removeAccessTokenChangeListener(_onTokenChanged);
     SessionManager.instance.removeBeforeClearListener(_beforeSessionClear);
     await _opened.close();
+    await _notificationOpened.close();
   }
 }

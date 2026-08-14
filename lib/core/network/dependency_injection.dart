@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_student_subjects_cubit/get_student_subjects_cubit.dart';
@@ -23,6 +24,13 @@ import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo
 import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_notification_service.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
+import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/features/notifications/data/repos/notifications_repo.dart';
+import 'package:bnan_app/features/notifications/data/repos/notifications_repo_impl.dart';
+import 'package:bnan_app/features/notifications/domain/notification_navigation_service.dart';
+import 'package:bnan_app/features/notifications/domain/recent_notification_ids.dart';
+import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
+import 'package:bnan_app/features/notifications/presentation/manager/preferences_cubit.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo.dart';
 import 'package:bnan_app/features/curriculum_management/data/repo/curriculum_management_repo_impl.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
@@ -57,6 +65,7 @@ import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final getIt = GetIt.instance;
 
@@ -72,6 +81,13 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => DeviceTokenRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<InstallationIdStore>(InstallationIdStore.new);
+  getIt.registerLazySingleton<NotificationsRepo>(
+    () => NotificationsRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<RecentNotificationIds>(RecentNotificationIds.new);
+  getIt.registerLazySingleton<NotificationNavigationService>(
+    () => NotificationNavigationService(SessionManager.instance),
+  );
 
   // Repositories
 
@@ -539,6 +555,16 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerLazySingleton<ChatNotificationCoordinator>(
     () => ChatNotificationCoordinator(getIt<SocketService>()),
   );
+  getIt.registerLazySingleton<NotificationsCubit>(
+    () => NotificationsCubit(
+      getIt<NotificationsRepo>(),
+      getIt<SocketService>(),
+      getIt<RecentNotificationIds>(),
+    ),
+  );
+  getIt.registerFactory<PreferencesCubit>(
+    () => PreferencesCubit(getIt<NotificationsRepo>()),
+  );
   if (firebaseAvailable) {
     getIt.registerLazySingleton<PushMessaging>(
       () => FirebasePushMessaging(FirebaseMessaging.instance),
@@ -556,7 +582,12 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
         messaging: getIt<PushMessaging>(),
         registrar: getIt<PushTokenRegistrar>(),
         chat: getIt<ChatNotificationCoordinator>(),
+        notifications: getIt<NotificationsCubit>(),
+        localNotifications: getIt<LocalPushNotifications>(),
       ),
+    );
+    getIt.registerLazySingleton<LocalPushNotifications>(
+      () => LocalPushNotifications(FlutterLocalNotificationsPlugin()),
     );
   }
   getIt.registerFactory<SendMessageCubit>(

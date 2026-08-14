@@ -6734,41 +6734,6 @@ class S {
     );
   }
 
-  /// `File saved successfully`
-  String get fileSavedSuccessfully {
-    return Intl.message(
-      'File saved successfully',
-      name: 'fileSavedSuccessfully',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Certificate saved successfully`
-  String get certificateSavedSuccessfully {
-    return Intl.message(
-      'Certificate saved successfully',
-      name: 'certificateSavedSuccessfully',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saved in: $location`
-  String savedInLocation(Object location) {
-    return Intl.message(
-      'Saved in: $location',
-      name: 'savedInLocation',
-      desc: '',
-      args: [location],
-    );
-  }
-
-  /// `Open`
-  String get openAction {
-    return Intl.message('Open', name: 'openAction', desc: '', args: []);
-  }
-
   /// `Unable to download file`
   String get unableToDownloadFile {
     return Intl.message(
@@ -10179,6 +10144,211 @@ class S {
     return Intl.message(
       'Payment method (optional)',
       name: 'adminSubjectRequestMethodOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File saved successfully`
+  String get fileSavedSuccessfully {
+    return Intl.message(
+      'File saved successfully',
+      name: 'fileSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate saved successfully`
+  String get certificateSavedSuccessfully {
+    return Intl.message(
+      'Certificate saved successfully',
+      name: 'certificateSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved in: {location}`
+  String savedInLocation(Object location) {
+    return Intl.message(
+      'Saved in: $location',
+      name: 'savedInLocation',
+      desc: '',
+      args: [location],
+    );
+  }
+
+  /// `Open`
+  String get openAction {
+    return Intl.message('Open', name: 'openAction', desc: '', args: []);
+  }
+
+  /// `Notification settings`
+  String get notificationSettings {
+    return Intl.message(
+      'Notification settings',
+      name: 'notificationSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark all as read`
+  String get markAllNotificationsRead {
+    return Intl.message(
+      'Mark all as read',
+      name: 'markAllNotificationsRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No notifications yet`
+  String get noNotificationsYet {
+    return Intl.message(
+      'No notifications yet',
+      name: 'noNotificationsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We will let you know when there is an update`
+  String get notificationsEmptySubtitle {
+    return Intl.message(
+      'We will let you know when there is an update',
+      name: 'notificationsEmptySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Now`
+  String get notificationNow {
+    return Intl.message('Now', name: 'notificationNow', desc: '', args: []);
+  }
+
+  /// `{count} minutes ago`
+  String notificationMinutesAgo(int count) {
+    return Intl.message(
+      '$count minutes ago',
+      name: 'notificationMinutesAgo',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `An hour ago`
+  String get notificationHourAgo {
+    return Intl.message(
+      'An hour ago',
+      name: 'notificationHourAgo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} hours ago`
+  String notificationHoursAgo(int count) {
+    return Intl.message(
+      '$count hours ago',
+      name: 'notificationHoursAgo',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Notification categories`
+  String get notificationCategories {
+    return Intl.message(
+      'Notification categories',
+      name: 'notificationCategories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification channels`
+  String get notificationChannels {
+    return Intl.message(
+      'Notification channels',
+      name: 'notificationChannels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chats`
+  String get notificationChat {
+    return Intl.message('Chats', name: 'notificationChat', desc: '', args: []);
+  }
+
+  /// `Academic`
+  String get notificationAcademic {
+    return Intl.message(
+      'Academic',
+      name: 'notificationAcademic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payments and subscriptions`
+  String get notificationFinance {
+    return Intl.message(
+      'Payments and subscriptions',
+      name: 'notificationFinance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Announcements`
+  String get notificationAnnouncements {
+    return Intl.message(
+      'Announcements',
+      name: 'notificationAnnouncements',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Administration`
+  String get notificationAdmin {
+    return Intl.message(
+      'Administration',
+      name: 'notificationAdmin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervision`
+  String get notificationSupervisor {
+    return Intl.message(
+      'Supervision',
+      name: 'notificationSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Device notifications`
+  String get notificationPush {
+    return Intl.message(
+      'Device notifications',
+      name: 'notificationPush',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In-app notifications`
+  String get notificationInApp {
+    return Intl.message(
+      'In-app notifications',
+      name: 'notificationInApp',
       desc: '',
       args: [],
     );

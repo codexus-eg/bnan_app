@@ -20,7 +20,9 @@ class SocketService {
   bool get isConnected => _socket?.connected ?? false;
 
   void _updateAuthToken(String? token) {
-    if (token?.isNotEmpty == true) _socket?.auth = {'token': token};
+    if (token?.isNotEmpty == true) {
+      _socket?.auth = {'token': token, 'lang': 'ar'};
+    }
   }
 
   Future<void> connect() {
@@ -50,7 +52,7 @@ class SocketService {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setAuth({'token': token})
+            .setAuth({'token': token, 'lang': 'ar'})
             .enableReconnection()
             .setReconnectionAttempts(5)
             .setReconnectionDelay(1000)
@@ -189,6 +191,19 @@ class SocketService {
       }
     });
   }
+
+  VoidCallback listenToChatNudge(
+    void Function(Map<String, dynamic> notification) onNudge,
+  ) => _listen('chat:nudge:received', (data) {
+    try {
+      final json = Map<String, dynamic>.from(data);
+      json['key'] ??= 'CHAT_NUDGE';
+      json['type'] ??= 'chat';
+      onNudge(json);
+    } catch (error) {
+      debugPrint('Chat nudge parsing error: ${error.runtimeType}');
+    }
+  });
 
   VoidCallback listenToReconnect(VoidCallback onReconnect) {
     final socket = _socket;

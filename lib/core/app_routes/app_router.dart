@@ -209,6 +209,14 @@ GoRouter buildRouter() {
       ),
 
       GoRoute(
+        path: Routes.notificationSettings,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const NotificationPreferencesView(),
+          key: state.pageKey,
+        ),
+      ),
+
+      GoRoute(
         path: Routes.chat,
         pageBuilder: (context, state) {
           final args = switch (state.extra) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bnan_app/features/push_notifications/data/models/chat_push_intent.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -8,9 +9,9 @@ class LocalPushNotifications {
   LocalPushNotifications(this._plugin);
   final FlutterLocalNotificationsPlugin _plugin;
   static const _channel = AndroidNotificationChannel(
-    'chat_messages',
-    'Chat messages',
-    description: 'New chat message notifications',
+    'bnan_notifications',
+    'Bnan notifications',
+    description: 'Bnan Academy notifications',
     importance: Importance.high,
     playSound: true,
   );
@@ -18,7 +19,7 @@ class LocalPushNotifications {
   Future<void> initialize(ValueChanged<String> onPayload) async {
     await _plugin.initialize(
       settings: const InitializationSettings(
-        android: AndroidInitializationSettings('ic_launcher'),
+        android: AndroidInitializationSettings('ic_notification'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
@@ -68,4 +69,29 @@ class LocalPushNotifications {
       payload: payload,
     );
   }
+
+  Future<void> showNotification(AppNotification notification) => _plugin.show(
+    id: notification.id.isEmpty
+        ? notification.hashCode
+        : notification.id.hashCode,
+    title: notification.title,
+    body: notification.body,
+    notificationDetails: const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'bnan_notifications',
+        'Bnan notifications',
+        channelDescription: 'Bnan Academy notifications',
+        icon: 'ic_notification',
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: true,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentSound: true,
+        presentBadge: true,
+      ),
+    ),
+    payload: jsonEncode(notification.toPayload()),
+  );
 }
