@@ -164,6 +164,7 @@
     "creditCard": "بطاقة إئتمانية",
     "tabbyTamara": "قسم فاتورتك مع تمارا",
     "goToPayment": "الإنتقال للدفع",
+    "payWithTamara": "الدفع مع تمارا",
     "@packageCalculation": {
         "placeholders": {
             "price": {},
@@ -1288,6 +1289,7 @@
     "chatTitleFallback": "المحادثة",
     "reviewRequest": "مراجعة الطلب",
     "submitRegistrationRequest": "إرسال طلب التسجيل",
-    "registrationRequestSuccessMessage": "تم إرسال طلب التسجيل بنجاح. ستتواصل معك الإدارة عبر واتساب لاستكمال إجراءات الاشتراك والتفعيل.",
+    "registrationRequestSuccessMessage": "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة.",
+    "backToLogin": "العودة لتسجيل الدخول",
     "done": "تم"
 }

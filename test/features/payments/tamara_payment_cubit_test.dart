@@ -247,7 +247,7 @@ void main() {
     await cubit.handleReturn(link);
     expect(repo.reconcileCalls, 1);
     expect(repo.statusCalls, 1);
-    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.state, isA<TamaraPaymentAbandoned>());
     await cubit.close();
   });
 
@@ -324,7 +324,6 @@ void main() {
     );
     await cubit.checkout(_request);
     await _markBrowserOpened(cubit);
-    cubit.onBackground();
     await cubit.onForeground();
     await Future<void>.delayed(const Duration(milliseconds: 12));
     await cubit.close();
@@ -343,7 +342,6 @@ void main() {
     );
     await cubit.checkout(_request);
     await _markBrowserOpened(cubit);
-    cubit.onBackground();
     await cubit.onForeground();
     await Future<void>.delayed(const Duration(milliseconds: 12));
     final callsAtCompletion = repo.statusCalls;
@@ -405,7 +403,6 @@ void main() {
     );
     await cubit.checkout(_request);
     await _markBrowserOpened(cubit);
-    cubit.onBackground();
     await cubit.onForeground();
     await Future<void>.delayed(const Duration(milliseconds: 15));
     final callsAtLimit = repo.statusCalls;
@@ -433,7 +430,57 @@ void main() {
     final cubit = _cubit(_PaymentRepo(), store);
     await cubit.restore();
     expect(cubit.draft?.idempotencyKey, 'saved-key');
-    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.state, isA<TamaraPaymentAbandoned>());
+    await cubit.close();
+  });
+
+  test('closing pending checkout stops polling and allows retry', () async {
+    final repo = _PaymentRepo();
+    final auth = _AuthRepo();
+    final cubit = _cubit(
+      repo,
+      store,
+      auth: auth,
+      pollInterval: const Duration(milliseconds: 2),
+    );
+    await cubit.checkout(_request);
+    await _markBrowserOpened(cubit);
+    await cubit.onForeground();
+    await cubit.abandonCheckout();
+    final callsAtClose = repo.statusCalls;
+    await Future<void>.delayed(const Duration(milliseconds: 12));
+    expect(repo.statusCalls, callsAtClose);
+    expect(auth.loginCalls, 0);
+    expect(cubit.state, isA<TamaraPaymentAbandoned>());
+    await cubit.close();
+  });
+
+  test('restart pending reconciles once without polling or login', () async {
+    await store.save(
+      PaymentDraft(
+        paymentId: 'payment-1',
+        checkoutUrl: _checkoutUrl,
+        checkoutOpenedAt: DateTime(2026),
+        idempotencyKey: 'saved-key',
+        packageId: 'package-1',
+        curriculumId: 'curriculum-1',
+        gradeId: 'grade-1',
+        subjectIds: const ['subject-1'],
+        studentEmail: 'student@example.com',
+        paymentStartedAt: DateTime(2026),
+        lastKnownStatus: PaymentStatus.pending,
+      ),
+    );
+    final repo = _PaymentRepo();
+    final auth = _AuthRepo();
+    final cubit = _cubit(repo, store, auth: auth);
+    await cubit.restore();
+    await cubit.onForeground();
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    expect(auth.loginCalls, 0);
+    expect(cubit.state, isA<TamaraPaymentAbandoned>());
     await cubit.close();
   });
 }

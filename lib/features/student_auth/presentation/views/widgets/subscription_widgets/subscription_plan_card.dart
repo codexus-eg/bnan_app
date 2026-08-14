@@ -35,12 +35,12 @@ class SubscriptionPlanCard extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          height: 340,
+          height: 280,
           width: double.infinity,
           padding: const EdgeInsetsDirectional.only(
             start: 8,
             end: 8,
-            top: 14,
+            top: 10,
             bottom: 8,
           ),
           decoration: BoxDecoration(
@@ -62,16 +62,16 @@ class SubscriptionPlanCard extends StatelessWidget {
           child: Column(
             children: [
               CircleAvatar(
-                radius: 15,
+                radius: 13,
                 backgroundColor: ColorManager.greyF4F6,
                 child: Padding(
-                  padding: const EdgeInsets.all(7.0),
+                  padding: const EdgeInsets.all(6),
                   child: SvgPicture.asset(ImageManager.clockThreeIcon),
                 ),
               ),
-              const SizedBox(height: 9),
+              const SizedBox(height: 6),
               SizedBox(
-                height: 36,
+                height: 32,
                 child: Center(
                   child: Text(
                     plan.title,
@@ -82,18 +82,18 @@ class SubscriptionPlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 9),
+              const SizedBox(height: 4),
               SizedBox(
-                height: 28,
+                height: 22,
                 child: plan.isSingleSubject
                     ? const Center(child: PackageScopeBadge())
                     : null,
               ),
-              const SizedBox(height: 9),
+              const SizedBox(height: 4),
               Container(
                 padding: EdgeInsetsDirectional.symmetric(
                   horizontal: 14,
-                  vertical: 5,
+                  vertical: 3,
                 ),
                 decoration: BoxDecoration(
                   color: ColorManager.greyF4F6,
@@ -106,9 +106,9 @@ class SubscriptionPlanCard extends StatelessWidget {
                   style: StylesManager.styleBold8(context),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 8),
               SizedBox(
-                height: 18,
+                height: 16,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
@@ -120,9 +120,9 @@ class SubscriptionPlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 9),
+              const SizedBox(height: 3),
               SizedBox(
-                height: 34,
+                height: 30,
                 width: double.infinity,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
@@ -132,9 +132,9 @@ class SubscriptionPlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 9),
+              const SizedBox(height: 3),
               SizedBox(
-                height: 28,
+                height: 24,
                 child: Center(
                   child: Text(
                     plan.saveText,

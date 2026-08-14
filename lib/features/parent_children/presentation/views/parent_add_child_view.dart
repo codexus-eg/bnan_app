@@ -4,6 +4,7 @@ import 'package:bnan_app/features/parent_children/presentation/manager/parent_ad
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_state.dart';
 import 'package:bnan_app/features/parent_children/presentation/widgets/parent_add_child_body.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,6 +82,12 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
         S.of(context).parentUnableToOpenCheckout,
         false,
       );
+      return;
+    }
+    if (result.outcome == TamaraSdkOutcome.cancel ||
+        result.outcome == TamaraSdkOutcome.failure) {
+      cubit.checkoutClosed();
+      showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);
       return;
     }
     await context.read<ParentAddChildCubit>().reconcilePayment();

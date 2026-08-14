@@ -332,9 +332,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Certificate saved successfully",
     ),
-    "savingCertificate": MessageLookupByLibrary.simpleMessage(
-      "Saving certificate...",
-    ),
     "certificateUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Certificate updated successfully",
     ),
@@ -366,14 +363,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chatMsg4": MessageLookupByLibrary.simpleMessage("Okay, I’ll start now"),
     "chatTitleFallback": MessageLookupByLibrary.simpleMessage("Conversation"),
-    "done": MessageLookupByLibrary.simpleMessage("Done"),
-    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
-      "The registration request was sent successfully. Administration will contact you via WhatsApp to complete the subscription and activation.",
-    ),
-    "reviewRequest": MessageLookupByLibrary.simpleMessage("Review request"),
-    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
-      "Submit registration request",
-    ),
     "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
       "Check your email ",
     ),
@@ -608,6 +597,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "doNotHaveAccount": MessageLookupByLibrary.simpleMessage(
       "Don\'t have an account? ",
     ),
+    "done": MessageLookupByLibrary.simpleMessage("Done"),
     "download": MessageLookupByLibrary.simpleMessage("Download"),
     "downloadPdf": MessageLookupByLibrary.simpleMessage("Download PDF"),
     "dueFriday": MessageLookupByLibrary.simpleMessage("Due Friday"),
@@ -754,7 +744,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "File saved successfully",
     ),
-    "savingFile": MessageLookupByLibrary.simpleMessage("Saving file..."),
     "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Please fill in all required fields.",
     ),
@@ -1498,6 +1487,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
       "Passwords do not match.",
     ),
+    "payWithTamara": MessageLookupByLibrary.simpleMessage("Pay with Tamara"),
     "paymentCompleted": MessageLookupByLibrary.simpleMessage("Paid"),
     "paymentConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Payment confirmed successfully",
@@ -1775,6 +1765,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Registration request rejected successfully",
         ),
+    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
+      "Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.",
+    ),
     "registrationRequests": MessageLookupByLibrary.simpleMessage(
       "Registration Requests",
     ),
@@ -1854,6 +1847,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "reviewPaidRequests": MessageLookupByLibrary.simpleMessage(
       "Review paid requests",
     ),
+    "reviewRequest": MessageLookupByLibrary.simpleMessage("Review request"),
     "reviews": MessageLookupByLibrary.simpleMessage("Reviews"),
     "rewardPoints": MessageLookupByLibrary.simpleMessage("Reward Points"),
     "rewards": MessageLookupByLibrary.simpleMessage("Rewards"),
@@ -1893,7 +1887,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveAmount": m28,
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save Changes"),
     "savedInLocation": m29,
-    "tryAgain": MessageLookupByLibrary.simpleMessage("Try again"),
+    "savingCertificate": MessageLookupByLibrary.simpleMessage(
+      "Saving certificate...",
+    ),
+    "savingFile": MessageLookupByLibrary.simpleMessage("Saving file..."),
     "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
     "scheduleCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Schedule added successfully",
@@ -2118,6 +2115,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "submitAssignmentCorrection": MessageLookupByLibrary.simpleMessage(
       "Grade Submission",
     ),
+    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
+      "Submit registration request",
+    ),
     "submitRequest": MessageLookupByLibrary.simpleMessage("Submit Request"),
     "submitted": MessageLookupByLibrary.simpleMessage("Submitted"),
     "submittedBadge": MessageLookupByLibrary.simpleMessage("Submitted"),
@@ -2319,6 +2319,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalSessions": MessageLookupByLibrary.simpleMessage("Total Sessions"),
     "totalStudents": MessageLookupByLibrary.simpleMessage("Total Students"),
     "trainingHours": m36,
+    "tryAgain": MessageLookupByLibrary.simpleMessage("Try again"),
     "tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
     "twelveHoursPlan": MessageLookupByLibrary.simpleMessage("12-hour package"),
     "twentyHoursPlan": MessageLookupByLibrary.simpleMessage("20-hour package"),

@@ -158,6 +158,7 @@
     "creditCard": "Credit Card",
     "tabbyTamara": "Split your bill with Tamara",
     "goToPayment": "Proceed to Payment",
+    "payWithTamara": "Pay with Tamara",
     "@packageCalculation": {
         "placeholders": {
             "price": {},
@@ -1289,6 +1290,7 @@
     "chatTitleFallback": "Conversation",
     "reviewRequest": "Review request",
     "submitRegistrationRequest": "Submit registration request",
-    "registrationRequestSuccessMessage": "The registration request was sent successfully. Administration will contact you via WhatsApp to complete the subscription and activation.",
+    "registrationRequestSuccessMessage": "Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.",
+    "backToLogin": "Back to login",
     "done": "Done"
 }

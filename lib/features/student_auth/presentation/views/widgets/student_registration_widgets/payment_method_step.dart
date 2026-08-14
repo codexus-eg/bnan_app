@@ -3,6 +3,10 @@ import 'package:bnan_app/features/student_auth/presentation/views/widgets/studen
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
@@ -13,7 +17,8 @@ class PaymentMethodStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = RegisterCubit.get(context);
-    final paymentSummary = context.watch<TamaraPaymentCubit>().paymentSummary;
+    final paymentCubit = context.watch<TamaraPaymentCubit>();
+    final paymentSummary = paymentCubit.paymentSummary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -41,6 +46,16 @@ class PaymentMethodStep extends StatelessWidget {
         ],
         const SizedBox(height: 16),
         const PaymentMethodsOptions(),
+        if (paymentCubit.state is TamaraPaymentAbandoned) ...[
+          const SizedBox(height: 12),
+          Text(
+            S.of(context).parentPaymentFailed,
+            textAlign: TextAlign.center,
+            style: StylesManager.styleRegular14(
+              context,
+            ).copyWith(color: ColorManager.red),
+          ),
+        ],
       ],
     );
   }

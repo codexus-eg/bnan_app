@@ -1184,6 +1184,16 @@ class S {
     );
   }
 
+  /// `Pay with Tamara`
+  String get payWithTamara {
+    return Intl.message(
+      'Pay with Tamara',
+      name: 'payWithTamara',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter {fieldName}`
   String fieldIsRequired(Object fieldName) {
     return Intl.message(
@@ -10394,24 +10404,40 @@ class S {
     );
   }
 
-  String get reviewRequest =>
-      Intl.message('Review request', name: 'reviewRequest', desc: '', args: []);
+  /// `Review request`
+  String get reviewRequest {
+    return Intl.message(
+      'Review request',
+      name: 'reviewRequest',
+      desc: '',
+      args: [],
+    );
+  }
 
-  String get submitRegistrationRequest => Intl.message(
-    'Submit registration request',
-    name: 'submitRegistrationRequest',
-    desc: '',
-    args: [],
-  );
+  /// `Submit registration request`
+  String get submitRegistrationRequest {
+    return Intl.message(
+      'Submit registration request',
+      name: 'submitRegistrationRequest',
+      desc: '',
+      args: [],
+    );
+  }
 
-  String get registrationRequestSuccessMessage => Intl.message(
-    'The registration request was sent successfully. Administration will contact you via WhatsApp to complete the subscription and activation.',
-    name: 'registrationRequestSuccessMessage',
-    desc: '',
-    args: [],
-  );
+  /// `Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.`
+  String get registrationRequestSuccessMessage {
+    return Intl.message(
+      'Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.',
+      name: 'registrationRequestSuccessMessage',
+      desc: '',
+      args: [],
+    );
+  }
 
-  String get done => Intl.message('Done', name: 'done', desc: '', args: []);
+  /// `Done`
+  String get done {
+    return Intl.message('Done', name: 'done', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

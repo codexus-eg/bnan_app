@@ -23,12 +23,7 @@ class SubjectsList extends StatelessWidget {
         final isLoading = state is GetSubjectsLoading;
 
         if (state is GetSubjectsInitial) {
-          return Text(
-            S.of(context).selectGrade,
-            style: StylesManager.styleRegular14(
-              context,
-            ).copyWith(color: ColorManager.grey7D7D),
-          );
+          return const SizedBox.shrink();
         }
 
         if (state is GetSubjectsFailure) {

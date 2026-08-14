@@ -72,6 +72,7 @@ void main() {
     );
     final cards = find.byType(SubscriptionPlanCard);
     expect(tester.getSize(cards.at(0)), tester.getSize(cards.at(1)));
+    expect(tester.getSize(cards.at(0)).height, lessThanOrEqualTo(280));
     expect(tester.takeException(), isNull);
   });
 }

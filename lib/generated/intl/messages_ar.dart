@@ -313,9 +313,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم حفظ الشهادة بنجاح",
     ),
-    "savingCertificate": MessageLookupByLibrary.simpleMessage(
-      "جاري حفظ الشهادة...",
-    ),
     "certificateUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم تعديل الشهادة بنجاح",
     ),
@@ -347,14 +344,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
     "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
-    "done": MessageLookupByLibrary.simpleMessage("تم"),
-    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلب التسجيل بنجاح. ستتواصل معك الإدارة عبر واتساب لاستكمال إجراءات الاشتراك والتفعيل.",
-    ),
-    "reviewRequest": MessageLookupByLibrary.simpleMessage("مراجعة الطلب"),
-    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
-      "إرسال طلب التسجيل",
-    ),
     "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
       "تحقق من بريدك الإلكتروني ",
     ),
@@ -557,6 +546,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discountType": MessageLookupByLibrary.simpleMessage("النوع"),
     "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
     "doNotHaveAccount": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
+    "done": MessageLookupByLibrary.simpleMessage("تم"),
     "download": MessageLookupByLibrary.simpleMessage("تحميل"),
     "downloadPdf": MessageLookupByLibrary.simpleMessage("تحميل PDF"),
     "dueFriday": MessageLookupByLibrary.simpleMessage("حتى الجمعة"),
@@ -683,7 +673,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم حفظ الملف بنجاح",
     ),
-    "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
     "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "يرجى ملء جميع الحقول المطلوبة.",
     ),
@@ -1400,6 +1389,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
       "كلمتا المرور غير متطابقتين.",
     ),
+    "payWithTamara": MessageLookupByLibrary.simpleMessage("الدفع مع تمارا"),
     "paymentCompleted": MessageLookupByLibrary.simpleMessage("تم الدفع"),
     "paymentConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم تأكيد الدفع بنجاح",
@@ -1667,6 +1657,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
     "registrationRequestRejectedSuccessfully":
         MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
+    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
+      "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة.",
+    ),
     "registrationRequests": MessageLookupByLibrary.simpleMessage(
       "طلبات التسجيل",
     ),
@@ -1744,6 +1737,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "reviewPaidRequests": MessageLookupByLibrary.simpleMessage(
       "عرض طلبات الدفع",
     ),
+    "reviewRequest": MessageLookupByLibrary.simpleMessage("مراجعة الطلب"),
     "reviews": MessageLookupByLibrary.simpleMessage("التقييمات"),
     "rewardPoints": MessageLookupByLibrary.simpleMessage("نقاط المكافآت"),
     "rewards": MessageLookupByLibrary.simpleMessage("مكافآت"),
@@ -1781,7 +1775,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveAmount": m28,
     "saveChanges": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
     "savedInLocation": m29,
-    "tryAgain": MessageLookupByLibrary.simpleMessage("حاول مرة أخرى"),
+    "savingCertificate": MessageLookupByLibrary.simpleMessage(
+      "جاري حفظ الشهادة...",
+    ),
+    "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
     "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
     "scheduleCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تمت إضافة الجدول بنجاح",
@@ -1996,6 +1993,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "submitAssignmentCorrection": MessageLookupByLibrary.simpleMessage(
       "تصحيح تسليم",
     ),
+    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
+      "إرسال طلب التسجيل",
+    ),
     "submitRequest": MessageLookupByLibrary.simpleMessage("إرسال الطلب"),
     "submitted": MessageLookupByLibrary.simpleMessage("مسلم"),
     "submittedBadge": MessageLookupByLibrary.simpleMessage("مرفوع"),
@@ -2191,6 +2191,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalSessions": MessageLookupByLibrary.simpleMessage("إجمالي الحصص"),
     "totalStudents": MessageLookupByLibrary.simpleMessage("إجمالي الطلاب"),
     "trainingHours": m36,
+    "tryAgain": MessageLookupByLibrary.simpleMessage("حاول مرة أخرى"),
     "tuesday": MessageLookupByLibrary.simpleMessage("الثلاثاء"),
     "twelveHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 12 ساعة"),
     "twentyHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 20 ساعة"),

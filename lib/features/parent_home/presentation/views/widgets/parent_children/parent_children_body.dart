@@ -92,7 +92,11 @@ class ParentChildrenBody extends StatelessWidget {
       Routes.parentAddChild,
       extra: args,
     );
-    if (result == ParentFlowResult.completed && context.mounted) {
+    if ({
+          ParentFlowResult.completed,
+          ParentFlowResult.pendingReview,
+        }.contains(result) &&
+        context.mounted) {
       await Future.wait([
         context.read<GetParentChildrenCubit>().getParentChildren(),
         context.read<DashboardCubit>().refresh(),

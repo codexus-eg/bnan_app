@@ -7,9 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TamaraCheckoutLaunchResult {
-  const TamaraCheckoutLaunchResult({required this.opened});
+  const TamaraCheckoutLaunchResult({required this.opened, this.outcome});
 
   final bool opened;
+  final TamaraSdkOutcome? outcome;
 }
 
 abstract class TamaraCheckoutLauncher {
@@ -39,8 +40,11 @@ abstract class TamaraCheckoutLauncher {
         ),
       );
       if (onOpened != null) unawaited(_notifyOpened(onOpened));
-      await checkout;
-      return const TamaraCheckoutLaunchResult(opened: true);
+      final outcome = await checkout;
+      return TamaraCheckoutLaunchResult(
+        opened: true,
+        outcome: outcome ?? TamaraSdkOutcome.cancel,
+      );
     } catch (error) {
       if (kDebugMode) {
         debugPrint('[TamaraCheckout] SDK unavailable: ${error.runtimeType}');

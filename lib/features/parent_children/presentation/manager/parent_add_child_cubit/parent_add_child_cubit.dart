@@ -233,6 +233,19 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     ),
   );
 
+  void checkoutClosed() {
+    if (state.phase != ParentAddChildPhase.processingPayment) return;
+    _attempt.startNew();
+    emit(
+      state.copyWith(
+        phase: ParentAddChildPhase.failure,
+        paymentStatus: PaymentStatus.cancelled,
+        shouldOpenCheckout: false,
+        errorMessage: S.current.parentPaymentFailed,
+      ),
+    );
+  }
+
   void reopenCheckout() {
     if (state.checkoutUrl?.isNotEmpty == true) {
       emit(state.copyWith(shouldOpenCheckout: true, errorMessage: null));

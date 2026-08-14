@@ -111,8 +111,16 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       ),
       GoRoute(
         path: Routes.subscription,
+        redirect: (_, state) =>
+            state.extra is CurriculumCardModel ? null : Routes.curriculum,
         pageBuilder: (context, state) {
-          final curriculum = state.extra as CurriculumCardModel;
+          final curriculum = state.extra;
+          if (curriculum is! CurriculumCardModel) {
+            return buildTransitionPages(
+              child: const SizedBox.shrink(),
+              key: state.pageKey,
+            );
+          }
           return buildTransitionPages(
             child: BlocProvider(
               create: (_) =>
@@ -130,8 +138,16 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       ),
       GoRoute(
         path: Routes.studentRegistration,
+        redirect: (_, state) =>
+            state.extra is RegisterFlowArgsModel ? null : Routes.curriculum,
         pageBuilder: (context, state) {
-          final args = state.extra as RegisterFlowArgsModel;
+          final args = state.extra;
+          if (args is! RegisterFlowArgsModel) {
+            return buildTransitionPages(
+              child: const SizedBox.shrink(),
+              key: state.pageKey,
+            );
+          }
           return buildTransitionPages(
             child: MultiBlocProvider(
               providers: [

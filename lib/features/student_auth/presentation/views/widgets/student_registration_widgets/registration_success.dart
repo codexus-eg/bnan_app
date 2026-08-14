@@ -22,7 +22,7 @@ class RegistrationSuccess extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           CustomAppButton(
-            text: S.of(context).done,
+            text: S.of(context).backToLogin,
             onPressed: () => MyNavigator.goToOffAll(context, Routes.logIn),
           ),
         ],
