@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:bnan_app/core/cache/cache_helper.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
@@ -16,8 +20,12 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
 
   final List<ChatMessageModel> _messages = [];
   final List<VoidCallback> _listenerDisposers = [];
+  final Set<String> _arrivedDuringInitialLoadIds = {};
 
   String? _currentRoomId;
+  String? _firstNewMessageId;
+  DateTime? _previousLastOpenedAt;
+  bool _initialHistoryResolved = false;
 
   Future<void> initializeChat({required String roomId}) async {
     if (isClosed) return;
@@ -25,6 +33,10 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     if (normalizedRoomId.isEmpty) return;
 
     _currentRoomId = normalizedRoomId;
+    _firstNewMessageId = null;
+    _initialHistoryResolved = false;
+    _arrivedDuringInitialLoadIds.clear();
+    _previousLastOpenedAt = _readLastOpened(normalizedRoomId);
     notifications?.enterRoom(normalizedRoomId);
     _messages.clear();
 
@@ -57,8 +69,12 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
       },
       (response) {
         _mergeHistory(response.messages);
-
+        if (!_initialHistoryResolved) {
+          _initialHistoryResolved = true;
+          _firstNewMessageId = _findFirstNewMessageId();
+        }
         _emitMessages();
+        unawaited(_saveLatestMessageTimestamp(roomId));
       },
     );
   }
@@ -79,10 +95,15 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
 
   void _addMessage(ChatMessageModel message) {
     if (!_belongsToCurrentRoom(message)) return;
+    if (!_initialHistoryResolved && message.id.trim().isNotEmpty) {
+      _arrivedDuringInitialLoadIds.add(message.id.trim());
+    }
 
     _upsert(_messages, message);
 
     _emitMessages();
+    final roomId = _currentRoomId;
+    if (roomId != null) unawaited(_saveLatestMessageTimestamp(roomId));
   }
 
   void _editMessage(ChatMessageModel updatedMessage) {
@@ -100,17 +121,96 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   }
 
   void _deleteMessage(String messageId) {
-    _messages.removeWhere((message) => message.id == messageId);
-
+    _markMessagesDeleted({messageId});
     _emitMessages();
+  }
+
+  Future<String?> deleteMessages({
+    required String roomId,
+    required Iterable<String> messageIds,
+  }) async {
+    final ids = messageIds
+        .map((id) => id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .take(50)
+        .toList(growable: false);
+    if (ids.isEmpty) return null;
+
+    final result = await chatRepo.deleteMessages(
+      roomId: roomId,
+      messageIds: ids,
+    );
+    if (isClosed) return null;
+    return result.fold((failure) => failure.message, (_) {
+      _markMessagesDeleted(ids.toSet());
+      _emitMessages();
+      return null;
+    });
   }
 
   void _emitMessages() {
     if (isClosed) return;
     emit(
-      GetRoomMessagesSuccess(messages: List<ChatMessageModel>.from(_messages)),
+      GetRoomMessagesSuccess(
+        messages: List<ChatMessageModel>.from(_messages),
+        firstNewMessageId: _firstNewMessageId,
+      ),
     );
   }
+
+  void _markMessagesDeleted(Set<String> messageIds) {
+    final ids = messageIds.map((id) => id.trim()).toSet();
+    for (var index = 0; index < _messages.length; index++) {
+      final message = _messages[index];
+      if (ids.contains(message.id.trim()) && !message.deletedForEveryone) {
+        _messages[index] = message.markDeleted();
+      }
+    }
+  }
+
+  String? _findFirstNewMessageId() {
+    final lastOpened = _previousLastOpenedAt;
+    if (lastOpened == null) return null;
+    final currentUserId = SessionManager.instance.userId ?? '';
+    for (final message in _messages) {
+      final createdAt = message.createdAt;
+      if (createdAt != null &&
+          createdAt.isAfter(lastOpened) &&
+          !message.deletedForEveryone &&
+          !_arrivedDuringInitialLoadIds.contains(message.id.trim()) &&
+          !message.isMine(currentUserId)) {
+        return message.id;
+      }
+    }
+    return null;
+  }
+
+  DateTime? _readLastOpened(String roomId) {
+    try {
+      final value = CacheHelper.getData(key: _lastOpenedKey(roomId));
+      return DateTime.tryParse(value?.toString() ?? '');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> _saveLatestMessageTimestamp(String roomId) async {
+    final timestamps = _messages
+        .map((message) => message.createdAt)
+        .whereType<DateTime>();
+    if (timestamps.isEmpty) return;
+    final latest = timestamps.reduce((a, b) => a.isAfter(b) ? a : b);
+    try {
+      await CacheHelper.saveData(
+        key: _lastOpenedKey(roomId),
+        value: latest.toUtc().toIso8601String(),
+      );
+    } catch (_) {}
+  }
+
+  String _lastOpenedKey(String roomId) =>
+      'chat_last_opened_${SessionManager.instance.userId ?? 'guest'}_$roomId';
 
   void _mergeHistory(List<ChatMessageModel> history) {
     final liveMessages = List<ChatMessageModel>.from(_messages);

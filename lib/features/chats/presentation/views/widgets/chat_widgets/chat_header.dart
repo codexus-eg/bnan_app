@@ -4,6 +4,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChatHeader extends StatelessWidget {
@@ -15,6 +16,10 @@ class ChatHeader extends StatelessWidget {
     this.classroomId,
     this.currentUserRole,
     this.onMessageTarget,
+    this.selectedCount = 0,
+    this.isDeleting = false,
+    this.onCancelSelection,
+    this.onDeleteSelection,
   });
   final String chatTitle;
   final String roomId;
@@ -22,6 +27,10 @@ class ChatHeader extends StatelessWidget {
   final String? classroomId;
   final String? currentUserRole;
   final ValueChanged<String>? onMessageTarget;
+  final int selectedCount;
+  final bool isDeleting;
+  final VoidCallback? onCancelSelection;
+  final VoidCallback? onDeleteSelection;
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +56,43 @@ class ChatHeader extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => MyNavigator.pop(context),
+              onPressed: selectedCount > 0
+                  ? onCancelSelection
+                  : () => MyNavigator.pop(context),
               icon: Icon(
-                isRtl ? Icons.arrow_back : Icons.arrow_forward,
+                selectedCount > 0
+                    ? Icons.close
+                    : isRtl
+                    ? Icons.arrow_back
+                    : Icons.arrow_forward,
                 color: ColorManager.white,
               ),
             ),
-            Expanded(child: UserInfo(chatTitle: chatTitle)),
-            if (ClassroomDocumentsAccess.canMessages(
+            Expanded(
+              child: selectedCount > 0
+                  ? Text(
+                      '$selectedCount ${S.of(context).selectedMessagesLabel}',
+                      style: const TextStyle(color: ColorManager.white),
+                    )
+                  : UserInfo(chatTitle: chatTitle),
+            ),
+            if (selectedCount > 0)
+              IconButton(
+                onPressed: isDeleting ? null : onDeleteSelection,
+                icon: isDeleting
+                    ? const SizedBox.square(
+                        dimension: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: ColorManager.white,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.delete_outline,
+                        color: ColorManager.white,
+                      ),
+              )
+            else if (ClassroomDocumentsAccess.canMessages(
               roomType: roomType,
               roomId: roomId,
               role: currentUserRole,

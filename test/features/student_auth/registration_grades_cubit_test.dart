@@ -27,8 +27,16 @@ void main() {
 
 GradesResponseModel _response(String id) => GradesResponseModel(
   success: true,
-  length: 1,
-  data: [GradeModel(id: id, name: id, isActive: true, subjects: const [])],
+  length: 2,
+  data: [
+    GradeModel(id: id, name: id, isActive: true, subjects: const []),
+    const GradeModel(
+      id: 'inactive',
+      name: 'Inactive',
+      isActive: false,
+      subjects: [],
+    ),
+  ],
 );
 
 class _Repo implements AuthRepo {

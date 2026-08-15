@@ -10472,6 +10472,30 @@ class S {
   String get supportBadge =>
       Intl.message('Support', name: 'supportBadge', args: []);
 
+  String get selectedMessagesLabel =>
+      Intl.message('selected', name: 'selectedMessagesLabel', args: []);
+
+  String get deleteMessageQuestion => Intl.message(
+    'Do you want to delete this message?',
+    name: 'deleteMessageQuestion',
+    args: [],
+  );
+
+  String get deleteSelectedMessagesQuestion => Intl.message(
+    'Do you want to delete the selected messages?',
+    name: 'deleteSelectedMessagesQuestion',
+    args: [],
+  );
+
+  String get deletedMessage => Intl.message(
+    'This message was deleted',
+    name: 'deletedMessage',
+    args: [],
+  );
+
+  String get newMessages =>
+      Intl.message('New messages', name: 'newMessages', args: []);
+
   /// `Review request`
   String get reviewRequest {
     return Intl.message(

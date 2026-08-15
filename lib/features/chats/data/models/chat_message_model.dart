@@ -83,4 +83,22 @@ class ChatMessageModel {
 
     return room?.toString() ?? '';
   }
+
+  bool isMine(String currentUserId) {
+    final userId = currentUserId.trim();
+    return userId.isNotEmpty && sender.id.trim() == userId;
+  }
+
+  ChatMessageModel markDeleted() => ChatMessageModel(
+    id: id,
+    roomId: roomId,
+    sender: sender,
+    text: '',
+    attachments: const [],
+    messageType: messageType,
+    deletedForEveryone: true,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    editedAt: editedAt,
+  );
 }

@@ -464,6 +464,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Search conversations",
     ),
     "supportBadge": MessageLookupByLibrary.simpleMessage("Support"),
+    "selectedMessagesLabel": MessageLookupByLibrary.simpleMessage("selected"),
+    "deleteMessageQuestion": MessageLookupByLibrary.simpleMessage(
+      "Do you want to delete this message?",
+    ),
+    "deleteSelectedMessagesQuestion": MessageLookupByLibrary.simpleMessage(
+      "Do you want to delete the selected messages?",
+    ),
+    "deletedMessage": MessageLookupByLibrary.simpleMessage(
+      "This message was deleted",
+    ),
+    "newMessages": MessageLookupByLibrary.simpleMessage("New messages"),
     "contactWhatsApp": MessageLookupByLibrary.simpleMessage(
       "Contact via WhatsApp",
     ),

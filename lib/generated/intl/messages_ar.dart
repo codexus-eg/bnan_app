@@ -433,6 +433,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "البحث في المحادثات",
     ),
     "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
+    "selectedMessagesLabel": MessageLookupByLibrary.simpleMessage("محددة"),
+    "deleteMessageQuestion": MessageLookupByLibrary.simpleMessage(
+      "هل تريد حذف هذه الرسالة؟",
+    ),
+    "deleteSelectedMessagesQuestion": MessageLookupByLibrary.simpleMessage(
+      "هل تريد حذف الرسائل المحددة؟",
+    ),
+    "deletedMessage": MessageLookupByLibrary.simpleMessage(
+      "تم حذف هذه الرسالة",
+    ),
+    "newMessages": MessageLookupByLibrary.simpleMessage("رسائل جديدة"),
     "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
     "copiedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم النسخ بنجاح",

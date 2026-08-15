@@ -34,4 +34,9 @@ abstract class ChatRepo {
   });
 
   Future<Either<Failure, void>> deleteMessage({required String messageId});
+
+  Future<Either<Failure, void>> deleteMessages({
+    required String roomId,
+    required List<String> messageIds,
+  });
 }

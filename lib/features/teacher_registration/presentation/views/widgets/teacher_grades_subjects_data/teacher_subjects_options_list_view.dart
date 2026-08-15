@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/student_auth/data/models/subject_model.dart';
+import 'package:bnan_app/features/grades_management/data/models/grade_model.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
 import 'package:bnan_app/core/shared_widget/custom_option.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/views/widgets/teacher_shared_widgets/teacher_yes_no_question/teacher_question_title.dart';
@@ -10,13 +10,14 @@ class TeacherSubjectsOptionsListView extends StatelessWidget {
     super.key,
     required this.gradeId,
     required this.subjects,
-    required this.teacherCubit, required this.curriculumName,
+    required this.teacherCubit,
+    required this.curriculumName,
   });
   final String gradeId;
-  final List<SubjectModel> subjects;
+  final List<GradeSubjectModel> subjects;
   final TeacherRegistrationCubit teacherCubit;
-    final String curriculumName;
-  
+  final String curriculumName;
+
   @override
   Widget build(BuildContext context) {
     if (subjects.isEmpty) {
@@ -25,10 +26,12 @@ class TeacherSubjectsOptionsListView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         TeacherQuestionTitle(
-              question: S.of(context).pleaseChooseCurriculumSubjects(curriculumName),
-              isRequired: true,
-            ),
+        TeacherQuestionTitle(
+          question: S
+              .of(context)
+              .pleaseChooseCurriculumSubjects(curriculumName),
+          isRequired: true,
+        ),
         const SizedBox(height: 8),
         GridView.builder(
           shrinkWrap: true,

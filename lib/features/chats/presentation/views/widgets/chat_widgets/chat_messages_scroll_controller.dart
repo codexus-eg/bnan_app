@@ -12,6 +12,8 @@ class _ChatMessagesScrollController {
     if (!isLoading) _positionInitially(messages);
   }
 
+  void claimInitialPosition() => _initialPositioned = true;
+
   void update({
     required bool wasLoading,
     required bool isLoading,

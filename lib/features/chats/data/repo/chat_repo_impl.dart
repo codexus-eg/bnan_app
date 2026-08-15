@@ -177,4 +177,23 @@ class ChatRepoImpl implements ChatRepo {
       return Left(Failure(message: S.current.unexpectedError));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteMessages({
+    required String roomId,
+    required List<String> messageIds,
+  }) async {
+    try {
+      await apiConsumer.delete(
+        EndPoints.deleteRoomMessages(roomId),
+        data: {'messageIds': messageIds},
+        isProtected: true,
+      );
+      return const Right(null);
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
 }

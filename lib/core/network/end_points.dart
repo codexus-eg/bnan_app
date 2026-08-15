@@ -163,6 +163,10 @@ abstract class EndPoints {
     return '/chats/rooms/$roomId/messages';
   }
 
+  static String deleteRoomMessages(String roomId) {
+    return '/chats/rooms/$roomId/messages';
+  }
+
   // Chats - Messages
 
   static String editMessage(String messageId) {

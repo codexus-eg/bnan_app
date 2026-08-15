@@ -1,4 +1,3 @@
-library tamara_sdk;
 
 import 'dart:core';
 import 'dart:io';
