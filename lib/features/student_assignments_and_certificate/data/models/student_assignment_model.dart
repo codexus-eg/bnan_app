@@ -54,7 +54,7 @@ class AssignmentModel {
     final submitted = json['submitted'] ?? false;
     final grade = json['grade'];
     final totalPoints = json['totalPoints'] ?? 0;
-    final isCompleted = submitted == true && grade != null && grade > 0;
+    final isCompleted = submitted == true;
 
     return AssignmentModel(
       id: json['id'] ?? '',

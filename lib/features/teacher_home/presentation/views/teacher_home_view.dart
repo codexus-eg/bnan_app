@@ -28,8 +28,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   late int currentIndex;
   bool _isLoggingOut = false;
 
-  static const int notificationsDrawerIndex = 12;
-  static const int plansDrawerIndex = 10;
+  static const int notificationsDrawerIndex = 7;
+  static const int plansDrawerIndex = 6;
 
   @override
   void initState() {
@@ -59,7 +59,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   void _onDrawerItemTap(int index) {
     final drawerItemCount = teacherDrawerItems(context).length;
     final scheduleRoutes = teacherScheduleRoutes();
-    const scheduleStartIndex = 2;
+    const scheduleStartIndex = 1;
     final scheduleIndex = index - scheduleStartIndex;
 
     _closeDrawer();
@@ -94,17 +94,17 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _navigateFromDrawer(int index) {
-    if (index == 4) {
+    if (index == 2) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
-    } else if (index == 6) {
+    } else if (index == 4) {
       MyNavigator.goTo(context, Routes.teacherRegistrationRequest);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == plansDrawerIndex) {
       MyNavigator.goTo(context, Routes.plans);
-    } else if (index == 13) {
+    } else if (index == 8) {
       MyNavigator.goTo(context, Routes.attendance);
-    } else if (index == 15) {
+    } else if (index == 10) {
       MyNavigator.goTo(context, Routes.weeklyIdealStudents);
     }
   }
@@ -161,11 +161,10 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 }
 
-const teacherPayrollTabIndex = 3;
+const teacherPayrollTabIndex = 2;
 const teacherDrawerToBottomNavIndex = <int, int>{
   0: 0,
   3: 1,
-  5: 2,
-  8: teacherPayrollTabIndex,
-  14: 4,
+  5: teacherPayrollTabIndex,
+  9: 3,
 };

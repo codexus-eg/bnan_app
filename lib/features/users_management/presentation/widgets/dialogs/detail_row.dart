@@ -40,17 +40,23 @@ class DetailRow extends StatelessWidget {
             ],
           ),
           if (value != null) ...[
-            Spacer(),
-            Row(
-              children: [
-                if (showCopy == true) ...[CopyIconButton(onPressed: onCopy)],
-                Text(
-                  value!,
-                  style: StylesManager.styleRegular10(
-                    context,
-                  ).copyWith(color: ColorManager.greyA8AF),
-                ),
-              ],
+            const SizedBox(width: 8),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (showCopy == true) CopyIconButton(onPressed: onCopy),
+                  Flexible(
+                    child: Text(
+                      value!,
+                      textAlign: TextAlign.end,
+                      style: StylesManager.styleRegular10(
+                        context,
+                      ).copyWith(color: ColorManager.greyA8AF),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ],

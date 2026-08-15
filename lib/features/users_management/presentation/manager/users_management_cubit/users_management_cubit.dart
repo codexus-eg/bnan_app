@@ -305,6 +305,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
       updatedAt: user.updatedAt,
       curriculum: user.curriculum,
       grade: user.grade,
+      registrationMode: user.registrationMode,
     );
   }
 

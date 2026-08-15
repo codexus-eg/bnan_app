@@ -29,17 +29,19 @@ class CardHeader extends StatelessWidget {
                   context,
                 ).copyWith(color: ColorManager.mainColor14),
               ),
-              const SizedBox(height: 4),
-              Text(
-               phone,
-                style: StylesManager.styleRegular14(
-                  context,
-                ).copyWith(color: ColorManager.greyA8AF),
-              ),
+              if (phone.trim().isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  phone,
+                  style: StylesManager.styleRegular14(
+                    context,
+                  ).copyWith(color: ColorManager.greyA8AF),
+                ),
+              ],
             ],
           ),
         ),
-        Customship(subtitle),
+        if (subtitle.trim().isNotEmpty) Customship(subtitle),
       ],
     );
   }

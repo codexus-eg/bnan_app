@@ -16,6 +16,7 @@ class ScheduleCell extends StatelessWidget {
     this.padding = EdgeInsets.zero,
     this.onTap,
     this.isLoading = false,
+    this.isLive = false,
   });
 
   final String text;
@@ -28,12 +29,15 @@ class ScheduleCell extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
   final bool isLoading;
+  final bool isLive;
 
   @override
   Widget build(BuildContext context) {
     final bool hasText = text.isNotEmpty;
 
-    final Color bgColor = _getBackgroundColor(hasText);
+    final Color bgColor = isLive
+        ? ColorManager.redFFF
+        : _getBackgroundColor(hasText);
     final Color textColor = _getTextColor(hasText);
 
     return CustomTableCell(
@@ -49,13 +53,29 @@ class ScheduleCell extends StatelessWidget {
                   dimension: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  maxLines: maxLines,
-                  style: StylesManager.styleBold12(
-                    context,
-                  ).copyWith(color: textColor, height: 1.1),
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        maxLines: maxLines,
+                        overflow: TextOverflow.ellipsis,
+                        style: StylesManager.styleBold12(
+                          context,
+                        ).copyWith(color: textColor, height: 1.1),
+                      ),
+                    ),
+                    if (isLive) ...[
+                      const SizedBox(height: 2),
+                      const Icon(
+                        Icons.videocam_rounded,
+                        size: 16,
+                        color: ColorManager.redD8,
+                      ),
+                    ],
+                  ],
                 ),
         ),
       ),

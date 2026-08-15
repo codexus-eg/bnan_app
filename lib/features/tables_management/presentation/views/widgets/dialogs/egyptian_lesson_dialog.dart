@@ -7,6 +7,7 @@ import 'package:bnan_app/core/shared_widget/dialogs/custom_delete_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/delete_lesson_button.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_day_dropdown.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/lesson_start_time_field.dart';
@@ -34,7 +35,7 @@ class EgyptianLessonDialog extends StatefulWidget {
 }
 
 class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
-  String? classroomSubjectId, startTime, localError;
+  String? classroomSubjectId, startTime, endTime, localError;
   late String day;
   late final TextEditingController classroom;
 
@@ -48,6 +49,7 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
       day = cubit.addableDays.firstOrNull ?? day;
     }
     startTime = widget.lesson?.startTime;
+    endTime = widget.lesson?.endTime;
     classroomSubjectId = widget.lesson?.classroomSubjectId;
     if (classroomSubjectId == null) {
       for (final item in cubit.state.subjects) {
@@ -138,7 +140,13 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
             const SizedBox(height: 16),
             LessonStartTimeField(
               value: startTime,
-              onTap: saving ? () {} : _pickTime,
+              onTap: saving ? () {} : () => _pickTime(end: false),
+            ),
+            const SizedBox(height: 16),
+            LessonStartTimeField(
+              value: endTime,
+              isEndTime: true,
+              onTap: saving ? () {} : () => _pickTime(end: true),
             ),
             if (error != null) ...[
               const SizedBox(height: 10),
@@ -170,8 +178,9 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
     );
   }
 
-  Future<void> _pickTime() async {
-    final parts = startTime?.split(':');
+  Future<void> _pickTime({required bool end}) async {
+    final selected = end ? endTime : startTime;
+    final parts = selected?.split(':');
     final initial = parts?.length == 2
         ? TimeOfDay(
             hour: int.tryParse(parts![0]) ?? 0,
@@ -187,12 +196,16 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
         '${value.hour.toString().padLeft(2, '0')}:'
         '${value.minute.toString().padLeft(2, '0')}';
     final cubit = context.read<EgyptianScheduleManagementCubit>();
-    if (widget.lesson == null && cubit.isPastStart(day, time)) {
+    if (!end && widget.lesson == null && cubit.isPastStart(day, time)) {
       setState(() => localError = S.of(context).scheduleTimeInPast);
       return;
     }
     setState(() {
-      startTime = time;
+      if (end) {
+        endTime = time;
+      } else {
+        startTime = time;
+      }
       localError = null;
       cubit.clearActionError();
     });
@@ -201,11 +214,16 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
   Future<void> _submit() async {
     final subjectId = classroomSubjectId;
     final time = startTime;
-    if (subjectId == null || time == null) {
+    final lessonEndTime = endTime;
+    if (subjectId == null || time == null || lessonEndTime == null) {
       debugPrint(
         'EDIT BLOCKED: ${subjectId == null ? 'classroomSubjectId null' : 'selectedTime null'}',
       );
       setState(() => localError = S.of(context).fillAllRequiredFields);
+      return;
+    }
+    if (!ScheduleTimeUtils.isEndAfter(time, lessonEndTime)) {
+      setState(() => localError = S.of(context).lessonEndTimeMustBeAfterStart);
       return;
     }
     final cubit = context.read<EgyptianScheduleManagementCubit>();
@@ -226,6 +244,7 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
       originalLessonId: widget.lesson?.id,
       classroomSubjectId: subjectId,
       startTime: time,
+      endTime: lessonEndTime,
     );
     debugPrint('EDIT CUBIT RESULT: $saved');
     if (saved && mounted) {

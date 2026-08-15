@@ -327,7 +327,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "chooseClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
-            "اختر المنهج الدراسي المناسب لأبنائك وابدأ رحلة التعليم معنا"),
+            "اختر المنهج الدراسي المناسب وابدأ رحلة التعليم معنا"),
         "chooseCurriculumIcon":
             MessageLookupByLibrary.simpleMessage("اختر أيقونة المنهج"),
         "chooseCurriculumType":
@@ -550,6 +550,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
         "endSession": MessageLookupByLibrary.simpleMessage("إنهاء الحصة"),
         "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
+        "lessonEndTimeMustBeAfterStart":
+            MessageLookupByLibrary.simpleMessage(
+                "وقت نهاية الحصة يجب أن يكون بعد وقت البداية"),
         "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
         "enterDiscountCode":
             MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),

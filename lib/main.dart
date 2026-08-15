@@ -10,11 +10,14 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  debugPaintBaselinesEnabled = false;
+  debugPaintSizeEnabled = false;
   if (kDebugMode) {
     await SecureCacheHelper.debugStorageTest();
   }

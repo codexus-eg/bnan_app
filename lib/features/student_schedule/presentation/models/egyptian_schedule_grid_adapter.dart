@@ -1,5 +1,6 @@
 import 'package:bnan_app/features/student_schedule/presentation/models/digital_schedule_grid_data.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 
 DigitalScheduleGridData adaptEgyptianSchedule(
   EgyptianScheduleWeek week, {
@@ -8,12 +9,17 @@ DigitalScheduleGridData adaptEgyptianSchedule(
 }) {
   final times = <String>{};
   final cells = <String, List<DigitalScheduleGridItem>>{};
+  final timeLabels = <String, String>{};
   for (final day in week.days) {
     final dayKey = _dayKey(DateTime.tryParse(day.date)?.weekday);
     if (dayKey == null) continue;
     for (final lesson in day.lessons) {
       if (lesson.startTime.isEmpty) continue;
       times.add(lesson.startTime);
+      timeLabels.putIfAbsent(
+        lesson.startTime,
+        () => ScheduleTimeUtils.range(lesson.startTime, lesson.endTime),
+      );
       cells
           .putIfAbsent('$dayKey|${lesson.startTime}', () => [])
           .add(
@@ -33,6 +39,7 @@ DigitalScheduleGridData adaptEgyptianSchedule(
     days: egyptianScheduleDays,
     times: times.toList()..sort(),
     cells: cells,
+    timeLabels: timeLabels,
   );
 }
 

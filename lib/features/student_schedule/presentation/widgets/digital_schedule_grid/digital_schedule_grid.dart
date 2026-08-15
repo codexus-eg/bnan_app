@@ -31,7 +31,7 @@ class DigitalScheduleGrid extends StatelessWidget {
               children: [
                 DigitalScheduleGridHeader(
                   title: S.of(context).time,
-                  times: data.times,
+                  times: data.times.map(data.timeLabel).toList(),
                 ),
                 ...data.days.map(
                   (day) => DigitalScheduleGridRow(

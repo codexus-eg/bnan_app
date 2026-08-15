@@ -339,6 +339,7 @@ class _EgyptianScheduleContent extends StatelessWidget {
     subjectName: item.subjectName,
     day: _dayName(item.date),
     startTime: item.startTime,
+    endTime: item.endTime,
     teacherName: item.teacherName,
   );
 

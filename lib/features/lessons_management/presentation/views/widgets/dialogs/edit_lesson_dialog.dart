@@ -18,7 +18,11 @@ class EditLessonDialog extends StatelessWidget {
   final LessonClassroomUiModel classroom;
   final LessonUiModel lesson;
   final Set<String> blockedDays;
-  final Future<bool> Function({required String day, required String startTime})
+  final Future<bool> Function({
+    required String day,
+    required String startTime,
+    required String endTime,
+  })
   onSave;
   final Future<bool> Function() onDelete;
 
@@ -36,6 +40,7 @@ class EditLessonDialog extends StatelessWidget {
               classroom: classroom,
               initialDay: lesson.day,
               initialTime: lesson.startTime,
+              initialEndTime: lesson.endTime,
               blockedDays: blockedDays,
               actionText: S.of(context).saveChanges,
               onSave: onSave,

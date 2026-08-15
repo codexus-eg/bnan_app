@@ -8,16 +8,18 @@ class LessonStartTimeField extends StatelessWidget {
     super.key,
     required this.value,
     required this.onTap,
+    this.isEndTime = false,
   });
 
   final String? value;
   final VoidCallback onTap;
+  final bool isEndTime;
 
   @override
   Widget build(BuildContext context) {
     return SchedulePickerField(
-      label: S.of(context).startTime,
-      hintText: S.of(context).startTime,
+      label: isEndTime ? S.of(context).endTime : S.of(context).startTime,
+      hintText: isEndTime ? S.of(context).endTime : S.of(context).startTime,
       value: value,
       icon: ImageManager.clockTenIcon,
       onTap: onTap,

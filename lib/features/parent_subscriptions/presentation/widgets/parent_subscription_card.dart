@@ -89,7 +89,7 @@ class ParentSubscriptionCard extends StatelessWidget {
         if (subscription.price != null)
           _line(
             context,
-            S.of(context).packagePrice,
+            S.of(context).adminSubjectRequestPrice,
             [
               _number(subscription.price!),
               if (subscription.currency?.trim().isNotEmpty == true)

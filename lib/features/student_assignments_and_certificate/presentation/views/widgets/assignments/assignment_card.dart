@@ -2,6 +2,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/student_assignment_model.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/widgets/assignments/assignment_card_actions_handler.dart';
+import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/widgets/assignments/assignment_attachment_preview.dart';
 import 'package:bnan_app/core/shared_widget/status_badge.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,10 @@ class AssignmentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _AssignmentCardHeader(assignment: assignment),
+          if (assignment.attachment.trim().isNotEmpty) ...[
+            const SizedBox(height: 8),
+            AssignmentAttachmentPreview(assignment: assignment),
+          ],
           const SizedBox(height: 8),
           AssignmentCardActionsHandler(
             assignment: assignment,

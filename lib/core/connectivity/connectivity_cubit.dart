@@ -5,17 +5,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ConnectivityCubit extends Cubit<ConnectivityState> {
-  ConnectivityCubit() : super(const ConnectivityInitial());
+  ConnectivityCubit() : super(const ConnectivityConnected());
 
+  final InternetConnection _connection = InternetConnection();
   StreamSubscription<InternetStatus>? _subscription;
   Future<void>? _pendingCheck;
   bool _completedInitialCheck = false;
+  bool _monitoringStarted = false;
 
   Future<void> startMonitoring() async {
-    await _subscription?.cancel();
+    if (_monitoringStarted) return;
+    _monitoringStarted = true;
     _completedInitialCheck = false;
-    _subscription = InternetConnection().onStatusChange.listen(_setStatus);
     await checkConnection();
+    if (isClosed) return;
+    _subscription = _connection.onStatusChange.listen(_setStatus);
   }
 
   Future<void> checkConnection() {
@@ -25,27 +29,26 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   }
 
   Future<void> _runCheck() async {
-    if (!isClosed) emit(const ConnectivityChecking());
-    var connected = false;
     try {
-      connected = await InternetConnection().hasInternetAccess;
-    } catch (_) {
-      connected = false;
-    }
-    if (!isClosed) {
+      final connected = await _connection.hasInternetAccess;
+      if (isClosed) return;
       _completedInitialCheck = true;
+      if ((connected && state is ConnectivityConnected) ||
+          (!connected && state is ConnectivityDisconnected)) {
+        return;
+      }
       emit(
         connected
             ? const ConnectivityConnected()
             : const ConnectivityDisconnected(),
       );
+    } catch (_) {
+      _completedInitialCheck = true;
     }
   }
 
   void _setStatus(InternetStatus status) {
-    if (isClosed || !_completedInitialCheck || state is ConnectivityChecking) {
-      return;
-    }
+    if (isClosed || !_completedInitialCheck) return;
     final connected = status == InternetStatus.connected;
     if ((connected && state is ConnectivityConnected) ||
         (!connected && state is ConnectivityDisconnected)) {

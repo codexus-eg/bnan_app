@@ -147,17 +147,27 @@ class GulfSchedule {
 }
 
 class GulfScheduleEntry {
-  const GulfScheduleEntry({required this.day, required this.startTime});
+  const GulfScheduleEntry({
+    required this.day,
+    required this.startTime,
+    this.endTime,
+  });
   final String day, startTime;
+  final String? endTime;
   bool get isValid => day.isNotEmpty && startTime.isNotEmpty;
 
   factory GulfScheduleEntry.fromJson(Map<String, dynamic> json) =>
       GulfScheduleEntry(
         day: _string(json['day']).toLowerCase(),
         startTime: _string(json['startTime']),
+        endTime: _nonEmpty(_string(json['endTime'])),
       );
 
-  Map<String, dynamic> toJson() => {'day': day, 'startTime': startTime};
+  Map<String, dynamic> toJson() => {
+    'day': day,
+    'startTime': startTime,
+    if (endTime != null) 'endTime': endTime,
+  };
 }
 
 Map<String, dynamic> _map(Object? value) =>

@@ -25,9 +25,21 @@ class NoInternetWidget extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: EmptyStateWidget(
-                  image: ImageManager.noInternet,
-                  title: S.of(context).noInternetConnection,
+                child: LayoutBuilder(
+                  builder: (context, constraints) => SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: SizedBox(
+                        height: 250,
+                        child: EmptyStateWidget(
+                          image: ImageManager.noInternet,
+                          title: S.of(context).noInternetConnection,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(

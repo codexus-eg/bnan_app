@@ -3,6 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/lessons_management/data/models/lesson_ui_model.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_state.dart';
@@ -22,14 +23,20 @@ class LessonForm extends StatefulWidget {
     required this.actionText,
     required this.onSave,
     this.initialTime,
+    this.initialEndTime,
     this.onDelete,
   });
 
   final LessonClassroomUiModel classroom;
   final String initialDay, actionText;
   final String? initialTime;
+  final String? initialEndTime;
   final Set<String> blockedDays;
-  final Future<bool> Function({required String day, required String startTime})
+  final Future<bool> Function({
+    required String day,
+    required String startTime,
+    required String endTime,
+  })
   onSave;
   final Future<bool> Function()? onDelete;
 
@@ -40,6 +47,7 @@ class LessonForm extends StatefulWidget {
 class _LessonFormState extends State<LessonForm> {
   late String day = widget.initialDay;
   late String? startTime = widget.initialTime;
+  late String? endTime = widget.initialEndTime;
   late final classroom = TextEditingController(text: widget.classroom.name);
   late final subject = TextEditingController(
     text: widget.classroom.subjectName,
@@ -53,8 +61,9 @@ class _LessonFormState extends State<LessonForm> {
     super.dispose();
   }
 
-  Future<void> _pickTime() async {
-    final parts = startTime?.split(':');
+  Future<void> _pickTime({required bool end}) async {
+    final selected = end ? endTime : startTime;
+    final parts = selected?.split(':');
     final initial = parts?.length == 2
         ? TimeOfDay(
             hour: int.tryParse(parts![0]) ?? 0,
@@ -66,10 +75,15 @@ class _LessonFormState extends State<LessonForm> {
       initialTime: initial,
     );
     if (!mounted || value == null) return;
+    final time =
+        '${value.hour.toString().padLeft(2, '0')}:'
+        '${value.minute.toString().padLeft(2, '0')}';
     setState(() {
-      startTime =
-          '${value.hour.toString().padLeft(2, '0')}:'
-          '${value.minute.toString().padLeft(2, '0')}';
+      if (end) {
+        endTime = time;
+      } else {
+        startTime = time;
+      }
       localError = null;
     });
   }
@@ -79,11 +93,19 @@ class _LessonFormState extends State<LessonForm> {
       setState(() => localError = S.of(context).duplicateScheduleDay);
       return;
     }
-    if (startTime == null) {
+    if (startTime == null || endTime == null) {
       setState(() => localError = S.of(context).fillAllRequiredFields);
       return;
     }
-    final saved = await widget.onSave(day: day, startTime: startTime!);
+    if (!ScheduleTimeUtils.isEndAfter(startTime!, endTime!)) {
+      setState(() => localError = S.of(context).lessonEndTimeMustBeAfterStart);
+      return;
+    }
+    final saved = await widget.onSave(
+      day: day,
+      startTime: startTime!,
+      endTime: endTime!,
+    );
     if (saved && mounted) Navigator.pop(context);
   }
 
@@ -138,7 +160,13 @@ class _LessonFormState extends State<LessonForm> {
             const SizedBox(height: 16),
             LessonStartTimeField(
               value: startTime,
-              onTap: state.isSaving ? () {} : _pickTime,
+              onTap: state.isSaving ? () {} : () => _pickTime(end: false),
+            ),
+            const SizedBox(height: 16),
+            LessonStartTimeField(
+              value: endTime,
+              isEndTime: true,
+              onTap: state.isSaving ? () {} : () => _pickTime(end: true),
             ),
             if (error != null) ...[
               const SizedBox(height: 10),

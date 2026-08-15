@@ -1,4 +1,7 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
@@ -50,12 +53,14 @@ class _WeeklyIdealStudentBodyState extends State<WeeklyIdealStudentBody> {
             onRetry: retry,
           );
         }
-        final sourceEmpty = source is PlansClassroomsEmpty;
-        final classrooms = source is PlansClassroomsSuccess
+        final sourceClassrooms = source is PlansClassroomsSuccess
             ? source.classrooms
-            : sourceEmpty
+            : source is PlansClassroomsEmpty
             ? const <PlanClassroomOption>[]
             : null;
+        final classrooms = _classroomsForCurrentRole(sourceClassrooms);
+        final sourceEmpty =
+            source is PlansClassroomsEmpty || classrooms?.isEmpty == true;
         if (classrooms != null) _syncClassrooms(classrooms);
         return _content(
           classrooms,
@@ -64,6 +69,18 @@ class _WeeklyIdealStudentBodyState extends State<WeeklyIdealStudentBody> {
         );
       },
     );
+  }
+
+  List<PlanClassroomOption>? _classroomsForCurrentRole(
+    List<PlanClassroomOption>? classrooms,
+  ) {
+    if (classrooms == null ||
+        SessionManager.instance.role != UserRole.teacher) {
+      return classrooms;
+    }
+    return classrooms
+        .where((item) => item.registrationMode == RegistrationMode.egyptian)
+        .toList(growable: false);
   }
 
   Widget _content(

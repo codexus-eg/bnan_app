@@ -121,8 +121,8 @@ class LessonsManagementBody extends StatelessWidget {
           classroom: _classroomUi(classroom),
           initialDay: cubit.state.selectedDay,
           blockedDays: classroom.entries.map((item) => item.day).toSet(),
-          onSave: ({required day, required startTime}) =>
-              cubit.saveEntry(day: day, startTime: startTime),
+          onSave: ({required day, required startTime, required endTime}) =>
+              cubit.saveEntry(day: day, startTime: startTime, endTime: endTime),
         ),
       ),
     );
@@ -145,11 +145,13 @@ class LessonsManagementBody extends StatelessWidget {
               .where((item) => item.day != lesson.day)
               .map((item) => item.day)
               .toSet(),
-          onSave: ({required day, required startTime}) => cubit.saveEntry(
-            originalDay: lesson.day,
-            day: day,
-            startTime: startTime,
-          ),
+          onSave: ({required day, required startTime, required endTime}) =>
+              cubit.saveEntry(
+                originalDay: lesson.day,
+                day: day,
+                startTime: startTime,
+                endTime: endTime,
+              ),
           onDelete: () => cubit.deleteEntry(lesson.day),
         ),
       ),
@@ -173,6 +175,7 @@ class LessonsManagementBody extends StatelessWidget {
         subjectName: classroom.subject?.name ?? '',
         day: entry.day,
         startTime: entry.startTime,
+        endTime: entry.endTime,
       );
 }
 

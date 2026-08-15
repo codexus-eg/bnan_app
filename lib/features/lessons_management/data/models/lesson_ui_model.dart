@@ -7,6 +7,7 @@ class LessonUiModel {
     required this.subjectName,
     required this.day,
     required this.startTime,
+    this.endTime,
     this.teacherName,
   });
 
@@ -17,9 +18,10 @@ class LessonUiModel {
   final String subjectName;
   final String day;
   final String startTime;
+  final String? endTime;
   final String? teacherName;
 
-  LessonUiModel copyWith({String? day, String? startTime}) {
+  LessonUiModel copyWith({String? day, String? startTime, String? endTime}) {
     return LessonUiModel(
       id: id,
       classroomId: classroomId,
@@ -28,6 +30,7 @@ class LessonUiModel {
       subjectName: subjectName,
       day: day ?? this.day,
       startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
       teacherName: teacherName,
     );
   }

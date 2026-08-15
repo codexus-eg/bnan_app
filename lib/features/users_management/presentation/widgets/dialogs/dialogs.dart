@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/helper/app_dialogs.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
@@ -11,9 +13,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserDialogs {
   static Future<void> showDetails(BuildContext context, UserItem user) {
+    final cubit = context.read<UsersManagementCubit>();
+    unawaited(cubit.getUserDetails(userId: user.id));
     return AppDialogs.show(
       context: context,
-      child: DetailsDialog(user: user),
+      child: BlocProvider.value(
+        value: cubit,
+        child: DetailsDialog(user: user),
+      ),
     );
   }
 

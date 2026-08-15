@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/features/tables_management/data/repo/egyptian_digital_schedule_repo.dart';
 import 'package:bnan_app/features/lessons_management/presentation/models/lesson_days.dart';
@@ -71,7 +72,6 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
 
   final EgyptianDigitalScheduleRepo repo;
   final String classroomId;
-  static final _timePattern = RegExp(r'^(?:[01]\d|2[0-3]):[0-5]\d$');
 
   Future<void> load() async {
     emit(state.copyWith(status: EgyptianScheduleStatus.loading, error: null));
@@ -219,14 +219,18 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
     String? originalLessonId,
     required String classroomSubjectId,
     required String startTime,
+    required String endTime,
   }) async {
     if (state.status == EgyptianScheduleStatus.saving ||
         classroomSubjectId.isEmpty ||
-        !_timePattern.hasMatch(startTime)) {
+        !ScheduleTimeUtils.isValid(startTime) ||
+        !ScheduleTimeUtils.isValid(endTime) ||
+        !ScheduleTimeUtils.isEndAfter(startTime, endTime)) {
       debugPrint(
         'EDIT BLOCKED: status=${state.status} '
         'classroomSubjectIdEmpty=${classroomSubjectId.isEmpty} '
-        'validTime=${_timePattern.hasMatch(startTime)}',
+        'validTimeRange='
+        '${ScheduleTimeUtils.isEndAfter(startTime, endTime)}',
       );
       return false;
     }
@@ -235,6 +239,7 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
     final updatedLesson = EgyptianLessonRequest(
       classroomSubjectId: classroomSubjectId,
       startTime: startTime,
+      endTime: endTime,
     );
     final lessons = <EgyptianLessonRequest>[];
     var replaced = false;
@@ -370,6 +375,7 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
     return EgyptianLessonRequest(
       classroomSubjectId: lesson.classroomSubjectId ?? '',
       startTime: lesson.startTime,
+      endTime: lesson.endTime,
     );
   }
 

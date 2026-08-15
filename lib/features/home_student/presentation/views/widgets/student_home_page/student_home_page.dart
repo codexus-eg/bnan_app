@@ -9,7 +9,6 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/dashboard/data/models/student_dashboard_model.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:bnan_app/features/dashboard/presentation/widgets/dashboard_builder.dart';
-import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/evaluation_metric/weekly_evaluation_section.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/package_details/package_details_card.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +46,7 @@ class StudentHomePage extends StatelessWidget {
           absent: 0,
         ),
       ),
-      weeklyEvaluation: const DashboardWeeklyEvaluation(
-        attendance: 0,
-        homework: 0,
-        behavior: 0,
-      ),
+      weeklyEvaluation: null,
     ),
     builder: (context, data, loading) => Column(
       children: [
@@ -79,16 +74,6 @@ class StudentHomePage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: HomeStatsSection(states: _stats(context, data)),
                     ),
-                    if (data.weeklyEvaluation != null)
-                      Padding(
-                        padding: const EdgeInsetsDirectional.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        child: WeeklyEvaluationSection(
-                          evaluation: data.weeklyEvaluation!,
-                        ),
-                      ),
                   ],
                 ),
               ),

@@ -560,10 +560,10 @@ class S {
     );
   }
 
-  /// `Choose the suitable curriculum for your children and start the learning journey with us`
+  /// `Choose the suitable curriculum  and start the learning journey with us`
   String get chooseCurriculum {
     return Intl.message(
-      'Choose the suitable curriculum for your children and start the learning journey with us',
+      'Choose the suitable curriculum  and start the learning journey with us',
       name: 'chooseCurriculum',
       desc: '',
       args: [],
@@ -6995,6 +6995,16 @@ class S {
     return Intl.message(
       'End time',
       name: 'endTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lesson end time must be after start time`
+  String get lessonEndTimeMustBeAfterStart {
+    return Intl.message(
+      'Lesson end time must be after start time',
+      name: 'lessonEndTimeMustBeAfterStart',
       desc: '',
       args: [],
     );

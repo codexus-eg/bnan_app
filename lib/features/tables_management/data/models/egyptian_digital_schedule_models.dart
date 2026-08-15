@@ -44,6 +44,7 @@ class EgyptianDigitalLesson {
     required this.id,
     required this.date,
     required this.startTime,
+    this.endTime,
     required this.classroomId,
     required this.classroomName,
     required this.subjectId,
@@ -56,7 +57,7 @@ class EgyptianDigitalLesson {
 
   final String id, date, startTime, classroomId, classroomName;
   final String subjectId, subjectName;
-  final String? classroomSubjectId, teacherName, teacherId;
+  final String? endTime, classroomSubjectId, teacherName, teacherId;
   final EgyptianLessonActiveSession? activeSession;
 
   factory EgyptianDigitalLesson.fromJson(Map<String, dynamic> json) {
@@ -74,6 +75,7 @@ class EgyptianDigitalLesson {
       id: _id(json),
       date: _text(json['date']),
       startTime: _text(json['startTime']),
+      endTime: _optional(json['endTime']),
       classroomId: _id(classroom),
       classroomName: _text(classroom['name']),
       subjectId: _id(subject),
@@ -156,13 +158,16 @@ class EgyptianLessonRequest {
   const EgyptianLessonRequest({
     required this.classroomSubjectId,
     required this.startTime,
+    this.endTime,
   });
 
   final String classroomSubjectId, startTime;
+  final String? endTime;
 
   Map<String, dynamic> toJson() => {
     'classroomSubject': classroomSubjectId,
     'startTime': startTime,
+    if (endTime != null) 'endTime': endTime,
   };
 }
 
