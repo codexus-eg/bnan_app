@@ -4,18 +4,34 @@ class GulfSchedulesResponse {
   final bool success;
   final GulfSchedulesData data;
 
-  factory GulfSchedulesResponse.fromJson(Map<String, dynamic> json) =>
-      GulfSchedulesResponse(
-        success: json['success'] == true,
-        data: GulfSchedulesData.fromJson(_map(json['data'])),
-      );
+  factory GulfSchedulesResponse.fromJson(Map<String, dynamic> json) {
+    final data = _map(json['data']);
+    return GulfSchedulesResponse(
+      success: json['success'] == true,
+      data: GulfSchedulesData.fromJson(
+        data,
+        metadata: data.containsKey('currentWeek') ? data : json,
+      ),
+    );
+  }
 }
 
 class GulfSchedulesData {
-  const GulfSchedulesData({required this.classrooms});
+  const GulfSchedulesData({
+    required this.classrooms,
+    this.currentWeek,
+    this.currentWeekStart,
+    this.timezone,
+  });
   final List<GulfClassroom> classrooms;
+  final int? currentWeek;
+  final DateTime? currentWeekStart;
+  final String? timezone;
 
-  factory GulfSchedulesData.fromJson(Map<String, dynamic> json) {
+  factory GulfSchedulesData.fromJson(
+    Map<String, dynamic> json, {
+    Map<String, dynamic> metadata = const {},
+  }) {
     final students = _maps(json['students']);
     final classrooms = students.isNotEmpty
         ? _maps(students.first['classrooms'])
@@ -25,6 +41,11 @@ class GulfSchedulesData {
           .map(GulfClassroom.fromJson)
           .where((item) => item.id.isNotEmpty)
           .toList(growable: false),
+      currentWeek: int.tryParse(_stringValue(metadata['currentWeek'])),
+      currentWeekStart: DateTime.tryParse(
+        _stringValue(metadata['currentWeekStart']),
+      ),
+      timezone: _nonEmpty(_stringValue(metadata['timezone'])),
     );
   }
 }
@@ -148,6 +169,7 @@ List<Map<String, dynamic>> _maps(Object? value) => value is List
           .toList()
     : const [];
 String _string(Object? value) => value is String ? value.trim() : '';
+String _stringValue(Object? value) => value?.toString().trim() ?? '';
 String _id(Map<String, dynamic> json) =>
     _string(json['id']).isNotEmpty ? _string(json['id']) : _string(json['_id']);
 String? _nonEmpty(String? value) =>

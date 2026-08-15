@@ -59,6 +59,22 @@ class TableManagementRepoImpl
   });
 
   @override
+  Future<Either<Failure, EgyptianScheduleWeek>> getParentEgyptianSchedule({
+    required String studentId,
+    String? weekStart,
+  }) => repoGuard(() async {
+    final response = await apiConsumer.get(
+      EndPoints.myEgyptianSchedule,
+      queryParameter: {
+        'studentId': studentId.trim(),
+        if (weekStart != null) 'weekStart': weekStart,
+      },
+      isProtected: true,
+    );
+    return EgyptianScheduleWeek.fromResponse(response);
+  });
+
+  @override
   Future<Either<Failure, EgyptianScheduleResponseModel>>
   getEgyptianScheduleByClassroom(String classroomId) {
     final id = classroomId.trim();

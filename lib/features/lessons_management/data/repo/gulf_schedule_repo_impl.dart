@@ -61,6 +61,22 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
   });
 
   @override
+  Future<Either<Failure, GulfSchedulesResponse>> getParentGulfSchedule({
+    required String studentId,
+    String? weekStart,
+  }) => repoGuard(() async {
+    final response = await api.get(
+      EndPoints.myGulfSchedule,
+      queryParameter: {
+        'studentId': studentId.trim(),
+        if (weekStart != null) 'weekStart': weekStart,
+      },
+      isProtected: true,
+    );
+    return GulfSchedulesResponse.fromJson(asMap(response));
+  });
+
+  @override
   Future<Either<Failure, Unit>> createClassroomSchedule(
     String classroomId,
     GulfScheduleRequest request,
