@@ -17,13 +17,11 @@ class ChatRepoImpl implements ChatRepo {
   final ApiConsumer apiConsumer;
 
   @override
-  Future<Either<Failure, ChatRoomResponseModel>> createSupportRoom({
-    required String userId,
-  }) async {
+  Future<Either<Failure, ChatRoomResponseModel>> createSupportRoom() async {
     try {
       final response = await apiConsumer.post(
         EndPoints.createSupportRoom,
-        data: {'userId': userId},
+        data: const <String, dynamic>{},
         isProtected: true,
       );
 
@@ -40,6 +38,26 @@ class ChatRepoImpl implements ChatRepo {
     try {
       final response = await apiConsumer.get(
         EndPoints.getMyChatRooms,
+        isProtected: true,
+      );
+
+      return Right(ChatRoomsResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChatRoomsResponseModel>> getAdminChatRooms({
+    String? search,
+  }) async {
+    try {
+      final query = search?.trim();
+      final response = await apiConsumer.get(
+        EndPoints.adminChatRooms,
+        queryParameter: query?.isNotEmpty == true ? {'search': query} : null,
         isProtected: true,
       );
 

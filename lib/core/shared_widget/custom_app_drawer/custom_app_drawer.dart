@@ -16,6 +16,7 @@ class CustomAppDrawer extends StatelessWidget {
     required this.selectedIndex,
     required this.onItemTap,
     required this.onLogoutTap,
+    this.footer,
   });
 
   final String userName;
@@ -24,6 +25,7 @@ class CustomAppDrawer extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemTap;
   final VoidCallback onLogoutTap;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,10 @@ class CustomAppDrawer extends StatelessWidget {
                   },
                 ),
               ),
+              if (footer != null) ...[
+                const Divider(color: ColorManager.greyA8AF),
+                footer!,
+              ],
               const Divider(color: ColorManager.greyA8AF),
               const LanguageDrawerItem(),
               const Divider(color: ColorManager.greyA8AF),

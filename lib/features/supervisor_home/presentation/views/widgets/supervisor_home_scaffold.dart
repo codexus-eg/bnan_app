@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/custom_bottom_nav_bar.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/support_chat_drawer_item.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_navigation_item.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +44,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
           selectedIndex: 0,
           onItemTap: onDrawerTap,
           onLogoutTap: onLogoutTap,
+          footer: SupportChatDrawerItem.forRole(SessionManager.instance.role),
         ),
         body: body,
         bottomNavigationBar: CustomBottomNavBar(

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/cache/chat_rooms_cache.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
@@ -19,13 +21,19 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   final ChatRepo chatRepo;
   final ChatRoomsCache? roomsCache;
   StreamSubscription<ChatNotificationEvent>? _notificationSubscription;
+  Timer? _searchDebounce;
+  String _adminSearch = '';
+  int _requestId = 0;
 
   Future<void> getChatRooms() async {
     if (isClosed) return;
+    final requestId = ++_requestId;
     emit(GetChatRoomsLoading());
 
-    final result = await chatRepo.getChatRooms();
-    if (isClosed) return;
+    final result = SessionManager.instance.role == UserRole.admin
+        ? await chatRepo.getAdminChatRooms(search: _adminSearch)
+        : await chatRepo.getChatRooms();
+    if (isClosed || requestId != _requestId) return;
 
     result.fold(
       (failure) {
@@ -35,6 +43,20 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
         roomsCache?.replace(response.rooms);
         emit(GetChatRoomsSuccess(rooms: response.rooms));
       },
+    );
+  }
+
+  void searchAdminRooms(String value) {
+    if (SessionManager.instance.role != UserRole.admin) return;
+    _adminSearch = value.trim();
+    _searchDebounce?.cancel();
+    if (_adminSearch.isEmpty) {
+      unawaited(getChatRooms());
+      return;
+    }
+    _searchDebounce = Timer(
+      const Duration(milliseconds: 450),
+      () => unawaited(getChatRooms()),
     );
   }
 
@@ -56,6 +78,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
 
   @override
   Future<void> close() async {
+    _searchDebounce?.cancel();
     await _notificationSubscription?.cancel();
     return super.close();
   }

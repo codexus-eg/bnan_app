@@ -459,6 +459,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "This Month Achievement",
     ),
     "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
+    "contactUs": MessageLookupByLibrary.simpleMessage("Contact us"),
+    "searchConversations": MessageLookupByLibrary.simpleMessage(
+      "Search conversations",
+    ),
+    "supportBadge": MessageLookupByLibrary.simpleMessage("Support"),
     "contactWhatsApp": MessageLookupByLibrary.simpleMessage(
       "Contact via WhatsApp",
     ),

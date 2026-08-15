@@ -6,11 +6,13 @@ import 'package:bnan_app/features/chats/data/models/chat_rooms_response_model.da
 import 'package:dartz/dartz.dart';
 
 abstract class ChatRepo {
-  Future<Either<Failure, ChatRoomResponseModel>> createSupportRoom({
-    required String userId,
-  });
+  Future<Either<Failure, ChatRoomResponseModel>> createSupportRoom();
 
   Future<Either<Failure, ChatRoomsResponseModel>> getChatRooms();
+
+  Future<Either<Failure, ChatRoomsResponseModel>> getAdminChatRooms({
+    String? search,
+  });
 
   Future<Either<Failure, ChatRoomResponseModel>> getChatRoom({
     required String roomId,

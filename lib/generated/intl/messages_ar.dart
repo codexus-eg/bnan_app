@@ -428,6 +428,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "إتقان هذا الشهر",
     ),
     "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
+    "contactUs": MessageLookupByLibrary.simpleMessage("تواصل معنا"),
+    "searchConversations": MessageLookupByLibrary.simpleMessage(
+      "البحث في المحادثات",
+    ),
+    "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
     "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
     "copiedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم النسخ بنجاح",

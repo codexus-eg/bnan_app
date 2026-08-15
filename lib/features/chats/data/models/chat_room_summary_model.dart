@@ -28,11 +28,36 @@ class ChatRoomSummaryModel {
     final legacyId = classroom is Map
         ? id(classroom['id']) ?? id(classroom['_id'])
         : id(classroom);
+    final participants = (json['participants'] as List? ?? const [])
+        .whereType<Map>();
+    Map participantData(Map item) =>
+        item['user'] is Map ? item['user'] as Map : item;
+    final participant = participants.cast<Map>().firstWhere(
+      (item) =>
+          (participantData(item)['role'] ?? item['role'])
+              ?.toString()
+              .toLowerCase() !=
+          'admin',
+      orElse: () => const {},
+    );
+    final visibleParticipant = participantData(participant);
+    final displayName = json['displayName']?.toString().trim();
+    final subtitle = json['subtitle']?.toString().trim();
+    final type = json['type']?.toString() ?? '';
+    final participantRole =
+        (visibleParticipant['role'] ?? participant['role'] ?? '').toString();
     return ChatRoomSummaryModel(
       id: json['id']?.toString() ?? '',
-      type: json['type']?.toString() ?? '',
-      displayName: json['displayName']?.toString() ?? '',
-      subtitle: json['subtitle']?.toString() ?? '',
+      type: type,
+      displayName: displayName?.isNotEmpty == true
+          ? displayName!
+          : (visibleParticipant['fullName'] ?? visibleParticipant['name'] ?? '')
+                .toString(),
+      subtitle: type == 'support' && participantRole.trim().isNotEmpty
+          ? participantRole
+          : subtitle?.isNotEmpty == true
+          ? subtitle!
+          : participantRole,
       classroomId: directId ?? legacyId,
       lastMessage: json['lastMessage']?.toString(),
       lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),

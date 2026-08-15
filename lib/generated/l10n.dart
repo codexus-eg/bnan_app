@@ -10458,6 +10458,20 @@ class S {
     );
   }
 
+  /// `Contact us`
+  String get contactUs {
+    return Intl.message('Contact us', name: 'contactUs', desc: '', args: []);
+  }
+
+  String get searchConversations => Intl.message(
+    'Search conversations',
+    name: 'searchConversations',
+    args: [],
+  );
+
+  String get supportBadge =>
+      Intl.message('Support', name: 'supportBadge', args: []);
+
   /// `Review request`
   String get reviewRequest {
     return Intl.message(

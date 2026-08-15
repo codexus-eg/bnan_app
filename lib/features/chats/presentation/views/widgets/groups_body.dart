@@ -1,7 +1,12 @@
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_chat_card.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
@@ -9,12 +14,38 @@ import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubi
 import 'package:bnan_app/features/chats/presentation/navigation/chat_room_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GroupsBody extends StatelessWidget {
   const GroupsBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isAdmin = SessionManager.instance.role == UserRole.admin;
+    return Column(
+      children: [
+        if (isAdmin)
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+            child: CustomTextField(
+              hintText: S.of(context).searchConversations,
+              backgroundColor: ColorManager.white,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SvgPicture.asset(
+                  ImageManager.usersManagementSearchIcon,
+                  width: 16,
+                ),
+              ),
+              onChanged: context.read<GetChatRoomsCubit>().searchAdminRooms,
+            ),
+          ),
+        Expanded(child: _rooms(context, isAdmin)),
+      ],
+    );
+  }
+
+  Widget _rooms(BuildContext context, bool isAdmin) {
     return BlocBuilder<GetChatRoomsCubit, GetChatRoomsState>(
       builder: (context, state) {
         if (state is GetChatRoomsFailure) {
@@ -38,35 +69,34 @@ class GroupsBody extends StatelessWidget {
             onRefresh: () {
               return context.read<GetChatRoomsCubit>().getChatRooms();
             },
-            child: ListView.builder(
+            child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsetsDirectional.all(16),
               itemCount: rooms.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final room = rooms[index];
 
-                return Padding(
-                  padding: const EdgeInsetsDirectional.only(bottom: 12),
-                  child: InkWell(
-                    onTap: () {
-                      final path = ChatRoomNavigation.path(room);
-                      if (path == null) return;
+                return InkWell(
+                  onTap: () {
+                    final path = ChatRoomNavigation.path(room);
+                    if (path == null) return;
 
-                      MyNavigator.goTo(
-                        context,
-                        path,
-                        extra: ChatRoomNavigation.arguments(
-                          room,
-                          currentUserRole: SessionManager.instance.userRole,
-                        ),
-                      );
-                    },
-                    child: CustomChatCard(
-                      title: room.displayName,
-                      subtitle: room.lastMessage?.trim().isNotEmpty == true
-                          ? room.lastMessage!
-                          : room.subtitle,
-                    ),
+                    MyNavigator.goTo(
+                      context,
+                      path,
+                      extra: ChatRoomNavigation.arguments(
+                        room,
+                        currentUserRole: SessionManager.instance.userRole,
+                      ),
+                    );
+                  },
+                  child: CustomChatCard(
+                    title: room.displayName,
+                    subtitle: _subtitle(room),
+                    badgeText: isAdmin && room.type == 'support'
+                        ? S.of(context).supportBadge
+                        : null,
                   ),
                 );
               },
@@ -75,5 +105,15 @@ class GroupsBody extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _subtitle(ChatRoomSummaryModel room) {
+    final message = room.lastMessage?.trim();
+    if (room.type != 'support' || room.subtitle.trim().isEmpty) {
+      return message?.isNotEmpty == true ? message! : room.subtitle;
+    }
+    return message?.isNotEmpty == true
+        ? '${room.subtitle} • $message'
+        : room.subtitle;
   }
 }
