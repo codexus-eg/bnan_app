@@ -240,6 +240,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "april2026": MessageLookupByLibrary.simpleMessage("April 2026"),
     "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
     "arabicLanguage": MessageLookupByLibrary.simpleMessage("Arabic Language"),
+    "languageArabic": MessageLookupByLibrary.simpleMessage("العربية"),
+    "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
     "assignStudent": MessageLookupByLibrary.simpleMessage("Assign Student"),
     "assignSubject": MessageLookupByLibrary.simpleMessage("Assign to Subject"),
     "assignSupervisorToClassroom": m0,

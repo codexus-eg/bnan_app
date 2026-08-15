@@ -921,6 +921,8 @@
     "parentThirdPreparatoryGrade": "الصف الثالث الإعدادي",
     "classRoomManagement": "إدراة الصفوف",
     "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+    "languageArabic": "العربية",
+    "languageEnglish": "English",
     "noDataAvailable": "لا يوجد معلومات حاليا",
     "sendNotificationToParentAndStudent": "إرسال إشعار لولي الأمر والطالب",
     "sendAll": "إرسال الكل",

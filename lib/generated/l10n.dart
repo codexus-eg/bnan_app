@@ -1009,6 +1009,16 @@ class S {
     );
   }
 
+  /// `العربية`
+  String get languageArabic {
+    return Intl.message('العربية', name: 'languageArabic', desc: '', args: []);
+  }
+
+  /// `English`
+  String get languageEnglish {
+    return Intl.message('English', name: 'languageEnglish', desc: '', args: []);
+  }
+
   /// `Physics`
   String get physics {
     return Intl.message('Physics', name: 'physics', desc: '', args: []);

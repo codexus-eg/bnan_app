@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:bnan_app/core/app_routes/app_router.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/connectivity/connectivity_cubit.dart';
 import 'package:bnan_app/core/helper/theme_helper.dart';
+import 'package:bnan_app/core/localization/language_manager/language_manager.dart';
+import 'package:bnan_app/core/localization/language_manager/language_state.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/session_invalidator.dart';
 import 'package:bnan_app/core/shared_widget/app_top_feedback/app_top_feedback.dart';
+import 'package:bnan_app/core/shared_widget/global_connectivity_overlay.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
@@ -34,6 +38,8 @@ class _BnanAppState extends State<BnanApp> {
   String? _navigatedPaymentId;
   late final GoRouter _router;
   late final ChatNotificationCoordinator _chatNotifications;
+  late final ConnectivityCubit _connectivity;
+  late final LanguageCubit _language;
   late final NotificationsCubit _notifications;
   PushNotificationService? _pushNotifications;
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -47,6 +53,9 @@ class _BnanAppState extends State<BnanApp> {
   void initState() {
     super.initState();
     _router = buildRouter(navigatorKey: _navigatorKey);
+    _language = LanguageCubit();
+    _connectivity = ConnectivityCubit();
+    unawaited(_connectivity.startMonitoring());
     _sessionExpiredSubscription = SessionInvalidator.instance.expired.listen(
       (_) => _openLoginAfterSessionExpiry(),
     );
@@ -76,26 +85,37 @@ class _BnanAppState extends State<BnanApp> {
 
   @override
   Widget build(BuildContext context) {
-    final app = MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      builder: _builder,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _language),
+        BlocProvider.value(value: _connectivity),
+        BlocProvider.value(value: _notifications),
       ],
-      supportedLocales: S.delegate.supportedLocales,
-      locale: const Locale('ar'),
-      title: 'Bnan App',
-      routerConfig: _router,
-      theme: ThemeHelper.getTheme(),
+      child: BlocBuilder<LanguageCubit, LanguageState>(
+        buildWhen: (previous, current) => previous.locale != current.locale,
+        builder: (context, state) {
+          final app = MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            builder: _builder,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            locale: state.locale,
+            title: 'Bnan App',
+            routerConfig: _router,
+            theme: ThemeHelper.getTheme(),
+          );
+          final cubit = paymentCubit;
+          return cubit == null
+              ? app
+              : BlocProvider.value(value: cubit, child: app);
+        },
+      ),
     );
-    final cubit = paymentCubit;
-    final result = cubit == null
-        ? app
-        : BlocProvider.value(value: cubit, child: app);
-    return BlocProvider.value(value: _notifications, child: result);
   }
 
   void _showChatNotification(ChatNotificationEvent event) {
@@ -185,6 +205,8 @@ class _BnanAppState extends State<BnanApp> {
     final pushNotifications = _pushNotifications;
     if (pushNotifications != null) unawaited(pushNotifications.dispose());
     unawaited(_chatNotifications.dispose());
+    unawaited(_connectivity.close());
+    unawaited(_language.close());
     _router.dispose();
     super.dispose();
   }
@@ -197,22 +219,24 @@ class _BnanAppState extends State<BnanApp> {
       data: mediaQuery.copyWith(textScaler: TextScaler.linear(scale)),
       child: child!,
     );
-    if (cubit == null) return scaledChild;
-    return BlocListener<TamaraPaymentCubit, TamaraPaymentState>(
-      listener: (context, state) {
-        if (state is! TamaraPaymentResult ||
-            state.status != PaymentStatus.completed) {
-          return;
-        }
-        final paymentId = cubit.draft?.paymentId ?? '';
-        if (_navigatedPaymentId == paymentId) return;
-        _navigatedPaymentId = paymentId;
-        GoRouter.of(context).go(
-          state.studentLoggedIn ? Routes.home : Routes.logIn,
-          extra: state.studentLoggedIn ? null : cubit.draft?.studentEmail,
-        );
-      },
-      child: TamaraReturnObserver(cubit: cubit, child: scaledChild),
-    );
+    final observedChild = cubit == null
+        ? scaledChild
+        : BlocListener<TamaraPaymentCubit, TamaraPaymentState>(
+            listener: (context, state) {
+              if (state is! TamaraPaymentResult ||
+                  state.status != PaymentStatus.completed) {
+                return;
+              }
+              final paymentId = cubit.draft?.paymentId ?? '';
+              if (_navigatedPaymentId == paymentId) return;
+              _navigatedPaymentId = paymentId;
+              GoRouter.of(context).go(
+                state.studentLoggedIn ? Routes.home : Routes.logIn,
+                extra: state.studentLoggedIn ? null : cubit.draft?.studentEmail,
+              );
+            },
+            child: TamaraReturnObserver(cubit: cubit, child: scaledChild),
+          );
+    return GlobalConnectivityOverlay(child: observedChild);
   }
 }

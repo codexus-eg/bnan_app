@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer_header.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer_item.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/drawer_item_model.dart';
+import 'package:bnan_app/core/shared_widget/custom_app_drawer/language_drawer_item.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -27,7 +28,7 @@ class CustomAppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width*(300/375),
+      width: MediaQuery.of(context).size.width * (300 / 375),
       backgroundColor: ColorManager.mainColor14,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadiusDirectional.only(
@@ -44,7 +45,7 @@ class CustomAppDrawer extends StatelessWidget {
                 userName: userName,
                 userSubtitle: userSubtitle,
               ),
-              Divider(height: 16,color: ColorManager.greyA8AF),
+              Divider(height: 16, color: ColorManager.greyA8AF),
               const SizedBox(height: 8),
               Expanded(
                 child: ListView.separated(
@@ -61,6 +62,8 @@ class CustomAppDrawer extends StatelessWidget {
                   },
                 ),
               ),
+              const Divider(color: ColorManager.greyA8AF),
+              const LanguageDrawerItem(),
               const Divider(color: ColorManager.greyA8AF),
               CustomAppDrawerItem(
                 title: S.of(context).logout,

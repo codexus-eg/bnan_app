@@ -921,6 +921,8 @@
     "parentThirdPreparatoryGrade": "Third Preparatory Grade",
     "classRoomManagement": "ClassRoom Management",
     "noInternetConnection": "No internet connection",
+    "languageArabic": "العربية",
+    "languageEnglish": "English",
     "noDataAvailable": "No information available now",
     "sendNotificationToParentAndStudent": "Send notification to parent and student",
     "sendAll": "Send All",
