@@ -575,8 +575,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "endDate": MessageLookupByLibrary.simpleMessage("End date"),
         "endSession": MessageLookupByLibrary.simpleMessage("End lesson"),
         "endTime": MessageLookupByLibrary.simpleMessage("End time"),
-        "lessonEndTimeMustBeAfterStart": MessageLookupByLibrary.simpleMessage(
-            "Lesson end time must be after start time"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "enterDiscountCode":
             MessageLookupByLibrary.simpleMessage("Enter discount code"),
@@ -785,6 +783,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "latestEarnedPoints":
             MessageLookupByLibrary.simpleMessage("Latest Earned Points"),
         "lessonDate": MessageLookupByLibrary.simpleMessage("Lesson date"),
+        "lessonEndTimeMustBeAfterStart": MessageLookupByLibrary.simpleMessage(
+            "Lesson end time must be after start time"),
         "lessonLabel": MessageLookupByLibrary.simpleMessage("Lesson"),
         "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
             "Math lesson starts in 15 min"),

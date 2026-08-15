@@ -550,9 +550,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
         "endSession": MessageLookupByLibrary.simpleMessage("إنهاء الحصة"),
         "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
-        "lessonEndTimeMustBeAfterStart":
-            MessageLookupByLibrary.simpleMessage(
-                "وقت نهاية الحصة يجب أن يكون بعد وقت البداية"),
         "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
         "enterDiscountCode":
             MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),
@@ -756,6 +753,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "latestEarnedPoints":
             MessageLookupByLibrary.simpleMessage("آخر النقاط المكتسبة"),
         "lessonDate": MessageLookupByLibrary.simpleMessage("تاريخ الحصة"),
+        "lessonEndTimeMustBeAfterStart": MessageLookupByLibrary.simpleMessage(
+            "وقت نهاية الحصة يجب أن يكون بعد وقت البداية"),
         "lessonLabel": MessageLookupByLibrary.simpleMessage("الدرس"),
         "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
             "حصة الرياضيات تبدأ خلال 15 د"),

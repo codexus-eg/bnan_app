@@ -44,7 +44,12 @@ class ClassroomsManagementDetailsCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ClassMetaRow(label: s.supervisor, value: '-'),
+              child: ClassMetaRow(
+                label: s.supervisor,
+                value: classroomItem.supervisor?.name.isNotEmpty == true
+                    ? classroomItem.supervisor!.name
+                    : '-',
+              ),
             ),
           ],
         ),
