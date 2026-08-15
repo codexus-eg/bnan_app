@@ -8,10 +8,12 @@ class LessonDayDropdown extends StatelessWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.days = lessonDays,
   });
 
   final String value;
   final ValueChanged<String?>? onChanged;
+  final List<String> days;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,8 @@ class LessonDayDropdown extends StatelessWidget {
     return CustomDropdown(
       label: s.day,
       value: value,
-      items: lessonDays,
-      itemsLabels: {for (final day in lessonDays) day: lessonDayLabel(s, day)},
+      items: days,
+      itemsLabels: {for (final day in days) day: lessonDayLabel(s, day)},
       onChanged: onChanged,
     );
   }

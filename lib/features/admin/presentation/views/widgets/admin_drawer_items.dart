@@ -32,7 +32,7 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.classRoomManagement,
       icon: ImageManager.teacherBookTwoIcon,
     ),
-    DrawerItemModel(title: s.schedule, icon: ImageManager.tableIcon),
+    DrawerItemModel(title: s.lessonsManagement, icon: ImageManager.tableIcon),
     DrawerItemModel(
       title: s.messages,
       icon: ImageManager.parentChatConversationCircleIcon,

@@ -2323,6 +2323,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
       "ترتيب الطلاب المثاليين هذا الأسبوع",
     ),
+    "studyNotStarted": MessageLookupByLibrary.simpleMessage(
+      "لم تبدأ الدراسة بعد",
+    ),
+    "cannotAddLessonInPreviousWeek": MessageLookupByLibrary.simpleMessage(
+      "لا يمكن إضافة حصة في أسبوع سابق",
+    ),
+    "scheduleDateInPast": MessageLookupByLibrary.simpleMessage(
+      "لا يمكن إضافة حصة في تاريخ مضى",
+    ),
+    "scheduleTimeInPast": MessageLookupByLibrary.simpleMessage(
+      "لا يمكن إضافة حصة في وقت مضى",
+    ),
     "weeklyLessons": m42,
     "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
     "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),

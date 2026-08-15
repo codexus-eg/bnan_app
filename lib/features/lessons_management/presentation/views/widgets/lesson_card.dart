@@ -73,6 +73,15 @@ class LessonCard extends StatelessWidget {
                     context,
                   ).copyWith(color: ColorManager.greyA8AF),
                 ),
+                if (lesson.teacherName != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    lesson.teacherName!,
+                    style: StylesManager.styleRegular12(
+                      context,
+                    ).copyWith(color: ColorManager.greyA8AF),
+                  ),
+                ],
               ],
             ),
           ),

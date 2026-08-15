@@ -6,12 +6,15 @@ import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repo_guard.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedule_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedules_response_model.dart';
+import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
+import 'package:bnan_app/features/tables_management/data/repo/egyptian_digital_schedule_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
-class TableManagementRepoImpl implements TableManagementRepo {
+class TableManagementRepoImpl
+    implements TableManagementRepo, EgyptianDigitalScheduleRepo {
   const TableManagementRepoImpl(this.apiConsumer);
 
   final ApiConsumer apiConsumer;
@@ -98,4 +101,62 @@ class TableManagementRepoImpl implements TableManagementRepo {
       );
     });
   }
+
+  @override
+  Future<Either<Failure, List<EgyptianClassroomSubject>>>
+  getEgyptianClassroomSubjects(String classroomId) => repoGuard(() async {
+    final response = await apiConsumer.get(
+      EndPoints.classroomSubjectsDetails(classroomId.trim()),
+      isProtected: true,
+    );
+    return parseEgyptianClassroomSubjects(asMap(response)['data']);
+  });
+
+  @override
+  Future<Either<Failure, EgyptianScheduleWeek>> getEgyptianClassroomWeek(
+    String classroomId, {
+    required String weekStart,
+  }) => repoGuard(() async {
+    final response = await apiConsumer.get(
+      EndPoints.egyptianSchedulesByClassroom(classroomId.trim()),
+      queryParameter: {'weekStart': weekStart},
+      isProtected: true,
+    );
+    return EgyptianScheduleWeek.fromResponse(response);
+  });
+
+  @override
+  Future<Either<Failure, void>> createEgyptianDay({
+    required String classroomId,
+    required EgyptianDayRequest request,
+  }) => repoGuard(() async {
+    await apiConsumer.post(
+      EndPoints.egyptianSchedules,
+      data: request.createJson(classroomId.trim()),
+      isProtected: true,
+    );
+  });
+
+  @override
+  Future<Either<Failure, void>> replaceEgyptianDay({
+    required String classroomId,
+    required EgyptianDayRequest request,
+  }) => repoGuard(() async {
+    await apiConsumer.put(
+      EndPoints.egyptianScheduleDay(classroomId.trim(), request.date),
+      data: request.replaceJson(),
+      isProtected: true,
+    );
+  });
+
+  @override
+  Future<Either<Failure, void>> deleteEgyptianDay({
+    required String classroomId,
+    required String date,
+  }) => repoGuard(() async {
+    await apiConsumer.delete(
+      EndPoints.egyptianScheduleDay(classroomId.trim(), date.trim()),
+      isProtected: true,
+    );
+  });
 }

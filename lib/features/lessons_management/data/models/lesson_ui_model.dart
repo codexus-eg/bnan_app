@@ -7,6 +7,7 @@ class LessonUiModel {
     required this.subjectName,
     required this.day,
     required this.startTime,
+    this.teacherName,
   });
 
   final String id;
@@ -16,6 +17,7 @@ class LessonUiModel {
   final String subjectName;
   final String day;
   final String startTime;
+  final String? teacherName;
 
   LessonUiModel copyWith({String? day, String? startTime}) {
     return LessonUiModel(
@@ -26,6 +28,7 @@ class LessonUiModel {
       subjectName: subjectName,
       day: day ?? this.day,
       startTime: startTime ?? this.startTime,
+      teacherName: teacherName,
     );
   }
 }

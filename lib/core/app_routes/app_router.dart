@@ -1081,22 +1081,8 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               Routes.splash;
         },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (_) =>
-                    getIt<GetEgyptianSchedulesCubit>()..getEgyptianSchedules(),
-              ),
-              BlocProvider(create: (_) => getIt<CreateEgyptianScheduleCubit>()),
-              BlocProvider(create: (_) => getIt<DeleteEgyptianScheduleCubit>()),
-              BlocProvider(
-                create: (_) => AcademicLookupsCubit(
-                  repo: getIt<AcademicLookupsRepo>(),
-                  loadClassroomsOnGrade: false,
-                  loadSubjectsWithoutClassroom: false,
-                )..loadGrades(),
-              ),
-            ],
+          child: BlocProvider(
+            create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
             child: const TablesManagementView(),
           ),
           key: state.pageKey,

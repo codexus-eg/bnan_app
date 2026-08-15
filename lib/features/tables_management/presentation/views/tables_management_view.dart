@@ -9,8 +9,8 @@ class TablesManagementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).classSchedulesManagement),
-      body: TablesManagementBody(),
+      appBar: CustomAppbar(headerText: S.of(context).lessonsManagement),
+      body: const TablesManagementBody(),
     );
   }
 }

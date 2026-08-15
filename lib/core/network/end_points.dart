@@ -406,6 +406,10 @@ abstract class EndPoints {
     return '$egyptianSchedules/classroom/$classroomId';
   }
 
+  static String egyptianScheduleDay(String classroomId, String date) {
+    return '${egyptianSchedulesByClassroom(classroomId)}/days/$date';
+  }
+
   static String deleteEgyptianSchedule(String scheduleId) {
     return '$egyptianSchedules/$scheduleId';
   }

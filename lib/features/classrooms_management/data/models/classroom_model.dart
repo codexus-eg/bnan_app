@@ -63,13 +63,22 @@ class ClassroomModel {
 }
 
 class ClassroomLookupModel {
-  const ClassroomLookupModel({required this.id, required this.name});
+  const ClassroomLookupModel({
+    required this.id,
+    required this.name,
+    this.registrationMode,
+  });
 
   final String id;
   final String name;
+  final String? registrationMode;
 
   factory ClassroomLookupModel.fromJson(Map<String, dynamic> json) {
-    return ClassroomLookupModel(id: json['id'] ?? '', name: json['name'] ?? '');
+    return ClassroomLookupModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      registrationMode: json['registrationMode']?.toString().trim(),
+    );
   }
 }
 

@@ -11,6 +11,7 @@ class LessonsManagementHeader extends StatelessWidget {
     required this.onClassroomChanged,
     required this.onAddTap,
     this.showAddButton = true,
+    this.adjacentFilter,
   });
 
   final List<LessonClassroomUiModel> classrooms;
@@ -18,6 +19,7 @@ class LessonsManagementHeader extends StatelessWidget {
   final ValueChanged<String?> onClassroomChanged;
   final VoidCallback? onAddTap;
   final bool showAddButton;
+  final Widget? adjacentFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +28,16 @@ class LessonsManagementHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          LessonClassroomDropdown(
-            classrooms: classrooms,
-            value: selectedClassroomId,
-            onChanged: onClassroomChanged,
-          ),
+          if (adjacentFilter == null)
+            _classroomDropdown()
+          else
+            Row(
+              children: [
+                Expanded(flex: 3, child: _classroomDropdown()),
+                const SizedBox(width: 16),
+                Expanded(flex: 2, child: adjacentFilter!),
+              ],
+            ),
           if (showAddButton) ...[
             const SizedBox(height: 12),
             AddLessonButton(onTap: onAddTap),
@@ -39,4 +46,10 @@ class LessonsManagementHeader extends StatelessWidget {
       ),
     );
   }
+
+  Widget _classroomDropdown() => LessonClassroomDropdown(
+    classrooms: classrooms,
+    value: selectedClassroomId,
+    onChanged: onClassroomChanged,
+  );
 }

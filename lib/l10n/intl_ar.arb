@@ -1291,5 +1291,9 @@
     "submitRegistrationRequest": "إرسال طلب التسجيل",
     "registrationRequestSuccessMessage": "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة.",
     "backToLogin": "العودة لتسجيل الدخول",
-    "done": "تم"
+    "done": "تم",
+    "studyNotStarted": "لم تبدأ الدراسة بعد",
+    "cannotAddLessonInPreviousWeek": "لا يمكن إضافة حصة في أسبوع سابق",
+    "scheduleDateInPast": "لا يمكن إضافة حصة في تاريخ مضى",
+    "scheduleTimeInPast": "لا يمكن إضافة حصة في وقت مضى"
 }

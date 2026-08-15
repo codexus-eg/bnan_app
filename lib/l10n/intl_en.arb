@@ -1292,5 +1292,9 @@
     "submitRegistrationRequest": "Submit registration request",
     "registrationRequestSuccessMessage": "Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.",
     "backToLogin": "Back to login",
-    "done": "Done"
+    "done": "Done",
+    "studyNotStarted": "Study has not started yet",
+    "cannotAddLessonInPreviousWeek": "A lesson cannot be added in a previous week",
+    "scheduleDateInPast": "A lesson cannot be added on a past date",
+    "scheduleTimeInPast": "A lesson cannot be added at a past time"
 }

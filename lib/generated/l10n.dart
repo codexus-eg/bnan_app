@@ -7969,6 +7969,30 @@ class S {
     );
   }
 
+  String get studyNotStarted => Intl.message(
+    'Study has not started yet',
+    name: 'studyNotStarted',
+    args: [],
+  );
+
+  String get cannotAddLessonInPreviousWeek => Intl.message(
+    'A lesson cannot be added in a previous week',
+    name: 'cannotAddLessonInPreviousWeek',
+    args: [],
+  );
+
+  String get scheduleDateInPast => Intl.message(
+    'A lesson cannot be added on a past date',
+    name: 'scheduleDateInPast',
+    args: [],
+  );
+
+  String get scheduleTimeInPast => Intl.message(
+    'A lesson cannot be added at a past time',
+    name: 'scheduleTimeInPast',
+    args: [],
+  );
+
   /// `No evaluation was recorded for this week`
   String get noEvaluationRecordedThisWeek {
     return Intl.message(
