@@ -1011,6 +1011,8 @@
     "uploadAction": "Upload",
     "studyPlanTitlePrefix": "Study plan for",
     "noPlansForWeek": "No plans for this week",
+    "noScheduleForWeek": "No schedule for this week",
+    "noSchedule": "No schedule",
     "noStudyWeeksAvailable": "No study weeks are available for this classroom",
     "planFile": "Plan file",
     "planFileRequired": "Plan file is required",

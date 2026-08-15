@@ -1131,6 +1131,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
       "No plans for this week",
     ),
+    "noSchedule": MessageLookupByLibrary.simpleMessage("No schedule"),
+    "noScheduleForWeek": MessageLookupByLibrary.simpleMessage(
+      "No schedule for this week",
+    ),
     "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
       "No recordings are available yet",
     ),

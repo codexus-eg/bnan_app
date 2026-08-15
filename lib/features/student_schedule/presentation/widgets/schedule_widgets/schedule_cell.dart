@@ -11,6 +11,9 @@ class ScheduleCell extends StatelessWidget {
     this.isDark = false,
     this.isEvaluation = false,
     this.width = 64,
+    this.height = 37,
+    this.maxLines = 2,
+    this.padding = EdgeInsets.zero,
   });
 
   final String text;
@@ -18,6 +21,9 @@ class ScheduleCell extends StatelessWidget {
   final bool isDark;
   final bool isEvaluation;
   final double width;
+  final double height;
+  final int maxLines;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +34,13 @@ class ScheduleCell extends StatelessWidget {
 
     return CustomTableCell(
       width: width,
+      height: height,
+      padding: padding,
       backgroundColor: bgColor,
       child: Text(
         text,
         textAlign: TextAlign.center,
-        maxLines: 2,
+        maxLines: maxLines,
         style: StylesManager.styleBold12(
           context,
         ).copyWith(color: textColor, height: 1.1),

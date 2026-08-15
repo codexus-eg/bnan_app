@@ -1048,6 +1048,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
       "لا توجد خطط لهذا الأسبوع",
     ),
+    "noSchedule": MessageLookupByLibrary.simpleMessage("لا يوجد جدول"),
+    "noScheduleForWeek": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد جدول لهذا الأسبوع",
+    ),
     "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
       "لا توجد تسجيلات متاحة حتى الآن",
     ),

@@ -1115,14 +1115,22 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
           if (isAllowed) return null;
           return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
         },
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<GetEgyptianSchedulesCubit>()..getMyEgyptianSchedule(),
-            child: const EgyptianSchedulesReadOnlyView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final session = SessionManager.instance;
+          final child =
+              session.role == UserRole.teacher &&
+                  session.hasEgyptianRegistration
+              ? const TeacherEgyptianScheduleView()
+              : session.isEgyptianStudent
+              ? const StudentEgyptianScheduleView()
+              : BlocProvider(
+                  create: (_) =>
+                      getIt<GetEgyptianSchedulesCubit>()
+                        ..getMyEgyptianSchedule(),
+                  child: const EgyptianSchedulesReadOnlyView(),
+                );
+          return buildTransitionPages(child: child, key: state.pageKey);
+        },
       ),
       GoRoute(
         path: Routes.gulfStudentScheduleReadOnly,

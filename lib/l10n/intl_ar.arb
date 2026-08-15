@@ -1010,6 +1010,8 @@
     "uploadAction": "رفع",
     "studyPlanTitlePrefix": "الخطة الدراسية لـ",
     "noPlansForWeek": "لا توجد خطط لهذا الأسبوع",
+    "noScheduleForWeek": "لا يوجد جدول لهذا الأسبوع",
+    "noSchedule": "لا يوجد جدول",
     "noStudyWeeksAvailable": "لا توجد أسابيع دراسية متاحة لهذا الفصل",
     "planFile": "ملف الخطة",
     "planFileRequired": "ملف الخطة مطلوب",

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedule_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedules_response_model.dart';
+import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class TableManagementRepo {
@@ -12,6 +13,10 @@ abstract class TableManagementRepo {
 
   Future<Either<Failure, EgyptianSchedulesResponseModel>>
   getMyEgyptianSchedule({String? studentId});
+
+  Future<Either<Failure, EgyptianScheduleWeek>> getMyEgyptianDigitalSchedule({
+    String? weekStart,
+  });
 
   Future<Either<Failure, EgyptianScheduleResponseModel>>
   getEgyptianScheduleByClassroom(String classroomId);

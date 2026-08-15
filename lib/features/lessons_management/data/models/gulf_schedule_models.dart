@@ -73,9 +73,17 @@ class GulfGrade extends GulfReference {
 }
 
 class GulfCurriculum extends GulfReference {
-  const GulfCurriculum({required super.id, required super.name});
-  factory GulfCurriculum.fromJson(Map<String, dynamic> json) =>
-      GulfCurriculum(id: _id(json), name: _string(json['name']));
+  const GulfCurriculum({
+    required super.id,
+    required super.name,
+    required this.registrationMode,
+  });
+  final String registrationMode;
+  factory GulfCurriculum.fromJson(Map<String, dynamic> json) => GulfCurriculum(
+    id: _id(json),
+    name: _string(json['name']),
+    registrationMode: _string(json['registrationMode']).toLowerCase(),
+  );
 }
 
 class GulfSubject extends GulfReference {

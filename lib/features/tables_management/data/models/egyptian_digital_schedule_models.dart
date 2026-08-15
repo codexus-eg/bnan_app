@@ -50,11 +50,14 @@ class EgyptianDigitalLesson {
     required this.subjectName,
     this.classroomSubjectId,
     this.teacherName,
+    this.teacherId,
+    this.activeSession,
   });
 
   final String id, date, startTime, classroomId, classroomName;
   final String subjectId, subjectName;
-  final String? classroomSubjectId, teacherName;
+  final String? classroomSubjectId, teacherName, teacherId;
+  final Object? activeSession;
 
   factory EgyptianDigitalLesson.fromJson(Map<String, dynamic> json) {
     final classroom = _map(json['classroom']);
@@ -79,6 +82,8 @@ class EgyptianDigitalLesson {
         json['classroomSubjectId'] ?? json['classroomSubject'],
       ),
       teacherName: _optional(teacher['name'] ?? teacher['fullName']),
+      teacherId: _optional(teacher['id'] ?? teacher['_id']),
+      activeSession: json['activeSession'],
     );
   }
 }

@@ -38,6 +38,8 @@ export 'package:bnan_app/features/student_subjects/presentation/views/student_su
 export 'package:bnan_app/features/student_subscriptions/presentation/views/student_subscriptions_view.dart';
 export 'package:bnan_app/features/student_subscriptions/presentation/manager/student_subscriptions_cubit.dart';
 export 'package:bnan_app/features/student_schedule/presentation/views/gulf_student_schedule_read_only_view.dart';
+export 'package:bnan_app/features/student_schedule/presentation/views/student_egyptian_schedule_view.dart';
+export 'package:bnan_app/features/teacher_schedule/presentation/views/teacher_egyptian_schedule_view.dart';
 
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:go_router/go_router.dart';

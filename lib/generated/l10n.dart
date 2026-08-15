@@ -7364,6 +7364,26 @@ class S {
     );
   }
 
+  /// `No schedule for this week`
+  String get noScheduleForWeek {
+    return Intl.message(
+      'No schedule for this week',
+      name: 'noScheduleForWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No schedule`
+  String get noSchedule {
+    return Intl.message(
+      'No schedule',
+      name: 'noSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No study weeks are available for this classroom`
   String get noStudyWeeksAvailable {
     return Intl.message(
