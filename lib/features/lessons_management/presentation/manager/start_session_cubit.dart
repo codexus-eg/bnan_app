@@ -162,13 +162,25 @@ class StartSessionCubit extends Cubit<StartSessionState> {
   Future<bool> end(String classroomId) async {
     final classroom = classroomId.trim();
     final session = state.active(classroom)?.session;
-    if (session == null || state.isLoading(classroom)) return false;
+    final sessionId = session?.id.trim() ?? '';
+    if (sessionId.isEmpty) {
+      emit(
+        state.copyWith(
+          eventClassroomId: classroom,
+          eventError: 'معرّف الجلسة غير صالح',
+          eventCode: 'INVALID_SESSION_ID',
+          eventId: state.eventId + 1,
+        ),
+      );
+      return false;
+    }
+    if (state.isLoading(classroom)) return false;
     emit(
       state.copyWith(
         endingClassroomIds: {...state.endingClassroomIds, classroom},
       ),
     );
-    final result = await repo.endSession(sessionId: session.id);
+    final result = await repo.endSession(sessionId: sessionId);
     if (isClosed) return false;
     final ending = {...state.endingClassroomIds}..remove(classroom);
     var succeeded = false;

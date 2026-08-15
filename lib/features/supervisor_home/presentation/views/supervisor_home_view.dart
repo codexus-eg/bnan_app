@@ -1,11 +1,13 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/current_user_ui.dart';
-import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_route.dart';
 import 'package:bnan_app/features/dashboard/data/models/dashboard_notification.dart';
 import 'package:bnan_app/features/dashboard/data/models/supervisor_dashboard_model.dart';
 import 'package:bnan_app/features/dashboard/presentation/widgets/dashboard_builder.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
+import 'package:bnan_app/features/notifications/domain/notification_navigation_service.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/config/supervisor_navigation_config.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_home_ui_data.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_navigation_item.dart';
@@ -57,7 +59,6 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
         data: SupervisorHomeUiData.fromDashboard(s, dashboard),
         onMenuTap: () => scaffoldKey.currentState?.openDrawer(),
         loading: loading,
-        onNotificationTap: openNotification,
       );
       return PopScope(
         canPop:
@@ -141,9 +142,24 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     setState(() => selectedDrawerRoute = item.route);
   }
 
-  void openNotification(DashboardNotification notification) {
-    final chatRoute = ChatNotificationRoute.path(notification.roomId);
-    MyNavigator.goTo(context, chatRoute ?? Routes.notification);
+  Future<void> openNotification(DashboardNotification notification) async {
+    final rawData = {
+      'title': notification.title,
+      'type': notification.type,
+      'isRead': notification.isRead,
+      'resource': notification.resource,
+      'data': notification.data,
+      'key': notification.data['key'] ?? notification.type,
+      'navigation': notification.data['navigation'] ?? {},
+    };
+    final appNotification = AppNotification.fromJson(rawData);
+    final destination = await getIt<NotificationNavigationService>()
+        .resolveDestination(appNotification);
+    if (!mounted || destination.path == Routes.notification) {
+      MyNavigator.goTo(context, Routes.notification);
+      return;
+    }
+    MyNavigator.goTo(context, destination.path, extra: destination.extra);
   }
 
   Future<void> logout() async {

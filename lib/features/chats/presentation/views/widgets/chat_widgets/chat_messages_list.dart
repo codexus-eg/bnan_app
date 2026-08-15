@@ -44,17 +44,16 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   void initState() {
     super.initState();
     _scroll.initialize(widget.isLoading, _displayMessages(widget.messages));
+    if (!widget.isLoading) {
+      _checkAndScrollToInitialTarget();
+    }
   }
 
   @override
   void didUpdateWidget(covariant ChatMessagesList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final initialTarget = widget.firstNewMessageId?.trim();
-    if (oldWidget.isLoading &&
-        !widget.isLoading &&
-        initialTarget?.isNotEmpty == true) {
-      _scroll.claimInitialPosition();
-      _scrollToInitialTarget(initialTarget!);
+    if (oldWidget.isLoading && !widget.isLoading) {
+      _checkAndScrollToInitialTarget();
       return;
     }
     _scroll.update(
@@ -63,6 +62,14 @@ class ChatMessagesListState extends State<ChatMessagesList> {
       oldMessages: _displayMessages(oldWidget.messages),
       newMessages: _displayMessages(widget.messages),
     );
+  }
+
+  void _checkAndScrollToInitialTarget() {
+    final initialTarget = widget.firstNewMessageId?.trim();
+    if (initialTarget != null && initialTarget.isNotEmpty) {
+      _scroll.claimInitialPosition();
+      _scrollToInitialTarget(initialTarget);
+    }
   }
 
   @override

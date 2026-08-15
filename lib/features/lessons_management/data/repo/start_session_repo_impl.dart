@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
@@ -66,6 +67,13 @@ class StartSessionRepoImpl implements StartSessionRepo {
   @override
   Future<Either<Failure, void>> endSession({required String sessionId}) =>
       repoGuard(() async {
-        await api.post(EndPoints.endSession(sessionId), isProtected: true);
+        final id = sessionId.trim();
+        if (id.isEmpty) {
+          throw const AppException(
+           'معرّف الجلسة غير صالح',
+            code: 'INVALID_SESSION_ID',
+          );
+        }
+        await api.post(EndPoints.endSession(id), isProtected: true);
       });
 }

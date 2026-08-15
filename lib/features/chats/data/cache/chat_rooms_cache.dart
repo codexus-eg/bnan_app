@@ -8,11 +8,12 @@ class ChatRoomsCache {
   List<ChatRoomSummaryModel> _rooms = const [];
   String? _ownerId;
 
-  ChatRoomSummaryModel? find(String roomId) {
+  ChatRoomSummaryModel? find(String targetId) {
     _clearForAnotherUser();
-    final id = roomId.trim();
+    final id = targetId.trim();
+    if (id.isEmpty) return null;
     for (final room in _rooms) {
-      if (room.id.trim() == id) return room;
+      if (room.id.trim() == id || room.classroomId?.trim() == id) return room;
     }
     return null;
   }

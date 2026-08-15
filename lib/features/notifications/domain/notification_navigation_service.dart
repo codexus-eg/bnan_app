@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/cache/chat_rooms_cache.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
@@ -24,6 +25,20 @@ class NotificationNavigationService {
   Future<NotificationDestination> resolveDestination(
     AppNotification notification,
   ) async {
+    final key = notification.key.trim().toUpperCase();
+    final role = _session.role;
+
+    if (role == UserRole.supervisor) {
+      if (key == 'IDEAL_SUPERVISOR_CERTIFICATE_ISSUED' ||
+          key.contains('SUPERVISOR_CERTIFICATE')) {
+        await _openSupervisorCertificate(notification);
+        return const NotificationDestination(Routes.notification);
+      }
+      if (key == 'SUPERVISOR_CLASSROOM_ASSIGNED') {
+        return _chatDestination(notification);
+      }
+    }
+
     if (_screen(notification) == 'chat_room') {
       return _chatDestination(notification);
     }
@@ -31,9 +46,21 @@ class NotificationNavigationService {
   }
 
   String resolve(AppNotification notification) {
+    final role = _session.role;
     final screen = _screen(notification);
     final params = notification.navigation.params;
     final resourceId = notification.resourceId;
+
+    if (role == UserRole.supervisor) {
+      if (screen == 'supervisor_classrooms' ||
+          screen == 'registration_requests' ||
+          screen == 'teacher_approval' ||
+          screen == 'students' ||
+          screen == 'certificates') {
+        return Routes.notification;
+      }
+    }
+
     final route = switch (screen) {
       'chat_room' => _required(Routes.chatPath, params['roomId'] ?? resourceId),
       'schedule' => _schedule(),
@@ -63,22 +90,63 @@ class NotificationNavigationService {
           .trim()
           .toLowerCase();
 
+  Future<void> _openSupervisorCertificate(AppNotification notification) async {
+    final params = notification.navigation.params;
+    final data = notification.data;
+    final certObj = data['certificate'] is Map
+        ? Map<String, dynamic>.from(data['certificate'] as Map)
+        : const <String, dynamic>{};
+
+    final candidate = _text(
+      params['certificateUrl'] ??
+          params['fileUrl'] ??
+          params['pdfUrl'] ??
+          params['url'] ??
+          params['link'] ??
+          data['certificateUrl'] ??
+          data['fileUrl'] ??
+          data['pdfUrl'] ??
+          data['url'] ??
+          data['link'] ??
+          certObj['url'] ??
+          certObj['fileUrl'] ??
+          certObj['pdfUrl'],
+    );
+
+    if (candidate != null && FileUrlLauncher.isValidWebUrl(candidate)) {
+      await FileUrlLauncher.open(candidate);
+    }
+  }
+
   Future<NotificationDestination> _chatDestination(
     AppNotification notification,
   ) async {
     final params = notification.navigation.params;
-    final roomId = _text(params['roomId'] ?? notification.resourceId);
-    if (roomId == null) {
+    final data = notification.data;
+    final targetId = _text(
+      params['roomId'] ??
+          params['classroomId'] ??
+          data['classroomId'] ??
+          notification.resourceId,
+    );
+    if (targetId == null) {
       return const NotificationDestination(Routes.notification);
     }
     final payloadName = _roomName(params);
-    var room = _roomsCache?.find(roomId);
-    if (room == null && payloadName == null) {
-      room = await _loadRoom(roomId);
+    var room = _roomsCache?.find(targetId);
+    if (room == null) {
+      room = await _loadRoom(targetId);
+    }
+    final roomId = room?.id ?? (params['roomId'] != null ? targetId : null);
+    if (roomId == null) {
+      return const NotificationDestination(Routes.notification);
     }
     final name = payloadName ?? _text(room?.displayName);
     final args = room == null
-        ? ChatRouteArgs(classroomName: name, currentUserRole: _session.userRole)
+        ? ChatRouteArgs(
+            classroomName: name,
+            currentUserRole: _session.userRole,
+          )
         : ChatRoomNavigation.arguments(
             room,
             currentUserRole: _session.userRole,
@@ -87,13 +155,13 @@ class NotificationNavigationService {
     return NotificationDestination(Routes.chatPath(roomId), extra: args);
   }
 
-  Future<ChatRoomSummaryModel?> _loadRoom(String roomId) async {
+  Future<ChatRoomSummaryModel?> _loadRoom(String targetId) async {
     final repo = _chatRepo;
     if (repo == null) return null;
     final result = await repo.getChatRooms();
     return result.fold((_) => null, (response) {
       _roomsCache?.replace(response.rooms);
-      return _roomsCache?.find(roomId) ?? _findRoom(response.rooms, roomId);
+      return _roomsCache?.find(targetId) ?? _findRoom(response.rooms, targetId);
     });
   }
 
@@ -167,10 +235,14 @@ String? _text(dynamic value) {
 
 ChatRoomSummaryModel? _findRoom(
   Iterable<ChatRoomSummaryModel> rooms,
-  String roomId,
+  String targetId,
 ) {
+  final target = targetId.trim();
+  if (target.isEmpty) return null;
   for (final room in rooms) {
-    if (room.id.trim() == roomId) return room;
+    if (room.id.trim() == target || room.classroomId?.trim() == target) {
+      return room;
+    }
   }
   return null;
 }

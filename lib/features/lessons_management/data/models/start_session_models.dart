@@ -36,14 +36,26 @@ class StartedSession {
   final bool activeOccurrence;
   final DateTime? startAt;
 
-  factory StartedSession.fromJson(Map<String, dynamic> json) => StartedSession(
-    id: _string(json['id']).isNotEmpty
-        ? _string(json['id'])
-        : _string(json['_id']),
-    status: _string(json['status']),
-    activeOccurrence: json['activeOccurrence'] == true,
-    startAt: DateTime.tryParse(_string(json['startAt'])),
-  );
+  factory StartedSession.fromJson(Map<String, dynamic> json) {
+    final sessionMap = _sessionMap(json);
+    final rawId = _string(
+      json['id'] ??
+          json['_id'] ??
+          json['sessionId'] ??
+          sessionMap['id'] ??
+          sessionMap['_id'] ??
+          sessionMap['sessionId'],
+    );
+    return StartedSession(
+      id: rawId,
+      status: _string(_nonEmpty(json['status']) ?? sessionMap['status']),
+      activeOccurrence:
+          json['activeOccurrence'] == true || sessionMap['activeOccurrence'] == true,
+      startAt: DateTime.tryParse(
+        _string(_nonEmpty(json['startAt']) ?? sessionMap['startAt']),
+      ),
+    );
+  }
 
   bool get isActive => const {
     'starting',
@@ -57,6 +69,10 @@ class StartedSession {
 Map<String, dynamic> _map(Object? value) =>
     value is Map ? Map<String, dynamic>.from(value) : const {};
 String _string(Object? value) => value is String ? value.trim() : '';
+String? _nonEmpty(Object? value) {
+  final str = value?.toString().trim();
+  return (str != null && str.isNotEmpty) ? str : null;
+}
 
 Map<String, dynamic> _sessionMap(Map<String, dynamic> json) {
   final nested = _map(json['session'] ?? json['activeSession']);

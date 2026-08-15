@@ -35,7 +35,7 @@ void main() async {
   );
   runApp(
     DevicePreview(
-      enabled: true,
+      enabled: !kDebugMode,
       storage: DevicePreviewStorage.none(),
       builder: (_) {
         return const BnanApp();

@@ -71,7 +71,7 @@ class GulfClassroom {
   final bool hasSubjectConflict;
 
   String? get classroomSubjectId =>
-      _nonEmpty(schedule?.classroomSubject) ?? _nonEmpty(classroomSubject);
+      _nonEmpty(classroomSubject) ?? _nonEmpty(schedule?.classroomSubject);
   List<GulfScheduleEntry> get entries =>
       schedule?.isActive == false ? const [] : schedule?.entries ?? const [];
 
