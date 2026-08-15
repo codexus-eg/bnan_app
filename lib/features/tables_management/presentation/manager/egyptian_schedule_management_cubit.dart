@@ -3,6 +3,7 @@ import 'package:bnan_app/features/tables_management/data/models/egyptian_digital
 import 'package:bnan_app/features/tables_management/data/repo/egyptian_digital_schedule_repo.dart';
 import 'package:bnan_app/features/lessons_management/presentation/models/lesson_days.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum EgyptianScheduleStatus { loading, ready, saving, failure }
@@ -202,8 +203,7 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
   }
 
   DateTime selectedDate(String day) {
-    final index = egyptianLessonDays.indexOf(day);
-    return _selectedWeekStart().add(Duration(days: index < 0 ? 0 : index));
+    return _dateForDayValue(_selectedWeekStart(), day);
   }
 
   void selectDay(String day) {
@@ -223,39 +223,84 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
     if (state.status == EgyptianScheduleStatus.saving ||
         classroomSubjectId.isEmpty ||
         !_timePattern.hasMatch(startTime)) {
+      debugPrint(
+        'EDIT BLOCKED: status=${state.status} '
+        'classroomSubjectIdEmpty=${classroomSubjectId.isEmpty} '
+        'validTime=${_timePattern.hasMatch(startTime)}',
+      );
       return false;
     }
     final date = _dateForDay(_selectedWeekStart(), state.selectedDay);
     final day = _day(date);
-    final lessons =
-        day?.lessons
-            .where((lesson) => lesson.id != originalLessonId)
-            .map(_requestFromLesson)
-            .toList() ??
-        <EgyptianLessonRequest>[];
-    if (lessons.any((item) => item.classroomSubjectId.isEmpty) ||
-        lessons.any((item) => item.startTime == startTime)) {
+    final updatedLesson = EgyptianLessonRequest(
+      classroomSubjectId: classroomSubjectId,
+      startTime: startTime,
+    );
+    final lessons = <EgyptianLessonRequest>[];
+    var replaced = false;
+    for (final lesson in day?.lessons ?? const <EgyptianDigitalLesson>[]) {
+      if (!replaced &&
+          originalLessonId != null &&
+          lesson.id == originalLessonId) {
+        lessons.add(updatedLesson);
+        replaced = true;
+      } else {
+        lessons.add(_requestFromLesson(lesson));
+      }
+    }
+    if (originalLessonId != null && !replaced) {
+      debugPrint(
+        'EDIT BLOCKED: original lesson not found; date=$date '
+        'lessonId=$originalLessonId availableDates='
+        '${state.days.map((item) => item.date).toList()}',
+      );
       return false;
     }
-    lessons.add(
-      EgyptianLessonRequest(
-        classroomSubjectId: classroomSubjectId,
-        startTime: startTime,
-      ),
-    );
+    if (originalLessonId == null) lessons.add(updatedLesson);
+    if (lessons.any((item) => item.classroomSubjectId.isEmpty) ||
+        _hasDuplicateStartTime(lessons)) {
+      debugPrint(
+        'EDIT BLOCKED: invalid classroomSubjectId or duplicate startTime',
+      );
+      return false;
+    }
     return _saveDay(date, lessons, exists: day != null);
   }
 
   Future<bool> deleteLesson(String lessonId) async {
-    if (state.status == EgyptianScheduleStatus.saving) return false;
+    if (state.status == EgyptianScheduleStatus.saving) {
+      debugPrint('DELETE BLOCKED: already saving');
+      return false;
+    }
     final date = _dateForDay(_selectedWeekStart(), state.selectedDay);
     final day = _day(date);
-    if (day == null) return false;
-    final remaining = day.lessons
-        .where((lesson) => lesson.id != lessonId)
-        .map(_requestFromLesson)
-        .toList(growable: false);
-    if (remaining.any((item) => item.classroomSubjectId.isEmpty)) return false;
+    if (day == null) {
+      debugPrint(
+        'DELETE BLOCKED: day not found; date=$date availableDates='
+        '${state.days.map((item) => item.date).toList()}',
+      );
+      return false;
+    }
+    final remaining = <EgyptianLessonRequest>[];
+    var removed = false;
+    for (final lesson in day.lessons) {
+      if (!removed && lesson.id == lessonId) {
+        removed = true;
+      } else {
+        remaining.add(_requestFromLesson(lesson));
+      }
+    }
+    if (!removed) {
+      debugPrint(
+        'DELETE BLOCKED: lesson not found; lessonId=$lessonId '
+        'availableIds=${day.lessons.map((item) => item.id).toList()}',
+      );
+      return false;
+    }
+    if (remaining.any((item) => item.classroomSubjectId.isEmpty)) {
+      debugPrint('DELETE BLOCKED: remaining classroomSubjectId is empty');
+      return false;
+    }
     emit(
       state.copyWith(status: EgyptianScheduleStatus.saving, actionError: null),
     );
@@ -290,9 +335,16 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
   }
 
   Future<bool> _finish(Either<Failure, void> result) async {
-    if (isClosed) return false;
+    if (isClosed) {
+      debugPrint('SCHEDULE ACTION BLOCKED: cubit is closed');
+      return false;
+    }
     final failure = result.fold<Failure?>((value) => value, (_) => null);
     if (failure != null) {
+      debugPrint(
+        'SCHEDULE ACTION FAILED: code=${failure.code} '
+        'message=${failure.message}',
+      );
       emit(
         state.copyWith(
           status: EgyptianScheduleStatus.ready,
@@ -315,18 +367,15 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
   }
 
   EgyptianLessonRequest _requestFromLesson(EgyptianDigitalLesson lesson) {
-    var classroomSubjectId = lesson.classroomSubjectId ?? '';
-    if (classroomSubjectId.isEmpty) {
-      for (final item in state.subjects) {
-        if (item.subjectId == lesson.subjectId) {
-          classroomSubjectId = item.classroomSubjectId;
-        }
-      }
-    }
     return EgyptianLessonRequest(
-      classroomSubjectId: classroomSubjectId,
+      classroomSubjectId: lesson.classroomSubjectId ?? '',
       startTime: lesson.startTime,
     );
+  }
+
+  bool _hasDuplicateStartTime(List<EgyptianLessonRequest> lessons) {
+    final times = <String>{};
+    return lessons.any((lesson) => !times.add(lesson.startTime));
   }
 
   Future<void> refreshSelectedWeek() async {
@@ -446,9 +495,20 @@ DateTime _lastWeekday(int year, int month, int weekday) {
   return value;
 }
 
-String _dateForDay(DateTime sunday, String day) {
-  final index = egyptianLessonDays.indexOf(day);
-  return _formatDate(sunday.add(Duration(days: index < 0 ? 0 : index)));
+String _dateForDay(DateTime weekStart, String day) =>
+    _formatDate(_dateForDayValue(weekStart, day));
+
+DateTime _dateForDayValue(DateTime weekStart, String day) {
+  final targetWeekday = switch (day) {
+    'sunday' => DateTime.sunday,
+    'monday' => DateTime.monday,
+    'tuesday' => DateTime.tuesday,
+    'wednesday' => DateTime.wednesday,
+    'thursday' => DateTime.thursday,
+    _ => weekStart.weekday,
+  };
+  final offset = (targetWeekday - weekStart.weekday + 7) % 7;
+  return _dateOnly(weekStart).add(Duration(days: offset));
 }
 
 String _formatDate(DateTime value) =>

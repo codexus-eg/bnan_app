@@ -3,6 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
+import 'package:bnan_app/core/shared_widget/dialogs/custom_delete_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -21,10 +22,12 @@ class EgyptianLessonDialog extends StatefulWidget {
     super.key,
     required this.classroomName,
     this.lesson,
+    this.confirmDelete = false,
   });
 
   final String classroomName;
   final EgyptianDigitalLesson? lesson;
+  final bool confirmDelete;
 
   @override
   State<EgyptianLessonDialog> createState() => _EgyptianLessonDialogState();
@@ -54,6 +57,15 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
         }
       }
     }
+    debugPrint('EDIT PREFILL lesson.id: ${widget.lesson?.id}');
+    debugPrint(
+      'EDIT PREFILL lesson.classroomSubjectId: '
+      '${widget.lesson?.classroomSubjectId}',
+    );
+    debugPrint('EDIT PREFILL selectedClassroomSubjectId: $classroomSubjectId');
+    debugPrint('EDIT PREFILL selectedTime: $startTime');
+    debugPrint('EDIT PREFILL originalTime: ${widget.lesson?.startTime}');
+    debugPrint('EDIT PREFILL selectedDate: ${cubit.selectedDate(day)}');
   }
 
   @override
@@ -190,20 +202,32 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
     final subjectId = classroomSubjectId;
     final time = startTime;
     if (subjectId == null || time == null) {
+      debugPrint(
+        'EDIT BLOCKED: ${subjectId == null ? 'classroomSubjectId null' : 'selectedTime null'}',
+      );
       setState(() => localError = S.of(context).fillAllRequiredFields);
       return;
     }
     final cubit = context.read<EgyptianScheduleManagementCubit>();
     if (widget.lesson == null && cubit.isPastStart(day, time)) {
+      debugPrint('EDIT BLOCKED: past time');
       setState(() => localError = S.of(context).scheduleTimeInPast);
       return;
     }
+    debugPrint('EDIT SAVE PRESSED');
+    debugPrint('edited lesson id: ${widget.lesson?.id}');
+    debugPrint('classroomSubjectId: $subjectId');
+    debugPrint('new startTime: $time');
+    debugPrint('originalTime: ${widget.lesson?.startTime}');
+    debugPrint('selectedDate: ${cubit.selectedDate(day)}');
     cubit.selectDay(day);
+    debugPrint('EDIT CALLING CUBIT');
     final saved = await cubit.saveLesson(
       originalLessonId: widget.lesson?.id,
       classroomSubjectId: subjectId,
       startTime: time,
     );
+    debugPrint('EDIT CUBIT RESULT: $saved');
     if (saved && mounted) {
       Navigator.pop(context);
       await cubit.refreshSelectedWeek();
@@ -211,12 +235,41 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
   }
 
   Future<void> _delete() async {
+    if (widget.confirmDelete) {
+      final confirmed = await _confirmDelete();
+      if (!mounted || !confirmed) {
+        debugPrint('DELETE BLOCKED: mounted=$mounted confirmed=$confirmed');
+        return;
+      }
+    }
     final cubit = context.read<EgyptianScheduleManagementCubit>();
+    debugPrint('DELETE BEFORE CUBIT: ${widget.lesson?.id}');
     final deleted = await cubit.deleteLesson(widget.lesson!.id);
+    debugPrint('DELETE CUBIT RESULT: $deleted');
     if (deleted && mounted) {
       Navigator.pop(context);
       await cubit.refreshSelectedWeek();
     }
+  }
+
+  Future<bool> _confirmDelete() async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => CustomAppDialog(
+            child: CustomDeleteDialog(
+              gradeId: widget.lesson!.id,
+              isLoading: false,
+              dialogHeader: S.of(dialogContext).delete,
+              subtitle: S.of(dialogContext).confirmDelete,
+              showCancelButton: true,
+              onPressed: () {
+                debugPrint('DELETE CONFIRMED: ${widget.lesson?.id}');
+                Navigator.pop(dialogContext, true);
+              },
+            ),
+          ),
+        ) ??
+        false;
   }
 
   String _label(EgyptianClassroomSubject item) {

@@ -13,6 +13,9 @@ import 'package:bnan_app/features/lessons_management/presentation/views/widgets/
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lessons_management_header.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lessons_selected_day_header.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lessons_week_days_selector.dart';
+import 'package:bnan_app/features/supervisor_management/data/models/supervisor_classroom_model.dart';
+import 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_cubit.dart';
+import 'package:bnan_app/features/supervisor_management/presentation/manager/get_supervisor_classrooms/get_supervisor_classrooms_state.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 import 'package:bnan_app/features/tables_management/data/repo/egyptian_digital_schedule_repo.dart';
@@ -24,7 +27,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TablesManagementBody extends StatefulWidget {
-  const TablesManagementBody({super.key});
+  const TablesManagementBody({super.key, this.useSupervisorClassrooms = false});
+
+  final bool useSupervisorClassrooms;
 
   @override
   State<TablesManagementBody> createState() => _TablesManagementBodyState();
@@ -36,32 +41,65 @@ class _TablesManagementBodyState extends State<TablesManagementBody> {
   @override
   Widget build(BuildContext context) => SafeArea(
     bottom: false,
-    child: BlocBuilder<ClassroomsCubit, ClassroomsState>(
-      builder: (context, state) {
-        if (state is ClassroomsFailure) {
-          return TableSchedulesFailure(
-            message: state.message,
-            onRetry: context.read<ClassroomsCubit>().getClassrooms,
-          );
-        }
-        if (state is! ClassroomsSuccess) {
-          return const AppSkeletonizer(isLoading: true, child: NoDataWidget());
-        }
-        return _classrooms(state.response.data);
-      },
-    ),
+    child: widget.useSupervisorClassrooms
+        ? BlocBuilder<
+            GetSupervisorClassroomsCubit,
+            GetSupervisorClassroomsState
+          >(builder: _supervisorClassrooms)
+        : BlocBuilder<ClassroomsCubit, ClassroomsState>(
+            builder: _adminClassrooms,
+          ),
   );
 
-  Widget _classrooms(List<ClassroomModel> values) {
-    final classrooms = values
-        .where(
-          (item) =>
-              item.isActive &&
-              item.id.isNotEmpty &&
-              item.curriculum.registrationMode?.toLowerCase() == 'egyptian',
-        )
-        .map(_classroomUi)
-        .toList(growable: false);
+  Widget _adminClassrooms(BuildContext context, ClassroomsState state) {
+    if (state is ClassroomsFailure) {
+      return TableSchedulesFailure(
+        message: state.message,
+        onRetry: context.read<ClassroomsCubit>().getClassrooms,
+      );
+    }
+    if (state is! ClassroomsSuccess) {
+      return const AppSkeletonizer(isLoading: true, child: NoDataWidget());
+    }
+    return _classrooms(
+      state.response.data
+          .where(
+            (item) =>
+                item.isActive &&
+                item.id.isNotEmpty &&
+                item.curriculum.registrationMode?.toLowerCase() == 'egyptian',
+          )
+          .map(_classroomUi)
+          .toList(growable: false),
+    );
+  }
+
+  Widget _supervisorClassrooms(
+    BuildContext context,
+    GetSupervisorClassroomsState state,
+  ) {
+    if (state is GetSupervisorClassroomsFailure) {
+      return TableSchedulesFailure(
+        message: state.errorMessage,
+        onRetry: context.read<GetSupervisorClassroomsCubit>().getMyClassrooms,
+      );
+    }
+    if (state is! GetSupervisorClassroomsSuccess) {
+      return const AppSkeletonizer(isLoading: true, child: NoDataWidget());
+    }
+    return _classrooms(
+      state.response.data
+          .where(
+            (item) =>
+                item.id.isNotEmpty &&
+                item.curriculum.registrationMode?.toLowerCase() == 'egyptian',
+          )
+          .map(_supervisorClassroomUi)
+          .toList(growable: false),
+    );
+  }
+
+  Widget _classrooms(List<LessonClassroomUiModel> classrooms) {
     final selectedId = classrooms.any((item) => item.id == classroomId)
         ? classroomId
         : classrooms.isEmpty
@@ -94,6 +132,7 @@ class _TablesManagementBodyState extends State<TablesManagementBody> {
         classrooms: classrooms,
         classroomId: selectedId,
         onClassroomChanged: _selectClassroom,
+        confirmDelete: widget.useSupervisorClassrooms,
       ),
     );
   }
@@ -125,6 +164,15 @@ class _TablesManagementBodyState extends State<TablesManagementBody> {
         subjectId: '',
         subjectName: '',
       );
+
+  LessonClassroomUiModel _supervisorClassroomUi(
+    SupervisorClassroomModel item,
+  ) => LessonClassroomUiModel(
+    id: item.id,
+    name: item.name,
+    subjectId: '',
+    subjectName: '',
+  );
 }
 
 class _EgyptianScheduleContent extends StatelessWidget {
@@ -132,11 +180,13 @@ class _EgyptianScheduleContent extends StatelessWidget {
     required this.classrooms,
     required this.classroomId,
     required this.onClassroomChanged,
+    required this.confirmDelete,
   });
 
   final List<LessonClassroomUiModel> classrooms;
   final String classroomId;
   final ValueChanged<String?> onClassroomChanged;
+  final bool confirmDelete;
 
   @override
   Widget build(BuildContext context) =>
@@ -180,6 +230,7 @@ class _EgyptianScheduleContent extends StatelessWidget {
       );
     }
     final lessons = _selectedLessons(state)..sort(_byStartTime);
+    final lessonModels = lessons.map(_lessonUi).toList(growable: false);
     return Column(
       children: [
         header,
@@ -198,11 +249,13 @@ class _EgyptianScheduleContent extends StatelessWidget {
           child: lessons.isEmpty
               ? NoDataWidget(title: S.of(context).noLessonsForSelectedDay)
               : LessonsList(
-                  lessons: lessons.map(_lessonUi).toList(growable: false),
-                  onTap: (lesson) => _openDialog(
-                    context,
-                    lesson: lessons.firstWhere((item) => item.id == lesson.id),
-                  ),
+                  lessons: lessonModels,
+                  onTap: (lesson) {
+                    final index = lessonModels.indexOf(lesson);
+                    if (index >= 0) {
+                      _openDialog(context, lesson: lessons[index]);
+                    }
+                  },
                 ),
         ),
       ],
@@ -304,6 +357,7 @@ class _EgyptianScheduleContent extends StatelessWidget {
               .firstWhere((item) => item.id == classroomId)
               .name,
           lesson: lesson,
+          confirmDelete: confirmDelete,
         ),
       ),
     );

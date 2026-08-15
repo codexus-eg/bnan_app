@@ -16,6 +16,12 @@ abstract class SupervisorNavigationConfig {
           ImageManager.tableIcon,
           Routes.egyptianSchedulesReadOnly,
         ),
+      if (session.isEgyptianSupervisor)
+        _item(
+          s.lessonsManagement,
+          ImageManager.calendarIcon,
+          Routes.tablesManagement,
+        ),
       if (session.isGulfSupervisor)
         _item(
           s.lessonsManagement,

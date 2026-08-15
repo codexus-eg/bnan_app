@@ -121,6 +121,10 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     List<SupervisorNavigationItem> bottom,
   ) {
     scaffoldKey.currentState?.closeDrawer();
+    if (item.route == Routes.tablesManagement) {
+      MyNavigator.goTo(context, Routes.tablesManagement);
+      return;
+    }
     final bottomIndex = bottom.indexWhere((entry) => entry.route == item.route);
     if (item.route == null || bottomIndex == homeTabIndex) {
       selectHome();

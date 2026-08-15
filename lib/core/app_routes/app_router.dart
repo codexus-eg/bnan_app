@@ -1076,17 +1076,32 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: Routes.tablesManagement,
         redirect: (context, state) {
-          if (SessionManager.instance.role == UserRole.admin) return null;
+          final session = SessionManager.instance;
+          if (session.role == UserRole.admin || session.isEgyptianSupervisor) {
+            return null;
+          }
           return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
               Routes.splash;
         },
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
-            child: const TablesManagementView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final isSupervisor = SessionManager.instance.isEgyptianSupervisor;
+          return buildTransitionPages(
+            child: isSupervisor
+                ? BlocProvider(
+                    create: (_) =>
+                        getIt<GetSupervisorClassroomsCubit>()
+                          ..getMyClassrooms(),
+                    child: const TablesManagementView(
+                      useSupervisorClassrooms: true,
+                    ),
+                  )
+                : BlocProvider(
+                    create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
+                    child: const TablesManagementView(),
+                  ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.egyptianSchedulesReadOnly,

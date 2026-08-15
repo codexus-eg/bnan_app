@@ -4,13 +4,25 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TablesManagementView extends StatelessWidget {
-  const TablesManagementView({super.key});
+  const TablesManagementView({
+    super.key,
+    this.showBackButton = true,
+    this.useSupervisorClassrooms = false,
+  });
+
+  final bool? showBackButton;
+  final bool? useSupervisorClassrooms;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(headerText: S.of(context).lessonsManagement),
-      body: const TablesManagementBody(),
+      appBar: CustomAppbar(
+        headerText: S.of(context).lessonsManagement,
+        iconNeeded: showBackButton ?? true,
+      ),
+      body: TablesManagementBody(
+        useSupervisorClassrooms: useSupervisorClassrooms ?? false,
+      ),
     );
   }
 }
