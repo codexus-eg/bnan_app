@@ -4,6 +4,7 @@ import 'package:bnan_app/features/tables_management/data/models/egyptian_digital
 DigitalScheduleGridData adaptEgyptianSchedule(
   EgyptianScheduleWeek week, {
   required String Function(EgyptianDigitalLesson) secondaryText,
+  bool includeJoinAction = false,
 }) {
   final times = <String>{};
   final cells = <String, List<DigitalScheduleGridItem>>{};
@@ -16,7 +17,15 @@ DigitalScheduleGridData adaptEgyptianSchedule(
       cells
           .putIfAbsent('$dayKey|${lesson.startTime}', () => [])
           .add(
-            DigitalScheduleGridItem(lesson.subjectName, secondaryText(lesson)),
+            DigitalScheduleGridItem(
+              lesson.subjectName,
+              secondaryText(lesson),
+              actionClassroomId:
+                  includeJoinAction &&
+                      lesson.activeSession?.studentCanJoin == true
+                  ? lesson.classroomId
+                  : null,
+            ),
           );
     }
   }

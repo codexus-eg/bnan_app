@@ -1,9 +1,11 @@
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_session_action.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -92,23 +94,43 @@ class ChatHeader extends StatelessWidget {
                         color: ColorManager.white,
                       ),
               )
-            else if (ClassroomDocumentsAccess.canMessages(
-              roomType: roomType,
-              roomId: roomId,
-              role: currentUserRole,
-            ))
-              IconButton(
-                key: const Key('classroomDocumentsButton'),
-                onPressed: () => _openDocuments(context),
-                icon: const Icon(
-                  Icons.folder_copy_outlined,
-                  color: ColorManager.white,
+            else ...[
+              if (_sessionRole != null &&
+                  roomType == 'classroom' &&
+                  classroomId?.trim().isNotEmpty == true)
+                ChatSessionAction(
+                  classroomId: classroomId!.trim(),
+                  role: _sessionRole!,
                 ),
-              ),
+              if (ClassroomDocumentsAccess.canMessages(
+                roomType: roomType,
+                roomId: roomId,
+                role: currentUserRole,
+              ))
+                IconButton(
+                  key: const Key('classroomDocumentsButton'),
+                  onPressed: () => _openDocuments(context),
+                  icon: const Icon(
+                    Icons.folder_copy_outlined,
+                    color: ColorManager.white,
+                  ),
+                ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  UserRole? get _sessionRole {
+    final role = UserRole.fromValue(currentUserRole);
+    return const {
+          UserRole.teacher,
+          UserRole.supervisor,
+          UserRole.admin,
+        }.contains(role)
+        ? role
+        : null;
   }
 
   Future<void> _openDocuments(BuildContext context) async {

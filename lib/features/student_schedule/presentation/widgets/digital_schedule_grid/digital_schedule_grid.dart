@@ -7,8 +7,15 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DigitalScheduleGrid extends StatelessWidget {
-  const DigitalScheduleGrid({super.key, required this.data});
+  const DigitalScheduleGrid({
+    super.key,
+    required this.data,
+    this.onAction,
+    this.loadingClassroomIds = const {},
+  });
   final DigitalScheduleGridData data;
+  final ValueChanged<String>? onAction;
+  final Set<String> loadingClassroomIds;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -32,6 +39,8 @@ class DigitalScheduleGrid extends StatelessWidget {
                     cells: data.times
                         .map((time) => data.items(day, time))
                         .toList(),
+                    onAction: onAction,
+                    loadingClassroomIds: loadingClassroomIds,
                   ),
                 ),
               ],

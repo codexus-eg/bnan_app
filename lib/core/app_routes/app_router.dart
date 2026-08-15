@@ -255,6 +255,10 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                         ..initializeChat(roomId: roomId),
                 ),
                 BlocProvider(create: (_) => getIt<SendMessageCubit>()),
+                BlocProvider(create: (_) => getIt<StartSessionCubit>()),
+                BlocProvider(
+                  create: (_) => getIt<GetTeacherAssignedSubjectsCubit>(),
+                ),
               ],
               child: ChatView(
                 roomId: roomId,

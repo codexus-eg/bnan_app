@@ -14,6 +14,8 @@ class ScheduleCell extends StatelessWidget {
     this.height = 37,
     this.maxLines = 2,
     this.padding = EdgeInsets.zero,
+    this.onTap,
+    this.isLoading = false,
   });
 
   final String text;
@@ -24,6 +26,8 @@ class ScheduleCell extends StatelessWidget {
   final double height;
   final int maxLines;
   final EdgeInsetsGeometry padding;
+  final VoidCallback? onTap;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +41,23 @@ class ScheduleCell extends StatelessWidget {
       height: height,
       padding: padding,
       backgroundColor: bgColor,
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        maxLines: maxLines,
-        style: StylesManager.styleBold12(
-          context,
-        ).copyWith(color: textColor, height: 1.1),
+      child: InkWell(
+        onTap: isLoading ? null : onTap,
+        child: Center(
+          child: isLoading
+              ? const SizedBox.square(
+                  dimension: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: maxLines,
+                  style: StylesManager.styleBold12(
+                    context,
+                  ).copyWith(color: textColor, height: 1.1),
+                ),
+        ),
       ),
     );
   }

@@ -57,7 +57,7 @@ class EgyptianDigitalLesson {
   final String id, date, startTime, classroomId, classroomName;
   final String subjectId, subjectName;
   final String? classroomSubjectId, teacherName, teacherId;
-  final Object? activeSession;
+  final EgyptianLessonActiveSession? activeSession;
 
   factory EgyptianDigitalLesson.fromJson(Map<String, dynamic> json) {
     final classroom = _map(json['classroom']);
@@ -83,9 +83,29 @@ class EgyptianDigitalLesson {
       ),
       teacherName: _optional(teacher['name'] ?? teacher['fullName']),
       teacherId: _optional(teacher['id'] ?? teacher['_id']),
-      activeSession: json['activeSession'],
+      activeSession: json['activeSession'] is Map
+          ? EgyptianLessonActiveSession.fromJson(
+              Map<String, dynamic>.from(json['activeSession']),
+            )
+          : null,
     );
   }
+}
+
+class EgyptianLessonActiveSession {
+  const EgyptianLessonActiveSession({required this.status, this.canJoin});
+
+  final String status;
+  final bool? canJoin;
+
+  factory EgyptianLessonActiveSession.fromJson(Map<String, dynamic> json) =>
+      EgyptianLessonActiveSession(
+        status: _text(json['status']).toLowerCase(),
+        canJoin: json['canJoin'] is bool ? json['canJoin'] as bool : null,
+      );
+
+  bool get studentCanJoin =>
+      const {'starting', 'live'}.contains(status) && canJoin != false;
 }
 
 class EgyptianClassroomSubject {

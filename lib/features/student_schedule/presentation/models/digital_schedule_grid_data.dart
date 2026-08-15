@@ -13,6 +13,11 @@ class DigitalScheduleGridData {
 }
 
 class DigitalScheduleGridItem {
-  const DigitalScheduleGridItem(this.primary, this.secondary);
+  const DigitalScheduleGridItem(
+    this.primary,
+    this.secondary, {
+    this.actionClassroomId,
+  });
   final String primary, secondary;
+  final String? actionClassroomId;
 }

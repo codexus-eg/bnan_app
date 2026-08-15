@@ -10,10 +10,14 @@ class DigitalScheduleContent extends StatelessWidget {
     required this.data,
     required this.emptyMessage,
     this.loading = false,
+    this.onAction,
+    this.loadingClassroomIds = const {},
   });
   final DigitalScheduleGridData data;
   final String emptyMessage;
   final bool loading;
+  final ValueChanged<String>? onAction;
+  final Set<String> loadingClassroomIds;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,11 @@ class DigitalScheduleContent extends StatelessWidget {
       isLoading: loading,
       child: SingleChildScrollView(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 24),
-        child: DigitalScheduleGrid(data: data),
+        child: DigitalScheduleGrid(
+          data: data,
+          onAction: onAction,
+          loadingClassroomIds: loadingClassroomIds,
+        ),
       ),
     );
   }

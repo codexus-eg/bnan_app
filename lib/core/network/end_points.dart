@@ -382,6 +382,16 @@ abstract class EndPoints {
     return '${classroomSessions(classroomId)}/start';
   }
 
+  static String activeClassroomSession(String classroomId) {
+    return '${classroomSessions(classroomId)}/active';
+  }
+
+  static String joinActiveClassroomSession(String classroomId) {
+    return '${activeClassroomSession(classroomId)}/join';
+  }
+
+  static String endSession(String sessionId) => '/sessions/$sessionId/end';
+
   static String attendanceById(String attendanceId) {
     return '$attendance/$attendanceId';
   }

@@ -17,8 +17,10 @@ class StartSessionData {
 
   factory StartSessionData.fromJson(Map<String, dynamic> json) =>
       StartSessionData(
-        session: StartedSession.fromJson(_map(json['session'])),
-        meetingLink: _string(json['meetingLink']),
+        session: StartedSession.fromJson(_sessionMap(json)),
+        meetingLink: _string(
+          json['meetingLink'] ?? _sessionMap(json)['meetingLink'],
+        ),
       );
 }
 
@@ -42,8 +44,21 @@ class StartedSession {
     activeOccurrence: json['activeOccurrence'] == true,
     startAt: DateTime.tryParse(_string(json['startAt'])),
   );
+
+  bool get isActive => const {
+    'starting',
+    'live',
+    'awaiting_zoom_end',
+  }.contains(status.toLowerCase());
+
+  bool get canJoin => const {'starting', 'live'}.contains(status.toLowerCase());
 }
 
 Map<String, dynamic> _map(Object? value) =>
     value is Map ? Map<String, dynamic>.from(value) : const {};
 String _string(Object? value) => value is String ? value.trim() : '';
+
+Map<String, dynamic> _sessionMap(Map<String, dynamic> json) {
+  final nested = _map(json['session'] ?? json['activeSession']);
+  return nested.isNotEmpty ? nested : json;
+}
