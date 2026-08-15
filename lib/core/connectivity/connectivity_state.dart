@@ -1,13 +1,19 @@
-class ConnectivityState {
-  const ConnectivityState({this.isConnected = true, this.isChecking = false});
+sealed class ConnectivityState {
+  const ConnectivityState();
+}
 
-  final bool isConnected;
-  final bool isChecking;
+final class ConnectivityInitial extends ConnectivityState {
+  const ConnectivityInitial();
+}
 
-  ConnectivityState copyWith({bool? isConnected, bool? isChecking}) {
-    return ConnectivityState(
-      isConnected: isConnected ?? this.isConnected,
-      isChecking: isChecking ?? this.isChecking,
-    );
-  }
+final class ConnectivityChecking extends ConnectivityState {
+  const ConnectivityChecking();
+}
+
+final class ConnectivityConnected extends ConnectivityState {
+  const ConnectivityConnected();
+}
+
+final class ConnectivityDisconnected extends ConnectivityState {
+  const ConnectivityDisconnected();
 }

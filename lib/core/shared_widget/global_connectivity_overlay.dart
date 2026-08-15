@@ -12,17 +12,14 @@ class GlobalConnectivityOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ConnectivityCubit, ConnectivityState>(
-      buildWhen: (previous, current) =>
-          previous.isConnected != current.isConnected ||
-          previous.isChecking != current.isChecking,
       builder: (context, state) {
         return Stack(
           fit: StackFit.expand,
           children: [
             child,
-            if (!state.isConnected)
+            if (state is ConnectivityDisconnected)
               NoInternetWidget(
-                isChecking: state.isChecking,
+                isChecking: false,
                 onRetry: context.read<ConnectivityCubit>().checkConnection,
               ),
           ],

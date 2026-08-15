@@ -64,13 +64,9 @@ class CustomAppDrawer extends StatelessWidget {
                   },
                 ),
               ),
-              if (footer != null) ...[
-                const Divider(color: ColorManager.greyA8AF),
-                footer!,
-              ],
               const Divider(color: ColorManager.greyA8AF),
+              if (footer != null) footer!,
               const LanguageDrawerItem(),
-              const Divider(color: ColorManager.greyA8AF),
               CustomAppDrawerItem(
                 title: S.of(context).logout,
                 icon: ImageManager.logout,

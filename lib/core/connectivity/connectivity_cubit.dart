@@ -5,13 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ConnectivityCubit extends Cubit<ConnectivityState> {
-  ConnectivityCubit() : super(const ConnectivityState());
+  ConnectivityCubit() : super(const ConnectivityInitial());
 
   StreamSubscription<InternetStatus>? _subscription;
   Future<void>? _pendingCheck;
+  bool _completedInitialCheck = false;
 
   Future<void> startMonitoring() async {
     await _subscription?.cancel();
+    _completedInitialCheck = false;
     _subscription = InternetConnection().onStatusChange.listen(_setStatus);
     await checkConnection();
   }
@@ -23,7 +25,7 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   }
 
   Future<void> _runCheck() async {
-    if (!isClosed) emit(state.copyWith(isChecking: true));
+    if (!isClosed) emit(const ConnectivityChecking());
     var connected = false;
     try {
       connected = await InternetConnection().hasInternetAccess;
@@ -31,15 +33,29 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
       connected = false;
     }
     if (!isClosed) {
-      emit(ConnectivityState(isConnected: connected));
+      _completedInitialCheck = true;
+      emit(
+        connected
+            ? const ConnectivityConnected()
+            : const ConnectivityDisconnected(),
+      );
     }
   }
 
   void _setStatus(InternetStatus status) {
-    if (isClosed) return;
+    if (isClosed || !_completedInitialCheck || state is ConnectivityChecking) {
+      return;
+    }
     final connected = status == InternetStatus.connected;
-    if (state.isConnected == connected && !state.isChecking) return;
-    emit(ConnectivityState(isConnected: connected));
+    if ((connected && state is ConnectivityConnected) ||
+        (!connected && state is ConnectivityDisconnected)) {
+      return;
+    }
+    emit(
+      connected
+          ? const ConnectivityConnected()
+          : const ConnectivityDisconnected(),
+    );
   }
 
   @override
