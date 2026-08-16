@@ -77,7 +77,9 @@ class ChatRoomSummaryModel {
 
     String resolvedSubtitle;
 
-    if (type == 'support') {
+    if (type == 'supervisor_student') {
+      resolvedSubtitle = backendSubtitle ?? '';
+    } else if (type == 'support') {
       final role = roleLabel(participantRole);
       resolvedSubtitle = role.isNotEmpty ? role : 'محادثة';
     } else if (type == 'classroom' ||

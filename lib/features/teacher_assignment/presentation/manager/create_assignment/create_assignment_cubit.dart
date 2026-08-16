@@ -50,10 +50,10 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
   }
 
   Future<void> pickAttachment() async {
-    attachmentFile = await FilePickerHelper.pickFile();
+    final file = await FilePickerHelper.pickFile();
+    if (isClosed || file == null) return;
 
-    if (attachmentFile == null) return;
-
+    attachmentFile = file;
     _emitChange();
   }
 
@@ -74,6 +74,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
   }
 
   Future<void> createAssignment() async {
+    if (isClosed) return;
     clearError();
 
     if (!formKey.currentState!.validate()) return;
@@ -98,6 +99,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
     );
 
     final result = await assignmentsRepo.createAssignment(request: request);
+    if (isClosed) return;
 
     result.fold(
       (failure) {
@@ -116,7 +118,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
 
   void _emitChange() {
     validationMessage = null;
-    emit(CreateAssignmentChangeValue());
+    if (!isClosed) emit(CreateAssignmentChangeValue());
   }
 
   @override

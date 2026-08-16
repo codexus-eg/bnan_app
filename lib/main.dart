@@ -34,12 +34,6 @@ void main() async {
     const SystemUiOverlayStyle(statusBarColor: ColorManager.white),
   );
   runApp(
-    DevicePreview(
-      enabled: !kDebugMode,
-      storage: DevicePreviewStorage.none(),
-      builder: (_) {
-        return const BnanApp();
-      },
-    ),
+    const BnanApp(),
   );
 }

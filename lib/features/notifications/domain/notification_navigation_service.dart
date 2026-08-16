@@ -134,19 +134,14 @@ class NotificationNavigationService {
     }
     final payloadName = _roomName(params);
     var room = _roomsCache?.find(targetId);
-    if (room == null) {
-      room = await _loadRoom(targetId);
-    }
+    room ??= await _loadRoom(targetId);
     final roomId = room?.id ?? (params['roomId'] != null ? targetId : null);
     if (roomId == null) {
       return const NotificationDestination(Routes.notification);
     }
     final name = payloadName ?? _text(room?.displayName);
     final args = room == null
-        ? ChatRouteArgs(
-            classroomName: name,
-            currentUserRole: _session.userRole,
-          )
+        ? ChatRouteArgs(classroomName: name, currentUserRole: _session.userRole)
         : ChatRoomNavigation.arguments(
             room,
             currentUserRole: _session.userRole,
@@ -174,9 +169,10 @@ class NotificationNavigationService {
     UserRole.parent => Routes.parentSchedule,
     UserRole.student when _session.isGulfStudent =>
       Routes.gulfStudentScheduleReadOnly,
-    UserRole.student ||
-    UserRole.teacher ||
-    UserRole.supervisor => Routes.egyptianSchedulesReadOnly,
+    UserRole.student || UserRole.teacher => Routes.egyptianSchedulesReadOnly,
+    UserRole.supervisor when _session.isGulfSupervisor =>
+      Routes.lessonsManagement,
+    UserRole.supervisor => Routes.tablesManagement,
     _ => Routes.tablesManagement,
   };
   String? _subscription(String? _) => switch (_session.role) {

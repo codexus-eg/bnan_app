@@ -101,6 +101,13 @@ const _tablesCases = [
     Routes.tablesManagement,
     'supervisor',
   ),
+  _GuardCase(
+    'tables allows Egyptian supervisor',
+    Routes.tablesManagement,
+    'supervisor',
+    allowed: true,
+    mode: RegistrationMode.egyptian,
+  ),
   _GuardCase('tables rejects student', Routes.tablesManagement, 'student'),
   _GuardCase('tables rejects parent', Routes.tablesManagement, 'parent'),
 ];
@@ -344,10 +351,9 @@ const _readOnlyCases = [
     modes: [RegistrationMode.egyptian],
   ),
   _GuardCase(
-    'Egyptian read-only allows supervisor',
+    'Egyptian read-only rejects supervisor',
     Routes.egyptianSchedulesReadOnly,
     'supervisor',
-    allowed: true,
     mode: RegistrationMode.egyptian,
   ),
   _GuardCase(

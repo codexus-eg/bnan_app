@@ -31,6 +31,28 @@ void main() {
     expect(page.items.single.id, 'n1');
     expect(page.unreadCount, 4);
     expect(page.hasNext, isTrue);
+    expect(page.totalPages, 2);
+  });
+
+  test('parses root pagination used by notifications endpoint', () {
+    final page = NotificationsPage.fromJson({
+      'data': [
+        {'id': 'n1'},
+      ],
+      'unreadCount': 3,
+      'pagination': {
+        'page': 2,
+        'limit': 20,
+        'total': 41,
+        'pages': 3,
+        'hasNextPage': true,
+      },
+    });
+
+    expect(page.page, 2);
+    expect(page.totalPages, 3);
+    expect(page.hasNext, isTrue);
+    expect(page.unreadCount, 3);
   });
 
   test('FCM JSON params preserve room id and room name', () {

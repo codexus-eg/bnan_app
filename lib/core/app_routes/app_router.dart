@@ -1122,7 +1122,6 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         redirect: (context, state) {
           final session = SessionManager.instance;
           final isAllowed =
-              session.isEgyptianSupervisor ||
               session.isEgyptianStudent ||
               (session.role == UserRole.teacher &&
                   session.hasEgyptianRegistration);
@@ -1131,18 +1130,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         },
         pageBuilder: (context, state) {
           final session = SessionManager.instance;
-          final child =
-              session.role == UserRole.teacher &&
-                  session.hasEgyptianRegistration
+          final child = session.role == UserRole.teacher
               ? const TeacherEgyptianScheduleView()
-              : session.isEgyptianStudent
-              ? const StudentEgyptianScheduleView()
-              : BlocProvider(
-                  create: (_) =>
-                      getIt<GetEgyptianSchedulesCubit>()
-                        ..getMyEgyptianSchedule(),
-                  child: const EgyptianSchedulesReadOnlyView(),
-                );
+              : const StudentEgyptianScheduleView();
           return buildTransitionPages(child: child, key: state.pageKey);
         },
       ),

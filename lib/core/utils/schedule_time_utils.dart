@@ -11,12 +11,37 @@ abstract final class ScheduleTimeUtils {
 
   static int? minutes(String? value) {
     if (value == null || !isValid(value)) return null;
+
     final parts = value.split(':');
+
     return int.parse(parts[0]) * 60 + int.parse(parts[1]);
   }
 
+  static String format12Hour(String? value) {
+    if (value == null || !isValid(value)) {
+      return value ?? '';
+    }
+
+    final parts = value.split(':');
+
+    final hour = int.parse(parts[0]);
+    final minute = parts[1];
+
+    final period = hour >= 12 ? 'PM' : 'AM';
+
+    final hour12 = hour % 12 == 0 ? 12 : hour % 12;
+
+    return '${hour12.toString().padLeft(2, '0')}:$minute $period';
+  }
+
   static String range(String startTime, String? endTime) {
+    final start = format12Hour(startTime);
     final end = endTime?.trim();
-    return end == null || end.isEmpty ? startTime : '$startTime - $end';
+
+    if (end == null || end.isEmpty) {
+      return start;
+    }
+
+    return '$start - ${format12Hour(end)}';
   }
 }

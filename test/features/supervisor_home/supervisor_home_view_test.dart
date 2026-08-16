@@ -239,7 +239,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Egyptian schedule item opens the read-only route', (
+  testWidgets('Egyptian supervisor opens new lessons management only', (
     tester,
   ) async {
     await _saveSupervisor(RegistrationMode.egyptian);
@@ -251,10 +251,11 @@ void main() {
     state.scaffoldKey.currentState?.openDrawer();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Schedule'));
+    expect(find.text('Schedule'), findsNothing);
+    await tester.tap(find.text('Lessons Management'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Egyptian schedules destination'), findsOneWidget);
+    expect(find.text('Tables management destination'), findsOneWidget);
   });
 
   testWidgets('supports the Arabic RTL layout at 360px', (tester) async {
@@ -303,6 +304,11 @@ Widget testApp({
         path: Routes.egyptianSchedulesReadOnly,
         builder: (_, _) =>
             const Scaffold(body: Text('Egyptian schedules destination')),
+      ),
+      GoRoute(
+        path: Routes.tablesManagement,
+        builder: (_, _) =>
+            const Scaffold(body: Text('Tables management destination')),
       ),
       GoRoute(
         path: Routes.plans,

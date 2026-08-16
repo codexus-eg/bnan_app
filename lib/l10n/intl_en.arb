@@ -381,9 +381,9 @@
     "personalProfile": "Personal Profile",
     "studentProfileGrade": "الصف الثاني الإعدادي",
     "studentProfileClass": "القسم المصري",
-    "contactInfo": "معلومات الاتصال",
-    "userName": "اسم المستخدم",
-    "privacy": "الخصوصية",
+    "contactInfo": "Contact Info",
+    "userName": "userName",
+    "privacy": "privacy",
     "changePhoneTitle": "Edit Phone Number",
     "changeUsernameTitle": "Edit Username",
     "changePasswordTitle": "Change Password",
@@ -1324,5 +1324,6 @@
     "studyNotStarted": "Study has not started yet",
     "cannotAddLessonInPreviousWeek": "A lesson cannot be added in a previous week",
     "scheduleDateInPast": "A lesson cannot be added on a past date",
-    "scheduleTimeInPast": "A lesson cannot be added at a past time"
+    "scheduleTimeInPast": "A lesson cannot be added at a past time",
+    "noSubjectsInClassroom": "No subjects have been added to this classroom."
 }

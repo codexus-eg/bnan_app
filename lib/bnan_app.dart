@@ -36,51 +36,78 @@ class BnanApp extends StatefulWidget {
 class _BnanAppState extends State<BnanApp> {
   TamaraPaymentCubit? paymentCubit;
   String? _navigatedPaymentId;
+
   late final GoRouter _router;
   late final ChatNotificationCoordinator _chatNotifications;
   late final ConnectivityCubit _connectivity;
   late final LanguageCubit _language;
   late final NotificationsCubit _notifications;
+
   PushNotificationService? _pushNotifications;
+
   final _navigatorKey = GlobalKey<NavigatorState>();
+
   StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
   StreamSubscription<AppNotification>? _notificationFeedbackSubscription;
   StreamSubscription<AppNotification>? _notificationNavigationSubscription;
   StreamSubscription<void>? _sessionExpiredSubscription;
+
   AppTopFeedbackHandle? _chatFeedback;
 
   @override
   void initState() {
     super.initState();
-    _router = buildRouter(navigatorKey: _navigatorKey);
+
+    _router = buildRouter(
+      navigatorKey: _navigatorKey,
+    );
+
     _language = LanguageCubit();
+
     _connectivity = ConnectivityCubit();
     unawaited(_connectivity.startMonitoring());
-    _sessionExpiredSubscription = SessionInvalidator.instance.expired.listen(
+
+    _sessionExpiredSubscription =
+        SessionInvalidator.instance.expired.listen(
       (_) => _openLoginAfterSessionExpiry(),
     );
+
     _chatNotifications = getIt<ChatNotificationCoordinator>();
     _notifications = getIt<NotificationsCubit>();
+
     _chatNotifications.setNotificationHandler(
       _notifications.ingestSocketNotification,
     );
-    _chatNotificationSubscription = _chatNotifications.foregroundEvents.listen(
+
+    _chatNotificationSubscription =
+        _chatNotifications.foregroundEvents.listen(
       _showChatNotification,
     );
+
     unawaited(_chatNotifications.initialize());
-    _notificationFeedbackSubscription = _notifications.incoming.listen(
+
+    _notificationFeedbackSubscription =
+        _notifications.incoming.listen(
       _showForegroundNotification,
     );
+
     unawaited(_notifications.initialize());
+
     if (getIt.isRegistered<PushNotificationService>()) {
       _pushNotifications = getIt<PushNotificationService>();
-      _notificationNavigationSubscription = _pushNotifications!
-          .notificationOpened
-          .listen(_openNotification);
+
+      _notificationNavigationSubscription =
+          _pushNotifications!.notificationOpened.listen(
+        _openNotification,
+      );
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) unawaited(_pushNotifications!.initialize());
+        if (mounted) {
+          unawaited(_pushNotifications!.initialize());
+        }
       });
     }
+
     if (getIt.isRegistered<TamaraPaymentCubit>()) {
       paymentCubit = getIt<TamaraPaymentCubit>()..restore();
     }
@@ -90,12 +117,19 @@ class _BnanAppState extends State<BnanApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: _language),
-        BlocProvider.value(value: _connectivity),
-        BlocProvider.value(value: _notifications),
+        BlocProvider.value(
+          value: _language,
+        ),
+        BlocProvider.value(
+          value: _connectivity,
+        ),
+        BlocProvider.value(
+          value: _notifications,
+        ),
       ],
       child: BlocBuilder<LanguageCubit, LanguageState>(
-        buildWhen: (previous, current) => previous.locale != current.locale,
+        buildWhen: (previous, current) =>
+            previous.locale != current.locale,
         builder: (context, state) {
           final app = MaterialApp.router(
             debugShowCheckedModeBanner: false,
@@ -112,49 +146,82 @@ class _BnanAppState extends State<BnanApp> {
             routerConfig: _router,
             theme: ThemeHelper.getTheme(),
           );
+
           final cubit = paymentCubit;
+
           return cubit == null
               ? app
-              : BlocProvider.value(value: cubit, child: app);
+              : BlocProvider.value(
+                  value: cubit,
+                  child: app,
+                );
         },
       ),
     );
   }
 
-  void _showChatNotification(ChatNotificationEvent event) {
+  void _showChatNotification(
+    ChatNotificationEvent event,
+  ) {
     final context = _navigatorKey.currentContext;
     final overlay = _navigatorKey.currentState?.overlay;
-    if (context == null || overlay == null) return;
+
+    if (context == null || overlay == null) {
+      return;
+    }
+
     final sender = event.senderName.isEmpty
         ? S.current.messages
         : event.senderName;
+
     _dismissChatNotification();
+
     _chatFeedback = AppTopFeedback.show(
       context,
       overlay: overlay,
       type: AppTopFeedbackType.notification,
-      title: event.roomName.isEmpty ? sender : event.roomName,
+      title: event.roomName.isEmpty
+          ? sender
+          : event.roomName,
       body: event.roomName.isEmpty
           ? event.message
           : '$sender: ${event.message}',
       dedupKey: 'chat:${event.messageId}',
       onTap: event.roomId.isEmpty
           ? null
-          : () => unawaited(_openNotification(_chatEventNotification(event))),
+          : () => unawaited(
+                _openNotification(
+                  _chatEventNotification(event),
+                ),
+              ),
     );
   }
 
   void _dismissChatNotification() {
     final feedback = _chatFeedback;
+
     _chatFeedback = null;
-    if (feedback != null) AppTopFeedback.dismiss(feedback);
+
+    if (feedback != null) {
+      AppTopFeedback.dismiss(feedback);
+    }
   }
 
-  void _showForegroundNotification(AppNotification notification) {
-    if (notification.key.trim().toUpperCase() == 'NEW_MESSAGE') return;
+  void _showForegroundNotification(
+    AppNotification notification,
+  ) {
+    if (notification.key.trim().toUpperCase() ==
+        'NEW_MESSAGE') {
+      return;
+    }
+
     final context = _navigatorKey.currentContext;
     final overlay = _navigatorKey.currentState?.overlay;
-    if (context == null || overlay == null) return;
+
+    if (context == null || overlay == null) {
+      return;
+    }
+
     AppTopFeedback.show(
       context,
       overlay: overlay,
@@ -166,20 +233,33 @@ class _BnanAppState extends State<BnanApp> {
       dedupKey: notification.id.isEmpty
           ? '${notification.key}|${notification.createdAt}'
           : notification.id,
-      onTap: () => unawaited(_openNotification(notification)),
+      onTap: () => unawaited(
+        _openNotification(notification),
+      ),
     );
   }
 
-  Future<void> _openNotification(AppNotification notification) async {
-    final destination = await getIt<NotificationNavigationService>()
-        .resolveDestination(notification);
-    if (_router.routeInformationProvider.value.uri.path == destination.path) {
+  Future<void> _openNotification(
+    AppNotification notification,
+  ) async {
+    final destination =
+        await getIt<NotificationNavigationService>()
+            .resolveDestination(notification);
+
+    if (_router.routeInformationProvider.value.uri.path ==
+        destination.path) {
       return;
     }
-    _router.push(destination.path, extra: destination.extra);
+
+    _router.push(
+      destination.path,
+      extra: destination.extra,
+    );
   }
 
-  AppNotification _chatEventNotification(ChatNotificationEvent event) =>
+  AppNotification _chatEventNotification(
+    ChatNotificationEvent event,
+  ) =>
       AppNotification.fromJson({
         'id': event.messageId,
         'key': 'NEW_MESSAGE',
@@ -188,58 +268,124 @@ class _BnanAppState extends State<BnanApp> {
           'screen': 'chat_room',
           'params': {
             'roomId': event.roomId,
-            if (event.roomName.isNotEmpty) 'roomName': event.roomName,
+            if (event.roomName.isNotEmpty)
+              'roomName': event.roomName,
           },
         },
       });
 
   void _openLoginAfterSessionExpiry() {
-    if (_router.routeInformationProvider.value.uri.path == Routes.logIn) return;
+    if (_router.routeInformationProvider.value.uri.path ==
+        Routes.logIn) {
+      return;
+    }
+
     _router.go(Routes.logIn);
+  }
+
+  Widget _builder(
+    BuildContext context,
+    Widget? child,
+  ) {
+    final mediaQuery = MediaQuery.of(context);
+
+    final scale =
+        (mediaQuery.size.width / 375).clamp(0.85, 1.05);
+
+    final cubit = paymentCubit;
+
+    final scaledChild = MediaQuery(
+      data: mediaQuery.copyWith(
+        textScaler: TextScaler.linear(scale),
+      ),
+      child: child!,
+    );
+
+    final observedChild = cubit == null
+        ? scaledChild
+        : BlocListener<TamaraPaymentCubit,
+            TamaraPaymentState>(
+            listener: (context, state) {
+              if (state is! TamaraPaymentResult ||
+                  state.status !=
+                      PaymentStatus.completed) {
+                return;
+              }
+
+              final paymentId =
+                  cubit.draft?.paymentId ?? '';
+
+              if (_navigatedPaymentId == paymentId) {
+                return;
+              }
+
+              _navigatedPaymentId = paymentId;
+
+              // IMPORTANT:
+              // Do not use GoRouter.of(context) here.
+              // This context belongs to MaterialApp.router.builder.
+              _router.go(
+                state.studentLoggedIn
+                    ? Routes.home
+                    : Routes.logIn,
+                extra: state.studentLoggedIn
+                    ? null
+                    : cubit.draft?.studentEmail,
+              );
+            },
+            child: TamaraReturnObserver(
+              cubit: cubit,
+              child: scaledChild,
+            ),
+          );
+
+    return GlobalConnectivityOverlay(
+      child: observedChild,
+    );
   }
 
   @override
   void dispose() {
     _dismissChatNotification();
-    unawaited(_chatNotificationSubscription?.cancel());
-    unawaited(_notificationFeedbackSubscription?.cancel());
-    unawaited(_notificationNavigationSubscription?.cancel());
-    unawaited(_sessionExpiredSubscription?.cancel());
-    final pushNotifications = _pushNotifications;
-    if (pushNotifications != null) unawaited(pushNotifications.dispose());
-    unawaited(_chatNotifications.dispose());
-    unawaited(_connectivity.close());
-    unawaited(_language.close());
-    _router.dispose();
-    super.dispose();
-  }
 
-  Widget _builder(BuildContext context, Widget? child) {
-    final mediaQuery = MediaQuery.of(context);
-    final scale = (mediaQuery.size.width / 375).clamp(0.85, 1.05);
-    final cubit = paymentCubit;
-    final scaledChild = MediaQuery(
-      data: mediaQuery.copyWith(textScaler: TextScaler.linear(scale)),
-      child: child!,
+    unawaited(
+      _chatNotificationSubscription?.cancel(),
     );
-    final observedChild = cubit == null
-        ? scaledChild
-        : BlocListener<TamaraPaymentCubit, TamaraPaymentState>(
-            listener: (context, state) {
-              if (state is! TamaraPaymentResult ||
-                  state.status != PaymentStatus.completed) {
-                return;
-              }
-              final paymentId = cubit.draft?.paymentId ?? '';
-              if (_navigatedPaymentId == paymentId) return;
-              _navigatedPaymentId = paymentId;
-              GoRouter.of(context).go(
-                state.studentLoggedIn ? Routes.home : Routes.logIn,
-                extra: state.studentLoggedIn ? null : cubit.draft?.studentEmail,
-              );
-            },
-            child: TamaraReturnObserver(cubit: cubit, child: scaledChild),
-          );
-    return GlobalConnectivityOverlay(child: observedChild);
+
+    unawaited(
+      _notificationFeedbackSubscription?.cancel(),
+    );
+
+    unawaited(
+      _notificationNavigationSubscription?.cancel(),
+    );
+
+    unawaited(
+      _sessionExpiredSubscription?.cancel(),
+    );
+
+    final pushNotifications = _pushNotifications;
+
+    if (pushNotifications != null) {
+      unawaited(
+        pushNotifications.dispose(),
+      );
+    }
+
+    unawaited(
+      _chatNotifications.dispose(),
+    );
+
+    unawaited(
+      _connectivity.close(),
+    );
+
+    unawaited(
+      _language.close(),
+    );
+
+    _router.dispose();
+
+    super.dispose();
   }
 }

@@ -7,6 +7,7 @@ import 'package:bnan_app/features/notifications/data/repos/notifications_repo.da
 import 'package:bnan_app/features/notifications/domain/recent_notification_ids.dart';
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
 import 'package:dartz/dartz.dart';
+import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -26,10 +27,80 @@ void main() {
     expect(repo.readIds, ['n1']);
     await cubit.close();
   });
+
+  test(
+    'loads pages once, appends unique items, and refresh resets to page 1',
+    () async {
+      final repo = _Repo()
+        ..pages = {
+          1: _page(1, 3, ['n1', 'n2']),
+          2: _page(2, 3, ['n2', 'n3']),
+          3: _page(3, 3, ['n4']),
+        };
+      final cubit = NotificationsCubit(
+        repo,
+        SocketService(),
+        RecentNotificationIds(),
+      );
+
+      await cubit.load(refresh: true);
+      await cubit.load();
+      await cubit.load();
+      await cubit.load();
+
+      expect(repo.requestedPages, [1, 2, 3]);
+      expect(cubit.state.items.map((item) => item.id), [
+        'n1',
+        'n2',
+        'n3',
+        'n4',
+      ]);
+      expect(cubit.state.hasNext, isFalse);
+
+      await cubit.load(refresh: true);
+      expect(repo.requestedPages, [1, 2, 3, 1]);
+      expect(cubit.state.items.map((item) => item.id), ['n1', 'n2']);
+      await cubit.close();
+    },
+  );
+
+  test(
+    'blocks duplicate refresh and load-more while refresh is pending',
+    () async {
+      final pending = Completer<Either<Failure, NotificationsPage>>();
+      final repo = _Repo()..pending = pending;
+      final cubit = NotificationsCubit(
+        repo,
+        SocketService(),
+        RecentNotificationIds(),
+      );
+
+      final first = cubit.load(refresh: true);
+      await cubit.load(refresh: true);
+      await cubit.load();
+
+      expect(repo.requestedPages, [1]);
+      pending.complete(Right(_page(1, 1, ['n1'])));
+      await first;
+      await cubit.close();
+    },
+  );
 }
+
+NotificationsPage _page(int page, int totalPages, List<String> ids) =>
+    NotificationsPage(
+      items: ids.map((id) => AppNotification.fromJson({'id': id})).toList(),
+      unreadCount: ids.length,
+      page: page,
+      totalPages: totalPages,
+      hasNext: page < totalPages,
+    );
 
 class _Repo implements NotificationsRepo {
   List<String> readIds = [];
+  Map<int, NotificationsPage> pages = {};
+  final List<int> requestedPages = [];
+  Completer<Either<Failure, NotificationsPage>>? pending;
   @override
   Future<Either<Failure, void>> markRead({
     List<String> ids = const [],
@@ -43,7 +114,12 @@ class _Repo implements NotificationsRepo {
   Future<Either<Failure, NotificationsPage>> getNotifications(
     int page,
     int limit,
-  ) => throw UnimplementedError();
+  ) async {
+    requestedPages.add(page);
+    if (pending case final value?) return value.future;
+    return Right(pages[page]!);
+  }
+
   @override
   Future<Either<Failure, NotificationPreferences>> getPreferences() =>
       throw UnimplementedError();

@@ -1323,5 +1323,6 @@
     "studyNotStarted": "لم تبدأ الدراسة بعد",
     "cannotAddLessonInPreviousWeek": "لا يمكن إضافة حصة في أسبوع سابق",
     "scheduleDateInPast": "لا يمكن إضافة حصة في تاريخ مضى",
-    "scheduleTimeInPast": "لا يمكن إضافة حصة في وقت مضى"
+    "scheduleTimeInPast": "لا يمكن إضافة حصة في وقت مضى",
+    "noSubjectsInClassroom": "لا توجد مواد مضافة لهذا الفصل."
 }

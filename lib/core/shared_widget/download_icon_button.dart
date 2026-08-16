@@ -14,11 +14,13 @@ class DownloadIconButton extends StatefulWidget {
     required this.url,
     this.fileName,
     this.enabled = true,
+    this.iconColor = ColorManager.mainColor14,
   });
 
   final String url;
   final String? fileName;
   final bool enabled;
+  final Color iconColor;
 
   @override
   State<DownloadIconButton> createState() => _DownloadIconButtonState();
@@ -37,19 +39,19 @@ class _DownloadIconButtonState extends State<DownloadIconButton> {
       ImageManager.downloadIcon,
       width: 24,
       height: 24,
-      colorFilter: const ColorFilter.mode(
-        ColorManager.mainColor14,
-        BlendMode.srcIn,
-      ),
+      colorFilter: ColorFilter.mode(widget.iconColor, BlendMode.srcIn),
     ),
   );
 
   Future<void> _download() async {
     setState(() => _isLoading = true);
+
     final certificate = (widget.fileName ?? widget.url).toLowerCase().contains(
       'certificate',
     );
+
     final s = S.of(context);
+
     final feedback = AppTopFeedback.show(
       context,
       type: AppTopFeedbackType.loading,
@@ -57,20 +59,26 @@ class _DownloadIconButtonState extends State<DownloadIconButton> {
       dedupKey: 'file-download',
       showClose: false,
     );
+
     final result = await FileDownloader.download(
       url: widget.url,
       fileName: widget.fileName ?? _nameFrom(widget.url),
     );
+
     if (!mounted) {
       AppTopFeedback.dismiss(feedback);
       return;
     }
+
     setState(() => _isLoading = false);
+
     if (result.status == DownloadSaveStatus.cancelled) {
       AppTopFeedback.dismiss(feedback);
       return;
     }
+
     final success = result.status == DownloadSaveStatus.saved;
+
     AppTopFeedback.replace(
       context,
       feedback,
@@ -88,7 +96,9 @@ class _DownloadIconButtonState extends State<DownloadIconButton> {
 
   Future<void> _open(DownloadSaveResult result) async {
     final opened = await DeviceFileSaver.open(result);
+
     if (!mounted || opened) return;
+
     AppTopFeedback.show(
       context,
       title: S.of(context).unableToOpenFile,
@@ -99,6 +109,7 @@ class _DownloadIconButtonState extends State<DownloadIconButton> {
 
   String _nameFrom(String value) {
     final segments = Uri.tryParse(value)?.pathSegments;
+
     return segments?.isNotEmpty == true ? segments!.last : 'downloaded_file';
   }
 }

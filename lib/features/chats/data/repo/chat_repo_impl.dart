@@ -17,6 +17,31 @@ class ChatRepoImpl implements ChatRepo {
   final ApiConsumer apiConsumer;
 
   @override
+  Future<Either<Failure, ChatRoomResponseModel>> openSupervisorStudentRoom({
+    required String studentId,
+  }) async {
+    try {
+      final response = await apiConsumer.post(
+        EndPoints.supervisorStudentRoom,
+        data: {'studentId': studentId.trim()},
+        isProtected: true,
+      );
+      return Right(ChatRoomResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
   Future<Either<Failure, ChatRoomResponseModel>> createSupportRoom() async {
     try {
       final response = await apiConsumer.post(

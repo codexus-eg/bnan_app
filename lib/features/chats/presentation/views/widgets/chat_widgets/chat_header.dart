@@ -36,7 +36,6 @@ class ChatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return Container(
       width: double.infinity,
@@ -62,11 +61,7 @@ class ChatHeader extends StatelessWidget {
                   ? onCancelSelection
                   : () => MyNavigator.pop(context),
               icon: Icon(
-                selectedCount > 0
-                    ? Icons.close
-                    : isRtl
-                    ? Icons.arrow_back
-                    : Icons.arrow_forward,
+                selectedCount > 0 ? Icons.close : _backIcon(context),
                 color: ColorManager.white,
               ),
             ),
@@ -120,6 +115,17 @@ class ChatHeader extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _backIcon(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final platform = Theme.of(context).platform;
+
+    if (platform == TargetPlatform.iOS) {
+      return isRtl ? Icons.arrow_back_ios_new : Icons.arrow_back_ios_new;
+    }
+
+    return isRtl ? Icons.arrow_back : Icons.arrow_back;
   }
 
   UserRole? get _sessionRole {

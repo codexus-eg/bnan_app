@@ -4,29 +4,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetMyEnrollmentsCubit extends Cubit<GetMyEnrollmentsState> {
   GetMyEnrollmentsCubit(this.studentGroupsRepo)
-      : super(GetMyEnrollmentsInitial());
+    : super(GetMyEnrollmentsInitial());
 
   final StudentGroupsRepo studentGroupsRepo;
+  int _requestId = 0;
 
   Future<void> getMyEnrollments() async {
+    if (isClosed) return;
+    final requestId = ++_requestId;
     emit(GetMyEnrollmentsLoading());
 
     final result = await studentGroupsRepo.getMyEnrollments();
+    if (isClosed || requestId != _requestId) return;
 
     result.fold(
       (failure) {
-        emit(
-          GetMyEnrollmentsFailure(
-            errorMessage: failure.message,
-          ),
-        );
+        emit(GetMyEnrollmentsFailure(errorMessage: failure.message));
       },
       (response) {
-        emit(
-          GetMyEnrollmentsSuccess(
-            enrollments: response.enrollments,
-          ),
-        );
+        emit(GetMyEnrollmentsSuccess(enrollments: response.enrollments));
       },
     );
   }

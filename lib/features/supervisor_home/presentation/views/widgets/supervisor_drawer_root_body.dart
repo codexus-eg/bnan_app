@@ -5,7 +5,6 @@ import 'package:bnan_app/features/ideal_student/presentation/views/weekly_ideal_
 import 'package:bnan_app/features/ideal_teacher/presentation/views/ideal_teacher_view.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/lessons_management_view.dart';
 import 'package:bnan_app/features/plans/presentation/views/widgets/supervisor_plans_root.dart';
-import 'package:bnan_app/features/tables_management/presentation/views/egyptian_schedules_read_only_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,10 +22,6 @@ Widget buildSupervisorDrawerRoot(String route) => switch (route) {
   Routes.idealTeacher => BlocProvider(
     create: (_) => getIt<SupervisorIdealTeacherCubit>(),
     child: const IdealTeacherView(showBackButton: false),
-  ),
-  Routes.egyptianSchedulesReadOnly => BlocProvider(
-    create: (_) => getIt<GetEgyptianSchedulesCubit>()..getMyEgyptianSchedule(),
-    child: const EgyptianSchedulesReadOnlyView(showBackButton: false),
   ),
   Routes.lessonsManagement => const LessonsManagementView(
     showBackButton: false,

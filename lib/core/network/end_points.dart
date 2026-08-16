@@ -60,6 +60,7 @@ abstract class EndPoints {
   static const String teacherMyPayoutProfile = '/teachers/me/payout-profile';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
+  static const String supervisorStudentRoom = '/chats/supervisor-student-room';
   static const String adminChatRooms = '/chats/admin/rooms';
   static const String getMyChatRooms = '/chats/rooms';
   static const String sendMessage = '/messages';

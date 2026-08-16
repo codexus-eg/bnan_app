@@ -30,5 +30,7 @@ class TeacherRegistrationRequestsCubit
   String? get lastClassroomId => _lastClassroomId;
   String? get lastChatRoomId => _lastChatRoomId;
 
-  void _emitState(TeacherRegistrationRequestsState value) => emit(value);
+  void _emitState(TeacherRegistrationRequestsState value) {
+    if (!isClosed) emit(value);
+  }
 }

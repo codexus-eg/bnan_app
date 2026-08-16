@@ -8,6 +8,10 @@ import 'package:dartz/dartz.dart';
 abstract class ChatRepo {
   Future<Either<Failure, ChatRoomResponseModel>> createSupportRoom();
 
+  Future<Either<Failure, ChatRoomResponseModel>> openSupervisorStudentRoom({
+    required String studentId,
+  });
+
   Future<Either<Failure, ChatRoomsResponseModel>> getChatRooms();
 
   Future<Either<Failure, ChatRoomsResponseModel>> getAdminChatRooms({

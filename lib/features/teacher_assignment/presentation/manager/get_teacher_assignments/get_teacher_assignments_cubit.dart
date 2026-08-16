@@ -8,11 +8,15 @@ class GetTeacherAssignmentsCubit extends Cubit<GetTeacherAssignmentsState> {
     : super(GetTeacherAssignmentsInitial());
 
   final AssignmentsRepo assignmentsRepo;
+  int _requestId = 0;
 
   Future<void> getAssignments({String? status}) async {
+    if (isClosed) return;
+    final requestId = ++_requestId;
     emit(GetTeacherAssignmentsLoading());
 
     final result = await assignmentsRepo.getAssignments(status: status);
+    if (isClosed || requestId != _requestId) return;
 
     result.fold(
       (failure) {
@@ -25,6 +29,7 @@ class GetTeacherAssignmentsCubit extends Cubit<GetTeacherAssignmentsState> {
   }
 
   void removeAssignment(String assignmentId) {
+    if (isClosed) return;
     final current = state;
     if (current is! GetTeacherAssignmentsSuccess) return;
     final assignments = current.assignments.assignments

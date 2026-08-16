@@ -17,8 +17,10 @@ class DocumentPreviewActions extends StatelessWidget {
           onTap: () => Navigator.pop(context),
         ),
         const SizedBox(width: 20),
-        DownloadIconButton(url: pdfUrl),
-      ],
+DownloadIconButton(
+  url: pdfUrl,
+  iconColor: Colors.white,
+),      ],
     );
   }
 }

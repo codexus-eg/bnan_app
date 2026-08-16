@@ -12,12 +12,6 @@ abstract class SupervisorNavigationConfig {
       _item(s.home, ImageManager.homeIcon),
       if (session.isEgyptianSupervisor)
         _item(
-          s.schedule,
-          ImageManager.tableIcon,
-          Routes.egyptianSchedulesReadOnly,
-        ),
-      if (session.isEgyptianSupervisor)
-        _item(
           s.lessonsManagement,
           ImageManager.calendarIcon,
           Routes.tablesManagement,

@@ -20,6 +20,7 @@ import 'package:bnan_app/features/tables_management/data/models/egyptian_digital
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 import 'package:bnan_app/features/tables_management/data/repo/egyptian_digital_schedule_repo.dart';
 import 'package:bnan_app/features/tables_management/presentation/manager/egyptian_schedule_management_cubit.dart';
+import 'package:bnan_app/features/tables_management/presentation/policies/egyptian_lesson_add_policy.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/widgets/dialogs/egyptian_lesson_dialog.dart';
 import 'package:bnan_app/features/tables_management/presentation/views/widgets/table_schedules_failure.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -196,12 +197,12 @@ class _EgyptianScheduleContent extends StatelessWidget {
 
   Widget _content(BuildContext context, EgyptianScheduleState state) {
     final cubit = context.read<EgyptianScheduleManagementCubit>();
-    final saving = state.status == EgyptianScheduleStatus.saving;
+    final addAvailability = egyptianLessonAddAvailability(state);
     final header = LessonsManagementHeader(
       classrooms: classrooms,
       selectedClassroomId: classroomId,
       onClassroomChanged: onClassroomChanged,
-      onAddTap: saving || state.subjects.isEmpty
+      onAddTap: addAvailability == EgyptianLessonAddAvailability.disabled
           ? null
           : () => _handleAdd(context, cubit, state),
       adjacentFilter: _weekDropdown(context, cubit, state),
@@ -286,6 +287,10 @@ class _EgyptianScheduleContent extends StatelessWidget {
     EgyptianScheduleManagementCubit cubit,
     EgyptianScheduleState state,
   ) {
+    if (state.subjects.isEmpty) {
+      showCustomSnackBar(context, S.of(context).noSubjectsInClassroom, false);
+      return;
+    }
     if (state.currentWeek == null) {
       showCustomSnackBar(context, S.of(context).studyNotStarted, false);
       return;

@@ -17,6 +17,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   final _incoming = StreamController<AppNotification>.broadcast();
   final List<VoidCallback> _removeSocketListeners = [];
   bool _initialized = false;
+  int _loadRevision = 0;
+  Set<String> _refreshBaselineIds = {};
   static const _limit = 20;
   Stream<AppNotification> get incoming => _incoming.stream;
 
@@ -50,30 +52,31 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   Future<void> load({bool refresh = false}) async {
-    if (state.loadingMore || (!refresh && !state.hasNext)) return;
+    if (refresh) {
+      if (state.refreshing) return;
+      _refreshBaselineIds = state.items.map(_notificationKey).toSet();
+    } else if (state.refreshing || state.loadingMore || !state.hasNext) {
+      return;
+    }
+    final revision = refresh ? ++_loadRevision : _loadRevision;
     final page = refresh ? 1 : state.page + 1;
     emit(
       state.copyWith(
         status: refresh ? NotificationsStatus.loading : state.status,
         loadingMore: !refresh,
+        refreshing: refresh,
         clearError: true,
       ),
     );
     final result = await _repo.getNotifications(page, _limit);
+    if (isClosed || revision != _loadRevision) return;
     result.fold(
-      (failure) => emit(
-        state.copyWith(
-          status: state.items.isEmpty
-              ? NotificationsStatus.failure
-              : state.status,
-          loadingMore: false,
-          error: failure.message,
-        ),
-      ),
+      (failure) => emit(_failureState(failure.message)),
       (value) => _mergePage(
         value.items,
         value.unreadCount,
         value.page,
+        value.totalPages,
         value.hasNext,
         refresh,
       ),
@@ -84,29 +87,50 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     List<AppNotification> values,
     int unread,
     int page,
+    int totalPages,
     bool hasNext,
     bool refresh,
   ) {
     final merged = <String, AppNotification>{};
+    final arrivedDuringRefresh = refresh
+        ? state.items.where(
+            (item) => !_refreshBaselineIds.contains(_notificationKey(item)),
+          )
+        : const Iterable<AppNotification>.empty();
     for (final item in [
-      ...refresh ? <AppNotification>[] : state.items,
+      ...refresh ? arrivedDuringRefresh : state.items,
       ...values,
     ]) {
-      merged[item.id.isEmpty ? '${item.key}|${item.createdAt}' : item.id] =
-          item;
+      merged[_notificationKey(item)] = item;
     }
+    _refreshBaselineIds = {};
     emit(
       state.copyWith(
         status: NotificationsStatus.success,
         items: merged.values.toList(),
         unreadCount: unread,
         page: page,
+        totalPages: totalPages,
         hasNext: hasNext,
         loadingMore: false,
+        refreshing: false,
         clearError: true,
       ),
     );
   }
+
+  NotificationsState _failureState(String message) {
+    _refreshBaselineIds = {};
+    return state.copyWith(
+      status: state.items.isEmpty ? NotificationsStatus.failure : state.status,
+      loadingMore: false,
+      refreshing: false,
+      error: message,
+    );
+  }
+
+  String _notificationKey(AppNotification item) =>
+      item.id.isEmpty ? '${item.key}|${item.createdAt}' : item.id;
 
   bool ingest(AppNotification value) {
     if (!_recent.claim(value.id)) return false;
@@ -180,6 +204,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   Future<void> _sessionChanged(String? previous, String? next) async {
+    _loadRevision++;
+    _refreshBaselineIds = {};
     for (final remove in _removeSocketListeners) {
       remove();
     }
@@ -191,6 +217,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   @override
   Future<void> close() async {
+    _loadRevision++;
     for (final remove in _removeSocketListeners) {
       remove();
     }
