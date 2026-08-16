@@ -24,14 +24,15 @@ class TeacherCertificateCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
-              children: [
-                Expanded(child: _details(context)),
-                CertificateActionButton(
-                  title: S.of(context).preview,
-                  onTap: () => _preview(context),
-                ),
-              ],
-            ),
+  children: [
+    Expanded(child: _details(context)),
+    const SizedBox(width: 12),
+    CertificateActionButton(
+      title: S.of(context).preview,
+      onTap: () => _preview(context),
+    ),
+  ],
+),
           ),
         ],
       ),
