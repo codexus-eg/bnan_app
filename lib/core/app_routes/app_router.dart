@@ -23,6 +23,7 @@ import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart'
 import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_student_access_policy.dart';
 import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teacher_access_policy.dart';
 import 'package:bnan_app/features/ideal_supervisor/presentation/policies/ideal_supervisor_access_policy.dart';
+import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
@@ -56,11 +57,19 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: Routes.logIn,
         pageBuilder: (context, state) {
-          final email = state.extra is String ? state.extra as String : null;
+          final args = state.extra is LoginRouteArgs
+              ? state.extra as LoginRouteArgs
+              : null;
+          final email =
+              args?.email ??
+              (state.extra is String ? state.extra as String : null);
           return buildTransitionPages(
             child: BlocProvider(
               create: (_) => getIt<LoginCubit>()..prefillEmail(email),
-              child: const LoginView(),
+              child: LoginView(
+                showEgyptianRegistrationSuccess:
+                    args?.showEgyptianRegistrationSuccess ?? false,
+              ),
             ),
             key: state.pageKey,
           );

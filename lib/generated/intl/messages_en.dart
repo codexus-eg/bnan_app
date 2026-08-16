@@ -565,6 +565,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "egyptianDepartment":
             MessageLookupByLibrary.simpleMessage("Egyptian Department"),
         "egyptianPound": MessageLookupByLibrary.simpleMessage("Egyptian Pound"),
+        "egyptianStudentRegistrationSuccessMessage":
+            MessageLookupByLibrary.simpleMessage(
+                "Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved."),
         "eightHoursPlan":
             MessageLookupByLibrary.simpleMessage("8-hour package"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),

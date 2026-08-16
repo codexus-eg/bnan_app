@@ -1318,6 +1318,7 @@
     "reviewRequest": "مراجعة الطلب",
     "submitRegistrationRequest": "إرسال طلب التسجيل",
     "registrationRequestSuccessMessage": "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة.",
+    "egyptianStudentRegistrationSuccessMessage": "تم إرسال طلب التسجيل بنجاح، وسيتم مراجعته من الإدارة. يمكنك تسجيل الدخول بعد قبول الطلب.",
     "backToLogin": "العودة لتسجيل الدخول",
     "done": "تم",
     "studyNotStarted": "لم تبدأ الدراسة بعد",

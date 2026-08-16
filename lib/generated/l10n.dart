@@ -12050,6 +12050,16 @@ class S {
     );
   }
 
+  /// `Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved.`
+  String get egyptianStudentRegistrationSuccessMessage {
+    return Intl.message(
+      'Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved.',
+      name: 'egyptianStudentRegistrationSuccessMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Done`
   String get done {
     return Intl.message(

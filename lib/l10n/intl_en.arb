@@ -1319,6 +1319,7 @@
     "reviewRequest": "Review request",
     "submitRegistrationRequest": "Submit registration request",
     "registrationRequestSuccessMessage": "Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.",
+    "egyptianStudentRegistrationSuccessMessage": "Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved.",
     "backToLogin": "Back to login",
     "done": "Done",
     "studyNotStarted": "Study has not started yet",

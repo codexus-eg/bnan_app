@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_registration_body.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
@@ -17,9 +21,20 @@ class StudentRegistrationView extends StatelessWidget {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) unawaited(RegistrationBackHandler.previous(context));
       },
-      child: const Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: StudentRegistrationBody(),
+      child: BlocListener<RegisterCubit, RegisterState>(
+        listenWhen: (_, state) => state is RegisterSuccess,
+        listener: (context, state) {
+          if (context.read<RegisterCubit>().isGulf) return;
+          MyNavigator.goToOffAll(
+            context,
+            Routes.logIn,
+            extra: const LoginRouteArgs(showEgyptianRegistrationSuccess: true),
+          );
+        },
+        child: const Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: StudentRegistrationBody(),
+        ),
       ),
     );
   }
