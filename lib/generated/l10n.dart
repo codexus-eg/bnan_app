@@ -12109,6 +12109,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Call student`
+  String get callStudentAlert {
+    return Intl.message(
+      'Call student',
+      name: 'callStudentAlert',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The student alert was sent successfully`
+  String get studentCallAlertSent {
+    return Intl.message(
+      'The student alert was sent successfully',
+      name: 'studentCallAlertSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The alert was already sent. Try again shortly`
+  String get studentCallAlertCooldown {
+    return Intl.message(
+      'The alert was already sent. Try again shortly',
+      name: 'studentCallAlertCooldown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your supervisor is calling you`
+  String get studentCallAlertTitle {
+    return Intl.message(
+      'Your supervisor is calling you',
+      name: 'studentCallAlertTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open Bnan to respond to your supervisor`
+  String get studentCallAlertBody {
+    return Intl.message(
+      'Open Bnan to respond to your supervisor',
+      name: 'studentCallAlertBody',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

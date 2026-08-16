@@ -35,6 +35,10 @@ class FakeAttendanceRepo implements AttendanceRepo {
   }
 
   @override
+  Future<Either<Failure, void>> callStudent(String studentId) async =>
+      const Right(null);
+
+  @override
   Future<Either<Failure, List<AttendanceSession>>> getSessions(
     String classroomId,
   ) => pendingSessions.putIfAbsent(classroomId, Completer.new).future;

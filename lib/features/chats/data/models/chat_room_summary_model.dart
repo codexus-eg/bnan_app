@@ -4,6 +4,7 @@ class ChatRoomSummaryModel {
   final String displayName;
   final String subtitle;
   final String? classroomId;
+  final String? studentId;
   final String? lastMessage;
   final DateTime? lastMessageAt;
 
@@ -13,6 +14,7 @@ class ChatRoomSummaryModel {
     required this.displayName,
     required this.subtitle,
     this.classroomId,
+    this.studentId,
     this.lastMessage,
     this.lastMessageAt,
   });
@@ -70,6 +72,16 @@ class ChatRoomSummaryModel {
 
     final type = json['type']?.toString().trim().toLowerCase() ?? '';
 
+    final student = participants.cast<Map>().firstWhere(
+      (item) =>
+          (participantData(item)['role'] ?? item['role'])
+              ?.toString()
+              .toLowerCase() ==
+          'student',
+      orElse: () => const {},
+    );
+    final studentData = participantData(student);
+
     final participantRole =
         (visibleParticipant['role'] ?? participant['role'] ?? '')
             .toString()
@@ -108,6 +120,9 @@ class ChatRoomSummaryModel {
                 .toString(),
       subtitle: resolvedSubtitle,
       classroomId: directId ?? legacyId,
+      studentId: type == 'supervisor_student'
+          ? id(studentData['id'] ?? studentData['_id'] ?? student['id'])
+          : null,
       lastMessage: json['lastMessage']?.toString(),
       lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
     );
@@ -136,6 +151,7 @@ class ChatRoomSummaryModel {
     String? displayName,
     String? subtitle,
     String? classroomId,
+    String? studentId,
     String? lastMessage,
     DateTime? lastMessageAt,
   }) {
@@ -145,6 +161,7 @@ class ChatRoomSummaryModel {
       displayName: displayName ?? this.displayName,
       subtitle: subtitle ?? this.subtitle,
       classroomId: classroomId ?? this.classroomId,
+      studentId: studentId ?? this.studentId,
       lastMessage: lastMessage ?? this.lastMessage,
       lastMessageAt: lastMessageAt ?? this.lastMessageAt,
     );

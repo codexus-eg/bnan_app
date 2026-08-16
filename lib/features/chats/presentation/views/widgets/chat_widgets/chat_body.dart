@@ -22,6 +22,7 @@ class ChatBody extends StatefulWidget {
     this.classroomId,
     this.classroomName,
     this.currentUserRole,
+    this.studentId,
   });
 
   final String roomId;
@@ -29,6 +30,7 @@ class ChatBody extends StatefulWidget {
   final String? classroomId;
   final String? classroomName;
   final String? currentUserRole;
+  final String? studentId;
 
   @override
   State<ChatBody> createState() => _ChatBodyState();
@@ -54,6 +56,7 @@ class _ChatBodyState extends State<ChatBody> {
             roomType: widget.roomType,
             classroomId: widget.classroomId,
             currentUserRole: widget.currentUserRole,
+            studentId: widget.studentId,
             onMessageTarget: (id) =>
                 messagesKey.currentState?.scrollToMessage(id),
             selectedCount: selectedMessageIds.length,

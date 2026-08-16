@@ -275,6 +275,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDate": MessageLookupByLibrary.simpleMessage("Birth date"),
         "bonusPoints": MessageLookupByLibrary.simpleMessage("Bonus Points"),
         "browseSection": MessageLookupByLibrary.simpleMessage("Browse section"),
+        "callStudentAlert":
+            MessageLookupByLibrary.simpleMessage("Call student"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "You can change the currency from the list"),
         "canDemo":
@@ -1709,6 +1711,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "This student cannot be assigned because the account has not been approved yet"),
         "studentCertificate":
             MessageLookupByLibrary.simpleMessage("Student Certificate"),
+        "studentCallAlertBody": MessageLookupByLibrary.simpleMessage(
+            "Open Bnan to respond to your supervisor"),
+        "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
+            "The alert was already sent. Try again shortly"),
+        "studentCallAlertSent": MessageLookupByLibrary.simpleMessage(
+            "The student alert was sent successfully"),
+        "studentCallAlertTitle": MessageLookupByLibrary.simpleMessage(
+            "Your supervisor is calling you"),
         "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
             "Unable to load classrooms. Please try again"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("Student Email"),

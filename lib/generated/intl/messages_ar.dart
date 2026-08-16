@@ -265,6 +265,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
         "bonusPoints": MessageLookupByLibrary.simpleMessage("النقاط الإضافية"),
         "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
+        "callStudentAlert":
+            MessageLookupByLibrary.simpleMessage("تنبيه الطالب للحضور"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "يمكنك تغيير العملة من القائمة"),
         "canDemo":
@@ -1648,6 +1650,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا يمكن تعيين هذا الطالب لأنه لم يتم اعتماد حسابه بعد"),
         "studentCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة الطالب"),
+        "studentCallAlertBody": MessageLookupByLibrary.simpleMessage(
+            "افتح بنان للاستجابة للمشرف"),
+        "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال التنبيه بالفعل، حاول بعد قليل"),
+        "studentCallAlertSent": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال التنبيه للطالب بنجاح"),
+        "studentCallAlertTitle":
+            MessageLookupByLibrary.simpleMessage("المشرف يناديك"),
         "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
             "تعذر تحميل الفصول، حاول مرة أخرى"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("ايميل الطالب"),

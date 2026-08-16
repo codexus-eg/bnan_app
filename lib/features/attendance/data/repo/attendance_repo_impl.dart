@@ -123,6 +123,16 @@ class AttendanceRepoImpl implements AttendanceRepo {
   });
 
   @override
+  Future<Either<Failure, void>> callStudent(String studentId) =>
+      _guard(() async {
+        await api.post(
+          EndPoints.supervisorCallStudent(studentId),
+          data: const <String, dynamic>{},
+          isProtected: true,
+        );
+      });
+
+  @override
   Future<Either<Failure, List<AttendanceRecord>>> submitBulk(
     BulkAttendanceRequest request,
   ) => _guard(() async {
@@ -189,7 +199,14 @@ class AttendanceRepoImpl implements AttendanceRepo {
     try {
       return Right(await call());
     } on AppException catch (error) {
-      return Left(Failure(message: error.message));
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
     } catch (_) {
       return Left(Failure(message: S.current.unexpectedError));
     }

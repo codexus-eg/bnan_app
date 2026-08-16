@@ -368,6 +368,10 @@ abstract class EndPoints {
     return '$classrooms/$classroomId/students';
   }
 
+  static String supervisorCallStudent(String studentId) {
+    return '/supervisors/me/students/$studentId/call';
+  }
+
   static String classroomSessions(String classroomId) {
     return '$classrooms/$classroomId/sessions';
   }

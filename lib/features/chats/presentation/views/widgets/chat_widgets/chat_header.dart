@@ -6,6 +6,7 @@ import 'package:bnan_app/features/chats/presentation/models/classroom_documents_
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_session_action.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/student_call_alert_action.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class ChatHeader extends StatelessWidget {
     this.roomType,
     this.classroomId,
     this.currentUserRole,
+    this.studentId,
     this.onMessageTarget,
     this.selectedCount = 0,
     this.isDeleting = false,
@@ -28,6 +30,7 @@ class ChatHeader extends StatelessWidget {
   final String? roomType;
   final String? classroomId;
   final String? currentUserRole;
+  final String? studentId;
   final ValueChanged<String>? onMessageTarget;
   final int selectedCount;
   final bool isDeleting;
@@ -36,7 +39,6 @@ class ChatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsetsDirectional.only(
@@ -90,6 +92,10 @@ class ChatHeader extends StatelessWidget {
                       ),
               )
             else ...[
+              if (_sessionRole == UserRole.supervisor &&
+                  roomType == 'supervisor_student' &&
+                  studentId?.trim().isNotEmpty == true)
+                StudentCallAlertAction(studentId: studentId!.trim()),
               if (_sessionRole != null &&
                   roomType == 'classroom' &&
                   classroomId?.trim().isNotEmpty == true)

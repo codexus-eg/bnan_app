@@ -1324,5 +1324,10 @@
     "cannotAddLessonInPreviousWeek": "لا يمكن إضافة حصة في أسبوع سابق",
     "scheduleDateInPast": "لا يمكن إضافة حصة في تاريخ مضى",
     "scheduleTimeInPast": "لا يمكن إضافة حصة في وقت مضى",
-    "noSubjectsInClassroom": "لا توجد مواد مضافة لهذا الفصل."
+    "noSubjectsInClassroom": "لا توجد مواد مضافة لهذا الفصل.",
+    "callStudentAlert": "تنبيه الطالب للحضور",
+    "studentCallAlertSent": "تم إرسال التنبيه للطالب بنجاح",
+    "studentCallAlertCooldown": "تم إرسال التنبيه بالفعل، حاول بعد قليل",
+    "studentCallAlertTitle": "المشرف يناديك",
+    "studentCallAlertBody": "افتح بنان للاستجابة للمشرف"
 }

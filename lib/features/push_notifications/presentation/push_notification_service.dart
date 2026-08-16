@@ -10,6 +10,7 @@ import 'package:bnan_app/features/push_notifications/presentation/push_token_reg
 import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:bnan_app/generated/l10n.dart';
 
 class PushNotificationService {
   PushNotificationService({
@@ -106,8 +107,15 @@ class PushNotificationService {
 
   AppNotification? _notification(RemoteMessage message) {
     final data = <String, dynamic>{...message.data};
-    data['_title'] = message.notification?.title;
-    data['_body'] = message.notification?.body;
+    if (data['key']?.toString().trim().toUpperCase() == 'STUDENT_CALL_ALERT') {
+      data['screen'] = 'student_home';
+      data['_title'] =
+          message.notification?.title ?? S.current.studentCallAlertTitle;
+      data['_body'] =
+          message.notification?.body ?? S.current.studentCallAlertBody;
+    }
+    data['_title'] ??= message.notification?.title;
+    data['_body'] ??= message.notification?.body;
     final value = AppNotification.fromJson(data);
     return value.id.isEmpty && value.key.isEmpty ? null : value;
   }

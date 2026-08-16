@@ -28,6 +28,10 @@ class NotificationNavigationService {
     final key = notification.key.trim().toUpperCase();
     final role = _session.role;
 
+    if (role == UserRole.student && key == 'STUDENT_CALL_ALERT') {
+      return const NotificationDestination(Routes.home);
+    }
+
     if (role == UserRole.supervisor) {
       if (key == 'IDEAL_SUPERVISOR_CERTIFICATE_ISSUED' ||
           key.contains('SUPERVISOR_CERTIFICATE')) {
@@ -62,6 +66,7 @@ class NotificationNavigationService {
     }
 
     final route = switch (screen) {
+      'student_home' => Routes.home,
       'chat_room' => _required(Routes.chatPath, params['roomId'] ?? resourceId),
       'schedule' => _schedule(),
       'subscription' => _subscription(params['studentId']?.toString()),

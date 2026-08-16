@@ -31,6 +31,9 @@ Future<bool> initializeFirebase() async {
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (!await initializeFirebase() || message.notification != null) return;
   final data = <String, dynamic>{...message.data};
+  if (data['key']?.toString().trim().toUpperCase() == 'STUDENT_CALL_ALERT') {
+    data['screen'] = 'student_home';
+  }
   final notification = AppNotification.fromJson(data);
   if (notification.id.isEmpty && notification.key.isEmpty) return;
   final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());

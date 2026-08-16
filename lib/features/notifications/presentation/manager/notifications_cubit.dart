@@ -7,6 +7,7 @@ import 'package:bnan_app/features/notifications/domain/recent_notification_ids.d
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/generated/l10n.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {
   NotificationsCubit(this._repo, this._socket, this._recent)
@@ -23,8 +24,21 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Stream<AppNotification> get incoming => _incoming.stream;
 
   void ingestSocketNotification(Map<String, dynamic> json) {
-    ingest(AppNotification.fromJson(json));
+    final payload = Map<String, dynamic>.from(json);
+    if (_key(payload) == 'STUDENT_CALL_ALERT') {
+      payload['_title'] ??= S.current.studentCallAlertTitle;
+      payload['_body'] ??= S.current.studentCallAlertBody;
+      payload['screen'] = 'student_home';
+    }
+    ingest(AppNotification.fromJson(payload));
   }
+
+  String _key(Map<String, dynamic> json) =>
+      (json['key'] ?? (json['data'] is Map ? json['data']['key'] : null))
+          ?.toString()
+          .trim()
+          .toUpperCase() ??
+      '';
 
   Future<void> initialize() async {
     if (_initialized) return;

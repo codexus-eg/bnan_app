@@ -18,6 +18,7 @@ abstract final class ChatRoomNavigation {
       classroomId: room.classroomId,
       classroomName: displayName ?? room.displayName,
       currentUserRole: currentUserRole,
+      studentId: room.studentId,
     );
   }
 }

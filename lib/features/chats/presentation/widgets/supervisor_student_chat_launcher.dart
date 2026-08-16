@@ -42,6 +42,7 @@ abstract final class SupervisorStudentChatLauncher {
           extra: ChatRouteArgs(
             roomType: response.room.type,
             currentUserRole: SessionManager.instance.userRole,
+            studentId: id,
           ),
         );
       },

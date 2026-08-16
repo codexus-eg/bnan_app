@@ -267,6 +267,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 classroomName: args?.classroomName,
                 currentUserRole:
                     args?.currentUserRole ?? SessionManager.instance.userRole,
+                studentId: args?.studentId,
               ),
             ),
           );

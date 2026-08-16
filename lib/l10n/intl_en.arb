@@ -1325,5 +1325,10 @@
     "cannotAddLessonInPreviousWeek": "A lesson cannot be added in a previous week",
     "scheduleDateInPast": "A lesson cannot be added on a past date",
     "scheduleTimeInPast": "A lesson cannot be added at a past time",
-    "noSubjectsInClassroom": "No subjects have been added to this classroom."
+    "noSubjectsInClassroom": "No subjects have been added to this classroom.",
+    "callStudentAlert": "Call student",
+    "studentCallAlertSent": "The student alert was sent successfully",
+    "studentCallAlertCooldown": "The alert was already sent. Try again shortly",
+    "studentCallAlertTitle": "Your supervisor is calling you",
+    "studentCallAlertBody": "Open Bnan to respond to your supervisor"
 }
