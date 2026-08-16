@@ -10,11 +10,13 @@ class StudentSubmissionFooter extends StatelessWidget {
   const StudentSubmissionFooter({
     super.key,
     required this.attachment,
+    required this.attachmentName,
     required this.buttonText,
     required this.onCorrectionPressed,
   });
 
   final String? attachment;
+  final String? attachmentName;
   final String? buttonText;
   final VoidCallback? onCorrectionPressed;
 
@@ -43,13 +45,16 @@ class StudentSubmissionFooter extends StatelessWidget {
   }
 
   Widget _attachment(BuildContext context, String attachment) {
+    final fileName = attachmentName?.trim().isNotEmpty == true
+        ? attachmentName!.trim()
+        : _fileName(attachment);
     return Row(
       children: [
         SvgPicture.asset(ImageManager.teacherAssignmentPaperclipIcon),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
-            _fileName(attachment),
+            fileName,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: StylesManager.styleBold14(
@@ -57,7 +62,7 @@ class StudentSubmissionFooter extends StatelessWidget {
             ).copyWith(color: ColorManager.mainColor14),
           ),
         ),
-        DownloadIconButton(url: attachment, fileName: _fileName(attachment)),
+        DownloadIconButton(url: attachment, fileName: fileName),
       ],
     );
   }

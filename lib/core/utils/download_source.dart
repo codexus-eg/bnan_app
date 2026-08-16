@@ -26,7 +26,11 @@ abstract final class DownloadSource {
           !resolved.isScheme('http') && !resolved.isScheme('https')) {
         return null;
       }
-      final response = await Dio().download(url, target.path);
+      final response = await Dio().download(
+        url,
+        target.path,
+        options: Options(headers: await AttachmentUrlResolver.headersFor(url)),
+      );
       contentType = response.headers.value(Headers.contentTypeHeader);
     }
     if (!await target.exists() || await target.length() == 0) return null;

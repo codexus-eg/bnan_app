@@ -59,6 +59,7 @@ class StudentSubmissionCard extends StatelessWidget {
             const SizedBox(height: 10),
             StudentSubmissionFooter(
               attachment: submission.attachment,
+              attachmentName: submission.attachmentName,
               buttonText: buttonText,
               onCorrectionPressed: onCorrectionPressed,
             ),

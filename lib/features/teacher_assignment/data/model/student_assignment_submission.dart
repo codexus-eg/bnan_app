@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/helper/attachment_file.dart';
+
 class StudentAssignmentSubmission {
   final String studentId;
   final String fullName;
@@ -33,6 +35,7 @@ class StudentAssignmentSubmission {
 class AssignmentSubmissionDetailsModel {
   final String id;
   final String? attachment;
+  final String? attachmentName;
   final String status;
   final num? score;
   final DateTime? submittedAt;
@@ -42,6 +45,7 @@ class AssignmentSubmissionDetailsModel {
   const AssignmentSubmissionDetailsModel({
     required this.id,
     required this.attachment,
+    required this.attachmentName,
     required this.status,
     required this.score,
     required this.submittedAt,
@@ -50,11 +54,12 @@ class AssignmentSubmissionDetailsModel {
   });
 
   factory AssignmentSubmissionDetailsModel.fromJson(Map<String, dynamic> json) {
-    final attachment = json['attachment']?.toString();
+    final attachment = AttachmentFile.fromJson(json['attachment']);
 
     return AssignmentSubmissionDetailsModel(
       id: json['id']?.toString() ?? '',
-      attachment: attachment == null || attachment.isEmpty ? null : attachment,
+      attachment: attachment.source.isEmpty ? null : attachment.source,
+      attachmentName: attachment.name.isEmpty ? null : attachment.name,
       status: json['status']?.toString() ?? '',
       score: _asNum(json['score']),
       submittedAt: _asDate(json['submittedAt']),

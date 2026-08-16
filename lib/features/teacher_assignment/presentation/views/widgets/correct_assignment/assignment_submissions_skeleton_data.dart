@@ -14,6 +14,7 @@ const skeletonAssignmentSubmissions = [
     submission: AssignmentSubmissionDetailsModel(
       id: 'skeleton-submission-reviewed',
       attachment: 'attachment.pdf',
+      attachmentName: 'attachment.pdf',
       status: 'reviewed',
       score: 10,
       submittedAt: null,
@@ -29,6 +30,7 @@ const skeletonAssignmentSubmissions = [
     submission: AssignmentSubmissionDetailsModel(
       id: 'skeleton-submission-pending',
       attachment: 'attachment.pdf',
+      attachmentName: 'attachment.pdf',
       status: 'submitted',
       score: null,
       submittedAt: null,

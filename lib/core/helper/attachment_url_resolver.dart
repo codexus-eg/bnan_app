@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 
 abstract final class AttachmentUrlResolver {
   static String resolve(String value) {
@@ -19,6 +20,21 @@ abstract final class AttachmentUrlResolver {
 
   static bool isPdf(String value) =>
       Uri.tryParse(value)?.path.toLowerCase().endsWith('.pdf') ?? false;
+
+  static Future<Map<String, String>?> headersFor(String value) async {
+    final uri = Uri.tryParse(value);
+    final base = Uri.parse(EndPoints.baseUrl);
+    if (uri == null ||
+        uri.scheme != base.scheme ||
+        uri.host != base.host ||
+        uri.port != base.port) {
+      return null;
+    }
+    final token = await SessionManager.instance.getAccessToken();
+    return token?.trim().isNotEmpty == true
+        ? {'Authorization': 'Bearer ${token!.trim()}'}
+        : null;
+  }
 
   static String _replaceLocalHost(Uri uri, Uri base) {
     if (uri.host != '127.0.0.1' && uri.host != 'localhost') {

@@ -70,9 +70,12 @@ class AssignmentCardActionsHandler extends StatelessWidget {
   }
 
   String _attachmentName(AssignmentModel value) {
+    if (value.attachmentName.trim().isNotEmpty) return value.attachmentName;
     final segments = Uri.tryParse(value.attachment)?.pathSegments;
     return segments?.isNotEmpty == true
         ? segments!.last
-        : '${value.title.trim().isEmpty ? 'assignment' : value.title}.pdf';
+        : value.title.trim().isEmpty
+        ? 'assignment'
+        : value.title;
   }
 }
