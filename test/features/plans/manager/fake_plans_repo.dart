@@ -24,6 +24,9 @@ class FakePlansRepo implements PlansRepo {
   int dailyCalls = 0;
   int uploadCalls = 0;
   int weeklyCalls = 0;
+  int parentPlansCalls = 0;
+  final elapsedRequests = <String>[];
+  final weekRequests = <(String, int?)>[];
 
   @override
   Future<Either<Failure, ParentChildrenResponseModel>> getParentChildren() =>
@@ -31,7 +34,10 @@ class FakePlansRepo implements PlansRepo {
 
   @override
   Future<Either<Failure, ParentChildrenPlansResponseModel>>
-  getParentChildrenPlans() => parentPlans.removeAt(0).future;
+  getParentChildrenPlans() {
+    parentPlansCalls++;
+    return parentPlans.removeAt(0).future;
+  }
 
   @override
   Future<Either<Failure, WeeklyPlansResponseModel>> getPlansByWeek({
@@ -39,6 +45,7 @@ class FakePlansRepo implements PlansRepo {
     int? week,
   }) {
     weeklyCalls++;
+    weekRequests.add((classroomId, week));
     return weekly.removeAt(0).future;
   }
 
@@ -55,7 +62,10 @@ class FakePlansRepo implements PlansRepo {
   @override
   Future<Either<Failure, ElapsedWeeksResponseModel>> getElapsedWeeks({
     required String classroomId,
-  }) => elapsed.removeAt(0).future;
+  }) {
+    elapsedRequests.add(classroomId);
+    return elapsed.removeAt(0).future;
+  }
 
   @override
   Future<Either<Failure, CreatePlanResponseModel>> createDailyPlan({

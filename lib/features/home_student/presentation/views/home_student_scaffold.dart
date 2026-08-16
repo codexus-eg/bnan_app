@@ -45,6 +45,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   };
 
   void _changeBottomNavIndex(int index) {
+    if (index == currentIndex) return;
     if (index == 1 && _studentScheduleRoute == null) return;
     if (index == 0 && currentIndex != 0) {
       context.read<DashboardCubit>().refresh();
@@ -75,12 +76,6 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     final bottomNavIndex = drawerToBottomNavIndex[index];
 
     _closeDrawer();
-
-    if (bottomNavIndex == 1) {
-      final route = _studentScheduleRoute;
-      if (route != null) MyNavigator.goTo(context, route);
-      return;
-    }
 
     if (bottomNavIndex != null) {
       _changeBottomNavIndex(bottomNavIndex);

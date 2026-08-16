@@ -38,6 +38,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _changeIndex(int index) {
+    if (index == currentIndex) return;
     if (index == 0 && currentIndex != 0) {
       context.read<DashboardCubit>().refresh();
     }

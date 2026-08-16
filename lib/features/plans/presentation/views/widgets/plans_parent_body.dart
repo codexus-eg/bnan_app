@@ -67,11 +67,12 @@ class PlansParentBody extends StatelessWidget {
     final title = cubit.selectedChildName.isEmpty
         ? s.studyPlanFor
         : '${s.studyPlanFor} - ${cubit.selectedChildName}';
-    final classroom = cubit.selectedChildId == null
+    final selectedClassroom = cubit.selectedClassroom;
+    final classroom = selectedClassroom == null
         ? null
         : PlanClassroomOption(
-            id: cubit.selectedChildId!,
-            name: cubit.selectedChildName,
+            id: selectedClassroom.id,
+            name: selectedClassroom.name,
           );
     if (state is GetParentPlansFailure) {
       return PlansClassroomsFeedback(

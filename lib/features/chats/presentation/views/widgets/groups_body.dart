@@ -107,13 +107,13 @@ class GroupsBody extends StatelessWidget {
     );
   }
 
-  String _subtitle(ChatRoomSummaryModel room) {
-    final message = room.lastMessage?.trim();
-    if (room.type != 'support' || room.subtitle.trim().isEmpty) {
-      return message?.isNotEmpty == true ? message! : room.subtitle;
-    }
-    return message?.isNotEmpty == true
-        ? '${room.subtitle} • $message'
-        : room.subtitle;
+ String _subtitle(ChatRoomSummaryModel room) {
+  final subtitle = room.subtitle.trim();
+
+  if (subtitle.isNotEmpty) {
+    return subtitle;
   }
+
+  return 'محادثة';
+}
 }

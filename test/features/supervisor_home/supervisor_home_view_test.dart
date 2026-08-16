@@ -86,51 +86,35 @@ void main() {
     expect(builds[Routes.certificatesManagement], 1);
   });
 
-  testWidgets('drawer-only Plans stays in shell and Back returns Home', (
+  testWidgets('drawer-only Plans opens its route and Back returns Home', (
     tester,
   ) async {
-    final builds = <String, int>{};
-    await tester.pumpWidget(testApp(tabBuilder: _tabBuilder(builds)));
+    await tester.pumpWidget(testApp());
     await tester.pumpAndSettle();
 
     await _openDrawer(tester);
     await tester.tap(find.text('Plans'));
     await tester.pumpAndSettle();
 
-    expect(find.text(Routes.plans), findsOneWidget);
-    expect(find.byType(CustomBottomNavBar), findsOneWidget);
-    expect(_bottomBar(tester).currentIndex, -1);
-    await tester.binding.handlePopRoute();
+    expect(find.text('Plans destination'), findsOneWidget);
+    expect(find.byType(CustomBottomNavBar), findsNothing);
+    await tester.pageBack();
     await tester.pumpAndSettle();
     expect(find.byType(SupervisorHomePage), findsOneWidget);
-    expect(builds[Routes.plans], 1);
   });
 
-  testWidgets(
-    'Ideal Student drawer root initializes once and preserves state',
-    (tester) async {
-      await _saveSupervisor(RegistrationMode.egyptian);
-      final builds = <String, int>{};
-      await tester.pumpWidget(testApp(tabBuilder: _tabBuilder(builds)));
-      await tester.pumpAndSettle();
+  testWidgets('Ideal Student remains a drawer-only route', (tester) async {
+    await _saveSupervisor(RegistrationMode.egyptian);
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
 
-      await _openDrawer(tester);
-      await tester.tap(find.text('Weekly Ideal Student'));
-      await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byKey(const Key('tabState')),
-        'ranking-state',
-      );
-      await tester.tap(find.text('Home').last);
-      await tester.pumpAndSettle();
-      await _openDrawer(tester);
-      await tester.tap(find.text('Weekly Ideal Student'));
-      await tester.pumpAndSettle();
+    await _openDrawer(tester);
+    await tester.tap(find.text('Weekly Ideal Student'));
+    await tester.pumpAndSettle();
 
-      expect(builds[Routes.weeklyIdealStudents], 1);
-      expect(find.text('ranking-state'), findsOneWidget);
-    },
-  );
+    expect(find.text('Ideal student destination'), findsOneWidget);
+    expect(find.byType(CustomBottomNavBar), findsNothing);
+  });
 
   testWidgets('system back from Certificates returns to Home', (tester) async {
     await tester.pumpWidget(testApp(tabBuilder: _tabBuilder({})));
@@ -319,6 +303,16 @@ Widget testApp({
         path: Routes.egyptianSchedulesReadOnly,
         builder: (_, _) =>
             const Scaffold(body: Text('Egyptian schedules destination')),
+      ),
+      GoRoute(
+        path: Routes.plans,
+        builder: (_, _) =>
+            Scaffold(appBar: AppBar(), body: const Text('Plans destination')),
+      ),
+      GoRoute(
+        path: Routes.weeklyIdealStudents,
+        builder: (_, _) =>
+            const Scaffold(body: Text('Ideal student destination')),
       ),
       GoRoute(
         path: '/certificate-detail',

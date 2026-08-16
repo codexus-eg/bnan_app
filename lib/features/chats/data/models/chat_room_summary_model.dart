@@ -23,15 +23,37 @@ class ChatRoomSummaryModel {
       return value.trim();
     }
 
+    String roleLabel(String role) {
+      switch (role.trim().toLowerCase()) {
+        case 'teacher':
+          return 'معلم';
+        case 'student':
+          return 'طالب';
+        case 'parent':
+          return 'ولي أمر';
+        case 'supervisor':
+          return 'مشرف';
+        case 'admin':
+          return 'إدارة';
+        default:
+          return '';
+      }
+    }
+
     final classroom = json['classroom'];
+
     final directId = id(json['classroomId']);
+
     final legacyId = classroom is Map
         ? id(classroom['id']) ?? id(classroom['_id'])
         : id(classroom);
+
     final participants = (json['participants'] as List? ?? const [])
         .whereType<Map>();
+
     Map participantData(Map item) =>
         item['user'] is Map ? item['user'] as Map : item;
+
     final participant = participants.cast<Map>().firstWhere(
       (item) =>
           (participantData(item)['role'] ?? item['role'])
@@ -40,27 +62,55 @@ class ChatRoomSummaryModel {
           'admin',
       orElse: () => const {},
     );
+
     final visibleParticipant = participantData(participant);
+
     final displayName = json['displayName']?.toString().trim();
-    final subtitle = json['subtitle']?.toString().trim();
-    final type = json['type']?.toString() ?? '';
+    final backendSubtitle = json['subtitle']?.toString().trim();
+
+    final type = json['type']?.toString().trim().toLowerCase() ?? '';
+
     final participantRole =
-        (visibleParticipant['role'] ?? participant['role'] ?? '').toString();
+        (visibleParticipant['role'] ?? participant['role'] ?? '')
+            .toString()
+            .trim();
+
+    String resolvedSubtitle;
+
+    if (type == 'support') {
+      resolvedSubtitle = 'دعم فني';
+    } else if (type == 'classroom' ||
+        type == 'classroom_group' ||
+        directId != null ||
+        legacyId != null) {
+      resolvedSubtitle = 'فصل دراسي';
+    } else {
+      final role = roleLabel(participantRole);
+
+      if (role.isNotEmpty) {
+        resolvedSubtitle = role;
+      } else if (backendSubtitle?.isNotEmpty == true) {
+        resolvedSubtitle = backendSubtitle!;
+      } else {
+        resolvedSubtitle = 'محادثة';
+      }
+    }
+
     return ChatRoomSummaryModel(
       id: json['id']?.toString() ?? '',
       type: type,
       displayName: displayName?.isNotEmpty == true
           ? displayName!
-          : (visibleParticipant['fullName'] ?? visibleParticipant['name'] ?? '')
+          : (visibleParticipant['fullName'] ??
+                    visibleParticipant['name'] ??
+                    '')
                 .toString(),
-      subtitle: type == 'support' && participantRole.trim().isNotEmpty
-          ? participantRole
-          : subtitle?.isNotEmpty == true
-          ? subtitle!
-          : participantRole,
+      subtitle: resolvedSubtitle,
       classroomId: directId ?? legacyId,
       lastMessage: json['lastMessage']?.toString(),
-      lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
+      lastMessageAt: DateTime.tryParse(
+        json['lastMessageAt']?.toString() ?? '',
+      ),
     );
   }
 
@@ -68,7 +118,7 @@ class ChatRoomSummaryModel {
     id: 'placeholder-id',
     type: 'support',
     displayName: 'اسم المستخدم',
-    subtitle: 'المرحلة الدراسية',
+    subtitle: 'نوع المحادثة',
     lastMessage: 'آخر رسالة في المحادثة',
   );
 
