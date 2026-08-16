@@ -57,9 +57,9 @@ class LocalPushNotifications {
       body: intent.body,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'chat_messages',
-          'Chat messages',
-          channelDescription: 'New chat message notifications',
+          'bnan_notifications',
+          'Bnan notifications',
+          channelDescription: 'Bnan Academy notifications',
           importance: Importance.high,
           priority: Priority.high,
           playSound: true,

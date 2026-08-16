@@ -17,6 +17,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test(
+    'coordinator forwards one notification payload to unread owner',
+    () async {
+      final coordinator = ChatNotificationCoordinator(
+        _Socket(),
+        alert: _Alert(),
+        currentUserId: () => 'me',
+      );
+      var received = 0;
+      coordinator.setNotificationHandler((_) => received++);
+
+      coordinator.handleNotification({'id': 'notification-1'});
+
+      expect(received, 1);
+      await coordinator.dispose();
+    },
+  );
+
   test('socket parser recognizes current FCM-shaped chat data', () {
     final notification = ChatNotificationModel.fromJson({
       'data': {
@@ -57,6 +75,38 @@ void main() {
       await coordinator.dispose();
     },
   );
+
+  test('notificationId deduplicates socket and foreground FCM', () async {
+    final alert = _Alert();
+    final coordinator = ChatNotificationCoordinator(
+      _Socket(),
+      alert: alert,
+      currentUserId: () => 'me',
+    );
+
+    coordinator.handleNotification({
+      'notificationId': 'notification-1',
+      'key': 'NEW_MESSAGE',
+      'data': {
+        'messageId': 'message-1',
+        'roomId': 'room-1',
+        'senderId': 'other',
+      },
+    });
+    final result = coordinator.handlePush(
+      messageId: 'message-1',
+      notificationId: 'notification-1',
+      roomId: 'room-1',
+      senderId: 'other',
+      title: 'Sender',
+      body: 'Hello',
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    expect(result, ChatForegroundNotificationResult.duplicate);
+    expect(alert.calls, 1);
+    await coordinator.dispose();
+  });
 
   test('own echo and current room do not alert', () async {
     final alert = _Alert();
@@ -138,11 +188,14 @@ void main() {
     );
 
     await coordinator.start();
-    expect(coordinator.listenerCount, 2);
+    expect(coordinator.listenerCount, 4);
+    expect(socket.joinedRooms, ['user_me']);
+    socket.reconnect();
+    expect(socket.joinedRooms, ['user_me', 'user_me']);
     coordinator.stop(disconnect: true);
 
     expect(coordinator.listenerCount, 0);
-    expect(socket.disposedListeners, 2);
+    expect(socket.disposedListeners, 4);
     expect(socket.disconnects, 1);
     await coordinator.dispose();
   });
@@ -176,6 +229,11 @@ class _Alert implements ChatForegroundAlert {
 class _Socket extends SocketService {
   int disposedListeners = 0;
   int disconnects = 0;
+  final List<String> joinedRooms = [];
+  VoidCallback? _onReconnect;
+
+  @override
+  bool get isConnected => true;
 
   @override
   Future<void> connect() async {}
@@ -192,6 +250,21 @@ class _Socket extends SocketService {
   VoidCallback listenToNotification(
     void Function(Map<String, dynamic> notification) onNotification,
   ) => _dispose();
+
+  @override
+  VoidCallback listenToJoinedRoom(void Function(String roomId) onJoined) =>
+      _dispose();
+
+  @override
+  VoidCallback listenToReconnect(VoidCallback onReconnect) {
+    _onReconnect = onReconnect;
+    return _dispose();
+  }
+
+  @override
+  void joinRoom(String roomId) => joinedRooms.add(roomId);
+
+  void reconnect() => _onReconnect?.call();
 
   @override
   void disconnect() => disconnects++;

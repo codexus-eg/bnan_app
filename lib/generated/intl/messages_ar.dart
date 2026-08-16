@@ -643,6 +643,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
       "انتهت صلاحية الجلسة.",
     ),
+    "internetConnectionFailedRetry": MessageLookupByLibrary.simpleMessage(
+      "تعذر الاتصال بالإنترنت، حاول مرة أخرى",
+    ),
+    "noStudentWithThisName": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد طالب بهذا الاسم",
+    ),
+    "searchForStudent": MessageLookupByLibrary.simpleMessage("ابحث عن طالب"),
+    "sessionExpiredLoginAgain": MessageLookupByLibrary.simpleMessage(
+      "انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى",
+    ),
+    "studentAssignmentAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
+      "هذا الطالب مُعيّن بالفعل",
+    ),
+    "studentAssignmentNoClassrooms": MessageLookupByLibrary.simpleMessage(
+      "لا توجد فصول متاحة لهذا الطالب",
+    ),
+    "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
+      "لا يمكن تعيين هذا الطالب لأنه لم يتم اعتماد حسابه بعد",
+    ),
+    "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "تعذر تحميل الفصول، حاول مرة أخرى",
+    ),
     "errorUnknown": MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع."),
     "errorUnknownStatusCode": m10,
     "errorValidation": MessageLookupByLibrary.simpleMessage(

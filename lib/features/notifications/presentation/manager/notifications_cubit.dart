@@ -20,6 +20,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   static const _limit = 20;
   Stream<AppNotification> get incoming => _incoming.stream;
 
+  void ingestSocketNotification(Map<String, dynamic> json) {
+    ingest(AppNotification.fromJson(json));
+  }
+
   Future<void> initialize() async {
     if (_initialized) return;
     _initialized = true;
@@ -33,12 +37,9 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     try {
       await _socket.connect();
       if (_removeSocketListeners.isEmpty) {
-        void handle(Map<String, dynamic> json) =>
-            ingest(AppNotification.fromJson(json));
-        _removeSocketListeners.addAll([
-          _socket.listenToNotification(handle),
-          _socket.listenToChatNudge(handle),
-        ]);
+        void handleNudge(Map<String, dynamic> json) =>
+            ingestSocketNotification(json);
+        _removeSocketListeners.addAll([_socket.listenToChatNudge(handleNudge)]);
       }
       await load(refresh: true);
     } catch (error) {

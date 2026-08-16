@@ -13,11 +13,7 @@ class ChatPushIntent {
 
   final String roomId, messageId, senderId, notificationId, title, body;
   final String roomName;
-  String get dedupKey => notificationId.isNotEmpty
-      ? notificationId
-      : messageId.isNotEmpty
-      ? messageId
-      : '$roomId|$senderId|$body';
+  String get dedupKey => notificationId.isNotEmpty ? notificationId : messageId;
 
   static ChatPushIntent? tryParse(
     Map<String, dynamic> data, {

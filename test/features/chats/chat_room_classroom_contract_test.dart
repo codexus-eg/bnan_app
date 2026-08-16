@@ -47,6 +47,31 @@ void main() {
       expect(room.classroomId, isNull);
     }
   });
+
+  test('support room subtitle is the non-admin participant role', () {
+    final room = _room({
+      'type': 'support',
+      'lastMessage': 'Do not show me as subtitle',
+      'participants': [
+        {
+          'user': {'id': 'admin', 'role': 'admin'},
+        },
+        {
+          'user': {'id': 'teacher', 'role': 'teacher'},
+        },
+      ],
+    });
+
+    expect(room.subtitle, 'معلم');
+    expect(room.subtitle, isNot(room.lastMessage));
+  });
+
+  test(
+    'support room without a participant role falls back to conversation',
+    () {
+      expect(_room({'type': 'support'}).subtitle, 'محادثة');
+    },
+  );
 }
 
 ChatRoomSummaryModel _room(Map<String, dynamic> values) {

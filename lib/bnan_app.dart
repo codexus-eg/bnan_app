@@ -60,11 +60,14 @@ class _BnanAppState extends State<BnanApp> {
       (_) => _openLoginAfterSessionExpiry(),
     );
     _chatNotifications = getIt<ChatNotificationCoordinator>();
+    _notifications = getIt<NotificationsCubit>();
+    _chatNotifications.setNotificationHandler(
+      _notifications.ingestSocketNotification,
+    );
     _chatNotificationSubscription = _chatNotifications.foregroundEvents.listen(
       _showChatNotification,
     );
     unawaited(_chatNotifications.initialize());
-    _notifications = getIt<NotificationsCubit>();
     _notificationFeedbackSubscription = _notifications.incoming.listen(
       _showForegroundNotification,
     );

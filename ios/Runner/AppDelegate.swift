@@ -4,6 +4,7 @@ import UIKit
 @main
 @objc class AppDelegate: FlutterAppDelegate {
   private var deviceFileSaver: DeviceFileSaver?
+  private var notificationSoundPlayer: NotificationSoundPlayer?
 
   override func application(
     _ application: UIApplication,
@@ -19,6 +20,8 @@ import UIKit
     }
     deviceFileSaver = DeviceFileSaver(controller: controller)
     deviceFileSaver?.register()
+    notificationSoundPlayer = NotificationSoundPlayer(controller: controller)
+    notificationSoundPlayer?.register()
     return launched
   }
 }

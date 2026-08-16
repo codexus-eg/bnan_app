@@ -1,4 +1,6 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
@@ -23,6 +25,7 @@ class StudentSubjectRequestsView extends StatefulWidget {
 class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     with WidgetsBindingObserver {
   bool _paymentRestoreChecked = false;
+  bool _returningHome = false;
 
   @override
   void initState() {
@@ -154,5 +157,13 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
         ? S.of(context).subjectRequestPaymentCompleted
         : state.message!;
     showCustomSnackBar(context, message, success);
+    if (success && !_returningHome) {
+      _returningHome = true;
+      if (Navigator.of(context).canPop()) {
+        MyNavigator.pop(context);
+      } else {
+        MyNavigator.goToOffAll(context, Routes.home);
+      }
+    }
   }
 }

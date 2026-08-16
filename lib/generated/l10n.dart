@@ -154,6 +154,86 @@ class S {
     );
   }
 
+  /// `Search for a student`
+  String get searchForStudent {
+    return Intl.message(
+      'Search for a student',
+      name: 'searchForStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No student found with this name`
+  String get noStudentWithThisName {
+    return Intl.message(
+      'No student found with this name',
+      name: 'noStudentWithThisName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This student cannot be assigned because the account has not been approved yet`
+  String get studentAssignmentNotApproved {
+    return Intl.message(
+      'This student cannot be assigned because the account has not been approved yet',
+      name: 'studentAssignmentNotApproved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No classrooms are available for this student`
+  String get studentAssignmentNoClassrooms {
+    return Intl.message(
+      'No classrooms are available for this student',
+      name: 'studentAssignmentNoClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This student is already assigned`
+  String get studentAssignmentAlreadyAssigned {
+    return Intl.message(
+      'This student is already assigned',
+      name: 'studentAssignmentAlreadyAssigned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your session has expired. Please sign in again`
+  String get sessionExpiredLoginAgain {
+    return Intl.message(
+      'Your session has expired. Please sign in again',
+      name: 'sessionExpiredLoginAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to connect to the internet. Please try again`
+  String get internetConnectionFailedRetry {
+    return Intl.message(
+      'Unable to connect to the internet. Please try again',
+      name: 'internetConnectionFailedRetry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load classrooms. Please try again`
+  String get studentClassroomsLoadFailed {
+    return Intl.message(
+      'Unable to load classrooms. Please try again',
+      name: 'studentClassroomsLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Access denied.`
   String get errorForbidden {
     return Intl.message(

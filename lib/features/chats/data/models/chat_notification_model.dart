@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class ChatNotificationModel {
+  final String notificationId;
   final String type;
   final String key;
   final String notificationType;
@@ -10,6 +11,7 @@ class ChatNotificationModel {
   final ChatLocalizedTextModel body;
 
   const ChatNotificationModel({
+    required this.notificationId,
     required this.type,
     required this.key,
     required this.notificationType,
@@ -45,6 +47,11 @@ class ChatNotificationModel {
       rawData.putIfAbsent(key, () => json[key]);
     }
     return ChatNotificationModel(
+      notificationId:
+          (json['notificationId'] ?? json['id'] ?? rawData['notificationId'])
+              ?.toString()
+              .trim() ??
+          '',
       type: json['type']?.toString() ?? '',
       key: (json['key'] ?? rawData['key'])?.toString() ?? '',
       notificationType:

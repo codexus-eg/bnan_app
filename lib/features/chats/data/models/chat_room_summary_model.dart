@@ -78,7 +78,8 @@ class ChatRoomSummaryModel {
     String resolvedSubtitle;
 
     if (type == 'support') {
-      resolvedSubtitle = 'دعم فني';
+      final role = roleLabel(participantRole);
+      resolvedSubtitle = role.isNotEmpty ? role : 'محادثة';
     } else if (type == 'classroom' ||
         type == 'classroom_group' ||
         directId != null ||
@@ -101,16 +102,12 @@ class ChatRoomSummaryModel {
       type: type,
       displayName: displayName?.isNotEmpty == true
           ? displayName!
-          : (visibleParticipant['fullName'] ??
-                    visibleParticipant['name'] ??
-                    '')
+          : (visibleParticipant['fullName'] ?? visibleParticipant['name'] ?? '')
                 .toString(),
       subtitle: resolvedSubtitle,
       classroomId: directId ?? legacyId,
       lastMessage: json['lastMessage']?.toString(),
-      lastMessageAt: DateTime.tryParse(
-        json['lastMessageAt']?.toString() ?? '',
-      ),
+      lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
     );
   }
 

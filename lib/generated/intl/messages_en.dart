@@ -706,6 +706,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
       "Session expired.",
     ),
+    "internetConnectionFailedRetry": MessageLookupByLibrary.simpleMessage(
+      "Unable to connect to the internet. Please try again",
+    ),
+    "noStudentWithThisName": MessageLookupByLibrary.simpleMessage(
+      "No student found with this name",
+    ),
+    "searchForStudent": MessageLookupByLibrary.simpleMessage(
+      "Search for a student",
+    ),
+    "sessionExpiredLoginAgain": MessageLookupByLibrary.simpleMessage(
+      "Your session has expired. Please sign in again",
+    ),
+    "studentAssignmentAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
+      "This student is already assigned",
+    ),
+    "studentAssignmentNoClassrooms": MessageLookupByLibrary.simpleMessage(
+      "No classrooms are available for this student",
+    ),
+    "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
+      "This student cannot be assigned because the account has not been approved yet",
+    ),
+    "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "Unable to load classrooms. Please try again",
+    ),
     "errorUnknown": MessageLookupByLibrary.simpleMessage(
       "An unexpected error occurred.",
     ),

@@ -76,14 +76,19 @@ class PushNotificationService {
     }
     final intent = _intent(message);
     if (intent == null) return;
-    _chat.handlePush(
-      messageId: intent.dedupKey,
+    final result = _chat.handlePush(
+      messageId: intent.messageId,
+      notificationId: intent.notificationId,
       roomId: intent.roomId,
       senderId: intent.senderId,
       title: intent.title,
       body: intent.body,
       roomName: intent.roomName,
     );
+    if (result == ChatForegroundNotificationResult.duplicate) {
+      debugPrint('FCM_FOREGROUND_DEDUPED');
+      debugPrint('notificationId: ${intent.dedupKey}');
+    }
   }
 
   void _handleOpened(RemoteMessage? message) {

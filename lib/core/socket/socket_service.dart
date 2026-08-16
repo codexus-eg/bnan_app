@@ -80,7 +80,11 @@ class SocketService {
 
   void _registerConnectionListeners() {
     _socket?.onConnect((_) {
-      debugPrint('Socket connected: ${_socket?.id}');
+      debugPrint('SOCKET CONNECTED');
+      debugPrint('socketId: ${_socket?.id ?? ''}');
+      debugPrint(
+        'currentUserId: ${SessionManager.instance.userId?.trim() ?? ''}',
+      );
       final completer = _connectionCompleter;
       if (completer != null && !completer.isCompleted) {
         completer.complete();
@@ -107,6 +111,10 @@ class SocketService {
   void joinRoom(String roomId) {
     if (!isConnected) return;
 
+    if (roomId.startsWith('user_')) {
+      debugPrint('USER ROOM JOIN REQUEST');
+      debugPrint('room: $roomId');
+    }
     _socket?.emit('joinRoom', roomId);
   }
 
@@ -181,7 +189,11 @@ class SocketService {
   VoidCallback listenToNotification(
     void Function(Map<String, dynamic> notification) onNotification,
   ) {
+    debugPrint('NOTIFICATION LISTENER REGISTERED');
+    debugPrint('eventName: notification');
     return _listen('notification', (data) {
+      debugPrint('NOTIFICATION RECEIVED');
+      debugPrint('payload: $data');
       try {
         final notification = Map<String, dynamic>.from(data);
 

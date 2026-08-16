@@ -13,9 +13,14 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private var pendingSave: SaveRequest? = null
+    private var notificationSoundPlayer: NotificationSoundPlayer? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        notificationSoundPlayer = NotificationSoundPlayer(
+            this,
+            flutterEngine.dartExecutor.binaryMessenger
+        ).also { it.register() }
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "bnan/device_file_saver"

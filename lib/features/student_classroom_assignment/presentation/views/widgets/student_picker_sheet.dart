@@ -20,9 +20,12 @@ class _StudentPickerSheetState extends State<StudentPickerSheet> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final normalizedQuery = query.trim().toLowerCase();
     final students = widget.students
         .where((student) {
-          return student.fullName.toLowerCase().contains(query.toLowerCase());
+          return student.fullName.trim().toLowerCase().contains(
+            normalizedQuery,
+          );
         })
         .toList(growable: false);
 
@@ -38,13 +41,13 @@ class _StudentPickerSheetState extends State<StudentPickerSheet> {
           children: [
             CustomTextField(
               label: s.student,
-              hintText: s.fullName,
-              onChanged: (value) => setState(() => query = value.trim()),
+              hintText: s.searchForStudent,
+              onChanged: (value) => setState(() => query = value),
             ),
             const SizedBox(height: 12),
             Expanded(
               child: students.isEmpty
-                  ? Center(child: Text(s.noDataAvailable))
+                  ? Center(child: Text(s.noStudentWithThisName))
                   : ListView.builder(
                       itemCount: students.length,
                       itemBuilder: (context, index) => InkWell(
