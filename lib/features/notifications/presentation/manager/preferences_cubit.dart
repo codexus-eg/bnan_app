@@ -14,24 +14,39 @@ class PreferencesCubit extends Cubit<PreferencesState> {
   final NotificationsRepo _repo;
 
   Future<void> load() async {
+    if (isClosed) return;
     emit(const PreferencesState(loading: true));
     final result = await _repo.getPreferences();
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(PreferencesState(error: failure.message)),
-      (value) => emit(PreferencesState(value: value)),
+      (failure) {
+        if (isClosed) return;
+        emit(PreferencesState(error: failure.message));
+      },
+      (value) {
+        if (isClosed) return;
+        emit(PreferencesState(value: value));
+      },
     );
   }
 
   Future<void> update(String group, String key, bool enabled) async {
+    if (isClosed) return;
     final current = state.value;
     if (current == null) return;
     final optimistic = current.update(group, key, enabled);
     emit(PreferencesState(value: optimistic, loading: true));
     final result = await _repo.updatePreferences(optimistic);
+    if (isClosed) return;
     result.fold(
-      (failure) =>
-          emit(PreferencesState(value: current, error: failure.message)),
-      (value) => emit(PreferencesState(value: value)),
+      (failure) {
+        if (isClosed) return;
+        emit(PreferencesState(value: current, error: failure.message));
+      },
+      (value) {
+        if (isClosed) return;
+        emit(PreferencesState(value: value));
+      },
     );
   }
 }

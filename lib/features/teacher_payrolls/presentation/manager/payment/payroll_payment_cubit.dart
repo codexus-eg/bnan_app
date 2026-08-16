@@ -8,14 +8,21 @@ class PayrollPaymentCubit extends Cubit<PayrollPaymentState> {
   final TeacherPayrollRepo repo;
   bool _paying = false;
   Future<void> pay(String id, PayrollPaymentRequest request) async {
-    if (_paying) return;
+    if (isClosed || _paying) return;
     _paying = true;
     emit(const PayrollPaymentLoading());
     final result = await repo.pay(id, request);
     _paying = false;
+    if (isClosed) return;
     result.fold(
-      (f) => emit(PayrollPaymentFailure(f.message, f.code)),
-      (p) => emit(PayrollPaymentSuccess(p)),
+      (f) {
+        if (isClosed) return;
+        emit(PayrollPaymentFailure(f.message, f.code));
+      },
+      (p) {
+        if (isClosed) return;
+        emit(PayrollPaymentSuccess(p));
+      },
     );
   }
 }

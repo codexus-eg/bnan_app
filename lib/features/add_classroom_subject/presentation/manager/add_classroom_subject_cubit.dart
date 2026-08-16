@@ -12,16 +12,26 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
   final AcademicLookupsRepo repo;
 
   Future<void> load() async {
-    if (state.loadingCurriculums || state.curriculums.isNotEmpty) return;
+    if (isClosed || state.loadingCurriculums || state.curriculums.isNotEmpty) {
+      return;
+    }
     emit(state.copyWith(loadingCurriculums: true, lookupError: null));
     final result = await repo.getCurriculums();
     if (isClosed) return;
     result.fold(
-      (failure) => emit(
-        state.copyWith(loadingCurriculums: false, lookupError: failure.message),
-      ),
-      (items) =>
-          emit(state.copyWith(curriculums: items, loadingCurriculums: false)),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            loadingCurriculums: false,
+            lookupError: failure.message,
+          ),
+        );
+      },
+      (items) {
+        if (isClosed) return;
+        emit(state.copyWith(curriculums: items, loadingCurriculums: false));
+      },
     );
   }
 
@@ -38,10 +48,16 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
     final result = await repo.getGrades(curriculumId: item.id);
     if (isClosed || state.selectedCurriculum?.id != item.id) return;
     result.fold(
-      (failure) => emit(
-        state.copyWith(loadingGrades: false, lookupError: failure.message),
-      ),
-      (items) => emit(state.copyWith(grades: items, loadingGrades: false)),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(loadingGrades: false, lookupError: failure.message),
+        );
+      },
+      (items) {
+        if (isClosed) return;
+        emit(state.copyWith(grades: items, loadingGrades: false));
+      },
     );
   }
 
@@ -86,6 +102,7 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
   }
 
   Future<void> _loadClassrooms(String curriculumId, String gradeId) async {
+    if (isClosed) return;
     emit(state.copyWith(loadingClassrooms: true));
     final result = await repo.getClassroomsByGrade(
       curriculumId: curriculumId,
@@ -93,15 +110,24 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
     );
     if (isClosed || state.selectedGrade?.id != gradeId) return;
     result.fold(
-      (failure) => emit(
-        state.copyWith(loadingClassrooms: false, lookupError: failure.message),
-      ),
-      (items) =>
-          emit(state.copyWith(classrooms: items, loadingClassrooms: false)),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            loadingClassrooms: false,
+            lookupError: failure.message,
+          ),
+        );
+      },
+      (items) {
+        if (isClosed) return;
+        emit(state.copyWith(classrooms: items, loadingClassrooms: false));
+      },
     );
   }
 
   Future<void> _loadGradeSubjects(String curriculumId, String gradeId) async {
+    if (isClosed) return;
     emit(state.copyWith(loadingGradeSubjects: true));
     final result = await repo.getSubjects(
       curriculumId: curriculumId,
@@ -115,13 +141,15 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
           lookupError: failure.message,
         ),
       ),
-      (items) => emit(
-        state.copyWith(gradeSubjects: items, loadingGradeSubjects: false),
-      ),
+      (items) {
+        if (isClosed) return;
+        emit(state.copyWith(gradeSubjects: items, loadingGradeSubjects: false));
+      },
     );
   }
 
   Future<void> _loadClassroomSubjects(String classroomId) async {
+    if (isClosed) return;
     final curriculumId = state.selectedCurriculum?.id;
     final gradeId = state.selectedGrade?.id;
     if (curriculumId == null || gradeId == null) return;
@@ -140,6 +168,7 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
         ),
       ),
       (items) {
+        if (isClosed) return;
         final assignedIds = items.map((item) => item.id).toSet();
         final selected = assignedIds.contains(state.selectedSubject?.id)
             ? null
@@ -156,6 +185,7 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
   }
 
   Future<void> submit() async {
+    if (isClosed) return;
     final classroom = state.selectedClassroom;
     final subject = state.selectedSubject;
     if (!state.canSubmit || classroom == null || subject == null) return;
@@ -167,6 +197,7 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
     if (isClosed) return;
     await result.fold(
       (failure) async {
+        if (isClosed) return;
         emit(
           state.copyWith(
             submitting: false,
@@ -175,8 +206,10 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
           ),
         );
         await _loadClassroomSubjects(classroom.id);
+        if (isClosed) return;
       },
       (_) async {
+        if (isClosed) return;
         emit(
           state.copyWith(
             classroomSubjects: [...state.classroomSubjects, subject],
@@ -187,6 +220,7 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
           ),
         );
         await _loadClassroomSubjects(classroom.id);
+        if (isClosed) return;
       },
     );
   }

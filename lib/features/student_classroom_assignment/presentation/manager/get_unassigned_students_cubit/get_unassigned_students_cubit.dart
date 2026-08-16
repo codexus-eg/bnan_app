@@ -2,25 +2,28 @@ import 'package:bnan_app/features/student_classroom_assignment/data/repo/student
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_unassigned_students_cubit/get_unassigned_students_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class GetUnassignedStudentsCubit
-    extends Cubit<GetUnassignedStudentsState> {
+class GetUnassignedStudentsCubit extends Cubit<GetUnassignedStudentsState> {
   GetUnassignedStudentsCubit(this.repo)
-      : super(const GetUnassignedStudentsInitial());
+    : super(const GetUnassignedStudentsInitial());
 
   final StudentClassroomAssignmentRepo repo;
 
   Future<void> getUnassignedStudents() async {
+    if (isClosed) return;
     emit(const GetUnassignedStudentsLoading());
 
     final result = await repo.getUnassignedStudents();
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(
-        GetUnassignedStudentsFailure(failure.message),
-      ),
-      (students) => emit(
-        GetUnassignedStudentsSuccess(students),
-      ),
+      (failure) {
+        if (isClosed) return;
+        emit(GetUnassignedStudentsFailure(failure.message));
+      },
+      (students) {
+        if (isClosed) return;
+        emit(GetUnassignedStudentsSuccess(students));
+      },
     );
   }
 }

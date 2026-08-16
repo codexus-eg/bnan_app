@@ -10,13 +10,21 @@ class GetEgyptianScheduleByClassroomCubit
   final TableManagementRepo repo;
 
   Future<void> getEgyptianScheduleByClassroom(String classroomId) async {
+    if (isClosed) return;
     emit(GetEgyptianScheduleByClassroomLoading());
 
     final result = await repo.getEgyptianScheduleByClassroom(classroomId);
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(GetEgyptianScheduleByClassroomFailure(failure.message)),
-      (response) => emit(GetEgyptianScheduleByClassroomSuccess(response)),
+      (failure) {
+        if (isClosed) return;
+        emit(GetEgyptianScheduleByClassroomFailure(failure.message));
+      },
+      (response) {
+        if (isClosed) return;
+        emit(GetEgyptianScheduleByClassroomSuccess(response));
+      },
     );
   }
 }

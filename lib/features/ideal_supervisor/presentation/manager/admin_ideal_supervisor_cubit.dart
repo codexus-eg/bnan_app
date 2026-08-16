@@ -11,37 +11,44 @@ class AdminIdealSupervisorCubit extends Cubit<AdminIdealSupervisorState> {
   final AdminIdealSupervisorRepo issueRepo;
 
   Future<void> load() async {
-    if (state.isSubmitting) return;
+    if (isClosed || state.isSubmitting) return;
     emit(state.copyWith(status: AdminIdealSupervisorStatus.loading));
     final result = await supervisorsRepo.getSupervisors();
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(
-        state.copyWith(
-          status: AdminIdealSupervisorStatus.failure,
-          message: failure.message,
-          errorCode: failure.code,
-        ),
-      ),
-      (response) => emit(
-        AdminIdealSupervisorState(
-          status: AdminIdealSupervisorStatus.loaded,
-          supervisors: response.data
-              .where((item) => item.id.isNotEmpty)
-              .toList(),
-        ),
-      ),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            status: AdminIdealSupervisorStatus.failure,
+            message: failure.message,
+            errorCode: failure.code,
+          ),
+        );
+      },
+      (response) {
+        if (isClosed) return;
+        emit(
+          AdminIdealSupervisorState(
+            status: AdminIdealSupervisorStatus.loaded,
+            supervisors: response.data
+                .where((item) => item.id.isNotEmpty)
+                .toList(),
+          ),
+        );
+      },
     );
   }
 
   void toggle(String id) {
-    if (id.isEmpty || state.isSubmitting) return;
+    if (isClosed || id.isEmpty || state.isSubmitting) return;
     final selected = {...state.selectedIds};
     selected.contains(id) ? selected.remove(id) : selected.add(id);
     emit(state.copyWith(selectedIds: selected));
   }
 
   Future<void> submit(String signerName) async {
-    if (state.selectedIds.isEmpty || state.isSubmitting) return;
+    if (isClosed || state.selectedIds.isEmpty || state.isSubmitting) return;
     emit(state.copyWith(status: AdminIdealSupervisorStatus.submitting));
     final result = await issueRepo.issueIdealSupervisors(
       IdealSupervisorRequest(
@@ -49,20 +56,27 @@ class AdminIdealSupervisorCubit extends Cubit<AdminIdealSupervisorState> {
         signerName: signerName,
       ),
     );
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(
-        state.copyWith(
-          status: AdminIdealSupervisorStatus.failure,
-          message: failure.message,
-          errorCode: failure.code,
-        ),
-      ),
-      (_) => emit(
-        state.copyWith(
-          status: AdminIdealSupervisorStatus.success,
-          selectedIds: const {},
-        ),
-      ),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            status: AdminIdealSupervisorStatus.failure,
+            message: failure.message,
+            errorCode: failure.code,
+          ),
+        );
+      },
+      (_) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            status: AdminIdealSupervisorStatus.success,
+            selectedIds: const {},
+          ),
+        );
+      },
     );
   }
 }

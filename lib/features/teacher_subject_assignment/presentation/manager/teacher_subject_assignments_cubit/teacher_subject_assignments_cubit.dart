@@ -12,12 +12,18 @@ class TeacherSubjectAssignmentsCubit
   final TeacherSubjectAssignmentRepo repo;
 
   Future<void> getTeacherTeachingAssignments() async {
+    if (isClosed) return;
     emit(const GetTeachingAssignmentsLoading());
 
     final result = await repo.getTeacherTeachingAssignments();
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(GetTeachingAssignmentsFailure(failure.message)),
+      (failure) {
+        if (isClosed) return;
+        emit(GetTeachingAssignmentsFailure(failure.message));
+      },
       (response) {
+        if (isClosed) return;
         if (response.data.isEmpty) {
           emit(const GetTeachingAssignmentsEmpty());
         } else {

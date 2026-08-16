@@ -18,16 +18,24 @@ class TeacherSubjectAssignmentActionsCubit
     required String teacherId,
     required List<String> curriculumIds,
   }) async {
+    if (isClosed) return;
     emit(const AssignCurriculumsLoading());
 
     final result = await repo.assignCurriculumsToTeacher(
       teacherId: teacherId,
       curriculumIds: curriculumIds,
     );
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(AssignCurriculumsFailure(failure.message)),
-      (response) => emit(AssignCurriculumsSuccess(response: response)),
+      (failure) {
+        if (isClosed) return;
+        emit(AssignCurriculumsFailure(failure.message));
+      },
+      (response) {
+        if (isClosed) return;
+        emit(AssignCurriculumsSuccess(response: response));
+      },
     );
   }
 
@@ -39,7 +47,7 @@ class TeacherSubjectAssignmentActionsCubit
     required String subjectId,
     required num pricePerSession,
   }) async {
-    if (state is AssignTeacherLoading) return;
+    if (isClosed || state is AssignTeacherLoading) return;
     emit(const AssignTeacherLoading());
     final result = await repo.assignTeacher(
       teacherId: teacherId,
@@ -51,9 +59,16 @@ class TeacherSubjectAssignmentActionsCubit
         pricePerSession: pricePerSession,
       ),
     );
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(AssignTeacherFailure(failure.message)),
-      (response) => emit(AssignTeacherSuccess(response: response)),
+      (failure) {
+        if (isClosed) return;
+        emit(AssignTeacherFailure(failure.message));
+      },
+      (response) {
+        if (isClosed) return;
+        emit(AssignTeacherSuccess(response: response));
+      },
     );
   }
 
@@ -61,6 +76,7 @@ class TeacherSubjectAssignmentActionsCubit
     required String teacherId,
     required String classroomId,
   }) async {
+    if (isClosed) return;
     final safeTeacherId = teacherId.trim();
     final safeClassroomId = classroomId.trim();
     if (safeTeacherId.isEmpty || safeClassroomId.isEmpty) return;
@@ -70,13 +86,22 @@ class TeacherSubjectAssignmentActionsCubit
       teacherId: safeTeacherId,
       classroomId: safeClassroomId,
     );
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(
-        UnassignTeacherFailure(safeTeacherId, safeClassroomId, failure.message),
-      ),
-      (response) => emit(
-        UnassignTeacherSuccess(safeTeacherId, safeClassroomId, response),
-      ),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          UnassignTeacherFailure(
+            safeTeacherId,
+            safeClassroomId,
+            failure.message,
+          ),
+        );
+      },
+      (response) {
+        if (isClosed) return;
+        emit(UnassignTeacherSuccess(safeTeacherId, safeClassroomId, response));
+      },
     );
   }
 }

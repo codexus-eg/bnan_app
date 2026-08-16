@@ -9,13 +9,21 @@ class DeleteEgyptianScheduleCubit extends Cubit<DeleteEgyptianScheduleState> {
   final TableManagementRepo repo;
 
   Future<void> deleteEgyptianSchedule(String scheduleId) async {
+    if (isClosed) return;
     emit(DeleteEgyptianScheduleLoading());
 
     final result = await repo.deleteEgyptianSchedule(scheduleId);
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(DeleteEgyptianScheduleFailure(failure.message)),
-      (_) => emit(DeleteEgyptianScheduleSuccess()),
+      (failure) {
+        if (isClosed) return;
+        emit(DeleteEgyptianScheduleFailure(failure.message));
+      },
+      (_) {
+        if (isClosed) return;
+        emit(DeleteEgyptianScheduleSuccess());
+      },
     );
   }
 }
