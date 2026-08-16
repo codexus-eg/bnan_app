@@ -22,9 +22,14 @@ class GroupsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAdmin = SessionManager.instance.role == UserRole.admin;
+    final canSearch = const {
+      UserRole.admin,
+      UserRole.supervisor,
+      UserRole.teacher,
+    }.contains(SessionManager.instance.role);
     return Column(
       children: [
-        if (isAdmin)
+        if (canSearch)
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
             child: CustomTextField(
@@ -37,7 +42,7 @@ class GroupsBody extends StatelessWidget {
                   width: 16,
                 ),
               ),
-              onChanged: context.read<GetChatRoomsCubit>().searchAdminRooms,
+              onChanged: context.read<GetChatRoomsCubit>().searchRooms,
             ),
           ),
         Expanded(child: _rooms(context, isAdmin)),
@@ -107,13 +112,13 @@ class GroupsBody extends StatelessWidget {
     );
   }
 
- String _subtitle(ChatRoomSummaryModel room) {
-  final subtitle = room.subtitle.trim();
+  String _subtitle(ChatRoomSummaryModel room) {
+    final subtitle = room.subtitle.trim();
 
-  if (subtitle.isNotEmpty) {
-    return subtitle;
+    if (subtitle.isNotEmpty) {
+      return subtitle;
+    }
+
+    return 'محادثة';
   }
-
-  return 'محادثة';
-}
 }

@@ -8,8 +8,13 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class StudentCallAlertAction extends StatefulWidget {
-  const StudentCallAlertAction({super.key, required this.studentId});
+  const StudentCallAlertAction({
+    super.key,
+    required this.studentId,
+    this.color = ColorManager.white,
+  });
   final String studentId;
+  final Color color;
 
   @override
   State<StudentCallAlertAction> createState() => _StudentCallAlertActionState();
@@ -24,14 +29,14 @@ class _StudentCallAlertActionState extends State<StudentCallAlertAction> {
     tooltip: S.of(context).callStudentAlert,
     onPressed: _loading || _coolingDown ? null : _call,
     icon: _loading
-        ? const SizedBox.square(
+        ? SizedBox.square(
             dimension: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: ColorManager.white,
+              color: widget.color,
             ),
           )
-        : const Icon(Icons.call_outlined, color: ColorManager.white),
+        : Icon(Icons.call_outlined, color: widget.color),
   );
 
   Future<void> _call() async {

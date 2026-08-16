@@ -16,6 +16,7 @@ abstract class Routes {
   static const String chat = '/chat/:roomId';
   static const String legacyChat = '/chat';
   static const String classroomDocuments = '/classroomDocuments';
+  static const String classroomMembers = '/classroomMembers';
   static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
   static const String studentSubjects = '/studentSubjects';

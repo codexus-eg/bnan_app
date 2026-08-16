@@ -10,7 +10,10 @@ import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries
 import 'package:bnan_app/features/chats/presentation/manager/message_documents_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_members_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/views/classroom_documents_view.dart';
+import 'package:bnan_app/features/chats/presentation/views/classroom_members_view.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
@@ -314,6 +317,25 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                     child: messageDocuments,
                   )
                 : messageDocuments,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: Routes.classroomMembers,
+        redirect: (_, _) => SessionManager.instance.role == UserRole.supervisor
+            ? null
+            : Routes.groups,
+        pageBuilder: (context, state) {
+          final args = state.extra as ClassroomMembersRouteArgs;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: BlocProvider(
+              create: (_) =>
+                  getIt<GetClassroomStudentsCubit>()
+                    ..getClassroomStudents(classroomId: args.classroomId),
+              child: const ClassroomMembersView(),
+            ),
           );
         },
       ),

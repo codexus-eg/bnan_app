@@ -3,6 +3,7 @@ import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_members_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_session_action.dart';
@@ -103,6 +104,18 @@ class ChatHeader extends StatelessWidget {
                   classroomId: classroomId!.trim(),
                   role: _sessionRole!,
                 ),
+              if (_sessionRole == UserRole.supervisor &&
+                  roomType == 'classroom' &&
+                  classroomId?.trim().isNotEmpty == true)
+                IconButton(
+                  key: const Key('classroomMembersButton'),
+                  tooltip: S.of(context).students,
+                  onPressed: () => _openMembers(context),
+                  icon: const Icon(
+                    Icons.group_outlined,
+                    color: ColorManager.white,
+                  ),
+                ),
               if (ClassroomDocumentsAccess.canMessages(
                 roomType: roomType,
                 roomId: roomId,
@@ -159,4 +172,10 @@ class ChatHeader extends StatelessWidget {
     );
     if (messageId?.trim().isNotEmpty == true) onMessageTarget?.call(messageId!);
   }
+
+  void _openMembers(BuildContext context) => MyNavigator.goTo<void>(
+    context,
+    Routes.classroomMembers,
+    extra: ClassroomMembersRouteArgs(classroomId: classroomId!.trim()),
+  );
 }
