@@ -5,60 +5,73 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ConnectivityCubit extends Cubit<ConnectivityState> {
-  ConnectivityCubit() : super(const ConnectivityConnected());
+  factory ConnectivityCubit({
+    Future<bool> Function()? checkInternet,
+    Stream<InternetStatus>? statusChanges,
+  }) {
+    final connection = InternetConnection();
+    return ConnectivityCubit._(
+      checkInternet ?? () => connection.hasInternetAccess,
+      statusChanges ?? connection.onStatusChange,
+    );
+  }
 
-  final InternetConnection _connection = InternetConnection();
+  ConnectivityCubit._(this._checkInternet, this._statusChanges)
+    : super(const ConnectivityChecking());
+
+  final Future<bool> Function() _checkInternet;
+  final Stream<InternetStatus> _statusChanges;
   StreamSubscription<InternetStatus>? _subscription;
   Future<void>? _pendingCheck;
-  bool _completedInitialCheck = false;
+  ConnectivityState? _lastConfirmedState;
+  bool _checkQueued = false;
   bool _monitoringStarted = false;
 
   Future<void> startMonitoring() async {
     if (_monitoringStarted) return;
     _monitoringStarted = true;
-    _completedInitialCheck = false;
+    _subscription = _statusChanges.listen((_) {
+      unawaited(checkConnection(showChecking: false));
+    });
     await checkConnection();
-    if (isClosed) return;
-    _subscription = _connection.onStatusChange.listen(_setStatus);
   }
 
-  Future<void> checkConnection() {
-    return _pendingCheck ??= _runCheck().whenComplete(() {
+  Future<void> checkConnection({bool showChecking = true}) async {
+    if (isClosed) return;
+    if (showChecking && state is! ConnectivityChecking) {
+      emit(const ConnectivityChecking());
+    }
+    if (_pendingCheck != null) {
+      _checkQueued = true;
+      return _pendingCheck;
+    }
+    do {
+      _checkQueued = false;
+      _pendingCheck = _runCheck();
+      await _pendingCheck;
       _pendingCheck = null;
-    });
+    } while (_checkQueued && !isClosed);
   }
 
   Future<void> _runCheck() async {
     try {
-      final connected = await _connection.hasInternetAccess;
+      final connected = await _checkInternet();
       if (isClosed) return;
-      _completedInitialCheck = true;
       if ((connected && state is ConnectivityConnected) ||
           (!connected && state is ConnectivityDisconnected)) {
         return;
       }
-      emit(
-        connected
-            ? const ConnectivityConnected()
-            : const ConnectivityDisconnected(),
-      );
-    } catch (_) {
-      _completedInitialCheck = true;
-    }
-  }
-
-  void _setStatus(InternetStatus status) {
-    if (isClosed || !_completedInitialCheck) return;
-    final connected = status == InternetStatus.connected;
-    if ((connected && state is ConnectivityConnected) ||
-        (!connected && state is ConnectivityDisconnected)) {
-      return;
-    }
-    emit(
-      connected
+      final confirmed = connected
           ? const ConnectivityConnected()
-          : const ConnectivityDisconnected(),
-    );
+          : const ConnectivityDisconnected();
+      _lastConfirmedState = confirmed;
+      emit(confirmed);
+    } catch (_) {
+      final confirmed = _lastConfirmedState;
+      if (!isClosed && confirmed != null && state is ConnectivityChecking) {
+        emit(confirmed);
+      }
+    }
   }
 
   @override

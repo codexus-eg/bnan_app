@@ -86,6 +86,7 @@ export 'package:bnan_app/features/certificates_management/presentation/manager/d
 export 'package:bnan_app/features/certificates_management/presentation/manager/get_certificate_details_cubit/get_certificate_details_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/get_monthly_certificates_cubit/get_monthly_certificates_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/issue_monthly_certificates_cubit/issue_monthly_certificates_cubit.dart';
+export 'package:bnan_app/features/certificates_management/presentation/manager/teacher_certificates_cubit/teacher_certificates_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/update_monthly_certificate_cubit/update_monthly_certificate_cubit.dart';
 export 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 export 'package:bnan_app/features/tables_management/data/repo/table_management_repo_impl.dart';

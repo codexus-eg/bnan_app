@@ -12,6 +12,7 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/teacher_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/repo/certificates_management_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
@@ -162,6 +163,33 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
       );
 
       return StudentSubjectsResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getTeacherCertificates({required int page, int limit = 20}) {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.supervisorTeacherCertificates,
+        queryParameter: {'page': page, 'limit': limit},
+        isProtected: true,
+      );
+      return TeacherCertificatesResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> issueGeneralTeacherCertificate({
+    required String teacherId,
+    required String signerName,
+  }) {
+    return repoGuard(() async {
+      await apiConsumer.post(
+        EndPoints.supervisorTeacherCertificate(teacherId),
+        data: {'signerName': signerName.trim()},
+        isProtected: true,
+      );
     });
   }
 }

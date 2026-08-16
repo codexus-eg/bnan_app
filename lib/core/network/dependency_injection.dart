@@ -525,6 +525,12 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<DeleteMonthlyCertificateCubit>(
     () => DeleteMonthlyCertificateCubit(getIt<CertificatesManagementRepo>()),
   );
+  getIt.registerFactory<TeacherCertificatesCubit>(
+    () => TeacherCertificatesCubit(
+      getIt<CertificatesManagementRepo>(),
+      getIt<SupervisorIdealTeacherRepo>(),
+    ),
+  );
   getIt.registerFactory<GetEgyptianSchedulesCubit>(
     () => GetEgyptianSchedulesCubit(getIt<TableManagementRepo>()),
   );

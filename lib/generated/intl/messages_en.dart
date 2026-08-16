@@ -746,6 +746,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "idealTeacher": MessageLookupByLibrary.simpleMessage("Ideal Teacher"),
         "idealTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("Ideal Teacher Certificate"),
+        "studentCertificates":
+            MessageLookupByLibrary.simpleMessage("Student Certificates"),
+        "teacherCertificates":
+            MessageLookupByLibrary.simpleMessage("Teacher Certificates"),
+        "generalTeacherCertificate": MessageLookupByLibrary.simpleMessage(
+            "Certificate of Appreciation"),
+        "teacherCertificateIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Teacher certificate issued successfully"),
         "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Ideal teacher certificate issued successfully"),
         "inactive": MessageLookupByLibrary.simpleMessage("InActive"),

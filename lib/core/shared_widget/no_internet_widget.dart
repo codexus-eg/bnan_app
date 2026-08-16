@@ -2,6 +2,7 @@ import 'package:bnan_app/core/shared_widget/empty_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,11 @@ class NoInternetWidget extends StatelessWidget {
                         child: EmptyStateWidget(
                           image: ImageManager.noInternet,
                           title: S.of(context).noInternetConnection,
+                          titleStyle: StylesManager.styleBold20(context)
+                              .copyWith(
+                                color: ColorManager.grey7D7D,
+                                decoration: TextDecoration.none,
+                              ),
                         ),
                       ),
                     ),
@@ -48,6 +54,9 @@ class NoInternetWidget extends StatelessWidget {
                   text: S.of(context).retry,
                   isLoading: isChecking,
                   onPressed: onRetry,
+                  style: StylesManager.styleBold16(
+                    context,
+                  ).copyWith(decoration: TextDecoration.none),
                 ),
               ),
               const SizedBox(height: 24),

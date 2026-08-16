@@ -12050,6 +12050,46 @@ class S {
     );
   }
 
+  /// `Student Certificates`
+  String get studentCertificates {
+    return Intl.message(
+      'Student Certificates',
+      name: 'studentCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher Certificates`
+  String get teacherCertificates {
+    return Intl.message(
+      'Teacher Certificates',
+      name: 'teacherCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate of Appreciation`
+  String get generalTeacherCertificate {
+    return Intl.message(
+      'Certificate of Appreciation',
+      name: 'generalTeacherCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher certificate issued successfully`
+  String get teacherCertificateIssuedSuccessfully {
+    return Intl.message(
+      'Teacher certificate issued successfully',
+      name: 'teacherCertificateIssuedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved.`
   String get egyptianStudentRegistrationSuccessMessage {
     return Intl.message(

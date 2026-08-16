@@ -31,6 +31,8 @@ abstract class EndPoints {
   static const String gulfTeacherRequests = '/gulf-teacher-requests';
   static const String supervisorMyClassrooms = '/supervisors/me/classrooms';
   static const String supervisorTeachers = '/supervisors/me/teachers';
+  static const String supervisorTeacherCertificates =
+      '/supervisors/me/teacher-certificates';
   static const String supervisorIdealTeachers =
       '/supervisors/me/ideal-teachers';
   static const String teacherAssignedSubjects =
@@ -370,6 +372,10 @@ abstract class EndPoints {
 
   static String supervisorCallStudent(String studentId) {
     return '/supervisors/me/students/$studentId/call';
+  }
+
+  static String supervisorTeacherCertificate(String teacherId) {
+    return '/supervisors/me/teachers/$teacherId/certificate';
   }
 
   static String classroomSessions(String classroomId) {
