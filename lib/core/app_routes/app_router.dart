@@ -1078,6 +1078,16 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         ),
       ),
       GoRoute(
+        path: Routes.addClassroomSubject,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) => getIt<AddClassroomSubjectCubit>()..load(),
+            child: const AddClassroomSubjectView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.tablesManagement,
         redirect: (context, state) {
           final session = SessionManager.instance;

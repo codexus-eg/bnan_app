@@ -41,6 +41,7 @@ abstract class EndPoints {
   static const String egyptianSchedules = '/egyptianSchedules';
   static const String myEgyptianSchedule = '$egyptianSchedules/mySchedule';
   static const String subjects = '/subjects';
+  static const String classroomSubjectsRoot = '/classroomsubjects/';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
   static const String supervisors = '/supervisors';

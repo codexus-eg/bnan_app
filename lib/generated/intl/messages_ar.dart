@@ -165,6 +165,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إضافة نقاط التميز"),
         "addScheduleEntry": MessageLookupByLibrary.simpleMessage("إضافة موعد"),
         "addSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة"),
+        "addSubjectToClassroom":
+            MessageLookupByLibrary.simpleMessage("إضافة مادة لفصل"),
+        "allGradeSubjectsAddedToClassroom":
+            MessageLookupByLibrary.simpleMessage(
+                "تمت إضافة جميع مواد هذا الصف إلى الفصل"),
         "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
         "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
         "adminRegistrationRequestsSection":

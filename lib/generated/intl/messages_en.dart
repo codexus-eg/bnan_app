@@ -169,6 +169,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "addScheduleEntry":
             MessageLookupByLibrary.simpleMessage("Add schedule entry"),
         "addSubject": MessageLookupByLibrary.simpleMessage("Add Subject"),
+        "addSubjectToClassroom":
+            MessageLookupByLibrary.simpleMessage("Add Subject to Classroom"),
+        "allGradeSubjectsAddedToClassroom":
+            MessageLookupByLibrary.simpleMessage(
+                "All grade subjects have already been added to this classroom"),
         "addUser": MessageLookupByLibrary.simpleMessage("Add User"),
         "admin": MessageLookupByLibrary.simpleMessage("Admin"),
         "adminRegistrationRequestsSection":

@@ -807,6 +807,8 @@
     "subjectsManagement": "Subjects Management",
     "addSubject": "Add Subject",
     "subjectCreatedSuccessfully": "Subject added successfully",
+    "addSubjectToClassroom": "Add Subject to Classroom",
+    "allGradeSubjectsAddedToClassroom": "All grade subjects have already been added to this classroom",
     "addNewSubject": "Add New Subject",
     "editSubject": "Edit Subject",
     "subjectName": "Subject Name",

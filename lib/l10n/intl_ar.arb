@@ -807,6 +807,8 @@
     "subjectsManagement": "إدارة المواد الدراسية",
     "addSubject": "إضافة مادة",
     "subjectCreatedSuccessfully": "تمت إضافة المادة بنجاح",
+    "addSubjectToClassroom": "إضافة مادة لفصل",
+    "allGradeSubjectsAddedToClassroom": "تمت إضافة جميع مواد هذا الصف إلى الفصل",
     "addNewSubject": "إضافة مادة جديد",
     "editSubject": "تعديل المادة",
     "subjectName": "اسم المادة",

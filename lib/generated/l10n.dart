@@ -6550,6 +6550,26 @@ class S {
     );
   }
 
+  /// `Add Subject to Classroom`
+  String get addSubjectToClassroom {
+    return Intl.message(
+      'Add Subject to Classroom',
+      name: 'addSubjectToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All grade subjects have already been added to this classroom`
+  String get allGradeSubjectsAddedToClassroom {
+    return Intl.message(
+      'All grade subjects have already been added to this classroom',
+      name: 'allGradeSubjectsAddedToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Subject added successfully`
   String get subjectCreatedSuccessfully {
     return Intl.message(

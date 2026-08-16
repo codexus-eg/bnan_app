@@ -28,6 +28,7 @@ abstract class Routes {
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
   static const String adminHome = '/adminHome';
+  static const String addClassroomSubject = '/admin/classroom-subjects/add';
   static const String discountCodes = '/discountCodes';
   static const String teacherPayrolls = '/admin/teacher-payrolls';
   static const String teacherPayrollCreate =

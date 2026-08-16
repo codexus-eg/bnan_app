@@ -494,6 +494,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<AcademicLookupsCubit>(
     () => AcademicLookupsCubit(repo: getIt<AcademicLookupsRepo>()),
   );
+  getIt.registerFactory<AddClassroomSubjectCubit>(
+    () => AddClassroomSubjectCubit(getIt<AcademicLookupsRepo>()),
+  );
   getIt.registerFactory<GetSupervisorsCubit>(
     () => GetSupervisorsCubit(getIt<SupervisorAssignmentRepo>()),
   );

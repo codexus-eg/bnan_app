@@ -120,6 +120,7 @@ export 'package:bnan_app/features/teacher_subject_assignment/presentation/manage
 export 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
 export 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo_impl.dart';
 export 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+export 'package:bnan_app/features/add_classroom_subject/presentation/manager/add_classroom_subject_cubit.dart';
 export 'package:bnan_app/features/grades_management/data/repo/grades_repo.dart';
 export 'package:bnan_app/features/grades_management/data/repo/grades_repo_impl.dart';
 export 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';

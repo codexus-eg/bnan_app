@@ -8,9 +8,9 @@ import 'package:dartz/dartz.dart';
 abstract class AcademicLookupsRepo {
   Future<Either<Failure, List<AcademicCurriculumModel>>> getCurriculums();
 
-  Future<Either<Failure, List<AcademicGradeModel>>> getGrades(
-  {  String? curriculumId,}
-  );
+  Future<Either<Failure, List<AcademicGradeModel>>> getGrades({
+    String? curriculumId,
+  });
 
   Future<Either<Failure, List<AcademicClassroomModel>>> getClassroomsByGrade({
     required String curriculumId,
@@ -22,4 +22,9 @@ abstract class AcademicLookupsRepo {
     required String gradeId,
     String? classroomId,
   });
+
+  Future<Either<Failure, Unit>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+  }) => throw UnimplementedError();
 }
