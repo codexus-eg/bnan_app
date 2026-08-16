@@ -23,7 +23,8 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   final Set<String> _arrivedDuringInitialLoadIds = {};
 
   String? _currentRoomId;
-  String? _firstNewMessageId;
+  String? _firstUnreadMessageId;
+  String? _lastLocallyReadMessageId;
   DateTime? _previousLastOpenedAt;
   bool _initialHistoryResolved = false;
 
@@ -33,7 +34,8 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     if (normalizedRoomId.isEmpty) return;
 
     _currentRoomId = normalizedRoomId;
-    _firstNewMessageId = null;
+    _firstUnreadMessageId = null;
+    _lastLocallyReadMessageId = null;
     _initialHistoryResolved = false;
     _arrivedDuringInitialLoadIds.clear();
     _previousLastOpenedAt = _readLastOpened(normalizedRoomId);
@@ -71,10 +73,9 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
         _mergeHistory(response.messages);
         if (!_initialHistoryResolved) {
           _initialHistoryResolved = true;
-          _firstNewMessageId = _findFirstNewMessageId();
+          _firstUnreadMessageId = _findFirstUnreadMessageId();
         }
         _emitMessages();
-        unawaited(_saveLatestMessageTimestamp(roomId));
       },
     );
   }
@@ -102,8 +103,6 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     _upsert(_messages, message);
 
     _emitMessages();
-    final roomId = _currentRoomId;
-    if (roomId != null) unawaited(_saveLatestMessageTimestamp(roomId));
   }
 
   void _editMessage(ChatMessageModel updatedMessage) {
@@ -154,7 +153,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     emit(
       GetRoomMessagesSuccess(
         messages: List<ChatMessageModel>.from(_messages),
-        firstNewMessageId: _firstNewMessageId,
+        firstUnreadMessageId: _firstUnreadMessageId,
       ),
     );
   }
@@ -169,7 +168,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     }
   }
 
-  String? _findFirstNewMessageId() {
+  String? _findFirstUnreadMessageId() {
     final lastOpened = _previousLastOpenedAt;
     if (lastOpened == null) return null;
     final currentUserId = SessionManager.instance.userId ?? '';
@@ -184,6 +183,22 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
       }
     }
     return null;
+  }
+
+  void markCurrentRoomRead() {
+    final roomId = _currentRoomId;
+    if (roomId == null || isClosed) return;
+    final latestMessageId = _messages.isEmpty ? null : _messages.last.id.trim();
+    if (latestMessageId == null ||
+        latestMessageId.isEmpty ||
+        latestMessageId == _lastLocallyReadMessageId) {
+      return;
+    }
+    _lastLocallyReadMessageId = latestMessageId;
+    unawaited(_saveLatestMessageTimestamp(roomId));
+    if (_firstUnreadMessageId == null) return;
+    _firstUnreadMessageId = null;
+    _emitMessages();
   }
 
   DateTime? _readLastOpened(String roomId) {

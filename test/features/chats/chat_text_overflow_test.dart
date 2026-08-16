@@ -49,7 +49,7 @@ void main() {
       );
 
       expect(tester.takeException(), isNull);
-      expect(find.text('Sender'), findsOneWidget);
+      expect(find.text('Sender (Teacher)'), findsOneWidget);
       expect(find.text('$long $unbroken'), findsOneWidget);
     });
   }

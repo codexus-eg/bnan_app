@@ -89,9 +89,12 @@ class _ChatBodyState extends State<ChatBody> {
                     messages: messages,
                     currentUserId: SessionManager.instance.userId ?? '',
                     isLoading: isLoading,
-                    firstNewMessageId: state is GetRoomMessagesSuccess
-                        ? state.firstNewMessageId
+                    firstUnreadMessageId: state is GetRoomMessagesSuccess
+                        ? state.firstUnreadMessageId
                         : null,
+                    onInitialPositioned: context
+                        .read<GetRoomMessagesCubit>()
+                        .markCurrentRoomRead,
                     selectedMessageIds: selectedMessageIds,
                     selectionMode: selectedMessageIds.isNotEmpty,
                     canSelect: _canDelete,

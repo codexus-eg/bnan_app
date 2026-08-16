@@ -45,7 +45,11 @@ class ChatBubble extends StatelessWidget {
           children: [
             if (!isMe && message.sender.fullName.trim().isNotEmpty) ...[
               Text(
-                message.sender.fullName.trim(),
+                ChatFormatters.senderLabel(
+                  context,
+                  message.sender.fullName,
+                  message.sender.role,
+                ),
                 style: StylesManager.styleMedium14(
                   context,
                 ).copyWith(color: ColorManager.mainColor14),
@@ -123,7 +127,7 @@ class ChatBubble extends StatelessWidget {
 
   Widget _buildTime(BuildContext context) {
     return Text(
-      ChatFormatters.formatTime(message.createdAt),
+      ChatFormatters.formatTime(message.createdAt, context: context),
       style: StylesManager.styleRegular14(context).copyWith(
         fontSize: 11,
         color: isMe ? ColorManager.grey9D9D : ColorManager.grey7A7C,

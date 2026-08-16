@@ -10,10 +10,12 @@ class ChatSenderModel {
   });
 
   factory ChatSenderModel.fromJson(Map<String, dynamic> json) {
+    final nested = json['user'];
+    final sender = nested is Map ? Map<String, dynamic>.from(nested) : json;
     return ChatSenderModel(
-      id: (json['id'] ?? json['_id'])?.toString() ?? '',
-      fullName: json['fullName']?.toString() ?? '',
-      role: json['role']?.toString() ?? '',
+      id: (sender['id'] ?? sender['_id'])?.toString() ?? '',
+      fullName: (sender['fullName'] ?? sender['name'])?.toString() ?? '',
+      role: (sender['role'] ?? json['role'])?.toString() ?? '',
     );
   }
 }
