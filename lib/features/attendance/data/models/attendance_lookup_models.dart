@@ -8,22 +8,34 @@ class AttendanceClassroom {
     required this.id,
     required this.name,
     required this.grade,
+    this.registrationMode = '',
   });
   final String id, name;
+  final String registrationMode;
   final AttendanceGrade grade;
 
   factory AttendanceClassroom.fromJson(Map<String, dynamic> json) {
     final classroom = _map(json['classroom']) ?? json;
     final grade = _map(classroom['grade']) ?? _map(json['grade']) ?? const {};
+    final id = _text(classroom['id'] ?? classroom['_id']);
+    final name = _text(classroom['name']);
     return AttendanceClassroom(
-      id: _text(classroom['id'] ?? classroom['_id']),
-      name: _text(classroom['name']),
+      id: id,
+      name: name,
+      registrationMode: _text(classroom['registrationMode']),
       grade: AttendanceGrade(
         id: _text(grade['id'] ?? grade['_id']),
         name: _text(grade['name']),
       ),
     );
   }
+
+  AttendanceClassroom withGrade(AttendanceGrade value) => AttendanceClassroom(
+    id: id,
+    name: name,
+    grade: value,
+    registrationMode: registrationMode,
+  );
 }
 
 class AttendanceSession {

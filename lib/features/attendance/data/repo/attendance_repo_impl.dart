@@ -9,6 +9,7 @@ import 'package:bnan_app/features/attendance/data/models/attendance_status.dart'
 import 'package:bnan_app/features/attendance/data/repo/attendance_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 class AttendanceRepoImpl implements AttendanceRepo {
   const AttendanceRepoImpl(this.api);
@@ -22,11 +23,76 @@ class AttendanceRepoImpl implements AttendanceRepo {
         ? EndPoints.teacherClassrooms
         : EndPoints.supervisorMyClassrooms;
     final response = await api.get(path, isProtected: true);
-    return _items(response)
+    var classrooms = _items(response)
         .map(AttendanceClassroom.fromJson)
-        .where((item) => item.id.isNotEmpty && item.grade.id.isNotEmpty)
+        .where((item) => item.id.isNotEmpty)
         .toList();
+    if (role == UserRole.teacher) {
+      classrooms = await _mapTeacherClassroomsToGrades(classrooms);
+    }
+    debugPrint('ATTENDANCE CLASSROOMS COUNT: ${classrooms.length}');
+    for (final classroom in classrooms) {
+      debugPrint('ATTENDANCE CLASSROOM ID: ${classroom.id}');
+      debugPrint('ATTENDANCE CLASSROOM NAME: ${classroom.name}');
+    }
+    return classrooms;
   });
+
+  Future<List<AttendanceClassroom>> _mapTeacherClassroomsToGrades(
+    List<AttendanceClassroom> allowedClassrooms,
+  ) async {
+    final curriculumResponse = await api.get(
+      EndPoints.teacherCurriculums,
+      isProtected: true,
+    );
+    final grades = <String, AttendanceGrade>{};
+    for (final curriculumId in _teacherCurriculumIds(curriculumResponse)) {
+      final response = await api.get(
+        EndPoints.teacherGrades(curriculumId),
+        isProtected: true,
+      );
+      for (final item in _items(response)) {
+        final id = _text(item['id'] ?? item['_id']);
+        if (id.isNotEmpty) {
+          grades[id] = AttendanceGrade(id: id, name: _text(item['name']));
+        }
+      }
+    }
+
+    final allowedById = {for (final item in allowedClassrooms) item.id: item};
+    final mapped = <String, AttendanceClassroom>{};
+    for (final grade in grades.values) {
+      final response = await api.get(
+        EndPoints.gradeClassrooms(grade.id),
+        isProtected: true,
+      );
+      for (final item in _items(response)) {
+        final classroomId = AttendanceClassroom.fromJson(item).id;
+        final classroom = allowedById[classroomId];
+        if (classroom != null) {
+          mapped[classroomId] = classroom.withGrade(grade);
+        }
+      }
+    }
+    return mapped.values.toList();
+  }
+
+  List<String> _teacherCurriculumIds(Object? response) {
+    final data = _map(response)['data'];
+    if (data is! List) return const [];
+    final ids = <String>{};
+    for (final item in data.whereType<Map>()) {
+      final map = Map<String, dynamic>.from(item);
+      final curriculums = map['curriculums'];
+      final values = curriculums is List ? curriculums : [map];
+      for (final value in values.whereType<Map>()) {
+        final curriculum = Map<String, dynamic>.from(value);
+        final id = _text(curriculum['id'] ?? curriculum['_id']);
+        if (id.isNotEmpty) ids.add(id);
+      }
+    }
+    return ids.toList();
+  }
 
   @override
   Future<Either<Failure, List<AttendanceSession>>> getSessions(
@@ -142,4 +208,6 @@ class AttendanceRepoImpl implements AttendanceRepo {
 
   Map<String, dynamic> _map(Object? value) =>
       value is Map ? Map<String, dynamic>.from(value) : {};
+
+  String _text(Object? value) => value?.toString().trim() ?? '';
 }

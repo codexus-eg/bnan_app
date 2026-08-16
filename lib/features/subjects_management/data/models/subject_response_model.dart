@@ -40,6 +40,7 @@ class SubjectModel {
   final DateTime? updatedAt;
 
   factory SubjectModel.fromJson(Map<String, dynamic> json) {
+    final grade = _subjectGrade(json);
     return SubjectModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
@@ -47,13 +48,22 @@ class SubjectModel {
       curriculum: json['curriculum'] == null
           ? null
           : SubjectCurriculumModel.fromJson(json['curriculum']),
-      grade: json['grade'] is Map
-          ? SubjectGradeModel.fromJson(Map<String, dynamic>.from(json['grade']))
-          : null,
+      grade: grade == null ? null : SubjectGradeModel.fromJson(grade),
       createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
     );
   }
+}
+
+Map<String, dynamic>? _subjectGrade(Map<String, dynamic> json) {
+  final grade = json['grade'];
+  if (grade is Map) return Map<String, dynamic>.from(grade);
+  final grades = json['grades'];
+  if (grades is! List) return null;
+  for (final item in grades) {
+    if (item is Map) return Map<String, dynamic>.from(item);
+  }
+  return null;
 }
 
 class SubjectCurriculumModel {

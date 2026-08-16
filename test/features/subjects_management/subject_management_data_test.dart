@@ -33,6 +33,19 @@ void main() {
     expect(SubjectModel.fromJson({'id': 'subject-2'}).grade, isNull);
   });
 
+  test('subject response parses grade from the list endpoint grades array', () {
+    final subject = SubjectModel.fromJson({
+      'id': 'subject-1',
+      'name': 'Arabic',
+      'grades': [
+        {'id': 'grade-1', 'name': 'صف اول ابتدائي'},
+      ],
+    });
+
+    expect(subject.grade?.id, 'grade-1');
+    expect(subject.grade?.name, 'صف اول ابتدائي');
+  });
+
   test('repository posts protected request through repoGuard', () async {
     final api = _Api();
     final result = await SubjectsRepoImpl(api).addSubject(request: request);
