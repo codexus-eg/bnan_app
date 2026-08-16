@@ -12,7 +12,7 @@ class SubmitAssignmentCubit extends Cubit<SubmitAssignmentState> {
     required String assignmentId,
     required String filePath,
   }) async {
-    if (isClosed) return;
+    if (isClosed || state is SubmitAssignmentLoading) return;
     emit(SubmitAssignmentLoading(assignmentId: assignmentId));
 
     final result = await assignmentsRepo.submitAssignment(

@@ -8,14 +8,16 @@ class AssignmentActionButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.icon,
-     this.onTap,
+    this.onTap,
     this.isFilled = false,
+    this.isLoading = false,
   });
 
   final String text;
   final String icon;
   final VoidCallback? onTap;
   final bool isFilled;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +25,33 @@ class AssignmentActionButton extends StatelessWidget {
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
         backgroundColor: isFilled ? ColorManager.mainColor14 : null,
-        foregroundColor: isFilled ? ColorManager.white : ColorManager.mainColor14,
+        foregroundColor: isFilled
+            ? ColorManager.white
+            : ColorManager.mainColor14,
         side: const BorderSide(color: ColorManager.mainColor14),
         textStyle: StylesManager.styleBold12(context),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         SvgPicture.asset(icon),
-         const SizedBox(width: 17),
-         Text(text,style: StylesManager.styleBold12(context).copyWith(
-          color: isFilled?ColorManager.white:ColorManager.mainColor14
-         ),)
+          if (isLoading)
+            const SizedBox.square(
+              dimension: 16,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: ColorManager.white,
+              ),
+            )
+          else
+            SvgPicture.asset(icon),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: StylesManager.styleBold12(context).copyWith(
+              color: isFilled ? ColorManager.white : ColorManager.mainColor14,
+            ),
+          ),
         ],
       ),
     );

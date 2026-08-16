@@ -420,11 +420,15 @@ void main() {
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
     expect(find.byType(WeeklyEvaluationForm), findsOneWidget);
+    final weekField = _dropdownByLabel(tester, 'Week');
+    expect(weekField.hint, 'Week 2');
+    expect(weekField.onChanged, isNull);
     await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     expect(repo.calls, 1);
+    expect(repo.lastRequest?.week, 2);
     expect(find.byType(WeeklyEvaluationForm), findsNothing);
   });
 }
@@ -508,12 +512,14 @@ class _SaveFailureRepo extends _NoopRepo {
 
 class _SaveSuccessRepo extends _NoopRepo {
   int calls = 0;
+  UpsertEvaluationRequestModel? lastRequest;
 
   @override
   Future<Either<Failure, Unit>> upsert(
     UpsertEvaluationRequestModel request,
   ) async {
     calls++;
+    lastRequest = request;
     return const Right(unit);
   }
 }

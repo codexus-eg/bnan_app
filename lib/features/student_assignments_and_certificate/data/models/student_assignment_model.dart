@@ -56,7 +56,14 @@ class AssignmentModel {
   factory AssignmentModel.fromJson(Map<String, dynamic> json) {
     final attachment = AttachmentFile.fromJson(json['attachment']);
     final submitted = json['submitted'] ?? false;
-    final grade = json['grade'];
+    final submission = json['submission'];
+    final gradeValue =
+        (submission is Map ? submission['score'] : null) ??
+        json['score'] ??
+        json['grade'];
+    final grade = gradeValue is num
+        ? gradeValue
+        : num.tryParse(gradeValue?.toString() ?? '');
     final totalPoints = json['totalPoints'] ?? 0;
     final isCompleted = submitted == true;
 
@@ -104,8 +111,8 @@ class AssignmentModel {
     required num? grade,
     required int totalPoints,
   }) {
-    if (submitted == true && grade != null && grade >= 0) {
-      return '${grade.toInt()}/$totalPoints';
+    if (grade != null) {
+      return '${grade.toInt()} / $totalPoints';
     }
 
     if (submitted == true) {

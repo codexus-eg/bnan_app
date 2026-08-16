@@ -33,9 +33,12 @@ class AssignmentActionButtons extends StatelessWidget {
           const SizedBox(width: 21),
           Expanded(
             child: AssignmentActionButton(
-              text: S.of(context).submitAssignment,
+              text: isLoading
+                  ? S.of(context).submittingAssignment
+                  : S.of(context).submitAssignment,
               icon: ImageManager.upload,
               isFilled: true,
+              isLoading: isLoading,
               onTap: isLoading ? null : onSubmit,
             ),
           ),

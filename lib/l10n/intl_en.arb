@@ -284,6 +284,7 @@
     },
     "download": "Download",
     "submitAssignment": "Submit Assignment",
+    "submittingAssignment": "Submitting...",
     "newBadge": "New",
     "submittedBadge": "Submitted",
     "thirdTermExercises": "Third Term Exercises",

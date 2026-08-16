@@ -42,8 +42,8 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
     super.initState();
     _notesController = TextEditingController();
     _bonusController = TextEditingController(text: '0');
-    week = widget.data.week;
     final editor = widget.data.editor;
+    week = editor?.week ?? widget.data.week;
     if (editor == null) {
       attendance = 'present';
       participation = 'excellent';
@@ -108,8 +108,10 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
                 onClassroomChanged: _selectClassroom,
                 onStudentChanged: _selectStudent,
                 onSubjectChanged: _selectSubject,
-                onWeekChanged: (value) =>
-                    setState(() => week = int.tryParse(value ?? '')),
+                onWeekChanged: widget.data.isEdit
+                    ? null
+                    : (value) =>
+                          setState(() => week = int.tryParse(value ?? '')),
               ),
               if (state is EvaluationOptionsFailure) ...[
                 const SizedBox(height: 12),
@@ -217,7 +219,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
         student: studentId!,
         classroom: classroomId!,
         subject: subject.id,
-        week: week!,
+        week: widget.data.editor?.week ?? week!,
         attendance: attendance!,
         participation: participation!,
         homework: homework!,

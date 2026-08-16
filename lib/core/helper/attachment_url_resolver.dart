@@ -8,13 +8,15 @@ abstract final class AttachmentUrlResolver {
     final base = Uri.parse(EndPoints.baseUrl);
     final uri = Uri.tryParse(source);
     if (uri == null) return '';
-    if (uri.hasScheme) return _replaceLocalHost(uri, base);
+    if (uri.hasScheme) return uri.toString();
     final origin = Uri(
       scheme: base.scheme,
       host: base.host,
       port: base.hasPort ? base.port : null,
     );
-    if (source.startsWith('/')) return origin.resolve(source).toString();
+    if (source.startsWith('/') || source.startsWith('uploads/')) {
+      return origin.resolve(source).toString();
+    }
     return Uri.parse('${EndPoints.baseUrl}/').resolve(source).toString();
   }
 
@@ -34,19 +36,5 @@ abstract final class AttachmentUrlResolver {
     return token?.trim().isNotEmpty == true
         ? {'Authorization': 'Bearer ${token!.trim()}'}
         : null;
-  }
-
-  static String _replaceLocalHost(Uri uri, Uri base) {
-    if (uri.host != '127.0.0.1' && uri.host != 'localhost') {
-      return uri.toString();
-    }
-    return Uri(
-      scheme: base.scheme,
-      host: base.host,
-      port: base.hasPort ? base.port : null,
-      path: uri.path,
-      query: uri.hasQuery ? uri.query : null,
-      fragment: uri.hasFragment ? uri.fragment : null,
-    ).toString();
   }
 }
