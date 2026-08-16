@@ -14,6 +14,18 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
   GulfSchedulesResponse? _cached;
   String? _cacheOwner, _cacheStudentId, _inFlightOwner, _inFlightStudentId;
   Future<Either<Failure, GulfSchedulesResponse>>? _inFlight;
+  int _cacheGeneration = 0;
+
+  @override
+  void invalidateScheduleCache() {
+    _cacheGeneration++;
+    _cached = null;
+    _cacheOwner = null;
+    _cacheStudentId = null;
+    _inFlight = null;
+    _inFlightOwner = null;
+    _inFlightStudentId = null;
+  }
 
   @override
   Future<Either<Failure, GulfSchedulesResponse>> getMyGulfSchedule({
@@ -29,7 +41,7 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
         _inFlight != null) {
       return _inFlight!;
     }
-    final request = _load(owner, id);
+    final request = _load(owner, id, _cacheGeneration);
     _inFlightOwner = owner;
     _inFlightStudentId = id;
     _inFlight = request;
@@ -45,6 +57,7 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
   Future<Either<Failure, GulfSchedulesResponse>> _load(
     String? owner,
     String? studentId,
+    int generation,
   ) => repoGuard(() async {
     final response = await api.get(
       EndPoints.myGulfSchedule,
@@ -52,7 +65,8 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
       isProtected: true,
     );
     final parsed = GulfSchedulesResponse.fromJson(asMap(response));
-    if (SessionManager.instance.accessToken == owner) {
+    if (SessionManager.instance.accessToken == owner &&
+        generation == _cacheGeneration) {
       _cacheOwner = owner;
       _cacheStudentId = studentId;
       _cached = parsed;
@@ -112,9 +126,7 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
   Future<Either<Failure, Unit>> _save(Future<Object?> Function() call) =>
       repoGuard(() async {
         await call();
-        _cached = null;
-        _cacheOwner = null;
-        _cacheStudentId = null;
+        invalidateScheduleCache();
         return unit;
       });
 

@@ -28,6 +28,11 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
   };
   Future<void> load() => _load(showLoading: true);
 
+  Future<void> refresh() {
+    repo.invalidateScheduleCache();
+    return _load(showLoading: false);
+  }
+
   void selectClassroom(String? id) {
     if (id == null || !state.classrooms.any((item) => item.id == id)) return;
     emit(state.copyWith(classroomId: id));

@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/lessons_management/data/models/start_session_models.dart';
+
 class GulfSchedulesResponse {
   const GulfSchedulesResponse({required this.success, required this.data});
 
@@ -151,9 +153,11 @@ class GulfScheduleEntry {
     required this.day,
     required this.startTime,
     this.endTime,
+    this.activeSession,
   });
   final String day, startTime;
   final String? endTime;
+  final StartedSession? activeSession;
   bool get isValid => day.isNotEmpty && startTime.isNotEmpty;
 
   factory GulfScheduleEntry.fromJson(Map<String, dynamic> json) =>
@@ -161,6 +165,10 @@ class GulfScheduleEntry {
         day: _string(json['day']).toLowerCase(),
         startTime: _string(json['startTime']),
         endTime: _nonEmpty(_string(json['endTime'])),
+        activeSession: _nullable(
+          json['activeSession'],
+          StartedSession.fromJson,
+        ),
       );
 
   Map<String, dynamic> toJson() => {
