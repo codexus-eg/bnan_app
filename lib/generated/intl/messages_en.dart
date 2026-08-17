@@ -681,6 +681,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
         "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
             "Future dates are not allowed"),
+        "generalTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("Certificate of Appreciation"),
         "goToPayment":
             MessageLookupByLibrary.simpleMessage("Proceed to Payment"),
         "good": MessageLookupByLibrary.simpleMessage("Good"),
@@ -746,15 +748,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "idealTeacher": MessageLookupByLibrary.simpleMessage("Ideal Teacher"),
         "idealTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("Ideal Teacher Certificate"),
-        "studentCertificates":
-            MessageLookupByLibrary.simpleMessage("Student Certificates"),
-        "teacherCertificates":
-            MessageLookupByLibrary.simpleMessage("Teacher Certificates"),
-        "generalTeacherCertificate": MessageLookupByLibrary.simpleMessage(
-            "Certificate of Appreciation"),
-        "teacherCertificateIssuedSuccessfully":
-            MessageLookupByLibrary.simpleMessage(
-                "Teacher certificate issued successfully"),
         "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Ideal teacher certificate issued successfully"),
         "inactive": MessageLookupByLibrary.simpleMessage("InActive"),
@@ -1721,8 +1714,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "No classrooms are available for this student"),
         "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
             "This student cannot be assigned because the account has not been approved yet"),
-        "studentCertificate":
-            MessageLookupByLibrary.simpleMessage("Student Certificate"),
         "studentCallAlertBody": MessageLookupByLibrary.simpleMessage(
             "Open Bnan to respond to your supervisor"),
         "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
@@ -1731,6 +1722,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "The student alert was sent successfully"),
         "studentCallAlertTitle": MessageLookupByLibrary.simpleMessage(
             "Your supervisor is calling you"),
+        "studentCertificate":
+            MessageLookupByLibrary.simpleMessage("Student Certificate"),
+        "studentCertificates":
+            MessageLookupByLibrary.simpleMessage("Student Certificates"),
         "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
             "Unable to load classrooms. Please try again"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("Student Email"),
@@ -1865,6 +1860,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "Apply as a Teacher at Banan Academy"),
         "teacherAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Teacher assigned successfully"),
+        "teacherCertificateIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Teacher certificate issued successfully"),
+        "teacherCertificates":
+            MessageLookupByLibrary.simpleMessage("Teacher Certificates"),
         "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
             "I confirm that all the information mentioned above is correct, and I agree to follow Banan Academy rules and policies"),
         "teacherMyEarnings":

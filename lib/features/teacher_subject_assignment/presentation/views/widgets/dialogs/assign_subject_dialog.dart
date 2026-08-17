@@ -149,7 +149,7 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
       curriculumId: selection.curriculumId!,
       gradeId: selection.gradeId!,
       classroomId: selection.classroomId!,
-      subjectId: selection.subjectId!,
+      subjectId: lookupState.selectedSubject!.subjectId,
       pricePerSession: price,
     );
   }

@@ -655,6 +655,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "fullName": MessageLookupByLibrary.simpleMessage("الاسم بالكامل"),
         "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
             "لا يمكن اختيار تاريخ مستقبلي"),
+        "generalTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة شكر وتقدير"),
         "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
         "good": MessageLookupByLibrary.simpleMessage("جيد"),
         "grade": MessageLookupByLibrary.simpleMessage("الصف"),
@@ -717,15 +719,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
         "idealTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
-        "studentCertificates":
-            MessageLookupByLibrary.simpleMessage("شهادات الطلاب"),
-        "teacherCertificates":
-            MessageLookupByLibrary.simpleMessage("شهادات المعلمين"),
-        "generalTeacherCertificate":
-            MessageLookupByLibrary.simpleMessage("شهادة شكر وتقدير"),
-        "teacherCertificateIssuedSuccessfully":
-            MessageLookupByLibrary.simpleMessage(
-                "تم إصدار شهادة المعلم بنجاح"),
         "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "تم إصدار شهادة المعلم المثالي بنجاح"),
         "inactive": MessageLookupByLibrary.simpleMessage("غير نشطة"),
@@ -1660,16 +1653,18 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا توجد فصول متاحة لهذا الطالب"),
         "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
             "لا يمكن تعيين هذا الطالب لأنه لم يتم اعتماد حسابه بعد"),
-        "studentCertificate":
-            MessageLookupByLibrary.simpleMessage("شهادة الطالب"),
-        "studentCallAlertBody": MessageLookupByLibrary.simpleMessage(
-            "افتح بنان للاستجابة للمشرف"),
+        "studentCallAlertBody":
+            MessageLookupByLibrary.simpleMessage("افتح بنان للاستجابة للمشرف"),
         "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
             "تم إرسال التنبيه بالفعل، حاول بعد قليل"),
         "studentCallAlertSent": MessageLookupByLibrary.simpleMessage(
             "تم إرسال التنبيه للطالب بنجاح"),
         "studentCallAlertTitle":
             MessageLookupByLibrary.simpleMessage("المشرف يناديك"),
+        "studentCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة الطالب"),
+        "studentCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادات الطلاب"),
         "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
             "تعذر تحميل الفصول، حاول مرة أخرى"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("ايميل الطالب"),
@@ -1801,6 +1796,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "التقديم كمعلم في أكاديمية بنان"),
         "teacherAssignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم توظيف المعلم بنجاح"),
+        "teacherCertificateIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إصدار شهادة المعلم بنجاح"),
+        "teacherCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادات المعلمين"),
         "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
             "أقر بصحة جميع البيانات المذكورة أعلاه، وأتعهد بالالتزام بقواعد وسياسات أكاديمية بنان"),
         "teacherMyEarnings": MessageLookupByLibrary.simpleMessage("مستحقاتي"),

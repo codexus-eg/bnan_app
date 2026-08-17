@@ -16,7 +16,11 @@ class SubjectCardManagement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gradeName = subject?.grade?.name?.trim();
+    final gradeNames = subject?.grades
+        .map((item) => item.name?.trim())
+        .whereType<String>()
+        .where((name) => name.isNotEmpty)
+        .join(', ');
     return CustomDetailsWidgetBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +38,7 @@ class SubjectCardManagement extends StatelessWidget {
           ),
           ClassMetaRow(
             label: S.of(context).grade,
-            value: gradeName == null || gradeName.isEmpty ? '-' : gradeName,
+            value: gradeNames == null || gradeNames.isEmpty ? '-' : gradeNames,
           ),
           const SizedBox(height: 8),
           ActionChipButton(

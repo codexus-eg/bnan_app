@@ -4,15 +4,16 @@ import 'package:bnan_app/features/student_schedule/presentation/models/digital_s
 import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 
 DigitalScheduleGridData adaptGulfStudentSchedule(
-  List<GulfClassroom> classrooms,
-) {
+  List<GulfClassroom> classrooms, {
+  bool studentSchedule = false,
+}) {
   final times = <String>{};
   final days = <String>{};
   final cells = <String, List<DigitalScheduleGridItem>>{};
   final timeLabels = <String, String>{};
-  final gulf = classrooms.where(
-    (item) => item.curriculum?.registrationMode == 'gulf',
-  );
+  final gulf = studentSchedule
+      ? classrooms
+      : classrooms.where((item) => item.curriculum?.registrationMode == 'gulf');
   for (final classroom in gulf) {
     for (final entry in classroom.entries) {
       times.add(entry.startTime);

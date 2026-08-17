@@ -26,7 +26,7 @@ class SubjectModel {
     required this.name,
     required this.isActive,
     this.curriculum,
-    this.grade,
+    this.grades = const [],
     this.createdAt,
     this.updatedAt,
   });
@@ -35,12 +35,12 @@ class SubjectModel {
   final String name;
   final bool isActive;
   final SubjectCurriculumModel? curriculum;
-  final SubjectGradeModel? grade;
+  final List<SubjectGradeModel> grades;
+  SubjectGradeModel? get grade => grades.firstOrNull;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   factory SubjectModel.fromJson(Map<String, dynamic> json) {
-    final grade = _subjectGrade(json);
     return SubjectModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
@@ -48,22 +48,25 @@ class SubjectModel {
       curriculum: json['curriculum'] == null
           ? null
           : SubjectCurriculumModel.fromJson(json['curriculum']),
-      grade: grade == null ? null : SubjectGradeModel.fromJson(grade),
+      grades: _subjectGrades(
+        json,
+      ).map(SubjectGradeModel.fromJson).toList(growable: false),
       createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
     );
   }
 }
 
-Map<String, dynamic>? _subjectGrade(Map<String, dynamic> json) {
-  final grade = json['grade'];
-  if (grade is Map) return Map<String, dynamic>.from(grade);
+List<Map<String, dynamic>> _subjectGrades(Map<String, dynamic> json) {
   final grades = json['grades'];
-  if (grades is! List) return null;
-  for (final item in grades) {
-    if (item is Map) return Map<String, dynamic>.from(item);
+  if (grades is List) {
+    return grades
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList(growable: false);
   }
-  return null;
+  final grade = json['grade'];
+  return grade is Map ? [Map<String, dynamic>.from(grade)] : const [];
 }
 
 class SubjectCurriculumModel {

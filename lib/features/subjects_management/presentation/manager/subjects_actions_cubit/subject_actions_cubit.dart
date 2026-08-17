@@ -11,7 +11,7 @@ class SubjectActionsCubit extends Cubit<SubjectActionsState> {
   Future<void> addSubject({
     required String name,
     required String curriculumId,
-    required String gradeId,
+    required List<String> gradeIds,
   }) async {
     if (isClosed || state is AddSubjectLoading) return;
     emit(AddSubjectLoading());
@@ -19,12 +19,12 @@ class SubjectActionsCubit extends Cubit<SubjectActionsState> {
       request: AddSubjectRequestModel(
         name: name,
         curriculumId: curriculumId,
-        gradeId: gradeId,
+        gradeIds: gradeIds,
       ),
     );
     if (isClosed) return;
     result.fold(
-      (failure) => emit(AddSubjectFailure(failure.message)),
+      (failure) => emit(AddSubjectFailure(failure.message, failure.code)),
       (_) => emit(AddSubjectSuccess()),
     );
   }
@@ -32,16 +32,17 @@ class SubjectActionsCubit extends Cubit<SubjectActionsState> {
   Future<void> updateSubject({
     required String subjectId,
     required String name,
+    required List<String> gradeIds,
   }) async {
     if (isClosed) return;
     emit(UpdateSubjectLoading());
     final result = await subjectsRepo.updateSubject(
       subjectId: subjectId,
-      request: UpdateSubjectRequestModel(name: name),
+      request: UpdateSubjectRequestModel(name: name, gradeIds: gradeIds),
     );
     if (isClosed) return;
     result.fold(
-      (failure) => emit(UpdateSubjectFailure(failure.message)),
+      (failure) => emit(UpdateSubjectFailure(failure.message, failure.code)),
       (_) => emit(UpdateSubjectSuccess()),
     );
   }

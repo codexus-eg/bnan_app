@@ -57,7 +57,10 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
           return BlocBuilder<StartSessionCubit, StartSessionState>(
             bloc: _sessionCubit,
             builder: (context, sessionState) => DigitalScheduleContent(
-              data: adaptGulfStudentSchedule(state.classrooms),
+              data: adaptGulfStudentSchedule(
+                state.classrooms,
+                studentSchedule: true,
+              ),
               emptyMessage: S.of(context).noSchedule,
               loadingClassroomIds: sessionState.joiningClassroomIds,
               onAction: _join,

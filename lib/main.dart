@@ -6,7 +6,6 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/push_notifications/firebase_bootstrap.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
