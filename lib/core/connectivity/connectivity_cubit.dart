@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bnan_app/core/connectivity/connectivity_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +12,21 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   }) {
     final connection = InternetConnection();
     return ConnectivityCubit._(
-      checkInternet ?? () => connection.hasInternetAccess,
+      checkInternet ?? _hasNetworkConnectivity,
       statusChanges ?? connection.onStatusChange,
     );
+  }
+
+  static Future<bool> _hasNetworkConnectivity() async {
+    try {
+      final interfaces = await NetworkInterface.list(
+        includeLoopback: false,
+        includeLinkLocal: true,
+      );
+      return interfaces.any((interface) => interface.addresses.isNotEmpty);
+    } catch (_) {
+      return true;
+    }
   }
 
   ConnectivityCubit._(this._checkInternet, this._statusChanges)

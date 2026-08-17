@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
@@ -32,6 +33,11 @@ class NotificationNavigationService {
       return const NotificationDestination(Routes.home);
     }
 
+    final screen = _screen(notification);
+    if (!_isAllowed(role, screen)) {
+      return NotificationDestination(_fallback());
+    }
+
     if (role == UserRole.supervisor) {
       if (key == 'IDEAL_SUPERVISOR_CERTIFICATE_ISSUED' ||
           key.contains('SUPERVISOR_CERTIFICATE')) {
@@ -43,7 +49,7 @@ class NotificationNavigationService {
       }
     }
 
-    if (_screen(notification) == 'chat_room') {
+    if (screen == 'chat_room') {
       return _chatDestination(notification);
     }
     return NotificationDestination(resolve(notification));
@@ -52,6 +58,7 @@ class NotificationNavigationService {
   String resolve(AppNotification notification) {
     final role = _session.role;
     final screen = _screen(notification);
+    if (!_isAllowed(role, screen)) return _fallback();
     final params = notification.navigation.params;
     final resourceId = notification.resourceId;
 
@@ -84,7 +91,7 @@ class NotificationNavigationService {
     };
     if (route != null) return route;
     if (kDebugMode) debugPrint('Unsupported notification target: $screen');
-    return Routes.notification;
+    return _fallback();
   }
 
   String _screen(AppNotification value) =>
@@ -135,14 +142,14 @@ class NotificationNavigationService {
           notification.resourceId,
     );
     if (targetId == null) {
-      return const NotificationDestination(Routes.notification);
+      return NotificationDestination(_fallback());
     }
     final payloadName = _roomName(params);
     var room = _roomsCache?.find(targetId);
     room ??= await _loadRoom(targetId);
     final roomId = room?.id ?? (params['roomId'] != null ? targetId : null);
     if (roomId == null) {
-      return const NotificationDestination(Routes.notification);
+      return NotificationDestination(_fallback());
     }
     final name = payloadName ?? _text(room?.displayName);
     final args = room == null
@@ -190,7 +197,53 @@ class NotificationNavigationService {
     UserRole.supervisor => Routes.certificatesManagement,
     _ => null,
   };
+
+  bool _isAllowed(UserRole? role, String screen) =>
+      role != null && (_allowedScreens[role]?.contains(screen) ?? false);
+
+  String _fallback() =>
+      HomeRouteResolver.forRole(_session.userRole) ?? Routes.splash;
 }
+
+const _allowedScreens = <UserRole, Set<String>>{
+  UserRole.student: {
+    'student_home',
+    'chat_room',
+    'schedule',
+    'subscription',
+    'certificates',
+    'student_evaluations',
+  },
+  UserRole.parent: {
+    'chat_room',
+    'schedule',
+    'subscription',
+    'certificates',
+    'parent_child_certificates',
+    'student_evaluations',
+  },
+  UserRole.teacher: {
+    'chat_room',
+    'schedule',
+    'performance',
+    'teacher_home',
+    'attendance',
+  },
+  UserRole.supervisor: {
+    'chat_room',
+    'schedule',
+    'certificates',
+    'supervisor_classrooms',
+    'attendance',
+  },
+  UserRole.admin: {
+    'chat_room',
+    'schedule',
+    'registration_requests',
+    'teacher_approval',
+    'students',
+  },
+};
 
 const _eventScreens = <String, String>{
   'NEW_MESSAGE': 'chat_room',

@@ -1,4 +1,3 @@
-import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
@@ -16,6 +15,7 @@ import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/sup
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_home_page.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 typedef SupervisorTabBuilder = Widget Function(String route);
 
@@ -134,11 +134,12 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     final destination = await getIt<NotificationNavigationService>()
         .resolveDestination(appNotification);
     if (!mounted) return;
-    if (destination.path == Routes.notification) {
-      MyNavigator.goTo(context, Routes.notification);
+    final router = GoRouter.of(context);
+    if (router.routeInformationProvider.value.uri.path ==
+        Uri.parse(destination.path).path) {
       return;
     }
-    MyNavigator.goTo(context, destination.path, extra: destination.extra);
+    router.go(destination.path, extra: destination.extra);
   }
 
   Future<void> logout() async {

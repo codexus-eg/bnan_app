@@ -47,6 +47,20 @@ void main() {
     expect(response.children.single.subscriptions.single.id, 'legacy');
   });
 
+  test('available subscriptions list does not fall back to legacy data', () {
+    final response = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'student': {'id': 'student-1'},
+          'subscriptions': <Object>[],
+          'subscription': {'id': 'stale-legacy'},
+        },
+      ],
+    });
+
+    expect(response.children.single.subscriptions, isEmpty);
+  });
+
   test('hours and numeric strings parse safely', () {
     final response = ParentSubscriptionsResponse.fromJson({
       'data': [
@@ -96,5 +110,28 @@ void main() {
       response.children.single.subscriptions.every((item) => item.canRenew),
       isTrue,
     );
+  });
+
+  test('server allowance does not expose renewal while still active', () {
+    final response = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'student': {'id': 'student-1'},
+          'subscriptions': [
+            {
+              'id': 'active',
+              'packageType': 'monthly',
+              'endDate': DateTime.now()
+                  .add(const Duration(days: 2))
+                  .toIso8601String(),
+              'status': 'active',
+              'renewalAllowed': true,
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(response.children.single.subscriptions.single.canRenew, isFalse);
   });
 }

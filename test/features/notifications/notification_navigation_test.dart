@@ -1,10 +1,18 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/domain/notification_navigation_service.dart';
 import 'package:bnan_app/features/notifications/domain/recent_notification_ids.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
+  setUp(() async {
+    FlutterSecureStorage.setMockInitialValues({});
+    await SessionManager.instance.clearSession();
+  });
+
   test('deduplicates IDs with bounded cache', () {
     final recent = RecentNotificationIds(capacity: 2);
     expect(recent.claim('n1'), isTrue);
@@ -14,15 +22,40 @@ void main() {
     expect(recent.claim('n1'), isTrue);
   });
 
-  test('resolves chat and safely falls back for unknown screen', () {
+  test('resolves chat and safely falls back for unknown screen', () async {
+    await _saveRole(UserRole.student);
     final service = NotificationNavigationService(SessionManager.instance);
     expect(
       service.resolve(_value('chat_room', id: 'room/1')),
       '/chat/room%2F1',
     );
-    expect(service.resolve(_value('future_screen')), '/notification');
+    expect(service.resolve(_value('future_screen')), Routes.home);
   });
+
+  for (final entry in const {
+    UserRole.student: (screen: 'teacher_approval', home: Routes.home),
+    UserRole.parent: (screen: 'performance', home: Routes.parentHome),
+    UserRole.teacher: (screen: 'students', home: Routes.teacherHome),
+    UserRole.supervisor: (
+      screen: 'registration_requests',
+      home: Routes.supervisorHome,
+    ),
+    UserRole.admin: (screen: 'subscription', home: Routes.adminHome),
+  }.entries) {
+    test('${entry.key.name} rejects another role notification route', () async {
+      await _saveRole(entry.key);
+      final service = NotificationNavigationService(SessionManager.instance);
+
+      expect(service.resolve(_value(entry.value.screen)), entry.value.home);
+    });
+  }
 }
+
+Future<void> _saveRole(UserRole role) => SessionManager.instance.saveSession(
+  accessToken: 'token',
+  refreshToken: '',
+  userRole: role.name,
+);
 
 AppNotification _value(String screen, {String? id}) =>
     AppNotification.fromJson({

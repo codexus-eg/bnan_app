@@ -9,7 +9,7 @@ bool canRenewSubscription({
   required String status,
   bool? serverAllowed,
 }) {
-  if (serverAllowed != null) return serverAllowed;
+  if (serverAllowed == false) return false;
   final isHours =
       remainingHours != null ||
       packageType == PackageType.hours ||

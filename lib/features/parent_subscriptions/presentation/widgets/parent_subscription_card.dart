@@ -4,7 +4,6 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/package_scope_badge.dart';
@@ -22,7 +21,7 @@ class ParentSubscriptionCard extends StatelessWidget {
   });
   final ParentChildSubscriptionsModel child;
   final ParentChildSubscriptionModel subscription;
-  final VoidCallback? onRenewed;
+  final Future<void> Function()? onRenewed;
   final bool showRenew;
   final bool isParent;
 
@@ -103,7 +102,7 @@ class ParentSubscriptionCard extends StatelessWidget {
           CustomAppButton(
             text: S.of(context).renewSubscription,
             onPressed: () async {
-              final result = await MyNavigator.goTo<ParentFlowResult>(
+              await MyNavigator.goTo(
                 context,
                 isParent
                     ? Routes.parentSubscriptionRenewalPath(child.studentId)
@@ -116,9 +115,9 @@ class ParentSubscriptionCard extends StatelessWidget {
                   registrationMode: child.registrationMode ?? '',
                   studentName: child.studentName,
                   isParent: isParent,
+                  onCompleted: onRenewed,
                 ),
               );
-              if (result == ParentFlowResult.completed) onRenewed?.call();
             },
           ),
         ],

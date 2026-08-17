@@ -52,6 +52,11 @@ class PushNotificationService {
   Future<void> initialize() async {
     if (!firebaseAvailable || _initialized) return;
     _initialized = true;
+    final messaging = _messaging;
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
+        messaging is FirebasePushMessaging) {
+      await messaging.configureIosForegroundPresentation();
+    }
     _subscriptions.addAll([
       _foregroundMessages.listen(_handleForeground),
       _openedMessages.listen(_handleOpened),
@@ -74,6 +79,10 @@ class PushNotificationService {
     final notification = _notification(message);
     if (notification != null) {
       _notifications?.ingest(notification);
+      if (defaultTargetPlatform == TargetPlatform.iOS &&
+          message.notification == null) {
+        await _localNotifications?.showNotification(notification);
+      }
     }
     final intent = _intent(message);
     if (intent == null) return;

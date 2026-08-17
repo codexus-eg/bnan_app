@@ -459,6 +459,7 @@ class ParentSubscriptionRenewalCubit
           errorMessage: null,
         ),
       );
+      await state.args.onCompleted?.call();
     } else if (response.status.isTerminal) {
       _attempt.startNew();
       await store?.clear();

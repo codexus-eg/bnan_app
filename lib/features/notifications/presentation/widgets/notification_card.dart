@@ -22,7 +22,12 @@ class NotificationCard extends StatelessWidget {
       final destination = await getIt<NotificationNavigationService>()
           .resolveDestination(notification);
       if (!context.mounted || destination.path == '/notification') return;
-      context.push(destination.path, extra: destination.extra);
+      final router = GoRouter.of(context);
+      if (router.routeInformationProvider.value.uri.path ==
+          Uri.parse(destination.path).path) {
+        return;
+      }
+      router.go(destination.path, extra: destination.extra);
     },
     child: Container(
       padding: const EdgeInsets.all(12),

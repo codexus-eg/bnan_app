@@ -162,7 +162,7 @@ class ParentChildSubscriptionsModel {
               )
               .toList()
         : <ParentChildSubscriptionModel>[];
-    final subscriptions = listSubscriptions.isNotEmpty
+    final subscriptions = rawList is List
         ? listSubscriptions
         : json['subscription'] is Map
         ? [

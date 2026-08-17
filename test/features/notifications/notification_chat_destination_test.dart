@@ -9,8 +9,19 @@ import 'package:bnan_app/features/notifications/data/models/app_notification.dar
 import 'package:bnan_app/features/notifications/domain/notification_navigation_service.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
+  setUp(() async {
+    FlutterSecureStorage.setMockInitialValues({});
+    await SessionManager.instance.clearSession();
+    await SessionManager.instance.saveSession(
+      accessToken: 'token',
+      refreshToken: '',
+      userRole: 'student',
+    );
+  });
+
   test('payload roomName reaches chat route arguments', () async {
     final destination = await _service().resolveDestination(
       _notification(params: {'roomId': '1', 'roomName': 'Mathematics'}),

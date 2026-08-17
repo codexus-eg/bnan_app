@@ -123,6 +123,92 @@ void main() {
     await cubit.close();
   });
 
+  for (final isParent in [false, true]) {
+    final owner = isParent ? 'parent' : 'student';
+    test('$owner Egyptian renewal uses the correct studentId', () async {
+      final directory = await Directory.systemTemp.createTemp('renew-egypt-');
+      final receipt = File('${directory.path}/receipt.png')
+        ..writeAsBytesSync([1]);
+      final repo = _Repo()
+        ..egyptianInitialStatuses.add(RenewalPaymentStatus.pending)
+        ..egyptianPollStatuses.add(RenewalPaymentStatus.completed);
+      final cubit = _ready(repo, mode: 'egyptian', isParent: isParent)
+        ..updateEgyptian(receipt: receipt);
+
+      await cubit.submit();
+      await _waitFor(cubit, ParentRenewalPhase.completed);
+
+      expect(repo.lastEgyptianRequest?.studentId, isParent ? 'child-1' : null);
+      expect(cubit.state.phase, ParentRenewalPhase.completed);
+      await cubit.close();
+      await directory.delete(recursive: true);
+    });
+
+    test(
+      '$owner Gulf renewal uses Tamara status and correct studentId',
+      () async {
+        final repo = _Repo()
+          ..terminalStatuses.add(RenewalPaymentStatus.completed);
+        final cubit = _ready(repo, mode: 'gulf', isParent: isParent);
+
+        await cubit.submit();
+        await cubit.reconcilePayment();
+
+        expect(repo.lastGulfRequest?.studentId, isParent ? 'child-1' : null);
+        expect(repo.keys.single, 'key-1');
+        expect(cubit.state.phase, ParentRenewalPhase.completed);
+        await cubit.close();
+      },
+    );
+  }
+
+  test('single_subject renewal sends its selected subjectId', () async {
+    final directory = await Directory.systemTemp.createTemp('renew-subject-');
+    final receipt = File('${directory.path}/receipt.png')
+      ..writeAsBytesSync([1]);
+    final repo = _Repo()
+      ..egyptianInitialStatuses.add(RenewalPaymentStatus.completed);
+    final cubit = _cubit(repo, mode: 'egyptian')
+      ..nextStep()
+      ..selectPackage(_singlePackage)
+      ..nextStep()
+      ..selectSubject('subject-1')
+      ..nextStep()
+      ..nextStep()
+      ..nextStep()
+      ..updateEgyptian(receipt: receipt);
+
+    await cubit.submit();
+
+    expect(repo.lastEgyptianRequest?.subjectId, 'subject-1');
+    await cubit.close();
+    await directory.delete(recursive: true);
+  });
+
+  test(
+    'completed renewal refreshes the originating subscriptions once',
+    () async {
+      var refreshes = 0;
+      final repo = _Repo()
+        ..terminalStatuses.add(RenewalPaymentStatus.completed);
+      final cubit = _ready(
+        repo,
+        mode: 'gulf',
+        onCompleted: () async {
+          refreshes++;
+        },
+      );
+
+      await cubit.submit();
+      await cubit.reconcilePayment();
+
+      expect(refreshes, 1);
+      await cubit.checkPaymentStatus();
+      expect(refreshes, 1);
+      await cubit.close();
+    },
+  );
+
   test(
     'Gulf terminal retry creates a new key and keeps parent session',
     () async {
@@ -381,6 +467,8 @@ ParentSubscriptionRenewalCubit _cubit(
   _Repo repo, {
   required String mode,
   RenewalPaymentStore? store,
+  bool isParent = true,
+  Future<void> Function()? onCompleted,
 }) => ParentSubscriptionRenewalCubit(
   repo: repo,
   keyGenerator: _Keys(),
@@ -393,6 +481,8 @@ ParentSubscriptionRenewalCubit _cubit(
       ParentSubscriptionSubjectModel(id: 'subject-1', name: 'Math'),
     ],
     registrationMode: mode,
+    isParent: isParent,
+    onCompleted: onCompleted,
   ),
   pollInterval: Duration.zero,
   maxPollAttempts: 2,
@@ -401,14 +491,23 @@ ParentSubscriptionRenewalCubit _ready(
   _Repo repo, {
   required String mode,
   RenewalPaymentStore? store,
+  bool isParent = true,
+  Future<void> Function()? onCompleted,
 }) {
-  final cubit = _cubit(repo, mode: mode, store: store)
-    ..nextStep()
-    ..selectPackage(_allPackage)
-    ..nextStep()
-    ..nextStep()
-    ..nextStep()
-    ..nextStep();
+  final cubit =
+      _cubit(
+          repo,
+          mode: mode,
+          store: store,
+          isParent: isParent,
+          onCompleted: onCompleted,
+        )
+        ..nextStep()
+        ..selectPackage(_allPackage)
+        ..nextStep()
+        ..nextStep()
+        ..nextStep()
+        ..nextStep();
   return cubit;
 }
 
@@ -443,10 +542,13 @@ class _Repo implements ParentSubscriptionsRepo {
   final Duration delay, statusDelay;
   final List<RenewalPaymentStatus> terminalStatuses = [];
   final List<RenewalPaymentStatus> egyptianInitialStatuses = [];
+  final List<RenewalPaymentStatus> egyptianPollStatuses = [];
   RenewalPaymentStatus egyptianStatusValue = RenewalPaymentStatus.pending;
   final List<Failure> checkoutFailures = [];
   final List<String> keys = [];
   String? failureCode;
+  EgyptianRenewalRequest? lastEgyptianRequest;
+  GulfRenewalRequest? lastGulfRequest;
   int renewCalls = 0, egyptianRenewCalls = 0, refreshCalls = 0;
   int activeChecks = 0, maxActiveChecks = 0;
   @override
@@ -457,6 +559,7 @@ class _Repo implements ParentSubscriptionsRepo {
 
   @override
   renewGulf({required request, required idempotencyKey}) async {
+    lastGulfRequest = request;
     renewCalls++;
     keys.add(idempotencyKey);
     await Future<void>.delayed(delay);
@@ -495,6 +598,7 @@ class _Repo implements ParentSubscriptionsRepo {
   );
   @override
   renewEgyptian(EgyptianRenewalRequest request) async {
+    lastEgyptianRequest = request;
     egyptianRenewCalls++;
     egyptianStatusValue = egyptianInitialStatuses.isEmpty
         ? RenewalPaymentStatus.pending
@@ -505,6 +609,12 @@ class _Repo implements ParentSubscriptionsRepo {
   }
 
   @override
-  egyptianStatus(String id) async =>
-      Right(RenewalStatusResponse(paymentId: id, status: egyptianStatusValue));
+  egyptianStatus(String id) async => Right(
+    RenewalStatusResponse(
+      paymentId: id,
+      status: egyptianPollStatuses.isEmpty
+          ? egyptianStatusValue
+          : egyptianPollStatuses.removeAt(0),
+    ),
+  );
 }

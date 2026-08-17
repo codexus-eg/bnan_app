@@ -9,11 +9,12 @@ class LocalPushNotifications {
   LocalPushNotifications(this._plugin);
   final FlutterLocalNotificationsPlugin _plugin;
   static const _channel = AndroidNotificationChannel(
-    'bnan_notifications',
+    'bnan_high_v2',
     'Bnan notifications',
     description: 'Bnan Academy notifications',
-    importance: Importance.high,
+    importance: Importance.max,
     playSound: true,
+    enableVibration: true,
   );
 
   Future<void> initialize(ValueChanged<String> onPayload) async {
@@ -57,14 +58,19 @@ class LocalPushNotifications {
       body: intent.body,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'bnan_notifications',
+          'bnan_high_v2',
           'Bnan notifications',
           channelDescription: 'Bnan Academy notifications',
-          importance: Importance.high,
+          importance: Importance.max,
           priority: Priority.high,
           playSound: true,
+          enableVibration: true,
         ),
-        iOS: DarwinNotificationDetails(presentSound: true),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
       ),
       payload: payload,
     );
@@ -78,13 +84,14 @@ class LocalPushNotifications {
     body: notification.body,
     notificationDetails: const NotificationDetails(
       android: AndroidNotificationDetails(
-        'bnan_notifications',
+        'bnan_high_v2',
         'Bnan notifications',
         channelDescription: 'Bnan Academy notifications',
         icon: 'ic_notification',
-        importance: Importance.high,
+        importance: Importance.max,
         priority: Priority.high,
         playSound: true,
+        enableVibration: true,
       ),
       iOS: DarwinNotificationDetails(
         presentAlert: true,
