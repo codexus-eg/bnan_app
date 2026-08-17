@@ -48,6 +48,9 @@ abstract class CertificatesManagementRepo {
   Future<Either<Failure, TeacherCertificatesResponseModel>>
   getTeacherCertificates({required int page, int limit = 20});
 
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getMyTeacherCertificates();
+
   Future<Either<Failure, void>> issueGeneralTeacherCertificate({
     required String teacherId,
     required String signerName,

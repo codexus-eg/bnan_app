@@ -28,15 +28,15 @@ class StudentClassroomAssignmentRepoImpl
 
       return data
           .whereType<Map>()
-          .where((item) {
-            final mode = item['registrationMode']?.toString().toLowerCase();
-            final status = item['status']?.toString().toLowerCase();
-            return mode == 'egyptian' && status == 'active';
-          })
           .map(
             (item) => UnassignedStudentModel.fromJson(
               Map<String, dynamic>.from(item),
             ),
+          )
+          .where(
+            (student) =>
+                student.registrationMode.trim().toLowerCase() == 'egyptian' &&
+                student.hasActiveAccount,
           )
           .toList();
     });

@@ -34,6 +34,10 @@ class TeacherBottomNavBar extends StatelessWidget {
       ),
       BottomNavItemModel(icon: ImageManager.wallet, title: s.dues),
       BottomNavItemModel(
+        icon: ImageManager.certificateBadgeIcon,
+        title: s.certificates,
+      ),
+      BottomNavItemModel(
         icon: ImageManager.userProfileIcon,
         title: s.myAccount,
       ),

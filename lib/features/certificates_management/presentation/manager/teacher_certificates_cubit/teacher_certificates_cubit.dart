@@ -5,11 +5,15 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeacherCertificatesCubit extends Cubit<TeacherCertificatesState> {
-  TeacherCertificatesCubit(this._certificates, this._teachers)
-    : super(const TeacherCertificatesState());
+  TeacherCertificatesCubit(
+    this._certificates,
+    this._teachers, {
+    this.mine = false,
+  }) : super(const TeacherCertificatesState());
 
   final CertificatesManagementRepo _certificates;
   final SupervisorIdealTeacherRepo _teachers;
+  final bool mine;
 
   Future<void> load({bool refresh = true}) async {
     if (refresh && state.status == TeacherCertificatesStatus.loading) return;
@@ -22,7 +26,9 @@ class TeacherCertificatesCubit extends Cubit<TeacherCertificatesState> {
         error: '',
       ),
     );
-    final result = await _certificates.getTeacherCertificates(page: page);
+    final result = mine
+        ? await _certificates.getMyTeacherCertificates()
+        : await _certificates.getTeacherCertificates(page: page);
     if (isClosed) return;
     result.fold(
       (failure) => emit(
@@ -34,16 +40,27 @@ class TeacherCertificatesCubit extends Cubit<TeacherCertificatesState> {
           error: failure.message,
         ),
       ),
-      (response) => emit(
-        state.copyWith(
-          status: TeacherCertificatesStatus.success,
-          items: refresh ? response.data : [...state.items, ...response.data],
-          page: response.pagination.currentPage ?? page,
-          lastPage: response.pagination.lastPage ?? page,
-          loadingMore: false,
-          error: '',
-        ),
-      ),
+      (response) {
+        final items = mine
+            ? response.data
+                  .where(
+                    (item) =>
+                        item.certificateType == 'ideal_teacher' ||
+                        item.certificateType == 'general_teacher',
+                  )
+                  .toList(growable: false)
+            : response.data;
+        emit(
+          state.copyWith(
+            status: TeacherCertificatesStatus.success,
+            items: refresh ? items : [...state.items, ...items],
+            page: response.pagination.currentPage ?? page,
+            lastPage: response.pagination.lastPage ?? page,
+            loadingMore: false,
+            error: '',
+          ),
+        );
+      },
     );
   }
 

@@ -11,6 +11,7 @@ import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teache
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -35,19 +36,25 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   void initState() {
     super.initState();
     currentIndex = widget.initialIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _loadTab(currentIndex);
+    });
   }
 
   void _changeIndex(int index) {
     if (index == currentIndex) return;
-    if (index == 0 && currentIndex != 0) {
-      context.read<DashboardCubit>().refresh();
-    }
     setState(() => currentIndex = index);
+    _loadTab(index);
   }
 
-  void _goHomeTab() {
-    setState(() => currentIndex = 0);
+  void _loadTab(int index) {
+    if (index == 0) context.read<DashboardCubit>().load();
+    if (index == teacherPayrollTabIndex) {
+      context.read<TeacherMyPayrollsCubit>().load(refresh: true);
+    }
   }
+
+  void _goHomeTab() => _changeIndex(0);
 
   void _openDrawer() {
     scaffoldKey.currentState?.openDrawer();
@@ -151,7 +158,11 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
                   onLogoutTap: _logout,
                 )
               : null,
-          body: TeacherHomeBody(index: currentIndex, onMenuTap: _openDrawer),
+          body: TeacherHomeBody(
+            key: ValueKey(currentIndex),
+            index: currentIndex,
+            onMenuTap: _openDrawer,
+          ),
           bottomNavigationBar: TeacherBottomNavBar(
             currentIndex: currentIndex,
             onTap: _onBottomNavTap,
@@ -167,5 +178,5 @@ const teacherDrawerToBottomNavIndex = <int, int>{
   0: 0,
   3: 1,
   5: teacherPayrollTabIndex,
-  9: 3,
+  9: 4,
 };

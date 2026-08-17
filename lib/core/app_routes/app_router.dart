@@ -482,8 +482,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               BlocProvider(create: (_) => getIt<TeacherMyPayrollsCubit>()),
               BlocProvider(
                 create: (_) =>
-                    getIt<DashboardCubit>(param1: DashboardRole.teacher)
-                      ..load(),
+                    getIt<DashboardCubit>(param1: DashboardRole.teacher),
               ),
             ],
             child: TeacherHomeView(

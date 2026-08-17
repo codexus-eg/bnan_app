@@ -2,6 +2,7 @@ import 'package:bnan_app/features/shared_profile/presentation/views/bodies/teach
 import 'package:bnan_app/features/teacher_assignment/presentation/views/teacher_asignment_view.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_my_payrolls_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_page.dart';
+import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_certificates_tab.dart';
 import 'package:flutter/material.dart';
 
 class TeacherHomeContent extends StatelessWidget {
@@ -20,6 +21,7 @@ class TeacherHomeContent extends StatelessWidget {
       TeacherHomePage(onMenuTap: onMenuTap),
       TeacherAssignmentsView(),
       const TeacherMyPayrollsBody(),
+      const TeacherCertificatesTab(),
       const TeacherProfileBody(),
     ];
 

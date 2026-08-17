@@ -180,6 +180,18 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   }
 
   @override
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getMyTeacherCertificates() {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.myCertificates,
+        isProtected: true,
+      );
+      return TeacherCertificatesResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
   Future<Either<Failure, void>> issueGeneralTeacherCertificate({
     required String teacherId,
     required String signerName,
