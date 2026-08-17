@@ -46,7 +46,9 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     result.fold((failure) => emit(GetUsersFailure(failure.message)), (
       response,
     ) {
-      users = _withLocalUsers(response.data);
+      users = _withLocalUsers(
+        response.data,
+      ).where(_matchesCurrentFilters).toList();
       _setPagination(response.pagination);
       emit(_success());
     });
@@ -93,7 +95,7 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
           ),
         ),
         (response) {
-          _appendUnique(response.data);
+          _appendUnique(response.data.where(_matchesCurrentFilters).toList());
           _setPagination(response.pagination);
           emit(_success());
         },
@@ -364,7 +366,8 @@ class UsersManagementCubit extends Cubit<UsersManagementState> {
     final query = _search.toLowerCase();
     if (query.isEmpty) return true;
     return user.name.toLowerCase().contains(query) ||
-        user.phone.toLowerCase().contains(query);
+        user.phone.toLowerCase().contains(query) ||
+        user.email.toLowerCase().contains(query);
   }
 
   void _setPagination(UsersPaginationModel pagination) {

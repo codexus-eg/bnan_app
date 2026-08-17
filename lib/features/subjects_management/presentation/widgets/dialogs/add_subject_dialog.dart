@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic_lookup_dropdowns.dart';
@@ -87,14 +89,23 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
                       gradeHint: s.chooseGrade,
                       onSelectionChanged: (_) {},
                     ),
-                    const SizedBox(height: 16),
-                    GradeMultiSelection(
-                      selectedIds: selectedGradeIds,
-                      onChanged: (value) => setState(() {
-                        selectedGradeIds = value;
-                        validationMessage = null;
-                      }),
-                    ),
+                    if (context
+                            .read<AcademicLookupsCubit>()
+                            .state
+                            .selectedCurriculum !=
+                        null) ...[
+                      const SizedBox(height: 16),
+                      GradeMultiSelection(
+                        labelStyle: StylesManager.styleBold14(
+                          context,
+                        ).copyWith(color: ColorManager.mainColor15),
+                        selectedIds: selectedGradeIds,
+                        onChanged: (value) => setState(() {
+                          selectedGradeIds = value;
+                          validationMessage = null;
+                        }),
+                      ),
+                    ],
                     if (validationMessage != null) ...[
                       const SizedBox(height: 16),
                       SubjectDialogError(message: validationMessage!),

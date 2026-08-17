@@ -12,10 +12,12 @@ class GradeMultiSelection extends StatelessWidget {
     super.key,
     required this.selectedIds,
     required this.onChanged,
+    this.labelStyle,
   });
 
   final Set<String> selectedIds;
   final ValueChanged<Set<String>> onChanged;
+  final TextStyle? labelStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class GradeMultiSelection extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(S.of(context).selectGrade),
+            Text(S.of(context).selectGrade, style: labelStyle),
             const SizedBox(height: 8),
             ...state.grades.map((grade) {
               return CustomOptionTile(

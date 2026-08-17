@@ -29,23 +29,21 @@ class ParentHomeContent extends StatelessWidget {
         onMenuTap: onMenuTap,
         onShowAllChildren: onShowAllChildren,
       ),
-      const ParentChildrenBody(),
-      const GroupsView(showBackButton: false),
-      const ParentSubscriptionsView(),
+      BlocProvider(
+        create: (_) => getIt<GetParentChildrenCubit>()..getParentChildren(),
+        child: const ParentChildrenBody(),
+      ),
+      BlocProvider(
+        create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+        child: const GroupsView(showBackButton: false),
+      ),
+      BlocProvider(
+        create: (_) => getIt<GetParentSubscriptionsCubit>()..load(),
+        child: const ParentSubscriptionsView(),
+      ),
       const ParentProfileBody(),
     ];
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<GetParentChildrenCubit>()..getParentChildren(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<GetParentSubscriptionsCubit>()..load(),
-        ),
-        BlocProvider(create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms()),
-      ],
-      child: IndexedStack(index: index, children: pages),
-    );
+    return pages[index];
   }
 }

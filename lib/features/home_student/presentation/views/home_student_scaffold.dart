@@ -28,6 +28,8 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   int currentIndex = 0;
+  int _tabRevision = 0;
+  bool _isNavigating = false;
 
   static const int requestLessonDrawerIndex = 2;
   static const int subjectsDrawerIndex = 1;
@@ -40,17 +42,22 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     0: 0,
     4: 1,
     9: 2,
-    3: 3,
+    ChatRoleNavigation.studentDrawerIndex: 3,
     10: 4,
   };
 
   void _changeBottomNavIndex(int index) {
-    if (index == currentIndex) return;
     if (index == 1 && _studentScheduleRoute == null) return;
-    if (index == 0 && currentIndex != 0) {
-      context.read<DashboardCubit>().refresh();
-    }
-    setState(() => currentIndex = index);
+    setState(() {
+      currentIndex = index;
+      _tabRevision++;
+    });
+    _loadTab(index);
+  }
+
+  void _loadTab(int index) {
+    if (index == 0) context.read<DashboardCubit>().refresh();
+    if (index == 4) StudentProfileCubit.get(context).getLoggedUser();
   }
 
   String? get _studentScheduleRoute {
@@ -61,7 +68,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   }
 
   void _goHomeTab() {
-    setState(() => currentIndex = 0);
+    if (currentIndex != 0) _changeBottomNavIndex(0);
   }
 
   void _openDrawer() {
@@ -72,7 +79,8 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     scaffoldKey.currentState?.closeDrawer();
   }
 
-  void _onDrawerItemTap(int index) {
+  Future<void> _onDrawerItemTap(int index) async {
+    if (_isNavigating) return;
     final bottomNavIndex = drawerToBottomNavIndex[index];
 
     _closeDrawer();
@@ -83,28 +91,34 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     }
 
     _goHomeTab();
-    _navigateFromDrawer(index);
+    _isNavigating = true;
+    try {
+      await _navigateFromDrawer(index);
+    } finally {
+      if (mounted) _loadTab(currentIndex);
+      _isNavigating = false;
+    }
   }
 
-  void _navigateFromDrawer(int index) {
+  Future<void> _navigateFromDrawer(int index) async {
     if (index == subjectsDrawerIndex) {
-      MyNavigator.goTo(context, Routes.studentSubjects);
+      await MyNavigator.goTo(context, Routes.studentSubjects);
     } else if (index == requestLessonDrawerIndex) {
-      MyNavigator.goTo(context, Routes.requestLesson);
+      await MyNavigator.goTo(context, Routes.requestLesson);
+    } else if (index == 3) {
+      await MyNavigator.goTo(context, Routes.parentCertificates);
     } else if (index == plansDrawerIndex) {
-      MyNavigator.goTo(
+      await MyNavigator.goTo(
         context,
         Routes.plans,
-        extra: widget.loggedUser.isGulfStudent,
+        extra: SessionManager.instance.isGulfStudent,
       );
     } else if (index == notificationDrawerIndex) {
-      MyNavigator.goTo(context, Routes.notification);
+      await MyNavigator.goTo(context, Routes.notification);
     } else if (index == evaluationsDrawerIndex) {
-      MyNavigator.goTo(context, Routes.weeklyEvaluations);
+      await MyNavigator.goTo(context, Routes.weeklyEvaluations);
     } else if (index == subscriptionsDrawerIndex) {
-      MyNavigator.goTo(context, Routes.studentSubscriptions);
-    } else if (index == ChatRoleNavigation.studentDrawerIndex) {
-      MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
+      await MyNavigator.goTo(context, Routes.studentSubscriptions);
     }
   }
 
@@ -140,6 +154,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
                 )
               : null,
           body: HomeStudentBody(
+            key: ValueKey('$currentIndex:$_tabRevision'),
             index: currentIndex,
             userName: CurrentUserUi.name(context),
             onMenuTap: _openDrawer,

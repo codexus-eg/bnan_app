@@ -8,6 +8,7 @@ import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_bottom_nav_bar.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_body.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_drawer.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
@@ -23,6 +24,8 @@ class _ParentHomeViewState extends State<ParentHomeView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   int currentIndex = 0;
+  int _tabRevision = 0;
+  bool _isNavigating = false;
   bool _isLoggingOut = false;
 
   static const int notificationsDrawerIndex = 5;
@@ -36,15 +39,20 @@ class _ParentHomeViewState extends State<ParentHomeView> {
   };
 
   void _changeIndex(int index) {
-    if (index == currentIndex) return;
-    if (index == 0 && currentIndex != 0) {
-      context.read<DashboardCubit>().refresh();
-    }
-    setState(() => currentIndex = index);
+    setState(() {
+      currentIndex = index;
+      _tabRevision++;
+    });
+    _loadTab(index);
+  }
+
+  void _loadTab(int index) {
+    if (index == 0) context.read<DashboardCubit>().refresh();
+    if (index == 4) StudentProfileCubit.get(context).getLoggedUser();
   }
 
   void _goHomeTab() {
-    setState(() => currentIndex = 0);
+    if (currentIndex != 0) _changeIndex(0);
   }
 
   void _openDrawer() {
@@ -55,7 +63,8 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     scaffoldKey.currentState?.closeDrawer();
   }
 
-  void _onDrawerItemTap(int index) {
+  Future<void> _onDrawerItemTap(int index) async {
+    if (_isNavigating) return;
     final bottomIndex = drawerToBottomNavIndex[index];
 
     _closeDrawer();
@@ -66,24 +75,26 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     }
 
     _goHomeTab();
-    _navigateFromDrawer(index);
+    _isNavigating = true;
+    try {
+      await _navigateFromDrawer(index);
+    } finally {
+      if (mounted) _loadTab(currentIndex);
+      _isNavigating = false;
+    }
   }
 
-  void _navigateFromDrawer(int index) {
+  Future<void> _navigateFromDrawer(int index) async {
     if (index == 2) {
-      MyNavigator.goTo(context, Routes.weeklyEvaluations);
-    }
-    if (index == 3) {
-      MyNavigator.goTo(context, Routes.parentSchedule);
-    }
-    if (index == notificationsDrawerIndex) {
-      MyNavigator.goTo(context, Routes.notification);
-    }
-    if (index == 4) {
-      MyNavigator.goTo(context, Routes.parentCertificates);
-    }
-    if (index == 8) {
-      MyNavigator.goTo(context, Routes.plans);
+      await MyNavigator.goTo(context, Routes.weeklyEvaluations);
+    } else if (index == 3) {
+      await MyNavigator.goTo(context, Routes.parentSchedule);
+    } else if (index == notificationsDrawerIndex) {
+      await MyNavigator.goTo(context, Routes.notification);
+    } else if (index == 4) {
+      await MyNavigator.goTo(context, Routes.parentCertificates);
+    } else if (index == 8) {
+      await MyNavigator.goTo(context, Routes.plans);
     }
   }
 
@@ -127,6 +138,7 @@ class _ParentHomeViewState extends State<ParentHomeView> {
                 )
               : null,
           body: ParentHomeBody(
+            key: ValueKey('$currentIndex:$_tabRevision'),
             index: currentIndex,
             onMenuTap: _openDrawer,
             onShowAllChildren: () => _changeIndex(1),

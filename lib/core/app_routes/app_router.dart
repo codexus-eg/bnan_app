@@ -214,9 +214,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         pageBuilder: (context, state) => buildTransitionPages(
           child: MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (_) => getIt<StudentProfileCubit>()..getLoggedUser(),
-              ),
+              BlocProvider(create: (_) => getIt<StudentProfileCubit>()),
               BlocProvider(
                 create: (_) =>
                     getIt<DashboardCubit>(param1: DashboardRole.student)
@@ -640,9 +638,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 create: (_) =>
                     getIt<DashboardCubit>(param1: DashboardRole.parent)..load(),
               ),
-              BlocProvider(
-                create: (_) => getIt<StudentProfileCubit>()..getLoggedUser(),
-              ),
+              BlocProvider(create: (_) => getIt<StudentProfileCubit>()),
             ],
             child: const ParentHomeView(),
           ),

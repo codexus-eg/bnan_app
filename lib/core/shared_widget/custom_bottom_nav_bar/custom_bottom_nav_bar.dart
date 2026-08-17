@@ -17,32 +17,39 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      padding: const EdgeInsets.only(top: 8, bottom: 8,left: 8,right: 8),
-      decoration: BoxDecoration(
-        color: ColorManager.greyF8F9,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-        boxShadow: [
-          BoxShadow(
-            color: ColorManager.black.withAlpha((255 * .25).round()),
-            blurRadius: 4,
-            offset: const Offset(4, 0),
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Container(
+        height: 70,
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
+        decoration: BoxDecoration(
+          color: ColorManager.greyF8F9,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
           ),
-        ],
-      ),
-      child: Row(
-        children: List.generate(items.length, (index) {
-          final item = items[index];
-          return Expanded(
-            child: CustomBottomNavItem(
-              imagePath: item.icon,
-              title: item.title,
-              isSelected: currentIndex == index,
-              onTap: () => onTap(index),
+          boxShadow: [
+            BoxShadow(
+              color: ColorManager.black.withAlpha((255 * .25).round()),
+              blurRadius: 4,
+              offset: const Offset(4, 0),
             ),
-          );
-        }),
+          ],
+        ),
+        child: Row(
+          children: List.generate(items.length, (index) {
+            final item = items[index];
+            return Expanded(
+              child: CustomBottomNavItem(
+                imagePath: item.icon,
+                title: item.title,
+                isSelected: currentIndex == index,
+                onTap: () => onTap(index),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

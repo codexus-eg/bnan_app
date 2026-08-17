@@ -58,7 +58,9 @@ class AssignmentModel {
     final submitted = json['submitted'] ?? false;
     final submission = json['submission'];
     final gradeValue =
-        (submission is Map ? submission['score'] : null) ??
+        (submission is Map
+            ? submission['score'] ?? submission['grade']
+            : null) ??
         json['score'] ??
         json['grade'];
     final grade = gradeValue is num
