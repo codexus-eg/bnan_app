@@ -41,6 +41,7 @@ class PushNotificationService {
   final _opened = StreamController<ChatPushIntent>.broadcast();
   final _notificationOpened = StreamController<AppNotification>.broadcast();
   final Set<String> _navigationIds = {};
+  final Set<String> _foregroundIds = {};
   final List<StreamSubscription<dynamic>> _subscriptions = [];
   ChatPushIntent? _pending;
   AppNotification? _pendingNotification;
@@ -77,14 +78,19 @@ class PushNotificationService {
 
   Future<void> _handleForeground(RemoteMessage message) async {
     final notification = _notification(message);
+    final intent = _intent(message);
+    final processingId = _processingId(message, notification, intent);
+    if (processingId.isNotEmpty && !_foregroundIds.add(processingId)) return;
+    if (_foregroundIds.length > 300) {
+      _foregroundIds.remove(_foregroundIds.first);
+    }
     if (notification != null) {
-      _notifications?.ingest(notification);
-      if (defaultTargetPlatform == TargetPlatform.iOS &&
-          message.notification == null) {
+      final accepted =
+          _notifications?.ingest(notification, emitIncoming: false) ?? true;
+      if (accepted && notification.key.trim().toUpperCase() != 'NEW_MESSAGE') {
         await _localNotifications?.showNotification(notification);
       }
     }
-    final intent = _intent(message);
     if (intent == null) return;
     final result = _chat.handlePush(
       messageId: intent.messageId,
@@ -99,6 +105,22 @@ class PushNotificationService {
       debugPrint('FCM_FOREGROUND_DEDUPED');
       debugPrint('notificationId: ${intent.dedupKey}');
     }
+  }
+
+  String _processingId(
+    RemoteMessage message,
+    AppNotification? notification,
+    ChatPushIntent? intent,
+  ) {
+    for (final id in [
+      message.messageId,
+      notification?.id,
+      intent?.notificationId,
+      intent?.messageId,
+    ]) {
+      if (id?.trim().isNotEmpty == true) return id!.trim();
+    }
+    return '';
   }
 
   void _handleOpened(RemoteMessage? message) {

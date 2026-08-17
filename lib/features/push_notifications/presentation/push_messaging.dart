@@ -28,9 +28,9 @@ class FirebasePushMessaging implements PushMessaging {
 
   Future<void> configureIosForegroundPresentation() {
     return _messaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
+      alert: false,
+      badge: false,
+      sound: false,
     );
   }
 }

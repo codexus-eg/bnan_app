@@ -202,6 +202,7 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
     if ((defaultTargetPlatform != TargetPlatform.iOS || key == 'CHAT_NUDGE') &&
         getIt.isRegistered<LocalPushNotifications>()) {
       unawaited(getIt<LocalPushNotifications>().showNotification(notification));
+      if (key == 'CHAT_NUDGE') return;
     }
 
     final context = _navigatorKey.currentContext;

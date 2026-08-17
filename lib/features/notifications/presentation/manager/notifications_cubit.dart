@@ -146,7 +146,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   String _notificationKey(AppNotification item) =>
       item.id.isEmpty ? '${item.key}|${item.createdAt}' : item.id;
 
-  bool ingest(AppNotification value) {
+  bool ingest(AppNotification value, {bool emitIncoming = true}) {
     if (!_recent.claim(value.id)) return false;
     if (value.id.isNotEmpty && state.items.any((item) => item.id == value.id)) {
       return false;
@@ -159,7 +159,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         unreadCount: state.unreadCount + (value.isRead ? 0 : 1),
       ),
     );
-    _incoming.add(value);
+    if (emitIncoming) _incoming.add(value);
     return true;
   }
 
