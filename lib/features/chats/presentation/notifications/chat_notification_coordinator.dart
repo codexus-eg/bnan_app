@@ -75,10 +75,7 @@ class ChatNotificationCoordinator {
       _listenerDisposers.addAll([
         socketService.listenToNewMessage(handleMessage),
         socketService.listenToNotification(handleNotification),
-        socketService.listenToJoinedRoom(_handleJoinedRoom),
-        socketService.listenToReconnect(_joinUserRoom),
       ]);
-      _joinUserRoom();
     } catch (error) {
       debugPrint('Chat notification socket unavailable: $error');
     } finally {
@@ -104,20 +101,6 @@ class ChatNotificationCoordinator {
     final notification = ChatNotificationModel.fromJson(payload);
     if (!notification.isChatMessage) return;
     _handle(ChatNotificationEvent.fromNotification(notification));
-  }
-
-  void _joinUserRoom() {
-    final userId = _currentUserId()?.trim() ?? '';
-    if (userId.isEmpty || !socketService.isConnected) return;
-    socketService.joinRoom('user_$userId');
-  }
-
-  void _handleJoinedRoom(String roomId) {
-    final userRoom = 'user_${_currentUserId()?.trim() ?? ''}';
-    if (roomId.trim() != userRoom) return;
-    debugPrint('USER ROOM JOINED');
-    debugPrint('room: $userRoom');
-    debugPrint('success: true');
   }
 
   ChatForegroundNotificationResult handlePush({

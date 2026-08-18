@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
@@ -124,12 +125,13 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
 
   Future<void> _logout() async {
     await StudentProfileCubit.get(context).logout();
+    final destination = await AppLogout.destinationAfterLogout();
 
     if (!mounted) return;
 
     showCustomSnackBar(context, S.of(context).logoutSuccess, true);
 
-    MyNavigator.goToOffAll(context, Routes.logIn);
+    MyNavigator.goToOffAll(context, destination);
   }
 
   @override

@@ -38,10 +38,10 @@ class AssignmentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _AssignmentCardHeader(assignment: assignment),
-          if (assignment.attachment.trim().isNotEmpty) ...[
-            const SizedBox(height: 8),
-            AssignmentAttachmentPreview(assignment: assignment),
-          ],
+          // if (assignment.attachment.trim().isNotEmpty) ...[
+          //   const SizedBox(height: 8),
+          //   AssignmentAttachmentPreview(assignment: assignment),
+          // ],
           const SizedBox(height: 8),
           AssignmentCardActionsHandler(
             assignment: assignment,

@@ -1335,5 +1335,10 @@
     "studentCallAlertSent": "The student alert was sent successfully",
     "studentCallAlertCooldown": "The alert was already sent. Try again shortly",
     "studentCallAlertTitle": "Your supervisor is calling you",
-    "studentCallAlertBody": "Open Bnan to respond to your supervisor"
+    "studentCallAlertBody": "Open Bnan to respond to your supervisor",
+    "savedAccounts": "Saved accounts",
+    "chooseSavedAccount": "Choose an account to continue",
+    "noSavedAccounts": "No saved accounts on this device",
+    "loginWithAnotherAccount": "Log in with another account",
+    "removeAccountFromDevice": "Remove account from this device"
 }

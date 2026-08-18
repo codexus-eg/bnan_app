@@ -1,7 +1,14 @@
 import 'package:bnan_app/features/student_schedule/presentation/models/digital_schedule_grid_data.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/core/utils/schedule_time_utils.dart';
-import 'package:bnan_app/features/lessons_management/presentation/models/lesson_days.dart';
+
+const _egyptianTableDays = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+];
 
 DigitalScheduleGridData adaptEgyptianSchedule(
   EgyptianScheduleWeek week, {
@@ -37,7 +44,7 @@ DigitalScheduleGridData adaptEgyptianSchedule(
     }
   }
   return DigitalScheduleGridData(
-    days: lessonDays,
+    days: _egyptianTableDays,
     times: times.toList()..sort(),
     cells: cells,
     timeLabels: timeLabels,
@@ -46,15 +53,13 @@ DigitalScheduleGridData adaptEgyptianSchedule(
 
 String? _dayKey(String value) {
   final day = value.trim().toLowerCase();
-  if (lessonDays.contains(day)) return day;
+  if (_egyptianTableDays.contains(day)) return day;
   return switch (DateTime.tryParse(value)?.weekday) {
     DateTime.sunday => 'sunday',
     DateTime.monday => 'monday',
     DateTime.tuesday => 'tuesday',
     DateTime.wednesday => 'wednesday',
     DateTime.thursday => 'thursday',
-    DateTime.friday => 'friday',
-    DateTime.saturday => 'saturday',
     _ => null,
   };
 }

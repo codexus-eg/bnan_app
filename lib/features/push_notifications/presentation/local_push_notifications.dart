@@ -11,10 +11,10 @@ class LocalPushNotifications {
   final FlutterLocalNotificationsPlugin _plugin;
   static const _soundChannel = MethodChannel('bnan/notification_sound');
   static const _channel = AndroidNotificationChannel(
-    'bnan_high_v2',
+    'bnan_notifications',
     'Bnan notifications',
     description: 'Bnan Academy notifications',
-    importance: Importance.max,
+    importance: Importance.high,
     playSound: true,
     enableVibration: true,
   );
@@ -69,10 +69,10 @@ class LocalPushNotifications {
       body: intent.body,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'bnan_high_v2',
+          'bnan_notifications',
           'Bnan notifications',
           channelDescription: 'Bnan Academy notifications',
-          importance: Importance.max,
+          importance: Importance.high,
           priority: Priority.high,
           playSound: true,
           enableVibration: true,
@@ -97,11 +97,11 @@ class LocalPushNotifications {
       body: notification.body,
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
-          isNudge ? 'bnan_nudge_silent_v1' : 'bnan_high_v2',
+          isNudge ? 'bnan_nudge_silent_v1' : 'bnan_notifications',
           isNudge ? 'Bnan nudge notifications' : 'Bnan notifications',
           channelDescription: 'Bnan Academy notifications',
           icon: 'ic_notification',
-          importance: Importance.max,
+          importance: Importance.high,
           priority: Priority.high,
           playSound: !isNudge,
           enableVibration: !isNudge,

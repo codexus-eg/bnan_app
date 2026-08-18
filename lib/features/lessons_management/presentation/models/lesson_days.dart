@@ -10,7 +10,13 @@ const lessonDays = [
   'friday',
 ];
 
-const egyptianLessonDays = lessonDays;
+const egyptianLessonDays = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+];
 
 String lessonDayLabel(S s, String day) => switch (day) {
   'saturday' => s.saturday,

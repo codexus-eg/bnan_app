@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
@@ -108,8 +109,9 @@ class _ParentHomeViewState extends State<ParentHomeView> {
         throw StateError('Authentication session was not cleared');
       }
       getIt<SocketService>().disconnect();
+      final destination = await AppLogout.destinationAfterLogout();
       if (!mounted) return;
-      MyNavigator.goToOffAll(context, Routes.logIn);
+      MyNavigator.goToOffAll(context, destination);
     } catch (error) {
       _isLoggingOut = false;
       if (!mounted) return;

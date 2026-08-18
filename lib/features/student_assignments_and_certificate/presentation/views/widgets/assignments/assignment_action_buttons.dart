@@ -24,10 +24,17 @@ class AssignmentActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        DownloadIconButton(
-          url: downloadUrl,
-          fileName: downloadFileName,
-          enabled: !isLoading,
+        Expanded(
+          child: DownloadIconButton(
+            url: downloadUrl,
+            fileName: downloadFileName,
+            enabled: !isLoading,
+            builder: (onPressed) => AssignmentActionButton(
+              text: S.of(context).download,
+              icon: ImageManager.downloadIcon,
+              onTap: onPressed,
+            ),
+          ),
         ),
         if (showSubmit) ...[
           const SizedBox(width: 21),

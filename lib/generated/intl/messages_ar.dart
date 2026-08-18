@@ -1537,6 +1537,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "savingCertificate":
             MessageLookupByLibrary.simpleMessage("جاري حفظ الشهادة..."),
         "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
+        "savedAccounts":
+            MessageLookupByLibrary.simpleMessage("الحسابات المحفوظة"),
+        "chooseSavedAccount":
+            MessageLookupByLibrary.simpleMessage("اختر حسابًا للمتابعة"),
+        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
+            "لا توجد حسابات محفوظة على هذا الجهاز"),
+        "loginWithAnotherAccount": MessageLookupByLibrary.simpleMessage(
+            "تسجيل الدخول بحساب آخر"),
+        "removeAccountFromDevice": MessageLookupByLibrary.simpleMessage(
+            "إزالة الحساب من هذا الجهاز"),
         "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
         "scheduleCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة الجدول بنجاح"),

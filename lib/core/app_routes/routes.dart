@@ -3,6 +3,7 @@ abstract class Routes {
   static const String onboarding = '/onboarding';
   static const String signUp = '/SignUp';
   static const String logIn = '/logIn';
+  static const String savedAccounts = '/saved-accounts';
   static const String forgetPassword = '/forget-password';
   static const String register = '/register';
   static const String curriculum = '/curriculum';
@@ -83,6 +84,7 @@ abstract class Routes {
 
   static String teacherPayrollCreatePath(String teacherId) =>
       teacherPayrollCreate.replaceFirst(':teacherId', teacherId);
+  static String get directLogIn => '$logIn?direct=true';
   static String chatPath(String roomId) =>
       chat.replaceFirst(':roomId', Uri.encodeComponent(roomId));
   static String parentSubscriptionRenewalPath(String studentId) =>

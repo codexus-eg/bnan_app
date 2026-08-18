@@ -98,7 +98,8 @@ class ChatHeader extends StatelessWidget {
                   studentId?.trim().isNotEmpty == true)
                 StudentCallAlertAction(studentId: studentId!.trim()),
               if (_sessionRole != null &&
-                  roomType == 'classroom' &&
+                  (_sessionRole == UserRole.student ||
+                      roomType == 'classroom') &&
                   classroomId?.trim().isNotEmpty == true)
                 ChatSessionAction(
                   classroomId: classroomId!.trim(),
@@ -150,6 +151,7 @@ class ChatHeader extends StatelessWidget {
   UserRole? get _sessionRole {
     final role = UserRole.fromValue(currentUserRole);
     return const {
+          UserRole.student,
           UserRole.teacher,
           UserRole.supervisor,
           UserRole.admin,

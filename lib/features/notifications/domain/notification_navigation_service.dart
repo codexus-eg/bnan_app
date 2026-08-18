@@ -76,7 +76,7 @@ class NotificationNavigationService {
       'student_home' => Routes.home,
       'chat_room' => _required(Routes.chatPath, params['roomId'] ?? resourceId),
       'schedule' => _schedule(),
-      'subscription' => _subscription(params['studentId']?.toString()),
+      'subscription' => _subscription(params),
       'certificates' => _certificates(),
       'parent_child_certificates' => Routes.parentCertificates,
       'student_evaluations' => Routes.weeklyEvaluations,
@@ -187,11 +187,23 @@ class NotificationNavigationService {
     UserRole.supervisor => Routes.tablesManagement,
     _ => Routes.tablesManagement,
   };
-  String? _subscription(String? _) => switch (_session.role) {
-    UserRole.student => Routes.studentSubscriptions,
-    UserRole.parent => Routes.parentSubscriptions,
-    _ => null,
-  };
+  String? _subscription(Map<String, dynamic> params) {
+    final route = switch (_session.role) {
+      UserRole.student => Routes.studentSubscriptions,
+      UserRole.parent => Routes.parentSubscriptions,
+      _ => null,
+    };
+    if (route == null) return null;
+    final query = <String, String>{
+      if (_text(params['studentId']) case final value?) 'studentId': value,
+      if (_text(params['subscriptionId']) case final value?)
+        'subscriptionId': value,
+    };
+    return query.isEmpty
+        ? route
+        : Uri(path: route, queryParameters: query).toString();
+  }
+
   String? _certificates() => switch (_session.role) {
     UserRole.parent || UserRole.student => Routes.parentCertificates,
     UserRole.supervisor => Routes.certificatesManagement,
@@ -256,6 +268,8 @@ const _eventScreens = <String, String>{
   'PERFORMANCE_POINTS_EARNED': 'performance',
   'PAYMENT_SUCCESS': 'subscription',
   'SUBSCRIPTION_STARTED': 'subscription',
+  'SUBSCRIPTION_EXPIRES_SOON': 'subscription',
+  'SUBSCRIPTION_HOURS_LOW': 'subscription',
   'STUDENT_CERTIFICATE_ISSUED': 'certificates',
   'CHILD_CERTIFICATE_ISSUED': 'parent_child_certificates',
   'IDEAL_TEACHER_CERTIFICATE_ISSUED': 'certificates',

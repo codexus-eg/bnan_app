@@ -1334,5 +1334,10 @@
     "studentCallAlertSent": "تم إرسال التنبيه للطالب بنجاح",
     "studentCallAlertCooldown": "تم إرسال التنبيه بالفعل، حاول بعد قليل",
     "studentCallAlertTitle": "المشرف يناديك",
-    "studentCallAlertBody": "افتح بنان للاستجابة للمشرف"
+    "studentCallAlertBody": "افتح بنان للاستجابة للمشرف",
+    "savedAccounts": "الحسابات المحفوظة",
+    "chooseSavedAccount": "اختر حسابًا للمتابعة",
+    "noSavedAccounts": "لا توجد حسابات محفوظة على هذا الجهاز",
+    "loginWithAnotherAccount": "تسجيل الدخول بحساب آخر",
+    "removeAccountFromDevice": "إزالة الحساب من هذا الجهاز"
 }

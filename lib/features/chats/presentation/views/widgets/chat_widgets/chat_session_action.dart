@@ -90,6 +90,10 @@ class _ChatSessionActionState extends State<ChatSessionAction> {
               ],
             );
           }
+          if (widget.role == UserRole.student &&
+              active?.session.canJoin == true) {
+            return _button(S.of(context).joinSession, _join);
+          }
           if ((widget.role == UserRole.admin ||
                   widget.role == UserRole.supervisor) &&
               active?.session.canJoin == true &&
@@ -148,6 +152,14 @@ class _ChatSessionActionState extends State<ChatSessionAction> {
     final link = cubit.state.active(widget.classroomId)?.meetingLink ?? '';
     await _open(link);
     await cubit.loadActive(widget.classroomId);
+  }
+
+  Future<void> _join() async {
+    final cubit = context.read<StartSessionCubit>();
+    final link = await cubit.join(widget.classroomId);
+    if (!mounted) return;
+    if (link == null || link.isEmpty) return _showSessionError(cubit.state);
+    await _open(link);
   }
 
   Future<void> _end() async {

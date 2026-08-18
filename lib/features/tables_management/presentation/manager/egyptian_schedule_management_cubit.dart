@@ -14,7 +14,7 @@ class EgyptianScheduleState {
     this.status = EgyptianScheduleStatus.loading,
     this.days = const [],
     this.subjects = const [],
-    this.selectedDay = 'saturday',
+    this.selectedDay = 'sunday',
     this.error,
     this.actionError,
   });

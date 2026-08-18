@@ -3,6 +3,7 @@ import 'package:bnan_app/core/cache/secure_cache_keys.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/current_user.dart';
+import 'package:bnan_app/core/session/saved_account_store.dart';
 import 'package:flutter/foundation.dart';
 
 typedef SessionChangeListener =
@@ -175,6 +176,7 @@ class SessionManager {
     );
     _refreshToken = refreshToken;
     _accessToken = accessToken;
+    await _saveCurrentAccount();
     for (final listener in List.of(_accessTokenChangeListeners)) {
       listener(accessToken);
     }
@@ -223,7 +225,9 @@ class SessionManager {
     _registrationMode = null;
     _registrationModes = const [];
 
-    await SecureCacheHelper.clearAll();
+    for (final key in SecureCacheKeys.sessionKeys) {
+      await SecureCacheHelper.removeData(key: key);
+    }
     await _notifySessionChanged(previousUserId, null);
     debugPrint('SessionManager.clearSession completed');
   }
@@ -290,6 +294,24 @@ class SessionManager {
     await _saveOptional(SecureCacheKeys.userName, _currentUser?.fullName);
     await _saveOptional(SecureCacheKeys.userEmail, _currentUser?.email);
     await _saveOptional(SecureCacheKeys.userPhone, _currentUser?.phone);
+    await _saveCurrentAccount();
+  }
+
+  Future<void> _saveCurrentAccount() async {
+    final user = _currentUser;
+    if (user == null || _refreshToken?.isNotEmpty != true) return;
+    await SavedAccountStore.upsert(
+      SavedAccount(
+        userId: user.id ?? '',
+        name: user.fullName ?? '',
+        role: user.role ?? '',
+        email: user.email ?? '',
+        phone: user.phone ?? '',
+        refreshToken: _refreshToken!,
+        registrationMode: _registrationMode,
+        registrationModes: _registrationModes,
+      ),
+    );
   }
 
   Future<void> _saveOptional(String key, String? value) {

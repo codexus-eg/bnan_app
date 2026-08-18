@@ -15,12 +15,14 @@ class DownloadIconButton extends StatefulWidget {
     this.fileName,
     this.enabled = true,
     this.iconColor = ColorManager.mainColor14,
+    this.builder,
   });
 
   final String url;
   final String? fileName;
   final bool enabled;
   final Color iconColor;
+  final Widget Function(VoidCallback? onPressed)? builder;
 
   @override
   State<DownloadIconButton> createState() => _DownloadIconButtonState();
@@ -30,18 +32,22 @@ class _DownloadIconButtonState extends State<DownloadIconButton> {
   bool _isLoading = false;
 
   @override
-  Widget build(BuildContext context) => IconButton(
-    tooltip: S.of(context).download,
-    onPressed: _isLoading || !widget.enabled || widget.url.trim().isEmpty
+  Widget build(BuildContext context) {
+    final onPressed = _isLoading || !widget.enabled || widget.url.trim().isEmpty
         ? null
-        : _download,
-    icon: SvgPicture.asset(
-      ImageManager.downloadIcon,
-      width: 24,
-      height: 24,
-      colorFilter: ColorFilter.mode(widget.iconColor, BlendMode.srcIn),
-    ),
-  );
+        : _download;
+    return widget.builder?.call(onPressed) ??
+        IconButton(
+          tooltip: S.of(context).download,
+          onPressed: onPressed,
+          icon: SvgPicture.asset(
+            ImageManager.downloadIcon,
+            width: 24,
+            height: 24,
+            colorFilter: ColorFilter.mode(widget.iconColor, BlendMode.srcIn),
+          ),
+        );
+  }
 
   Future<void> _download() async {
     setState(() => _isLoading = true);

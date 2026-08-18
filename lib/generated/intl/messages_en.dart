@@ -1590,6 +1590,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "savingCertificate":
             MessageLookupByLibrary.simpleMessage("Saving certificate..."),
         "savingFile": MessageLookupByLibrary.simpleMessage("Saving file..."),
+        "savedAccounts": MessageLookupByLibrary.simpleMessage("Saved accounts"),
+        "chooseSavedAccount": MessageLookupByLibrary.simpleMessage(
+            "Choose an account to continue"),
+        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
+            "No saved accounts on this device"),
+        "loginWithAnotherAccount": MessageLookupByLibrary.simpleMessage(
+            "Log in with another account"),
+        "removeAccountFromDevice": MessageLookupByLibrary.simpleMessage(
+            "Remove account from this device"),
         "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
         "scheduleCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("Schedule added successfully"),

@@ -12209,6 +12209,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Saved accounts`
+  String get savedAccounts {
+    return Intl.message(
+      'Saved accounts',
+      name: 'savedAccounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose an account to continue`
+  String get chooseSavedAccount {
+    return Intl.message(
+      'Choose an account to continue',
+      name: 'chooseSavedAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No saved accounts on this device`
+  String get noSavedAccounts {
+    return Intl.message(
+      'No saved accounts on this device',
+      name: 'noSavedAccounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log in with another account`
+  String get loginWithAnotherAccount {
+    return Intl.message(
+      'Log in with another account',
+      name: 'loginWithAnotherAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove account from this device`
+  String get removeAccountFromDevice {
+    return Intl.message(
+      'Remove account from this device',
+      name: 'removeAccountFromDevice',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

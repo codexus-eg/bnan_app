@@ -2,6 +2,7 @@ import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/session/saved_account_store.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
@@ -24,6 +25,7 @@ import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_stud
 import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teacher_access_policy.dart';
 import 'package:bnan_app/features/ideal_supervisor/presentation/policies/ideal_supervisor_access_policy.dart';
 import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
+import 'package:bnan_app/features/saved_accounts/presentation/views/saved_accounts_view.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
@@ -56,6 +58,15 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
 
       GoRoute(
         path: Routes.logIn,
+        redirect: (context, state) async {
+          if (state.extra != null ||
+              state.uri.queryParameters['direct'] == 'true') {
+            return null;
+          }
+          return await SavedAccountStore.hasAccounts()
+              ? Routes.savedAccounts
+              : null;
+        },
         pageBuilder: (context, state) {
           final args = state.extra is LoginRouteArgs
               ? state.extra as LoginRouteArgs
@@ -74,6 +85,14 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
             key: state.pageKey,
           );
         },
+      ),
+
+      GoRoute(
+        path: Routes.savedAccounts,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const SavedAccountsView(),
+          key: state.pageKey,
+        ),
       ),
 
       GoRoute(
