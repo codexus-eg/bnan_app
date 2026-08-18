@@ -67,7 +67,6 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
     debugPrint('EDIT PREFILL selectedClassroomSubjectId: $classroomSubjectId');
     debugPrint('EDIT PREFILL selectedTime: $startTime');
     debugPrint('EDIT PREFILL originalTime: ${widget.lesson?.startTime}');
-    debugPrint('EDIT PREFILL selectedDate: ${cubit.selectedDate(day)}');
   }
 
   @override
@@ -195,11 +194,6 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
     final time =
         '${value.hour.toString().padLeft(2, '0')}:'
         '${value.minute.toString().padLeft(2, '0')}';
-    final cubit = context.read<EgyptianScheduleManagementCubit>();
-    if (!end && widget.lesson == null && cubit.isPastStart(day, time)) {
-      setState(() => localError = S.of(context).scheduleTimeInPast);
-      return;
-    }
     setState(() {
       if (end) {
         endTime = time;
@@ -207,7 +201,7 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
         startTime = time;
       }
       localError = null;
-      cubit.clearActionError();
+      context.read<EgyptianScheduleManagementCubit>().clearActionError();
     });
   }
 
@@ -227,17 +221,11 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
       return;
     }
     final cubit = context.read<EgyptianScheduleManagementCubit>();
-    if (widget.lesson == null && cubit.isPastStart(day, time)) {
-      debugPrint('EDIT BLOCKED: past time');
-      setState(() => localError = S.of(context).scheduleTimeInPast);
-      return;
-    }
     debugPrint('EDIT SAVE PRESSED');
     debugPrint('edited lesson id: ${widget.lesson?.id}');
     debugPrint('classroomSubjectId: $subjectId');
     debugPrint('new startTime: $time');
     debugPrint('originalTime: ${widget.lesson?.startTime}');
-    debugPrint('selectedDate: ${cubit.selectedDate(day)}');
     cubit.selectDay(day);
     debugPrint('EDIT CALLING CUBIT');
     final saved = await cubit.saveLesson(
@@ -249,7 +237,7 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
     debugPrint('EDIT CUBIT RESULT: $saved');
     if (saved && mounted) {
       Navigator.pop(context);
-      await cubit.refreshSelectedWeek();
+      await cubit.refreshSchedule();
     }
   }
 
@@ -267,7 +255,7 @@ class _EgyptianLessonDialogState extends State<EgyptianLessonDialog> {
     debugPrint('DELETE CUBIT RESULT: $deleted');
     if (deleted && mounted) {
       Navigator.pop(context);
-      await cubit.refreshSelectedWeek();
+      await cubit.refreshSchedule();
     }
   }
 

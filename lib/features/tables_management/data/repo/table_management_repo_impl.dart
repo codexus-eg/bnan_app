@@ -47,12 +47,10 @@ class TableManagementRepoImpl
   }
 
   @override
-  Future<Either<Failure, EgyptianScheduleWeek>> getMyEgyptianDigitalSchedule({
-    String? weekStart,
-  }) => repoGuard(() async {
+  Future<Either<Failure, EgyptianScheduleWeek>>
+  getMyEgyptianDigitalSchedule() => repoGuard(() async {
     final response = await apiConsumer.get(
       EndPoints.myEgyptianSchedule,
-      queryParameter: weekStart == null ? null : {'weekStart': weekStart},
       isProtected: true,
     );
     return EgyptianScheduleWeek.fromResponse(response);
@@ -61,14 +59,10 @@ class TableManagementRepoImpl
   @override
   Future<Either<Failure, EgyptianScheduleWeek>> getParentEgyptianSchedule({
     required String studentId,
-    String? weekStart,
   }) => repoGuard(() async {
     final response = await apiConsumer.get(
       EndPoints.myEgyptianSchedule,
-      queryParameter: {
-        'studentId': studentId.trim(),
-        if (weekStart != null) 'weekStart': weekStart,
-      },
+      queryParameter: {'studentId': studentId.trim()},
       isProtected: true,
     );
     return EgyptianScheduleWeek.fromResponse(response);
@@ -142,12 +136,10 @@ class TableManagementRepoImpl
 
   @override
   Future<Either<Failure, EgyptianScheduleWeek>> getEgyptianClassroomWeek(
-    String classroomId, {
-    required String weekStart,
-  }) => repoGuard(() async {
+    String classroomId,
+  ) => repoGuard(() async {
     final response = await apiConsumer.get(
       EndPoints.egyptianSchedulesByClassroom(classroomId.trim()),
-      queryParameter: {'weekStart': weekStart},
       isProtected: true,
     );
     return EgyptianScheduleWeek.fromResponse(response);
@@ -171,7 +163,7 @@ class TableManagementRepoImpl
     required EgyptianDayRequest request,
   }) => repoGuard(() async {
     await apiConsumer.put(
-      EndPoints.egyptianScheduleDay(classroomId.trim(), request.date),
+      EndPoints.egyptianScheduleDay(classroomId.trim(), request.day),
       data: request.replaceJson(),
       isProtected: true,
     );
@@ -180,10 +172,10 @@ class TableManagementRepoImpl
   @override
   Future<Either<Failure, void>> deleteEgyptianDay({
     required String classroomId,
-    required String date,
+    required String day,
   }) => repoGuard(() async {
     await apiConsumer.delete(
-      EndPoints.egyptianScheduleDay(classroomId.trim(), date.trim()),
+      EndPoints.egyptianScheduleDay(classroomId.trim(), day.trim()),
       isProtected: true,
     );
   });

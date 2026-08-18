@@ -6,7 +6,7 @@ class EgyptianScheduleDay {
 
   factory EgyptianScheduleDay.fromJson(Map<String, dynamic> json) =>
       EgyptianScheduleDay(
-        date: _text(json['date']),
+        date: _text(json['day'] ?? json['date']),
         lessons: _maps(
           json['lessons'],
         ).map(EgyptianDigitalLesson.fromJson).toList(growable: false),
@@ -73,7 +73,7 @@ class EgyptianDigitalLesson {
         : directTeacher;
     return EgyptianDigitalLesson(
       id: _id(json),
-      date: _text(json['date']),
+      date: _text(json['day'] ?? json['date']),
       startTime: _text(json['startTime']),
       endTime: _optional(json['endTime']),
       classroomId: _id(classroom),
@@ -172,14 +172,14 @@ class EgyptianLessonRequest {
 }
 
 class EgyptianDayRequest {
-  const EgyptianDayRequest({required this.date, required this.lessons});
+  const EgyptianDayRequest({required this.day, required this.lessons});
 
-  final String date;
+  final String day;
   final List<EgyptianLessonRequest> lessons;
 
   Map<String, dynamic> createJson(String classroomId) => {
     'classroom': classroomId,
-    'date': date,
+    'day': day,
     'lessons': lessons.map((item) => item.toJson()).toList(),
   };
 
@@ -208,7 +208,7 @@ List<EgyptianScheduleDay> parseEgyptianScheduleDays(Object? data) {
         .toList(growable: false);
   }
   final map = _map(data);
-  if (map['date'] != null && map['lessons'] is List) {
+  if ((map['day'] ?? map['date']) != null && map['lessons'] is List) {
     return [EgyptianScheduleDay.fromJson(map)];
   }
   for (final value in [map['days'], map['schedule'], map['schedules']]) {

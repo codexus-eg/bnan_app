@@ -8,7 +8,6 @@ DigitalScheduleGridData adaptGulfStudentSchedule(
   bool studentSchedule = false,
 }) {
   final times = <String>{};
-  final days = <String>{};
   final cells = <String, List<DigitalScheduleGridItem>>{};
   final timeLabels = <String, String>{};
   final gulf = studentSchedule
@@ -21,7 +20,6 @@ DigitalScheduleGridData adaptGulfStudentSchedule(
         entry.startTime,
         () => ScheduleTimeUtils.range(entry.startTime, entry.endTime),
       );
-      days.add(entry.day);
       cells
           .putIfAbsent('${entry.day}|${entry.startTime}', () => [])
           .add(
@@ -36,7 +34,7 @@ DigitalScheduleGridData adaptGulfStudentSchedule(
     }
   }
   return DigitalScheduleGridData(
-    days: lessonDays.where(days.contains).toList(),
+    days: lessonDays,
     times: times.toList()..sort(),
     cells: cells,
     timeLabels: timeLabels,

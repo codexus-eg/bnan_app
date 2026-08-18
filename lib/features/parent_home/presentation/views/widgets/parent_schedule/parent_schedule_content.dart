@@ -26,14 +26,6 @@ class ParentScheduleContent extends StatefulWidget {
 }
 
 class _ParentScheduleContentState extends State<ParentScheduleContent> {
-  int? _selectedWeek;
-  String? _selectedWeekStart;
-
-  void _rememberWeek(int week, String start) {
-    _selectedWeek = week;
-    _selectedWeekStart = start;
-  }
-
   @override
   Widget build(BuildContext context) {
     final studentId = widget.child.id.trim();
@@ -45,23 +37,16 @@ class _ParentScheduleContentState extends State<ParentScheduleContent> {
           create: (_) => ParentEgyptianScheduleCubit(
             getIt<TableManagementRepo>(),
             studentId,
-            onWeekResolved: _rememberWeek,
-          )..load(selectedWeek: _selectedWeek, weekStart: _selectedWeekStart),
+          )..load(),
           child: ParentEgyptianScheduleBody(
             childSelector: widget.childSelector,
-            onWeekChanged: _rememberWeek,
           ),
         ),
         RegistrationMode.gulf => BlocProvider(
-          create: (_) => ParentGulfScheduleCubit(
-            getIt<GulfScheduleRepo>(),
-            studentId,
-            onWeekResolved: _rememberWeek,
-          )..load(selectedWeek: _selectedWeek, weekStart: _selectedWeekStart),
-          child: ParentGulfScheduleBody(
-            childSelector: widget.childSelector,
-            onWeekChanged: _rememberWeek,
-          ),
+          create: (_) =>
+              ParentGulfScheduleCubit(getIt<GulfScheduleRepo>(), studentId)
+                ..load(),
+          child: ParentGulfScheduleBody(childSelector: widget.childSelector),
         ),
         null => const NoDataWidget(),
       },

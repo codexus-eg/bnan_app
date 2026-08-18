@@ -7,9 +7,8 @@ abstract interface class EgyptianDigitalScheduleRepo {
   getEgyptianClassroomSubjects(String classroomId);
 
   Future<Either<Failure, EgyptianScheduleWeek>> getEgyptianClassroomWeek(
-    String classroomId, {
-    required String weekStart,
-  });
+    String classroomId,
+  );
 
   Future<Either<Failure, void>> createEgyptianDay({
     required String classroomId,
@@ -23,6 +22,6 @@ abstract interface class EgyptianDigitalScheduleRepo {
 
   Future<Either<Failure, void>> deleteEgyptianDay({
     required String classroomId,
-    required String date,
+    required String day,
   });
 }

@@ -1,9 +1,7 @@
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
-import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
-import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_model.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_state.dart';
@@ -147,13 +145,6 @@ class _TablesManagementBodyState extends State<TablesManagementBody> {
     selectedClassroomId: selectedId,
     onClassroomChanged: _selectClassroom,
     onAddTap: onAdd,
-    adjacentFilter: CustomDropdown(
-      label: S.of(context).week,
-      hint: S.of(context).selectWeek,
-      items: const [],
-      backgroundColor: ColorManager.white,
-      onChanged: null,
-    ),
   );
 
   void _selectClassroom(String? value) => setState(() => classroomId = value);
@@ -205,7 +196,6 @@ class _EgyptianScheduleContent extends StatelessWidget {
       onAddTap: addAvailability == EgyptianLessonAddAvailability.disabled
           ? null
           : () => _handleAdd(context, cubit, state),
-      adjacentFilter: _weekDropdown(context, cubit, state),
     );
     if (state.status == EgyptianScheduleStatus.loading) {
       return Column(
@@ -231,7 +221,9 @@ class _EgyptianScheduleContent extends StatelessWidget {
       );
     }
     final lessons = _selectedLessons(state)..sort(_byStartTime);
-    final lessonModels = lessons.map(_lessonUi).toList(growable: false);
+    final lessonModels = lessons
+        .map((lesson) => _lessonUi(lesson, state.selectedDay))
+        .toList(growable: false);
     return Column(
       children: [
         header,
@@ -263,25 +255,6 @@ class _EgyptianScheduleContent extends StatelessWidget {
     );
   }
 
-  Widget _weekDropdown(
-    BuildContext context,
-    EgyptianScheduleManagementCubit cubit,
-    EgyptianScheduleState state,
-  ) => CustomDropdown(
-    label: S.of(context).week,
-    value: state.selectedWeek?.toString(),
-    hint: state.currentWeek == null
-        ? S.of(context).studyNotStarted
-        : S.of(context).selectWeek,
-    items: state.availableWeeks.map((item) => '${item.number}').toList(),
-    itemsLabels: {
-      for (final item in state.availableWeeks)
-        '${item.number}': S.of(context).weekNumber(item.number),
-    },
-    backgroundColor: ColorManager.white,
-    onChanged: (value) => cubit.selectWeek(int.tryParse(value ?? '')),
-  );
-
   void _handleAdd(
     BuildContext context,
     EgyptianScheduleManagementCubit cubit,
@@ -289,22 +262,6 @@ class _EgyptianScheduleContent extends StatelessWidget {
   ) {
     if (state.subjects.isEmpty) {
       showCustomSnackBar(context, S.of(context).noSubjectsInClassroom, false);
-      return;
-    }
-    if (state.currentWeek == null) {
-      showCustomSnackBar(context, S.of(context).studyNotStarted, false);
-      return;
-    }
-    if (cubit.isPreviousWeek) {
-      showCustomSnackBar(
-        context,
-        S.of(context).cannotAddLessonInPreviousWeek,
-        false,
-      );
-      return;
-    }
-    if (cubit.addableDays.isEmpty) {
-      showCustomSnackBar(context, S.of(context).scheduleDateInPast, false);
       return;
     }
     _openDialog(context);
@@ -322,6 +279,8 @@ class _EgyptianScheduleContent extends StatelessWidget {
       a.startTime.compareTo(b.startTime);
 
   String _dayName(String date) {
+    final day = date.trim().toLowerCase();
+    if (egyptianLessonDays.contains(day)) return day;
     final value = DateTime.tryParse(date);
     return switch (value?.weekday) {
       DateTime.sunday => 'sunday',
@@ -334,19 +293,20 @@ class _EgyptianScheduleContent extends StatelessWidget {
     };
   }
 
-  LessonUiModel _lessonUi(EgyptianDigitalLesson item) => LessonUiModel(
-    id: item.id,
-    classroomId: item.classroomId,
-    classroomName: item.classroomName.isNotEmpty
-        ? item.classroomName
-        : classrooms.firstWhere((value) => value.id == classroomId).name,
-    subjectId: item.subjectId,
-    subjectName: item.subjectName,
-    day: _dayName(item.date),
-    startTime: item.startTime,
-    endTime: item.endTime,
-    teacherName: item.teacherName,
-  );
+  LessonUiModel _lessonUi(EgyptianDigitalLesson item, String day) =>
+      LessonUiModel(
+        id: item.id,
+        classroomId: item.classroomId,
+        classroomName: item.classroomName.isNotEmpty
+            ? item.classroomName
+            : classrooms.firstWhere((value) => value.id == classroomId).name,
+        subjectId: item.subjectId,
+        subjectName: item.subjectName,
+        day: day,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        teacherName: item.teacherName,
+      );
 
   Future<void> _openDialog(
     BuildContext context, {

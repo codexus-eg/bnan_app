@@ -1,6 +1,7 @@
 import 'package:bnan_app/features/student_schedule/presentation/models/digital_schedule_grid_data.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/core/utils/schedule_time_utils.dart';
+import 'package:bnan_app/features/lessons_management/presentation/models/lesson_days.dart';
 
 DigitalScheduleGridData adaptEgyptianSchedule(
   EgyptianScheduleWeek week, {
@@ -11,7 +12,7 @@ DigitalScheduleGridData adaptEgyptianSchedule(
   final cells = <String, List<DigitalScheduleGridItem>>{};
   final timeLabels = <String, String>{};
   for (final day in week.days) {
-    final dayKey = _dayKey(DateTime.tryParse(day.date)?.weekday);
+    final dayKey = _dayKey(day.date);
     if (dayKey == null) continue;
     for (final lesson in day.lessons) {
       if (lesson.startTime.isEmpty) continue;
@@ -36,26 +37,24 @@ DigitalScheduleGridData adaptEgyptianSchedule(
     }
   }
   return DigitalScheduleGridData(
-    days: egyptianScheduleDays,
+    days: lessonDays,
     times: times.toList()..sort(),
     cells: cells,
     timeLabels: timeLabels,
   );
 }
 
-const egyptianScheduleDays = [
-  'sunday',
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-];
-
-String? _dayKey(int? weekday) => switch (weekday) {
-  DateTime.sunday => 'sunday',
-  DateTime.monday => 'monday',
-  DateTime.tuesday => 'tuesday',
-  DateTime.wednesday => 'wednesday',
-  DateTime.thursday => 'thursday',
-  _ => null,
-};
+String? _dayKey(String value) {
+  final day = value.trim().toLowerCase();
+  if (lessonDays.contains(day)) return day;
+  return switch (DateTime.tryParse(value)?.weekday) {
+    DateTime.sunday => 'sunday',
+    DateTime.monday => 'monday',
+    DateTime.tuesday => 'tuesday',
+    DateTime.wednesday => 'wednesday',
+    DateTime.thursday => 'thursday',
+    DateTime.friday => 'friday',
+    DateTime.saturday => 'saturday',
+    _ => null,
+  };
+}

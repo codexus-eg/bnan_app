@@ -26,6 +26,17 @@ void main() {
     expect(assignment.attachmentName, 'homework_math.docx');
   });
 
+  test('student assignment displays the grade returned by the API', () {
+    final assignment = AssignmentModel.fromJson({
+      'grade': 85,
+      'totalPoints': 100,
+      'submitted': true,
+    });
+
+    expect(assignment.grade, 85);
+    expect(assignment.badgeText, '85 / 100');
+  });
+
   test('teacher submission parses encoded attachment filename', () {
     final submission = AssignmentSubmissionDetailsModel.fromJson({
       'id': 's1',

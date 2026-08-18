@@ -11,7 +11,6 @@ abstract class GulfScheduleRepo {
   });
   Future<Either<Failure, GulfSchedulesResponse>> getParentGulfSchedule({
     required String studentId,
-    String? weekStart,
   }) => getMyGulfSchedule(studentId: studentId);
   Future<Either<Failure, Unit>> createClassroomSchedule(
     String classroomId,

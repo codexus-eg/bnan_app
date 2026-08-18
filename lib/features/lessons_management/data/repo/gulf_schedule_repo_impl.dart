@@ -77,14 +77,10 @@ class GulfScheduleRepoImpl implements GulfScheduleRepo {
   @override
   Future<Either<Failure, GulfSchedulesResponse>> getParentGulfSchedule({
     required String studentId,
-    String? weekStart,
   }) => repoGuard(() async {
     final response = await api.get(
       EndPoints.myGulfSchedule,
-      queryParameter: {
-        'studentId': studentId.trim(),
-        if (weekStart != null) 'weekStart': weekStart,
-      },
+      queryParameter: {'studentId': studentId.trim()},
       isProtected: true,
     );
     return GulfSchedulesResponse.fromJson(asMap(response));

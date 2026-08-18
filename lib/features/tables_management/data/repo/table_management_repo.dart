@@ -14,14 +14,11 @@ abstract class TableManagementRepo {
   Future<Either<Failure, EgyptianSchedulesResponseModel>>
   getMyEgyptianSchedule({String? studentId});
 
-  Future<Either<Failure, EgyptianScheduleWeek>> getMyEgyptianDigitalSchedule({
-    String? weekStart,
-  });
+  Future<Either<Failure, EgyptianScheduleWeek>> getMyEgyptianDigitalSchedule();
 
   Future<Either<Failure, EgyptianScheduleWeek>> getParentEgyptianSchedule({
     required String studentId,
-    String? weekStart,
-  }) => getMyEgyptianDigitalSchedule(weekStart: weekStart);
+  }) => getMyEgyptianDigitalSchedule();
 
   Future<Either<Failure, EgyptianScheduleResponseModel>>
   getEgyptianScheduleByClassroom(String classroomId);

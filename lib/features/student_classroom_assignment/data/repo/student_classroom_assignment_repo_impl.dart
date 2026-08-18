@@ -33,11 +33,6 @@ class StudentClassroomAssignmentRepoImpl
               Map<String, dynamic>.from(item),
             ),
           )
-          .where(
-            (student) =>
-                student.registrationMode.trim().toLowerCase() == 'egyptian' &&
-                student.hasActiveAccount,
-          )
           .toList();
     });
   }

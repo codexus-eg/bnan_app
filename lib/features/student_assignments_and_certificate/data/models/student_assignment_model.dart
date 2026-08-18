@@ -56,13 +56,7 @@ class AssignmentModel {
   factory AssignmentModel.fromJson(Map<String, dynamic> json) {
     final attachment = AttachmentFile.fromJson(json['attachment']);
     final submitted = json['submitted'] ?? false;
-    final submission = json['submission'];
-    final gradeValue =
-        (submission is Map
-            ? submission['score'] ?? submission['grade']
-            : null) ??
-        json['score'] ??
-        json['grade'];
+    final gradeValue = json['grade'];
     final grade = gradeValue is num
         ? gradeValue
         : num.tryParse(gradeValue?.toString() ?? '');
