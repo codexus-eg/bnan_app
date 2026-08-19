@@ -4,9 +4,11 @@ class ChatRoomSummaryModel {
   final String displayName;
   final String subtitle;
   final String? classroomId;
+  final String? classroomSubjectId;
   final String? studentId;
   final String? lastMessage;
   final DateTime? lastMessageAt;
+  final int unreadCount;
 
   const ChatRoomSummaryModel({
     required this.id,
@@ -14,15 +16,22 @@ class ChatRoomSummaryModel {
     required this.displayName,
     required this.subtitle,
     this.classroomId,
+    this.classroomSubjectId,
     this.studentId,
     this.lastMessage,
     this.lastMessageAt,
+    this.unreadCount = 0,
   });
 
   factory ChatRoomSummaryModel.fromJson(Map<String, dynamic> json) {
     String? id(Object? value) {
       if (value is! String || value.trim().isEmpty) return null;
       return value.trim();
+    }
+
+    int parseUnreadCount(Object? value) {
+      if (value is int) return value;
+      return int.tryParse(value?.toString() ?? '') ?? 0;
     }
 
     String roleLabel(String role) {
@@ -80,6 +89,7 @@ class ChatRoomSummaryModel {
           'student',
       orElse: () => const {},
     );
+
     final studentData = participantData(student);
 
     final participantRole =
@@ -116,15 +126,29 @@ class ChatRoomSummaryModel {
       type: type,
       displayName: displayName?.isNotEmpty == true
           ? displayName!
-          : (visibleParticipant['fullName'] ?? visibleParticipant['name'] ?? '')
+          : (visibleParticipant['fullName'] ??
+                    visibleParticipant['name'] ??
+                    '')
                 .toString(),
       subtitle: resolvedSubtitle,
       classroomId: directId ?? legacyId,
+      classroomSubjectId: id(json['classroomSubjectId']),
       studentId: type == 'supervisor_student'
-          ? id(studentData['id'] ?? studentData['_id'] ?? student['id'])
+          ? id(
+              studentData['id'] ??
+                  studentData['_id'] ??
+                  student['id'],
+            )
           : null,
       lastMessage: json['lastMessage']?.toString(),
-      lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
+      lastMessageAt: DateTime.tryParse(
+        json['lastMessageAt']?.toString() ?? '',
+      ),
+      unreadCount: parseUnreadCount(
+        json['unreadCount'] ??
+            json['unreadMessagesCount'] ??
+            json['unread'],
+      ),
     );
   }
 
@@ -134,6 +158,7 @@ class ChatRoomSummaryModel {
     displayName: 'اسم المستخدم',
     subtitle: 'نوع المحادثة',
     lastMessage: 'آخر رسالة في المحادثة',
+    unreadCount: 0,
   );
 
   static const placeholders = [
@@ -151,9 +176,11 @@ class ChatRoomSummaryModel {
     String? displayName,
     String? subtitle,
     String? classroomId,
+    String? classroomSubjectId,
     String? studentId,
     String? lastMessage,
     DateTime? lastMessageAt,
+    int? unreadCount,
   }) {
     return ChatRoomSummaryModel(
       id: id ?? this.id,
@@ -161,9 +188,11 @@ class ChatRoomSummaryModel {
       displayName: displayName ?? this.displayName,
       subtitle: subtitle ?? this.subtitle,
       classroomId: classroomId ?? this.classroomId,
+      classroomSubjectId: classroomSubjectId ?? this.classroomSubjectId,
       studentId: studentId ?? this.studentId,
       lastMessage: lastMessage ?? this.lastMessage,
       lastMessageAt: lastMessageAt ?? this.lastMessageAt,
+      unreadCount: unreadCount ?? this.unreadCount,
     );
   }
 }

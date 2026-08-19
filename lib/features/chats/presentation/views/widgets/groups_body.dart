@@ -22,11 +22,13 @@ class GroupsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAdmin = SessionManager.instance.role == UserRole.admin;
+
     final canSearch = const {
       UserRole.admin,
       UserRole.supervisor,
       UserRole.teacher,
     }.contains(SessionManager.instance.role);
+
     return Column(
       children: [
         if (canSearch)
@@ -45,7 +47,9 @@ class GroupsBody extends StatelessWidget {
               onChanged: context.read<GetChatRoomsCubit>().searchRooms,
             ),
           ),
-        Expanded(child: _rooms(context, isAdmin)),
+        Expanded(
+          child: _rooms(context, isAdmin),
+        ),
       ],
     );
   }
@@ -54,7 +58,9 @@ class GroupsBody extends StatelessWidget {
     return BlocBuilder<GetChatRoomsCubit, GetChatRoomsState>(
       builder: (context, state) {
         if (state is GetChatRoomsFailure) {
-          return Center(child: Text(state.errorMessage));
+          return Center(
+            child: Text(state.errorMessage),
+          );
         }
 
         if (state is GetChatRoomsSuccess && state.rooms.isEmpty) {
@@ -83,11 +89,12 @@ class GroupsBody extends StatelessWidget {
                 final room = rooms[index];
 
                 return InkWell(
-                  onTap: () {
+                  onTap: () async {
                     final path = ChatRoomNavigation.path(room);
+
                     if (path == null) return;
 
-                    MyNavigator.goTo(
+                    await MyNavigator.goTo(
                       context,
                       path,
                       extra: ChatRoomNavigation.arguments(
@@ -95,10 +102,17 @@ class GroupsBody extends StatelessWidget {
                         currentUserRole: SessionManager.instance.userRole,
                       ),
                     );
+
+                    if (!context.mounted) return;
+
+                    await context
+                        .read<GetChatRoomsCubit>()
+                        .getChatRooms();
                   },
                   child: CustomChatCard(
                     title: room.displayName,
                     subtitle: _subtitle(room),
+                    unreadCount: room.unreadCount,
                     badgeText: isAdmin && room.type == 'support'
                         ? S.of(context).supportBadge
                         : null,

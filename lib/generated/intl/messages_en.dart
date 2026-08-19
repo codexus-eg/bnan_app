@@ -359,6 +359,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseGrade": MessageLookupByLibrary.simpleMessage("Choose a grade"),
         "chooseNewCurriculum":
             MessageLookupByLibrary.simpleMessage("Choose curriculum"),
+        "chooseSavedAccount": MessageLookupByLibrary.simpleMessage(
+            "Choose an account to continue"),
         "chooseScheduleImage":
             MessageLookupByLibrary.simpleMessage("Choose schedule image"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("Choose subject"),
@@ -817,6 +819,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
             "Log in to access your dashboard"),
         "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("Welcome"),
+        "loginWithAnotherAccount":
+            MessageLookupByLibrary.simpleMessage("Log in with another account"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "logoutSuccess":
             MessageLookupByLibrary.simpleMessage("Logged out successfully"),
@@ -971,6 +975,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "There are no registered children"),
         "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
             "No reports are available yet"),
+        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
+            "No saved accounts on this device"),
         "noSchedule": MessageLookupByLibrary.simpleMessage("No schedule"),
         "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
             "No schedule entries have been added for this classroom yet"),
@@ -1500,6 +1506,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "remainingDays": m25,
         "remainingHours": m26,
         "remainingSessions": MessageLookupByLibrary.simpleMessage("Remaining"),
+        "removeAccountFromDevice": MessageLookupByLibrary.simpleMessage(
+            "Remove account from this device"),
         "renewSubscription":
             MessageLookupByLibrary.simpleMessage("Renew subscription"),
         "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
@@ -1586,19 +1594,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "saveAmount": m28,
         "saveChanges": MessageLookupByLibrary.simpleMessage("Save Changes"),
+        "savedAccounts": MessageLookupByLibrary.simpleMessage("Saved accounts"),
         "savedInLocation": m29,
         "savingCertificate":
             MessageLookupByLibrary.simpleMessage("Saving certificate..."),
         "savingFile": MessageLookupByLibrary.simpleMessage("Saving file..."),
-        "savedAccounts": MessageLookupByLibrary.simpleMessage("Saved accounts"),
-        "chooseSavedAccount": MessageLookupByLibrary.simpleMessage(
-            "Choose an account to continue"),
-        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
-            "No saved accounts on this device"),
-        "loginWithAnotherAccount": MessageLookupByLibrary.simpleMessage(
-            "Log in with another account"),
-        "removeAccountFromDevice": MessageLookupByLibrary.simpleMessage(
-            "Remove account from this device"),
         "schedule": MessageLookupByLibrary.simpleMessage("Schedule"),
         "scheduleCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("Schedule added successfully"),

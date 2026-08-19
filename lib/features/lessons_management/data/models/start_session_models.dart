@@ -35,10 +35,12 @@ class StartedSession {
     this.subjectId = '',
     this.classroomSubjectId = '',
     this.occurrenceKey = '',
+    this.chatRoomId = '',
   });
 
   final String id, status;
   final String classroomId, subjectId, classroomSubjectId, occurrenceKey;
+  final String chatRoomId;
   final bool activeOccurrence;
   final DateTime? startAt;
   final bool? joinPermission;
@@ -73,6 +75,12 @@ class StartedSession {
       ),
       occurrenceKey: _string(
         json['occurrenceKey'] ?? sessionMap['occurrenceKey'],
+      ),
+      chatRoomId: _string(
+        json['chatRoomId'] ??
+            json['chatRoom'] ??
+            sessionMap['chatRoomId'] ??
+            sessionMap['chatRoom'],
       ),
       startAt: DateTime.tryParse(
         _string(_nonEmpty(json['startAt']) ?? sessionMap['startAt']),

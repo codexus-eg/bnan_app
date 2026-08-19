@@ -131,6 +131,23 @@ class ChatRepoImpl implements ChatRepo {
   }
 
   @override
+  Future<Either<Failure, void>> markRoomAsRead({
+    required String roomId,
+  }) async {
+    try {
+      await apiConsumer.patch(
+        EndPoints.markRoomAsRead(roomId),
+        isProtected: true,
+      );
+      return const Right(null);
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
   Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
     required String roomId,
     String? text,

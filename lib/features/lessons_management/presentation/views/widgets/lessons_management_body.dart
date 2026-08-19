@@ -176,6 +176,10 @@ class LessonsManagementBody extends StatelessWidget {
         day: entry.day,
         startTime: entry.startTime,
         endTime: entry.endTime,
+        chatRoomId: entry.chatRoomId ?? classroom.chatRoomId,
+        classroomSubjectId:
+            entry.classroomSubjectId ?? classroom.classroomSubjectId,
+        occurrenceKey: entry.occurrenceKey,
       );
 }
 

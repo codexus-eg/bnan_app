@@ -167,6 +167,10 @@ abstract class EndPoints {
     return '/chats/rooms/$roomId/messages';
   }
 
+  static String markRoomAsRead(String roomId) {
+    return '/chats/rooms/$roomId/read';
+  }
+
   static String deleteRoomMessages(String roomId) {
     return '/chats/rooms/$roomId/messages';
   }

@@ -61,6 +61,7 @@ class GulfClassroom {
     this.subject,
     this.schedule,
     this.classroomSubject,
+    this.chatRoomId,
     this.hasSubjectConflict = false,
   });
 
@@ -70,6 +71,7 @@ class GulfClassroom {
   final GulfSubject? subject;
   final GulfSchedule? schedule;
   final String? classroomSubject;
+  final String? chatRoomId;
   final bool hasSubjectConflict;
 
   String? get classroomSubjectId =>
@@ -77,16 +79,28 @@ class GulfClassroom {
   List<GulfScheduleEntry> get entries =>
       schedule?.isActive == false ? const [] : schedule?.entries ?? const [];
 
-  factory GulfClassroom.fromJson(Map<String, dynamic> json) => GulfClassroom(
-    id: _id(json),
-    name: _string(json['name']),
-    grade: _nullable(json['grade'], GulfGrade.fromJson),
-    curriculum: _nullable(json['curriculum'], GulfCurriculum.fromJson),
-    subject: _nullable(json['subject'], GulfSubject.fromJson),
-    schedule: _nullable(json['schedule'], GulfSchedule.fromJson),
-    classroomSubject: _referenceId(json['classroomSubject']),
-    hasSubjectConflict: json['hasSubjectConflict'] == true,
-  );
+  factory GulfClassroom.fromJson(Map<String, dynamic> json) {
+    final classroomSubject = _map(json['classroomSubject']);
+    final schedule = _map(json['schedule']);
+    return GulfClassroom(
+      id: _id(json),
+      name: _string(json['name']),
+      grade: _nullable(json['grade'], GulfGrade.fromJson),
+      curriculum: _nullable(json['curriculum'], GulfCurriculum.fromJson),
+      subject: _nullable(json['subject'], GulfSubject.fromJson),
+      schedule: _nullable(json['schedule'], GulfSchedule.fromJson),
+      classroomSubject: _referenceId(json['classroomSubject']),
+      chatRoomId: _referenceId(
+        json['chatRoomId'] ??
+            json['chatRoom'] ??
+            classroomSubject['chatRoomId'] ??
+            classroomSubject['chatRoom'] ??
+            schedule['chatRoomId'] ??
+            schedule['chatRoom'],
+      ),
+      hasSubjectConflict: json['hasSubjectConflict'] == true,
+    );
+  }
 }
 
 class GulfGrade extends GulfReference {
@@ -154,10 +168,16 @@ class GulfScheduleEntry {
     required this.startTime,
     this.endTime,
     this.activeSession,
+    this.chatRoomId,
+    this.classroomSubjectId,
+    this.occurrenceKey,
   });
   final String day, startTime;
   final String? endTime;
   final StartedSession? activeSession;
+  final String? chatRoomId;
+  final String? classroomSubjectId;
+  final String? occurrenceKey;
   bool get isValid => day.isNotEmpty && startTime.isNotEmpty;
 
   factory GulfScheduleEntry.fromJson(Map<String, dynamic> json) =>
@@ -169,6 +189,11 @@ class GulfScheduleEntry {
           json['activeSession'],
           StartedSession.fromJson,
         ),
+        chatRoomId: _referenceId(json['chatRoomId'] ?? json['chatRoom']),
+        classroomSubjectId: _referenceId(
+          json['classroomSubjectId'] ?? json['classroomSubject'],
+        ),
+        occurrenceKey: _nonEmpty(_string(json['occurrenceKey'])),
       );
 
   Map<String, dynamic> toJson() => {

@@ -343,6 +343,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "chooseNewCurriculum":
             MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "chooseSavedAccount":
+            MessageLookupByLibrary.simpleMessage("اختر حسابًا للمتابعة"),
         "chooseScheduleImage":
             MessageLookupByLibrary.simpleMessage("اختر صورة الجدول"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
@@ -787,6 +789,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
             "سجل دخولك للوصول إلى لوحة التحكم"),
         "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
+        "loginWithAnotherAccount":
+            MessageLookupByLibrary.simpleMessage("تسجيل الدخول بحساب آخر"),
         "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
         "logoutSuccess":
             MessageLookupByLibrary.simpleMessage("تم تسجيل الخروج بنجاح"),
@@ -940,6 +944,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا يوجد أبناء مسجلون"),
         "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد تقارير متاحة حتى الآن"),
+        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
+            "لا توجد حسابات محفوظة على هذا الجهاز"),
         "noSchedule": MessageLookupByLibrary.simpleMessage("لا يوجد جدول"),
         "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
             "لم تتم إضافة مواعيد لهذا الفصل بعد"),
@@ -1446,6 +1452,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "remainingDays": m25,
         "remainingHours": m26,
         "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
+        "removeAccountFromDevice":
+            MessageLookupByLibrary.simpleMessage("إزالة الحساب من هذا الجهاز"),
         "renewSubscription":
             MessageLookupByLibrary.simpleMessage("تجديد الاشتراك"),
         "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
@@ -1533,20 +1541,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "save": MessageLookupByLibrary.simpleMessage("حفظ"),
         "saveAmount": m28,
         "saveChanges": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
+        "savedAccounts":
+            MessageLookupByLibrary.simpleMessage("الحسابات المحفوظة"),
         "savedInLocation": m29,
         "savingCertificate":
             MessageLookupByLibrary.simpleMessage("جاري حفظ الشهادة..."),
         "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
-        "savedAccounts":
-            MessageLookupByLibrary.simpleMessage("الحسابات المحفوظة"),
-        "chooseSavedAccount":
-            MessageLookupByLibrary.simpleMessage("اختر حسابًا للمتابعة"),
-        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
-            "لا توجد حسابات محفوظة على هذا الجهاز"),
-        "loginWithAnotherAccount": MessageLookupByLibrary.simpleMessage(
-            "تسجيل الدخول بحساب آخر"),
-        "removeAccountFromDevice": MessageLookupByLibrary.simpleMessage(
-            "إزالة الحساب من هذا الجهاز"),
         "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
         "scheduleCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة الجدول بنجاح"),

@@ -37,7 +37,7 @@ import 'package:bnan_app/features/curriculum_management/presentation/manager/get
     as curriculum_management;
 import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/supervisor_classroom_assignment_view.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'routes_export.dart';
 
 GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
@@ -638,15 +638,33 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         ),
       ),
       GoRoute(
-        path: Routes.supervisorHome,
+        path: Routes.teacherMyEarnings,
+        redirect: _teacherOnly,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<DashboardCubit>(param1: DashboardRole.supervisor)..load(),
-            child: const SupervisorHomeView(),
-          ),
           key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<TeacherMyPayrollsCubit>(),
+            child: const Scaffold(
+              body: TeacherMyPayrollsBody(showBackButton: true),
+            ),
+          ),
         ),
+      ),
+      GoRoute(
+        path: Routes.supervisorHome,
+        pageBuilder: (context, state) {
+          final tabRoute = state.uri.queryParameters['tab'] ??
+              state.uri.queryParameters['route'] ??
+              state.extra as String?;
+          return buildTransitionPages(
+            child: BlocProvider(
+              create: (_) =>
+                  getIt<DashboardCubit>(param1: DashboardRole.supervisor)..load(),
+              child: SupervisorHomeView(initialRoute: tabRoute),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.parentHome,

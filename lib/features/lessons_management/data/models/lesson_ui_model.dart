@@ -9,6 +9,9 @@ class LessonUiModel {
     required this.startTime,
     this.endTime,
     this.teacherName,
+    this.chatRoomId,
+    this.classroomSubjectId,
+    this.occurrenceKey,
   });
 
   final String id;
@@ -20,6 +23,9 @@ class LessonUiModel {
   final String startTime;
   final String? endTime;
   final String? teacherName;
+  final String? chatRoomId;
+  final String? classroomSubjectId;
+  final String? occurrenceKey;
 
   LessonUiModel copyWith({String? day, String? startTime, String? endTime}) {
     return LessonUiModel(
@@ -32,6 +38,9 @@ class LessonUiModel {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       teacherName: teacherName,
+      chatRoomId: chatRoomId,
+      classroomSubjectId: classroomSubjectId,
+      occurrenceKey: occurrenceKey,
     );
   }
 }

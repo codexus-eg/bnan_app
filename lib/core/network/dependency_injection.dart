@@ -264,7 +264,11 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => GulfScheduleCubit(getIt<GulfScheduleRepo>()),
   );
   getIt.registerFactory<StartSessionCubit>(
-    () => StartSessionCubit(getIt<StartSessionRepo>()),
+    () => StartSessionCubit(
+      getIt<StartSessionRepo>(),
+      getIt<GulfScheduleRepo>(),
+      getIt<TableManagementRepo>(),
+    ),
   );
   getIt.registerFactory<curriculum_management.GetCurriculumsCubit>(
     () => curriculum_management.GetCurriculumsCubit(

@@ -20,19 +20,69 @@ import 'package:go_router/go_router.dart';
 typedef SupervisorTabBuilder = Widget Function(String route);
 
 class SupervisorHomeView extends StatefulWidget {
-  const SupervisorHomeView({super.key, this.userName, this.tabBuilder});
+  const SupervisorHomeView({
+    super.key,
+    this.userName,
+    this.tabBuilder,
+    this.initialRoute,
+  });
+
   final String? userName;
   final SupervisorTabBuilder? tabBuilder;
+
+  /// لو اتفتحت الصفحة من مكان خارجي وعايزين نفتح Tab معين مباشرة،
+  /// مثال: Routes.attendance
+  final String? initialRoute;
+
   @override
   State<SupervisorHomeView> createState() => SupervisorHomeViewState();
 }
 
 class SupervisorHomeViewState extends State<SupervisorHomeView> {
   static const homeTabIndex = 0;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final Map<int, Widget> _tabs = {};
+
   bool isLoggingOut = false;
+
   int selectedBottomIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _applyInitialRoute(widget.initialRoute);
+  }
+
+  @override
+  void didUpdateWidget(covariant SupervisorHomeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialRoute != null &&
+        widget.initialRoute!.trim().isNotEmpty &&
+        widget.initialRoute != oldWidget.initialRoute) {
+      _applyInitialRoute(widget.initialRoute);
+    }
+  }
+
+  void _applyInitialRoute(String? routeName) {
+    final route = routeName?.trim();
+    if (route == null || route.isEmpty) return;
+
+    final s = S.current;
+    final bottom = SupervisorNavigationConfig.bottom(s);
+    final index = bottom.indexWhere((item) => item.route == route);
+
+    if (index > homeTabIndex && index < bottom.length) {
+      final item = bottom[index];
+      if (item.isEnabled && item.route != null) {
+        _tabs.putIfAbsent(
+          index,
+          () => (widget.tabBuilder ?? buildSupervisorBottomTab)(item.route!),
+        );
+        selectedBottomIndex = index;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) =>
@@ -46,19 +96,32 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
         ),
         builder: (context, dashboard, loading) {
           final s = S.of(context);
+
           final drawer = SupervisorNavigationConfig.drawer(s);
           final bottom = SupervisorNavigationConfig.bottom(s);
-          final userName = widget.userName ?? CurrentUserUi.name(context);
+
+          _handleInitialRoute(bottom);
+
+          final userName =
+              widget.userName ?? CurrentUserUi.name(context);
+
           final home = SupervisorHomePage(
             userName: userName,
-            data: SupervisorHomeUiData.fromDashboard(s, dashboard),
-            onMenuTap: () => scaffoldKey.currentState?.openDrawer(),
+            data: SupervisorHomeUiData.fromDashboard(
+              s,
+              dashboard,
+            ),
+            onMenuTap: () =>
+                scaffoldKey.currentState?.openDrawer(),
             loading: loading,
           );
+
           return PopScope(
             canPop: selectedBottomIndex == homeTabIndex,
             onPopInvokedWithResult: (didPop, result) {
-              if (!didPop) selectHome();
+              if (!didPop) {
+                selectHome();
+              }
             },
             child: SupervisorHomeScaffold(
               scaffoldKey: scaffoldKey,
@@ -70,37 +133,84 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
                   bottom.length,
                   (index) => index == homeTabIndex
                       ? home
-                      : _tabs[index] ?? const SizedBox.shrink(),
+                      : _tabs[index] ??
+                          const SizedBox.shrink(),
                 ),
               ),
               currentIndex: selectedBottomIndex,
               drawerItems: drawer,
               bottomItems: bottom,
-              onDrawerTap: (i) => selectDrawerRoot(drawer[i], bottom),
-              onBottomTap: (i) => selectBottomTab(i, bottom[i]),
+              onDrawerTap: (i) =>
+                  selectDrawerRoot(drawer[i], bottom),
+              onBottomTap: (i) =>
+                  selectBottomTab(i, bottom[i]),
               onLogoutTap: logout,
             ),
           );
         },
       );
 
-  void selectBottomTab(int index, SupervisorNavigationItem item) {
+  void _handleInitialRoute(
+    List<SupervisorNavigationItem> bottom,
+  ) {
+    final route = widget.initialRoute?.trim();
+
+    if (route == null || route.isEmpty) return;
+
+    final index = bottom.indexWhere(
+      (item) => item.route == route,
+    );
+
+    if (index > homeTabIndex &&
+        index < bottom.length &&
+        selectedBottomIndex != index) {
+      final item = bottom[index];
+      if (item.isEnabled && item.route != null) {
+        _tabs.putIfAbsent(
+          index,
+          () => (widget.tabBuilder ?? buildSupervisorBottomTab)(item.route!),
+        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && selectedBottomIndex != index) {
+            setState(() {
+              selectedBottomIndex = index;
+            });
+          }
+        });
+      }
+    }
+  }
+
+  void selectBottomTab(
+    int index,
+    SupervisorNavigationItem item,
+  ) {
     if (index == selectedBottomIndex) return;
+
     if (index == homeTabIndex) {
       selectHome();
       return;
     }
+
     if (!item.isEnabled) return;
+
     _tabs.putIfAbsent(
       index,
-      () => (widget.tabBuilder ?? buildSupervisorBottomTab)(item.route!),
+      () => (widget.tabBuilder ??
+          buildSupervisorBottomTab)(item.route!),
     );
-    setState(() => selectedBottomIndex = index);
+
+    setState(() {
+      selectedBottomIndex = index;
+    });
   }
 
   void selectHome() {
     if (selectedBottomIndex == homeTabIndex) return;
-    setState(() => selectedBottomIndex = homeTabIndex);
+
+    setState(() {
+      selectedBottomIndex = homeTabIndex;
+    });
   }
 
   void selectDrawerRoot(
@@ -108,44 +218,82 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     List<SupervisorNavigationItem> bottom,
   ) {
     scaffoldKey.currentState?.closeDrawer();
-    final bottomIndex = bottom.indexWhere((entry) => entry.route == item.route);
-    if (item.route == null || bottomIndex == homeTabIndex) {
+
+    final bottomIndex = bottom.indexWhere(
+      (entry) => entry.route == item.route,
+    );
+
+    if (item.route == null ||
+        bottomIndex == homeTabIndex) {
       selectHome();
       return;
     }
+
     if (bottomIndex > homeTabIndex) {
-      selectBottomTab(bottomIndex, bottom[bottomIndex]);
+      selectBottomTab(
+        bottomIndex,
+        bottom[bottomIndex],
+      );
       return;
     }
-    MyNavigator.goTo(context, item.route!, extra: item.extra);
+
+    MyNavigator.goTo(
+      context,
+      item.route!,
+      extra: item.extra,
+    );
   }
 
-  Future<void> openNotification(DashboardNotification notification) async {
+  Future<void> openNotification(
+    DashboardNotification notification,
+  ) async {
     final rawData = {
       'title': notification.title,
       'type': notification.type,
       'isRead': notification.isRead,
       'resource': notification.resource,
       'data': notification.data,
-      'key': notification.data['key'] ?? notification.type,
-      'navigation': notification.data['navigation'] ?? {},
+      'key':
+          notification.data['key'] ?? notification.type,
+      'navigation':
+          notification.data['navigation'] ?? {},
     };
-    final appNotification = AppNotification.fromJson(rawData);
-    final destination = await getIt<NotificationNavigationService>()
-        .resolveDestination(appNotification);
+
+    final appNotification =
+        AppNotification.fromJson(rawData);
+
+    final destination =
+        await getIt<NotificationNavigationService>()
+            .resolveDestination(appNotification);
+
     if (!mounted) return;
+
     final router = GoRouter.of(context);
-    if (router.routeInformationProvider.value.uri.path ==
+
+    if (router
+            .routeInformationProvider
+            .value
+            .uri
+            .path ==
         Uri.parse(destination.path).path) {
       return;
     }
-    router.go(destination.path, extra: destination.extra);
+
+    router.go(
+      destination.path,
+      extra: destination.extra,
+    );
   }
 
   Future<void> logout() async {
     if (isLoggingOut) return;
+
     isLoggingOut = true;
+
     await AppLogout.perform(context);
-    if (mounted) isLoggingOut = false;
+
+    if (mounted) {
+      isLoggingOut = false;
+    }
   }
 }

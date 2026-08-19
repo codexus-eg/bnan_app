@@ -13,7 +13,10 @@ import '../widgets/teacher_payrolls_skeleton.dart';
 import '../widgets/teacher_payout_profile_card.dart';
 
 class TeacherMyPayrollsBody extends StatefulWidget {
-  const TeacherMyPayrollsBody({super.key});
+  const TeacherMyPayrollsBody({super.key, this.showBackButton = false});
+
+  final bool showBackButton;
+
   @override
   State<TeacherMyPayrollsBody> createState() => _TeacherMyPayrollsBodyState();
 }
@@ -32,7 +35,7 @@ class _TeacherMyPayrollsBodyState extends State<TeacherMyPayrollsBody> {
     children: [
       CustomAppbar(
         headerText: S.of(context).teacherMyEarnings,
-        iconNeeded: false,
+        iconNeeded: widget.showBackButton,
       ),
       Expanded(
         child: BlocConsumer<TeacherMyPayrollsCubit, TeacherMyPayrollsState>(

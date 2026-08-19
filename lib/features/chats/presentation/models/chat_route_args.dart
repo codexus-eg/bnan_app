@@ -13,3 +13,4 @@ class ChatRouteArgs {
   final String? currentUserRole;
   final String? studentId;
 }
+

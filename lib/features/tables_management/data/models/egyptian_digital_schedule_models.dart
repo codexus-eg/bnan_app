@@ -52,12 +52,14 @@ class EgyptianDigitalLesson {
     this.classroomSubjectId,
     this.teacherName,
     this.teacherId,
+    this.chatRoomId,
     this.activeSession,
   });
 
   final String id, date, startTime, classroomId, classroomName;
   final String subjectId, subjectName;
   final String? endTime, classroomSubjectId, teacherName, teacherId;
+  final String? chatRoomId;
   final EgyptianLessonActiveSession? activeSession;
 
   factory EgyptianDigitalLesson.fromJson(Map<String, dynamic> json) {
@@ -85,6 +87,12 @@ class EgyptianDigitalLesson {
       ),
       teacherName: _optional(teacher['name'] ?? teacher['fullName']),
       teacherId: _optional(teacher['id'] ?? teacher['_id']),
+      chatRoomId: _referenceId(
+        json['chatRoomId'] ??
+            json['chatRoom'] ??
+            classroomSubject['chatRoomId'] ??
+            classroomSubject['chatRoom'],
+      ),
       activeSession: json['activeSession'] is Map
           ? EgyptianLessonActiveSession.fromJson(
               Map<String, dynamic>.from(json['activeSession']),
@@ -117,11 +125,13 @@ class EgyptianClassroomSubject {
     required this.subjectName,
     this.teacherNames = const [],
     this.isActive = true,
+    this.chatRoomId,
   });
 
   final String classroomSubjectId, subjectId, subjectName;
   final List<String> teacherNames;
   final bool isActive;
+  final String? chatRoomId;
   String get id => classroomSubjectId;
 
   factory EgyptianClassroomSubject.fromJson(Map<String, dynamic> json) {
@@ -150,6 +160,7 @@ class EgyptianClassroomSubject {
           .where((name) => name.isNotEmpty)
           .toList(growable: false),
       isActive: json['isActive'] != false,
+      chatRoomId: _referenceId(json['chatRoomId'] ?? json['chatRoom']),
     );
   }
 }

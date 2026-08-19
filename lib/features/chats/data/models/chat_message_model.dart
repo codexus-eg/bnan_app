@@ -40,14 +40,22 @@ class ChatMessageModel {
     deletedForEveryone: false,
   );
 
-  static const List<ChatMessageModel> placeholders = [
-    placeholder,
-    placeholder,
-    placeholder,
-    placeholder,
-    placeholder,
-    placeholder,
-  ];
+  static List<ChatMessageModel> get placeholders => List.generate(
+        6,
+        (i) => ChatMessageModel(
+          id: 'placeholder-id-$i',
+          roomId: 'placeholder-room-id',
+          sender: const ChatSenderModel(
+            id: 'placeholder-sender-id',
+            fullName: 'اسم المستخدم',
+            role: 'student',
+          ),
+          text: 'هذه رسالة تجريبية لعرض حالة التحميل',
+          attachments: const [],
+          messageType: 'text',
+          deletedForEveryone: false,
+        ),
+      );
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     final senderJson = json['sender'];

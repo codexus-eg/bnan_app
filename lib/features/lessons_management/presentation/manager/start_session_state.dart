@@ -11,6 +11,7 @@ class StartSessionState {
     this.checkedClassroomIds = const {},
     this.startedByClassroom = const {},
     this.activeByClassroom = const {},
+    this.scheduledChatRoomIds = const {},
     this.eventClassroomId,
     this.eventError,
     this.eventCode,
@@ -27,6 +28,8 @@ class StartSessionState {
   final Set<String> checkedClassroomIds;
   final Map<String, StartSessionData> startedByClassroom;
   final Map<String, StartSessionData> activeByClassroom;
+  // chatRoomIds الخاصة بالحصص المجدولة والمستحقة للمعلم
+  final Set<String> scheduledChatRoomIds;
   final String? eventClassroomId, eventError, eventCode;
   final int? eventStatusCode;
   final StartSessionIssue? eventIssue;
@@ -43,6 +46,8 @@ class StartSessionState {
       startedByClassroom[classroomId];
   StartSessionData? active(String classroomId) =>
       activeByClassroom[classroomId];
+  bool isScheduledChat(String roomId) =>
+      roomId.trim().isNotEmpty && scheduledChatRoomIds.contains(roomId.trim());
 
   StartSessionState copyWith({
     Set<String>? loadingClassroomIds,
@@ -52,6 +57,7 @@ class StartSessionState {
     Set<String>? checkedClassroomIds,
     Map<String, StartSessionData>? startedByClassroom,
     Map<String, StartSessionData>? activeByClassroom,
+    Set<String>? scheduledChatRoomIds,
     Object? eventClassroomId = _unset,
     Object? eventError = _unset,
     Object? eventCode = _unset,
@@ -67,6 +73,7 @@ class StartSessionState {
     checkedClassroomIds: checkedClassroomIds ?? this.checkedClassroomIds,
     startedByClassroom: startedByClassroom ?? this.startedByClassroom,
     activeByClassroom: activeByClassroom ?? this.activeByClassroom,
+    scheduledChatRoomIds: scheduledChatRoomIds ?? this.scheduledChatRoomIds,
     eventClassroomId: eventClassroomId == _unset
         ? this.eventClassroomId
         : eventClassroomId as String?,

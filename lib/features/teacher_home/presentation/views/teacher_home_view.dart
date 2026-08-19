@@ -12,7 +12,6 @@ import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teache
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
-import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -50,9 +49,6 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
 
   void _loadTab(int index) {
     if (index == 0) context.read<DashboardCubit>().load();
-    if (index == teacherPayrollTabIndex) {
-      context.read<TeacherMyPayrollsCubit>().load(refresh: true);
-    }
   }
 
   void _goHomeTab() => _changeIndex(0);
@@ -74,7 +70,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
     _closeDrawer();
 
     if (ChatRoleNavigation.isTeacherMessagesIndex(index, drawerItemCount)) {
-      MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
+      _changeIndex(teacherMessagesTabIndex);
       return;
     }
 
@@ -107,6 +103,8 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
     } else if (index == 4) {
       MyNavigator.goTo(context, Routes.teacherRegistrationRequest);
+    } else if (index == 5) {
+      MyNavigator.goTo(context, Routes.teacherMyEarnings);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == plansDrawerIndex) {
@@ -175,10 +173,10 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 }
 
-const teacherPayrollTabIndex = 2;
+const teacherMessagesTabIndex = 2;
+const teacherPayrollTabIndex = teacherMessagesTabIndex;
 const teacherDrawerToBottomNavIndex = <int, int>{
   0: 0,
   3: 1,
-  5: teacherPayrollTabIndex,
   9: 4,
 };

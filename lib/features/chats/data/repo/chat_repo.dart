@@ -26,6 +26,10 @@ abstract class ChatRepo {
     required String roomId,
   });
 
+  Future<Either<Failure, void>> markRoomAsRead({
+    required String roomId,
+  });
+
   Future<Either<Failure, ChatMessageResponseModel>> sendMessage({
     required String roomId,
     String? text,
