@@ -27,7 +27,11 @@ class NotificationCard extends StatelessWidget {
           Uri.parse(destination.path).path) {
         return;
       }
-      router.go(destination.path, extra: destination.extra);
+      if (NotificationNavigationService.isHomeDestination(destination.path)) {
+        router.go(destination.path, extra: destination.extra);
+      } else {
+        router.push(destination.path, extra: destination.extra);
+      }
     },
     child: Container(
       padding: const EdgeInsets.all(12),

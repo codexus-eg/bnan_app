@@ -5,6 +5,7 @@ class ChatRouteArgs {
     this.classroomName,
     this.currentUserRole,
     this.studentId,
+    this.targetMessageId,
   });
 
   final String? roomType;
@@ -12,5 +13,6 @@ class ChatRouteArgs {
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
+  final String? targetMessageId;
 }
 

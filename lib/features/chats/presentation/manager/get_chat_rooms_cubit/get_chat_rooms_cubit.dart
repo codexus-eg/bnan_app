@@ -13,14 +13,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   GetChatRoomsCubit(
     this.chatRepo, [
-    ChatNotificationCoordinator? notifications,
+    this.notifications,
     this.roomsCache,
   ]) : super(GetChatRoomsInitial()) {
     _notificationSubscription = notifications?.roomEvents.listen(_updateRoom);
   }
 
   final ChatRepo chatRepo;
+  final ChatNotificationCoordinator? notifications;
   final ChatRoomsCache? roomsCache;
+  final Set<String> _processedMessageIds = {};
   StreamSubscription<ChatNotificationEvent>? _notificationSubscription;
   Timer? _searchDebounce;
   String _adminSearch = '';
@@ -85,16 +87,54 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
     );
   }
 
+  void markRoomRead(String roomId) {
+    if (isClosed) return;
+    final id = roomId.trim();
+    if (id.isEmpty) return;
+    final index = _allRooms.indexWhere(
+      (room) => room.id.trim() == id || room.classroomId?.trim() == id,
+    );
+    if (index == -1) return;
+    if (_allRooms[index].unreadCount == 0) return;
+    final rooms = List.of(_allRooms);
+    rooms[index] = rooms[index].copyWith(unreadCount: 0);
+    _allRooms = rooms;
+    roomsCache?.replace(rooms);
+    emit(GetChatRoomsSuccess(rooms: _visibleRooms));
+  }
+
   void _updateRoom(ChatNotificationEvent event) {
     if (isClosed) return;
-    final index = _allRooms.indexWhere((room) => room.id == event.roomId);
+    final roomId = event.roomId.trim();
+    if (roomId.isEmpty) return;
+
+    final index = _allRooms.indexWhere(
+      (room) => room.id.trim() == roomId || room.classroomId?.trim() == roomId,
+    );
     if (index == -1) return;
 
+    final currentUserId = SessionManager.instance.userId?.trim() ?? '';
+    final isMine = event.senderId.isNotEmpty && event.senderId == currentUserId;
+    final isCurrentRoom = notifications?.currentRoomId == roomId ||
+        notifications?.currentRoomId == _allRooms[index].id;
+
+    final messageId = event.messageId.trim();
+    final isDuplicate =
+        messageId.isNotEmpty && !_processedMessageIds.add(messageId);
+    if (_processedMessageIds.length > 500) {
+      _processedMessageIds.remove(_processedMessageIds.first);
+    }
+
+    final shouldIncrement = !isMine && !isCurrentRoom && !isDuplicate;
+
     final rooms = List.of(_allRooms);
-    final room = rooms
-        .removeAt(index)
-        .copyWith(lastMessage: event.message, lastMessageAt: event.createdAt);
-    rooms.insert(0, room);
+    final prev = rooms.removeAt(index);
+    final updated = prev.copyWith(
+      lastMessage: event.message.isNotEmpty ? event.message : prev.lastMessage,
+      lastMessageAt: event.createdAt,
+      unreadCount: shouldIncrement ? prev.unreadCount + 1 : prev.unreadCount,
+    );
+    rooms.insert(0, updated);
     _allRooms = rooms;
     roomsCache?.replace(rooms);
     emit(GetChatRoomsSuccess(rooms: _visibleRooms));

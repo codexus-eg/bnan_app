@@ -23,6 +23,16 @@ class NotificationNavigationService {
   final ChatRepo? _chatRepo;
   final ChatRoomsCache? _roomsCache;
 
+  static const _homePaths = <String>{
+    Routes.home,
+    Routes.teacherHome,
+    Routes.adminHome,
+    Routes.parentHome,
+    Routes.supervisorHome,
+  };
+
+  static bool isHomeDestination(String path) => _homePaths.contains(path);
+
   Future<NotificationDestination> resolveDestination(
     AppNotification notification,
   ) async {
@@ -152,12 +162,26 @@ class NotificationNavigationService {
       return NotificationDestination(_fallback());
     }
     final name = payloadName ?? _text(room?.displayName);
+    final targetMessageId = _text(
+      params['targetMessageId'] ??
+          params['messageId'] ??
+          data['targetMessageId'] ??
+          data['messageId'] ??
+          (notification.key.trim().toUpperCase() == 'NEW_MESSAGE'
+              ? notification.id
+              : null),
+    );
     final args = room == null
-        ? ChatRouteArgs(classroomName: name, currentUserRole: _session.userRole)
+        ? ChatRouteArgs(
+            classroomName: name,
+            currentUserRole: _session.userRole,
+            targetMessageId: targetMessageId,
+          )
         : ChatRoomNavigation.arguments(
             room,
             currentUserRole: _session.userRole,
             displayName: name,
+            targetMessageId: targetMessageId,
           );
     return NotificationDestination(Routes.chatPath(roomId), extra: args);
   }

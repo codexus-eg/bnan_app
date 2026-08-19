@@ -7,6 +7,7 @@ class ChatRoomDetailsModel {
   final bool isActive;
   final String? lastMessage;
   final DateTime? lastMessageAt;
+  final int unreadCount;
 
   const ChatRoomDetailsModel({
     required this.id,
@@ -15,6 +16,7 @@ class ChatRoomDetailsModel {
     required this.isActive,
     this.lastMessage,
     this.lastMessageAt,
+    this.unreadCount = 0,
   });
 
   factory ChatRoomDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class ChatRoomDetailsModel {
       isActive: json['isActive'] == true,
       lastMessage: json['lastMessage']?.toString(),
       lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
+      unreadCount: (json['unreadCount'] as num?)?.toInt() ?? 0,
     );
   }
 }

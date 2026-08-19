@@ -584,6 +584,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
       getIt<ChatRepo>(),
       getIt<SocketService>(),
       getIt<ChatNotificationCoordinator>(),
+      getIt<ChatRoomsCache>(),
     ),
   );
   getIt.registerLazySingleton<SocketService>(() => SocketService());

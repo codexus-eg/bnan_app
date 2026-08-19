@@ -49,6 +49,21 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+  static const _homePaths = <String>{
+    Routes.home,
+    Routes.teacherHome,
+    Routes.adminHome,
+    Routes.parentHome,
+    Routes.supervisorHome,
+  };
+
+  static const _preLoginPaths = <String>{
+    Routes.splash,
+    Routes.onboarding,
+    Routes.logIn,
+    Routes.savedAccounts,
+  };
+
   StreamSubscription<ChatNotificationEvent>? _chatNotificationSubscription;
   StreamSubscription<AppNotification>? _notificationFeedbackSubscription;
   StreamSubscription<AppNotification>? _notificationNavigationSubscription;
@@ -231,13 +246,49 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
     final destination = await getIt<NotificationNavigationService>()
         .resolveDestination(notification);
 
-    if (_router.routeInformationProvider.value.uri.path ==
-        Uri.parse(destination.path).path) {
+    final targetPath = Uri.parse(destination.path).path;
+    final currentPath = _router.routeInformationProvider.value.uri.path;
+
+    if (currentPath == targetPath) return;
+
+    if (_homePaths.contains(targetPath)) {
+      _router.go(destination.path, extra: destination.extra);
       return;
     }
 
-    _router.go(destination.path, extra: destination.extra);
+    if (_preLoginPaths.contains(currentPath)) {
+      await _waitUntilHome();
+      if (!mounted ||
+          _router.routeInformationProvider.value.uri.path == targetPath) {
+        return;
+      }
+    }
+
+    _router.push(destination.path, extra: destination.extra);
   }
+
+  Future<void> _waitUntilHome() async {
+    if (_isHomePath(_router.routerDelegate.currentConfiguration.uri.path)) {
+      return;
+    }
+    final completer = Completer<void>();
+    late final VoidCallback listener;
+    listener = () {
+      if (!_isHomePath(_router.routerDelegate.currentConfiguration.uri.path)) {
+        return;
+      }
+      _router.routerDelegate.removeListener(listener);
+      completer.complete();
+    };
+    _router.routerDelegate.addListener(listener);
+    try {
+      await completer.future.timeout(const Duration(seconds: 10));
+    } on TimeoutException {
+      _router.routerDelegate.removeListener(listener);
+    }
+  }
+
+  bool _isHomePath(String path) => _homePaths.contains(path);
 
   AppNotification _chatEventNotification(ChatNotificationEvent event) =>
       AppNotification.fromJson({
@@ -248,6 +299,7 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
           'screen': 'chat_room',
           'params': {
             'roomId': event.roomId,
+            'messageId': event.messageId,
             if (event.roomName.isNotEmpty) 'roomName': event.roomName,
           },
         },

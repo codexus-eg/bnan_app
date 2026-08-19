@@ -49,7 +49,15 @@ class AppNotification {
     final params = NotificationNavigation.decodeParams(navigation['params']);
     final sources = [json, data];
     for (final source in sources) {
-      for (final key in const ['roomId', 'classroomId', 'roomName', 'chatName', 'name']) {
+      for (final key in const [
+        'roomId',
+        'classroomId',
+        'roomName',
+        'chatName',
+        'name',
+        'messageId',
+        'targetMessageId',
+      ]) {
         if (source[key] != null) params.putIfAbsent(key, () => source[key]);
       }
     }

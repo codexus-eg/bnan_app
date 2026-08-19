@@ -12,6 +12,7 @@ abstract final class ChatRoomNavigation {
     ChatRoomSummaryModel room, {
     required String? currentUserRole,
     String? displayName,
+    String? targetMessageId,
   }) {
     return ChatRouteArgs(
       roomType: room.type,
@@ -19,6 +20,7 @@ abstract final class ChatRoomNavigation {
       classroomName: displayName ?? room.displayName,
       currentUserRole: currentUserRole,
       studentId: room.studentId,
+      targetMessageId: targetMessageId,
     );
   }
 }

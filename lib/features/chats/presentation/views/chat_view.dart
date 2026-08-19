@@ -12,6 +12,7 @@ class ChatView extends StatelessWidget {
     this.classroomName,
     this.currentUserRole,
     this.studentId,
+    this.targetMessageId,
   });
 
   final String roomId;
@@ -20,6 +21,7 @@ class ChatView extends StatelessWidget {
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
+  final String? targetMessageId;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class ChatView extends StatelessWidget {
           classroomName: classroomName,
           currentUserRole: currentUserRole,
           studentId: studentId,
+          targetMessageId: targetMessageId,
         ),
       ),
     );

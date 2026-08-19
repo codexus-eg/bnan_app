@@ -144,11 +144,10 @@ class ChatRoomSummaryModel {
       lastMessageAt: DateTime.tryParse(
         json['lastMessageAt']?.toString() ?? '',
       ),
-      unreadCount: parseUnreadCount(
-        json['unreadCount'] ??
-            json['unreadMessagesCount'] ??
-            json['unread'],
-      ),
+      unreadCount: (json['unreadCount'] as num?)?.toInt() ??
+          parseUnreadCount(
+            json['unreadMessagesCount'] ?? json['unread'],
+          ),
     );
   }
 

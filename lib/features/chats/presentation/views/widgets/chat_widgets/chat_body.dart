@@ -23,6 +23,7 @@ class ChatBody extends StatefulWidget {
     this.classroomName,
     this.currentUserRole,
     this.studentId,
+    this.targetMessageId,
   });
 
   final String roomId;
@@ -31,6 +32,7 @@ class ChatBody extends StatefulWidget {
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
+  final String? targetMessageId;
 
   @override
   State<ChatBody> createState() => _ChatBodyState();
@@ -92,6 +94,7 @@ class _ChatBodyState extends State<ChatBody> {
                     messages: messages,
                     currentUserId: SessionManager.instance.userId ?? '',
                     isLoading: isLoading,
+                    targetMessageId: widget.targetMessageId,
                     firstUnreadMessageId: state is GetRoomMessagesSuccess
                         ? state.firstUnreadMessageId
                         : null,

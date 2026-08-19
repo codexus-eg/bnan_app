@@ -14,6 +14,7 @@ class ChatMessagesList extends StatefulWidget {
     required this.messages,
     required this.currentUserId,
     this.isLoading = false,
+    this.targetMessageId,
     this.firstUnreadMessageId,
     this.onInitialPositioned,
     this.selectedMessageIds = const {},
@@ -25,6 +26,7 @@ class ChatMessagesList extends StatefulWidget {
   final List<ChatMessageModel> messages;
   final String currentUserId;
   final bool isLoading;
+  final String? targetMessageId;
   final String? firstUnreadMessageId;
   final VoidCallback? onInitialPositioned;
   final Set<String> selectedMessageIds;
@@ -47,22 +49,35 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   @override
   void initState() {
     super.initState();
-    _scroll.initialize(widget.isLoading, _displayMessages(widget.messages));
     if (!widget.isLoading) {
-      _checkAndScrollToInitialTarget();
+      final messages = _displayMessages(widget.messages);
+      final target = _resolveInitialTarget(messages);
+      if (target != null) {
+        _scroll.claimInitialPosition();
+        _scrollToInitialTarget(target);
+      } else {
+        _scroll.initialize(false, messages);
+      }
+    } else {
+      _scroll.initialize(true, const []);
     }
   }
 
   @override
   void didUpdateWidget(covariant ChatMessagesList oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final messages = _displayMessages(widget.messages);
     if (oldWidget.isLoading && !widget.isLoading) {
-      if (!_checkAndScrollToInitialTarget()) {
+      final target = _resolveInitialTarget(messages);
+      if (target != null) {
+        _scroll.claimInitialPosition();
+        _scrollToInitialTarget(target);
+      } else {
         _scroll.update(
           wasLoading: oldWidget.isLoading,
           isLoading: widget.isLoading,
           oldMessages: _displayMessages(oldWidget.messages),
-          newMessages: _displayMessages(widget.messages),
+          newMessages: messages,
         );
       }
       return;
@@ -71,18 +86,24 @@ class ChatMessagesListState extends State<ChatMessagesList> {
       wasLoading: oldWidget.isLoading,
       isLoading: widget.isLoading,
       oldMessages: _displayMessages(oldWidget.messages),
-      newMessages: _displayMessages(widget.messages),
+      newMessages: messages,
     );
   }
 
-  bool _checkAndScrollToInitialTarget() {
-    final initialTarget = widget.firstUnreadMessageId?.trim();
-    if (initialTarget != null && initialTarget.isNotEmpty) {
-      _scroll.claimInitialPosition();
-      _scrollToInitialTarget(initialTarget);
-      return true;
+  String? _resolveInitialTarget(List<ChatMessageModel> messages) {
+    final target = widget.targetMessageId?.trim();
+    if (target != null && target.isNotEmpty) {
+      if (messages.any((m) => m.id.trim() == target)) {
+        return target;
+      }
     }
-    return false;
+    final unread = widget.firstUnreadMessageId?.trim();
+    if (unread != null && unread.isNotEmpty) {
+      if (messages.any((m) => m.id.trim() == unread)) {
+        return unread;
+      }
+    }
+    return null;
   }
 
   @override

@@ -246,10 +246,17 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
       return;
     }
 
-    router.go(
-      destination.path,
-      extra: destination.extra,
-    );
+    if (NotificationNavigationService.isHomeDestination(destination.path)) {
+      router.go(
+        destination.path,
+        extra: destination.extra,
+      );
+    } else {
+      router.push(
+        destination.path,
+        extra: destination.extra,
+      );
+    }
   }
 
   Future<void> logout() async {

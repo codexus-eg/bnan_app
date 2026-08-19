@@ -23,6 +23,17 @@ class ChatRoomsCache {
     _rooms = List.unmodifiable(rooms);
   }
 
+  void markRoomRead(String roomId) {
+    _clearForAnotherUser();
+    final id = roomId.trim();
+    if (id.isEmpty) return;
+    final index = _rooms.indexWhere((r) => r.id.trim() == id);
+    if (index == -1) return;
+    final updated = List.of(_rooms);
+    updated[index] = updated[index].copyWith(unreadCount: 0);
+    _rooms = List.unmodifiable(updated);
+  }
+
   void _clearForAnotherUser() {
     if (_ownerId == _session.userId) return;
     _ownerId = _session.userId;

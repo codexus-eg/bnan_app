@@ -299,6 +299,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 currentUserRole:
                     args?.currentUserRole ?? SessionManager.instance.userRole,
                 studentId: args?.studentId,
+                targetMessageId: args?.targetMessageId,
               ),
             ),
           );

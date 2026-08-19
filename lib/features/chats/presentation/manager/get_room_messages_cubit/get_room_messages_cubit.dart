@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bnan_app/core/cache/cache_helper.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
+import 'package:bnan_app/features/chats/data/cache/chat_rooms_cache.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_state.dart';
@@ -15,11 +16,13 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     this.chatRepo,
     this.socketService, [
     this.notifications,
+    this.roomsCache,
   ]) : super(GetRoomMessagesInitial());
 
   final ChatRepo chatRepo;
   final SocketService socketService;
   final ChatNotificationCoordinator? notifications;
+  final ChatRoomsCache? roomsCache;
 
   final List<ChatMessageModel> _messages = [];
   final List<VoidCallback> _listenerDisposers = [];
@@ -304,6 +307,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   Future<void> _sendMarkRoomAsRead(String roomId) async {
     await chatRepo.markRoomAsRead(roomId: roomId);
     await _saveLatestMessageTimestamp(roomId);
+    roomsCache?.markRoomRead(roomId);
   }
 
   DateTime? _readLastOpened(
