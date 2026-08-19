@@ -173,6 +173,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Add Subject to Classroom"),
         "addUser": MessageLookupByLibrary.simpleMessage("Add User"),
         "admin": MessageLookupByLibrary.simpleMessage("Admin"),
+        "adminNotes":
+            MessageLookupByLibrary.simpleMessage("Admin notes (optional)"),
         "adminRegistrationRequestsSection":
             MessageLookupByLibrary.simpleMessage("Registration requests"),
         "adminSubjectRequestAmountOptional":
@@ -221,6 +223,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Share your expertise and join our teaching team"),
         "approveAccountActivation":
             MessageLookupByLibrary.simpleMessage("Approve account activation"),
+        "approveRequest":
+            MessageLookupByLibrary.simpleMessage("Approve request"),
         "april2026": MessageLookupByLibrary.simpleMessage("April 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "arabicLanguage":
@@ -287,8 +291,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelAssignment":
             MessageLookupByLibrary.simpleMessage("Cancel Assignment"),
         "cancelAssignmentMessage": m4,
+        "cancelSubjectRequestType":
+            MessageLookupByLibrary.simpleMessage("Cancel subject"),
         "cancelSupervisorAssignmentQuestion": m5,
         "cancelTeacherAssignmentQuestion": m6,
+        "cancellationRequests":
+            MessageLookupByLibrary.simpleMessage("Cancellation requests"),
         "cannotAddLessonInPreviousWeek": MessageLookupByLibrary.simpleMessage(
             "A lesson cannot be added in a previous week"),
         "cannotDisplayStudentCertificates":
@@ -321,6 +329,21 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change Password"),
         "changePhoneTitle":
             MessageLookupByLibrary.simpleMessage("Edit Phone Number"),
+        "changeRequestApproved":
+            MessageLookupByLibrary.simpleMessage("Approved"),
+        "changeRequestApprovedSuccess": MessageLookupByLibrary.simpleMessage(
+            "Request approved successfully"),
+        "changeRequestPending": MessageLookupByLibrary.simpleMessage("Pending"),
+        "changeRequestRejected":
+            MessageLookupByLibrary.simpleMessage("Rejected"),
+        "changeRequestRejectedSuccess": MessageLookupByLibrary.simpleMessage(
+            "Request rejected successfully"),
+        "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
+            "Your request was submitted successfully"),
+        "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
+            "No cancellation or teacher-change requests"),
+        "changeTeacherRequestType":
+            MessageLookupByLibrary.simpleMessage("Change teacher"),
         "changeUsernameTitle":
             MessageLookupByLibrary.simpleMessage("Edit Username"),
         "chatMsg1": MessageLookupByLibrary.simpleMessage(
@@ -1502,6 +1525,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("Registration Requests"),
         "reject": MessageLookupByLibrary.simpleMessage("Reject"),
+        "rejectRequest": MessageLookupByLibrary.simpleMessage("Reject request"),
+        "rejectionReason":
+            MessageLookupByLibrary.simpleMessage("Rejection reason"),
         "relationships": MessageLookupByLibrary.simpleMessage("Relationships"),
         "remainingDays": m25,
         "remainingHours": m26,
@@ -1539,8 +1565,17 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your request has been accepted!"),
         "requestNewLesson":
             MessageLookupByLibrary.simpleMessage("Request New Lesson"),
+        "requestReason": MessageLookupByLibrary.simpleMessage("Request reason"),
         "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
             "Your request has been submitted and is now under review."),
+        "requestTeacherChangeOrCancellation":
+            MessageLookupByLibrary.simpleMessage(
+                "Request teacher change / discontinuation"),
+        "requestTeacherWithdrawal": MessageLookupByLibrary.simpleMessage(
+            "Request withdrawal from teaching"),
+        "requestType": MessageLookupByLibrary.simpleMessage("Request type"),
+        "requester": MessageLookupByLibrary.simpleMessage("Requester"),
+        "requesterType": MessageLookupByLibrary.simpleMessage("Requester type"),
         "resendCode": MessageLookupByLibrary.simpleMessage("Resend code?"),
         "resetCodeRequired": MessageLookupByLibrary.simpleMessage(
             "Please enter the verification code"),
@@ -1957,6 +1992,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Technical Skills"),
         "teacherUnassignedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Teacher assignment removed successfully"),
+        "teacherWithdrawalRequestType":
+            MessageLookupByLibrary.simpleMessage("Teacher withdrawal"),
         "teachers": MessageLookupByLibrary.simpleMessage("Teachers"),
         "teachingInBnan":
             MessageLookupByLibrary.simpleMessage("Teaching in Bnan"),

@@ -80,13 +80,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       return;
     }
 
-    var legacyIndex = index < scheduleStartIndex
+    final legacyIndex = index < scheduleStartIndex
         ? index
         : index - scheduleRoutes.length + 1;
-    if (!SessionManager.instance.canAccessTeacherSubjectRequests &&
-        legacyIndex >= 6) {
-      legacyIndex++;
-    }
     final bottomIndex = teacherDrawerToBottomNavIndex[legacyIndex];
 
     if (bottomIndex != null) {
@@ -175,8 +171,4 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
 
 const teacherMessagesTabIndex = 2;
 const teacherPayrollTabIndex = teacherMessagesTabIndex;
-const teacherDrawerToBottomNavIndex = <int, int>{
-  0: 0,
-  3: 1,
-  9: 4,
-};
+const teacherDrawerToBottomNavIndex = <int, int>{0: 0, 3: 1, 9: 4};

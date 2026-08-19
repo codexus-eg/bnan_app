@@ -14,6 +14,8 @@ import 'package:bnan_app/features/chats/presentation/models/classroom_documents_
 import 'package:bnan_app/features/chats/presentation/models/classroom_members_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/views/classroom_documents_view.dart';
 import 'package:bnan_app/features/chats/presentation/views/classroom_members_view.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_request_actions_cubit.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_requests_cubit.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
@@ -653,13 +655,15 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: Routes.supervisorHome,
         pageBuilder: (context, state) {
-          final tabRoute = state.uri.queryParameters['tab'] ??
+          final tabRoute =
+              state.uri.queryParameters['tab'] ??
               state.uri.queryParameters['route'] ??
               state.extra as String?;
           return buildTransitionPages(
             child: BlocProvider(
               create: (_) =>
-                  getIt<DashboardCubit>(param1: DashboardRole.supervisor)..load(),
+                  getIt<DashboardCubit>(param1: DashboardRole.supervisor)
+                    ..load(),
               child: SupervisorHomeView(initialRoute: tabRoute),
             ),
             key: state.pageKey,
@@ -1266,6 +1270,13 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                   ..onRefresh = () => context
                       .read<AdminSubjectRequestsCubit>()
                       .load(refresh: true),
+              ),
+              BlocProvider(create: (_) => getIt<AdminChangeRequestsCubit>()),
+              BlocProvider(
+                create: (context) =>
+                    getIt<AdminChangeRequestActionsCubit>()
+                      ..onRefresh = () =>
+                          context.read<AdminChangeRequestsCubit>().load(),
               ),
             ],
             child: const RegistrationRequestsView(),

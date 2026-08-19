@@ -100,8 +100,6 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
           final drawer = SupervisorNavigationConfig.drawer(s);
           final bottom = SupervisorNavigationConfig.bottom(s);
 
-          _handleInitialRoute(bottom);
-
           final userName =
               widget.userName ?? CurrentUserUi.name(context);
 
@@ -149,37 +147,6 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
           );
         },
       );
-
-  void _handleInitialRoute(
-    List<SupervisorNavigationItem> bottom,
-  ) {
-    final route = widget.initialRoute?.trim();
-
-    if (route == null || route.isEmpty) return;
-
-    final index = bottom.indexWhere(
-      (item) => item.route == route,
-    );
-
-    if (index > homeTabIndex &&
-        index < bottom.length &&
-        selectedBottomIndex != index) {
-      final item = bottom[index];
-      if (item.isEnabled && item.route != null) {
-        _tabs.putIfAbsent(
-          index,
-          () => (widget.tabBuilder ?? buildSupervisorBottomTab)(item.route!),
-        );
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && selectedBottomIndex != index) {
-            setState(() {
-              selectedBottomIndex = index;
-            });
-          }
-        });
-      }
-    }
-  }
 
   void selectBottomTab(
     int index,

@@ -1,12 +1,19 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/custom_bottom_nav_bar.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/dashboard/data/models/dashboard_data.dart';
 import 'package:bnan_app/features/dashboard/data/models/supervisor_dashboard_model.dart';
 import 'package:bnan_app/features/dashboard/data/repo/dashboard_repo.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:bnan_app/features/notifications/data/models/notification_preferences.dart';
+import 'package:bnan_app/features/notifications/data/models/notifications_page.dart';
+import 'package:bnan_app/features/notifications/data/repos/notifications_repo.dart';
+import 'package:bnan_app/features/notifications/domain/recent_notification_ids.dart';
+import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/supervisor_home_view.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_home_page.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -19,6 +26,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
+  setUpAll(() {
+    getIt.registerSingleton<NotificationsCubit>(
+      NotificationsCubit(
+        _UnusedNotificationsRepo(),
+        SocketService(),
+        RecentNotificationIds(),
+      ),
+    );
+  });
+
+  tearDownAll(() => getIt.unregister<NotificationsCubit>());
+
   setUp(() async {
     FlutterSecureStorage.setMockInitialValues({});
     await _saveSupervisor(RegistrationMode.gulf);
@@ -150,6 +169,26 @@ void main() {
     expect(_bottomBar(tester).currentIndex, 0);
   });
 
+  testWidgets('initial Attendance route does not lock bottom navigation', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      testApp(initialRoute: Routes.attendance, tabBuilder: _tabBuilder({})),
+    );
+    await tester.pumpAndSettle();
+
+    expect(_bottomBar(tester).currentIndex, 4);
+    await tester.tap(find.text('Evaluations').last);
+    await tester.pumpAndSettle();
+    expect(_bottomBar(tester).currentIndex, 1);
+    await tester.tap(find.text('Messages').last);
+    await tester.pumpAndSettle();
+    expect(_bottomBar(tester).currentIndex, 2);
+    await tester.tap(find.text('Home').last);
+    await tester.pumpAndSettle();
+    expect(_bottomBar(tester).currentIndex, 0);
+  });
+
   testWidgets('switching and re-tapping tabs keeps one tab instance', (
     tester,
   ) async {
@@ -275,6 +314,7 @@ void main() {
 Widget testApp({
   Locale locale = const Locale('en'),
   SupervisorTabBuilder? tabBuilder,
+  String? initialRoute,
 }) {
   final router = GoRouter(
     routes: [
@@ -288,6 +328,7 @@ Widget testApp({
             userName:
                 'A very long supervisor display name for overflow testing',
             tabBuilder: tabBuilder,
+            initialRoute: initialRoute,
           ),
         ),
       ),
@@ -373,6 +414,29 @@ class _DashboardRepo implements DashboardRepo {
       notifications: [],
     ),
   );
+}
+
+class _UnusedNotificationsRepo implements NotificationsRepo {
+  @override
+  Future<Either<Failure, NotificationsPage>> getNotifications(
+    int page,
+    int limit,
+  ) => throw UnimplementedError();
+
+  @override
+  Future<Either<Failure, NotificationPreferences>> getPreferences() =>
+      throw UnimplementedError();
+
+  @override
+  Future<Either<Failure, void>> markRead({
+    List<String> ids = const [],
+    bool all = false,
+  }) => throw UnimplementedError();
+
+  @override
+  Future<Either<Failure, NotificationPreferences>> updatePreferences(
+    NotificationPreferences value,
+  ) => throw UnimplementedError();
 }
 
 Future<void> _saveSupervisor(RegistrationMode mode) {

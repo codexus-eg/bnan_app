@@ -8,6 +8,8 @@ import 'package:bnan_app/features/chats/presentation/policies/classroom_document
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_session_action.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/student_call_alert_action.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/policies/change_request_access_policy.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/widgets/classroom_change_request_action.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -74,7 +76,10 @@ class ChatHeader extends StatelessWidget {
                       '$selectedCount ${S.of(context).selectedMessagesLabel}',
                       style: const TextStyle(color: ColorManager.white),
                     )
-                  : UserInfo(chatTitle: chatTitle),
+                  : LayoutBuilder(
+                      builder: (context, constraints) =>
+                          _responsiveContent(context, constraints),
+                    ),
             ),
             if (selectedCount > 0)
               IconButton(
@@ -91,50 +96,81 @@ class ChatHeader extends StatelessWidget {
                         Icons.delete_outline,
                         color: ColorManager.white,
                       ),
-              )
-            else ...[
-              if (_sessionRole == UserRole.supervisor &&
-                  roomType == 'supervisor_student' &&
-                  studentId?.trim().isNotEmpty == true)
-                StudentCallAlertAction(studentId: studentId!.trim()),
-              if (_sessionRole != null &&
-                  classroomId?.trim().isNotEmpty == true)
-                ChatSessionAction(
-                  classroomId: classroomId!.trim(),
-                  roomId: roomId,
-                  role: _sessionRole!,
-                ),
-              if (_sessionRole == UserRole.supervisor &&
-                  roomType == 'classroom' &&
-                  classroomId?.trim().isNotEmpty == true)
-                IconButton(
-                  key: const Key('classroomMembersButton'),
-                  tooltip: S.of(context).students,
-                  onPressed: () => _openMembers(context),
-                  icon: const Icon(
-                    Icons.group_outlined,
-                    color: ColorManager.white,
-                  ),
-                ),
-              if (ClassroomDocumentsAccess.canMessages(
-                roomType: roomType,
-                roomId: roomId,
-                role: currentUserRole,
-              ))
-                IconButton(
-                  key: const Key('classroomDocumentsButton'),
-                  onPressed: () => _openDocuments(context),
-                  icon: const Icon(
-                    Icons.folder_copy_outlined,
-                    color: ColorManager.white,
-                  ),
-                ),
-            ],
+              ),
           ],
         ),
       ),
     );
   }
+
+  Widget _responsiveContent(BuildContext context, BoxConstraints constraints) {
+    final actions = _actions(context);
+    final info = UserInfo(chatTitle: chatTitle);
+    if (actions.isEmpty) return info;
+    if (constraints.maxWidth < 460) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          info,
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: actions,
+            ),
+          ),
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Expanded(child: info),
+        ...actions,
+      ],
+    );
+  }
+
+  List<Widget> _actions(BuildContext context) => [
+    if (_sessionRole == UserRole.supervisor &&
+        roomType == 'supervisor_student' &&
+        studentId?.trim().isNotEmpty == true)
+      StudentCallAlertAction(studentId: studentId!.trim()),
+    if (_sessionRole != null && classroomId?.trim().isNotEmpty == true)
+      ChatSessionAction(
+        classroomId: classroomId!.trim(),
+        roomId: roomId,
+        role: _sessionRole!,
+      ),
+    if (classroomId?.trim().isNotEmpty == true &&
+        ChangeRequestAccessPolicy.canShow(
+          role: _sessionRole,
+          roomType: roomType,
+        ))
+      ClassroomChangeRequestAction(
+        classroomId: classroomId!.trim(),
+        role: _sessionRole!,
+      ),
+    if (_sessionRole == UserRole.supervisor &&
+        roomType == 'classroom' &&
+        classroomId?.trim().isNotEmpty == true)
+      IconButton(
+        key: const Key('classroomMembersButton'),
+        tooltip: S.of(context).students,
+        onPressed: () => _openMembers(context),
+        icon: const Icon(Icons.group_outlined, color: ColorManager.white),
+      ),
+    if (ClassroomDocumentsAccess.canMessages(
+      roomType: roomType,
+      roomId: roomId,
+      role: currentUserRole,
+    ))
+      IconButton(
+        key: const Key('classroomDocumentsButton'),
+        onPressed: () => _openDocuments(context),
+        icon: const Icon(Icons.folder_copy_outlined, color: ColorManager.white),
+      ),
+  ];
 
   IconData _backIcon(BuildContext context) {
     final isRtl = Directionality.of(context) == TextDirection.rtl;

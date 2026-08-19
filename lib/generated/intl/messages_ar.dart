@@ -169,6 +169,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إضافة مادة لفصل"),
         "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
         "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
+        "adminNotes":
+            MessageLookupByLibrary.simpleMessage("ملاحظات الإدارة (اختياري)"),
         "adminRegistrationRequestsSection":
             MessageLookupByLibrary.simpleMessage("طلبات تسجيل"),
         "adminSubjectRequestAmountOptional":
@@ -216,6 +218,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "شارك خبراتك وانضم إلى فريقنا التعليمي"),
         "approveAccountActivation":
             MessageLookupByLibrary.simpleMessage("موافقة تفعيل الحساب"),
+        "approveRequest":
+            MessageLookupByLibrary.simpleMessage("الموافقة على الطلب"),
         "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
         "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
@@ -276,8 +280,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "cancelAssignment": MessageLookupByLibrary.simpleMessage("إلغاء توظيف"),
         "cancelAssignmentMessage": m4,
+        "cancelSubjectRequestType":
+            MessageLookupByLibrary.simpleMessage("إلغاء المادة"),
         "cancelSupervisorAssignmentQuestion": m5,
         "cancelTeacherAssignmentQuestion": m6,
+        "cancellationRequests":
+            MessageLookupByLibrary.simpleMessage("طلبات الإلغاء"),
         "cannotAddLessonInPreviousWeek": MessageLookupByLibrary.simpleMessage(
             "لا يمكن إضافة حصة في أسبوع سابق"),
         "cannotDisplayStudentCertificates":
@@ -310,6 +318,20 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعديل كلمة المرور"),
         "changePhoneTitle":
             MessageLookupByLibrary.simpleMessage("تعديل رقم الهاتف"),
+        "changeRequestApproved": MessageLookupByLibrary.simpleMessage("مقبول"),
+        "changeRequestApprovedSuccess": MessageLookupByLibrary.simpleMessage(
+            "تمت الموافقة على الطلب بنجاح"),
+        "changeRequestPending":
+            MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
+        "changeRequestRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
+        "changeRequestRejectedSuccess":
+            MessageLookupByLibrary.simpleMessage("تم رفض الطلب بنجاح"),
+        "changeRequestSubmitted":
+            MessageLookupByLibrary.simpleMessage("تم إرسال طلبك بنجاح"),
+        "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
+            "لا توجد طلبات إلغاء أو تغيير معلم"),
+        "changeTeacherRequestType":
+            MessageLookupByLibrary.simpleMessage("تغيير المعلم"),
         "changeUsernameTitle":
             MessageLookupByLibrary.simpleMessage("تعديل اسم المستخدم"),
         "chatMsg1": MessageLookupByLibrary.simpleMessage(
@@ -1448,6 +1470,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("طلبات التسجيل"),
         "reject": MessageLookupByLibrary.simpleMessage("رفض"),
+        "rejectRequest": MessageLookupByLibrary.simpleMessage("رفض الطلب"),
+        "rejectionReason": MessageLookupByLibrary.simpleMessage("سبب الرفض"),
         "relationships": MessageLookupByLibrary.simpleMessage("العلاقات"),
         "remainingDays": m25,
         "remainingHours": m26,
@@ -1486,8 +1510,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
         "requestNewLesson":
             MessageLookupByLibrary.simpleMessage("طلب درس جديد"),
+        "requestReason": MessageLookupByLibrary.simpleMessage("سبب الطلب"),
         "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
             "تم إرسال طلبك وهو الآن قيد المراجعة."),
+        "requestTeacherChangeOrCancellation":
+            MessageLookupByLibrary.simpleMessage(
+                "طلب تغيير المعلم / إلغاء الاستمرار"),
+        "requestTeacherWithdrawal":
+            MessageLookupByLibrary.simpleMessage("طلب اعتذار عن الاستمرار"),
+        "requestType": MessageLookupByLibrary.simpleMessage("نوع الطلب"),
+        "requester": MessageLookupByLibrary.simpleMessage("مقدم الطلب"),
+        "requesterType": MessageLookupByLibrary.simpleMessage("نوع مقدم الطلب"),
         "resendCode": MessageLookupByLibrary.simpleMessage("إعادة الإرسال؟"),
         "resetCodeRequired":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كود التحقق"),
@@ -1894,6 +1927,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المهارات التقنية"),
         "teacherUnassignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إلغاء توظيف المعلم بنجاح"),
+        "teacherWithdrawalRequestType":
+            MessageLookupByLibrary.simpleMessage("اعتذار المعلم عن الاستمرار"),
         "teachers": MessageLookupByLibrary.simpleMessage("المعلمون"),
         "teachingInBnan":
             MessageLookupByLibrary.simpleMessage("التدريس في بنان"),

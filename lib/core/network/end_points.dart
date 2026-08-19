@@ -57,6 +57,8 @@ abstract class EndPoints {
   static const String adminDiscountCodes = '/admin/discount-codes';
   static const String adminPayrolls = '/admin/payrolls';
   static const String adminSubjectRequests = '/admin/subject-requests';
+  static const String adminClassroomChangeRequests =
+      '/admin/classroom-change-requests';
   static const String adminPayrollsPreview = '$adminPayrolls/preview';
   static const String teacherMyPayrolls = '/teachers/me/payrolls';
   static const String teacherMyPayoutProfile = '/teachers/me/payout-profile';
@@ -128,6 +130,21 @@ abstract class EndPoints {
 
   static String rejectAdminSubjectRequest(String id) =>
       '$adminSubjectRequests/$id/reject';
+
+  static String classroomChangeRequests(String classroomId) =>
+      '$classrooms/$classroomId/change-requests';
+
+  static String classroomTeacherRequests(String classroomId) =>
+      '$classrooms/$classroomId/teacher-requests';
+
+  static String adminClassroomChangeRequest(String id) =>
+      '$adminClassroomChangeRequests/$id';
+
+  static String approveClassroomChangeRequest(String id) =>
+      '${adminClassroomChangeRequest(id)}/approve';
+
+  static String rejectClassroomChangeRequest(String id) =>
+      '${adminClassroomChangeRequest(id)}/reject';
 
   static String teacherMyPayroll(String id) => '$teacherMyPayrolls/$id';
 

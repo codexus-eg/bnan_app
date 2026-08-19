@@ -248,6 +248,7 @@ class _ChatSessionActionState extends State<ChatSessionAction>
         child: Text(
           label,
           maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       );
 

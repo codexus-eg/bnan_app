@@ -12259,6 +12259,216 @@ class S {
       args: [],
     );
   }
+
+  /// `Request teacher change / discontinuation`
+  String get requestTeacherChangeOrCancellation {
+    return Intl.message(
+      'Request teacher change / discontinuation',
+      name: 'requestTeacherChangeOrCancellation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request withdrawal from teaching`
+  String get requestTeacherWithdrawal {
+    return Intl.message(
+      'Request withdrawal from teaching',
+      name: 'requestTeacherWithdrawal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request reason`
+  String get requestReason {
+    return Intl.message(
+      'Request reason',
+      name: 'requestReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your request was submitted successfully`
+  String get changeRequestSubmitted {
+    return Intl.message(
+      'Your request was submitted successfully',
+      name: 'changeRequestSubmitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancellation requests`
+  String get cancellationRequests {
+    return Intl.message(
+      'Cancellation requests',
+      name: 'cancellationRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No cancellation or teacher-change requests`
+  String get changeRequestsEmpty {
+    return Intl.message(
+      'No cancellation or teacher-change requests',
+      name: 'changeRequestsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requester`
+  String get requester {
+    return Intl.message(
+      'Requester',
+      name: 'requester',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requester type`
+  String get requesterType {
+    return Intl.message(
+      'Requester type',
+      name: 'requesterType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request type`
+  String get requestType {
+    return Intl.message(
+      'Request type',
+      name: 'requestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change teacher`
+  String get changeTeacherRequestType {
+    return Intl.message(
+      'Change teacher',
+      name: 'changeTeacherRequestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel subject`
+  String get cancelSubjectRequestType {
+    return Intl.message(
+      'Cancel subject',
+      name: 'cancelSubjectRequestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher withdrawal`
+  String get teacherWithdrawalRequestType {
+    return Intl.message(
+      'Teacher withdrawal',
+      name: 'teacherWithdrawalRequestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending`
+  String get changeRequestPending {
+    return Intl.message(
+      'Pending',
+      name: 'changeRequestPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approved`
+  String get changeRequestApproved {
+    return Intl.message(
+      'Approved',
+      name: 'changeRequestApproved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejected`
+  String get changeRequestRejected {
+    return Intl.message(
+      'Rejected',
+      name: 'changeRequestRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve request`
+  String get approveRequest {
+    return Intl.message(
+      'Approve request',
+      name: 'approveRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reject request`
+  String get rejectRequest {
+    return Intl.message(
+      'Reject request',
+      name: 'rejectRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Admin notes (optional)`
+  String get adminNotes {
+    return Intl.message(
+      'Admin notes (optional)',
+      name: 'adminNotes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejection reason`
+  String get rejectionReason {
+    return Intl.message(
+      'Rejection reason',
+      name: 'rejectionReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request approved successfully`
+  String get changeRequestApprovedSuccess {
+    return Intl.message(
+      'Request approved successfully',
+      name: 'changeRequestApprovedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request rejected successfully`
+  String get changeRequestRejectedSuccess {
+    return Intl.message(
+      'Request rejected successfully',
+      name: 'changeRequestRejectedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

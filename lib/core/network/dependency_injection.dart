@@ -7,6 +7,10 @@ import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject
 import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject_requests_repo_impl.dart';
 import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_request_actions_cubit.dart';
 import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
+import 'package:bnan_app/features/classroom_change_requests/data/repo/classroom_change_requests_repo.dart';
+import 'package:bnan_app/features/classroom_change_requests/data/repo/classroom_change_requests_repo_impl.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_request_actions_cubit.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_requests_cubit.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/data/cache/chat_rooms_cache.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo_impl.dart';
@@ -125,6 +129,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<AdminSubjectRequestsRepo>(
     () => AdminSubjectRequestsRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<ClassroomChangeRequestsRepo>(
+    () => ClassroomChangeRequestsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<DashboardRepo>(
     () => DashboardRepoImpl(getIt<ApiConsumer>()),
@@ -378,6 +385,12 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerFactory<AdminSubjectRequestActionsCubit>(
     () => AdminSubjectRequestActionsCubit(getIt<AdminSubjectRequestsRepo>()),
+  );
+  getIt.registerFactory<AdminChangeRequestsCubit>(
+    () => AdminChangeRequestsCubit(getIt<ClassroomChangeRequestsRepo>()),
+  );
+  getIt.registerFactory<AdminChangeRequestActionsCubit>(
+    () => AdminChangeRequestActionsCubit(getIt<ClassroomChangeRequestsRepo>()),
   );
   getIt.registerFactoryParam<DashboardCubit, DashboardRole, void>(
     (role, _) => DashboardCubit(getIt<DashboardRepo>(), role),
