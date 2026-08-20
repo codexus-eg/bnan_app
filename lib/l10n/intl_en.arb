@@ -1369,5 +1369,7 @@
     "rejectionReason": "Rejection reason",
     "changeRequestApprovedSuccess": "Request approved successfully",
     "changeRequestRejectedSuccess": "Request rejected successfully",
-    "meetingLinkOptional": "Meeting link (optional)"
+    "meetingLinkOptional": "Meeting link (optional)",
+    "assignSubjectToClassroom": "Please assign a subject to this classroom",
+    "cancellationReason": "Cancellation reason"
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:bnan_app/features/push_notifications/data/models/chat_push_intent.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
@@ -26,6 +27,33 @@ class LocalPushNotifications {
     playSound: false,
     enableVibration: false,
   );
+  static final _nudgeAlertChannel = AndroidNotificationChannel(
+    'bnan_nudge_alert_v2',
+    'Bnan long nudge alerts',
+    description: 'Bnan Academy long student nudge alerts',
+    importance: Importance.max,
+    sound: const RawResourceAndroidNotificationSound('nudge_alert'),
+    enableVibration: true,
+    vibrationPattern: Int64List.fromList(const [
+      0,
+      500,
+      300,
+      500,
+      300,
+      500,
+      300,
+      500,
+      300,
+      500,
+      300,
+      500,
+      300,
+      500,
+      300,
+      500,
+    ]),
+    audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
+  );
 
   Future<void> initialize(ValueChanged<String> onPayload) async {
     await _plugin.initialize(
@@ -48,6 +76,7 @@ class LocalPushNotifications {
         >();
     await android?.createNotificationChannel(_channel);
     await android?.createNotificationChannel(_nudgeChannel);
+    await android?.createNotificationChannel(_nudgeAlertChannel);
   }
 
   Future<String?> initialPayload() async {
@@ -87,8 +116,12 @@ class LocalPushNotifications {
     );
   }
 
-  Future<void> showNotification(AppNotification notification) async {
+  Future<void> showNotification(
+    AppNotification notification, {
+    bool playNudgeLocally = true,
+  }) async {
     final isNudge = notification.key.trim().toUpperCase() == 'CHAT_NUDGE';
+    final useNudgeChannel = isNudge && !playNudgeLocally;
     await _plugin.show(
       id: notification.id.isEmpty
           ? notification.hashCode
@@ -97,24 +130,42 @@ class LocalPushNotifications {
       body: notification.body,
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
-          isNudge ? 'bnan_nudge_silent_v1' : 'bnan_notifications',
-          isNudge ? 'Bnan nudge notifications' : 'Bnan notifications',
+          useNudgeChannel
+              ? 'bnan_nudge_alert_v2'
+              : isNudge
+              ? 'bnan_nudge_silent_v1'
+              : 'bnan_notifications',
+          useNudgeChannel
+              ? 'Bnan long nudge alerts'
+              : isNudge
+              ? 'Bnan nudge notifications'
+              : 'Bnan notifications',
           channelDescription: 'Bnan Academy notifications',
           icon: 'ic_notification',
           importance: Importance.high,
           priority: Priority.high,
-          playSound: !isNudge,
-          enableVibration: !isNudge,
+          playSound: !isNudge || useNudgeChannel,
+          sound: useNudgeChannel
+              ? const RawResourceAndroidNotificationSound('nudge_alert')
+              : null,
+          enableVibration: !isNudge || useNudgeChannel,
+          vibrationPattern: useNudgeChannel
+              ? _nudgeAlertChannel.vibrationPattern
+              : null,
+          audioAttributesUsage: useNudgeChannel
+              ? AudioAttributesUsage.notificationRingtone
+              : AudioAttributesUsage.notification,
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,
-          presentSound: !isNudge,
+          presentSound: !isNudge || useNudgeChannel,
           presentBadge: true,
+          sound: useNudgeChannel ? 'nudge_alert.wav' : null,
         ),
       ),
       payload: jsonEncode(notification.toPayload()),
     );
-    if (isNudge) {
+    if (isNudge && playNudgeLocally) {
       await _soundChannel.invokeMethod<void>('playNudgeNotificationSequence');
     }
   }

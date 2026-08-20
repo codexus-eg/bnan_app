@@ -55,7 +55,7 @@ class _ActionState extends State<ClassroomChangeRequestAction> {
         title: widget.role == UserRole.student
             ? s.requestTeacherChangeOrCancellation
             : s.requestTeacherWithdrawal,
-        label: s.requestReason,
+        label: s.cancellationReason,
       ),
     );
     if (notes == null || !mounted) return;

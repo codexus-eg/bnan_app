@@ -1,6 +1,4 @@
 import 'package:bnan_app/core/constants/tamara_default_address.dart';
-import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
-import 'package:bnan_app/core/helper/phone_number_normalizer.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
@@ -36,10 +34,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final parentFormKey = GlobalKey<FormState>();
   final studentFormKey = GlobalKey<FormState>();
 
-  final parentNameController = TextEditingController();
   final parentEmailController = TextEditingController();
-  final parentPhoneController = TextEditingController();
-  final parentWhatsappController = TextEditingController();
   final parentPasswordController = TextEditingController();
   final studentPasswordController = TextEditingController();
   final studentNameController = TextEditingController();
@@ -64,11 +59,6 @@ class RegisterCubit extends Cubit<RegisterState> {
   bool get isGulf => registrationMode == 'gulf';
   bool _authenticating = false;
   bool _submitting = false;
-  String? get normalizedParentPhone => PhoneNumberNormalizer.normalize(
-    parentPhoneController.text,
-    currency: packageCurrency,
-  );
-
   void setGrade({required String id, required String name}) {
     selectedGradeId = id;
     selectedGradeName = name;
@@ -123,19 +113,15 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   RegisterRequestModel? buildRegisterRequest() {
-    final phone = normalizedParentPhone;
     final subjectCount = selectedSubjectIds.length;
     final validSubjects = isSingleSubjectPackage
         ? subjectCount == 1
         : subjectCount > 0;
-    if (phone == null || selectedGradeId == null || !validSubjects) return null;
+    if (selectedGradeId == null || !validSubjects) return null;
     return RegisterRequestModel(
       parent: RegisterParentModel(
-        fullName: parentNameController.text.trim(),
         email: parentEmailController.text.trim(),
-        phone: phone,
         password: parentPasswordController.text,
-        whatsappNumber: parentWhatsappController.text.trim(),
       ),
       student: RegisterStudentModel(
         fullName: studentNameController.text.trim(),
@@ -152,20 +138,13 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> authenticateParentAndContinue() async {
     if (_authenticating) return;
     if (!(parentFormKey.currentState?.validate() ?? false)) return;
-    final parentPhone = normalizedParentPhone;
-    if (parentPhone == null) return;
     _authenticating = true;
     emit(RegisterLoading(currentStep: state.currentStep));
     try {
       final result = await gulfParentAuthRepo.authenticate(
-        ParentRegisterRequestModel(
-          fullName: parentNameController.text,
+        RegisterParentModel(
           email: parentEmailController.text,
           password: parentPasswordController.text,
-          phone: parentPhone,
-          whatsappNumber: parentWhatsappController.text.trim().isEmpty
-              ? parentPhone
-              : parentWhatsappController.text,
         ),
       );
       if (isClosed) return;
@@ -247,10 +226,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   @override
   Future<void> close() {
-    parentNameController.dispose();
     parentEmailController.dispose();
-    parentPhoneController.dispose();
-    parentWhatsappController.dispose();
     parentPasswordController.dispose();
     studentPasswordController.dispose();
     studentNameController.dispose();

@@ -109,7 +109,9 @@ class _UploadStudyPlanFormState extends State<UploadStudyPlanForm> {
           ? state.classroomSubjects.subjects
           : const [];
       return (
-        s.selectSubject,
+        state is GetClassroomSubjectsSuccess && items.isEmpty
+            ? s.assignSubjectToClassroom
+            : s.selectSubject,
         {for (final item in items) item.subjectId: item.name},
       );
     }
@@ -123,7 +125,12 @@ class _UploadStudyPlanFormState extends State<UploadStudyPlanForm> {
     final items = state is GetTeacherAssignedSubjectsSuccess
         ? state.response.data.subjects
         : const [];
-    return (s.selectSubject, {for (final item in items) item.id: item.name});
+    return (
+      state is GetTeacherAssignedSubjectsSuccess && items.isEmpty
+          ? s.assignSubjectToClassroom
+          : s.selectSubject,
+      {for (final item in items) item.id: item.name},
+    );
   }
 
   String? get _fileName {

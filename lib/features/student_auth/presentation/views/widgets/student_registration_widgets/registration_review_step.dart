@@ -26,13 +26,7 @@ class RegistrationReviewStep extends StatelessWidget {
         '${cubit.packageName} — ${cubit.packagePrice} '
             '${CurrencyFormatter.symbol(context, cubit.packageCurrency)}',
       ),
-      (S.of(context).parentName, cubit.parentNameController.text.trim()),
       (S.of(context).email, cubit.parentEmailController.text.trim()),
-      (S.of(context).phoneNumber, cubit.parentPhoneController.text.trim()),
-      (
-        S.of(context).whatsappNumber,
-        cubit.parentWhatsappController.text.trim(),
-      ),
       (S.of(context).studentName, cubit.studentNameController.text.trim()),
       (S.of(context).studentEmail, cubit.studentEmailController.text.trim()),
       (S.of(context).curriculum, cubit.curriculumName),

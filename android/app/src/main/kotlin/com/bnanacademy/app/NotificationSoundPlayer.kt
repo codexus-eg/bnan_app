@@ -18,15 +18,11 @@ class NotificationSoundPlayer(
     private val channel = MethodChannel(messenger, "bnan/notification_sound")
     private var ringtone: Ringtone? = null
     private var sequencePlayer: MediaPlayer? = null
-    private var sequenceRemaining = 0
 
     fun register() {
         channel.setMethodCallHandler { call, result ->
             if (call.method == "playNudgeNotificationSequence") {
-                if (sequenceRemaining == 0) {
-                    sequenceRemaining = 3
-                    playNudgeTone()
-                }
+                playNudgeAlert()
                 result.success(null)
                 return@setMethodCallHandler
             }
@@ -51,25 +47,29 @@ class NotificationSoundPlayer(
         }
     }
 
-    private fun playNudgeTone() {
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            ?: return finishSequence()
+    private fun playNudgeAlert() {
+        if (sequencePlayer != null) return
+        val resourceId = context.resources.getIdentifier(
+            "nudge_alert",
+            "raw",
+            context.packageName
+        )
+        if (resourceId == 0) return
         val attributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
+        val uri = android.net.Uri.parse("android.resource://${context.packageName}/$resourceId")
         sequencePlayer = MediaPlayer.create(context, uri, null, attributes, 0)
             ?: return finishSequence()
         vibrate()
         sequencePlayer?.setOnCompletionListener { player ->
             player.release()
             sequencePlayer = null
-            sequenceRemaining--
-            if (sequenceRemaining > 0) playNudgeTone() else finishSequence()
         }
         sequencePlayer?.setOnErrorListener { player, _, _ ->
             player.release()
-            finishSequence()
+            sequencePlayer = null
             true
         }
         sequencePlayer?.start()
@@ -77,17 +77,20 @@ class NotificationSoundPlayer(
 
     private fun vibrate() {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val pattern = longArrayOf(
+            0, 500, 300, 500, 300, 500, 300, 500,
+            300, 500, 300, 500, 300, 500, 300, 500
+        )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(250, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
         } else {
             @Suppress("DEPRECATION")
-            vibrator.vibrate(250)
+            vibrator.vibrate(pattern, -1)
         }
     }
 
     private fun finishSequence() {
         sequencePlayer?.release()
         sequencePlayer = null
-        sequenceRemaining = 0
     }
 }

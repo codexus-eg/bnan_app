@@ -38,5 +38,5 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (notification.id.isEmpty && notification.key.isEmpty) return;
   final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
   await local.initialize((_) {});
-  await local.showNotification(notification);
+  await local.showNotification(notification, playNudgeLocally: false);
 }

@@ -53,6 +53,13 @@ void main() {
     ]);
     expect(repo.registerCalls, 1);
   });
+
+  test('student registration sends only parent email and password', () {
+    expect(_request.toJson()['parent'], {
+      'email': 'p@e.com',
+      'password': 'Password1',
+    });
+  });
 }
 
 RegisterFlowArgsModel _args(String mode) => RegisterFlowArgsModel(
@@ -66,13 +73,7 @@ RegisterFlowArgsModel _args(String mode) => RegisterFlowArgsModel(
 );
 
 const _request = RegisterRequestModel(
-  parent: RegisterParentModel(
-    fullName: 'Parent',
-    email: 'p@e.com',
-    phone: '+201000000000',
-    password: 'Password1',
-    whatsappNumber: '+201000000000',
-  ),
+  parent: RegisterParentModel(email: 'p@e.com', password: 'Password1'),
   student: RegisterStudentModel(
     fullName: 'Student',
     email: 's@e.com',

@@ -387,6 +387,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
       "Meeting link (optional)",
     ),
+    "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
+      "Please assign a subject to this classroom",
+    ),
+    "cancellationReason": MessageLookupByLibrary.simpleMessage(
+      "Cancellation reason",
+    ),
     "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
       "Your request was submitted successfully",
     ),

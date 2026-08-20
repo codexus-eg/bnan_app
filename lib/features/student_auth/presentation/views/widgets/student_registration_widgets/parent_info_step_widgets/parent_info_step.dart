@@ -27,41 +27,11 @@ class ParentInfoStep extends StatelessWidget {
           // ),
           // const SizedBox(height: 16),
           CustomTextField(
-            controller: cubit.parentNameController,
-            label: S.of(context).parentName,
-            hintText: '',
-            isRequired: true,
-            validator: MyValidator.validateName,
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
             controller: cubit.parentEmailController,
             label: S.of(context).email,
             isRequired: true,
             keyboardType: TextInputType.emailAddress,
             validator: MyValidator.validateEmail,
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
-            controller: cubit.parentPhoneController,
-            label: S.of(context).phoneNumber,
-            keyboardType: TextInputType.phone,
-            isRequired: true,
-            validator: (value) =>
-                MyValidator.validatePhone(value, cubit.packageCurrency),
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
-            controller: cubit.parentWhatsappController,
-            label: S.of(context).whatsappNumber,
-            keyboardType: TextInputType.phone,
-            isRequired: !cubit.isGulf,
-            validator: cubit.isGulf
-                ? null
-                : (value) => MyValidator.requiredField(
-                    value,
-                    S.of(context).whatsappNumber,
-                  ),
           ),
           const SizedBox(height: 16),
           CustomPasswordField(

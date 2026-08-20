@@ -1,9 +1,10 @@
+import AVFoundation
 import AudioToolbox
 import Flutter
 
 final class NotificationSoundPlayer {
   private let channel: FlutterMethodChannel
-  private var sequenceRemaining = 0
+  private var nudgePlayer: AVAudioPlayer?
 
   init(controller: FlutterViewController) {
     channel = FlutterMethodChannel(
@@ -15,10 +16,7 @@ final class NotificationSoundPlayer {
   func register() {
     channel.setMethodCallHandler { call, result in
       if call.method == "playNudgeNotificationSequence" {
-        if self.sequenceRemaining == 0 {
-          self.sequenceRemaining = 3
-          self.playNudgeTone()
-        }
+        self.playNudgeAlert()
         result(nil)
         return
       }
@@ -32,14 +30,24 @@ final class NotificationSoundPlayer {
     }
   }
 
-  private func playNudgeTone() {
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-    AudioServicesPlaySystemSoundWithCompletion(1007) { [weak self] in
-      guard let self else { return }
-      self.sequenceRemaining -= 1
-      if self.sequenceRemaining > 0 {
-        self.playNudgeTone()
+  private func playNudgeAlert() {
+    if nudgePlayer?.isPlaying == true { return }
+    guard let url = Bundle.main.url(forResource: "nudge_alert", withExtension: "wav") else {
+      return
+    }
+    do {
+      let player = try AVAudioPlayer(contentsOf: url)
+      nudgePlayer = player
+      player.prepareToPlay()
+      player.play()
+      for delay in stride(from: 0.0, through: 6.0, by: 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self, weak player] in
+          guard self?.nudgePlayer === player, player?.isPlaying == true else { return }
+          AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        }
       }
+    } catch {
+      nudgePlayer = nil
     }
   }
 }

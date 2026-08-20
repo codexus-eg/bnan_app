@@ -1368,5 +1368,7 @@
     "rejectionReason": "سبب الرفض",
     "changeRequestApprovedSuccess": "تمت الموافقة على الطلب بنجاح",
     "changeRequestRejectedSuccess": "تم رفض الطلب بنجاح",
-    "meetingLinkOptional": "رابط الاجتماع (اختياري)"
+    "meetingLinkOptional": "رابط الاجتماع (اختياري)",
+    "assignSubjectToClassroom": "برجاء تعيين مادة لهذا الفصل",
+    "cancellationReason": "سبب الإلغاء"
 }

@@ -11168,6 +11168,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Please assign a subject to this classroom`
+  String get assignSubjectToClassroom {
+    return Intl.message(
+      'Please assign a subject to this classroom',
+      name: 'assignSubjectToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancellation reason`
+  String get cancellationReason {
+    return Intl.message(
+      'Cancellation reason',
+      name: 'cancellationReason',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
