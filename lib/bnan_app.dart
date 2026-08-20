@@ -84,7 +84,7 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
     unawaited(_connectivity.startMonitoring());
 
     _sessionExpiredSubscription = SessionInvalidator.instance.expired.listen(
-      (_) => _openLoginAfterSessionExpiry(),
+      _openLoginAfterSessionExpiry,
     );
 
     _chatNotifications = getIt<ChatNotificationCoordinator>();
@@ -305,12 +305,22 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
         },
       });
 
-  void _openLoginAfterSessionExpiry() {
+  void _openLoginAfterSessionExpiry(String? reason) {
     if (_router.routeInformationProvider.value.uri.path == Routes.logIn) {
       return;
     }
 
     _router.go(Routes.logIn);
+    if (reason != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        AppTopFeedback.show(
+          context,
+          title: S.of(context).subscriptionAccessExpired,
+          type: AppTopFeedbackType.warning,
+        );
+      });
+    }
   }
 
   Widget _builder(BuildContext context, Widget? child) {

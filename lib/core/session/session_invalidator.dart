@@ -6,29 +6,33 @@ class SessionInvalidator {
   SessionInvalidator._();
   static final instance = SessionInvalidator._();
 
-  final _expired = StreamController<void>.broadcast();
+  final _expired = StreamController<String?>.broadcast();
   Future<void>? _invalidation;
   bool _invalidated = false;
 
-  Stream<void> get expired => _expired.stream;
+  Stream<String?> get expired => _expired.stream;
   bool get isInvalidating => _invalidation != null;
 
-  Future<void> invalidate() {
+  Future<void> invalidate() => _invalidate(null);
+
+  Future<void> invalidateSubscriptionAccess(String code) => _invalidate(code);
+
+  Future<void> _invalidate(String? reason) {
     final active = _invalidation;
     if (active != null) return active;
     if (_invalidated && SessionManager.instance.accessToken == null) {
       return Future<void>.value();
     }
     _invalidated = true;
-    final operation = _perform();
+    final operation = _perform(reason);
     _invalidation = operation;
     return operation.whenComplete(() {
       if (identical(_invalidation, operation)) _invalidation = null;
     });
   }
 
-  Future<void> _perform() async {
+  Future<void> _perform(String? reason) async {
     await SessionManager.instance.clearSession();
-    _expired.add(null);
+    _expired.add(reason);
   }
 }

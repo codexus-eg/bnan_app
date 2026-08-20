@@ -1,6 +1,7 @@
-import 'dart:io';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/network/dio_consumer.dart';
+import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_payment_address.dart';
@@ -12,15 +13,21 @@ import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscr
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_status_response.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_payment_draft.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo_impl.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_payment_store.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscription_renewal_view.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -52,14 +59,10 @@ void main() {
     },
   );
 
-  test('student renewal payloads omit studentId', () async {
-    final directory = await Directory.systemTemp.createTemp('student-renewal-');
-    final receipt = File('${directory.path}/receipt.png')
-      ..writeAsBytesSync([1]);
-    final egyptian = await EgyptianRenewalRequest(
+  test('renewal payloads omit studentId', () {
+    final egyptian = const EgyptianRenewalRequest(
       packageId: 'package-1',
-      receiptImage: receipt,
-    ).toFormData();
+    ).toJson();
     final gulf = GulfRenewalRequest(
       packageId: 'package-1',
       paymentAddress: const ParentPaymentAddress(
@@ -69,34 +72,51 @@ void main() {
       ),
     ).toJson();
 
-    expect(egyptian.fields.any((item) => item.key == 'studentId'), isFalse);
+    expect(egyptian.containsKey('studentId'), isFalse);
     expect(gulf.containsKey('studentId'), isFalse);
-    await directory.delete(recursive: true);
   });
 
-  test('Egyptian FormData uses exact fields and studentId', () async {
-    final directory = await Directory.systemTemp.createTemp('renewal-');
-    final receipt = File('${directory.path}/receipt.png')
-      ..writeAsBytesSync([1]);
-    final form = await EgyptianRenewalRequest(
-      studentId: 'child-1',
+  test('Egyptian JSON uses minimal fields without receipt', () {
+    final json = const EgyptianRenewalRequest(
       packageId: 'package-1',
       subjectId: 'subject-1',
-      receiptImage: receipt,
-    ).toFormData();
-    expect(form.fields.map((item) => item.key).toSet(), {
-      'studentId',
-      'packageId',
-      'subjectId',
-    });
-    expect(
-      form.fields.firstWhere((item) => item.key == 'studentId').value,
-      'child-1',
-    );
-    expect(form.files.single.key, 'receiptImage');
-    await receipt.delete();
-    await directory.delete();
+    ).toJson();
+    expect(json.keys.toSet(), {'packageId', 'subjectId'});
+    expect(json.containsKey('receiptImage'), isFalse);
   });
+
+  test('PackageModel reads the backend _id as packageId', () {
+    expect(PackageModel.fromJson({'_id': 'package-1'}).id, 'package-1');
+  });
+
+  test(
+    'Egyptian repo posts the minimal payload to the renewal endpoint',
+    () async {
+      final dio = Dio();
+      final consumer = DioConsumer(dio: dio);
+      late RequestOptions sent;
+      dio.interceptors.insert(
+        0,
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            sent = options;
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {'status': 'completed'},
+              ),
+            );
+          },
+        ),
+      );
+      await ParentSubscriptionsRepoImpl(
+        consumer,
+      ).renewEgyptian(const EgyptianRenewalRequest(packageId: 'package-1'));
+      expect(sent.path, EndPoints.egyptianSubscriptionRenewal);
+      expect(sent.data, {'packageId': 'package-1'});
+    },
+  );
 
   test(
     'single subject requires one assigned subject and package curriculum',
@@ -116,32 +136,105 @@ void main() {
     },
   );
 
-  test('receipt is required for Egyptian renewal', () async {
-    final cubit = _ready(_Repo(), mode: 'egyptian');
+  test('Egyptian renewal submits without receipt', () async {
+    final repo = _Repo();
+    final cubit = _ready(repo, mode: 'egyptian');
     await cubit.submit();
-    expect(cubit.state.errorMessage, S.current.paymentReceiptRequired);
+    expect(repo.egyptianRenewCalls, 1);
+    await cubit.close();
+  });
+
+  test(
+    'Egyptian package without id never enters loading or calls repo',
+    () async {
+      final repo = _Repo();
+      final cubit = _cubit(repo, mode: 'egyptian')
+        ..nextStep()
+        ..selectPackage(
+          const PackageModel(
+            curriculum: 'curriculum-1',
+            accessScope: 'all_subjects',
+            type: 'monthly',
+            isActive: true,
+          ),
+        )
+        ..nextStep()
+        ..nextStep();
+      await cubit.submit();
+      expect(repo.egyptianRenewCalls, 0);
+      expect(cubit.state.phase, ParentRenewalPhase.editing);
+      await cubit.close();
+    },
+  );
+
+  testWidgets('Egyptian monthly confirm pops without polling', (tester) async {
+    var refreshes = 0;
+    final repo = _Repo();
+    final cubit =
+        _cubit(
+            repo,
+            mode: 'egyptian',
+            isParent: false,
+            onCompleted: () async => refreshes++,
+          )
+          ..nextStep()
+          ..selectPackage(_monthlyAllPackage)
+          ..nextStep()
+          ..nextStep();
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, _) => Scaffold(
+            body: TextButton(
+              onPressed: () => context.push('/renewal'),
+              child: const Text('Student source'),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: '/renewal',
+          builder: (_, __) => BlocProvider.value(
+            value: cubit,
+            child: const ParentSubscriptionRenewalView(),
+          ),
+        ),
+      ],
+    );
+    await tester.pumpWidget(_app(router));
+    await tester.tap(find.text('Student source'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Submit renewal request'));
+    await tester.pumpAndSettle();
+    expect(repo.egyptianRenewCalls, 1);
+    expect(refreshes, 0);
+    expect(repo.egyptianStatusCalls, 0);
+    expect(cubit.state.phase, ParentRenewalPhase.pending);
+    expect(find.text('Student source'), findsOneWidget);
+    expect(find.text('Back to children'), findsNothing);
     await cubit.close();
   });
 
   for (final isParent in [false, true]) {
     final owner = isParent ? 'parent' : 'student';
-    test('$owner Egyptian renewal uses the correct studentId', () async {
-      final directory = await Directory.systemTemp.createTemp('renew-egypt-');
-      final receipt = File('${directory.path}/receipt.png')
-        ..writeAsBytesSync([1]);
-      final repo = _Repo()
-        ..egyptianInitialStatuses.add(RenewalPaymentStatus.pending)
-        ..egyptianPollStatuses.add(RenewalPaymentStatus.completed);
-      final cubit = _ready(repo, mode: 'egyptian', isParent: isParent)
-        ..updateEgyptian(receipt: receipt);
+    test('$owner Egyptian renewal stays pending after one request', () async {
+      var refreshes = 0;
+      final repo = _Repo();
+      final cubit = _ready(
+        repo,
+        mode: 'egyptian',
+        isParent: isParent,
+        onCompleted: () async => refreshes++,
+      );
 
       await cubit.submit();
-      await _waitFor(cubit, ParentRenewalPhase.completed);
 
-      expect(repo.lastEgyptianRequest?.studentId, isParent ? 'child-1' : null);
-      expect(cubit.state.phase, ParentRenewalPhase.completed);
+      expect(repo.egyptianRenewCalls, 1);
+      expect(repo.lastEgyptianRequest?.packageId, 'package-1');
+      expect(refreshes, 0);
+      expect(repo.egyptianStatusCalls, 0);
+      expect(cubit.state.phase, ParentRenewalPhase.pending);
       await cubit.close();
-      await directory.delete(recursive: true);
     });
 
     test(
@@ -163,26 +256,19 @@ void main() {
   }
 
   test('single_subject renewal sends its selected subjectId', () async {
-    final directory = await Directory.systemTemp.createTemp('renew-subject-');
-    final receipt = File('${directory.path}/receipt.png')
-      ..writeAsBytesSync([1]);
-    final repo = _Repo()
-      ..egyptianInitialStatuses.add(RenewalPaymentStatus.completed);
+    final repo = _Repo();
     final cubit = _cubit(repo, mode: 'egyptian')
       ..nextStep()
       ..selectPackage(_singlePackage)
       ..nextStep()
       ..selectSubject('subject-1')
       ..nextStep()
-      ..nextStep()
-      ..nextStep()
-      ..updateEgyptian(receipt: receipt);
+      ..nextStep();
 
     await cubit.submit();
 
     expect(repo.lastEgyptianRequest?.subjectId, 'subject-1');
     await cubit.close();
-    await directory.delete(recursive: true);
   });
 
   test(
@@ -339,25 +425,6 @@ void main() {
     await cubit.close();
   });
 
-  for (final status in [
-    RenewalPaymentStatus.pending,
-    RenewalPaymentStatus.confirmed,
-  ]) {
-    test('Egyptian $status does not refresh subscriptions', () async {
-      final directory = await Directory.systemTemp.createTemp('renew-status-');
-      final receipt = File('${directory.path}/receipt.png')
-        ..writeAsBytesSync([1]);
-      final repo = _Repo()..egyptianInitialStatuses.add(status);
-      final cubit = _ready(repo, mode: 'egyptian')
-        ..updateEgyptian(receipt: receipt);
-      await cubit.submit();
-      expect(repo.refreshCalls, 0);
-      expect(cubit.state.status, status);
-      await cubit.close();
-      await directory.delete(recursive: true);
-    });
-  }
-
   test('checkout URL can be reopened without creating a checkout', () async {
     final repo = _Repo();
     final cubit = _ready(repo, mode: 'gulf');
@@ -392,23 +459,23 @@ void main() {
     await SessionManager.instance.clearSession();
   });
 
-  test('rejected Egyptian renewal allows retry', () async {
-    final directory = await Directory.systemTemp.createTemp('renew-retry-');
-    final receipt = File('${directory.path}/receipt.png')
-      ..writeAsBytesSync([1]);
+  test('Egyptian 409 stays on the wizard and allows retry', () async {
     final repo = _Repo()
-      ..egyptianInitialStatuses.addAll([
-        RenewalPaymentStatus.rejected,
-        RenewalPaymentStatus.pending,
-      ]);
-    final cubit = _ready(repo, mode: 'egyptian')
-      ..updateEgyptian(receipt: receipt);
+      ..egyptianFailures.add(
+        Failure(
+          message: 'SUBSCRIPTION_STILL_ACTIVE',
+          code: 'SUBSCRIPTION_STILL_ACTIVE',
+          statusCode: 409,
+        ),
+      );
+    final cubit = _ready(repo, mode: 'egyptian');
     await cubit.submit();
-    expect(cubit.state.phase, ParentRenewalPhase.failure);
-    await cubit.retry();
+    expect(cubit.state.phase, ParentRenewalPhase.editing);
+    expect(cubit.state.errorMessage, S.current.renewalSubscriptionStillActive);
+    await cubit.submit();
     expect(repo.egyptianRenewCalls, 2);
+    expect(cubit.state.phase, ParentRenewalPhase.pending);
     await cubit.close();
-    await directory.delete(recursive: true);
   });
 
   test('lifecycle checks do not run beside an active poller', () async {
@@ -461,6 +528,25 @@ const _monthlySinglePackage = PackageModel(
   accessScope: 'single_subject',
   type: 'monthly',
   isActive: true,
+);
+const _monthlyAllPackage = PackageModel(
+  id: 'monthly-package',
+  curriculum: 'curriculum-1',
+  accessScope: 'all_subjects',
+  type: 'monthly',
+  isActive: true,
+);
+
+Widget _app(GoRouter router) => MaterialApp.router(
+  routerConfig: router,
+  locale: const Locale('en'),
+  localizationsDelegates: const [
+    S.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: S.delegate.supportedLocales,
 );
 
 ParentSubscriptionRenewalCubit _cubit(
@@ -545,11 +631,13 @@ class _Repo implements ParentSubscriptionsRepo {
   final List<RenewalPaymentStatus> egyptianPollStatuses = [];
   RenewalPaymentStatus egyptianStatusValue = RenewalPaymentStatus.pending;
   final List<Failure> checkoutFailures = [];
+  final List<Failure> egyptianFailures = [];
   final List<String> keys = [];
   String? failureCode;
   EgyptianRenewalRequest? lastEgyptianRequest;
   GulfRenewalRequest? lastGulfRequest;
   int renewCalls = 0, egyptianRenewCalls = 0, refreshCalls = 0;
+  int egyptianStatusCalls = 0;
   int activeChecks = 0, maxActiveChecks = 0;
   @override
   getSubscriptions() async {
@@ -600,6 +688,9 @@ class _Repo implements ParentSubscriptionsRepo {
   renewEgyptian(EgyptianRenewalRequest request) async {
     lastEgyptianRequest = request;
     egyptianRenewCalls++;
+    if (egyptianFailures.isNotEmpty) {
+      return Left(egyptianFailures.removeAt(0));
+    }
     egyptianStatusValue = egyptianInitialStatuses.isEmpty
         ? RenewalPaymentStatus.pending
         : egyptianInitialStatuses.removeAt(0);
@@ -609,12 +700,15 @@ class _Repo implements ParentSubscriptionsRepo {
   }
 
   @override
-  egyptianStatus(String id) async => Right(
-    RenewalStatusResponse(
-      paymentId: id,
-      status: egyptianPollStatuses.isEmpty
-          ? egyptianStatusValue
-          : egyptianPollStatuses.removeAt(0),
-    ),
-  );
+  egyptianStatus(String id) async {
+    egyptianStatusCalls++;
+    return Right(
+      RenewalStatusResponse(
+        paymentId: id,
+        status: egyptianPollStatuses.isEmpty
+            ? egyptianStatusValue
+            : egyptianPollStatuses.removeAt(0),
+      ),
+    );
+  }
 }

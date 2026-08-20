@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_status_response.dart';
@@ -24,9 +23,6 @@ class ParentSubscriptionRenewalState {
     this.package,
     this.subjectId,
     this.discountCode = '',
-    this.method = '',
-    this.referenceNumber = '',
-    this.receipt,
     this.paymentId,
     this.checkoutUrl,
     this.status,
@@ -39,8 +35,7 @@ class ParentSubscriptionRenewalState {
   final int currentStep;
   final PackageModel? package;
   final String? subjectId, paymentId, checkoutUrl, errorMessage;
-  final String discountCode, method, referenceNumber;
-  final File? receipt;
+  final String discountCode;
   final RenewalPaymentStatus? status;
   final PaymentAmountSummary? paymentSummary;
   final bool shouldOpenCheckout;
@@ -48,6 +43,7 @@ class ParentSubscriptionRenewalState {
   bool get hasSupportedRegistrationMode =>
       args.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
+  int get lastStep => isGulf ? 5 : 3;
   bool get isBusy =>
       phase == ParentRenewalPhase.submitting ||
       phase == ParentRenewalPhase.processing;
@@ -58,9 +54,6 @@ class ParentSubscriptionRenewalState {
     Object? package = _unset,
     Object? subjectId = _unset,
     String? discountCode,
-    String? method,
-    String? referenceNumber,
-    Object? receipt = _unset,
     Object? paymentId = _unset,
     Object? checkoutUrl = _unset,
     Object? status = _unset,
@@ -78,9 +71,6 @@ class ParentSubscriptionRenewalState {
         ? this.subjectId
         : subjectId as String?,
     discountCode: discountCode ?? this.discountCode,
-    method: method ?? this.method,
-    referenceNumber: referenceNumber ?? this.referenceNumber,
-    receipt: identical(receipt, _unset) ? this.receipt : receipt as File?,
     paymentId: identical(paymentId, _unset)
         ? this.paymentId
         : paymentId as String?,

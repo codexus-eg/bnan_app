@@ -1,5 +1,4 @@
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
-import 'package:bnan_app/features/parent_subscriptions/presentation/policies/subscription_renewal_policy.dart';
 
 class ParentSubscriptionSubjectModel {
   const ParentSubscriptionSubjectModel({required this.id, required this.name});
@@ -23,11 +22,15 @@ class ParentChildSubscriptionModel {
     this.remainingHours = 0,
     this.usedHoursValue,
     this.status = '',
+    this.computedStatus = '',
+    this.isActive,
     this.startDate,
     this.endDate,
+    this.gracePeriodEndsAt,
+    this.renewalDueDate,
     this.price,
     this.currency,
-    this.renewalAllowed,
+    this.canRenew = false,
     this.planKind = '',
     this.remainingValue,
     this.hasRemainingHours = false,
@@ -36,13 +39,14 @@ class ParentChildSubscriptionModel {
   });
 
   final String id, packageId, packageName, curriculumId;
-  final String accessScope, packageType, status;
+  final String accessScope, packageType, status, computedStatus;
+  final bool? isActive;
   final ParentSubscriptionSubjectModel? subject;
   final num purchasedHours, remainingHours;
   final num? usedHoursValue, price;
   final String? currency;
-  final DateTime? startDate, endDate;
-  final bool? renewalAllowed;
+  final DateTime? startDate, endDate, gracePeriodEndsAt, renewalDueDate;
+  final bool canRenew;
   final String planKind;
   final num? remainingValue;
   final bool hasRemainingHours;
@@ -54,16 +58,8 @@ class ParentChildSubscriptionModel {
   bool get isHoursPlan =>
       hasRemainingHours || packageType == 'hours' || planKind == 'gulf';
   bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
-  bool get canRenew => canRenewSubscription(
-    packageType: packageType,
-    planKind: planKind,
-    remainingHours: hasRemainingHours ? remainingHours : null,
-    remainingValue: remainingValue,
-    endDate: endDate,
-    status: status,
-    serverAllowed: renewalAllowed,
-  );
-
+  String get effectiveStatus =>
+      computedStatus.isEmpty ? status : computedStatus;
   factory ParentChildSubscriptionModel.fromJson(
     Map<String, dynamic> json, {
     String curriculumIdFallback = '',
@@ -119,13 +115,15 @@ class ParentChildSubscriptionModel {
           rawUsedHours != null ||
           rawPurchasedHours != null && rawRemainingHours != null,
       status: _text(json['status']),
+      computedStatus: _text(json['computedStatus']),
+      isActive: json['isActive'] is bool ? json['isActive'] as bool : null,
       startDate: _date(json['startDate'] ?? period['start']),
       endDate: _date(json['expiryDate'] ?? json['endDate'] ?? period['end']),
+      gracePeriodEndsAt: _date(json['gracePeriodEndsAt']),
+      renewalDueDate: _date(json['renewalDueDate']),
       price: _nullableNumber(json['paidPrice'] ?? json['price']),
       currency: _nullableText(json['currency'] ?? package['currency']),
-      renewalAllowed: json['renewalAllowed'] is bool
-          ? json['renewalAllowed'] as bool
-          : null,
+      canRenew: json['canRenew'] is bool ? json['canRenew'] as bool : false,
       planKind: _text(json['planKind'] ?? summary['planKind']),
     );
   }

@@ -14,11 +14,15 @@ class RenewalNavigation extends StatelessWidget {
     return Column(
       children: [
         CustomAppButton(
-          text: state.currentStep == 5
-              ? S.of(context).parentSubmitPayment
+          text: state.currentStep == state.lastStep
+              ? state.isGulf
+                    ? S.of(context).parentSubmitPayment
+                    : S.of(context).renewalSubmitRequest
               : S.of(context).next,
           isLoading: state.isBusy,
-          onPressed: state.currentStep == 5 ? cubit.submit : cubit.nextStep,
+          onPressed: state.currentStep == state.lastStep
+              ? cubit.submit
+              : cubit.nextStep,
         ),
         if (state.currentStep > 0) ...[
           const SizedBox(height: 12),

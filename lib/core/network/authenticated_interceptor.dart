@@ -11,12 +11,14 @@ class AuthenticatedInterceptor extends Interceptor {
     required this.tokens,
     required this.refresh,
     required this.invalidate,
+    this.invalidateAccess,
     this.isInvalidating = _neverInvalidating,
   });
   final Dio dio;
   final TokenStore tokens;
   final TokenRefreshCoordinator refresh;
   final Future<void> Function() invalidate;
+  final Future<void> Function(String code)? invalidateAccess;
   final bool Function() isInvalidating;
 
   @override
@@ -43,6 +45,11 @@ class AuthenticatedInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final options = err.requestOptions;
+    final accessCode = _subscriptionAccessCode(err.response?.data);
+    if (options.extra['isProtected'] == true && accessCode != null) {
+      await (invalidateAccess?.call(accessCode) ?? invalidate());
+      return handler.next(err);
+    }
     if (!_canRefresh(err)) return handler.next(err);
     if (options.extra['retriedAfterRefresh'] == true) {
       await invalidate();
@@ -81,4 +88,33 @@ class AuthenticatedInterceptor extends Interceptor {
   }
 
   static bool _neverInvalidating() => false;
+
+  String? _subscriptionAccessCode(dynamic data) {
+    if (data is! Map) return null;
+    final code = _findCode(data)?.toUpperCase();
+    const denied = {
+      'SUBSCRIPTION_SUSPENDED',
+      'SUBSCRIPTION_EXPIRED',
+      'SUBSCRIPTION_CANCELLED',
+      'SUBSCRIPTION_ACCESS_DENIED',
+      'NO_VALID_SUBSCRIPTION',
+    };
+    return denied.contains(code) ? code : null;
+  }
+
+  String? _findCode(Map data, [int depth = 0]) {
+    if (depth > 3) return null;
+    for (final key in const ['code', 'errorCode', 'error_code']) {
+      final value = data[key]?.toString().trim();
+      if (value?.isNotEmpty == true) return value;
+    }
+    for (final key in const ['error', 'data', 'response']) {
+      final nested = data[key];
+      if (nested is Map) {
+        final value = _findCode(nested, depth + 1);
+        if (value != null) return value;
+      }
+    }
+    return null;
+  }
 }

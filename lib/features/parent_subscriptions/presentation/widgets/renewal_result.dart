@@ -26,7 +26,7 @@ class RenewalResult extends StatelessWidget {
         : pending
         ? state.status == RenewalPaymentStatus.confirmed
               ? S.of(context).parentPaymentConfirmedWaiting
-              : S.of(context).renewalReceiptPending
+              : S.of(context).renewalRequestPending
         : unknown
         ? S.of(context).parentPaymentStatusTimeout
         : S.of(context).parentPaymentProcessing;
@@ -51,7 +51,9 @@ class RenewalResult extends StatelessWidget {
             const SizedBox(height: 24),
             if (completed || pending)
               CustomAppButton(
-                text: S.of(context).parentBackToChildren,
+                text: state.args.isParent
+                    ? S.of(context).parentBackToChildren
+                    : S.of(context).subscriptions,
                 onPressed: () => MyNavigator.pop(
                   context,
                   completed

@@ -19,18 +19,26 @@ class ParentSubscriptionRenewalBody extends StatelessWidget {
         ParentSubscriptionRenewalState
       >(
         builder: (context, state) {
-          if (state.phase != ParentRenewalPhase.editing &&
+          if (state.isGulf &&
+              state.phase != ParentRenewalPhase.editing &&
               state.phase != ParentRenewalPhase.submitting) {
             return RenewalResult(state: state);
           }
-          final headers = [
-            S.of(context).renewalCurrentSubscription,
-            S.of(context).parentPackageStep,
-            S.of(context).parentSubjectsStep,
-            S.of(context).optionalDiscountCode,
-            S.of(context).parentReviewStep,
-            S.of(context).parentPaymentStep,
-          ];
+          final headers = state.isGulf
+              ? [
+                  S.of(context).renewalCurrentSubscription,
+                  S.of(context).parentPackageStep,
+                  S.of(context).parentSubjectsStep,
+                  S.of(context).optionalDiscountCode,
+                  S.of(context).parentReviewStep,
+                  S.of(context).parentPaymentStep,
+                ]
+              : [
+                  S.of(context).renewalCurrentSubscription,
+                  S.of(context).parentPackageStep,
+                  S.of(context).parentSubjectsStep,
+                  S.of(context).parentReviewStep,
+                ];
           return SafeArea(
             top: false,
             child: CustomScrollView(
@@ -41,7 +49,7 @@ class ParentSubscriptionRenewalBody extends StatelessWidget {
                     title: S.of(context).renewSubscription,
                     subtitle: S.of(context).pleaseFillRequiredInfo,
                     currentStep: state.currentStep + 1,
-                    listLength: 6,
+                    listLength: state.lastStep + 1,
                     stepHeader: headers[state.currentStep],
                     textColor: ColorManager.mainColor14,
                   ),

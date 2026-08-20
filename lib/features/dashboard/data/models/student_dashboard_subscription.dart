@@ -15,14 +15,19 @@ class DashboardSubscription {
     this.endDate,
     this.remainingType = '',
     this.remainingValue,
+    this.status = '',
+    this.computedStatus = '',
+    this.gracePeriodEndsAt,
+    this.renewalDueDate,
   });
   final String packageName, packageType;
   final int totalHours, usedHours, remainingHours;
   final double progressPercentage;
   final bool isActive;
+  final String status, computedStatus;
   final String planKind, remainingType;
   final int purchasedMonths;
-  final DateTime? startDate, endDate;
+  final DateTime? startDate, endDate, gracePeriodEndsAt, renewalDueDate;
   final int? remainingValue;
 
   bool get isMonthly => planKind.trim().isNotEmpty
@@ -46,7 +51,11 @@ class DashboardSubscription {
         summary['remainingHours'] ?? json['remainingHours'],
       ),
       progressPercentage: dashboardDouble(summary['progressPercentage']),
-      isActive: dashboardBool(summary['isActive']),
+      isActive: dashboardBool(json['isActive'] ?? summary['isActive']),
+      status: dashboardString(json['status'] ?? summary['status']),
+      computedStatus: dashboardString(
+        json['computedStatus'] ?? summary['computedStatus'],
+      ),
       planKind: dashboardString(json['planKind'] ?? summary['planKind']),
       purchasedMonths: dashboardInt(
         json['purchasedMonths'] ?? summary['purchasedMonths'],
@@ -59,6 +68,12 @@ class DashboardSubscription {
       remainingValue: remaining['value'] == null
           ? null
           : dashboardInt(remaining['value']),
+      gracePeriodEndsAt: _date(
+        json['gracePeriodEndsAt'] ?? summary['gracePeriodEndsAt'],
+      ),
+      renewalDueDate: _date(
+        json['renewalDueDate'] ?? summary['renewalDueDate'],
+      ),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscriptions_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -83,33 +84,36 @@ void main() {
     expect(subscription.usedHours, 6.5);
   });
 
-  test('renewal uses numeric expiry data before textual status', () {
+  test('canRenew uses backend value only with a safe false default', () {
     final response = ParentSubscriptionsResponse.fromJson({
       'data': [
         {
           'student': {'id': 'student-1'},
           'subscriptions': [
             {
-              'id': 'hours',
+              'id': 'allowed',
               'packageType': 'hours',
-              'remainingHours': '0',
+              'remainingHours': 4,
               'status': 'active',
+              'canRenew': true,
             },
             {
-              'id': 'monthly',
-              'planKind': 'egyptian_monthly',
-              'remaining': {'value': 0},
-              'status': 'active',
+              'id': 'denied',
+              'packageType': 'monthly',
+              'endDate': '2026-01-01T00:00:00.000Z',
+              'status': 'expired',
+              'canRenew': false,
             },
+            {'id': 'missing', 'status': 'expired'},
           ],
         },
       ],
     });
 
-    expect(
-      response.children.single.subscriptions.every((item) => item.canRenew),
-      isTrue,
-    );
+    final subscriptions = response.children.single.subscriptions;
+    expect(subscriptions.first.canRenew, isTrue);
+    expect(subscriptions[1].canRenew, isFalse);
+    expect(subscriptions.last.canRenew, isFalse);
   });
 
   test('server allowance does not expose renewal while still active', () {
@@ -125,7 +129,7 @@ void main() {
                   .add(const Duration(days: 2))
                   .toIso8601String(),
               'status': 'active',
-              'renewalAllowed': true,
+              'canRenew': false,
             },
           ],
         },
@@ -133,5 +137,59 @@ void main() {
     });
 
     expect(response.children.single.subscriptions.single.canRenew, isFalse);
+  });
+
+  test('computed lifecycle fields override stale stored status', () {
+    final response = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'student': {'id': 'student-1'},
+          'subscriptions': [
+            {
+              'id': 'hours',
+              'packageType': 'hours',
+              'remainingHours': 0,
+              'status': 'active',
+              'computedStatus': 'expired',
+              'isActive': false,
+              'canRenew': true,
+              'gracePeriodEndsAt': '2026-09-05T00:00:00.000Z',
+              'renewalDueDate': '2026-09-01T00:00:00.000Z',
+            },
+          ],
+        },
+      ],
+    });
+    final subscription = response.children.single.subscriptions.single;
+    expect(subscription.effectiveStatus, 'expired');
+    expect(subscription.isActive, isFalse);
+    expect(subscription.gracePeriodEndsAt, isNotNull);
+    expect(subscription.renewalDueDate, isNotNull);
+    expect(subscription.canRenew, isTrue);
+  });
+
+  test('monthly grace period renews even while isActive remains true', () {
+    final subscription = ParentChildSubscriptionModel.fromJson({
+      'id': 'monthly',
+      'packageType': 'monthly',
+      'endDate': DateTime.now()
+          .subtract(const Duration(minutes: 1))
+          .toIso8601String(),
+      'computedStatus': 'grace_period',
+      'isActive': true,
+      'canRenew': true,
+    });
+    expect(subscription.canRenew, isTrue);
+  });
+
+  test('hours cannot renew before remaining hours reach zero', () {
+    final subscription = ParentChildSubscriptionModel.fromJson({
+      'id': 'hours',
+      'packageType': 'hours',
+      'remainingHours': 1,
+      'status': 'expired',
+      'canRenew': false,
+    });
+    expect(subscription.canRenew, isFalse);
   });
 }

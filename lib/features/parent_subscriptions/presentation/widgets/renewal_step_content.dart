@@ -13,7 +13,8 @@ class RenewalStepContent extends StatelessWidget {
   final int step;
   @override
   Widget build(BuildContext context) {
-    final args = context.read<ParentSubscriptionRenewalCubit>().state.args;
+    final state = context.read<ParentSubscriptionRenewalCubit>().state;
+    final args = state.args;
     return switch (step) {
       0 => ParentSubscriptionCard(
         child: ParentChildSubscriptionsModel(
@@ -24,11 +25,13 @@ class RenewalStepContent extends StatelessWidget {
         ),
         subscription: args.subscription,
         showRenew: false,
+        isParent: args.isParent,
       ),
       1 => const RenewalPackageStep(),
       2 => const RenewalSubjectStep(),
-      3 => const RenewalDiscountStep(),
-      4 => const RenewalPriceStep(),
+      3 =>
+        state.isGulf ? const RenewalDiscountStep() : const RenewalPriceStep(),
+      4 => state.isGulf ? const RenewalPriceStep() : const SizedBox.shrink(),
       _ => const RenewalPaymentStep(),
     };
   }

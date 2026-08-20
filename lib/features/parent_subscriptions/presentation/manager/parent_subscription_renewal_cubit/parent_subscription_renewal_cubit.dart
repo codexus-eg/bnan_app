@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
@@ -53,6 +52,10 @@ class ParentSubscriptionRenewalCubit
         draft.paymentId.isEmpty) {
       return;
     }
+    if (!state.isGulf) {
+      await store?.clear();
+      return;
+    }
     _attempt.restore(
       fingerprint: draft.payloadFingerprint,
       key: draft.idempotencyKey,
@@ -94,22 +97,13 @@ class ParentSubscriptionRenewalCubit
 
   void updateDiscount(String value) =>
       emit(state.copyWith(discountCode: value, errorMessage: null));
-  void updateEgyptian({String? method, String? reference, File? receipt}) =>
-      emit(
-        state.copyWith(
-          method: method,
-          referenceNumber: reference,
-          receipt: receipt ?? state.receipt,
-          errorMessage: null,
-        ),
-      );
   bool nextStep() {
     final error = _validation();
     if (error != null) {
       _error(error);
       return false;
     }
-    if (state.currentStep < 5) {
+    if (state.currentStep < state.lastStep) {
       emit(state.copyWith(currentStep: state.currentStep + 1));
     }
     return true;
@@ -235,6 +229,10 @@ class ParentSubscriptionRenewalCubit
   }
 
   Future<void> _submitEgyptian() async {
+    final packageId = state.package?.id?.trim();
+    if (packageId == null || packageId.isEmpty) {
+      return _error('PACKAGE_NOT_FOUND');
+    }
     emit(
       state.copyWith(
         phase: ParentRenewalPhase.submitting,
@@ -245,13 +243,8 @@ class ParentSubscriptionRenewalCubit
     );
     final result = await repo.renewEgyptian(
       EgyptianRenewalRequest(
-        studentId: state.args.isParent ? state.args.studentId : null,
-        packageId: state.package!.id!,
+        packageId: packageId,
         subjectId: state.isSingleSubject ? state.subjectId : null,
-        discountCode: state.discountCode,
-        method: state.method,
-        referenceNumber: state.referenceNumber,
-        receiptImage: state.receipt!,
       ),
     );
     if (isClosed) return;
@@ -260,7 +253,7 @@ class ParentSubscriptionRenewalCubit
         if (isClosed) return;
         emit(
           state.copyWith(
-            phase: ParentRenewalPhase.failure,
+            phase: ParentRenewalPhase.editing,
             errorMessage: mapParentFlowFailure(
               failure,
               fallback: S.current.renewalFailed,
@@ -270,36 +263,15 @@ class ParentSubscriptionRenewalCubit
       },
       (response) async {
         if (isClosed) return;
-        if (response.paymentId.isNotEmpty) {
-          await store?.save(
-            RenewalPaymentDraft(
-              paymentId: response.paymentId,
-              checkoutUrl: '',
-              studentId: state.args.studentId,
-              ownerUserId: SessionManager.instance.userId ?? '',
-              idempotencyKey: '',
-              payloadFingerprint: '',
-              isParent: state.args.isParent,
-              createdAt: DateTime.now().toUtc().toIso8601String(),
-              registrationMode: state.args.registrationMode,
-            ),
-          );
-          if (isClosed) return;
-        }
+        await store?.clear();
         emit(
           state.copyWith(
             phase: ParentRenewalPhase.pending,
             paymentId: response.paymentId,
             status: response.status,
-            paymentSummary: response.paymentSummary,
             errorMessage: null,
           ),
         );
-        if (response.status.isTerminal) {
-          await _handle(response);
-        } else if (response.paymentId.isNotEmpty) {
-          unawaited(_pollEgyptian(response.paymentId));
-        }
       },
     );
   }
@@ -492,9 +464,6 @@ class ParentSubscriptionRenewalCubit
         state.isSingleSubject &&
         state.subjectId == null) {
       return 'SINGLE_SUBJECT_SUBSCRIPTION_SUBJECT_REQUIRED';
-    }
-    if (payment || state.currentStep == 5) {
-      if (!state.isGulf && state.receipt == null) return 'RECEIPT_REQUIRED';
     }
     return null;
   }

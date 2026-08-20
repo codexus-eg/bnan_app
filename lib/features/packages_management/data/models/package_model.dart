@@ -39,7 +39,7 @@ class PackageModel {
 
   factory PackageModel.fromJson(Map<String, dynamic> json) {
     return PackageModel(
-      id: json['id']?.toString(),
+      id: (json['id'] ?? json['_id'])?.toString(),
       name: json['name']?.toString(),
       curriculum: _curriculumId(json['curriculum']),
       type: json['type']?.toString(),

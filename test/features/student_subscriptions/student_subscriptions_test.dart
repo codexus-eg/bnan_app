@@ -12,6 +12,7 @@ void main() {
     expect(api.paths, [EndPoints.studentHome, EndPoints.mySubjects]);
     expect(student.registrationMode, 'egyptian');
     expect(student.subscriptions.map((item) => item.id), ['new-1', 'new-2']);
+    expect(student.subscriptions.first.canRenew, isTrue);
     expect(student.subjects.single.id, 'subject-1');
   });
 }
@@ -42,7 +43,7 @@ class _Api implements ApiConsumer {
         },
         'subscription': {'id': 'legacy'},
         'subscriptions': [
-          {'id': 'new-1'},
+          {'id': 'new-1', 'canRenew': true},
           {'id': 'new-2'},
         ],
       },
