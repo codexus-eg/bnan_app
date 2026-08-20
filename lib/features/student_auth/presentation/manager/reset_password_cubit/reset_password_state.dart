@@ -23,3 +23,9 @@ final class ResetPasswordFailure extends ResetPasswordState {
 
   final String errorMessage;
 }
+
+final class VerifyAccountSuccess extends ResetPasswordState {
+  VerifyAccountSuccess({required this.message});
+
+  final String message;
+}

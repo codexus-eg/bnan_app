@@ -136,6 +136,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountActivatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Account activated successfully",
     ),
+    "accountVerificationInstructions": MessageLookupByLibrary.simpleMessage(
+      " and enter the code to verify your account.",
+    ),
+    "accountVerifiedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "Your account has been verified successfully",
+    ),
     "activated": MessageLookupByLibrary.simpleMessage("Active"),
     "active": MessageLookupByLibrary.simpleMessage("Active"),
     "active2": MessageLookupByLibrary.simpleMessage("Active"),
@@ -2587,6 +2593,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter a valid integer score",
     ),
     "verify": MessageLookupByLibrary.simpleMessage("Verify"),
+    "verifyAccountTitle": MessageLookupByLibrary.simpleMessage(
+      "Verify Account",
+    ),
     "veryGood": MessageLookupByLibrary.simpleMessage("Very Good"),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View all"),

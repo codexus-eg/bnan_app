@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_cubit.dart';
@@ -5,6 +7,7 @@ import 'package:bnan_app/features/parent_children/presentation/manager/parent_ad
 import 'package:bnan_app/features/parent_children/presentation/widgets/parent_add_child_body.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,8 +44,22 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
   Widget build(BuildContext context) {
     return BlocListener<ParentAddChildCubit, ParentAddChildState>(
       listenWhen: (before, after) =>
-          !before.shouldOpenCheckout && after.shouldOpenCheckout,
-      listener: _openCheckout,
+          (!before.shouldOpenCheckout && after.shouldOpenCheckout) ||
+          (before.phase != after.phase &&
+              (after.phase == ParentAddChildPhase.pendingReview ||
+                  after.phase == ParentAddChildPhase.completed)),
+      listener: (context, state) {
+        if (state.phase == ParentAddChildPhase.pendingReview ||
+            state.phase == ParentAddChildPhase.completed) {
+          MyNavigator.goToOffAll(
+            context,
+            Routes.forgetPassword,
+            extra: OtpFlowArgs.accountVerification(state.email),
+          );
+          return;
+        }
+        _openCheckout(context, state);
+      },
       child: Scaffold(
         appBar: CustomAppbar(headerText: S.of(context).parentAddChildTitle),
         body: const ParentAddChildBody(),

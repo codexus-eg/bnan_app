@@ -36,7 +36,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   final int maxPollAttempts;
 
   Timer? _timer;
-  TamaraCheckoutRequest? _request;
   PaymentDraft? _draft;
   bool _statusInFlight = false;
   bool _checkoutInFlight = false;
@@ -68,7 +67,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       await _resetAttempt();
       existing = null;
     }
-    _request = request;
     if (existing?.lastKnownStatus == PaymentStatus.completed) {
       emit(const TamaraPaymentResult(status: PaymentStatus.completed));
       return;
@@ -80,7 +78,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     if (existing != null && existing.payloadFingerprint != fingerprint) {
       await _resetAttempt();
       existing = null;
-      _request = request;
     }
     if (existing != null &&
         existing.lastKnownStatus == PaymentStatus.pending &&
@@ -277,7 +274,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
     if (effectiveStatus == PaymentStatus.completed) {
       _stopPolling();
-      await _loginStudent();
+      await _completeRegistration();
       return;
     }
     if (effectiveStatus.isTerminal) {
@@ -370,38 +367,10 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _timer = null;
   }
 
-  Future<void> _loginStudent() async {
-    final request = _request;
-    if (request == null) {
-      await _retainCompletedEmail();
-      if (isClosed) return;
-      emit(const TamaraPaymentResult(status: PaymentStatus.completed));
-      return;
-    }
-    final result = await authRepo.loginStudentAfterPayment(
-      email: request.student.email,
-      password: request.student.password,
-    );
+  Future<void> _completeRegistration() async {
+    await _retainCompletedEmail();
     if (isClosed) return;
-    await result.fold(
-      (_) async {
-        _request = null;
-        await _retainCompletedEmail();
-        if (isClosed) return;
-        emit(const TamaraPaymentResult(status: PaymentStatus.completed));
-      },
-      (response) async {
-        _request = null;
-        await store.clear();
-        if (isClosed) return;
-        emit(
-          const TamaraPaymentResult(
-            status: PaymentStatus.completed,
-            studentLoggedIn: true,
-          ),
-        );
-      },
-    );
+    emit(const TamaraPaymentResult(status: PaymentStatus.completed));
   }
 
   Future<void> _retainCompletedEmail() async {
@@ -469,7 +438,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   Future<void> _resetAttempt() async {
     _attemptGeneration++;
     _stopPolling();
-    _request = null;
     _draft = null;
     _paymentSummary = null;
     _statusInFlight = false;

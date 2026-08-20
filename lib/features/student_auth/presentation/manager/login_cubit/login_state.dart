@@ -11,10 +11,12 @@ final class LoginSuccess extends LoginState {
 
   final AuthUserModel user;
 }
+
 final class LoginPasswordVisibilityChanged extends LoginState {}
 
 final class LoginFailure extends LoginState {
-  LoginFailure({required this.errorMessage});
+  LoginFailure({required this.errorMessage, this.code});
 
   final String errorMessage;
+  final String? code;
 }

@@ -4,6 +4,12 @@ final class ForgotPasswordInitial extends ForgotPasswordState {}
 
 final class ForgotPasswordLoading extends ForgotPasswordState {}
 
+final class ForgotPasswordCooldown extends ForgotPasswordState {
+  ForgotPasswordCooldown(this.seconds);
+
+  final int seconds;
+}
+
 final class ForgotPasswordSuccess extends ForgotPasswordState {
   ForgotPasswordSuccess({required this.message});
 

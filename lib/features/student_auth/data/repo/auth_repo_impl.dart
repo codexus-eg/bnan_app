@@ -35,7 +35,14 @@ class AuthRepoImpl implements AuthRepo {
       final authResponse = AuthResponseModel.fromJson(response);
       return Right(authResponse);
     } on AppException catch (error) {
-      return Left(Failure(message: error.message));
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
     } catch (_) {
       return Left(Failure(message: S.current.unexpectedError));
     }
@@ -57,7 +64,14 @@ class AuthRepoImpl implements AuthRepo {
 
       return Right(authResponse);
     } on AppException catch (error) {
-      return Left(Failure(message: error.message));
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
     } catch (_) {
       return Left(Failure(message: S.current.unexpectedError));
     }
@@ -121,6 +135,55 @@ class AuthRepoImpl implements AuthRepo {
       return Right(SimpleResponseModel.fromJson(response));
     } on AppException catch (error) {
       return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SimpleResponseModel>> verifyAccount({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      final response = await apiConsumer.post(
+        EndPoints.verifyAccount,
+        data: {'email': email.trim(), 'code': code.trim()},
+      );
+      return Right(SimpleResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SimpleResponseModel>> resendVerificationCode({
+    required String email,
+  }) async {
+    try {
+      final response = await apiConsumer.post(
+        EndPoints.resendVerificationCode,
+        data: {'email': email.trim()},
+      );
+      return Right(SimpleResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
     } catch (_) {
       return Left(Failure(message: S.current.unexpectedError));
     }

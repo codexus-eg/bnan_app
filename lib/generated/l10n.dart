@@ -444,6 +444,16 @@ class S {
     );
   }
 
+  /// ` and enter the code to verify your account.`
+  String get accountVerificationInstructions {
+    return Intl.message(
+      ' and enter the code to verify your account.',
+      name: 'accountVerificationInstructions',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Welcome`
   String get loginWelcomeTitle {
     return Intl.message(
@@ -1404,6 +1414,26 @@ class S {
     return Intl.message(
       'Forgot Password',
       name: 'forgotPasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify Account`
+  String get verifyAccountTitle {
+    return Intl.message(
+      'Verify Account',
+      name: 'verifyAccountTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your account has been verified successfully`
+  String get accountVerifiedSuccessfully {
+    return Intl.message(
+      'Your account has been verified successfully',
+      name: 'accountVerifiedSuccessfully',
       desc: '',
       args: [],
     );

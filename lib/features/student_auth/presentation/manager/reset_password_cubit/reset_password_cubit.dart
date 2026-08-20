@@ -47,6 +47,20 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     );
   }
 
+  Future<void> verifyAccount({required String email}) async {
+    final code = otpController.text.trim();
+    if (code.isEmpty) {
+      emit(ResetPasswordFailure(errorMessage: S.current.resetCodeRequired));
+      return;
+    }
+    emit(ResetPasswordLoading());
+    final result = await authRepo.verifyAccount(email: email, code: code);
+    result.fold(
+      (failure) => emit(ResetPasswordFailure(errorMessage: failure.message)),
+      (response) => emit(VerifyAccountSuccess(message: response.message)),
+    );
+  }
+
   Future<void> resetPassword({required String email}) async {
     if (!(formKey.currentState?.validate() ?? false)) return;
 

@@ -3,6 +3,7 @@ import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_cubit.dart';
 import 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -39,7 +40,11 @@ class ParentRegisterSubmitButton extends StatelessWidget {
             S.of(context).userCreatedSuccessfully,
             true,
           );
-          MyNavigator.goToOffAll(context, Routes.parentHome);
+          MyNavigator.goToOffAll(
+            context,
+            Routes.forgetPassword,
+            extra: OtpFlowArgs.accountVerification(emailController.text.trim()),
+          );
         }
       },
       builder: (context, state) => CustomAppButton(

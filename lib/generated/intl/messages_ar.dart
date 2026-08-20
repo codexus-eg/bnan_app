@@ -131,6 +131,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountActivatedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم تفعيل الحساب بنجاح",
     ),
+    "accountVerificationInstructions": MessageLookupByLibrary.simpleMessage(
+      " وأدخل الكود لتفعيل حسابك.",
+    ),
+    "accountVerifiedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم تفعيل حسابك بنجاح",
+    ),
     "activated": MessageLookupByLibrary.simpleMessage("مفعل"),
     "active": MessageLookupByLibrary.simpleMessage("نشطة"),
     "active2": MessageLookupByLibrary.simpleMessage("نشط"),
@@ -1841,7 +1847,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "إعادة تعيين كلمة المرور",
     ),
     "resetPasswordInstructions": MessageLookupByLibrary.simpleMessage(
-      " واتبع التعليمات لإعادة تعيين كلمة المرور.",
+      " وأدخل الكود لإعادة تعيين كلمة المرور.",
     ),
     "resetPasswordSuccessSubtitle": m27,
     "resetPasswordSuccessTitle": MessageLookupByLibrary.simpleMessage(
@@ -2457,6 +2463,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "أدخل درجة صحيحة بدون كسور",
     ),
     "verify": MessageLookupByLibrary.simpleMessage("تحقق"),
+    "verifyAccountTitle": MessageLookupByLibrary.simpleMessage("تفعيل الحساب"),
     "veryGood": MessageLookupByLibrary.simpleMessage("جيد جدًا"),
     "view": MessageLookupByLibrary.simpleMessage("عرض"),
     "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),

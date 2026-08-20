@@ -51,7 +51,11 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
   ) async {
     final role = response.user.role.trim().toLowerCase();
     final status = response.user.status.trim().toLowerCase();
-    if (!response.hasToken || role != 'parent' || status != 'active') {
+    if (role != 'parent') {
+      return Left(Failure(message: 'Parent account is not active'));
+    }
+    if (!response.hasToken) return Right(response);
+    if (status != 'active') {
       return Left(Failure(message: 'Parent account is not active'));
     }
     await SessionManager.instance.saveSession(

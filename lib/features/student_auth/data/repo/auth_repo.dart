@@ -30,6 +30,15 @@ abstract class AuthRepo {
     required String resetCode,
   });
 
+  Future<Either<Failure, SimpleResponseModel>> verifyAccount({
+    required String email,
+    required String code,
+  }) => throw UnimplementedError();
+
+  Future<Either<Failure, SimpleResponseModel>> resendVerificationCode({
+    required String email,
+  }) => throw UnimplementedError();
+
   Future<Either<Failure, SimpleResponseModel>> resetPassword({
     required String email,
     required String newPassword,

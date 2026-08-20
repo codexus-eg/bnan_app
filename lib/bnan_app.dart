@@ -16,6 +16,7 @@ import 'package:bnan_app/features/chats/presentation/notifications/chat_notifica
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_notification_service.dart';
 import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
@@ -356,8 +357,10 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
               // Do not use GoRouter.of(context) here.
               // This context belongs to MaterialApp.router.builder.
               _router.go(
-                state.studentLoggedIn ? Routes.home : Routes.logIn,
-                extra: state.studentLoggedIn ? null : cubit.draft?.studentEmail,
+                Routes.forgetPassword,
+                extra: OtpFlowArgs.accountVerification(
+                  cubit.draft?.studentEmail ?? '',
+                ),
               );
             },
             child: TamaraReturnObserver(cubit: cubit, child: scaledChild),

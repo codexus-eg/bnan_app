@@ -293,7 +293,7 @@ void main() {
     await cubit.close();
   });
 
-  test('student login happens only after completed', () async {
+  test('completed payment keeps email for account verification', () async {
     final repo = _PaymentRepo();
     final auth = _AuthRepo();
     final cubit = _cubit(repo, store, auth: auth);
@@ -301,15 +301,15 @@ void main() {
     expect(auth.loginCalls, 0);
     repo.statusResponse = _status(PaymentStatus.completed);
     await cubit.checkStatus();
-    expect(auth.loginCalls, 1);
-    expect(auth.lastEmail, 'student@example.com');
-    expect(store.read(), isNull);
+    expect(auth.loginCalls, 0);
+    expect(store.read()?.studentEmail, 'student@example.com');
+    expect(store.read()?.lastKnownStatus, PaymentStatus.completed);
     expect(
       cubit.state,
       isA<TamaraPaymentResult>().having(
         (state) => state.studentLoggedIn,
         'studentLoggedIn',
-        isTrue,
+        isFalse,
       ),
     );
     await cubit.close();

@@ -27,6 +27,7 @@ import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_stud
 import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teacher_access_policy.dart';
 import 'package:bnan_app/features/ideal_supervisor/presentation/policies/ideal_supervisor_access_policy.dart';
 import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/saved_accounts/presentation/views/saved_accounts_view.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
@@ -99,16 +100,25 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
 
       GoRoute(
         path: Routes.forgetPassword,
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => getIt<ForgotPasswordCubit>()),
-              BlocProvider(create: (_) => getIt<ResetPasswordCubit>()),
-            ],
-            child: const ForgetPasswordView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final args = state.extra is OtpFlowArgs
+              ? state.extra as OtpFlowArgs
+              : const OtpFlowArgs();
+          return buildTransitionPages(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<ForgotPasswordCubit>()
+                    ..prefillEmail(args.email)
+                    ..startResendCooldown(),
+                ),
+                BlocProvider(create: (_) => getIt<ResetPasswordCubit>()),
+              ],
+              child: ForgetPasswordView(args: args),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
 
       GoRoute(
