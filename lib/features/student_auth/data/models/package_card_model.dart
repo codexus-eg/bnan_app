@@ -15,6 +15,7 @@ class PackageCardModel {
   final num price;
   final String currency;
   final bool isSingleSubject;
+  final bool hidePrices;
 
   const PackageCardModel({
     required this.id,
@@ -27,11 +28,13 @@ class PackageCardModel {
     required this.price,
     required this.currency,
     required this.isSingleSubject,
+    this.hidePrices = false,
   });
 
   factory PackageCardModel.fromPackage({
     required BuildContext context,
     required PackageModel package,
+    bool hidePrices = false,
   }) {
     final oldPrice = package.oldPrice ?? 0;
     final price = package.price ?? 0;
@@ -41,11 +44,13 @@ class PackageCardModel {
       id: package.id ?? '',
       title: package.name ?? '',
       durationText: _durationText(context, package),
-      oldPriceText: package.oldPrice == null
+      oldPriceText: hidePrices || package.oldPrice == null
           ? ''
           : CurrencyFormatter.amount(context, oldPrice, package.currency),
-      priceText: CurrencyFormatter.amount(context, price, package.currency),
-      saveText: saveValue <= 0
+      priceText: hidePrices
+          ? ''
+          : CurrencyFormatter.amount(context, price, package.currency),
+      saveText: hidePrices || saveValue <= 0
           ? ''
           : '${S.of(context).save} '
                 '${CurrencyFormatter.amount(context, saveValue, package.currency)}',
@@ -53,6 +58,7 @@ class PackageCardModel {
       price: price,
       currency: package.currency ?? '',
       isSingleSubject: package.accessScope == PackageAccessScope.singleSubject,
+      hidePrices: hidePrices,
     );
   }
 
@@ -64,20 +70,24 @@ class PackageCardModel {
     return S.of(context).trainingHours((package.hours ?? 0).toString());
   }
 
-  static List<PackageCardModel> placeholders(BuildContext context) {
+  static List<PackageCardModel> placeholders(
+    BuildContext context, {
+    bool hidePrices = false,
+  }) {
     return List.generate(
       4,
       (_) => PackageCardModel(
         id: '',
         title: S.of(context).hoursPackage('8'),
         durationText: S.of(context).trainingHours('8'),
-        oldPriceText: S.of(context).oldPrice('380'),
-        priceText: S.of(context).currentPrice('300'),
-        saveText: S.of(context).saveAmount('80'),
+        oldPriceText: hidePrices ? '' : S.of(context).oldPrice('380'),
+        priceText: hidePrices ? '' : S.of(context).currentPrice('300'),
+        saveText: hidePrices ? '' : S.of(context).saveAmount('80'),
         isPopular: false,
         price: 0,
         currency: '',
         isSingleSubject: false,
+        hidePrices: hidePrices,
       ),
     );
   }

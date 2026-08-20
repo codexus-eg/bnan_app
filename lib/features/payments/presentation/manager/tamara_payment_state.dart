@@ -21,8 +21,8 @@ class TamaraPaymentPending extends TamaraPaymentState {
   final bool shouldOpenCheckout;
 }
 
-class TamaraPaymentAbandoned extends TamaraPaymentState {
-  const TamaraPaymentAbandoned();
+class TamaraPaymentVerificationPending extends TamaraPaymentState {
+  const TamaraPaymentVerificationPending();
 }
 
 class TamaraPaymentResult extends TamaraPaymentState {

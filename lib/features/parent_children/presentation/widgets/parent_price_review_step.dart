@@ -12,6 +12,7 @@ class ParentPriceReviewStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ParentAddChildCubit>().state;
+    if (!state.isGulf) return const ParentReviewDetails();
     final package = state.package!;
     final price = _format(package.price ?? 0);
     return Column(

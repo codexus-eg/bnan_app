@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/packages_management/data/models/egyptian_package_policy.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_package_policy.dart';
 
@@ -9,5 +10,7 @@ abstract class RenewalPackagePolicy {
   }) =>
       package.isActive &&
       ParentPackagePolicy.isRegistrationModeSupported(registrationMode) &&
-      package.curriculum == curriculumId;
+      package.curriculum == curriculumId &&
+      (registrationMode != 'egyptian' ||
+          EgyptianPackagePolicy.isValid(package));
 }

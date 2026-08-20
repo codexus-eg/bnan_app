@@ -247,6 +247,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
     "assignStudent": MessageLookupByLibrary.simpleMessage("تعيين طالب"),
     "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
+    "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
+      "برجاء تعيين مادة لهذا الفصل",
+    ),
+    "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
+      "برجاء تعيين معلم للمادة أولًا",
+    ),
     "assignSupervisorToClassroom": m0,
     "assignTeacherInSubject": m1,
     "assignToClassroom": MessageLookupByLibrary.simpleMessage("توظيف في فصل"),
@@ -316,6 +322,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "cancelSupervisorAssignmentQuestion": m5,
     "cancelTeacherAssignmentQuestion": m6,
+    "cancellationReason": MessageLookupByLibrary.simpleMessage("سبب الإلغاء"),
     "cancellationRequests": MessageLookupByLibrary.simpleMessage(
       "طلبات الإلغاء",
     ),
@@ -371,15 +378,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "changeRequestRejectedSuccess": MessageLookupByLibrary.simpleMessage(
       "تم رفض الطلب بنجاح",
     ),
-    "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
-      "رابط الاجتماع (اختياري)",
-    ),
-    "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
-      "برجاء تعيين مادة لهذا الفصل",
-    ),
-    "cancellationReason": MessageLookupByLibrary.simpleMessage("سبب الإلغاء"),
     "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
       "تم إرسال طلبك بنجاح",
+    ),
+    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
+      "لديك طلب تغيير معلم قيد المراجعة بالفعل",
     ),
     "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
       "لا توجد طلبات إلغاء أو تغيير معلم",
@@ -978,6 +981,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "الرياضيات . أ/سارة عبدالله",
     ),
     "mayCertificate": MessageLookupByLibrary.simpleMessage("شهادة شهر مايو"),
+    "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
+      "رابط الاجتماع (اختياري)",
+    ),
     "messageDocuments": MessageLookupByLibrary.simpleMessage("مستندات الرسائل"),
     "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
     "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
@@ -1513,6 +1519,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "صورة إيصال الدفع مطلوبة",
     ),
     "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
+    "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
+      "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت.",
+    ),
     "payrollAccountHolder": MessageLookupByLibrary.simpleMessage(
       "اسم صاحب الحساب",
     ),

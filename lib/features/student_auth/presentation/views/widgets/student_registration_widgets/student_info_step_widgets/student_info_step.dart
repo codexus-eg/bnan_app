@@ -112,8 +112,10 @@ class StudentInfoStep extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 16),
-          const SubjectsList(),
+          if (registerCubit.requiresSubjectSelection) ...[
+            const SizedBox(height: 16),
+            const SubjectsList(),
+          ],
           const SizedBox(height: 16),
           LayoutBuilder(
             builder: (context, constraints) {

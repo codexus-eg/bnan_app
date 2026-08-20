@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_type.dart';
 
 class PackageFormState {
   const PackageFormState({
@@ -21,7 +22,13 @@ class PackageFormState {
 
   bool get isEdit => packageId?.isNotEmpty == true;
   bool get isGulf => registrationMode?.trim().toLowerCase() == 'gulf';
-  String get effectivePackageType => isGulf ? 'hours' : packageType;
-  bool get canSelectSingleSubject => registrationMode == 'egyptian';
+  bool get isEgyptian => registrationMode?.trim().toLowerCase() == 'egyptian';
+  bool get isEgyptianAllSubjects => isEgyptian && !isSingleSubject;
+  String get effectivePackageType => isGulf || isSingleSubject
+      ? PackageType.hours
+      : isEgyptianAllSubjects
+      ? PackageType.monthly
+      : packageType;
+  bool get canSelectSingleSubject => isEgyptian;
   bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
 }

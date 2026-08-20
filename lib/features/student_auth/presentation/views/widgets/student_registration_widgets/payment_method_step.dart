@@ -46,14 +46,14 @@ class PaymentMethodStep extends StatelessWidget {
         ],
         const SizedBox(height: 16),
         const PaymentMethodsOptions(),
-        if (paymentCubit.state is TamaraPaymentAbandoned) ...[
+        if (paymentCubit.state is TamaraPaymentVerificationPending) ...[
           const SizedBox(height: 12),
           Text(
-            S.of(context).parentPaymentFailed,
+            S.of(context).paymentVerificationPending,
             textAlign: TextAlign.center,
             style: StylesManager.styleRegular14(
               context,
-            ).copyWith(color: ColorManager.red),
+            ).copyWith(color: ColorManager.mainColor14),
           ),
         ],
       ],

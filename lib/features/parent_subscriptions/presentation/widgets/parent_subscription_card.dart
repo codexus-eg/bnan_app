@@ -89,7 +89,7 @@ class ParentSubscriptionCard extends StatelessWidget {
               S.of(context).renewalExpiry,
               _date(subscription.endDate!),
             ),
-          if (subscription.price != null)
+          if (!_isEgyptian && subscription.price != null)
             _line(
               context,
               S.of(context).adminSubjectRequestPrice,
@@ -163,6 +163,9 @@ class ParentSubscriptionCard extends StatelessWidget {
   );
   String _number(num value) =>
       value % 1 == 0 ? value.toInt().toString() : value.toString();
+  bool get _isEgyptian =>
+      child.registrationMode?.trim().toLowerCase() == 'egyptian' ||
+      subscription.planKind.trim().toLowerCase().startsWith('egyptian');
   String _date(DateTime value) =>
       value.toLocal().toIso8601String().split('T').first;
 

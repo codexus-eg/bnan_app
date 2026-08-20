@@ -11,19 +11,25 @@ class SubjectRequestPackageDialog extends StatelessWidget {
     super.key,
     required this.packages,
     this.selectedId,
+    this.hidePrices = false,
   });
 
   final List<PackageModel> packages;
   final String? selectedId;
+  final bool hidePrices;
 
   static Future<String?> show(
     BuildContext context, {
     required List<PackageModel> packages,
     String? selectedId,
+    bool hidePrices = false,
   }) => showDialog<String>(
     context: context,
-    builder: (_) =>
-        SubjectRequestPackageDialog(packages: packages, selectedId: selectedId),
+    builder: (_) => SubjectRequestPackageDialog(
+      packages: packages,
+      selectedId: selectedId,
+      hidePrices: hidePrices,
+    ),
   );
 
   @override
@@ -51,6 +57,7 @@ class SubjectRequestPackageDialog extends StatelessWidget {
                     child: SubjectRequestPackageGrid(
                       packages: packages,
                       selectedId: selectedId,
+                      hidePrices: hidePrices,
                     ),
                   ),
           ),

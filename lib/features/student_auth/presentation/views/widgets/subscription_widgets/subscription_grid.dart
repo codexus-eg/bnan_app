@@ -84,10 +84,14 @@ class SubscriptionGrid extends StatelessWidget {
                         PackageCardModel.fromPackage(
                           context: context,
                           package: package,
+                          hidePrices: registrationMode == 'egyptian',
                         ),
                   )
                   .toList()
-            : PackageCardModel.placeholders(context);
+            : PackageCardModel.placeholders(
+                context,
+                hidePrices: registrationMode == 'egyptian',
+              );
 
         final grid = Padding(
           padding: const EdgeInsets.only(top: 8),

@@ -57,6 +57,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   bool get isGulf => registrationMode == 'gulf';
+  bool get requiresSubjectSelection => isGulf || isSingleSubjectPackage;
   bool _authenticating = false;
   bool _submitting = false;
   void setGrade({required String id, required String name}) {
@@ -106,7 +107,9 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   bool validateStudent() {
     final validForm = studentFormKey.currentState?.validate() ?? false;
-    final validSubjects = isSingleSubjectPackage
+    final validSubjects = !requiresSubjectSelection
+        ? true
+        : isSingleSubjectPackage
         ? selectedSubjectIds.length == 1
         : selectedSubjectIds.isNotEmpty;
     return validForm && selectedGradeId != null && validSubjects;
@@ -114,7 +117,9 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   RegisterRequestModel? buildRegisterRequest() {
     final subjectCount = selectedSubjectIds.length;
-    final validSubjects = isSingleSubjectPackage
+    final validSubjects = !requiresSubjectSelection
+        ? true
+        : isSingleSubjectPackage
         ? subjectCount == 1
         : subjectCount > 0;
     if (selectedGradeId == null || !validSubjects) return null;

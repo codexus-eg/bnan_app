@@ -152,16 +152,21 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       return false;
     }
     if (state.currentStep < state.lastStep) {
-      emit(state.copyWith(currentStep: state.currentStep + 1));
+      final nextStep = state.currentStep == 2 && !state.requiresSubjectSelection
+          ? 4
+          : state.currentStep + 1;
+      emit(state.copyWith(currentStep: nextStep));
     }
     return true;
   }
 
   void previousStep() {
     if (state.currentStep == 0 || state.isBusy) return;
-    emit(
-      state.copyWith(currentStep: state.currentStep - 1, errorMessage: null),
-    );
+    final previousStep =
+        state.currentStep == 4 && !state.requiresSubjectSelection
+        ? 2
+        : state.currentStep - 1;
+    emit(state.copyWith(currentStep: previousStep, errorMessage: null));
   }
 
   Future<void> submit() async {

@@ -2,6 +2,7 @@ import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/classroom_change_requests/data/repo/classroom_change_requests_repo.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/policies/classroom_change_request_error_mapper.dart';
 import 'package:bnan_app/features/classroom_change_requests/presentation/widgets/request_notes_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,11 @@ class _ActionState extends State<ClassroomChangeRequestAction> {
       }
     });
     result.fold(
-      (failure) => showCustomSnackBar(context, failure.message, false),
+      (failure) => showCustomSnackBar(
+        context,
+        mapClassroomChangeRequestFailure(failure),
+        false,
+      ),
       (_) => showCustomSnackBar(context, s.changeRequestSubmitted, true),
     );
   }

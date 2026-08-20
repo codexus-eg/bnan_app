@@ -1351,6 +1351,7 @@
     "requestTeacherWithdrawal": "طلب اعتذار عن الاستمرار",
     "requestReason": "سبب الطلب",
     "changeRequestSubmitted": "تم إرسال طلبك بنجاح",
+    "changeTeacherRequestAlreadyPending": "لديك طلب تغيير معلم قيد المراجعة بالفعل",
     "cancellationRequests": "طلبات الإلغاء",
     "changeRequestsEmpty": "لا توجد طلبات إلغاء أو تغيير معلم",
     "requester": "مقدم الطلب",
@@ -1370,5 +1371,7 @@
     "changeRequestRejectedSuccess": "تم رفض الطلب بنجاح",
     "meetingLinkOptional": "رابط الاجتماع (اختياري)",
     "assignSubjectToClassroom": "برجاء تعيين مادة لهذا الفصل",
-    "cancellationReason": "سبب الإلغاء"
+    "assignTeacherToSubjectFirst": "برجاء تعيين معلم للمادة أولًا",
+    "cancellationReason": "سبب الإلغاء",
+    "paymentVerificationPending": "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."
 }

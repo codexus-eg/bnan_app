@@ -237,6 +237,24 @@ void main() {
     await cubit.close();
   });
 
+  test(
+    'provider success reconciles then checks authoritative status',
+    () async {
+      final repo = _PaymentRepo()
+        ..statusResponse = _status(PaymentStatus.completed);
+      final cubit = _cubit(repo, store);
+      await cubit.checkout(_request);
+      await _markBrowserOpened(cubit);
+
+      await cubit.verifyProviderSuccess();
+
+      expect(repo.reconcileCalls, 1);
+      expect(repo.statusCalls, 1);
+      expect(cubit.state, isA<TamaraPaymentResult>());
+      await cubit.close();
+    },
+  );
+
   test('deep link is deduplicated and status remains authoritative', () async {
     final repo = _PaymentRepo()
       ..statusResponse = _status(PaymentStatus.pending);
@@ -247,7 +265,7 @@ void main() {
     await cubit.handleReturn(link);
     expect(repo.reconcileCalls, 1);
     expect(repo.statusCalls, 1);
-    expect(cubit.state, isA<TamaraPaymentAbandoned>());
+    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
     await cubit.close();
   });
 
@@ -409,6 +427,7 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 8));
     expect(repo.statusCalls, callsAtLimit);
     expect(cubit.draft?.lastKnownStatus, PaymentStatus.pending);
+    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
     await cubit.close();
   });
 
@@ -430,7 +449,7 @@ void main() {
     final cubit = _cubit(_PaymentRepo(), store);
     await cubit.restore();
     expect(cubit.draft?.idempotencyKey, 'saved-key');
-    expect(cubit.state, isA<TamaraPaymentAbandoned>());
+    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
     await cubit.close();
   });
 
@@ -451,7 +470,7 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 12));
     expect(repo.statusCalls, callsAtClose);
     expect(auth.loginCalls, 0);
-    expect(cubit.state, isA<TamaraPaymentAbandoned>());
+    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
     await cubit.close();
   });
 
@@ -480,7 +499,7 @@ void main() {
     expect(repo.reconcileCalls, 1);
     expect(repo.statusCalls, 1);
     expect(auth.loginCalls, 0);
-    expect(cubit.state, isA<TamaraPaymentAbandoned>());
+    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
     await cubit.close();
   });
 }

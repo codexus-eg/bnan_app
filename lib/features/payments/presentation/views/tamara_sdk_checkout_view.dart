@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_return.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -14,11 +15,13 @@ class TamaraSdkCheckoutView extends StatefulWidget {
     required this.checkoutUrl,
     this.completionStream,
     this.isCompleted,
+    this.onPaymentSuccess,
   });
 
   final String checkoutUrl;
   final Stream<bool>? completionStream;
   final bool Function()? isCompleted;
+  final Future<void> Function()? onPaymentSuccess;
 
   @override
   State<TamaraSdkCheckoutView> createState() => _TamaraSdkCheckoutViewState();
@@ -27,6 +30,7 @@ class TamaraSdkCheckoutView extends StatefulWidget {
 class _TamaraSdkCheckoutViewState extends State<TamaraSdkCheckoutView> {
   StreamSubscription<bool>? _completionSubscription;
   bool _paymentCompletionHandled = false;
+  bool _providerSuccessHandled = false;
 
   @override
   void initState() {
@@ -57,7 +61,7 @@ class _TamaraSdkCheckoutViewState extends State<TamaraSdkCheckoutView> {
           _returnUrl(TamaraReturnOutcome.success),
           _returnUrl(TamaraReturnOutcome.failure),
           _returnUrl(TamaraReturnOutcome.cancel),
-          onPaymentSuccess: () {},
+          onPaymentSuccess: _onPaymentSuccess,
           onPaymentFailed: () => _close(TamaraSdkOutcome.failure),
           onPaymentCanceled: () => _close(TamaraSdkOutcome.cancel),
         ),
@@ -66,7 +70,15 @@ class _TamaraSdkCheckoutViewState extends State<TamaraSdkCheckoutView> {
   );
 
   String _returnUrl(TamaraReturnOutcome outcome) =>
-      '${TamaraReturn.scheme}://${TamaraReturn.host}/tamara/${outcome.name}';
+      '${EndPoints.baseUrl}/payment/tamara/${outcome.name}';
+
+  void _onPaymentSuccess() {
+    if (_providerSuccessHandled) return;
+    _providerSuccessHandled = true;
+    final callback = widget.onPaymentSuccess;
+    if (callback != null) unawaited(callback());
+    _close(TamaraSdkOutcome.success);
+  }
 
   void _close(TamaraSdkOutcome outcome) {
     if (_paymentCompletionHandled || !mounted) return;

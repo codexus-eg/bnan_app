@@ -130,6 +130,8 @@ class _StudentSubjectRequestsBodyState
       context,
       packages: state.packages,
       selectedId: state.selectedPackageId,
+      hidePrices:
+          state.availability?.registrationMode == RegistrationMode.egyptian,
     );
     if (!mounted || id == null) return;
     context.read<StudentSubjectRequestsCubit>().selectPackage(id);

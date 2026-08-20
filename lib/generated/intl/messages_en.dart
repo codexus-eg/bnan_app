@@ -258,6 +258,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "arabicLanguage": MessageLookupByLibrary.simpleMessage("Arabic Language"),
     "assignStudent": MessageLookupByLibrary.simpleMessage("Assign Student"),
     "assignSubject": MessageLookupByLibrary.simpleMessage("Assign to Subject"),
+    "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
+      "Please assign a subject to this classroom",
+    ),
+    "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
+      "Please assign a teacher to the subject first",
+    ),
     "assignSupervisorToClassroom": m0,
     "assignTeacherInSubject": m1,
     "assignToClassroom": MessageLookupByLibrary.simpleMessage(
@@ -331,6 +337,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "cancelSupervisorAssignmentQuestion": m5,
     "cancelTeacherAssignmentQuestion": m6,
+    "cancellationReason": MessageLookupByLibrary.simpleMessage(
+      "Cancellation reason",
+    ),
     "cancellationRequests": MessageLookupByLibrary.simpleMessage(
       "Cancellation requests",
     ),
@@ -384,17 +393,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "changeRequestRejectedSuccess": MessageLookupByLibrary.simpleMessage(
       "Request rejected successfully",
     ),
-    "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
-      "Meeting link (optional)",
-    ),
-    "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
-      "Please assign a subject to this classroom",
-    ),
-    "cancellationReason": MessageLookupByLibrary.simpleMessage(
-      "Cancellation reason",
-    ),
     "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
       "Your request was submitted successfully",
+    ),
+    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
+      "You already have a teacher change request under review",
     ),
     "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
       "No cancellation or teacher-change requests",
@@ -1055,6 +1058,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Math . Ms. Sarah Abdullah",
     ),
     "mayCertificate": MessageLookupByLibrary.simpleMessage("May Certificate"),
+    "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
+      "Meeting link (optional)",
+    ),
     "messageDocuments": MessageLookupByLibrary.simpleMessage(
       "Message Documents",
     ),
@@ -1607,6 +1613,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Payment receipt image is required",
     ),
     "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
+    "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
+      "Payment status is being verified. This may take some time.",
+    ),
     "payrollAccountHolder": MessageLookupByLibrary.simpleMessage(
       "Account holder",
     ),

@@ -5,6 +5,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/manager/plans_actions/plans_actions_state.dart';
+import 'package:bnan_app/features/plans/presentation/mappers/add_plan_error_message_mapper.dart';
 import 'package:bnan_app/features/plans/presentation/models/plan_classroom_option.dart';
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/utils/plans_file_picker.dart';
@@ -83,7 +84,12 @@ class _UploadStudyPlanFormState extends State<UploadStudyPlanForm> {
             ),
             if (state is UploadTermPlanFailure) ...[
               const SizedBox(height: 16),
-              PlansDialogErrorMessage(message: state.message),
+              PlansDialogErrorMessage(
+                message: mapUploadPlanErrorMessage(
+                  state.message,
+                  teacherRequiredMessage: s.assignTeacherToSubjectFirst,
+                ),
+              ),
             ],
             const SizedBox(height: 16),
             CustomAppButton(

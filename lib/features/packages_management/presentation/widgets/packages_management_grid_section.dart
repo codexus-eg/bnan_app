@@ -23,13 +23,23 @@ class PackagesManagementGridSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final registrationModes = {
+      for (final item in context.read<AcademicLookupsCubit>().state.curriculums)
+        item.id.toString(): item.registrationMode,
+    };
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: SubscriptionGrid(
         curriculumId: curriculumId,
         curriculumName: curriculumName,
         isSliver: false,
-        planMapper: AdminPackageCardMapper.fromPackage,
+        planMapper: (context, package) => AdminPackageCardMapper.fromPackage(
+          context,
+          package,
+          hidePrices:
+              registrationModes[package.curriculum]?.trim().toLowerCase() ==
+              'egyptian',
+        ),
         bottomWidget: (plan, package) {
           return PackageAdminActions(
             plan: plan,

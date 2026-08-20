@@ -23,7 +23,7 @@ class ParentReviewDetails extends StatelessWidget {
       (S.of(context).studentEmail, state.email),
       (S.of(context).curriculum, state.curriculum?.name ?? ''),
       (S.of(context).grade, state.grade?.name ?? ''),
-      (S.of(context).subjects, subjects),
+      if (state.requiresSubjectSelection) (S.of(context).subjects, subjects),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

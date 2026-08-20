@@ -86,8 +86,9 @@ class AdminChangeRequestCard extends StatelessWidget {
             : S.of(context).changeRequestRejectedSuccess,
         true,
       );
-      if (state.action == AdminChangeRequestAction.approve) {
-        MyNavigator.goTo(context, Routes.teacherApplication);
+      if (state.action == AdminChangeRequestAction.approve &&
+          request.requestType == 'change_teacher') {
+        MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
       }
     }
   }

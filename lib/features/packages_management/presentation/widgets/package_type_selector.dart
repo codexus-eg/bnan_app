@@ -10,12 +10,14 @@ class PackageTypeSelector extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.monthlyEnabled = true,
+    this.hoursEnabled = true,
     this.showMonthly = true,
   });
 
   final String value;
   final ValueChanged<String> onChanged;
   final bool monthlyEnabled;
+  final bool hoursEnabled;
   final bool showMonthly;
 
   @override
@@ -56,6 +58,7 @@ class PackageTypeSelector extends StatelessWidget {
                   context,
                   'hours',
                   S.of(context).packageHoursType,
+                  enabled: hoursEnabled,
                 ),
               ),
             ],
@@ -67,6 +70,7 @@ class PackageTypeSelector extends StatelessWidget {
               context,
               'hours',
               S.of(context).packageHoursType,
+              enabled: hoursEnabled,
             ),
           ),
       ],

@@ -30,7 +30,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
                 ? S.of(context).submitRegistrationRequest
                 : RegisterCubit.get(context).isGulf &&
                       step == 4 &&
-                      paymentState is TamaraPaymentAbandoned
+                      paymentState is TamaraPaymentVerificationPending
                 ? S.of(context).parentRetryPayment
                 : step == 4
                 ? S.of(context).payWithTamara
@@ -113,10 +113,6 @@ class RegistrationNavigationButtons extends StatelessWidget {
       showCustomSnackBar(context, state.message, false);
       return;
     }
-    if (state is TamaraPaymentAbandoned) {
-      showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);
-      return;
-    }
     if (state is TamaraPaymentPending && state.shouldOpenCheckout) {
       final url = state.checkoutUrl;
       if (url == null) {
@@ -141,6 +137,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
             cubit.state is TamaraPaymentResult &&
             (cubit.state as TamaraPaymentResult).status ==
                 PaymentStatus.completed,
+        onPaymentSuccess: cubit.verifyProviderSuccess,
         onOpened: () async {
           await cubit.completeCheckoutLaunch(opened: true);
           await cubit.onForeground();
@@ -160,18 +157,27 @@ class RegistrationNavigationButtons extends StatelessWidget {
       }
       if (result.outcome == TamaraSdkOutcome.cancel ||
           result.outcome == TamaraSdkOutcome.failure) {
-        await cubit.abandonCheckout();
-        if (context.mounted) {
-          showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);
-        }
+        await cubit.verifyCheckoutClosed();
         return;
       }
       await cubit.onForeground();
       return;
     }
+    if (state is TamaraPaymentVerificationPending) {
+      showCustomSnackBar(
+        context,
+        S.of(context).paymentVerificationPending,
+        true,
+      );
+      return;
+    }
     if (state is TamaraPaymentResult &&
-        state.status != PaymentStatus.completed) {
-      showCustomSnackBar(context, state.status.name, false);
+        const {
+          PaymentStatus.failed,
+          PaymentStatus.cancelled,
+          PaymentStatus.expired,
+        }.contains(state.status)) {
+      showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);
     }
   }
 }

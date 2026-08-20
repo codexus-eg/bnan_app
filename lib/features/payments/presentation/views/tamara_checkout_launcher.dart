@@ -20,6 +20,7 @@ abstract class TamaraCheckoutLauncher {
     Future<void> Function()? onOpened,
     Stream<bool>? completionStream,
     bool Function()? isCompleted,
+    Future<void> Function()? onPaymentSuccess,
   }) async {
     if (!FileUrlLauncher.isValidWebUrl(checkoutUrl)) {
       return const TamaraCheckoutLaunchResult(opened: false);
@@ -36,6 +37,7 @@ abstract class TamaraCheckoutLauncher {
             checkoutUrl: checkoutUrl,
             completionStream: completionStream,
             isCompleted: isCompleted,
+            onPaymentSuccess: onPaymentSuccess,
           ),
         ),
       );

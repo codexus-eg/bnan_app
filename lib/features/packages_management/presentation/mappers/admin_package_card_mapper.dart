@@ -7,11 +7,13 @@ import 'package:intl/intl.dart';
 abstract class AdminPackageCardMapper {
   static PackageCardModel fromPackage(
     BuildContext context,
-    PackageModel package,
-  ) {
+    PackageModel package, {
+    bool hidePrices = false,
+  }) {
     final base = PackageCardModel.fromPackage(
       context: context,
       package: package,
+      hidePrices: hidePrices,
     );
     final oldPrice = package.oldPrice ?? 0;
     final price = package.price ?? 0;
@@ -20,15 +22,17 @@ abstract class AdminPackageCardMapper {
       id: base.id,
       title: base.title,
       durationText: base.durationText,
-      oldPriceText: _money(context, oldPrice, currency),
-      priceText: _money(context, price, currency),
-      saveText:
-          '${S.of(context).discountAmount}: '
-          '${_money(context, oldPrice - price, currency)}',
+      oldPriceText: hidePrices ? '' : _money(context, oldPrice, currency),
+      priceText: hidePrices ? '' : _money(context, price, currency),
+      saveText: hidePrices
+          ? ''
+          : '${S.of(context).discountAmount}: '
+                '${_money(context, oldPrice - price, currency)}',
       isPopular: base.isPopular,
       price: base.price,
       currency: currency,
       isSingleSubject: base.isSingleSubject,
+      hidePrices: base.hidePrices,
     );
   }
 

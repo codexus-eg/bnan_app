@@ -1352,6 +1352,7 @@
     "requestTeacherWithdrawal": "Request withdrawal from teaching",
     "requestReason": "Request reason",
     "changeRequestSubmitted": "Your request was submitted successfully",
+    "changeTeacherRequestAlreadyPending": "You already have a teacher change request under review",
     "cancellationRequests": "Cancellation requests",
     "changeRequestsEmpty": "No cancellation or teacher-change requests",
     "requester": "Requester",
@@ -1371,5 +1372,7 @@
     "changeRequestRejectedSuccess": "Request rejected successfully",
     "meetingLinkOptional": "Meeting link (optional)",
     "assignSubjectToClassroom": "Please assign a subject to this classroom",
-    "cancellationReason": "Cancellation reason"
+    "assignTeacherToSubjectFirst": "Please assign a teacher to the subject first",
+    "cancellationReason": "Cancellation reason",
+    "paymentVerificationPending": "Payment status is being verified. This may take some time."
 }

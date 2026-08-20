@@ -55,7 +55,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     final draft = _draft;
     if (draft?.lastKnownStatus == PaymentStatus.pending &&
         draft?.paymentId.isNotEmpty == true) {
-      emit(const TamaraPaymentAbandoned());
+      emit(const TamaraPaymentVerificationPending());
     }
   }
 
@@ -184,6 +184,18 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     await _reconcileAndCheckStatus();
   }
 
+  Future<void> verifyProviderSuccess() async {
+    _reconciledThisForeground = false;
+    await _reconcileAndCheckStatus();
+  }
+
+  Future<void> verifyCheckoutClosed() async {
+    _stopPolling();
+    _checkoutLaunchClaimed = false;
+    _reconciledThisForeground = false;
+    await _reconcileAndCheckStatus();
+  }
+
   Future<void> _reconcileAndCheckStatus() async {
     final draft = _draft;
     if (draft == null ||
@@ -287,7 +299,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     emit(
       _checkoutLaunchClaimed
           ? TamaraPaymentPending(checkoutUrl: _draft!.checkoutUrl)
-          : const TamaraPaymentAbandoned(),
+          : const TamaraPaymentVerificationPending(),
     );
   }
 
@@ -306,7 +318,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       if (_pollAttempts >= maxPollAttempts) {
         _stopPolling();
         _checkoutLaunchClaimed = false;
-        if (!isClosed) emit(const TamaraPaymentAbandoned());
+        if (!isClosed) emit(const TamaraPaymentVerificationPending());
         return;
       }
       _pollAttempts++;
@@ -358,7 +370,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconciledThisForeground = false;
     _checkoutLaunchClaimed = false;
     if (!isClosed && _draft?.lastKnownStatus == PaymentStatus.pending) {
-      emit(const TamaraPaymentAbandoned());
+      emit(const TamaraPaymentVerificationPending());
     }
   }
 

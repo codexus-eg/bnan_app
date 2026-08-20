@@ -43,7 +43,11 @@ class ParentSubscriptionRenewalState {
   bool get hasSupportedRegistrationMode =>
       args.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
-  int get lastStep => isGulf ? 5 : 3;
+  int get lastStep => isGulf
+      ? 5
+      : isSingleSubject
+      ? 2
+      : 1;
   bool get isBusy =>
       phase == ParentRenewalPhase.submitting ||
       phase == ParentRenewalPhase.processing;

@@ -10994,6 +10994,16 @@ class S {
     );
   }
 
+  /// `You already have a teacher change request under review`
+  String get changeTeacherRequestAlreadyPending {
+    return Intl.message(
+      'You already have a teacher change request under review',
+      name: 'changeTeacherRequestAlreadyPending',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancellation requests`
   String get cancellationRequests {
     return Intl.message(
@@ -11179,11 +11189,31 @@ class S {
     );
   }
 
+  /// `Please assign a teacher to the subject first`
+  String get assignTeacherToSubjectFirst {
+    return Intl.message(
+      'Please assign a teacher to the subject first',
+      name: 'assignTeacherToSubjectFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancellation reason`
   String get cancellationReason {
     return Intl.message(
       'Cancellation reason',
       name: 'cancellationReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment status is being verified. This may take some time.`
+  String get paymentVerificationPending {
+    return Intl.message(
+      'Payment status is being verified. This may take some time.',
+      name: 'paymentVerificationPending',
       desc: '',
       args: [],
     );

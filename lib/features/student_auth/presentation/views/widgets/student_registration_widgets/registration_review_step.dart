@@ -1,4 +1,3 @@
-import 'package:bnan_app/core/helper/currency_formatter.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
@@ -21,17 +20,13 @@ class RegistrationReviewStep extends StatelessWidget {
               .join(', ')
         : '';
     final rows = <(String, String)>[
-      (
-        S.of(context).selectedPackage,
-        '${cubit.packageName} — ${cubit.packagePrice} '
-            '${CurrencyFormatter.symbol(context, cubit.packageCurrency)}',
-      ),
+      (S.of(context).selectedPackage, cubit.packageName),
       (S.of(context).email, cubit.parentEmailController.text.trim()),
       (S.of(context).studentName, cubit.studentNameController.text.trim()),
       (S.of(context).studentEmail, cubit.studentEmailController.text.trim()),
       (S.of(context).curriculum, cubit.curriculumName),
       (S.of(context).grade, cubit.selectedGradeName ?? ''),
-      (S.of(context).subjects, subjects),
+      if (cubit.requiresSubjectSelection) (S.of(context).subjects, subjects),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

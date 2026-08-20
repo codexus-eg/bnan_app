@@ -31,11 +31,12 @@ class SubscriptionPlanCard extends StatelessWidget {
   final bool isSelected;
   @override
   Widget build(BuildContext context) {
+    final isCompact = plan.hidePrices;
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
-          height: 280,
+          height: isCompact ? null : 280,
           width: double.infinity,
           padding: const EdgeInsetsDirectional.only(
             start: 8,
@@ -60,6 +61,7 @@ class SubscriptionPlanCard extends StatelessWidget {
             ],
           ),
           child: Column(
+            mainAxisSize: isCompact ? MainAxisSize.min : MainAxisSize.max,
             children: [
               CircleAvatar(
                 radius: 13,
@@ -82,13 +84,15 @@ class SubscriptionPlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 4),
-              SizedBox(
-                height: 22,
-                child: plan.isSingleSubject
-                    ? const Center(child: PackageScopeBadge())
-                    : null,
-              ),
+              if (!isCompact || plan.isSingleSubject) ...[
+                const SizedBox(height: 4),
+                SizedBox(
+                  height: 22,
+                  child: plan.isSingleSubject
+                      ? const Center(child: PackageScopeBadge())
+                      : null,
+                ),
+              ],
               const SizedBox(height: 4),
               Container(
                 padding: EdgeInsetsDirectional.symmetric(
@@ -107,45 +111,47 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              SizedBox(
-                height: 16,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    plan.oldPriceText,
-                    style: StylesManager.styleRegular12(context).copyWith(
-                      decoration: TextDecoration.lineThrough,
-                      color: ColorManager.greyA8AF,
+              if (!isCompact) ...[
+                SizedBox(
+                  height: 16,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      plan.oldPriceText,
+                      style: StylesManager.styleRegular12(context).copyWith(
+                        decoration: TextDecoration.lineThrough,
+                        color: ColorManager.greyA8AF,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 3),
-              SizedBox(
-                height: 30,
-                width: double.infinity,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    plan.priceText,
-                    style: StylesManager.styleBold24(context),
+                const SizedBox(height: 3),
+                SizedBox(
+                  height: 30,
+                  width: double.infinity,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      plan.priceText,
+                      style: StylesManager.styleBold24(context),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 3),
-              SizedBox(
-                height: 24,
-                child: Center(
-                  child: Text(
-                    plan.saveText,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: StylesManager.styleBold8(context),
+                const SizedBox(height: 3),
+                SizedBox(
+                  height: 24,
+                  child: Center(
+                    child: Text(
+                      plan.saveText,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: StylesManager.styleBold8(context),
+                    ),
                   ),
                 ),
-              ),
-              const Spacer(),
+                const Spacer(),
+              ],
               bottomWidget ??
                   SubscribeButton(
                     text: S.of(context).parentChoosePackage,
