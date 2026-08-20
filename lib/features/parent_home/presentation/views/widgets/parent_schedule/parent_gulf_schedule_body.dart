@@ -30,7 +30,10 @@ class ParentGulfScheduleBody extends StatelessWidget {
                       ? state.error
                       : null,
                   onRetry: cubit.load,
-                  data: adaptGulfStudentSchedule(state.classrooms),
+                  data: adaptGulfStudentSchedule(
+                    state.classrooms,
+                    studentSchedule: true,
+                  ),
                   emptyMessage: S.of(context).noSchedule,
                 ),
               ),

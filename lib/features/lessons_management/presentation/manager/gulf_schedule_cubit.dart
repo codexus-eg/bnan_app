@@ -118,6 +118,7 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
   }
 
   Future<void> _load({required bool showLoading}) async {
+    if (isClosed) return;
     final generation = ++_loadGeneration;
     if (showLoading) {
       emit(

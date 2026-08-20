@@ -5,7 +5,9 @@ List<ChatMessageModel> _displayMessages(List<ChatMessageModel> messages) {
   final duplicateIds = <String>{};
   final uniqueMessages = <ChatMessageModel>[];
 
-  for (final message in _orderedMessages(messages)) {
+  for (final message in _orderedMessages(
+    messages.where((message) => !message.isNonDisplayableSessionEvent).toList(),
+  )) {
     final id = message.id.trim();
     if (id.isEmpty || seenIds.add(id)) {
       uniqueMessages.add(message);

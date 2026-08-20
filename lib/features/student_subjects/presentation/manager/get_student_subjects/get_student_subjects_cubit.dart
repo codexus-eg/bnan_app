@@ -9,7 +9,7 @@ class GetMySubjectsCubit extends Cubit<GetMySubjectsState> {
   bool _loading = false;
 
   Future<void> loadSubjects() async {
-    if (_loading) return;
+    if (_loading || isClosed) return;
     _loading = true;
     emit(GetMySubjectsLoading());
     final result = await repo.getMySubjects();

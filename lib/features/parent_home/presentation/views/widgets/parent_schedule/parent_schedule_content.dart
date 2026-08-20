@@ -3,11 +3,11 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
 import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
-import 'package:bnan_app/features/parent_home/presentation/manager/parent_egyptian_schedule_cubit.dart';
 import 'package:bnan_app/features/parent_home/presentation/manager/parent_gulf_schedule_cubit.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_schedule/parent_egyptian_schedule_body.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_schedule/parent_gulf_schedule_body.dart';
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
+import 'package:bnan_app/features/tables_management/presentation/manager/get_egyptian_schedules_cubit/get_egyptian_schedules_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,10 +34,10 @@ class _ParentScheduleContentState extends State<ParentScheduleContent> {
       key: ValueKey('$studentId:${widget.child.registrationMode}'),
       child: switch (widget.child.registrationMode) {
         RegistrationMode.egyptian => BlocProvider(
-          create: (_) => ParentEgyptianScheduleCubit(
+          create: (_) => GetEgyptianSchedulesCubit(
             getIt<TableManagementRepo>(),
-            studentId,
-          )..load(),
+            studentId: studentId,
+          )..getMyEgyptianSchedule(),
           child: ParentEgyptianScheduleBody(
             childSelector: widget.childSelector,
           ),

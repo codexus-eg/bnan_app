@@ -1,11 +1,9 @@
 import 'package:bnan_app/core/shared_widget/custom_avatar.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/shared_widget/status_badge.dart';
-import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CustomChatCard extends StatelessWidget {
   const CustomChatCard({
@@ -77,44 +75,26 @@ class CustomChatCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                ImageManager.chatIcon,
+          if (unreadCount > 0) ...[
+            const SizedBox(width: 8),
+            Container(
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: ColorManager.red,
+                shape: BoxShape.circle,
               ),
-              if (unreadCount > 0) ...[
-                const SizedBox(height: 6),
-                Container(
-                  constraints: const BoxConstraints(
-                    minWidth: 22,
-                    minHeight: 22,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                  ),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: ColorManager.mainColor14,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                  child: Text(
-                    unreadCount > 99
-                        ? '99+'
-                        : unreadCount.toString(),
-                    style: const TextStyle(
-                      color: ColorManager.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              child: Text(
+                unreadCount > 99 ? '99+' : unreadCount.toString(),
+                style: const TextStyle(
+                  color: ColorManager.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ],
-          ),
+              ),
+            ),
+          ],
         ],
       ),
     );

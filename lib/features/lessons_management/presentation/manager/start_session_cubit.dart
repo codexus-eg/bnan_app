@@ -5,6 +5,8 @@ import 'package:bnan_app/features/lessons_management/presentation/manager/start_
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timezone/data/latest.dart' as timezone_data;
+import 'package:timezone/timezone.dart' as timezone;
 
 class StartSessionCubit extends Cubit<StartSessionState> {
   StartSessionCubit(
@@ -17,14 +19,12 @@ class StartSessionCubit extends Cubit<StartSessionState> {
   final TableManagementRepo tableManagementRepo;
   final Map<String, int> _requestIds = {};
   final Map<String, int> _activeRequestIds = {};
+  static bool _timezonesInitialized = false;
 
   /// جلب الحصص المجدولة والمستحقة الآن للمعلم من النظامين (Gulf + Egyptian)
   /// حسب نافذة وقت بدء الحصة، واستخراج chatRoomId الخاص بكل حصة مستحقة.
   Future<void> loadScheduledLessons() async {
     final chatRoomIds = <String>{};
-    final todayName = _currentWeekdayName();
-    final todayIso = DateTime.now().toIso8601String().split('T').first;
-    final now = DateTime.now();
 
     // 1. الجدول الخليجي (Gulf Schedule)
     try {
@@ -32,10 +32,16 @@ class StartSessionCubit extends Cubit<StartSessionState> {
       gulfResult.fold((failure) {
         debugPrint('[DEBUG StartSession] GulfSchedule load failure: ${failure.message}');
       }, (response) {
+        final now = _nowIn(response.data.timezone);
+        final todayName = _weekdayName(now.weekday);
         for (final classroom in response.data.classrooms) {
           for (final entry in classroom.entries) {
             final isDayMatch = entry.day.trim().toLowerCase() == todayName;
-            final isDue = ScheduleTimeUtils.isDueNow(entry.startTime, entry.endTime);
+            final isDue = ScheduleTimeUtils.isDueNow(
+              entry.startTime,
+              entry.endTime,
+              now: now,
+            );
             final cr = entry.chatRoomId ?? classroom.chatRoomId;
             final csId = entry.classroomSubjectId ?? classroom.classroomSubjectId;
 
@@ -68,6 +74,9 @@ class StartSessionCubit extends Cubit<StartSessionState> {
       egyptResult.fold((failure) {
         debugPrint('[DEBUG StartSession] EgyptianSchedule load failure: ${failure.message}');
       }, (week) {
+        final now = _nowIn(week.timezone);
+        final todayName = _weekdayName(now.weekday);
+        final todayIso = now.toIso8601String().split('T').first;
         for (final day in week.days) {
           final dayLower = day.date.trim().toLowerCase();
           final isDayMatch = dayLower == todayName ||
@@ -77,6 +86,7 @@ class StartSessionCubit extends Cubit<StartSessionState> {
             final isDue = ScheduleTimeUtils.isDueNow(
               lesson.startTime,
               lesson.endTime,
+              now: now,
             );
             final cr = lesson.chatRoomId;
 
@@ -102,9 +112,7 @@ class StartSessionCubit extends Cubit<StartSessionState> {
       debugPrint('[DEBUG StartSession] EgyptianSchedule error: $e');
     }
 
-    debugPrint(
-      '[DEBUG StartSession] Final scheduledChatRoomIds: $chatRoomIds, now: $now',
-    );
+    debugPrint('[DEBUG StartSession] Final scheduledChatRoomIds: $chatRoomIds');
 
     if (!isClosed) {
       emit(state.copyWith(scheduledChatRoomIds: chatRoomIds));
@@ -154,7 +162,7 @@ class StartSessionCubit extends Cubit<StartSessionState> {
     );
   }
 
-  static String _currentWeekdayName() => switch (DateTime.now().weekday) {
+  static String _weekdayName(int weekday) => switch (weekday) {
     DateTime.saturday => 'saturday',
     DateTime.sunday => 'sunday',
     DateTime.monday => 'monday',
@@ -164,6 +172,20 @@ class StartSessionCubit extends Cubit<StartSessionState> {
     DateTime.friday => 'friday',
     _ => '',
   };
+
+  static DateTime _nowIn(String? name) {
+    final value = name?.trim();
+    if (value == null || value.isEmpty) return DateTime.now();
+    if (!_timezonesInitialized) {
+      timezone_data.initializeTimeZones();
+      _timezonesInitialized = true;
+    }
+    try {
+      return timezone.TZDateTime.now(timezone.getLocation(value));
+    } on timezone.LocationNotFoundException {
+      return DateTime.now();
+    }
+  }
 
   static String? _dayKey(String value) {
     final day = value.trim().toLowerCase();
@@ -264,7 +286,9 @@ class StartSessionCubit extends Cubit<StartSessionState> {
 
   Future<String?> join(String classroomId) async {
     final classroom = classroomId.trim();
-    if (classroom.isEmpty || state.isLoading(classroom)) return null;
+    if (isClosed || classroom.isEmpty || state.isLoading(classroom)) {
+      return null;
+    }
     emit(
       state.copyWith(
         joiningClassroomIds: {...state.joiningClassroomIds, classroom},

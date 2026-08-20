@@ -19,7 +19,7 @@ class RecordingCard extends StatelessWidget {
     subtitle: S.of(context).sessionRecording,
     onTap: () => openDocumentLink(
       context,
-      item.recordingLink,
+      item.playbackUrl,
       kind: DocumentLinkKind.recording,
       opener: opener,
     ),

@@ -10,6 +10,8 @@ export 'read_only_inline_failure.dart';
 
 class ReadOnlyEvaluationsFeedback extends StatelessWidget {
   const ReadOnlyEvaluationsFeedback({super.key, required this.state});
+  static const _notEnrolledMessage = 'الطالب غير مقيد في هذا الفصل';
+  static const _noClassroomMessage = 'الطالب غير مقيد في فصل';
   final ReadOnlyWeeklyEvaluationsState state;
 
   @override
@@ -20,7 +22,10 @@ class ReadOnlyEvaluationsFeedback extends StatelessWidget {
       );
     }
     if (state.status == ReadOnlyEvaluationsStatus.failure) {
-      return ReadOnlyFailureFeedback(message: state.failureMessage ?? '');
+      final message = state.failureMessage ?? '';
+      return message.trim() == _notEnrolledMessage
+          ? const NoDataWidget(title: _noClassroomMessage)
+          : ReadOnlyFailureFeedback(message: message);
     }
     return NoDataWidget(title: _emptyTitle(context));
   }
