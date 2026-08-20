@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/card_header.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
@@ -28,7 +30,7 @@ class AdminChangeRequestCard extends StatelessWidget {
                 state.id == request.id ||
             state is AdminChangeRequestActionSuccess && state.id == request.id,
         listener: _listener,
-        builder: (context, _) => InkWell(
+        builder: (context, state) => InkWell(
           onTap: () => _showDetails(context),
           child: CustomDetailsWidgetBackground(
             child: Column(
@@ -43,7 +45,7 @@ class AdminChangeRequestCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 AdminChangeRequestInfo(request: request),
-                if (_pending) ...[
+                if (_pending && !_completed(state)) ...[
                   const SizedBox(height: 8),
                   AdminChangeRequestActions(requestId: request.id),
                 ],
@@ -55,6 +57,9 @@ class AdminChangeRequestCard extends StatelessWidget {
 
   bool get _pending =>
       const {'pending', 'awaiting_admin_approval'}.contains(request.status);
+
+  bool _completed(AdminChangeRequestActionsState state) =>
+      state is AdminChangeRequestActionSuccess && state.id == request.id;
 
   Future<void> _showDetails(BuildContext context) async {
     final result = await context.read<AdminChangeRequestsCubit>().getDetails(
@@ -81,6 +86,9 @@ class AdminChangeRequestCard extends StatelessWidget {
             : S.of(context).changeRequestRejectedSuccess,
         true,
       );
+      if (state.action == AdminChangeRequestAction.approve) {
+        MyNavigator.goTo(context, Routes.teacherApplication);
+      }
     }
   }
 }

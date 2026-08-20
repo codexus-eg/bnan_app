@@ -9,6 +9,7 @@ class ChatView extends StatelessWidget {
     required this.roomId,
     this.roomType,
     this.classroomId,
+    this.classroomSubjectId,
     this.classroomName,
     this.currentUserRole,
     this.studentId,
@@ -18,6 +19,7 @@ class ChatView extends StatelessWidget {
   final String roomId;
   final String? roomType;
   final String? classroomId;
+  final String? classroomSubjectId;
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
@@ -37,6 +39,7 @@ class ChatView extends StatelessWidget {
           roomId: roomId,
           roomType: roomType,
           classroomId: classroomId,
+          classroomSubjectId: classroomSubjectId,
           classroomName: classroomName,
           currentUserRole: currentUserRole,
           studentId: studentId,

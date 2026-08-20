@@ -9,6 +9,7 @@ class ClassroomModel {
     required this.approvedStudentsCount,
     required this.assignedTeachersCount,
     this.supervisor,
+    this.meetingLink = '',
   });
 
   final String id;
@@ -20,6 +21,7 @@ class ClassroomModel {
   final int approvedStudentsCount;
   final int assignedTeachersCount;
   final ClassroomSupervisorModel? supervisor;
+  final String meetingLink;
 
   static const List<ClassroomModel> skeletonClassrooms = [
     ClassroomModel(
@@ -81,6 +83,7 @@ class ClassroomModel {
       approvedStudentsCount: json['approvedStudentsCount'] ?? 0,
       assignedTeachersCount: json['assignedTeachersCount'] ?? 0,
       supervisor: supervisor,
+      meetingLink: json['meetingLink']?.toString() ?? '',
     );
   }
 }

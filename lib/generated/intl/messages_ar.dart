@@ -371,6 +371,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "changeRequestRejectedSuccess": MessageLookupByLibrary.simpleMessage(
       "تم رفض الطلب بنجاح",
     ),
+    "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
+      "رابط الاجتماع (اختياري)",
+    ),
     "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
       "تم إرسال طلبك بنجاح",
     ),

@@ -12,13 +12,19 @@ class ClassroomChangeRequestsRepoImpl implements ClassroomChangeRequestsRepo {
   @override
   submitStudent({
     required String classroomId,
+    String? classroomSubjectId,
     required String notes,
     String requestType = 'change_teacher',
   }) => repoGuard(
     () async => _message(
       await _api.post(
         EndPoints.classroomChangeRequests(classroomId),
-        data: {'requestType': requestType, 'notes': notes.trim()},
+        data: {
+          'requestType': requestType,
+          if (requestType == 'change_teacher')
+            'classroomSubjectId': classroomSubjectId?.trim(),
+          'notes': notes.trim(),
+        },
         isProtected: true,
       ),
     ),

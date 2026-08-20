@@ -1367,5 +1367,6 @@
     "adminNotes": "ملاحظات الإدارة (اختياري)",
     "rejectionReason": "سبب الرفض",
     "changeRequestApprovedSuccess": "تمت الموافقة على الطلب بنجاح",
-    "changeRequestRejectedSuccess": "تم رفض الطلب بنجاح"
+    "changeRequestRejectedSuccess": "تم رفض الطلب بنجاح",
+    "meetingLinkOptional": "رابط الاجتماع (اختياري)"
 }

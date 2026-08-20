@@ -24,6 +24,7 @@ class AddClassroomDialog extends StatefulWidget {
 class AddClassroomDialogState extends State<AddClassroomDialog> {
   final formKey = GlobalKey<FormState>();
   final classNameController = TextEditingController();
+  final meetingLinkController = TextEditingController();
   AcademicLookupSelection selection = const AcademicLookupSelection();
   String? supervisorId;
   String? validationMessage;
@@ -31,6 +32,7 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
   @override
   void dispose() {
     classNameController.dispose();
+    meetingLinkController.dispose();
     super.dispose();
   }
 
@@ -64,6 +66,14 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
                     validator: (value) => value?.trim().isEmpty ?? true
                         ? s.classNameRequired
                         : null,
+                    onChanged: (_) => setState(() => validationMessage = null),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextField(
+                    label: s.meetingLinkOptional,
+                    controller: meetingLinkController,
+                    keyboardType: TextInputType.url,
+                    backgroundColor: ColorManager.white,
                     onChanged: (_) => setState(() => validationMessage = null),
                   ),
                   const SizedBox(height: 16),
@@ -127,6 +137,9 @@ class AddClassroomDialogState extends State<AddClassroomDialog> {
         curriculumId: selection.curriculumId,
         gradeId: selection.gradeId,
         supervisorId: supervisorId,
+        meetingLink: meetingLinkController.text.trim().isEmpty
+            ? null
+            : meetingLinkController.text.trim(),
       ),
     );
   }

@@ -7,8 +7,8 @@ abstract final class ChangeRequestAccessPolicy {
     final session = SessionManager.instance;
     final type = roomType?.trim().toLowerCase();
     if (role == UserRole.student) {
-      return session.isGulfStudent ||
-          (session.isEgyptianStudent && type == 'classroom');
+      return (session.isGulfStudent || session.isEgyptianStudent) &&
+          type == 'classroom';
     }
     if (role == UserRole.teacher) {
       return session.registrationModes.contains(RegistrationMode.gulf) ||

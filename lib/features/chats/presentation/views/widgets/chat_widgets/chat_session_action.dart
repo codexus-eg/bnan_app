@@ -88,173 +88,156 @@ class _ChatSessionActionState extends State<ChatSessionAction>
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<StartSessionCubit, StartSessionState>(
-        builder: (context, state) {
-          final id = widget.classroomId;
-          final currentRoom = widget.roomId.trim();
-          final active = state.active(id);
+  Widget build(
+    BuildContext context,
+  ) => BlocBuilder<StartSessionCubit, StartSessionState>(
+    builder: (context, state) {
+      final id = widget.classroomId;
+      final currentRoom = widget.roomId.trim();
+      final active = state.active(id);
+      final sessionRoom = active?.session.chatRoomId.trim() ?? '';
+      final isSameChat = sessionRoom.isEmpty || sessionRoom == currentRoom;
+      final canEnterActive =
+          active != null &&
+          const {
+            'starting',
+            'live',
+          }.contains(active.session.status.trim().toLowerCase()) &&
+          isSameChat;
 
-          debugPrint(
-            '[DEBUG ChatSessionAction] build -> '
-            'currentChatId: $currentRoom, '
-            'classroomId: $id, '
-            'role: ${widget.role}, '
-            'isChecking: ${state.isChecking(id)}, '
-            'isLoading: ${state.isLoading(id)}, '
-            'scheduledChatRoomIds: ${state.scheduledChatRoomIds}, '
-            'isScheduledChat: ${state.isScheduledChat(currentRoom)}, '
-            'activeSession: ${active?.session.id}, '
-            'activeChatRoomId: ${active?.session.chatRoomId}',
-          );
+      debugPrint(
+        '[DEBUG ChatSessionAction] build -> '
+        'currentChatId: $currentRoom, '
+        'classroomId: $id, '
+        'role: ${widget.role}, '
+        'isChecking: ${state.isChecking(id)}, '
+        'isLoading: ${state.isLoading(id)}, '
+        'scheduledChatRoomIds: ${state.scheduledChatRoomIds}, '
+        'isScheduledChat: ${state.isScheduledChat(currentRoom)}, '
+        'activeSession: ${active?.session.id}, '
+        'activeChatRoomId: ${active?.session.chatRoomId}',
+      );
 
-          if (state.isLoading(id)) {
-            return const Padding(
-              padding: EdgeInsetsDirectional.symmetric(
-                horizontal: 12,
-              ),
-              child: SizedBox.square(
-                dimension: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: ColorManager.white,
-                ),
-              ),
-            );
-          }
+      if (state.isLoading(id)) {
+        return const Padding(
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 12),
+          child: SizedBox.square(
+            dimension: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: ColorManager.white,
+            ),
+          ),
+        );
+      }
 
-          if (widget.role == UserRole.teacher) {
-            if (active == null) {
-              // قبل بدء الحصة: يظهر الزر فقط إذا كان هذا الشات هو شات الحصة المجدولة
-              if (!state.isScheduledChat(currentRoom)) {
-                return const SizedBox.shrink();
-              }
-              return _button(S.of(context).startSession, _start);
-            }
-            // بعد بدء الحصة: يظهر فقط إذا تطابق chatRoomId في الـ activeSession
-            final sessionRoom = active.session.chatRoomId.trim();
-            if (sessionRoom.isNotEmpty && sessionRoom != currentRoom) {
-              return const SizedBox.shrink();
-            }
-
-            if (active.session.status == 'awaiting_zoom_end') {
-              return _button(
-                S.of(context).sessionEnding,
-                null,
-              );
-            }
-
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _button(
-                  S.of(context).joinSession,
-                  active.meetingLink.isNotEmpty
-                      ? () => _open(active.meetingLink)
-                      : _join,
-                ),
-                IconButton(
-                  tooltip: S.of(context).endSession,
-                  onPressed: _end,
-                  icon: const Icon(
-                    Icons.stop_circle_outlined,
-                  ),
-                  color: ColorManager.white,
-                ),
-              ],
-            );
-          }
-
-          if (widget.role == UserRole.supervisor) {
-            final sessionRoom = active?.session.chatRoomId.trim() ?? '';
-            final isSameChat = sessionRoom.isEmpty || sessionRoom == currentRoom;
-            final hasActiveSession = active != null && active.session.isActive;
-
-            debugPrint(
-              '[DEBUG ChatSessionAction] Supervisor check -> '
-              'role: ${widget.role}, '
-              'currentChatId: $currentRoom, '
-              'classroomId: $id, '
-              'activeSessionId: ${active?.session.id}, '
-              'activeSessionStatus: ${active?.session.status}, '
-              'activeChatRoomId: $sessionRoom, '
-              'meetingLink: ${active?.meetingLink}, '
-              'isSameChat: $isSameChat, '
-              'hasActiveSession: $hasActiveSession',
-            );
-
-            if (hasActiveSession && isSameChat) {
-              return _button(
-                S.of(context).joinSession,
-                active.meetingLink.isNotEmpty
-                    ? () => _joinSupervisor(active.meetingLink)
-                    : () async {
-                        final cubit = context.read<StartSessionCubit>();
-                        final link = await cubit.join(widget.classroomId);
-                        if (link != null && link.isNotEmpty) {
-                          await _joinSupervisor(link);
-                        } else if (mounted) {
-                          _showSessionError(cubit.state);
-                        }
-                      },
-              );
-            }
+      if (widget.role == UserRole.teacher) {
+        if (active == null) {
+          // قبل بدء الحصة: يظهر الزر فقط إذا كان هذا الشات هو شات الحصة المجدولة
+          if (!state.isScheduledChat(currentRoom)) {
             return const SizedBox.shrink();
           }
-
-          // student / admin:
-          if (active != null) {
-            final sessionRoom = active.session.chatRoomId.trim();
-            if (sessionRoom.isNotEmpty && sessionRoom != currentRoom) {
-              return const SizedBox.shrink();
-            }
-          }
-
-          if (widget.role == UserRole.student &&
-              active?.session.canJoin == true) {
-            return _button(
-              S.of(context).joinSession,
-              _join,
-            );
-          }
-
-          if (widget.role == UserRole.admin &&
-              active?.session.canJoin == true &&
-              active!.meetingLink.isNotEmpty) {
-            return _button(
-              S.of(context).joinSession,
-              () => _open(active.meetingLink),
-            );
-          }
-
+          return _button(S.of(context).startSession, _start);
+        }
+        // بعد بدء الحصة: يظهر فقط إذا تطابق chatRoomId في الـ activeSession
+        final sessionRoom = active.session.chatRoomId.trim();
+        if (sessionRoom.isNotEmpty && sessionRoom != currentRoom) {
           return const SizedBox.shrink();
+        }
 
-        },
-      );
+        if (active.session.status == 'awaiting_zoom_end') {
+          return _button(S.of(context).sessionEnding, null);
+        }
 
-  Widget _button(
-    String label,
-    VoidCallback? onPressed,
-  ) =>
-      TextButton(
-        onPressed: onPressed,
-        style: TextButton.styleFrom(
-          foregroundColor: ColorManager.white,
-          visualDensity: VisualDensity.compact,
-          padding: const EdgeInsetsDirectional.symmetric(
-            horizontal: 8,
-          ),
-        ),
-        child: Text(
-          label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      );
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _button(
+              S.of(context).joinSession,
+              active.meetingLink.isNotEmpty
+                  ? () => _open(active.meetingLink)
+                  : _join,
+            ),
+            IconButton(
+              tooltip: S.of(context).endSession,
+              onPressed: _end,
+              icon: const Icon(Icons.stop_circle_outlined),
+              color: ColorManager.white,
+            ),
+          ],
+        );
+      }
+
+      if (widget.role == UserRole.supervisor) {
+        debugPrint(
+          '[DEBUG ChatSessionAction] Supervisor check -> '
+          'role: ${widget.role}, '
+          'currentChatId: $currentRoom, '
+          'classroomId: $id, '
+          'activeSessionId: ${active?.session.id}, '
+          'activeSessionStatus: ${active?.session.status}, '
+          'activeChatRoomId: $sessionRoom, '
+          'meetingLink: ${active?.meetingLink}, '
+          'isSameChat: $isSameChat, '
+          'canEnterActive: $canEnterActive',
+        );
+
+        if (canEnterActive) {
+          return _button(
+            S.of(context).joinSession,
+            active.meetingLink.isNotEmpty
+                ? () => _joinSupervisor(active.meetingLink)
+                : () async {
+                    final cubit = context.read<StartSessionCubit>();
+                    final link = await cubit.join(widget.classroomId);
+                    if (link != null && link.isNotEmpty) {
+                      await _joinSupervisor(link);
+                    } else if (mounted) {
+                      _showSessionError(cubit.state);
+                    }
+                  },
+          );
+        }
+        return const SizedBox.shrink();
+      }
+
+      // student / admin:
+      if (active != null) {
+        final sessionRoom = active.session.chatRoomId.trim();
+        if (sessionRoom.isNotEmpty && sessionRoom != currentRoom) {
+          return const SizedBox.shrink();
+        }
+      }
+
+      if (widget.role == UserRole.student && canEnterActive) {
+        return _button(S.of(context).joinSession, _join);
+      }
+
+      if (widget.role == UserRole.admin && canEnterActive) {
+        return _button(
+          S.of(context).joinSession,
+          active.meetingLink.isNotEmpty
+              ? () => _open(active.meetingLink)
+              : _join,
+        );
+      }
+
+      return const SizedBox.shrink();
+    },
+  );
+
+  Widget _button(String label, VoidCallback? onPressed) => TextButton(
+    onPressed: onPressed,
+    style: TextButton.styleFrom(
+      foregroundColor: ColorManager.white,
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+    ),
+    child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+  );
 
   Future<void> _start() async {
-    final subjectsCubit =
-        context.read<GetTeacherAssignedSubjectsCubit>();
+    final subjectsCubit = context.read<GetTeacherAssignedSubjectsCubit>();
 
     await subjectsCubit.getTeacherAssignedSubjects(
       classroomId: widget.classroomId,
@@ -265,17 +248,13 @@ class _ChatSessionActionState extends State<ChatSessionAction>
     final state = subjectsCubit.state;
 
     if (state is GetTeacherAssignedSubjectsFailure) {
-      return showCustomSnackBar(
-        context,
-        state.errorMessage,
-        false,
-      );
+      return showCustomSnackBar(context, state.errorMessage, false);
     }
 
     final List<TeacherAssignedSubjectModel> subjects =
         state is GetTeacherAssignedSubjectsSuccess
-            ? state.response.data.subjects
-            : const [];
+        ? state.response.data.subjects
+        : const [];
 
     if (subjects.isEmpty) {
       return showCustomSnackBar(
@@ -287,10 +266,7 @@ class _ChatSessionActionState extends State<ChatSessionAction>
 
     final subjectId = subjects.length == 1
         ? subjects.single.id
-        : await showTeacherSessionSubjectPicker(
-            context,
-            subjects,
-          );
+        : await showTeacherSessionSubjectPicker(context, subjects);
 
     if (!mounted || subjectId == null) return;
 
@@ -307,8 +283,7 @@ class _ChatSessionActionState extends State<ChatSessionAction>
       return _showSessionError(cubit.state);
     }
 
-    final link =
-        cubit.state.active(widget.classroomId)?.meetingLink ?? '';
+    final link = cubit.state.active(widget.classroomId)?.meetingLink ?? '';
 
     await _open(link);
 
@@ -318,9 +293,7 @@ class _ChatSessionActionState extends State<ChatSessionAction>
   Future<void> _join() async {
     final cubit = context.read<StartSessionCubit>();
 
-    final link = await cubit.join(
-      widget.classroomId,
-    );
+    final link = await cubit.join(widget.classroomId);
 
     if (!mounted) return;
 
@@ -360,33 +333,23 @@ class _ChatSessionActionState extends State<ChatSessionAction>
   void _pollAwaitingEnd(StartSessionCubit cubit) {
     endStatusTimer?.cancel();
 
-    endStatusTimer = Timer.periodic(
-      const Duration(seconds: 10),
-      (timer) async {
-        if (!mounted) {
-          return timer.cancel();
-        }
+    endStatusTimer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+      if (!mounted) {
+        return timer.cancel();
+      }
 
-        await cubit.loadActive(
-          widget.classroomId,
-        );
+      await cubit.loadActive(widget.classroomId);
 
-        if (cubit
-                .state
-                .active(widget.classroomId)
-                ?.session
-                .status !=
-            'awaiting_zoom_end') {
-          timer.cancel();
-        }
-      },
-    );
+      if (cubit.state.active(widget.classroomId)?.session.status !=
+          'awaiting_zoom_end') {
+        timer.cancel();
+      }
+    });
   }
 
   Future<void> _open(String link) async {
     final opened =
-        FileUrlLauncher.isValidWebUrl(link) &&
-        await FileUrlLauncher.open(link);
+        FileUrlLauncher.isValidWebUrl(link) && await FileUrlLauncher.open(link);
 
     if (mounted && !opened) {
       showCustomSnackBar(
@@ -403,17 +366,10 @@ class _ChatSessionActionState extends State<ChatSessionAction>
     final message = switch (code) {
       'CLASSROOM_SESSION_ALREADY_ACTIVE' =>
         S.of(context).classroomSessionAlreadyActive,
-      'SESSION_NOT_ACTIVE' =>
-        S.of(context).noActiveSessionNow,
-      _ =>
-        state.eventError ??
-            S.of(context).unexpectedError,
+      'SESSION_NOT_ACTIVE' => S.of(context).noActiveSessionNow,
+      _ => state.eventError ?? S.of(context).unexpectedError,
     };
 
-    showCustomSnackBar(
-      context,
-      message,
-      false,
-    );
+    showCustomSnackBar(context, message, false);
   }
 }

@@ -23,6 +23,7 @@ class EditClassroomDialog extends StatefulWidget {
 class EditClassroomDialogState extends State<EditClassroomDialog> {
   final formKey = GlobalKey<FormState>();
   late final TextEditingController classNameController;
+  late final TextEditingController meetingLinkController;
   String? validationMessage;
 
   @override
@@ -31,11 +32,15 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
     classNameController = TextEditingController(
       text: widget.classroomItem.name,
     );
+    meetingLinkController = TextEditingController(
+      text: widget.classroomItem.meetingLink,
+    );
   }
 
   @override
   void dispose() {
     classNameController.dispose();
+    meetingLinkController.dispose();
     super.dispose();
   }
 
@@ -72,6 +77,14 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
                         : null,
                     onChanged: (_) => setState(() => validationMessage = null),
                   ),
+                  const SizedBox(height: 16),
+                  CustomTextField(
+                    label: s.meetingLinkOptional,
+                    controller: meetingLinkController,
+                    keyboardType: TextInputType.url,
+                    backgroundColor: ColorManager.white,
+                    onChanged: (_) => setState(() => validationMessage = null),
+                  ),
                   if (validationMessage != null) ...[
                     const SizedBox(height: 12),
                     Text(
@@ -101,7 +114,10 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
 
     context.read<ClassroomActionsCubit>().updateClassroom(
       widget.classroomItem.id,
-      ClassroomRequestModel(name: classNameController.text.trim()),
+      ClassroomRequestModel(
+        name: classNameController.text.trim(),
+        meetingLink: meetingLinkController.text.trim(),
+      ),
     );
   }
 }

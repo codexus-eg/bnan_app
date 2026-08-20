@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 abstract class ClassroomChangeRequestsRepo {
   Future<Either<Failure, String>> submitStudent({
     required String classroomId,
+    String? classroomSubjectId,
     required String notes,
     String requestType = 'change_teacher',
   });

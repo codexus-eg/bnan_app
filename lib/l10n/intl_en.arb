@@ -1368,5 +1368,6 @@
     "adminNotes": "Admin notes (optional)",
     "rejectionReason": "Rejection reason",
     "changeRequestApprovedSuccess": "Request approved successfully",
-    "changeRequestRejectedSuccess": "Request rejected successfully"
+    "changeRequestRejectedSuccess": "Request rejected successfully",
+    "meetingLinkOptional": "Meeting link (optional)"
 }

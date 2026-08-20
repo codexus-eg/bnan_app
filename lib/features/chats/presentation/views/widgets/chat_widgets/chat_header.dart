@@ -20,6 +20,7 @@ class ChatHeader extends StatelessWidget {
     required this.roomId,
     this.roomType,
     this.classroomId,
+    this.classroomSubjectId,
     this.currentUserRole,
     this.studentId,
     this.onMessageTarget,
@@ -32,6 +33,7 @@ class ChatHeader extends StatelessWidget {
   final String roomId;
   final String? roomType;
   final String? classroomId;
+  final String? classroomSubjectId;
   final String? currentUserRole;
   final String? studentId;
   final ValueChanged<String>? onMessageTarget;
@@ -107,26 +109,21 @@ class ChatHeader extends StatelessWidget {
     final actions = _actions(context);
     final info = UserInfo(chatTitle: chatTitle);
     if (actions.isEmpty) return info;
-    if (constraints.maxWidth < 460) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          info,
-          Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: Wrap(
-              alignment: WrapAlignment.end,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: actions,
-            ),
-          ),
-        ],
-      );
-    }
+    final actionsWidth = (constraints.maxWidth - 64).clamp(
+      0.0,
+      constraints.maxWidth,
+    );
     return Row(
       children: [
         Expanded(child: info),
-        ...actions,
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: actionsWidth),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerEnd,
+            child: Row(mainAxisSize: MainAxisSize.min, children: actions),
+          ),
+        ),
       ],
     );
   }
@@ -149,6 +146,7 @@ class ChatHeader extends StatelessWidget {
         ))
       ClassroomChangeRequestAction(
         classroomId: classroomId!.trim(),
+        classroomSubjectId: classroomSubjectId?.trim(),
         role: _sessionRole!,
       ),
     if (_sessionRole == UserRole.supervisor &&

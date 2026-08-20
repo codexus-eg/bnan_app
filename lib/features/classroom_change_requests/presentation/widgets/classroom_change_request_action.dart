@@ -10,9 +10,11 @@ class ClassroomChangeRequestAction extends StatefulWidget {
   const ClassroomChangeRequestAction({
     super.key,
     required this.classroomId,
+    this.classroomSubjectId,
     required this.role,
   });
   final String classroomId;
+  final String? classroomSubjectId;
   final UserRole role;
 
   @override
@@ -21,13 +23,14 @@ class ClassroomChangeRequestAction extends StatefulWidget {
 
 class _ActionState extends State<ClassroomChangeRequestAction> {
   bool _loading = false;
+  bool _submitted = false;
 
   @override
   Widget build(BuildContext context) => IconButton(
     tooltip: widget.role == UserRole.student
         ? S.of(context).requestTeacherChangeOrCancellation
         : S.of(context).requestTeacherWithdrawal,
-    onPressed: _loading ? null : _submit,
+    onPressed: _loading || _submitted ? null : _submit,
     icon: _loading
         ? const SizedBox.square(
             dimension: 20,
@@ -41,6 +44,11 @@ class _ActionState extends State<ClassroomChangeRequestAction> {
 
   Future<void> _submit() async {
     final s = S.of(context);
+    final classroomSubjectId = widget.classroomSubjectId?.trim() ?? '';
+    if (widget.role == UserRole.student && classroomSubjectId.isEmpty) {
+      showCustomSnackBar(context, s.unexpectedError, false);
+      return;
+    }
     final notes = await showDialog<String>(
       context: context,
       builder: (_) => RequestNotesDialog(
@@ -56,6 +64,7 @@ class _ActionState extends State<ClassroomChangeRequestAction> {
     final result = widget.role == UserRole.student
         ? await repo.submitStudent(
             classroomId: widget.classroomId,
+            classroomSubjectId: classroomSubjectId,
             notes: notes,
           )
         : await repo.submitTeacher(
@@ -63,7 +72,12 @@ class _ActionState extends State<ClassroomChangeRequestAction> {
             notes: notes,
           );
     if (!mounted) return;
-    setState(() => _loading = false);
+    setState(() {
+      _loading = false;
+      if (result.isRight() && widget.role == UserRole.student) {
+        _submitted = true;
+      }
+    });
     result.fold(
       (failure) => showCustomSnackBar(context, failure.message, false),
       (_) => showCustomSnackBar(context, s.changeRequestSubmitted, true),

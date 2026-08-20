@@ -11158,6 +11158,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Meeting link (optional)`
+  String get meetingLinkOptional {
+    return Intl.message(
+      'Meeting link (optional)',
+      name: 'meetingLinkOptional',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

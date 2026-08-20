@@ -20,6 +20,7 @@ class ChatBody extends StatefulWidget {
     required this.roomId,
     this.roomType,
     this.classroomId,
+    this.classroomSubjectId,
     this.classroomName,
     this.currentUserRole,
     this.studentId,
@@ -29,6 +30,7 @@ class ChatBody extends StatefulWidget {
   final String roomId;
   final String? roomType;
   final String? classroomId;
+  final String? classroomSubjectId;
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
@@ -57,6 +59,7 @@ class _ChatBodyState extends State<ChatBody> {
             roomId: widget.roomId,
             roomType: widget.roomType,
             classroomId: widget.classroomId,
+            classroomSubjectId: widget.classroomSubjectId,
             currentUserRole: widget.currentUserRole,
             studentId: widget.studentId,
             onMessageTarget: (id) =>

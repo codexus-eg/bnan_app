@@ -9,12 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminChangeRequestActions extends StatelessWidget {
-  const AdminChangeRequestActions({super.key, required this.requestId});
+  const AdminChangeRequestActions({
+    super.key,
+    required this.requestId,
+  });
+
   final String requestId;
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AdminChangeRequestActionsCubit>();
+
     return Row(
       children: [
         Expanded(
@@ -31,7 +36,10 @@ class AdminChangeRequestActions extends StatelessWidget {
         ),
         const SizedBox(width: 22),
         StatusActionButton(
-          isLoading: cubit.loading(requestId, AdminChangeRequestAction.reject),
+          isLoading: cubit.loading(
+            requestId,
+            AdminChangeRequestAction.reject,
+          ),
           onPressed: () => _reject(context),
         ),
       ],
@@ -47,6 +55,7 @@ class AdminChangeRequestActions extends StatelessWidget {
         required: false,
       ),
     );
+
     if (notes != null && context.mounted) {
       await context.read<AdminChangeRequestActionsCubit>().approve(
         requestId,
@@ -63,6 +72,7 @@ class AdminChangeRequestActions extends StatelessWidget {
         label: S.of(context).rejectionReason,
       ),
     );
+
     if (reason != null && context.mounted) {
       await context.read<AdminChangeRequestActionsCubit>().reject(
         requestId,

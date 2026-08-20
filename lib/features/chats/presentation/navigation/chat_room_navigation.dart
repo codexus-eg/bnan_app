@@ -17,6 +17,7 @@ abstract final class ChatRoomNavigation {
     return ChatRouteArgs(
       roomType: room.type,
       classroomId: room.classroomId,
+      classroomSubjectId: room.classroomSubjectId,
       classroomName: displayName ?? room.displayName,
       currentUserRole: currentUserRole,
       studentId: room.studentId,
