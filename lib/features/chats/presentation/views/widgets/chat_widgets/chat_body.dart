@@ -20,7 +20,10 @@ class ChatBody extends StatefulWidget {
     required this.roomId,
     this.roomType,
     this.classroomId,
+    this.accessScope,
     this.classroomSubjectId,
+    this.canRequestTeacherWithdrawal = false,
+    this.classroomSubjectAmbiguous = false,
     this.classroomName,
     this.currentUserRole,
     this.studentId,
@@ -30,7 +33,10 @@ class ChatBody extends StatefulWidget {
   final String roomId;
   final String? roomType;
   final String? classroomId;
+  final String? accessScope;
   final String? classroomSubjectId;
+  final bool canRequestTeacherWithdrawal;
+  final bool classroomSubjectAmbiguous;
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
@@ -59,7 +65,10 @@ class _ChatBodyState extends State<ChatBody> {
             roomId: widget.roomId,
             roomType: widget.roomType,
             classroomId: widget.classroomId,
+            accessScope: widget.accessScope,
             classroomSubjectId: widget.classroomSubjectId,
+            canRequestTeacherWithdrawal: widget.canRequestTeacherWithdrawal,
+            classroomSubjectAmbiguous: widget.classroomSubjectAmbiguous,
             currentUserRole: widget.currentUserRole,
             studentId: widget.studentId,
             onMessageTarget: (id) =>

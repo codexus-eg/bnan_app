@@ -275,6 +275,14 @@ bool get canAccessTeacherSubjectRequests =>
     );
   }
 
+  Future<void> replaceTeacherRegistrationModes(
+    Iterable<RegistrationMode> modes,
+  ) async {
+    _registrationModes = List.unmodifiable(modes.toSet());
+    await _saveModes(_registrationModes);
+    await _saveCurrentAccount();
+  }
+
   Future<void> mergeCurrentUser({
     String? id,
     String? fullName,

@@ -128,7 +128,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('add action is compact and edit action is subject-specific', (
+  testWidgets('add action is compact and edit action stays single', (
     tester,
   ) async {
     await _pump(
@@ -145,8 +145,14 @@ void main() {
                 status: 'evaluated',
                 evaluation: EvaluationValueModel(attendance: 'present'),
               ),
+              EvaluationSubjectModel(
+                id: 'c',
+                name: 'Chemistry',
+                status: 'evaluated',
+                evaluation: EvaluationValueModel(attendance: 'present'),
+              ),
             ],
-            onPressed: (_) {},
+            onPressed: () {},
           ),
         ],
       ),

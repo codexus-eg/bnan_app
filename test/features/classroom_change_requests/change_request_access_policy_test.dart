@@ -24,13 +24,15 @@ void main() {
           ChangeRequestAccessPolicy.canShow(
             role: UserRole.student,
             roomType: 'classroom',
+            accessScope: 'private',
           ),
           isTrue,
         );
         expect(
           ChangeRequestAccessPolicy.canShow(
             role: UserRole.student,
-            roomType: 'classroom_group',
+            roomType: 'classroom',
+            accessScope: 'shared_group',
           ),
           isFalse,
         );

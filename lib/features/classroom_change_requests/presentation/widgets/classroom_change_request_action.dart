@@ -12,10 +12,12 @@ class ClassroomChangeRequestAction extends StatefulWidget {
     super.key,
     required this.classroomId,
     this.classroomSubjectId,
+    this.classroomSubjectAmbiguous = false,
     required this.role,
   });
   final String classroomId;
   final String? classroomSubjectId;
+  final bool classroomSubjectAmbiguous;
   final UserRole role;
 
   @override
@@ -46,31 +48,47 @@ class _ActionState extends State<ClassroomChangeRequestAction> {
   Future<void> _submit() async {
     final s = S.of(context);
     final classroomSubjectId = widget.classroomSubjectId?.trim() ?? '';
-    if (widget.role == UserRole.student && classroomSubjectId.isEmpty) {
-      showCustomSnackBar(context, s.unexpectedError, false);
+    if (widget.role == UserRole.teacher &&
+        (classroomSubjectId.isEmpty || widget.classroomSubjectAmbiguous)) {
+      debugPrint(
+        'Teacher withdrawal blocked: classroom subject is missing or ambiguous',
+      );
+      showCustomSnackBar(context, s.gulfClassroomSubjectUnavailable, false);
       return;
     }
-    final notes = await showDialog<String>(
+    if (widget.role == UserRole.student && classroomSubjectId.isEmpty) {
+      debugPrint(
+        'Classroom change request blocked: classroomSubjectId is missing',
+      );
+      showCustomSnackBar(context, s.gulfClassroomSubjectUnavailable, false);
+      return;
+    }
+    final request = await showDialog<RequestNotesResult>(
       context: context,
       builder: (_) => RequestNotesDialog(
         title: widget.role == UserRole.student
             ? s.requestTeacherChangeOrCancellation
             : s.requestTeacherWithdrawal,
         label: s.cancellationReason,
+        requestTypes: widget.role == UserRole.student
+            ? const ['change_teacher', 'cancel_subject']
+            : null,
       ),
     );
-    if (notes == null || !mounted) return;
+    if (request == null || !mounted) return;
     setState(() => _loading = true);
     final repo = getIt<ClassroomChangeRequestsRepo>();
     final result = widget.role == UserRole.student
         ? await repo.submitStudent(
             classroomId: widget.classroomId,
             classroomSubjectId: classroomSubjectId,
-            notes: notes,
+            notes: request.notes,
+            requestType: request.requestType ?? 'change_teacher',
           )
         : await repo.submitTeacher(
             classroomId: widget.classroomId,
-            notes: notes,
+            classroomSubjectId: classroomSubjectId,
+            notes: request.notes,
           );
     if (!mounted) return;
     setState(() {

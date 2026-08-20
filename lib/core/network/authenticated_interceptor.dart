@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/token_refresh_coordinator.dart';
 import 'package:bnan_app/core/network/token_store.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:dio/dio.dart';
 
 class AuthenticatedInterceptor extends Interceptor {
@@ -46,7 +48,9 @@ class AuthenticatedInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final options = err.requestOptions;
     final accessCode = _subscriptionAccessCode(err.response?.data);
-    if (options.extra['isProtected'] == true && accessCode != null) {
+    if (options.extra['isProtected'] == true &&
+        accessCode != null &&
+        !_isStudentJoinSession(options.path)) {
       await (invalidateAccess?.call(accessCode) ?? invalidate());
       return handler.next(err);
     }
@@ -88,6 +92,11 @@ class AuthenticatedInterceptor extends Interceptor {
   }
 
   static bool _neverInvalidating() => false;
+
+  bool _isStudentJoinSession(String path) =>
+      SessionManager.instance.role == UserRole.student &&
+      path.startsWith('${EndPoints.classrooms}/') &&
+      path.endsWith('/sessions/active/join');
 
   String? _subscriptionAccessCode(dynamic data) {
     if (data is! Map) return null;

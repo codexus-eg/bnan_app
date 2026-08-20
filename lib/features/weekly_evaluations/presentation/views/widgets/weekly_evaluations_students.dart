@@ -50,8 +50,14 @@ class WeeklyEvaluationsStudents extends StatelessWidget {
             headerAction: policy.canEdit
                 ? WeeklyEvaluationSubjectActions(
                     subjects: student.subjects,
-                    onPressed: (subject) =>
-                        _showEdit(context, data, student, subject),
+                    onPressed: () => _showEdit(
+                      context,
+                      data,
+                      student,
+                      student.subjects
+                          .where((subject) => subject.isEvaluated)
+                          .toList(growable: false),
+                    ),
                   )
                 : null,
           ),
@@ -74,11 +80,11 @@ class WeeklyEvaluationsStudents extends StatelessWidget {
     BuildContext context,
     WeeklyEvaluationsDataModel data,
     WeeklyEvaluationStudentModel student,
-    EvaluationSubjectModel subject,
+    List<EvaluationSubjectModel> subjects,
   ) {
     final classroom = cubit.selectedClassroom;
     final week = cubit.selectedWeek;
-    if (classroom == null || week == null) return;
+    if (classroom == null || week == null || subjects.isEmpty) return;
     _showDialog(
       context,
       EvaluationDialogContext.edit(
@@ -90,8 +96,9 @@ class WeeklyEvaluationsStudents extends StatelessWidget {
               ? classroom.name
               : data.classroomName,
           week: week,
-          subject: subject,
+          subject: subjects.first,
         ),
+        subjects: subjects,
       ),
     );
   }

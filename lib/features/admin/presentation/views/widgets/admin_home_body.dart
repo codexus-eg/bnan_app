@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_home_layout.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/package_actions_cubit/package_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/packages_management_body.dart';
@@ -50,6 +52,10 @@ class AdminHomeBody extends StatelessWidget {
           BlocProvider(create: (context) => getIt<PackageActionsCubit>()),
         ],
         child: const PackagesManagementBody(),
+      ),
+      BlocProvider(
+        create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+        child: const GroupsView(showBackButton: false),
       ),
     ];
 

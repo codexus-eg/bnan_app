@@ -919,6 +919,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "إصدار شهادة جديدة",
     ),
     "joinSession": MessageLookupByLibrary.simpleMessage("دخول الحصة"),
+    "joinSubjectNotInSubscription": MessageLookupByLibrary.simpleMessage(
+      "اشتراكك الحالي لا يشمل هذه المادة",
+    ),
+    "joinSubscriptionExpired": MessageLookupByLibrary.simpleMessage(
+      "انتهى اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة",
+    ),
+    "joinSubscriptionHoursExhausted": MessageLookupByLibrary.simpleMessage(
+      "نفدت ساعات اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة",
+    ),
     "kuwaitiCurriculum": MessageLookupByLibrary.simpleMessage("المنهج الكويتي"),
     "languageArabic": MessageLookupByLibrary.simpleMessage("العربية"),
     "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
@@ -988,6 +997,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
     "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
     "month": MessageLookupByLibrary.simpleMessage("الشهر"),
+    "oneMonth": MessageLookupByLibrary.simpleMessage("شهر"),
     "monthlyCertificateTitle": m15,
     "monthlyPackage": MessageLookupByLibrary.simpleMessage("باقة شهرية"),
     "monthlyProfits": MessageLookupByLibrary.simpleMessage("الأرباح الشهرية"),

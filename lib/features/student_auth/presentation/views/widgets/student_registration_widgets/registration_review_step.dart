@@ -2,6 +2,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/get_curricul
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/core/shared_widget/registration_review_line.dart';
+import 'package:bnan_app/core/helper/package_display_formatter.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,10 @@ class RegistrationReviewStep extends StatelessWidget {
               .join(', ')
         : '';
     final rows = <(String, String)>[
-      (S.of(context).selectedPackage, cubit.packageName),
+      (
+        S.of(context).selectedPackage,
+        PackageDisplayFormatter.name(context, cubit.packageName),
+      ),
       (S.of(context).email, cubit.parentEmailController.text.trim()),
       (S.of(context).studentName, cubit.studentNameController.text.trim()),
       (S.of(context).studentEmail, cubit.studentEmailController.text.trim()),

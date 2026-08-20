@@ -134,7 +134,12 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
         ),
       ),
       (response) {
-        final realClassrooms = response.data.classrooms;
+        final realClassrooms = response.data.classrooms
+            .where((item) {
+              final mode = item.curriculum?.registrationMode;
+              return mode == null || mode.isEmpty || mode == 'gulf';
+            })
+            .toList(growable: false);
         final classrooms = realClassrooms.isEmpty
             ? emptySuccessFallback
             : realClassrooms;

@@ -85,6 +85,16 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(RegisterStepChanged(currentStep: state.currentStep));
   }
 
+  void setAllSubjectIds(Iterable<String> subjectIds) {
+    if (requiresSubjectSelection) return;
+    selectedSubjectIds = subjectIds
+        .map((id) => id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList(growable: false);
+    emit(RegisterStepChanged(currentStep: state.currentStep));
+  }
+
   void setPackageId(String id) {
     packageId = id;
   }

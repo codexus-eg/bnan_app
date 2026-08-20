@@ -6,7 +6,10 @@ import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_registration_body.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/tamara_verification_loading.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,11 +18,19 @@ class StudentRegistrationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final step = context.watch<RegisterCubit>().state.currentStep;
+    final register = context.watch<RegisterCubit>();
+    final step = register.state.currentStep;
+    final payment = context.watch<TamaraPaymentCubit>();
+    final isVerifying =
+        register.isGulf &&
+        (payment.isAwaitingVerification ||
+            payment.state is TamaraPaymentVerificationPending);
     return PopScope(
-      canPop: step == RegisterCubit.firstStep,
+      canPop: !isVerifying && step == RegisterCubit.firstStep,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) unawaited(RegistrationBackHandler.previous(context));
+        if (!didPop && !isVerifying) {
+          unawaited(RegistrationBackHandler.previous(context));
+        }
       },
       child: BlocListener<RegisterCubit, RegisterState>(
         listenWhen: (_, state) => state is RegisterSuccess,
@@ -34,9 +45,14 @@ class StudentRegistrationView extends StatelessWidget {
             ),
           );
         },
-        child: const Scaffold(
+        child: Scaffold(
           resizeToAvoidBottomInset: true,
-          body: StudentRegistrationBody(),
+          body: Stack(
+            children: [
+              const StudentRegistrationBody(),
+              if (isVerifying) const TamaraVerificationLoading(),
+            ],
+          ),
         ),
       ),
     );

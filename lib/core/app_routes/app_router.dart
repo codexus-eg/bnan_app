@@ -28,6 +28,7 @@ import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teac
 import 'package:bnan_app/features/ideal_supervisor/presentation/policies/ideal_supervisor_access_policy.dart';
 import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
 import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_state.dart';
 import 'package:bnan_app/features/saved_accounts/presentation/views/saved_accounts_view.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
@@ -305,7 +306,12 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 roomId: roomId,
                 roomType: args?.roomType,
                 classroomId: args?.classroomId,
+                accessScope: args?.accessScope,
                 classroomSubjectId: args?.classroomSubjectId,
+                canRequestTeacherWithdrawal:
+                    args?.canRequestTeacherWithdrawal ?? false,
+                classroomSubjectAmbiguous:
+                    args?.classroomSubjectAmbiguous ?? false,
                 classroomName: args?.classroomName,
                 currentUserRole:
                     args?.currentUserRole ?? SessionManager.instance.userRole,
@@ -513,13 +519,20 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               BlocProvider(create: (_) => getIt<TeacherMyPayrollsCubit>()),
               BlocProvider(
                 create: (_) =>
+                    getIt<TeacherProfileCubit>()..getTeacherProfile(),
+              ),
+              BlocProvider(
+                create: (_) =>
                     getIt<DashboardCubit>(param1: DashboardRole.teacher),
               ),
             ],
-            child: TeacherHomeView(
-              initialIndex: state.uri.queryParameters['tab'] == 'payrolls'
-                  ? teacherPayrollTabIndex
-                  : 0,
+            child: BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
+              buildWhen: (_, current) => current is TeacherProfileSuccess,
+              builder: (_, _) => TeacherHomeView(
+                initialIndex: state.uri.queryParameters['tab'] == 'payrolls'
+                    ? teacherPayrollTabIndex
+                    : 0,
+              ),
             ),
           ),
           key: state.pageKey,
@@ -1067,6 +1080,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                   ),
                 if (role == UserRole.parent)
                   BlocProvider(
+                    lazy: false,
                     create: (_) =>
                         getIt<GetParentPlansCubit>()..loadParentPlans(),
                   ),

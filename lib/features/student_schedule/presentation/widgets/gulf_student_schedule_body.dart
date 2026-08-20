@@ -5,6 +5,7 @@ import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
+import 'package:bnan_app/features/lessons_management/presentation/utils/student_join_session_error.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
@@ -84,15 +85,21 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
     final link = await _sessionCubit.join(classroomId);
     if (!mounted) return;
     if (link == null || link.isEmpty) {
+      final joinError = studentJoinSessionErrorMessage(
+        context,
+        _sessionCubit.state,
+      );
       final inactive =
           _sessionCubit.state.eventCode == 'SESSION_NOT_ACTIVE' ||
           _sessionCubit.state.eventError == 'SESSION_NOT_ACTIVE' ||
           _sessionCubit.state.eventStatusCode == 404;
       showCustomSnackBar(
         context,
-        inactive
-            ? S.of(context).noActiveSessionNow
-            : _sessionCubit.state.eventError ?? S.of(context).unexpectedError,
+        joinError ??
+            (inactive
+                ? S.of(context).noActiveSessionNow
+                : _sessionCubit.state.eventError ??
+                      S.of(context).unexpectedError),
         false,
       );
       if (inactive && !_scheduleCubit.isClosed) {

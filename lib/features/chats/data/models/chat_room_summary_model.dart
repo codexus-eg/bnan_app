@@ -4,7 +4,10 @@ class ChatRoomSummaryModel {
   final String displayName;
   final String subtitle;
   final String? classroomId;
+  final String? accessScope;
   final String? classroomSubjectId;
+  final bool canRequestTeacherWithdrawal;
+  final bool classroomSubjectAmbiguous;
   final String? studentId;
   final String? lastMessage;
   final DateTime? lastMessageAt;
@@ -16,7 +19,10 @@ class ChatRoomSummaryModel {
     required this.displayName,
     required this.subtitle,
     this.classroomId,
+    this.accessScope,
     this.classroomSubjectId,
+    this.canRequestTeacherWithdrawal = false,
+    this.classroomSubjectAmbiguous = false,
     this.studentId,
     this.lastMessage,
     this.lastMessageAt,
@@ -126,28 +132,23 @@ class ChatRoomSummaryModel {
       type: type,
       displayName: displayName?.isNotEmpty == true
           ? displayName!
-          : (visibleParticipant['fullName'] ??
-                    visibleParticipant['name'] ??
-                    '')
+          : (visibleParticipant['fullName'] ?? visibleParticipant['name'] ?? '')
                 .toString(),
       subtitle: resolvedSubtitle,
       classroomId: directId ?? legacyId,
+      accessScope: id(json['accessScope'])?.toLowerCase(),
       classroomSubjectId: id(json['classroomSubjectId']),
+      canRequestTeacherWithdrawal:
+          json['canRequestTeacherWithdrawal'] == true,
+      classroomSubjectAmbiguous: json['classroomSubjectAmbiguous'] == true,
       studentId: type == 'supervisor_student'
-          ? id(
-              studentData['id'] ??
-                  studentData['_id'] ??
-                  student['id'],
-            )
+          ? id(studentData['id'] ?? studentData['_id'] ?? student['id'])
           : null,
       lastMessage: json['lastMessage']?.toString(),
-      lastMessageAt: DateTime.tryParse(
-        json['lastMessageAt']?.toString() ?? '',
-      ),
-      unreadCount: (json['unreadCount'] as num?)?.toInt() ??
-          parseUnreadCount(
-            json['unreadMessagesCount'] ?? json['unread'],
-          ),
+      lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
+      unreadCount:
+          (json['unreadCount'] as num?)?.toInt() ??
+          parseUnreadCount(json['unreadMessagesCount'] ?? json['unread']),
     );
   }
 
@@ -175,7 +176,10 @@ class ChatRoomSummaryModel {
     String? displayName,
     String? subtitle,
     String? classroomId,
+    String? accessScope,
     String? classroomSubjectId,
+    bool? canRequestTeacherWithdrawal,
+    bool? classroomSubjectAmbiguous,
     String? studentId,
     String? lastMessage,
     DateTime? lastMessageAt,
@@ -187,7 +191,12 @@ class ChatRoomSummaryModel {
       displayName: displayName ?? this.displayName,
       subtitle: subtitle ?? this.subtitle,
       classroomId: classroomId ?? this.classroomId,
+      accessScope: accessScope ?? this.accessScope,
       classroomSubjectId: classroomSubjectId ?? this.classroomSubjectId,
+      canRequestTeacherWithdrawal:
+          canRequestTeacherWithdrawal ?? this.canRequestTeacherWithdrawal,
+      classroomSubjectAmbiguous:
+          classroomSubjectAmbiguous ?? this.classroomSubjectAmbiguous,
       studentId: studentId ?? this.studentId,
       lastMessage: lastMessage ?? this.lastMessage,
       lastMessageAt: lastMessageAt ?? this.lastMessageAt,

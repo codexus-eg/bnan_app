@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/helper/package_display_formatter.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/dashboard/data/models/student_dashboard_subscription.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -14,8 +15,12 @@ class MonthlySubscriptionInfo extends StatelessWidget {
     final s = S.of(context);
     return Column(
       children: [
-        _line(context, s.packageName, subscription.packageName),
-        _line(context, s.packageDuration, '${subscription.purchasedMonths}'),
+        _line(
+          context,
+          s.packageName,
+          PackageDisplayFormatter.name(context, subscription.packageName),
+        ),
+        _line(context, s.packageDuration, s.oneMonth),
         _line(context, s.startDate, _date(subscription.startDate)),
         _line(context, s.endDate, _date(subscription.endDate)),
         if (subscription.remainingType.trim().toLowerCase() == 'days' &&

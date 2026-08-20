@@ -32,6 +32,16 @@ void main() {
     expect(cubit.selectedSubjectIds, ['science']);
   });
 
+  test('Egyptian all-subjects payload uses every loaded grade subject', () {
+    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
+    cubit.setRegisterFlowArgs(_args('egyptian'));
+    cubit.setGrade(id: 'grade', name: 'Grade');
+    cubit.setAllSubjectIds(const ['math', 'science']);
+
+    expect(cubit.requiresSubjectSelection, isFalse);
+    expect(cubit.buildRegisterRequest()!.student.subjects, ['math', 'science']);
+  });
+
   test('Egyptian and Gulf flows both end at their fourth step', () {
     final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
     cubit.setRegisterFlowArgs(_args('egyptian'));

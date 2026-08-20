@@ -18,9 +18,11 @@ class AuthResponseModel {
 
     final dataJson = data is Map<String, dynamic> ? data : <String, dynamic>{};
     final nestedUser = dataJson['user'];
-    final userJson = nestedUser is Map<String, dynamic>
-        ? {...dataJson, ...nestedUser}
-        : dataJson;
+    final userJson = <String, dynamic>{
+      ...json,
+      ...dataJson,
+      if (nestedUser is Map<String, dynamic>) ...nestedUser,
+    };
 
     return AuthResponseModel(
       success: json['success'] == true,

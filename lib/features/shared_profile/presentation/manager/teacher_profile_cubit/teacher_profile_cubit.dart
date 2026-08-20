@@ -31,6 +31,9 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
           phone: profile.phone,
           role: 'teacher',
         );
+        await SessionManager.instance.replaceTeacherRegistrationModes(
+          profile.registrationModes,
+        );
         if (isClosed) return;
         emit(TeacherProfileSuccess(teacherProfile: profile));
       },

@@ -49,6 +49,10 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
   PaymentDraft? get draft => _draft;
   PaymentAmountSummary? get paymentSummary => _paymentSummary;
+  bool get isAwaitingVerification =>
+      _draft?.paymentId.isNotEmpty == true &&
+      _draft?.checkoutOpenedAt != null &&
+      _draft?.lastKnownStatus == PaymentStatus.pending;
 
   Future<void> restore() async {
     _draft = await _readOwnedDraft();
@@ -190,9 +194,11 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   }
 
   Future<void> verifyCheckoutClosed() async {
+    if (_draft?.lastKnownStatus != PaymentStatus.pending) return;
     _stopPolling();
-    _checkoutLaunchClaimed = false;
+    _checkoutLaunchClaimed = true;
     _reconciledThisForeground = false;
+    if (!isClosed) emit(const TamaraPaymentVerificationPending());
     await _reconcileAndCheckStatus();
   }
 
@@ -217,9 +223,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     if (isClosed) return;
     await reconciled.fold((_) async {}, _handleStatus);
     if (_draft?.lastKnownStatus.isTerminal == true) return;
-    final canPoll = await checkStatus();
-    if (canPoll &&
-        _checkoutLaunchClaimed &&
+    await checkStatus();
+    if (_checkoutLaunchClaimed &&
         _draft?.lastKnownStatus == PaymentStatus.pending) {
       _startPolling();
     }

@@ -992,6 +992,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Issue New Certificate",
     ),
     "joinSession": MessageLookupByLibrary.simpleMessage("Join lesson"),
+    "joinSubjectNotInSubscription": MessageLookupByLibrary.simpleMessage(
+      "Your current subscription does not include this subject",
+    ),
+    "joinSubscriptionExpired": MessageLookupByLibrary.simpleMessage(
+      "Your subscription has expired. Please renew your subscription to join the lesson",
+    ),
+    "joinSubscriptionHoursExhausted": MessageLookupByLibrary.simpleMessage(
+      "Your subscription hours have been exhausted. Please renew your subscription to join the lesson",
+    ),
     "kuwaitiCurriculum": MessageLookupByLibrary.simpleMessage(
       "Kuwaiti Curriculum",
     ),
@@ -1067,6 +1076,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "messages": MessageLookupByLibrary.simpleMessage("Messages"),
     "monday": MessageLookupByLibrary.simpleMessage("Monday"),
     "month": MessageLookupByLibrary.simpleMessage("Month"),
+    "oneMonth": MessageLookupByLibrary.simpleMessage("1 month"),
     "monthlyCertificateTitle": m15,
     "monthlyPackage": MessageLookupByLibrary.simpleMessage("Monthly Package"),
     "monthlyProfits": MessageLookupByLibrary.simpleMessage("Monthly Profits"),

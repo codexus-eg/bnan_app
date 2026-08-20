@@ -5,6 +5,7 @@ import 'package:bnan_app/core/shared_widget/home_appbar.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_drawer_items.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/student_drawer_items.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_drawer_items.dart';
+import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_drawer_items.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -59,6 +60,10 @@ void main() {
       ([], []),
     ]) {
       await _saveTeacher(testCase.$1);
+      expect(
+        SessionManager.instance.registrationModes.toSet(),
+        testCase.$1.toSet(),
+      );
       expect(teacherScheduleRoutes(), testCase.$2);
       final gulfItem = testCase.$1.contains(RegistrationMode.gulf) ? 1 : 0;
       final idealItem = testCase.$1.contains(RegistrationMode.egyptian) ? 1 : 0;
@@ -196,11 +201,17 @@ Widget _localizedBuilder() => MaterialApp(
   ),
 );
 
-Future<void> _saveTeacher(List<RegistrationMode> modes) {
-  return SessionManager.instance.saveSession(
+Future<void> _saveTeacher(List<RegistrationMode> modes) async {
+  await SessionManager.instance.saveSession(
     accessToken: 'token',
     refreshToken: '',
     userRole: 'teacher',
-    registrationModes: modes,
+    registrationModes: RegistrationMode.values,
+  );
+  final profile = TeacherProfileModel.fromJson({
+    'registrationModes': modes.map((mode) => mode.name).toList(),
+  });
+  await SessionManager.instance.replaceTeacherRegistrationModes(
+    profile.registrationModes,
   );
 }

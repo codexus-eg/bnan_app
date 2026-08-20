@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/helper/package_display_formatter.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -40,7 +41,10 @@ class ParentSubscriptionCard extends StatelessWidget {
                 child: Text(
                   subscription.packageName.isEmpty
                       ? '-'
-                      : subscription.packageName,
+                      : PackageDisplayFormatter.name(
+                          context,
+                          subscription.packageName,
+                        ),
                   style: StylesManager.styleBold16(
                     context,
                   ).copyWith(color: ColorManager.mainColor14),

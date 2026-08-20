@@ -12,6 +12,7 @@ abstract class ClassroomChangeRequestsRepo {
   });
   Future<Either<Failure, String>> submitTeacher({
     required String classroomId,
+    required String classroomSubjectId,
     required String notes,
   });
   Future<Either<Failure, ClassroomChangeRequestsPage>> getAdminRequests();

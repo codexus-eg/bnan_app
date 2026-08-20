@@ -9,7 +9,6 @@ import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_c
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
-import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
 
@@ -155,12 +154,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
         }
         return;
       }
-      if (result.outcome == TamaraSdkOutcome.cancel ||
-          result.outcome == TamaraSdkOutcome.failure) {
-        await cubit.verifyCheckoutClosed();
-        return;
-      }
-      await cubit.onForeground();
+      await cubit.verifyCheckoutClosed();
       return;
     }
     if (state is TamaraPaymentVerificationPending) {

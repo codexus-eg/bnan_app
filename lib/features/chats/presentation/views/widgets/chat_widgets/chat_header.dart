@@ -20,7 +20,10 @@ class ChatHeader extends StatelessWidget {
     required this.roomId,
     this.roomType,
     this.classroomId,
+    this.accessScope,
     this.classroomSubjectId,
+    this.canRequestTeacherWithdrawal = false,
+    this.classroomSubjectAmbiguous = false,
     this.currentUserRole,
     this.studentId,
     this.onMessageTarget,
@@ -33,7 +36,10 @@ class ChatHeader extends StatelessWidget {
   final String roomId;
   final String? roomType;
   final String? classroomId;
+  final String? accessScope;
   final String? classroomSubjectId;
+  final bool canRequestTeacherWithdrawal;
+  final bool classroomSubjectAmbiguous;
   final String? currentUserRole;
   final String? studentId;
   final ValueChanged<String>? onMessageTarget;
@@ -143,10 +149,13 @@ class ChatHeader extends StatelessWidget {
         ChangeRequestAccessPolicy.canShow(
           role: _sessionRole,
           roomType: roomType,
+          accessScope: accessScope,
+          canRequestTeacherWithdrawal: canRequestTeacherWithdrawal,
         ))
       ClassroomChangeRequestAction(
         classroomId: classroomId!.trim(),
         classroomSubjectId: classroomSubjectId?.trim(),
+        classroomSubjectAmbiguous: classroomSubjectAmbiguous,
         role: _sessionRole!,
       ),
     if (_sessionRole == UserRole.supervisor &&

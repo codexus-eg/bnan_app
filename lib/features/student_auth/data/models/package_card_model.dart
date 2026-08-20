@@ -64,7 +64,7 @@ class PackageCardModel {
 
   static String _durationText(BuildContext context, PackageModel package) {
     if (package.type == 'monthly') {
-      return '${package.months ?? 0} شهر';
+      return S.of(context).oneMonth;
     }
 
     return S.of(context).trainingHours((package.hours ?? 0).toString());

@@ -19,6 +19,21 @@ void main() {
     });
     expect((api.data! as Map).containsKey('subjectId'), isFalse);
   });
+
+  test('cancel_subject sends the room classroomSubjectId', () async {
+    final api = _Api();
+    await ClassroomChangeRequestsRepoImpl(api).submitStudent(
+      classroomId: 'classroom-id',
+      classroomSubjectId: 'classroom-subject-id',
+      notes: ' cancel subject ',
+      requestType: 'cancel_subject',
+    );
+    expect(api.data, {
+      'requestType': 'cancel_subject',
+      'classroomSubjectId': 'classroom-subject-id',
+      'notes': 'cancel subject',
+    });
+  });
 }
 
 class _Api implements ApiConsumer {

@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/helper/package_display_formatter.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -76,7 +77,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                 height: 32,
                 child: Center(
                   child: Text(
-                    plan.title,
+                    PackageDisplayFormatter.name(context, plan.title),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,

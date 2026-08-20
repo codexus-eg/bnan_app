@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/features/dashboard/data/models/dashboard_notification.dart';
 import 'package:bnan_app/features/dashboard/data/models/supervisor_dashboard_model.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:bnan_app/features/dashboard/presentation/widgets/dashboard_builder.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/domain/notification_navigation_service.dart';
@@ -13,8 +16,10 @@ import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_home_scaffold.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_bottom_tab_body.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_home_page.dart';
+import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_tab_refresh.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 typedef SupervisorTabBuilder = Widget Function(String route);
@@ -43,6 +48,7 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final Map<int, Widget> _tabs = {};
+  final Map<int, GlobalKey<SupervisorTabRefreshState>> _refreshKeys = {};
 
   bool isLoggingOut = false;
 
@@ -75,11 +81,9 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     if (index > homeTabIndex && index < bottom.length) {
       final item = bottom[index];
       if (item.isEnabled && item.route != null) {
-        _tabs.putIfAbsent(
-          index,
-          () => (widget.tabBuilder ?? buildSupervisorBottomTab)(item.route!),
-        );
+        _tabs.putIfAbsent(index, () => _buildTab(index, item.route!));
         selectedBottomIndex = index;
+        _scheduleRefresh(index);
       }
     }
   }
@@ -152,8 +156,6 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     int index,
     SupervisorNavigationItem item,
   ) {
-    if (index == selectedBottomIndex) return;
-
     if (index == homeTabIndex) {
       selectHome();
       return;
@@ -161,23 +163,42 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
 
     if (!item.isEnabled) return;
 
-    _tabs.putIfAbsent(
-      index,
-      () => (widget.tabBuilder ??
-          buildSupervisorBottomTab)(item.route!),
-    );
+    final isNew = !_tabs.containsKey(index);
+    _tabs.putIfAbsent(index, () => _buildTab(index, item.route!));
 
-    setState(() {
-      selectedBottomIndex = index;
-    });
+    if (index != selectedBottomIndex) {
+      setState(() => selectedBottomIndex = index);
+    }
+    if (isNew) {
+      _scheduleRefresh(index);
+    } else {
+      unawaited(_refreshTab(index));
+    }
   }
 
   void selectHome() {
+    unawaited(context.read<DashboardCubit>().refresh());
     if (selectedBottomIndex == homeTabIndex) return;
 
     setState(() {
       selectedBottomIndex = homeTabIndex;
     });
+  }
+
+  Widget _buildTab(int index, String route) {
+    if (widget.tabBuilder != null) return widget.tabBuilder!(route);
+    final key = _refreshKeys.putIfAbsent(index, GlobalKey.new);
+    return buildSupervisorBottomTab(route, refreshKey: key);
+  }
+
+  void _scheduleRefresh(int index) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(_refreshTab(index));
+    });
+  }
+
+  Future<void> _refreshTab(int index) async {
+    await _refreshKeys[index]?.currentState?.refresh();
   }
 
   void selectDrawerRoot(

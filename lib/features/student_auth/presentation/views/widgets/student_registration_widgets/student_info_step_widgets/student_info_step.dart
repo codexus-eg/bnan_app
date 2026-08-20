@@ -2,6 +2,7 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
@@ -76,7 +77,7 @@ class StudentInfoStep extends StatelessWidget {
                       hint: S.of(context).selectGrade,
                       items: gradeNames,
                       isRequired: true,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         if (value == null) return;
 
                         final selectedGrade = state.grades.firstWhere(
@@ -88,13 +89,20 @@ class StudentInfoStep extends StatelessWidget {
                           name: selectedGrade.name,
                         );
 
-                        context
-                            .read<GetCurriculmSubjectsCubit>()
-                            .getCurriculumSubjects(
-                              curriculumId: registerCubit.curriculumId,
-                              gradeId: selectedGrade.id,
-                              isGulf: registerCubit.isGulf,
-                            );
+                        final subjectsCubit = context
+                            .read<GetCurriculmSubjectsCubit>();
+                        await subjectsCubit.getCurriculumSubjects(
+                          curriculumId: registerCubit.curriculumId,
+                          gradeId: selectedGrade.id,
+                          isGulf: registerCubit.isGulf,
+                        );
+                        if (!context.mounted) return;
+                        final subjectsState = subjectsCubit.state;
+                        if (subjectsState is GetSubjectsSuccess) {
+                          registerCubit.setAllSubjectIds(
+                            subjectsState.subjects.map((item) => item.id),
+                          );
+                        }
                       },
                     );
                   }

@@ -4389,6 +4389,11 @@ class S {
     return Intl.message('Month', name: 'month', desc: '', args: []);
   }
 
+  /// `1 month`
+  String get oneMonth {
+    return Intl.message('1 month', name: 'oneMonth', desc: '', args: []);
+  }
+
   /// `Salary`
   String get salary {
     return Intl.message('Salary', name: 'salary', desc: '', args: []);
@@ -6332,6 +6337,36 @@ class S {
   /// `Join lesson`
   String get joinSession {
     return Intl.message('Join lesson', name: 'joinSession', desc: '', args: []);
+  }
+
+  /// `Your subscription has expired. Please renew your subscription to join the lesson`
+  String get joinSubscriptionExpired {
+    return Intl.message(
+      'Your subscription has expired. Please renew your subscription to join the lesson',
+      name: 'joinSubscriptionExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your subscription hours have been exhausted. Please renew your subscription to join the lesson`
+  String get joinSubscriptionHoursExhausted {
+    return Intl.message(
+      'Your subscription hours have been exhausted. Please renew your subscription to join the lesson',
+      name: 'joinSubscriptionHoursExhausted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your current subscription does not include this subject`
+  String get joinSubjectNotInSubscription {
+    return Intl.message(
+      'Your current subscription does not include this subject',
+      name: 'joinSubjectNotInSubscription',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `End lesson`

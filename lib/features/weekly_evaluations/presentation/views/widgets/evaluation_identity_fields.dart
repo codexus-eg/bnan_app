@@ -51,9 +51,7 @@ class EvaluationIdentityFields extends StatelessWidget {
             students.isEmpty)
           _message(s.noStudentsInClass),
         const SizedBox(height: 12),
-        data.isEdit
-            ? _fixed(s.subject, data.editor!.subject.name)
-            : _subject(s),
+        _subject(s),
         if (showAvailabilityMessages &&
             !data.isEdit &&
             studentId != null &&

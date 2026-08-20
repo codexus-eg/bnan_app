@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/helper/currency_formatter.dart';
+import 'package:bnan_app/core/helper/package_display_formatter.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class PaymentMethodCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            packageName,
+            PackageDisplayFormatter.name(context, packageName),
             style: StylesManager.styleBold16(
               context,
             ).copyWith(color: ColorManager.mainColor15),

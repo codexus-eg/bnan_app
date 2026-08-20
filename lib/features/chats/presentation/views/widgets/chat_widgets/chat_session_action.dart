@@ -8,6 +8,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/teacher_session_subject_picker.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
+import 'package:bnan_app/features/lessons_management/presentation/utils/student_join_session_error.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/teacher_assigned_subject_model.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_state.dart';
@@ -362,13 +363,18 @@ class _ChatSessionActionState extends State<ChatSessionAction>
 
   void _showSessionError(StartSessionState state) {
     final code = state.eventCode ?? state.eventError;
+    final studentJoinError = widget.role == UserRole.student
+        ? studentJoinSessionErrorMessage(context, state)
+        : null;
 
-    final message = switch (code) {
-      'CLASSROOM_SESSION_ALREADY_ACTIVE' =>
-        S.of(context).classroomSessionAlreadyActive,
-      'SESSION_NOT_ACTIVE' => S.of(context).noActiveSessionNow,
-      _ => state.eventError ?? S.of(context).unexpectedError,
-    };
+    final message =
+        studentJoinError ??
+        switch (code) {
+          'CLASSROOM_SESSION_ALREADY_ACTIVE' =>
+            S.of(context).classroomSessionAlreadyActive,
+          'SESSION_NOT_ACTIVE' => S.of(context).noActiveSessionNow,
+          _ => state.eventError ?? S.of(context).unexpectedError,
+        };
 
     showCustomSnackBar(context, message, false);
   }

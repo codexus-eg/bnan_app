@@ -48,6 +48,20 @@ void main() {
     }
   });
 
+  test('classroom access contract is parsed directly', () {
+    final private = _room({
+      'type': 'classroom',
+      'accessScope': 'private',
+      'classroomSubjectId': ' classroom-subject ',
+    });
+    expect(private.accessScope, 'private');
+    expect(private.classroomSubjectId, 'classroom-subject');
+
+    final shared = _room({'type': 'classroom', 'accessScope': 'shared_group'});
+    expect(shared.accessScope, 'shared_group');
+    expect(shared.classroomSubjectId, isNull);
+  });
+
   test('support room subtitle is the non-admin participant role', () {
     final room = _room({
       'type': 'support',

@@ -2,6 +2,7 @@ import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
+import 'package:bnan_app/features/lessons_management/presentation/utils/student_join_session_error.dart';
 import 'package:bnan_app/features/student_schedule/presentation/manager/egyptian_schedule_state.dart';
 import 'package:bnan_app/features/student_schedule/presentation/models/egyptian_schedule_grid_adapter.dart';
 import 'package:bnan_app/features/student_schedule/presentation/widgets/digital_schedule_grid/digital_schedule_content.dart';
@@ -55,15 +56,21 @@ class EgyptianScheduleLoadedBody extends StatelessWidget {
     final link = await sessionCubit.join(classroomId);
     if (!context.mounted) return;
     if (link == null || link.isEmpty) {
+      final joinError = studentJoinSessionErrorMessage(
+        context,
+        sessionCubit.state,
+      );
       final inactive =
           sessionCubit.state.eventCode == 'SESSION_NOT_ACTIVE' ||
           sessionCubit.state.eventError == 'SESSION_NOT_ACTIVE' ||
           sessionCubit.state.eventStatusCode == 404;
       showCustomSnackBar(
         context,
-        inactive
-            ? S.of(context).noActiveSessionNow
-            : sessionCubit.state.eventError ?? S.of(context).unexpectedError,
+        joinError ??
+            (inactive
+                ? S.of(context).noActiveSessionNow
+                : sessionCubit.state.eventError ??
+                      S.of(context).unexpectedError),
         false,
       );
       if (inactive) {
