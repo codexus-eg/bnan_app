@@ -17,6 +17,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
     required this.drawerItems,
     required this.bottomItems,
     required this.onDrawerTap,
+    required this.onDrawerChanged,
     required this.onBottomTap,
     required this.onLogoutTap,
   });
@@ -29,6 +30,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
   final List<SupervisorNavigationItem> drawerItems;
   final List<SupervisorNavigationItem> bottomItems;
   final ValueChanged<int> onDrawerTap;
+  final DrawerCallback onDrawerChanged;
   final ValueChanged<int> onBottomTap;
   final VoidCallback onLogoutTap;
 
@@ -37,6 +39,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
     return StatusBarWidget(
       child: Scaffold(
         key: scaffoldKey,
+        onDrawerChanged: onDrawerChanged,
         drawer: CustomAppDrawer(
           userName: userName,
           userSubtitle: userSubtitle,

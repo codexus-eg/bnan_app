@@ -4,4 +4,5 @@ bool isValidParentRenewalRoute({required String? studentId, Object? extra}) =>
     studentId?.isNotEmpty == true &&
     extra is ParentSubscriptionRenewalArgs &&
     extra.isParent &&
+    extra.curriculumId.trim().isNotEmpty &&
     extra.studentId == studentId;

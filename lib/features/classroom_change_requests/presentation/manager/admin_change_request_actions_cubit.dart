@@ -16,11 +16,16 @@ class AdminChangeRequestActionsCubit
       (state as AdminChangeRequestActionLoading).id == id &&
       (state as AdminChangeRequestActionLoading).action == action;
 
-  Future<void> approve(String id, String notes) => _perform(
-    id,
-    AdminChangeRequestAction.approve,
-    () => _repo.approve(id, adminNotes: notes),
-  );
+  Future<void> approve(String id, String classroomSubjectId, String notes) =>
+      _perform(
+        id,
+        AdminChangeRequestAction.approve,
+        () => _repo.approve(
+          id,
+          classroomSubjectId: classroomSubjectId,
+          adminNotes: notes,
+        ),
+      );
 
   Future<void> reject(String id, String reason) => _perform(
     id,

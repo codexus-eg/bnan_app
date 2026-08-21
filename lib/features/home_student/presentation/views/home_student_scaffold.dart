@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/app_logout.dart';
+import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
@@ -27,6 +28,7 @@ class HomeStudentScaffold extends StatefulWidget {
 
 class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _drawerNavigation = DrawerNavigationGuard();
 
   int currentIndex = 0;
   int _tabRevision = 0;
@@ -49,6 +51,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
 
   void _changeBottomNavIndex(int index) {
     if (index == 1 && _studentScheduleRoute == null) return;
+    if (index == currentIndex) return;
     setState(() {
       currentIndex = index;
       _tabRevision++;
@@ -81,7 +84,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   }
 
   Future<void> _onDrawerItemTap(int index) async {
-    if (_isNavigating) return;
+    if (_isNavigating || !_drawerNavigation.begin()) return;
     final bottomNavIndex = drawerToBottomNavIndex[index];
 
     _closeDrawer();
@@ -148,6 +151,7 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
         },
         child: Scaffold(
           key: scaffoldKey,
+          onDrawerChanged: _drawerNavigation.drawerChanged,
           drawer: currentIndex == 0
               ? HomeStudentDrawer(
                   loggedUser: widget.loggedUser,

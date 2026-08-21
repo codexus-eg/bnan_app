@@ -1,3 +1,6 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/status_action_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_request_actions_cubit.dart';
@@ -12,9 +15,13 @@ class AdminChangeRequestActions extends StatelessWidget {
   const AdminChangeRequestActions({
     super.key,
     required this.requestId,
+    required this.classroomSubjectId,
+    this.navigateAfterApproval = false,
   });
 
   final String requestId;
+  final String classroomSubjectId;
+  final bool navigateAfterApproval;
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +43,7 @@ class AdminChangeRequestActions extends StatelessWidget {
         ),
         const SizedBox(width: 22),
         StatusActionButton(
-          isLoading: cubit.loading(
-            requestId,
-            AdminChangeRequestAction.reject,
-          ),
+          isLoading: cubit.loading(requestId, AdminChangeRequestAction.reject),
           onPressed: () => _reject(context),
         ),
       ],
@@ -47,25 +51,38 @@ class AdminChangeRequestActions extends StatelessWidget {
   }
 
   Future<void> _approve(BuildContext context) async {
-    final notes = await showDialog<String>(
+    if (classroomSubjectId.trim().isEmpty) {
+      showCustomSnackBar(
+        context,
+        S.of(context).gulfClassroomSubjectUnavailable,
+        false,
+      );
+      return;
+    }
+    final navigator = Navigator.of(context);
+    final cubit = context.read<AdminChangeRequestActionsCubit>();
+    final result = await showDialog<RequestNotesResult>(
       context: context,
       builder: (_) => RequestNotesDialog(
         title: S.of(context).approveRequest,
         label: S.of(context).adminNotes,
         required: false,
+        onSubmit: (result) async {
+          await cubit.approve(requestId, classroomSubjectId, result.notes);
+          final state = cubit.state;
+          return state is AdminChangeRequestActionSuccess &&
+              state.id == requestId &&
+              state.action == AdminChangeRequestAction.approve;
+        },
       ),
     );
-
-    if (notes != null && context.mounted) {
-      await context.read<AdminChangeRequestActionsCubit>().approve(
-        requestId,
-        notes,
-      );
+    if (result != null && navigateAfterApproval && navigator.mounted) {
+      MyNavigator.goTo(navigator.context, Routes.teacherSubjectAssignmentView);
     }
   }
 
   Future<void> _reject(BuildContext context) async {
-    final reason = await showDialog<String>(
+    final result = await showDialog<RequestNotesResult>(
       context: context,
       builder: (_) => RequestNotesDialog(
         title: S.of(context).rejectRequest,
@@ -73,10 +90,10 @@ class AdminChangeRequestActions extends StatelessWidget {
       ),
     );
 
-    if (reason != null && context.mounted) {
+    if (result != null && context.mounted) {
       await context.read<AdminChangeRequestActionsCubit>().reject(
         requestId,
-        reason,
+        result.notes,
       );
     }
   }

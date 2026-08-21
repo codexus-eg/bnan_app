@@ -41,6 +41,21 @@ void main() {
   });
 
   test(
+    'student and parent Gulf renewals share the same six-step flow',
+    () async {
+      for (final isParent in [false, true]) {
+        final cubit = _cubit(_Repo(), mode: 'gulf', isParent: isParent);
+        final state = cubit.state;
+
+        expect(state.isGulf, isTrue);
+        expect(state.lastStep, 5);
+        expect(state.hasSupportedRegistrationMode, isTrue);
+        await cubit.close();
+      }
+    },
+  );
+
+  test(
     'Gulf payload always sends studentId and omits subject for all subjects',
     () {
       final json = GulfRenewalRequest(

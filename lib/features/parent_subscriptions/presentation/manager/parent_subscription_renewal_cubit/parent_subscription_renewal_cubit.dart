@@ -183,6 +183,7 @@ class ParentSubscriptionRenewalCubit
   }
 
   Future<void> reconcilePayment() async {
+    if (isClosed || state.phase == ParentRenewalPhase.completed) return;
     final id = state.paymentId;
     if (id == null || id.isEmpty) return;
     if (state.isGulf) {
@@ -264,6 +265,7 @@ class ParentSubscriptionRenewalCubit
       (response) async {
         if (isClosed) return;
         await store?.clear();
+        if (isClosed) return;
         emit(
           state.copyWith(
             phase: ParentRenewalPhase.pending,

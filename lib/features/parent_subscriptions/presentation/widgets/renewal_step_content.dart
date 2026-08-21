@@ -20,6 +20,8 @@ class RenewalStepContent extends StatelessWidget {
         child: ParentChildSubscriptionsModel(
           studentId: args.studentId,
           studentName: args.studentName,
+          curriculumId: args.curriculumId,
+          registrationMode: args.registrationMode,
           subscriptions: [args.subscription],
           subjects: args.subjects,
         ),

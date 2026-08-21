@@ -12,6 +12,9 @@ class RenewalPackageStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ParentSubscriptionRenewalCubit>().state;
+    if (state.args.curriculumId.trim().isEmpty) {
+      return Text(S.of(context).invalidData);
+    }
     return SubscriptionGrid(
       curriculumId: state.args.curriculumId,
       curriculumName: '',

@@ -14,10 +14,12 @@ class RequestNotesDialog extends StatefulWidget {
     required this.label,
     this.required = true,
     this.requestTypes,
+    this.onSubmit,
   });
   final String title, label;
   final bool required;
   final List<String>? requestTypes;
+  final Future<bool> Function(RequestNotesResult result)? onSubmit;
 
   @override
   State<RequestNotesDialog> createState() => _RequestNotesDialogState();
@@ -27,6 +29,7 @@ class _RequestNotesDialogState extends State<RequestNotesDialog> {
   final _formKey = GlobalKey<FormState>();
   final _controller = TextEditingController();
   String? _requestType;
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -84,15 +87,22 @@ class _RequestNotesDialogState extends State<RequestNotesDialog> {
     ),
   );
 
-  void _submit() {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
-    Navigator.pop(
-      context,
-      RequestNotesResult(
-        notes: _controller.text.trim(),
-        requestType: _requestType,
-      ),
+  Future<void> _submit() async {
+    if (_submitting || !(_formKey.currentState?.validate() ?? false)) return;
+    final result = RequestNotesResult(
+      notes: _controller.text.trim(),
+      requestType: _requestType,
     );
+    final onSubmit = widget.onSubmit;
+    if (onSubmit == null) {
+      Navigator.pop<RequestNotesResult>(context, result);
+      return;
+    }
+    _submitting = true;
+    final accepted = await onSubmit(result);
+    if (!mounted) return;
+    _submitting = false;
+    if (accepted) Navigator.pop<RequestNotesResult>(context, result);
   }
 }
 

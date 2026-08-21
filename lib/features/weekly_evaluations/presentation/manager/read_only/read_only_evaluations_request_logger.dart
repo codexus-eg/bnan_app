@@ -5,16 +5,19 @@ void logReadOnlyEvaluationsRequest({
   required String role,
   String? studentProfileId,
   String? userId,
+  String? classroomId,
   int? week,
 }) {
   assert(() {
     final keys = [
       if (studentProfileId?.isNotEmpty == true) 'studentId',
+      if (classroomId?.isNotEmpty == true) 'classroomId',
       if (week != null) 'week',
     ];
     debugPrint(
       'Weekly evaluations request: role=$role, '
-      'studentProfileId=$studentProfileId, userId=$userId, week=$week, '
+      'studentProfileId=$studentProfileId, userId=$userId, '
+      'classroomId=$classroomId, week=$week, '
       'endpoint=${EndPoints.myEvaluations}, queryKeys=$keys',
     );
     return true;

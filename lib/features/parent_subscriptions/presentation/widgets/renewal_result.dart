@@ -10,11 +10,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
 
-class RenewalResult extends StatelessWidget {
+class RenewalResult extends StatefulWidget {
   const RenewalResult({super.key, required this.state});
   final ParentSubscriptionRenewalState state;
+
+  @override
+  State<RenewalResult> createState() => _RenewalResultState();
+}
+
+class _RenewalResultState extends State<RenewalResult> {
+  bool _leaving = false;
+
   @override
   Widget build(BuildContext context) {
+    final state = widget.state;
     final completed = state.phase == ParentRenewalPhase.completed;
     final failed = state.phase == ParentRenewalPhase.failure;
     final pending = state.phase == ParentRenewalPhase.pending;
@@ -54,8 +63,7 @@ class RenewalResult extends StatelessWidget {
                 text: state.args.isParent
                     ? S.of(context).parentBackToChildren
                     : S.of(context).subscriptions,
-                onPressed: () => MyNavigator.pop(
-                  context,
+                onPressed: () => _leave(
                   completed
                       ? ParentFlowResult.completed
                       : ParentFlowResult.pendingReview,
@@ -87,5 +95,11 @@ class RenewalResult extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _leave(ParentFlowResult result) {
+    if (_leaving || !mounted) return;
+    _leaving = true;
+    MyNavigator.pop(context, result);
   }
 }

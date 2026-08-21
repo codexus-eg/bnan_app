@@ -34,19 +34,18 @@ class ClassroomChangeRequestsRepoImpl implements ClassroomChangeRequestsRepo {
     required String classroomId,
     required String classroomSubjectId,
     required String notes,
-  }) =>
-      repoGuard(
-        () async => _message(
-          await _api.post(
-            EndPoints.classroomTeacherRequests(classroomId),
-            data: {
-              'classroomSubjectId': classroomSubjectId.trim(),
-              'notes': notes.trim(),
-            },
-            isProtected: true,
-          ),
-        ),
-      );
+  }) => repoGuard(
+    () async => _message(
+      await _api.post(
+        EndPoints.classroomTeacherRequests(classroomId),
+        data: {
+          'classroomSubjectId': classroomSubjectId.trim(),
+          'notes': notes.trim(),
+        },
+        isProtected: true,
+      ),
+    ),
+  );
 
   @override
   getAdminRequests() => repoGuard(
@@ -77,11 +76,16 @@ class ClassroomChangeRequestsRepoImpl implements ClassroomChangeRequestsRepo {
   });
 
   @override
-  approve(String id, {String? adminNotes}) => repoGuard(
+  approve(
+    String id, {
+    required String classroomSubjectId,
+    String? adminNotes,
+  }) => repoGuard(
     () async => _message(
       await _api.patch(
         EndPoints.approveClassroomChangeRequest(id),
         data: {
+          'classroomSubject': classroomSubjectId.trim(),
           if (adminNotes?.trim().isNotEmpty == true)
             'adminNotes': adminNotes!.trim(),
         },

@@ -442,7 +442,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 Routes.splash;
           }
           final extra = state.extra;
-          return extra is ParentSubscriptionRenewalArgs && !extra.isParent
+          return extra is ParentSubscriptionRenewalArgs &&
+                  !extra.isParent &&
+                  extra.curriculumId.trim().isNotEmpty
               ? null
               : Routes.studentSubscriptions;
         },
@@ -458,9 +460,13 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                         ..restore(),
                 ),
                 BlocProvider(
-                  create: (_) =>
-                      getIt<GetPackagesCubit>()
-                        ..getPackagesByCurriculum(args.curriculumId),
+                  create: (_) {
+                    final cubit = getIt<GetPackagesCubit>();
+                    if (args.curriculumId.trim().isNotEmpty) {
+                      cubit.getPackagesByCurriculum(args.curriculumId);
+                    }
+                    return cubit;
+                  },
                 ),
               ],
               child: const ParentSubscriptionRenewalView(),
@@ -769,9 +775,13 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                         ..restore(),
                 ),
                 BlocProvider(
-                  create: (_) =>
-                      getIt<GetPackagesCubit>()
-                        ..getPackagesByCurriculum(args.curriculumId),
+                  create: (_) {
+                    final cubit = getIt<GetPackagesCubit>();
+                    if (args.curriculumId.trim().isNotEmpty) {
+                      cubit.getPackagesByCurriculum(args.curriculumId);
+                    }
+                    return cubit;
+                  },
                 ),
               ],
               child: const ParentSubscriptionRenewalView(),
@@ -964,8 +974,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
             return buildTransitionPages(
               child: BlocProvider(
                 create: (_) => role == UserRole.student
-                    ? (getIt<ReadOnlyWeeklyEvaluationsCubit>()
-                        ..loadForStudent())
+                    ? (getIt<ReadOnlyWeeklyEvaluationsCubit>()..loadForStudent(
+                        classroomId: state.uri.queryParameters['classroomId'],
+                      ))
                     : (getIt<ReadOnlyWeeklyEvaluationsCubit>()
                         ..loadForParent()),
                 child: const WeeklyEvaluationsView(),

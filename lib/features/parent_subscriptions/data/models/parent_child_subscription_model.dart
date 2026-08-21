@@ -134,10 +134,11 @@ class ParentChildSubscriptionsModel {
     required this.studentId,
     required this.studentName,
     required this.subscriptions,
+    this.curriculumId = '',
     this.registrationMode,
     this.subjects = const [],
   });
-  final String studentId, studentName;
+  final String studentId, studentName, curriculumId;
   final String? registrationMode;
   final List<ParentChildSubscriptionModel> subscriptions;
   final List<ParentSubscriptionSubjectModel> subjects;
@@ -146,7 +147,10 @@ class ParentChildSubscriptionsModel {
     final student = _map(json['student'] ?? json['child']);
     final source = student.isEmpty ? json : student;
     final curriculumId = _nestedId(
-      source['curriculum'] ?? source['curriculumId'] ?? json['curriculum'],
+      json['curriculumId'] ??
+          json['curriculum'] ??
+          source['curriculumId'] ??
+          source['curriculum'],
     );
     final rawList = json['subscriptions'];
     final listSubscriptions = rawList is List
@@ -190,12 +194,8 @@ class ParentChildSubscriptionsModel {
     return ParentChildSubscriptionsModel(
       studentId: _id(source),
       studentName: _text(source['fullName'] ?? source['name']),
-      registrationMode: _nullableText(
-        source['registrationMode'] ??
-            json['registrationMode'] ??
-            _map(source['curriculum'])['registrationMode'] ??
-            _map(json['curriculum'])['registrationMode'],
-      ),
+      curriculumId: curriculumId,
+      registrationMode: _registrationMode(json['registrationMode']),
       subscriptions: List.unmodifiable(subscriptions),
       subjects: List.unmodifiable(subjects.where((item) => item.id.isNotEmpty)),
     );
@@ -207,6 +207,7 @@ class ParentChildSubscriptionsModel {
   }) {
     final data = _map(json['data']);
     final student = _map(data['student']);
+    final studentCurriculum = _map(student['curriculum']);
     final parsed = ParentChildSubscriptionsModel.fromJson({
       'student': student,
       'subscriptions': data['subscriptions'] ?? student['subscriptions'],
@@ -215,7 +216,10 @@ class ParentChildSubscriptionsModel {
     return ParentChildSubscriptionsModel(
       studentId: parsed.studentId,
       studentName: parsed.studentName,
-      registrationMode: parsed.registrationMode,
+      curriculumId: parsed.curriculumId,
+      registrationMode: _registrationMode(
+        student['registrationMode'] ?? studentCurriculum['registrationMode'],
+      ),
       subscriptions: parsed.subscriptions,
       subjects: subjects.isEmpty
           ? parsed.subjects
@@ -238,6 +242,13 @@ String? _nullableText(dynamic value) {
   final result = _text(value);
   return result.isEmpty ? null : result;
 }
+
+String? _registrationMode(dynamic value) =>
+    switch (_nullableText(value)?.toLowerCase()) {
+      'gulf' => 'gulf',
+      'egyptian' => 'egyptian',
+      _ => null,
+    };
 
 num _number(dynamic value) =>
     value is num ? value : num.tryParse(_text(value)) ?? 0;

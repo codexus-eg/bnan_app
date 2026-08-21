@@ -46,6 +46,26 @@ void main() {
     expect(exception.code, 'INVALID_PAYMENT_PHONE');
     expect(exception.message, 'Parent phone is invalid.');
   });
+
+  test('specific validation error wins over a generic backend message', () {
+    final request = RequestOptions(path: '/subscription-renewals/gulf');
+    final exception = AppException.fromDio(
+      DioException(
+        requestOptions: request,
+        type: DioExceptionType.badResponse,
+        response: Response<Map<String, dynamic>>(
+          requestOptions: request,
+          statusCode: 400,
+          data: {
+            'message': 'Invalid input data',
+            'errors': {'subjectId': 'Subject is required'},
+          },
+        ),
+      ),
+    );
+
+    expect(exception.message, 'Subject is required');
+  });
 }
 
 DioException _conflict(String? message) {

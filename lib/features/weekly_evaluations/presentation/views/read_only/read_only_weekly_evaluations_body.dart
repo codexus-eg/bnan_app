@@ -43,5 +43,6 @@ class ReadOnlyWeeklyEvaluationsBody extends StatelessWidget {
       state.isLoading &&
       (state.data == null ||
           state.isChangingWeek ||
-          state.isChangingChild);
+          state.isChangingChild ||
+          state.isChangingClassroom);
 }

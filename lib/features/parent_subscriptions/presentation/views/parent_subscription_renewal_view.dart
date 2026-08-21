@@ -90,9 +90,9 @@ class _State extends State<ParentSubscriptionRenewalView>
                 cubit.state.phase == ParentRenewalPhase.completed,
             onOpened: cubit.reconcilePayment,
           );
-    if (!context.mounted) return;
+    if (!context.mounted || cubit.isClosed) return;
     if (!result.opened) {
-      context.read<ParentSubscriptionRenewalCubit>().checkoutOpenFailed();
+      cubit.checkoutOpenFailed();
       showCustomSnackBar(
         context,
         S.of(context).parentUnableToOpenCheckout,
@@ -100,6 +100,6 @@ class _State extends State<ParentSubscriptionRenewalView>
       );
       return;
     }
-    await context.read<ParentSubscriptionRenewalCubit>().reconcilePayment();
+    await cubit.reconcilePayment();
   }
 }

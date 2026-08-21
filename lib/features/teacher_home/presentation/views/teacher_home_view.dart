@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/app_logout.dart';
+import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
@@ -25,6 +26,7 @@ class TeacherHomeView extends StatefulWidget {
 
 class _TeacherHomeViewState extends State<TeacherHomeView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _drawerNavigation = DrawerNavigationGuard();
 
   late int currentIndex;
   bool _isLoggingOut = false;
@@ -62,6 +64,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _onDrawerItemTap(int index) {
+    if (!_drawerNavigation.begin()) return;
     final drawerItemCount = teacherDrawerItems(context).length;
     final scheduleRoutes = teacherScheduleRoutes();
     const scheduleStartIndex = 1;
@@ -148,6 +151,7 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         },
         child: Scaffold(
           key: scaffoldKey,
+          onDrawerChanged: _drawerNavigation.drawerChanged,
           drawer: currentIndex == 0
               ? TeacherHomeDrawer(
                   onItemTap: _onDrawerItemTap,

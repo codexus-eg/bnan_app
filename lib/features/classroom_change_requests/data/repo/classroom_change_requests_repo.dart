@@ -19,7 +19,11 @@ abstract class ClassroomChangeRequestsRepo {
   Future<Either<Failure, ClassroomChangeRequestModel>> getAdminRequest(
     String id,
   );
-  Future<Either<Failure, String>> approve(String id, {String? adminNotes});
+  Future<Either<Failure, String>> approve(
+    String id, {
+    required String classroomSubjectId,
+    String? adminNotes,
+  });
   Future<Either<Failure, String>> reject(
     String id, {
     required String rejectionReason,

@@ -17,12 +17,13 @@ void main() {
     expect(PackageModel.fromJson(const {}).curriculum, isNull);
   });
 
-  test('group curriculum and registration mode fall back to subscriptions', () {
+  test('parent child reads sibling curriculum and registration mode', () {
     final response = ParentSubscriptionsResponse.fromJson({
       'data': [
         {
+          'registrationMode': 'egyptian',
+          'curriculumId': 'curriculum-1',
           'student': {'id': 'child', 'name': 'Student'},
-          'curriculum': {'id': 'curriculum-1', 'registrationMode': 'egyptian'},
           'subscriptions': [
             {'id': 'sub', 'packageId': 'package'},
           ],
@@ -31,6 +32,7 @@ void main() {
     });
     final child = response.children.single;
     expect(child.registrationMode, 'egyptian');
+    expect(child.curriculumId, 'curriculum-1');
     expect(child.subscriptions.single.curriculumId, 'curriculum-1');
   });
 
@@ -45,6 +47,19 @@ void main() {
       isFalse,
     );
     expect(isValidParentRenewalRoute(studentId: 'child', extra: _args), isTrue);
+    expect(
+      isValidParentRenewalRoute(
+        studentId: 'child',
+        extra: ParentSubscriptionRenewalArgs(
+          studentId: 'child',
+          curriculumId: '',
+          subscription: _subscription,
+          subjects: const [],
+          registrationMode: 'gulf',
+        ),
+      ),
+      isFalse,
+    );
     expect(
       isValidParentRenewalRoute(
         studentId: 'child',

@@ -98,6 +98,7 @@ void main() {
 
     await _openDrawer(tester);
     await tester.tap(find.text('Certificates').first);
+    await tester.tap(find.text('Certificates').first);
     await tester.pumpAndSettle();
 
     expect(find.text(Routes.certificatesManagement), findsOneWidget);
@@ -112,6 +113,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await _openDrawer(tester);
+    await tester.tap(find.text('Plans'));
     await tester.tap(find.text('Plans'));
     await tester.pumpAndSettle();
 

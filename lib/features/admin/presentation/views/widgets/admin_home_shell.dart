@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/app_logout.dart';
+import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
@@ -23,6 +24,7 @@ class AdminHomeShell extends StatefulWidget {
 
 class _AdminHomeShellState extends State<AdminHomeShell> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _drawerNavigation = DrawerNavigationGuard();
   int currentIndex = 0;
   bool _isLoggingOut = false;
   static const int subjectAssignmentDrawerIndex = 2;
@@ -47,6 +49,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
   static const Map<int, int> drawerToBottomNavIndex = {0: 0, 1: 1, 6: 2};
 
   void _onDrawerItemTap(int index) {
+    if (!_drawerNavigation.begin()) return;
     final bottomNavIndex = drawerToBottomNavIndex[index];
 
     _closeDrawer();
@@ -134,6 +137,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
         },
         child: Scaffold(
           key: scaffoldKey,
+          onDrawerChanged: _drawerNavigation.drawerChanged,
           drawer: currentIndex == 0
               ? AdminHomeDrawer(
                   onItemTap: _onDrawerItemTap,

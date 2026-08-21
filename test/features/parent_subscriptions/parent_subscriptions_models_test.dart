@@ -84,6 +84,62 @@ void main() {
     expect(subscription.usedHours, 6.5);
   });
 
+  test('Gulf registration mode is read from the child sibling field', () {
+    final child = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'registrationMode': 'gulf',
+          'curriculumId': '6a83284e6067abfc995abb3d',
+          'student': {'id': 'student-1'},
+          'subscription': {'id': 'legacy'},
+          'subscriptions': [
+            {'id': 'sub', 'registrationMode': 'egyptian'},
+          ],
+        },
+      ],
+    }).children.single;
+
+    expect(child.registrationMode, 'gulf');
+    expect(child.curriculumId, '6a83284e6067abfc995abb3d');
+    expect(child.subscriptions.single.curriculumId, '6a83284e6067abfc995abb3d');
+  });
+
+  test('Egyptian registration mode is read from the child sibling field', () {
+    final child = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'registrationMode': 'egyptian',
+          'curriculum': {'id': 'egyptian-curriculum'},
+          'student': {'id': 'student-1'},
+          'subscriptions': [
+            {'id': 'sub'},
+          ],
+        },
+      ],
+    }).children.single;
+
+    expect(child.registrationMode, 'egyptian');
+    expect(child.curriculumId, 'egyptian-curriculum');
+  });
+
+  test('missing or legacy mode is not inferred', () {
+    for (final mode in [null, 'saudi']) {
+      final child = ParentSubscriptionsResponse.fromJson({
+        'data': [
+          {
+            'registrationMode': mode,
+            'student': {'id': 'student-1'},
+            'subscriptions': [
+              {'id': 'sub', 'planKind': 'gulf', 'currency': 'SAR'},
+            ],
+          },
+        ],
+      }).children.single;
+
+      expect(child.registrationMode, isNull);
+    }
+  });
+
   test('canRenew uses backend value only with a safe false default', () {
     final response = ParentSubscriptionsResponse.fromJson({
       'data': [

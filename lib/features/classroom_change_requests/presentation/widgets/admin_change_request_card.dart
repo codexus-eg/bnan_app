@@ -1,5 +1,3 @@
-import 'package:bnan_app/core/app_routes/routes.dart';
-import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/card_header.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
@@ -47,7 +45,12 @@ class AdminChangeRequestCard extends StatelessWidget {
                 AdminChangeRequestInfo(request: request),
                 if (_pending && !_completed(state)) ...[
                   const SizedBox(height: 8),
-                  AdminChangeRequestActions(requestId: request.id),
+                  AdminChangeRequestActions(
+                    requestId: request.id,
+                    classroomSubjectId: request.classroomSubjectId,
+                    navigateAfterApproval:
+                        request.requestType == 'change_teacher',
+                  ),
                 ],
               ],
             ),
@@ -86,10 +89,6 @@ class AdminChangeRequestCard extends StatelessWidget {
             : S.of(context).changeRequestRejectedSuccess,
         true,
       );
-      if (state.action == AdminChangeRequestAction.approve &&
-          request.requestType == 'change_teacher') {
-        MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
-      }
     }
   }
 }

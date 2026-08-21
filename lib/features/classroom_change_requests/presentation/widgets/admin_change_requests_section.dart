@@ -56,6 +56,7 @@ const _placeholders = [
     requesterType: 'student',
     classroomName: 'Classroom',
     subjectName: 'Subject',
+    classroomSubjectId: 'classroom-subject',
     notes: 'Reason',
     requestType: 'change_teacher',
   ),

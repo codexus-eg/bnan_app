@@ -6,6 +6,7 @@ class ClassroomChangeRequestModel {
     required this.requesterType,
     required this.classroomName,
     required this.subjectName,
+    required this.classroomSubjectId,
     required this.notes,
     required this.requestType,
     this.createdAt,
@@ -13,6 +14,7 @@ class ClassroomChangeRequestModel {
 
   final String id, status, requesterName, requesterType;
   final String classroomName, subjectName, notes, requestType;
+  final String classroomSubjectId;
   final DateTime? createdAt;
 
   factory ClassroomChangeRequestModel.fromJson(Map<String, dynamic> json) {
@@ -24,7 +26,8 @@ class ClassroomChangeRequestModel {
     );
     final user = _map(requester['user']);
     final classroom = _map(json['classroom']);
-    final classroomSubject = _map(json['classroomSubject']);
+    final rawClassroomSubject = json['classroomSubject'];
+    final classroomSubject = _map(rawClassroomSubject);
     final subject = _map(
       json['subject'] ?? classroomSubject['subject'] ?? classroom['subject'],
     );
@@ -45,6 +48,11 @@ class ClassroomChangeRequestModel {
       requesterType: requesterType,
       classroomName: _text(classroom['name'] ?? json['classroomName']),
       subjectName: _text(subject['name'] ?? json['subjectName']),
+      classroomSubjectId: _text(
+        classroomSubject['_id'] ??
+            classroomSubject['id'] ??
+            (rawClassroomSubject is String ? rawClassroomSubject : null),
+      ),
       notes: _text(json['notes']),
       requestType: requestType.isEmpty && requesterType == 'teacher'
           ? 'teacher_withdrawal'

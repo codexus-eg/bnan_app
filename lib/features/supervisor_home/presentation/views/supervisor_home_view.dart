@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bnan_app/core/helper/app_logout.dart';
+import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/current_user_ui.dart';
@@ -47,6 +48,7 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
   static const homeTabIndex = 0;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _drawerNavigation = DrawerNavigationGuard();
   final Map<int, Widget> _tabs = {};
   final Map<int, GlobalKey<SupervisorTabRefreshState>> _refreshKeys = {};
 
@@ -144,6 +146,7 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
               bottomItems: bottom,
               onDrawerTap: (i) =>
                   selectDrawerRoot(drawer[i], bottom),
+              onDrawerChanged: _drawerNavigation.drawerChanged,
               onBottomTap: (i) =>
                   selectBottomTab(i, bottom[i]),
               onLogoutTap: logout,
@@ -156,6 +159,7 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     int index,
     SupervisorNavigationItem item,
   ) {
+    if (index == selectedBottomIndex) return;
     if (index == homeTabIndex) {
       selectHome();
       return;
@@ -205,6 +209,7 @@ class SupervisorHomeViewState extends State<SupervisorHomeView> {
     SupervisorNavigationItem item,
     List<SupervisorNavigationItem> bottom,
   ) {
+    if (!_drawerNavigation.begin()) return;
     scaffoldKey.currentState?.closeDrawer();
 
     final bottomIndex = bottom.indexWhere(

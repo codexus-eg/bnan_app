@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
@@ -176,6 +177,7 @@ void main() {
               child: const ParentChildSubscriptionsModel(
                 studentId: 'student',
                 studentName: 'Student',
+                curriculumId: 'egyptian-curriculum',
                 registrationMode: 'egyptian',
                 subscriptions: [],
               ),
@@ -186,13 +188,13 @@ void main() {
                 curriculumId: 'curriculum',
                 canRenew: true,
               ),
-              isParent: false,
+              isParent: true,
               onRenewed: () async => refreshes++,
             ),
           ),
         ),
         GoRoute(
-          path: Routes.studentSubscriptionRenewal,
+          path: Routes.parentSubscriptionRenewal,
           builder: (context, _) => Scaffold(
             body: TextButton(
               onPressed: () => context.pop(ParentFlowResult.pendingReview),
@@ -215,6 +217,83 @@ void main() {
       findsWidgets,
     );
   });
+
+  testWidgets(
+    'parent renewal uses selected mode and ignores rapid double tap',
+    (tester) async {
+      ParentSubscriptionRenewalArgs? received;
+      var routeBuilds = 0;
+      final router = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (_, __) => Scaffold(
+              body: ParentSubscriptionCard(
+                child: const ParentChildSubscriptionsModel(
+                  studentId: 'student',
+                  studentName: 'Student',
+                  curriculumId: '6a83284e6067abfc995abb3d',
+                  registrationMode: 'gulf',
+                  subscriptions: [],
+                ),
+                subscription: const ParentChildSubscriptionModel(
+                  id: 'subscription',
+                  packageId: 'package',
+                  packageName: 'Package',
+                  curriculumId: 'curriculum',
+                  planKind: 'gulf',
+                  packageType: 'hours',
+                  canRenew: true,
+                ),
+                isParent: true,
+              ),
+            ),
+          ),
+          GoRoute(
+            path: Routes.parentSubscriptionRenewal,
+            builder: (_, state) {
+              routeBuilds++;
+              received = state.extra! as ParentSubscriptionRenewalArgs;
+              final renewalState = ParentSubscriptionRenewalState(
+                args: received!,
+              );
+              return Scaffold(
+                body: Text(
+                  renewalState.hasSupportedRegistrationMode
+                      ? 'Parent Gulf renewal'
+                      : 'This curriculum registration mode is not supported.',
+                ),
+              );
+            },
+          ),
+        ],
+      );
+      await tester.pumpWidget(_localizedRouter(router));
+      final renew = tester
+          .widget<CustomAppButton>(find.byType(CustomAppButton))
+          .onPressed!;
+      renew();
+      renew();
+      await tester.pumpAndSettle();
+
+      expect(routeBuilds, 1);
+      expect(received?.registrationMode, 'gulf');
+      expect(received?.curriculumId, '6a83284e6067abfc995abb3d');
+      expect(find.text('Parent Gulf renewal'), findsOneWidget);
+      expect(
+        find.text('This curriculum registration mode is not supported.'),
+        findsNothing,
+      );
+      expect(
+        ParentSubscriptionRenewalState(
+          args: received!,
+        ).hasSupportedRegistrationMode,
+        isTrue,
+      );
+      router.pop();
+      await tester.pumpAndSettle();
+    },
+  );
 }
 
 Future<void> _verifyRenewalReturn(
@@ -270,11 +349,18 @@ Future<void> _verifyRenewalReturn(
   await tester.pumpWidget(_localizedRouter(router));
   await tester.tap(find.text('Renew'));
   await tester.pumpAndSettle();
-  await tester.tap(
-    success
-        ? find.text(isParent ? 'Back to children' : 'Subscriptions')
-        : find.byIcon(Icons.arrow_back),
-  );
+  final back = success
+      ? find.text(isParent ? 'Back to children' : 'Subscriptions')
+      : find.byIcon(Icons.arrow_back);
+  if (success) {
+    final leave = tester
+        .widget<CustomAppButton>(find.byType(CustomAppButton))
+        .onPressed!;
+    leave();
+    leave();
+  } else {
+    await tester.tap(back);
+  }
   await tester.pumpAndSettle();
   expect(find.text(source), findsOneWidget);
 }
