@@ -1,18 +1,15 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_body.dart';
+import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatView extends StatelessWidget {
   const ChatView({
     super.key,
     required this.roomId,
-    this.roomType,
-    this.classroomId,
-    this.accessScope,
-    this.classroomSubjectId,
-    this.canRequestTeacherWithdrawal = false,
-    this.classroomSubjectAmbiguous = false,
     this.classroomName,
     this.currentUserRole,
     this.studentId,
@@ -20,12 +17,6 @@ class ChatView extends StatelessWidget {
   });
 
   final String roomId;
-  final String? roomType;
-  final String? classroomId;
-  final String? accessScope;
-  final String? classroomSubjectId;
-  final bool canRequestTeacherWithdrawal;
-  final bool classroomSubjectAmbiguous;
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;
@@ -41,18 +32,20 @@ class ChatView extends StatelessWidget {
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: ChatBody(
-          roomId: roomId,
-          roomType: roomType,
-          classroomId: classroomId,
-          accessScope: accessScope,
-          classroomSubjectId: classroomSubjectId,
-          canRequestTeacherWithdrawal: canRequestTeacherWithdrawal,
-          classroomSubjectAmbiguous: classroomSubjectAmbiguous,
-          classroomName: classroomName,
-          currentUserRole: currentUserRole,
-          studentId: studentId,
-          targetMessageId: targetMessageId,
+        body: BlocBuilder<ChatRoomMetadataCubit, ChatRoomMetadataState>(
+          builder: (_, metadata) => ChatBody(
+            roomId: roomId,
+            roomType: metadata.roomType,
+            classroomId: metadata.classroomId,
+            accessScope: metadata.accessScope,
+            classroomSubjectId: metadata.classroomSubjectId,
+            canRequestTeacherWithdrawal: metadata.canRequestTeacherWithdrawal,
+            classroomSubjectAmbiguous: metadata.classroomSubjectAmbiguous,
+            classroomName: classroomName,
+            currentUserRole: currentUserRole,
+            studentId: studentId,
+            targetMessageId: targetMessageId,
+          ),
         ),
       ),
     );

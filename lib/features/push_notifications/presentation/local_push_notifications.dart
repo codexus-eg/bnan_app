@@ -10,8 +10,6 @@ class LocalPushNotifications {
   LocalPushNotifications(this._plugin);
   final FlutterLocalNotificationsPlugin _plugin;
   static const _chatRingNotificationId = 1128352844;
-  static const _chatRingDurationMs = 15000;
-  static const _androidFlagInsistent = 4;
   static const _soundChannel = MethodChannel('bnan/notification_sound');
   static const _channel = AndroidNotificationChannel(
     'bnan_notifications',
@@ -57,11 +55,11 @@ class LocalPushNotifications {
     audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
   );
   static final _chatRingChannel = AndroidNotificationChannel(
-    'bnan_chat_ring_v1',
+    'bnan_chat_ring_v3',
     'Chat call alerts',
     description: 'Incoming chat call alerts',
     importance: Importance.max,
-    sound: const RawResourceAndroidNotificationSound('nudge_alert'),
+    sound: const RawResourceAndroidNotificationSound('chat_ring'),
     enableVibration: true,
     vibrationPattern: _nudgeAlertChannel.vibrationPattern,
     audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
@@ -157,7 +155,7 @@ class LocalPushNotifications {
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           isChatRing
-              ? 'bnan_chat_ring_v1'
+              ? 'bnan_chat_ring_v3'
               : useNudgeChannel
               ? 'bnan_nudge_alert_v2'
               : isNudge
@@ -175,7 +173,9 @@ class LocalPushNotifications {
           importance: isChatRing ? Importance.max : Importance.high,
           priority: isChatRing ? Priority.max : Priority.high,
           playSound: isChatRing || !isNudge || useNudgeChannel,
-          sound: isChatRing || useNudgeChannel
+          sound: isChatRing
+              ? const RawResourceAndroidNotificationSound('chat_ring')
+              : useNudgeChannel
               ? const RawResourceAndroidNotificationSound('nudge_alert')
               : null,
           enableVibration: isChatRing || !isNudge || useNudgeChannel,
@@ -185,10 +185,6 @@ class LocalPushNotifications {
           audioAttributesUsage: isChatRing || useNudgeChannel
               ? AudioAttributesUsage.notificationRingtone
               : AudioAttributesUsage.notification,
-          timeoutAfter: isChatRing ? _chatRingDurationMs : null,
-          additionalFlags: isChatRing
-              ? Int32List.fromList(const [_androidFlagInsistent])
-              : null,
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,
@@ -197,7 +193,9 @@ class LocalPushNotifications {
               !isNudge && !isChatRing ||
               useNudgeChannel,
           presentBadge: true,
-          sound: isChatRing && !isForegroundChatRing || useNudgeChannel
+          sound: isChatRing && !isForegroundChatRing
+              ? 'chat_ring.wav'
+              : useNudgeChannel
               ? 'nudge_alert.wav'
               : null,
         ),

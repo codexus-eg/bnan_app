@@ -5,6 +5,9 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/session/saved_account_store.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_state.dart';
+import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
@@ -292,6 +295,12 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
+                  create: (_) => ChatRoomMetadataCubit(
+                    getIt<ChatRepo>(),
+                    ChatRoomMetadataState.fromArgs(args),
+                  )..load(roomId),
+                ),
+                BlocProvider(
                   create: (_) =>
                       getIt<GetRoomMessagesCubit>()
                         ..initializeChat(roomId: roomId),
@@ -304,14 +313,6 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               ],
               child: ChatView(
                 roomId: roomId,
-                roomType: args?.roomType,
-                classroomId: args?.classroomId,
-                accessScope: args?.accessScope,
-                classroomSubjectId: args?.classroomSubjectId,
-                canRequestTeacherWithdrawal:
-                    args?.canRequestTeacherWithdrawal ?? false,
-                classroomSubjectAmbiguous:
-                    args?.classroomSubjectAmbiguous ?? false,
                 classroomName: args?.classroomName,
                 currentUserRole:
                     args?.currentUserRole ?? SessionManager.instance.userRole,

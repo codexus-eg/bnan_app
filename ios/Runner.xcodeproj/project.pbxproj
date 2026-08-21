@@ -14,6 +14,7 @@
 		F20000000000000000000001 /* DeviceFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000002 /* DeviceFileSaver.swift */; };
 		F20000000000000000000003 /* NotificationSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000004 /* NotificationSoundPlayer.swift */; };
 		F30000000000000000000001 /* nudge_alert.wav in Resources */ = {isa = PBXBuildFile; fileRef = F30000000000000000000002 /* nudge_alert.wav */; };
+		F40000000000000000000001 /* chat_ring.wav in Resources */ = {isa = PBXBuildFile; fileRef = F40000000000000000000002 /* chat_ring.wav */; };
 		F10000000000000000000001 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* GoogleService-Info.plist */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		F20000000000000000000002 /* DeviceFileSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFileSaver.swift; sourceTree = "<group>"; };
 		F20000000000000000000004 /* NotificationSoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSoundPlayer.swift; sourceTree = "<group>"; };
 		F30000000000000000000002 /* nudge_alert.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = nudge_alert.wav; sourceTree = "<group>"; };
+		F40000000000000000000002 /* chat_ring.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = chat_ring.wav; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				F20000000000000000000002 /* DeviceFileSaver.swift */,
 				F20000000000000000000004 /* NotificationSoundPlayer.swift */,
 				F30000000000000000000002 /* nudge_alert.wav */,
+				F40000000000000000000002 /* chat_ring.wav */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
@@ -230,6 +233,7 @@
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				F10000000000000000000001 /* GoogleService-Info.plist in Resources */,
 				F30000000000000000000001 /* nudge_alert.wav in Resources */,
+				F40000000000000000000001 /* chat_ring.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

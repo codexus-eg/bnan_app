@@ -22,8 +22,8 @@ class ChatBody extends StatefulWidget {
     this.classroomId,
     this.accessScope,
     this.classroomSubjectId,
-    this.canRequestTeacherWithdrawal = false,
-    this.classroomSubjectAmbiguous = false,
+    this.canRequestTeacherWithdrawal,
+    this.classroomSubjectAmbiguous,
     this.classroomName,
     this.currentUserRole,
     this.studentId,
@@ -35,8 +35,8 @@ class ChatBody extends StatefulWidget {
   final String? classroomId;
   final String? accessScope;
   final String? classroomSubjectId;
-  final bool canRequestTeacherWithdrawal;
-  final bool classroomSubjectAmbiguous;
+  final bool? canRequestTeacherWithdrawal;
+  final bool? classroomSubjectAmbiguous;
   final String? classroomName;
   final String? currentUserRole;
   final String? studentId;

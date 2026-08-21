@@ -6,8 +6,8 @@ class ChatRoomSummaryModel {
   final String? classroomId;
   final String? accessScope;
   final String? classroomSubjectId;
-  final bool canRequestTeacherWithdrawal;
-  final bool classroomSubjectAmbiguous;
+  final bool? canRequestTeacherWithdrawal;
+  final bool? classroomSubjectAmbiguous;
   final String? studentId;
   final String? lastMessage;
   final DateTime? lastMessageAt;
@@ -21,8 +21,8 @@ class ChatRoomSummaryModel {
     this.classroomId,
     this.accessScope,
     this.classroomSubjectId,
-    this.canRequestTeacherWithdrawal = false,
-    this.classroomSubjectAmbiguous = false,
+    this.canRequestTeacherWithdrawal,
+    this.classroomSubjectAmbiguous,
     this.studentId,
     this.lastMessage,
     this.lastMessageAt,
@@ -138,9 +138,12 @@ class ChatRoomSummaryModel {
       classroomId: directId ?? legacyId,
       accessScope: id(json['accessScope'])?.toLowerCase(),
       classroomSubjectId: id(json['classroomSubjectId']),
-      canRequestTeacherWithdrawal:
-          json['canRequestTeacherWithdrawal'] == true,
-      classroomSubjectAmbiguous: json['classroomSubjectAmbiguous'] == true,
+      canRequestTeacherWithdrawal: json['canRequestTeacherWithdrawal'] is bool
+          ? json['canRequestTeacherWithdrawal'] as bool
+          : null,
+      classroomSubjectAmbiguous: json['classroomSubjectAmbiguous'] is bool
+          ? json['classroomSubjectAmbiguous'] as bool
+          : null,
       studentId: type == 'supervisor_student'
           ? id(studentData['id'] ?? studentData['_id'] ?? student['id'])
           : null,

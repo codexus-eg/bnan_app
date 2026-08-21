@@ -22,8 +22,8 @@ class ChatHeader extends StatelessWidget {
     this.classroomId,
     this.accessScope,
     this.classroomSubjectId,
-    this.canRequestTeacherWithdrawal = false,
-    this.classroomSubjectAmbiguous = false,
+    this.canRequestTeacherWithdrawal,
+    this.classroomSubjectAmbiguous,
     this.currentUserRole,
     this.studentId,
     this.onMessageTarget,
@@ -38,8 +38,8 @@ class ChatHeader extends StatelessWidget {
   final String? classroomId;
   final String? accessScope;
   final String? classroomSubjectId;
-  final bool canRequestTeacherWithdrawal;
-  final bool classroomSubjectAmbiguous;
+  final bool? canRequestTeacherWithdrawal;
+  final bool? classroomSubjectAmbiguous;
   final String? currentUserRole;
   final String? studentId;
   final ValueChanged<String>? onMessageTarget;
@@ -150,12 +150,14 @@ class ChatHeader extends StatelessWidget {
           role: _sessionRole,
           roomType: roomType,
           accessScope: accessScope,
+          classroomSubjectId: classroomSubjectId,
           canRequestTeacherWithdrawal: canRequestTeacherWithdrawal,
+          classroomSubjectAmbiguous: classroomSubjectAmbiguous,
         ))
       ClassroomChangeRequestAction(
         classroomId: classroomId!.trim(),
         classroomSubjectId: classroomSubjectId?.trim(),
-        classroomSubjectAmbiguous: classroomSubjectAmbiguous,
+        classroomSubjectAmbiguous: classroomSubjectAmbiguous == true,
         role: _sessionRole!,
       ),
     if (_sessionRole == UserRole.supervisor &&

@@ -116,2467 +116,2027 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "Packages": MessageLookupByLibrary.simpleMessage("باقات"),
-    "PackagesandSubscriptions": MessageLookupByLibrary.simpleMessage(
-      "الباقات والاشتراكات",
-    ),
-    "absence": MessageLookupByLibrary.simpleMessage("غياب"),
-    "absent": MessageLookupByLibrary.simpleMessage("غياب"),
-    "academicPerformanceMessage": MessageLookupByLibrary.simpleMessage(
-      "للتميز في الأداء الأكاديمي",
-    ),
-    "accept": MessageLookupByLibrary.simpleMessage("قبول"),
-    "acceptRequest": MessageLookupByLibrary.simpleMessage("قبول الطلب"),
-    "acceptStudentRequest": MessageLookupByLibrary.simpleMessage("قبول طلب"),
-    "accountActivatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تفعيل الحساب بنجاح",
-    ),
-    "accountVerificationInstructions": MessageLookupByLibrary.simpleMessage(
-      " وأدخل الكود لتفعيل حسابك.",
-    ),
-    "accountVerifiedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تفعيل حسابك بنجاح",
-    ),
-    "activated": MessageLookupByLibrary.simpleMessage("مفعل"),
-    "active": MessageLookupByLibrary.simpleMessage("نشطة"),
-    "active2": MessageLookupByLibrary.simpleMessage("نشط"),
-    "activeGroups": MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
-    "activeSubscriptions": MessageLookupByLibrary.simpleMessage(
-      "اشتراكات نشطة",
-    ),
-    "addAction": MessageLookupByLibrary.simpleMessage("إضافة"),
-    "addDailyPlanForStudents": MessageLookupByLibrary.simpleMessage(
-      "إضافة خطة يومية للطلاب",
-    ),
-    "addDiscountCode": MessageLookupByLibrary.simpleMessage("إضافة كود خصم"),
-    "addLesson": MessageLookupByLibrary.simpleMessage("إضافة حصة"),
-    "addNewChapter": MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
-    "addNewCurriculum": MessageLookupByLibrary.simpleMessage("إضافة منهج جديد"),
-    "addNewEvaluation": MessageLookupByLibrary.simpleMessage(
-      "إضافة تقييم جديد",
-    ),
-    "addNewGrade": MessageLookupByLibrary.simpleMessage("إضافة صف جديد"),
-    "addNewPackage": MessageLookupByLibrary.simpleMessage("إضافة باقة جديدة"),
-    "addNewPackageTitle": MessageLookupByLibrary.simpleMessage(
-      "إضافة باقة جديدة",
-    ),
-    "addNewSchedule": MessageLookupByLibrary.simpleMessage("إضافة جدول جديد"),
-    "addNewSemester": MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
-    "addNewSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة جديد"),
-    "addNewUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم جديد"),
-    "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
-      "يتم احتساب المكافآت بناءً على الأداء",
-    ),
-    "addRewardPointsTitle": MessageLookupByLibrary.simpleMessage(
-      "إضافة نقاط التميز",
-    ),
-    "addScheduleEntry": MessageLookupByLibrary.simpleMessage("إضافة موعد"),
-    "addSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة"),
-    "addSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
-      "إضافة مادة لفصل",
-    ),
-    "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
-    "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
-    "adminNotes": MessageLookupByLibrary.simpleMessage(
-      "ملاحظات الإدارة (اختياري)",
-    ),
-    "adminRegistrationRequestsSection": MessageLookupByLibrary.simpleMessage(
-      "طلبات تسجيل",
-    ),
-    "adminSubjectRequestAmountOptional": MessageLookupByLibrary.simpleMessage(
-      "المبلغ (اختياري)",
-    ),
-    "adminSubjectRequestApprove": MessageLookupByLibrary.simpleMessage(
-      "موافقة",
-    ),
-    "adminSubjectRequestApproved": MessageLookupByLibrary.simpleMessage(
-      "تمت الموافقة على طلب المادة",
-    ),
-    "adminSubjectRequestMethodOptional": MessageLookupByLibrary.simpleMessage(
-      "طريقة الدفع (اختياري)",
-    ),
-    "adminSubjectRequestPaymentNotes": MessageLookupByLibrary.simpleMessage(
-      "ملاحظات الدفع (اختياري)",
-    ),
-    "adminSubjectRequestPrice": MessageLookupByLibrary.simpleMessage("السعر"),
-    "adminSubjectRequestReferenceNumber": MessageLookupByLibrary.simpleMessage(
-      "رقم المرجع (اختياري)",
-    ),
-    "adminSubjectRequestRejectedSuccess": MessageLookupByLibrary.simpleMessage(
-      "تم رفض طلب المادة",
-    ),
-    "adminSubjectRequestRequestedAt": MessageLookupByLibrary.simpleMessage(
-      "تاريخ الطلب",
-    ),
-    "adminSubjectRequestsEmpty": MessageLookupByLibrary.simpleMessage(
-      "لا توجد طلبات مواد بهذه الحالة",
-    ),
-    "adminSubjectRequestsSection": MessageLookupByLibrary.simpleMessage(
-      "طلبات مادة/درس",
-    ),
-    "adminSubscriptionRenewals": MessageLookupByLibrary.simpleMessage(
-      "طلبات تجديد الاشتراكات",
-    ),
-    "adminSupervisors": MessageLookupByLibrary.simpleMessage("مشرفين"),
-    "adminUsers": MessageLookupByLibrary.simpleMessage("مستخدمين"),
-    "algebraCourseCertificate": MessageLookupByLibrary.simpleMessage(
-      "شهادة إتمام دورة الجبر",
-    ),
-    "all": MessageLookupByLibrary.simpleMessage("الكل"),
-    "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
-    "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
-    "allDocuments": MessageLookupByLibrary.simpleMessage("جميع المستندات"),
-    "allGradeSubjectsAddedToClassroom": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة جميع مواد هذا الصف إلى الفصل",
-    ),
-    "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
-    "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
-    "allSubjects": MessageLookupByLibrary.simpleMessage("كل المواد"),
-    "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
-    "amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
-    "applePay": MessageLookupByLibrary.simpleMessage("أبل باي"),
-    "applyAsTeacher": MessageLookupByLibrary.simpleMessage("التقديم كمعلم"),
-    "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
-      "شارك خبراتك وانضم إلى فريقنا التعليمي",
-    ),
-    "approveAccountActivation": MessageLookupByLibrary.simpleMessage(
-      "موافقة تفعيل الحساب",
-    ),
-    "approveRequest": MessageLookupByLibrary.simpleMessage(
-      "الموافقة على الطلب",
-    ),
-    "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
-    "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
-    "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
-    "assignStudent": MessageLookupByLibrary.simpleMessage("تعيين طالب"),
-    "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
-    "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
-      "برجاء تعيين مادة لهذا الفصل",
-    ),
-    "assignSupervisorToClassroom": m0,
-    "assignTeacherInSubject": m1,
-    "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
-      "برجاء تعيين معلم للمادة أولًا",
-    ),
-    "assignToClassroom": MessageLookupByLibrary.simpleMessage("توظيف في فصل"),
-    "assignmentAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم توظيف المشرف بنجاح",
-    ),
-    "assignmentDescription": MessageLookupByLibrary.simpleMessage("الوصف"),
-    "assignmentNotSubmittedYet": MessageLookupByLibrary.simpleMessage(
-      "لم يسلم الواجب بعد",
-    ),
-    "assignmentRemovedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم إلغاء توظيف المشرف بنجاح",
-    ),
-    "assignmentSubmittedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم رفع الواجب بنجاح",
-    ),
-    "assignmentTitle": MessageLookupByLibrary.simpleMessage("العنوان"),
-    "assignments": MessageLookupByLibrary.simpleMessage("الواجبات"),
-    "assignmentsEvaluation": MessageLookupByLibrary.simpleMessage(
-      "تقييم الواجبات",
-    ),
-    "atLeastSixChars": MessageLookupByLibrary.simpleMessage("6 أحرف على الأقل"),
-    "attachedFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
-    "attachment": MessageLookupByLibrary.simpleMessage("المرفق"),
-    "attachmentFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
-    "attendance": MessageLookupByLibrary.simpleMessage("الحضور"),
-    "attendanceRate": MessageLookupByLibrary.simpleMessage("نسبة الحضور"),
-    "attendanceRegisteredSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تسجيل الحضور بنجاح",
-    ),
-    "attendanceRegistration": MessageLookupByLibrary.simpleMessage(
-      "تسجيل الحضور",
-    ),
-    "attendanceStudentsTitle": m2,
-    "attendanceUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تعديل الحضور بنجاح",
-    ),
-    "availability": MessageLookupByLibrary.simpleMessage("الأوقات المتاحة"),
-    "available": MessageLookupByLibrary.simpleMessage("المتاحة"),
-    "availableDay": MessageLookupByLibrary.simpleMessage("اليوم المتاح"),
-    "averagePercent": m3,
-    "back": MessageLookupByLibrary.simpleMessage("رجوع"),
-    "backToLogin": MessageLookupByLibrary.simpleMessage("العودة لتسجيل الدخول"),
-    "bankTransfer": MessageLookupByLibrary.simpleMessage("تحويل بنكي"),
-    "behavior": MessageLookupByLibrary.simpleMessage("السلوك"),
-    "biology": MessageLookupByLibrary.simpleMessage("الأحياء"),
-    "birthDate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
-    "bonusPoints": MessageLookupByLibrary.simpleMessage("النقاط الإضافية"),
-    "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
-    "callStudentAlert": MessageLookupByLibrary.simpleMessage(
-      "تنبيه الطالب للحضور",
-    ),
-    "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
-      "يمكنك تغيير العملة من القائمة",
-    ),
-    "canDemo": MessageLookupByLibrary.simpleMessage(
-      "هل يمكن تقديم درس تجريبي؟",
-    ),
-    "canProvideTrialLesson": MessageLookupByLibrary.simpleMessage(
-      "هل يمكنك تقديم حصة تجريبية؟",
-    ),
-    "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
-    "cancelAssignment": MessageLookupByLibrary.simpleMessage("إلغاء توظيف"),
-    "cancelAssignmentMessage": m4,
-    "cancelSubjectRequestType": MessageLookupByLibrary.simpleMessage(
-      "إلغاء المادة",
-    ),
-    "cancelSupervisorAssignmentQuestion": m5,
-    "cancelTeacherAssignmentQuestion": m6,
-    "cancellationReason": MessageLookupByLibrary.simpleMessage("سبب الإلغاء"),
-    "cancellationRequests": MessageLookupByLibrary.simpleMessage(
-      "طلبات الإلغاء",
-    ),
-    "cannotAddLessonInPreviousWeek": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن إضافة حصة في أسبوع سابق",
-    ),
-    "cannotDisplayStudentCertificates": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن عرض شهادات هذا الطالب",
-    ),
-    "cardHolderName": MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
-    "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
-    "cash": MessageLookupByLibrary.simpleMessage("كاش"),
-    "certificateAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة الشهادة بنجاح",
-    ),
-    "certificateDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حذف الشهادة بنجاح",
-    ),
-    "certificateFileUnavailable": MessageLookupByLibrary.simpleMessage(
-      "ملف الشهادة غير متاح",
-    ),
-    "certificateReceived": MessageLookupByLibrary.simpleMessage(
-      "حصلت على شهادة شهر مايو",
-    ),
-    "certificateSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حفظ الشهادة بنجاح",
-    ),
-    "certificateUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تعديل الشهادة بنجاح",
-    ),
-    "certificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
-    "certificatesSentSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال الشهادات بنجاح",
-    ),
-    "certificatesWithoutArticle": MessageLookupByLibrary.simpleMessage(
-      "شهادات",
-    ),
-    "changePassword": MessageLookupByLibrary.simpleMessage("تغيير كلمة المرور"),
-    "changePasswordTitle": MessageLookupByLibrary.simpleMessage(
-      "تعديل كلمة المرور",
-    ),
-    "changePhoneTitle": MessageLookupByLibrary.simpleMessage(
-      "تعديل رقم الهاتف",
-    ),
-    "changeRequestApproved": MessageLookupByLibrary.simpleMessage("مقبول"),
-    "changeRequestApprovedSuccess": MessageLookupByLibrary.simpleMessage(
-      "تمت الموافقة على الطلب بنجاح",
-    ),
-    "changeRequestPending": MessageLookupByLibrary.simpleMessage(
-      "قيد المراجعة",
-    ),
-    "changeRequestRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
-    "changeRequestRejectedSuccess": MessageLookupByLibrary.simpleMessage(
-      "تم رفض الطلب بنجاح",
-    ),
-    "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلبك بنجاح",
-    ),
-    "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
-      "لا توجد طلبات إلغاء أو تغيير معلم",
-    ),
-    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
-      "لديك طلب تغيير معلم قيد المراجعة بالفعل",
-    ),
-    "changeTeacherRequestType": MessageLookupByLibrary.simpleMessage(
-      "تغيير المعلم",
-    ),
-    "changeUsernameTitle": MessageLookupByLibrary.simpleMessage(
-      "تعديل اسم المستخدم",
-    ),
-    "chatMsg1": MessageLookupByLibrary.simpleMessage(
-      "أهلا أحمد، كيف الأداء في الواجب الجديد؟",
-    ),
-    "chatMsg2": MessageLookupByLibrary.simpleMessage(
-      "تمام أ/ سارة وشكراً على الإنشاء.",
-    ),
-    "chatMsg3": MessageLookupByLibrary.simpleMessage(
-      "ممتاز، لا تنسى مراجعة الفصل الثالث قبل الحصة.",
-    ),
-    "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
-    "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
-    "checkYourEmailPrefix": MessageLookupByLibrary.simpleMessage(
-      "تحقق من بريدك الإلكتروني ",
-    ),
-    "chemistry": MessageLookupByLibrary.simpleMessage("الكيمياء"),
-    "child": MessageLookupByLibrary.simpleMessage("الابن"),
-    "children": MessageLookupByLibrary.simpleMessage("الأبناء"),
-    "childrenCount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
-    "childrenDiscount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
-    "childrenSubscriptions": MessageLookupByLibrary.simpleMessage(
-      "اشتراكات الأبناء",
-    ),
-    "chooseAccountType": MessageLookupByLibrary.simpleMessage(
-      "اختر نوع الحساب للمتابعة",
-    ),
-    "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
-    "chooseClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
-    "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
-      "اختر المنهج الدراسي المناسب وابدأ رحلة التعليم معنا",
-    ),
-    "chooseCurriculumIcon": MessageLookupByLibrary.simpleMessage(
-      "اختر أيقونة المنهج",
-    ),
-    "chooseCurriculumType": MessageLookupByLibrary.simpleMessage(
-      "اختر نوع المنهج",
-    ),
-    "chooseFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
-    "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
-    "chooseNewCurriculum": MessageLookupByLibrary.simpleMessage("اختر المنهج"),
-    "chooseSavedAccount": MessageLookupByLibrary.simpleMessage(
-      "اختر حسابًا للمتابعة",
-    ),
-    "chooseScheduleImage": MessageLookupByLibrary.simpleMessage(
-      "اختر صورة الجدول",
-    ),
-    "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
-    "city": MessageLookupByLibrary.simpleMessage("المدينة"),
-    "classDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الفصل"),
-    "classLabel": MessageLookupByLibrary.simpleMessage("الفصول"),
-    "className": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
-    "classNameRequired": MessageLookupByLibrary.simpleMessage(
-      "اسم الفصل مطلوب",
-    ),
-    "classR": MessageLookupByLibrary.simpleMessage("فصل"),
-    "classRoom": MessageLookupByLibrary.simpleMessage("الفصل"),
-    "classRoomManagement": MessageLookupByLibrary.simpleMessage("إدراة الصفوف"),
-    "classSchedulesManagement": MessageLookupByLibrary.simpleMessage(
-      "إدارة جداول الصفوف",
-    ),
-    "classes": MessageLookupByLibrary.simpleMessage("الصفوف"),
-    "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
-    "classesManagement": MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
-    "classroom": MessageLookupByLibrary.simpleMessage("الفصل"),
-    "classroomRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى اختيار الفصل",
-    ),
-    "classroomSessionAlreadyActive": MessageLookupByLibrary.simpleMessage(
-      "توجد حصة نشطة بالفعل لهذا الفصل",
-    ),
-    "classroomZoomNotConfigured": MessageLookupByLibrary.simpleMessage(
-      "إعداد Zoom غير مكتمل لهذا الفصل",
-    ),
-    "classrooms": MessageLookupByLibrary.simpleMessage("الفصول"),
-    "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
-    "closePreview": MessageLookupByLibrary.simpleMessage("إغلاق المعاينة"),
-    "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
-    "completedSessions": MessageLookupByLibrary.simpleMessage("الحصص المكتملة"),
-    "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
-    "confirmDelete": MessageLookupByLibrary.simpleMessage(
-      "هل أنت متأكد أنك تريد الحذف؟",
-    ),
-    "confirmNewPassword": MessageLookupByLibrary.simpleMessage(
-      "تأكيد كلمة المرور",
-    ),
-    "confirmPasswordCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
-      "تأكيد كلمة المرور لا يمكن أن يكون فارغًا.",
-    ),
-    "confirmPasswordLabel": MessageLookupByLibrary.simpleMessage(
-      "تأكيد كلمة المرور",
-    ),
-    "confirmRequest": MessageLookupByLibrary.simpleMessage("تأكيد الطلب"),
-    "congrats": MessageLookupByLibrary.simpleMessage("مبروك"),
-    "congratsThisMonth": MessageLookupByLibrary.simpleMessage(
-      "إتقان هذا الشهر",
-    ),
-    "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
-    "contactUs": MessageLookupByLibrary.simpleMessage("تواصل معنا"),
-    "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
-    "copiedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم النسخ بنجاح",
-    ),
-    "correctAssignment": MessageLookupByLibrary.simpleMessage("تصحيح الواجب"),
-    "country": MessageLookupByLibrary.simpleMessage("الدولة"),
-    "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
-    "createAssignment": MessageLookupByLibrary.simpleMessage("إنشاء الواجب"),
-    "createNewAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب جديد"),
-    "createNewAssignment": MessageLookupByLibrary.simpleMessage(
-      "إنشاء واجب جديد",
-    ),
-    "creditCard": MessageLookupByLibrary.simpleMessage("بطاقة إئتمانية"),
-    "currency": MessageLookupByLibrary.simpleMessage("العملة:"),
-    "currencyRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى اختيار العملة",
-    ),
-    "currentMonth": MessageLookupByLibrary.simpleMessage("الشهر الحالي"),
-    "currentPrice": m7,
-    "currentProfits": MessageLookupByLibrary.simpleMessage("الأرباح الحالية"),
-    "curricula": MessageLookupByLibrary.simpleMessage("المناهج"),
-    "curriculum": MessageLookupByLibrary.simpleMessage("المنهج"),
-    "curriculumDescription": MessageLookupByLibrary.simpleMessage("وصف المنهج"),
-    "curriculumIcon": MessageLookupByLibrary.simpleMessage("صورة المنهج"),
-    "curriculumName": MessageLookupByLibrary.simpleMessage("اسم المنهج"),
-    "curriculumRequired": MessageLookupByLibrary.simpleMessage("المنهج مطلوب"),
-    "curriculumSelection": MessageLookupByLibrary.simpleMessage(
-      "اختيار المنهج",
-    ),
-    "curriculums": MessageLookupByLibrary.simpleMessage("المناهج"),
-    "cv": MessageLookupByLibrary.simpleMessage("CV"),
-    "cvUnavailable": MessageLookupByLibrary.simpleMessage(
-      "رابط السيرة الذاتية غير متاح",
-    ),
-    "cvv": MessageLookupByLibrary.simpleMessage("رمز التحقق CVV"),
-    "dailyPlanAlreadyUploaded": MessageLookupByLibrary.simpleMessage(
-      "الخطة مرفوعة بالفعل لهذا اليوم.",
-    ),
-    "dailyPlanCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة الخطة اليومية بنجاح",
-    ),
-    "dailyPlansTitle": MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
-    "dailyProfits": MessageLookupByLibrary.simpleMessage("الأرباح اليومية"),
-    "dashboard": MessageLookupByLibrary.simpleMessage("الرئيسية"),
-    "dashboardPassword": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور للدخول على الداشبورد",
-    ),
-    "date": MessageLookupByLibrary.simpleMessage("التاريخ"),
-    "dateFormatHint": MessageLookupByLibrary.simpleMessage("mm/dd/yy"),
-    "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("مدة محددة"),
-    "day": MessageLookupByLibrary.simpleMessage("يوم"),
-    "days": MessageLookupByLibrary.simpleMessage("أيام"),
-    "daysPackage": m8,
-    "deductionsDesc": MessageLookupByLibrary.simpleMessage("الغياب أو التأخير"),
-    "deductionsTitle": MessageLookupByLibrary.simpleMessage("خصم أي استقطاعات"),
-    "degree": MessageLookupByLibrary.simpleMessage("الدرجة"),
-    "delete": MessageLookupByLibrary.simpleMessage("حذف"),
-    "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
-    "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل أنت متأكد من حذف هذا الواجب؟",
-    ),
-    "deleteDiscountCode": MessageLookupByLibrary.simpleMessage("حذف كود الخصم"),
-    "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل أنت متأكد من حذف كود الخصم؟",
-    ),
-    "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
-    "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل أنت متأكد أنك تريد حذف الصف",
-    ),
-    "deleteMessageQuestion": MessageLookupByLibrary.simpleMessage(
-      "هل تريد حذف هذه الرسالة؟",
-    ),
-    "deletePackage": MessageLookupByLibrary.simpleMessage("حذف الباقة"),
-    "deletePackageConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل تريد حذف هذه الباقة؟",
-    ),
-    "deleteSchedule": MessageLookupByLibrary.simpleMessage("حذف الجدول"),
-    "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل أنت متأكد من حذف هذا الجدول؟",
-    ),
-    "deleteSelectedMessagesQuestion": MessageLookupByLibrary.simpleMessage(
-      "هل تريد حذف الرسائل المحددة؟",
-    ),
-    "deletedMessage": MessageLookupByLibrary.simpleMessage(
-      "تم حذف هذه الرسالة",
-    ),
-    "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
-    "desiredSubjects": MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
-    "details": MessageLookupByLibrary.simpleMessage("التفاصيل"),
-    "disable": MessageLookupByLibrary.simpleMessage("تعطيل"),
-    "disableAccount": MessageLookupByLibrary.simpleMessage("تعطيل الحساب"),
-    "disableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل تريد تعطيل هذا الحساب؟",
-    ),
-    "disableUserDescription": MessageLookupByLibrary.simpleMessage(
-      "لن يستطيع الدخول حتى تقوم بتفعيله.",
-    ),
-    "disableUserQuestion": m9,
-    "discountAmount": MessageLookupByLibrary.simpleMessage("الخصم"),
-    "discountCode": MessageLookupByLibrary.simpleMessage("كود الخصم"),
-    "discountCodeCreated": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة كود الخصم بنجاح",
-    ),
-    "discountCodeDeleted": MessageLookupByLibrary.simpleMessage(
-      "تم حذف كود الخصم بنجاح",
-    ),
-    "discountCodeRequired": MessageLookupByLibrary.simpleMessage(
-      "كود الخصم مطلوب",
-    ),
-    "discountCodeUpdated": MessageLookupByLibrary.simpleMessage(
-      "تم تعديل كود الخصم بنجاح",
-    ),
-    "discountCodes": MessageLookupByLibrary.simpleMessage("أكواد الخصم"),
-    "discountDatesRequired": MessageLookupByLibrary.simpleMessage(
-      "تاريخ البداية والنهاية مطلوبان",
-    ),
-    "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية",
-    ),
-    "discountPercentage": MessageLookupByLibrary.simpleMessage(
-      "النسبة المئوية",
-    ),
-    "discountTitle": MessageLookupByLibrary.simpleMessage("عنوان الخصم"),
-    "discountTitleHint": MessageLookupByLibrary.simpleMessage(
-      "مثال: وفر 120 ر.س",
-    ),
-    "discountType": MessageLookupByLibrary.simpleMessage("النوع"),
-    "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
-    "doNotHaveAccount": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
-    "done": MessageLookupByLibrary.simpleMessage("تم"),
-    "download": MessageLookupByLibrary.simpleMessage("تحميل"),
-    "downloadPdf": MessageLookupByLibrary.simpleMessage("تحميل PDF"),
-    "dueFriday": MessageLookupByLibrary.simpleMessage("حتى الجمعة"),
-    "dueSunday": MessageLookupByLibrary.simpleMessage("حتى الأحد"),
-    "dues": MessageLookupByLibrary.simpleMessage("المستحقات"),
-    "duplicateScheduleDay": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن إضافة أكثر من موعد لنفس اليوم",
-    ),
-    "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
-    "editAttendance": MessageLookupByLibrary.simpleMessage("تعديل الحضور"),
-    "editCertificate": MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
-    "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
-    "editCurriculum": MessageLookupByLibrary.simpleMessage("تعديل المنهج"),
-    "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
-    "editDiscountCode": MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
-    "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
-    "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
-    "editLesson": MessageLookupByLibrary.simpleMessage("تعديل الحصة"),
-    "editPackage": MessageLookupByLibrary.simpleMessage("تعديل الباقة"),
-    "editScheduleEntry": MessageLookupByLibrary.simpleMessage("تعديل الموعد"),
-    "editSubject": MessageLookupByLibrary.simpleMessage("تعديل المادة"),
-    "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
-    "egpShort": MessageLookupByLibrary.simpleMessage("ج.م"),
-    "egyptian": MessageLookupByLibrary.simpleMessage("مصري"),
-    "egyptianCurriculum": MessageLookupByLibrary.simpleMessage("المنهج المصري"),
-    "egyptianCurriculumDesc": MessageLookupByLibrary.simpleMessage(
-      "تعليم متكامل للصفوف الابتدائية والإعدادية والثانوية وفق المنهج المصري الحديث.",
-    ),
-    "egyptianDepartment": MessageLookupByLibrary.simpleMessage("القسم المصري"),
-    "egyptianPound": MessageLookupByLibrary.simpleMessage("الجنيه المصري"),
-    "egyptianRenewalRequestSubmitted": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلب التجديد بنجاح وهو الآن قيد مراجعة الإدارة",
-    ),
-    "egyptianStudentRegistrationSuccessMessage":
-        MessageLookupByLibrary.simpleMessage(
-          "تم إرسال طلب التسجيل بنجاح، وسيتم مراجعته من الإدارة. يمكنك تسجيل الدخول بعد قبول الطلب.",
-        ),
-    "eightHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 8 ساعات"),
-    "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
-    "emailAddress": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
-    "emailCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
-      "البريد الإلكتروني لا يمكن أن يكون فارغًا.",
-    ),
-    "emailRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال البريد الإلكتروني",
-    ),
-    "emiratiCurriculum": MessageLookupByLibrary.simpleMessage(
-      "المنهج الإماراتي",
-    ),
-    "emptyLesson": MessageLookupByLibrary.simpleMessage("حصة فارغة"),
-    "enableAccount": MessageLookupByLibrary.simpleMessage("فك التعطيل"),
-    "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
-      "هل تريد فك تعطيل هذا الحساب؟",
-    ),
-    "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
-    "endSession": MessageLookupByLibrary.simpleMessage("إنهاء الحصة"),
-    "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
-    "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
-    "enterDiscountCode": MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),
-    "errorBadCertificate": MessageLookupByLibrary.simpleMessage(
-      "شهادة SSL غير موثوقة.",
-    ),
-    "errorBadRequest": MessageLookupByLibrary.simpleMessage("طلب غير صالح."),
-    "errorCancel": MessageLookupByLibrary.simpleMessage("تم إلغاء الطلب."),
-    "errorConnectionTimeout": MessageLookupByLibrary.simpleMessage(
-      "انتهت مهلة الاتصال بالخادم.",
-    ),
-    "errorForbidden": MessageLookupByLibrary.simpleMessage("تم رفض الوصول."),
-    "errorInternalServer": MessageLookupByLibrary.simpleMessage(
-      "خطأ داخلي في الخادم.",
-    ),
-    "errorNoInternet": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد اتصال بالإنترنت.",
-    ),
-    "errorNotFound": MessageLookupByLibrary.simpleMessage("العنصر غير موجود."),
-    "errorReceiveTimeout": MessageLookupByLibrary.simpleMessage(
-      "انتهت مهلة استلام البيانات.",
-    ),
-    "errorSendTimeout": MessageLookupByLibrary.simpleMessage(
-      "انتهت مهلة إرسال البيانات.",
-    ),
-    "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
-      "انتهت صلاحية الجلسة.",
-    ),
-    "errorUnknown": MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع."),
-    "errorUnknownStatusCode": m10,
-    "errorValidation": MessageLookupByLibrary.simpleMessage(
-      "يرجى مراجعة البيانات المُدخلة والمحاولة مرة أخرى.",
-    ),
-    "evaluationAbsent": MessageLookupByLibrary.simpleMessage("غائب"),
-    "evaluationAcceptable": MessageLookupByLibrary.simpleMessage("مقبول"),
-    "evaluationEvaluated": MessageLookupByLibrary.simpleMessage("تم التقييم"),
-    "evaluationExcused": MessageLookupByLibrary.simpleMessage("غياب بعذر"),
-    "evaluationLate": MessageLookupByLibrary.simpleMessage("متأخر"),
-    "evaluationNotEvaluated": MessageLookupByLibrary.simpleMessage(
-      "لم يتم التقييم",
-    ),
-    "evaluationPresent": MessageLookupByLibrary.simpleMessage("حاضر"),
-    "evaluationSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حفظ التقييم بنجاح",
-    ),
-    "evaluationStatusUnavailable": MessageLookupByLibrary.simpleMessage(
-      "حالة التقييم غير متاحة",
-    ),
-    "evaluationWeak": MessageLookupByLibrary.simpleMessage("ضعيف"),
-    "evaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
-    "excellencePoints": MessageLookupByLibrary.simpleMessage("نقاط التميز"),
-    "excellent": MessageLookupByLibrary.simpleMessage("ممتاز"),
-    "excellentTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
-    "expected": MessageLookupByLibrary.simpleMessage("المتوقع"),
-    "expenses": MessageLookupByLibrary.simpleMessage("المصاريف"),
-    "experience": MessageLookupByLibrary.simpleMessage("الخبرة"),
-    "expiredSubscriptions": MessageLookupByLibrary.simpleMessage(
-      "اشتراكات منتهية",
-    ),
-    "expiryDate": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
-    "failedToCopy": MessageLookupByLibrary.simpleMessage("تعذر النسخ"),
-    "failedToLoadAttendance": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل بيانات الحضور",
-    ),
-    "failedToOpenCv": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح السيرة الذاتية",
-    ),
-    "fieldIsRequired": m11,
-    "fieldRequired": MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
-    "fileDownloadStarted": MessageLookupByLibrary.simpleMessage(
-      "تم فتح ملف الواجب",
-    ),
-    "fileDownloadedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تحميل الملف بنجاح",
-    ),
-    "fileSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حفظ الملف بنجاح",
-    ),
-    "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
-      "يرجى ملء جميع الحقول المطلوبة.",
-    ),
-    "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي"),
-    "finalDelete": MessageLookupByLibrary.simpleMessage("حذف نهائي"),
-    "finalDeleteDescription": MessageLookupByLibrary.simpleMessage(
-      "سيتم حذف هذا الحساب نهائيًا من النظام، بما في ذلك حساب الدخول وملف البيانات المرتبط به. لا يمكن التراجع عن هذا الإجراء.",
-    ),
-    "finalDeleteUser": MessageLookupByLibrary.simpleMessage(
-      "حذف نهائي للمستخدم",
-    ),
-    "finished": MessageLookupByLibrary.simpleMessage("منتهي"),
-    "firstPrimaryClassroom": MessageLookupByLibrary.simpleMessage(
-      "الصف الأول الابتدائي",
-    ),
-    "forgotPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
-    "forgotPasswordSubtitle": MessageLookupByLibrary.simpleMessage(
-      "أدخل بريدك الإلكتروني وسنرسل لك كود إعادة التعيين",
-    ),
-    "forgotPasswordTitle": MessageLookupByLibrary.simpleMessage(
-      "استعادة كلمة المرور",
-    ),
-    "fourDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 4 أيام"),
-    "fourHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 4 ساعات"),
-    "fourthPrimaryClassroom": MessageLookupByLibrary.simpleMessage(
-      "الصف الرابع الابتدائي",
-    ),
-    "friday": MessageLookupByLibrary.simpleMessage("الجمعة"),
-    "from": MessageLookupByLibrary.simpleMessage("من"),
-    "fullName": MessageLookupByLibrary.simpleMessage("الاسم بالكامل"),
-    "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن اختيار تاريخ مستقبلي",
-    ),
-    "generalTeacherCertificate": MessageLookupByLibrary.simpleMessage(
-      "شهادة شكر وتقدير",
-    ),
-    "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
-    "good": MessageLookupByLibrary.simpleMessage("جيد"),
-    "grade": MessageLookupByLibrary.simpleMessage("الصف"),
-    "gradeAndAssignScore": MessageLookupByLibrary.simpleMessage(
-      "تصحيح ووضع الدرجة",
-    ),
-    "gradeLabel": m12,
-    "gradeLevel": MessageLookupByLibrary.simpleMessage("المرحلة الدراسية"),
-    "gradeName": MessageLookupByLibrary.simpleMessage("اسم الصف"),
-    "gradeRequired": MessageLookupByLibrary.simpleMessage("الصف مطلوب"),
-    "graded": MessageLookupByLibrary.simpleMessage("مصحح"),
-    "gradesCount": m13,
-    "graduationGrade": MessageLookupByLibrary.simpleMessage("التقدير"),
-    "graduationYear": MessageLookupByLibrary.simpleMessage("سنة التخرج"),
-    "groupCreatedByYou": MessageLookupByLibrary.simpleMessage(
-      "تم إنشاء المجموعة، ابدأ بكم",
-    ),
-    "groups": MessageLookupByLibrary.simpleMessage("المجموعات"),
-    "gulfClassroomSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
-      "بيانات مادة الفصل تحتاج إلى مراجعة الإدارة",
-    ),
-    "gulfCurriculum": MessageLookupByLibrary.simpleMessage("المنهج الخليجي"),
-    "gulfScheduleEntryAdded": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة الموعد",
-    ),
-    "gulfScheduleEntryDeleted": MessageLookupByLibrary.simpleMessage(
-      "تم حذف الموعد",
-    ),
-    "gulfScheduleEntryUpdated": MessageLookupByLibrary.simpleMessage(
-      "تم تعديل الموعد",
-    ),
-    "gulfScheduleLoadFailed": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل الجدول",
-    ),
-    "hasClearMic": MessageLookupByLibrary.simpleMessage("هل لديك مايك واضح؟"),
-    "hasGoodCamera": MessageLookupByLibrary.simpleMessage(
-      "هل لديك كاميرا جيدة؟",
-    ),
-    "hasLaptopOrComputer": MessageLookupByLibrary.simpleMessage(
-      "هل لديك لاب توب أو كمبيوتر؟",
-    ),
-    "hasStableInternet": MessageLookupByLibrary.simpleMessage(
-      "هل لديك إنترنت مستقر؟",
-    ),
-    "hasTeachingExperience": MessageLookupByLibrary.simpleMessage(
-      "هل لديك خبرة في التدريس؟",
-    ),
-    "hireTeachers": MessageLookupByLibrary.simpleMessage("توظيف المعلمين"),
-    "home": MessageLookupByLibrary.simpleMessage("الرئيسية"),
-    "homeworkLabel": MessageLookupByLibrary.simpleMessage("الواجب"),
-    "hourlyRate": MessageLookupByLibrary.simpleMessage("سعر الساعة(ر.س)"),
-    "hourlyRateMustBeNumber": MessageLookupByLibrary.simpleMessage(
-      "سعر الساعة يجب أن يكون رقم",
-    ),
-    "hourlyRateRequired": MessageLookupByLibrary.simpleMessage(
-      "سعر الساعة مطلوب",
-    ),
-    "hoursPackage": m14,
-    "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
-      "كيف تتعامل مع طالب ضعيف المستوى؟",
-    ),
-    "idealSupervisor": MessageLookupByLibrary.simpleMessage("المشرف المثالي"),
-    "idealSupervisorCertificate": MessageLookupByLibrary.simpleMessage(
-      "شهادة المشرف المثالي",
-    ),
-    "idealSupervisorCertificateAlreadyExists":
-        MessageLookupByLibrary.simpleMessage(
-          "تم إصدار شهادة المشرف المثالي لهذا الشهر بالفعل",
-        ),
-    "idealSupervisorIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم إصدار شهادة المشرف المثالي بنجاح",
-    ),
-    "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
-    "idealTeacherCertificate": MessageLookupByLibrary.simpleMessage(
-      "شهادة المعلم المثالي",
-    ),
-    "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم إصدار شهادة المعلم المثالي بنجاح",
-    ),
-    "inactive": MessageLookupByLibrary.simpleMessage("غير نشطة"),
-    "instapay": MessageLookupByLibrary.simpleMessage("إنستاباي"),
-    "interaction": MessageLookupByLibrary.simpleMessage("التفاعل"),
-    "interactionAppreciationCertificate": MessageLookupByLibrary.simpleMessage(
-      "شكر وتقدير - التفاعل",
-    ),
-    "interactionLevel": MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
-    "internetConnectionFailedRetry": MessageLookupByLibrary.simpleMessage(
-      "تعذر الاتصال بالإنترنت، حاول مرة أخرى",
-    ),
-    "invalidCertificateRecipient": MessageLookupByLibrary.simpleMessage(
-      "الحساب المحدد ليس مشرفًا",
-    ),
-    "invalidChildrenCount": MessageLookupByLibrary.simpleMessage(
-      "أدخل عدد أبناء موجبًا",
-    ),
-    "invalidCvUrl": MessageLookupByLibrary.simpleMessage(
-      "رابط السيرة الذاتية غير صالح",
-    ),
-    "invalidData": MessageLookupByLibrary.simpleMessage(
-      "يرجى التأكد من البيانات المدخلة",
-    ),
-    "invalidDiscountPercentage": MessageLookupByLibrary.simpleMessage(
-      "أدخل نسبة مئوية صحيحة",
-    ),
-    "invalidEmail": MessageLookupByLibrary.simpleMessage(
-      "الرجاء إدخال عنوان بريد إلكتروني صالح.",
-    ),
-    "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
-      "النقاط الإضافية يجب أن تكون من 0 إلى 5",
-    ),
-    "invalidIdealSupervisorSelection": MessageLookupByLibrary.simpleMessage(
-      "اختر مشرفًا صالحًا واحدًا على الأقل",
-    ),
-    "invalidLink": MessageLookupByLibrary.simpleMessage("رابط غير صالح"),
-    "invalidPackage": MessageLookupByLibrary.simpleMessage(
-      "بيانات الباقة غير صالحة",
-    ),
-    "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
-      "أدخل مبلغًا صحيحًا لا يقل عن 0.01",
-    ),
-    "invalidPhoneNumber": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال رقم هاتف صحيح",
-    ),
-    "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
-    "issueCertificate": MessageLookupByLibrary.simpleMessage("إصدار الشهادة"),
-    "issueNewCertificate": MessageLookupByLibrary.simpleMessage(
-      "إصدار شهادة جديدة",
-    ),
-    "joinSession": MessageLookupByLibrary.simpleMessage("دخول الحصة"),
-    "joinSubjectNotInSubscription": MessageLookupByLibrary.simpleMessage(
-      "اشتراكك الحالي لا يشمل هذه المادة",
-    ),
-    "joinSubscriptionExpired": MessageLookupByLibrary.simpleMessage(
-      "انتهى اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة",
-    ),
-    "joinSubscriptionHoursExhausted": MessageLookupByLibrary.simpleMessage(
-      "نفدت ساعات اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة",
-    ),
-    "kuwaitiCurriculum": MessageLookupByLibrary.simpleMessage("المنهج الكويتي"),
-    "languageArabic": MessageLookupByLibrary.simpleMessage("العربية"),
-    "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
-    "lastSixMonths": MessageLookupByLibrary.simpleMessage("آخر ٦ شهور"),
-    "latestEarnedPoints": MessageLookupByLibrary.simpleMessage(
-      "آخر النقاط المكتسبة",
-    ),
-    "lessonDate": MessageLookupByLibrary.simpleMessage("تاريخ الحصة"),
-    "lessonEndTimeMustBeAfterStart": MessageLookupByLibrary.simpleMessage(
-      "وقت نهاية الحصة يجب أن يكون بعد وقت البداية",
-    ),
-    "lessonLabel": MessageLookupByLibrary.simpleMessage("الدرس"),
-    "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
-      "حصة الرياضيات تبدأ خلال 15 د",
-    ),
-    "lessons": MessageLookupByLibrary.simpleMessage("حصة"),
-    "lessonsManagement": MessageLookupByLibrary.simpleMessage("إدارة الحصص"),
-    "lightAndShadowExperiment": MessageLookupByLibrary.simpleMessage(
-      "تجربة الضوء والظل",
-    ),
-    "loading": MessageLookupByLibrary.simpleMessage("جاري التحميل..."),
-    "loadingClassrooms": MessageLookupByLibrary.simpleMessage(
-      "جاري تحميل الفصول",
-    ),
-    "loadingStudents": MessageLookupByLibrary.simpleMessage(
-      "جاري تحميل الطلاب",
-    ),
-    "login": MessageLookupByLibrary.simpleMessage("تسجيل دخول"),
-    "loginNow": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
-    "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
-      "سجل دخولك للوصول إلى لوحة التحكم",
-    ),
-    "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
-    "loginWithAnotherAccount": MessageLookupByLibrary.simpleMessage(
-      "تسجيل الدخول بحساب آخر",
-    ),
-    "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
-    "logoutSuccess": MessageLookupByLibrary.simpleMessage(
-      "تم تسجيل الخروج بنجاح",
-    ),
-    "major": MessageLookupByLibrary.simpleMessage("التخصص العلمي"),
-    "manageStudentsAndClasses": MessageLookupByLibrary.simpleMessage(
-      "إدارة الفصول والطلاب",
-    ),
-    "manualPaymentConfirmation": MessageLookupByLibrary.simpleMessage(
-      "تأكيد الدفع يدوياً",
-    ),
-    "manualTransferReviewPending": MessageLookupByLibrary.simpleMessage(
-      "بانتظار مراجعة الإيصال يدوي",
-    ),
-    "march2026": MessageLookupByLibrary.simpleMessage("مارس 2026"),
-    "markAllNotificationsRead": MessageLookupByLibrary.simpleMessage(
-      "تحديد الكل كمقروء",
-    ),
-    "markAsRead": MessageLookupByLibrary.simpleMessage("تمييز كمقروءة"),
-    "materialsManagement": MessageLookupByLibrary.simpleMessage("إدارة المواد"),
-    "math": MessageLookupByLibrary.simpleMessage("الرياضيات"),
-    "mathShort": MessageLookupByLibrary.simpleMessage("رياضيات"),
-    "mathTeacherSarah": MessageLookupByLibrary.simpleMessage(
-      "الرياضيات . أ/سارة عبدالله",
-    ),
-    "mayCertificate": MessageLookupByLibrary.simpleMessage("شهادة شهر مايو"),
-    "meetingLinkOptional": MessageLookupByLibrary.simpleMessage(
-      "رابط الاجتماع (اختياري)",
-    ),
-    "messageDocuments": MessageLookupByLibrary.simpleMessage("مستندات الرسائل"),
-    "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
-    "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
-    "month": MessageLookupByLibrary.simpleMessage("الشهر"),
-    "monthlyCertificateTitle": m15,
-    "monthlyPackage": MessageLookupByLibrary.simpleMessage("باقة شهرية"),
-    "monthlyProfits": MessageLookupByLibrary.simpleMessage("الأرباح الشهرية"),
-    "monthlyRevenue": MessageLookupByLibrary.simpleMessage("إيرادات الشهر"),
-    "mostPopular": MessageLookupByLibrary.simpleMessage("الأكثر طلباً"),
-    "moveToReview": MessageLookupByLibrary.simpleMessage("نقل للمراجعة"),
-    "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
-    "myGroups": MessageLookupByLibrary.simpleMessage("مجموعاتي"),
-    "myPerformance": MessageLookupByLibrary.simpleMessage("أدائي"),
-    "myRequests": MessageLookupByLibrary.simpleMessage("طلباتي"),
-    "name": MessageLookupByLibrary.simpleMessage("الاسم"),
-    "nameCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
-      "الاسم لا يمكن أن يكون فارغًا.",
-    ),
-    "nameMinLength": MessageLookupByLibrary.simpleMessage(
-      "يجب أن يحتوي الاسم على 3 أحرف على الأقل.",
-    ),
-    "nationality": MessageLookupByLibrary.simpleMessage("الجنسية"),
-    "net": MessageLookupByLibrary.simpleMessage("الصافي"),
-    "netAmount": MessageLookupByLibrary.simpleMessage("الصافي"),
-    "newAssignmentUploaded": MessageLookupByLibrary.simpleMessage(
-      "تم رفع واجب جديد",
-    ),
-    "newBadge": MessageLookupByLibrary.simpleMessage("جديد"),
-    "newCertificate": MessageLookupByLibrary.simpleMessage("شهادة تقدير"),
-    "newClassMessageNotification": MessageLookupByLibrary.simpleMessage(
-      "رسالة جديدة من الصف الرابع",
-    ),
-    "newCustomer": MessageLookupByLibrary.simpleMessage("عميل جديد"),
-    "newMessage": MessageLookupByLibrary.simpleMessage(
-      "رسالة جديدة من أ/ سارة",
-    ),
-    "newMessages": MessageLookupByLibrary.simpleMessage("رسائل جديدة"),
-    "newPassword": MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
-    "newPasswordLabel": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور الجديدة",
-    ),
-    "newPrice": MessageLookupByLibrary.simpleMessage("السعر الجديد"),
-    "newPriceInvalid": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال السعر الجديد بشكل صحيح",
-    ),
-    "newPriceMustBeLessThanOldPrice": MessageLookupByLibrary.simpleMessage(
-      "يجب أن يكون السعر الجديد أقل من أو يساوي السعر القديم",
-    ),
-    "newRating": MessageLookupByLibrary.simpleMessage(
-      "تقييم أسبوعي جديد لأحمد",
-    ),
-    "newWeeklyEvaluation": MessageLookupByLibrary.simpleMessage(
-      "تقييم أسبوعي جديد",
-    ),
-    "next": MessageLookupByLibrary.simpleMessage("التالي"),
-    "nextLevelPointsText": m16,
-    "nextSteps": MessageLookupByLibrary.simpleMessage("الخطوات التالية"),
-    "no": MessageLookupByLibrary.simpleMessage("لا"),
-    "noActiveAccountsFound": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حسابات مفعلة",
-    ),
-    "noActiveSessionNow": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حصة مباشرة الآن",
-    ),
-    "noAssignedSubjectsForClassroom": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد مسندة لك في هذا الفصل",
-    ),
-    "noAssignmentsYet": MessageLookupByLibrary.simpleMessage(
-      "لا توجد واجبات حالياً",
-    ),
-    "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
-      "عند إضافة واجبات جديدة ستظهر في هذه الصفحة.",
-    ),
-    "noAvailableClassrooms": MessageLookupByLibrary.simpleMessage(
-      "لا توجد فصول متاحة",
-    ),
-    "noCertificatesAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد شهادات متاحة حتى الآن",
-    ),
-    "noCertificatesForStudent": MessageLookupByLibrary.simpleMessage(
-      "لا توجد شهادات لهذا الطالب",
-    ),
-    "noChildrenAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد أبناء متاحون",
-    ),
-    "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد أبناء مرتبطون بهذا الحساب",
-    ),
-    "noClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد فصول متاحة",
-    ),
-    "noClassroomsAvailableForGrade": MessageLookupByLibrary.simpleMessage(
-      "لا توجد فصول لهذا الصف",
-    ),
-    "noCompletedAssignments": MessageLookupByLibrary.simpleMessage(
-      "لا توجد واجبات مكتملة",
-    ),
-    "noCompletedAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
-      "عند حل الواجبات ستظهر هنا.",
-    ),
-    "noCurriculumsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مناهج متاحة",
-    ),
-    "noCurriculumsFound": MessageLookupByLibrary.simpleMessage("لا توجد مناهج"),
-    "noDataAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد معلومات حاليا",
-    ),
-    "noDiscountCodes": MessageLookupByLibrary.simpleMessage(
-      "لا توجد أكواد خصم",
-    ),
-    "noEvaluationForStudent": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد تقييم لهذا الطالب",
-    ),
-    "noEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
-      "لم يتم تسجيل تقييم لهذا الأسبوع",
-    ),
-    "noEvaluationWeeksAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد أسابيع متاحة للتقييم",
-    ),
-    "noGradesAvailableForCurriculum": MessageLookupByLibrary.simpleMessage(
-      "لا توجد صفوف لهذا المنهج",
-    ),
-    "noGroupsYet": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مجموعات حالياً",
-    ),
-    "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
-      "عند الانضمام إلى مجموعة أو إرسال طلب جديد ستظهر هنا.",
-    ),
-    "noGulfClassroomsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد فصول خليجية متاحة",
-    ),
-    "noInactiveAccountsFound": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حسابات غير مفعلة",
-    ),
-    "noInternetConnection": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد اتصال بالإنترنت",
-    ),
-    "noLessonsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حصص متاحة",
-    ),
-    "noLessonsForSelectedDay": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حصص في اليوم المحدد",
-    ),
-    "noMessageDocumentsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مستندات في الرسائل حتى الآن",
-    ),
-    "noNewRegistrationRequests": MessageLookupByLibrary.simpleMessage(
-      "لا توجد طلبات تسجيل جديدة حاليًا",
-    ),
-    "noNotifications": MessageLookupByLibrary.simpleMessage("لا توجد إشعارات"),
-    "noNotificationsYet": MessageLookupByLibrary.simpleMessage(
-      "لا توجد إشعارات حتى الآن",
-    ),
-    "noPendingAssignments": MessageLookupByLibrary.simpleMessage(
-      "لا توجد واجبات قيد الانتظار",
-    ),
-    "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
-      "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد.",
-    ),
-    "noPlansAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد خطط متاحة",
-    ),
-    "noPlansForWeek": MessageLookupByLibrary.simpleMessage(
-      "لا توجد خطط لهذا الأسبوع",
-    ),
-    "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد تسجيلات متاحة حتى الآن",
-    ),
-    "noRegisteredChildren": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد أبناء مسجلون",
-    ),
-    "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد تقارير متاحة حتى الآن",
-    ),
-    "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حسابات محفوظة على هذا الجهاز",
-    ),
-    "noSchedule": MessageLookupByLibrary.simpleMessage("لا يوجد جدول"),
-    "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
-      "لم تتم إضافة مواعيد لهذا الفصل بعد",
-    ),
-    "noScheduleForWeek": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد جدول لهذا الأسبوع",
-    ),
-    "noScheduledLessonForDay": MessageLookupByLibrary.simpleMessage(
-      "لا توجد حصة مجدولة في هذا اليوم",
-    ),
-    "noStudentWithThisName": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد طالب بهذا الاسم",
-    ),
-    "noStudentsInClass": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد طلاب في هذا الفصل",
-    ),
-    "noStudentsInClassroom": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد طلاب في هذا الفصل",
-    ),
-    "noStudyWeeksAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد أسابيع دراسية متاحة لهذا الفصل",
-    ),
-    "noSubjectEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
-      "لم يتم تسجيل تقييم لهذه المادة في هذا الأسبوع",
-    ),
-    "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد متاحة لهذا الصف",
-    ),
-    "noSubjectsAvailableForClassroom": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد لهذا الفصل",
-    ),
-    "noSubjectsAvailableForTeacherStudent":
-        MessageLookupByLibrary.simpleMessage(
-          "لا توجد مواد متاحة لك لهذا الطالب",
-        ),
-    "noSubjectsAvailableReadOnly": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد متاحة",
-    ),
-    "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد متاحة لهذا الطالب",
-    ),
-    "noSubjectsInClassroom": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد مضافة لهذا الفصل.",
-    ),
-    "noSubjectsMatchSearch": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد مطابقة للبحث",
-    ),
-    "noSubjectsRegistered": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مواد دراسية مسجلة حتى الآن",
-    ),
-    "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
-    "noSummaryContent": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد محتوى متاح لهذا الملخص",
-    ),
-    "noSupervisorsFound": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد مشرفون",
-    ),
-    "noTeachersAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد معلمون متاحون",
-    ),
-    "noTermPlansAvailable": MessageLookupByLibrary.simpleMessage(
-      "لا توجد خطط ترم متاحة",
-    ),
-    "noUnassignedStudents": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد طلاب غير معينين",
-    ),
-    "noValidSubjectForClassroom": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مادة صالحة مرتبطة بهذا الفصل",
-    ),
-    "noWeeklyEvaluations": MessageLookupByLibrary.simpleMessage(
-      "لا توجد تقييمات أسبوعية",
-    ),
-    "notActivated": MessageLookupByLibrary.simpleMessage("غير مفعل"),
-    "notAvailable": MessageLookupByLibrary.simpleMessage("غير متاحة"),
-    "notSubmitted": MessageLookupByLibrary.simpleMessage("لم يسلم"),
-    "notes": MessageLookupByLibrary.simpleMessage(
-      "ملاحظات إضافية أو تفاصيل تريد مشاركتها معنا",
-    ),
-    "notesHint": MessageLookupByLibrary.simpleMessage(
-      "مثال: كل يوم اثنين وأربعاء الساعة 5 مساءً",
-    ),
-    "notesText": MessageLookupByLibrary.simpleMessage("ملاحظات"),
-    "notificationAcademic": MessageLookupByLibrary.simpleMessage("الأكاديمية"),
-    "notificationAdmin": MessageLookupByLibrary.simpleMessage("الإدارة"),
-    "notificationAnnouncements": MessageLookupByLibrary.simpleMessage(
-      "الإعلانات",
-    ),
-    "notificationCategories": MessageLookupByLibrary.simpleMessage(
-      "فئات الإشعارات",
-    ),
-    "notificationChannels": MessageLookupByLibrary.simpleMessage(
-      "قنوات الإشعارات",
-    ),
-    "notificationChat": MessageLookupByLibrary.simpleMessage("المحادثات"),
-    "notificationFinance": MessageLookupByLibrary.simpleMessage(
-      "المدفوعات والاشتراكات",
-    ),
-    "notificationHourAgo": MessageLookupByLibrary.simpleMessage("منذ ساعة"),
-    "notificationHoursAgo": m17,
-    "notificationInApp": MessageLookupByLibrary.simpleMessage(
-      "الإشعارات داخل التطبيق",
-    ),
-    "notificationMinutesAgo": m18,
-    "notificationNow": MessageLookupByLibrary.simpleMessage("الآن"),
-    "notificationPush": MessageLookupByLibrary.simpleMessage("إشعارات الجهاز"),
-    "notificationSettings": MessageLookupByLibrary.simpleMessage(
-      "إعدادات الإشعارات",
-    ),
-    "notificationSupervisor": MessageLookupByLibrary.simpleMessage("الإشراف"),
-    "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
-    "notificationsEmptySubtitle": MessageLookupByLibrary.simpleMessage(
-      "سنخبرك هنا عند وجود أي تحديث جديد",
-    ),
-    "numberOfHours": MessageLookupByLibrary.simpleMessage("عدد الساعات"),
-    "numberOfHoursHint": MessageLookupByLibrary.simpleMessage("مثال: 12 ساعة"),
-    "oldPasswordLabel": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور القديمة",
-    ),
-    "oldPrice": m19,
-    "oldPriceInvalid": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال السعر القديم بشكل صحيح",
-    ),
-    "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
-      "منصة تعليمية تساعدك على تطوير مهاراتك",
-    ),
-    "onboardingSubtitle2": MessageLookupByLibrary.simpleMessage(
-      "استمتع بتجربة تعليمية مرنة تناسب يومك وأسلوبك",
-    ),
-    "onboardingSubtitle3": MessageLookupByLibrary.simpleMessage(
-      "محتوى تفاعلي يساعدك على التعلم بطريقة أكثر متعة",
-    ),
-    "onboardingTitle1": MessageLookupByLibrary.simpleMessage(
-      "ابدأ رحلتك التعليمية بسهولة",
-    ),
-    "onboardingTitle2": MessageLookupByLibrary.simpleMessage(
-      "دروس تفاعلية ومحتوى ممتع",
-    ),
-    "onboardingTitle3": MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
-    "oneMonth": MessageLookupByLibrary.simpleMessage("شهر"),
-    "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
-    "openAction": MessageLookupByLibrary.simpleMessage("فتح"),
-    "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
-    "openFile": MessageLookupByLibrary.simpleMessage("فتح الملف"),
-    "openLink": MessageLookupByLibrary.simpleMessage("فتح الرابط"),
-    "openRecording": MessageLookupByLibrary.simpleMessage("فتح التسجيل"),
-    "openSessionLink": MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
-    "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
-    "optionalDiscountCode": MessageLookupByLibrary.simpleMessage(
-      "كود الخصم (اختياري)",
-    ),
-    "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
-    "other": MessageLookupByLibrary.simpleMessage("أخرى"),
-    "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
-    "packageAccessScope": MessageLookupByLibrary.simpleMessage("نطاق الباقة"),
-    "packageCalculation": m20,
-    "packageCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة الباقة بنجاح",
-    ),
-    "packageDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حذف الباقة بنجاح",
-    ),
-    "packageDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الباقة"),
-    "packageDuration": MessageLookupByLibrary.simpleMessage("مدة الباقة"),
-    "packageDurationHint": MessageLookupByLibrary.simpleMessage(
-      "مثال: باقة الـ 4 ساعات",
-    ),
-    "packageDurationInvalid": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال مدة صحيحة للباقة",
-    ),
-    "packageExpiryText": MessageLookupByLibrary.simpleMessage(
-      "ينتهي خلال 18 يوم . تجديد تلقائي",
-    ),
-    "packageFormName": MessageLookupByLibrary.simpleMessage("اسم الباقة"),
-    "packageHoursType": MessageLookupByLibrary.simpleMessage("باقة ساعات"),
-    "packageNameRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال اسم الباقة",
-    ),
-    "packageOldPrice": MessageLookupByLibrary.simpleMessage("السعر القديم"),
-    "packagePrice": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
-    "packageType": MessageLookupByLibrary.simpleMessage("نوع الباقة"),
-    "packageUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تعديل الباقة بنجاح",
-    ),
-    "packages": MessageLookupByLibrary.simpleMessage("الباقات"),
-    "packagesManagement": MessageLookupByLibrary.simpleMessage("إدارة الباقات"),
-    "paidAmount": MessageLookupByLibrary.simpleMessage("المبلغ المدفوع"),
-    "paidAmountHint": MessageLookupByLibrary.simpleMessage("مثال: 512 SAR"),
-    "parent": MessageLookupByLibrary.simpleMessage("ولي الأمر"),
-    "parentAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
-    "parentAddChild": MessageLookupByLibrary.simpleMessage("إضافة ابن"),
-    "parentAddChildFailed": MessageLookupByLibrary.simpleMessage(
-      "تعذر إضافة الابن الآن. حاول مرة أخرى.",
-    ),
-    "parentAddChildTitle": MessageLookupByLibrary.simpleMessage(
-      "إضافة ابن جديد",
-    ),
-    "parentAddressLine1": MessageLookupByLibrary.simpleMessage("العنوان"),
-    "parentAddressLine2": MessageLookupByLibrary.simpleMessage(
-      "تفاصيل إضافية للعنوان",
-    ),
-    "parentBackToChildren": MessageLookupByLibrary.simpleMessage(
-      "العودة إلى الأبناء",
-    ),
-    "parentCertificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
-    "parentCheckPaymentStatus": MessageLookupByLibrary.simpleMessage(
-      "التحقق من حالة الدفع",
-    ),
-    "parentChildAccountStep": MessageLookupByLibrary.simpleMessage(
-      "بيانات الابن",
-    ),
-    "parentChildAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة الابن بنجاح",
-    ),
-    "parentChildEmailUsed": MessageLookupByLibrary.simpleMessage(
-      "البريد الإلكتروني مستخدم بالفعل",
-    ),
-    "parentChildren": MessageLookupByLibrary.simpleMessage("الأبناء"),
-    "parentChoosePackage": MessageLookupByLibrary.simpleMessage("اختيار"),
-    "parentDailyPlans": MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
-    "parentEvaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
-    "parentFirstPreparatoryGrade": MessageLookupByLibrary.simpleMessage(
-      "الصف الأول الإعدادي",
-    ),
-    "parentGuardian": MessageLookupByLibrary.simpleMessage("ولي أمر"),
-    "parentHomeTitle": MessageLookupByLibrary.simpleMessage("الرئيسية"),
-    "parentInfo": MessageLookupByLibrary.simpleMessage("معلومات ولي الأمر"),
-    "parentMessages": MessageLookupByLibrary.simpleMessage("الرسائل"),
-    "parentName": MessageLookupByLibrary.simpleMessage("اسم ولي الأمر"),
-    "parentNameHint": MessageLookupByLibrary.simpleMessage(
-      "أدخل اسم ولي الأمر",
-    ),
-    "parentNotifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
-    "parentOpenPaymentPage": MessageLookupByLibrary.simpleMessage(
-      "فتح صفحة الدفع",
-    ),
-    "parentPackageSelected": MessageLookupByLibrary.simpleMessage(
-      "تم الاختيار",
-    ),
-    "parentPackageStep": MessageLookupByLibrary.simpleMessage("اختيار الباقة"),
-    "parentPackagesAndSubscription": MessageLookupByLibrary.simpleMessage(
-      "الباقات والاشتراك",
-    ),
-    "parentPasswordMinLength": MessageLookupByLibrary.simpleMessage(
-      "يجب ألا تقل كلمة المرور عن 6 أحرف",
-    ),
-    "parentPaymentAddress": MessageLookupByLibrary.simpleMessage("عنوان الدفع"),
-    "parentPaymentAddressRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى استكمال عنوان الدفع",
-    ),
-    "parentPaymentConfirmedWaiting": MessageLookupByLibrary.simpleMessage(
-      "تم تأكيد الدفع وهو بانتظار الاعتماد النهائي.",
-    ),
-    "parentPaymentFailed": MessageLookupByLibrary.simpleMessage(
-      "لم تكتمل عملية الدفع. يمكنك المحاولة مرة أخرى.",
-    ),
-    "parentPaymentMethodOptional": MessageLookupByLibrary.simpleMessage(
-      "طريقة الدفع (اختياري)",
-    ),
-    "parentPaymentProcessing": MessageLookupByLibrary.simpleMessage(
-      "جاري التحقق من حالة الدفع...",
-    ),
-    "parentPaymentStatusTimeout": MessageLookupByLibrary.simpleMessage(
-      "تعذر تأكيد حالة الدفع حتى الآن.",
-    ),
-    "parentPaymentStep": MessageLookupByLibrary.simpleMessage("الدفع"),
-    "parentReceiptError": MessageLookupByLibrary.simpleMessage(
-      "تعذر إرسال الإيصال. تحقق من الملف وحاول مجددًا.",
-    ),
-    "parentReceiptPendingMessage": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال الإيصال وهو قيد المراجعة.",
-    ),
-    "parentReceiptSelected": MessageLookupByLibrary.simpleMessage(
-      "تم اختيار الإيصال",
-    ),
-    "parentReferenceNumberOptional": MessageLookupByLibrary.simpleMessage(
-      "رقم المرجع (اختياري)",
-    ),
-    "parentRegion": MessageLookupByLibrary.simpleMessage("المنطقة"),
-    "parentRegistrationForm": MessageLookupByLibrary.simpleMessage(
-      "نموذج تسجيل ولي الأمر",
-    ),
-    "parentRenew": MessageLookupByLibrary.simpleMessage("جدد"),
-    "parentRetryPayment": MessageLookupByLibrary.simpleMessage(
-      "إعادة محاولة الدفع",
-    ),
-    "parentReviewStep": MessageLookupByLibrary.simpleMessage(
-      "مراجعة السعر والخصم",
-    ),
-    "parentRole": MessageLookupByLibrary.simpleMessage("ولي أمر"),
-    "parentSchedule": MessageLookupByLibrary.simpleMessage("الجدول"),
-    "parentSecondPreparatoryGrade": MessageLookupByLibrary.simpleMessage(
-      "الصف الثاني الإعدادي",
-    ),
-    "parentShowAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
-    "parentSingleSubjectRequired": MessageLookupByLibrary.simpleMessage(
-      "يجب اختيار مادة واحدة فقط لهذه الباقة",
-    ),
-    "parentSubjectsStep": MessageLookupByLibrary.simpleMessage("اختيار المواد"),
-    "parentSubmitPayment": MessageLookupByLibrary.simpleMessage("إرسال الدفع"),
-    "parentSubscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
-    "parentSubscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
-      "اشتراك ليلى سينتهي خلال 5 أيام",
-    ),
-    "parentSubscriptionRenewHint": MessageLookupByLibrary.simpleMessage(
-      "جدده الآن لتجنب التعليق",
-    ),
-    "parentSubscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
-    "parentThirdPreparatoryGrade": MessageLookupByLibrary.simpleMessage(
-      "الصف الثالث الإعدادي",
-    ),
-    "parentUnableToOpenCheckout": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح رابط الدفع",
-    ),
-    "parentUnsupportedRegistrationMode": MessageLookupByLibrary.simpleMessage(
-      "نظام التسجيل لهذا المنهج غير مدعوم.",
-    ),
-    "parentWelcome": MessageLookupByLibrary.simpleMessage("أهلًا بك"),
-    "parentYourChildren": MessageLookupByLibrary.simpleMessage("أبناؤك"),
-    "participation": MessageLookupByLibrary.simpleMessage("المشاركة"),
-    "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
-    "passwordAndConfirmRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال كلمة المرور وتأكيدها",
-    ),
-    "passwordCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور لا يمكن أن تكون فارغة.",
-    ),
-    "passwordChangedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تغيير كلمة المرور بنجاح",
-    ),
-    "passwordHint": MessageLookupByLibrary.simpleMessage("6 أحرف علي الأقل"),
-    "passwordMinLength": MessageLookupByLibrary.simpleMessage(
-      "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
-    ),
-    "passwordMustHaveNumber": MessageLookupByLibrary.simpleMessage(
-      "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
-    ),
-    "passwordMustHaveUpperCase": MessageLookupByLibrary.simpleMessage(
-      "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
-    ),
-    "passwordWillBeUsed": MessageLookupByLibrary.simpleMessage(
-      "ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع",
-    ),
-    "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
-      "كلمتا المرور غير متطابقتين.",
-    ),
-    "payWithTamara": MessageLookupByLibrary.simpleMessage("الدفع مع تمارا"),
-    "paymentCompleted": MessageLookupByLibrary.simpleMessage("تم الدفع"),
-    "paymentConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تأكيد الدفع بنجاح",
-    ),
-    "paymentDoneOn": MessageLookupByLibrary.simpleMessage("تم الدفع في"),
-    "paymentInfo": MessageLookupByLibrary.simpleMessage("معلومات الدفع"),
-    "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
-    "paymentMethods": MessageLookupByLibrary.simpleMessage("طرق الدفع"),
-    "paymentReceipt": MessageLookupByLibrary.simpleMessage("إيصال الدفع"),
-    "paymentReceiptRequired": MessageLookupByLibrary.simpleMessage(
-      "صورة إيصال الدفع مطلوبة",
-    ),
-    "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
-    "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
-      "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت.",
-    ),
-    "payrollAccountHolder": MessageLookupByLibrary.simpleMessage(
-      "اسم صاحب الحساب",
-    ),
-    "payrollAccountNumber": MessageLookupByLibrary.simpleMessage("رقم الحساب"),
-    "payrollAddPayoutProfile": MessageLookupByLibrary.simpleMessage(
-      "إضافة بيانات الاستلام",
-    ),
-    "payrollAdjustmentNote": MessageLookupByLibrary.simpleMessage(
-      "سبب المكافأة أو الخصم",
-    ),
-    "payrollAdjustments": MessageLookupByLibrary.simpleMessage(
-      "المكافآت والخصومات",
-    ),
-    "payrollAllStatuses": MessageLookupByLibrary.simpleMessage("كل الحالات"),
-    "payrollAllTeachers": MessageLookupByLibrary.simpleMessage("كل المعلمين"),
-    "payrollAmount": MessageLookupByLibrary.simpleMessage("المبلغ"),
-    "payrollApplyFilters": MessageLookupByLibrary.simpleMessage(
-      "تطبيق الفلاتر",
-    ),
-    "payrollBankAccount": MessageLookupByLibrary.simpleMessage("حساب بنكي"),
-    "payrollBankDestinationRequired": MessageLookupByLibrary.simpleMessage(
-      "أدخل رقم الحساب أو الآيبان",
-    ),
-    "payrollBankName": MessageLookupByLibrary.simpleMessage("اسم البنك"),
-    "payrollBonus": MessageLookupByLibrary.simpleMessage("المكافآت"),
-    "payrollCancelled": MessageLookupByLibrary.simpleMessage("ملغي"),
-    "payrollChooseReceipt": MessageLookupByLibrary.simpleMessage(
-      "اختر صورة الإيصال",
-    ),
-    "payrollConfirmPayment": MessageLookupByLibrary.simpleMessage(
-      "تأكيد الدفع",
-    ),
-    "payrollContinueDraft": MessageLookupByLibrary.simpleMessage(
-      "متابعة المسودة",
-    ),
-    "payrollCreate": MessageLookupByLibrary.simpleMessage("إنشاء كشف الراتب"),
-    "payrollCurrentPeriod": MessageLookupByLibrary.simpleMessage(
-      "الفترة الحالية",
-    ),
-    "payrollCurriculumsCount": MessageLookupByLibrary.simpleMessage(
-      "عدد المناهج",
-    ),
-    "payrollDeduction": MessageLookupByLibrary.simpleMessage("الخصومات"),
-    "payrollDraft": MessageLookupByLibrary.simpleMessage("مسودة"),
-    "payrollDuration": MessageLookupByLibrary.simpleMessage("المدة"),
-    "payrollDurationMinutes": MessageLookupByLibrary.simpleMessage(
-      "المدة بالدقائق",
-    ),
-    "payrollEditPayoutProfile": MessageLookupByLibrary.simpleMessage(
-      "تعديل بيانات الاستلام",
-    ),
-    "payrollEgyptian": MessageLookupByLibrary.simpleMessage("مصري"),
-    "payrollEgyptianWork": MessageLookupByLibrary.simpleMessage("مصري"),
-    "payrollExcludedSessions": m21,
-    "payrollFilterAction": MessageLookupByLibrary.simpleMessage(
-      "تصفية الرواتب",
-    ),
-    "payrollFilters": MessageLookupByLibrary.simpleMessage("فلاتر الرواتب"),
-    "payrollFromDate": MessageLookupByLibrary.simpleMessage("من تاريخ"),
-    "payrollGulf": MessageLookupByLibrary.simpleMessage("خليجي"),
-    "payrollGulfWork": MessageLookupByLibrary.simpleMessage("خليجي"),
-    "payrollHourlyRate": MessageLookupByLibrary.simpleMessage("سعر الساعة"),
-    "payrollIban": MessageLookupByLibrary.simpleMessage("رقم الآيبان"),
-    "payrollIncluded": MessageLookupByLibrary.simpleMessage("داخلة في الحساب"),
-    "payrollInstapay": MessageLookupByLibrary.simpleMessage("إنستا باي"),
-    "payrollInstapayAddress": MessageLookupByLibrary.simpleMessage(
-      "عنوان إنستا باي",
-    ),
-    "payrollInvalidAmount": MessageLookupByLibrary.simpleMessage(
-      "أدخل مبلغًا صحيحًا لا يقل عن صفر",
-    ),
-    "payrollNegativeTotal": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن أن يكون إجمالي الراتب سالبًا",
-    ),
-    "payrollNetTotal": MessageLookupByLibrary.simpleMessage("صافي الإجمالي"),
-    "payrollNoMatchingTeachers": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد معلمون مطابقون للفترة أو الفلاتر المحددة",
-    ),
-    "payrollNoPayoutProfile": MessageLookupByLibrary.simpleMessage(
-      "لا توجد بيانات استلام. يجب إضافتها قبل تسجيل الدفع.",
-    ),
-    "payrollNoWork": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد عمل مستحق لهذا المعلم في الفترة المحددة",
-    ),
-    "payrollPaid": MessageLookupByLibrary.simpleMessage("مدفوع"),
-    "payrollPaidAt": MessageLookupByLibrary.simpleMessage("تاريخ الدفع"),
-    "payrollPaymentConfirmationBody": m22,
-    "payrollPaymentConfirmationTitle": MessageLookupByLibrary.simpleMessage(
-      "تأكيد دفع الراتب؟",
-    ),
-    "payrollPaymentDetails": MessageLookupByLibrary.simpleMessage(
-      "تفاصيل الدفع",
-    ),
-    "payrollPayoutDetails": MessageLookupByLibrary.simpleMessage(
-      "بيانات استلام الراتب",
-    ),
-    "payrollPayoutMethod": MessageLookupByLibrary.simpleMessage(
-      "طريقة الاستلام",
-    ),
-    "payrollPeriod": MessageLookupByLibrary.simpleMessage("الفترة"),
-    "payrollReceiptInvalidType": MessageLookupByLibrary.simpleMessage(
-      "استخدم صورة PNG أو JPG أو JPEG أو WebP",
-    ),
-    "payrollReceiptMissing": MessageLookupByLibrary.simpleMessage(
-      "الملف المحدد غير متاح",
-    ),
-    "payrollReceiptRequired": MessageLookupByLibrary.simpleMessage(
-      "إيصال التحويل مطلوب",
-    ),
-    "payrollReceiptTooLarge": MessageLookupByLibrary.simpleMessage(
-      "يجب ألا يتجاوز الإيصال 5 ميجابايت",
-    ),
-    "payrollRemoveReceipt": MessageLookupByLibrary.simpleMessage(
-      "إزالة الإيصال",
-    ),
-    "payrollResetFilters": MessageLookupByLibrary.simpleMessage(
-      "إعادة ضبط الفلاتر",
-    ),
-    "payrollReviewSessions": MessageLookupByLibrary.simpleMessage(
-      "مراجعة الحصص",
-    ),
-    "payrollSaveDraft": MessageLookupByLibrary.simpleMessage("حفظ كمسودة"),
-    "payrollSessionDetails": MessageLookupByLibrary.simpleMessage(
-      "تفاصيل الحصص",
-    ),
-    "payrollSessionRate": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
-    "payrollSessionsCount": MessageLookupByLibrary.simpleMessage("عدد الحصص"),
-    "payrollStatus": MessageLookupByLibrary.simpleMessage("الحالة"),
-    "payrollSystem": MessageLookupByLibrary.simpleMessage("النظام"),
-    "payrollTeacherDetails": MessageLookupByLibrary.simpleMessage(
-      "بيانات المعلم والفترة",
-    ),
-    "payrollToDate": MessageLookupByLibrary.simpleMessage("إلى تاريخ"),
-    "payrollTotal": MessageLookupByLibrary.simpleMessage("الإجمالي"),
-    "payrollTransactionReference": MessageLookupByLibrary.simpleMessage(
-      "مرجع التحويل",
-    ),
-    "payrollTransferReceipt": MessageLookupByLibrary.simpleMessage(
-      "إيصال التحويل",
-    ),
-    "payrollUnprepared": MessageLookupByLibrary.simpleMessage("لم يُجهز"),
-    "payrollViewDetails": MessageLookupByLibrary.simpleMessage("عرض التفاصيل"),
-    "payrollWallet": MessageLookupByLibrary.simpleMessage("محفظة إلكترونية"),
-    "payrollWalletPhone": MessageLookupByLibrary.simpleMessage("رقم المحفظة"),
-    "payrollWalletProvider": MessageLookupByLibrary.simpleMessage(
-      "مزود المحفظة",
-    ),
-    "payrollWorkSummary": MessageLookupByLibrary.simpleMessage("ملخص العمل"),
-    "pending": MessageLookupByLibrary.simpleMessage("معلق"),
-    "pendingMathSubtitle": MessageLookupByLibrary.simpleMessage(
-      "درس الكسور، بانتظار أي معلم",
-    ),
-    "pendingPayments": MessageLookupByLibrary.simpleMessage(
-      "المدفوعات المعلقة",
-    ),
-    "pendingReceipts": MessageLookupByLibrary.simpleMessage("إيصالات معلقة"),
-    "pendingRegisterRequests": MessageLookupByLibrary.simpleMessage(
-      "طلبات تسجيل معلقة",
-    ),
-    "pendingRequests": MessageLookupByLibrary.simpleMessage("طلبات معلقة"),
-    "pendingReview": MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
-    "pendingScienceSubtitle": MessageLookupByLibrary.simpleMessage(
-      "درس بناء الضوء، بانتظار أي معلم",
-    ),
-    "pendingWaiting": MessageLookupByLibrary.simpleMessage("قيد الانتظار"),
-    "performance": MessageLookupByLibrary.simpleMessage("أدائي"),
-    "permanentlyDeleteFromSystem": MessageLookupByLibrary.simpleMessage(
-      "حذف نهائي من النظام",
-    ),
-    "personalProfile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
-    "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
-    "physics": MessageLookupByLibrary.simpleMessage("الفيزياء"),
-    "planFile": MessageLookupByLibrary.simpleMessage("ملف الخطة"),
-    "planFileRequired": MessageLookupByLibrary.simpleMessage("ملف الخطة مطلوب"),
-    "plansTitle": MessageLookupByLibrary.simpleMessage("الخطط"),
-    "platformsUsed": MessageLookupByLibrary.simpleMessage("المنصات المستخدمة"),
-    "pleaseAnswerAllQuestions": MessageLookupByLibrary.simpleMessage(
-      "برجاء الإجابة على جميع الأسئلة",
-    ),
-    "pleaseChooseAtLeastOneGrade": MessageLookupByLibrary.simpleMessage(
-      "برجاء اختيار صف واحد على الأقل",
-    ),
-    "pleaseChooseAtLeastOneSubjectForEachGrade":
-        MessageLookupByLibrary.simpleMessage(
-          "برجاء اختيار مادة واحدة على الأقل لكل صف",
-        ),
-    "pleaseChooseCurriculumGrades": m23,
-    "pleaseChooseCurriculumSubjects": m24,
-    "pleaseChooseTeachingCurriculum": MessageLookupByLibrary.simpleMessage(
-      "برجاء اختيار المنهج الذي تدرسه",
-    ),
-    "pleaseEnterSubjectsGrades": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال درجات المواد",
-    ),
-    "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
-      "يرجى ملء جميع الحقول المطلوبة",
-    ),
-    "pleaseSelectFile": MessageLookupByLibrary.simpleMessage(
-      "من فضلك اختاري ملفًا أولًا",
-    ),
-    "pleaseSelectStudent": MessageLookupByLibrary.simpleMessage(
-      "يرجى اختيار الطالب",
-    ),
-    "poemAnalysis": MessageLookupByLibrary.simpleMessage("تحليل القصيدة"),
-    "point": MessageLookupByLibrary.simpleMessage("نقطة"),
-    "points": MessageLookupByLibrary.simpleMessage("النقاط"),
-    "pointsCount": MessageLookupByLibrary.simpleMessage("نقطة"),
-    "pointsTipDescription": MessageLookupByLibrary.simpleMessage(
-      "احرص على تسليم التقييمات الأسبوعية في موعدها لكسب ٢٠ نقطة إضافية أسبوعيًا",
-    ),
-    "positiveWeekRequired": MessageLookupByLibrary.simpleMessage(
-      "أدخل رقم أسبوع صحيحًا موجبًا",
-    ),
-    "preferredDays": MessageLookupByLibrary.simpleMessage(
-      "مواعيد الطالب المفضلة",
-    ),
-    "preferredDaysHint": MessageLookupByLibrary.simpleMessage(
-      "حدد الأيام والأوقات المفضلة للحضور",
-    ),
-    "preview": MessageLookupByLibrary.simpleMessage("معاينة"),
-    "previous": MessageLookupByLibrary.simpleMessage("السابق"),
-    "primaryGradeFive": MessageLookupByLibrary.simpleMessage(
-      "الصف الخامس الابتدائي",
-    ),
-    "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
-    "qarCurrency": MessageLookupByLibrary.simpleMessage("ريال قطري (ر.ق)"),
-    "qarShort": MessageLookupByLibrary.simpleMessage("ر.ق"),
-    "qatariCurriculum": MessageLookupByLibrary.simpleMessage("المنهج القطري"),
-    "qatariCurriculumDesc": MessageLookupByLibrary.simpleMessage(
-      "منهج معتمد من وزارة التربية والتعليم في قطر، ويشمل المراحل الأساسية حتى الثانوية.",
-    ),
-    "qualification": MessageLookupByLibrary.simpleMessage("المؤهل"),
-    "quotaReport": MessageLookupByLibrary.simpleMessage("تقرير الحصص"),
-    "quran": MessageLookupByLibrary.simpleMessage("القرآن الكريم"),
-    "ranking": MessageLookupByLibrary.simpleMessage("الترتيب"),
-    "rating": MessageLookupByLibrary.simpleMessage("تقييم"),
-    "readyGroupSubtitle": MessageLookupByLibrary.simpleMessage(
-      "الرياضيات - مجموعة جاهزة",
-    ),
-    "recordings": MessageLookupByLibrary.simpleMessage("التسجيلات"),
-    "registerAsParent": MessageLookupByLibrary.simpleMessage(
-      "التسجيل كولي أمر",
-    ),
-    "registerAsParentSubtitle": MessageLookupByLibrary.simpleMessage(
-      "تابع تقدم أبنائك وتواصل مع المعلمين",
-    ),
-    "registerAsStudent": MessageLookupByLibrary.simpleMessage("التسجيل كطالب"),
-    "registerAsStudentSubtitle": MessageLookupByLibrary.simpleMessage(
-      "انضم للفصول الدراسية وابدأ رحلتك التعليمية",
-    ),
-    "registrationDate": MessageLookupByLibrary.simpleMessage("تاريخ التسجيل"),
-    "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
-    "registrationRequestRejectedSuccessfully":
-        MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
-    "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة.",
-    ),
-    "registrationRequests": MessageLookupByLibrary.simpleMessage(
-      "طلبات التسجيل",
-    ),
-    "reject": MessageLookupByLibrary.simpleMessage("رفض"),
-    "rejectRequest": MessageLookupByLibrary.simpleMessage("رفض الطلب"),
-    "rejectionReason": MessageLookupByLibrary.simpleMessage("سبب الرفض"),
-    "relationships": MessageLookupByLibrary.simpleMessage("العلاقات"),
-    "remainingDays": m25,
-    "remainingHours": m26,
-    "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
-    "removeAccountFromDevice": MessageLookupByLibrary.simpleMessage(
-      "إزالة الحساب من هذا الجهاز",
-    ),
-    "renewSubscription": MessageLookupByLibrary.simpleMessage("تجديد الاشتراك"),
-    "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
-      "هذه الباقة تشمل كل المواد ولا تحتاج إلى اختيار مادة.",
-    ),
-    "renewalApprove": MessageLookupByLibrary.simpleMessage("اعتماد التجديد"),
-    "renewalApproved": MessageLookupByLibrary.simpleMessage(
-      "تم اعتماد التجديد",
-    ),
-    "renewalCompleted": MessageLookupByLibrary.simpleMessage(
-      "تم تجديد الاشتراك بنجاح.",
-    ),
-    "renewalConfirmPayment": MessageLookupByLibrary.simpleMessage(
-      "تأكيد الدفع",
-    ),
-    "renewalCurrentSubscription": MessageLookupByLibrary.simpleMessage(
-      "الاشتراك الحالي",
-    ),
-    "renewalExpiry": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
-    "renewalFailed": MessageLookupByLibrary.simpleMessage(
-      "تعذر تجديد الاشتراك. حاول مرة أخرى.",
-    ),
-    "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
-      "يلزم بدء محاولة دفع جديدة. حاول مرة أخرى.",
-    ),
-    "renewalInvalidPaymentStatus": MessageLookupByLibrary.simpleMessage(
-      "حالة طلب الدفع لا تسمح بتنفيذ هذا الإجراء.",
-    ),
-    "renewalNoRequests": MessageLookupByLibrary.simpleMessage("لا توجد طلبات"),
-    "renewalOptionalRejectionReason": MessageLookupByLibrary.simpleMessage(
-      "سبب الرفض (اختياري)",
-    ),
-    "renewalPaymentConfirmed": MessageLookupByLibrary.simpleMessage(
-      "تم تأكيد الدفع",
-    ),
-    "renewalPaymentNotConfirmed": MessageLookupByLibrary.simpleMessage(
-      "يجب تأكيد الدفع قبل اعتماد التجديد.",
-    ),
-    "renewalPendingReview": MessageLookupByLibrary.simpleMessage(
-      "قيد المراجعة",
-    ),
-    "renewalPurchasedHours": MessageLookupByLibrary.simpleMessage(
-      "الساعات المشتراة",
-    ),
-    "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلب التجديد والإيصال قيد المراجعة.",
-    ),
-    "renewalReferenceNumber": MessageLookupByLibrary.simpleMessage(
-      "رقم المرجع",
-    ),
-    "renewalRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
-    "renewalRemainingHours": MessageLookupByLibrary.simpleMessage(
-      "الساعات المتبقية",
-    ),
-    "renewalRequestPending": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلب التجديد وهو قيد المراجعة.",
-    ),
-    "renewalRequestedAt": MessageLookupByLibrary.simpleMessage("تاريخ الطلب"),
-    "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
-      "غير مسموح لك بتجديد اشتراك هذا الطالب.",
-    ),
-    "renewalSubjectNotAssigned": MessageLookupByLibrary.simpleMessage(
-      "هذه المادة غير مضافة للطالب.",
-    ),
-    "renewalSubmitRequest": MessageLookupByLibrary.simpleMessage(
-      "إرسال طلب التجديد",
-    ),
-    "renewalSubscriptionStillActive": MessageLookupByLibrary.simpleMessage(
-      "الاشتراك ما زال فعالًا ولا يمكن تجديده الآن.",
-    ),
-    "renewalUsedHours": MessageLookupByLibrary.simpleMessage(
-      "الساعات المستخدمة",
-    ),
-    "renewalViewReceipt": MessageLookupByLibrary.simpleMessage("عرض الإيصال"),
-    "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
-    "requestAccepted": MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
-    "requestNewLesson": MessageLookupByLibrary.simpleMessage("طلب درس جديد"),
-    "requestReason": MessageLookupByLibrary.simpleMessage("سبب الطلب"),
-    "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال طلبك وهو الآن قيد المراجعة.",
-    ),
-    "requestTeacherChangeOrCancellation": MessageLookupByLibrary.simpleMessage(
-      "طلب تغيير المعلم / إلغاء الاستمرار",
-    ),
-    "requestTeacherWithdrawal": MessageLookupByLibrary.simpleMessage(
-      "طلب اعتذار عن الاستمرار",
-    ),
-    "requestType": MessageLookupByLibrary.simpleMessage("نوع الطلب"),
-    "requester": MessageLookupByLibrary.simpleMessage("مقدم الطلب"),
-    "requesterType": MessageLookupByLibrary.simpleMessage("نوع مقدم الطلب"),
-    "resendCode": MessageLookupByLibrary.simpleMessage("إعادة الإرسال؟"),
-    "resetCodeRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال كود التحقق",
-    ),
-    "resetCodeSubtitle": MessageLookupByLibrary.simpleMessage(
-      "تحقق من بريدك الإلكتروني وأدخل الكود المرسل إليك",
-    ),
-    "resetPassword": MessageLookupByLibrary.simpleMessage(
-      "إعادة تعيين كلمة المرور",
-    ),
-    "resetPasswordInstructions": MessageLookupByLibrary.simpleMessage(
-      " وأدخل الكود لإعادة تعيين كلمة المرور.",
-    ),
-    "resetPasswordSuccessSubtitle": m27,
-    "resetPasswordSuccessTitle": MessageLookupByLibrary.simpleMessage(
-      "تم الإرسال بنجاح",
-    ),
-    "retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
-    "revenues": MessageLookupByLibrary.simpleMessage("الإيرادات"),
-    "reviewNewStudents": MessageLookupByLibrary.simpleMessage(
-      "عرض طلبات الطلاب",
-    ),
-    "reviewPaidRequests": MessageLookupByLibrary.simpleMessage(
-      "عرض طلبات الدفع",
-    ),
-    "reviewRequest": MessageLookupByLibrary.simpleMessage("مراجعة الطلب"),
-    "reviews": MessageLookupByLibrary.simpleMessage("التقييمات"),
-    "rewardPoints": MessageLookupByLibrary.simpleMessage("نقاط المكافآت"),
-    "rewards": MessageLookupByLibrary.simpleMessage("مكافآت"),
-    "role": MessageLookupByLibrary.simpleMessage("دور"),
-    "salary": MessageLookupByLibrary.simpleMessage("الراتب"),
-    "salaryCalculationFormula": MessageLookupByLibrary.simpleMessage(
-      "عدد الحصص * سعر الحصة",
-    ),
-    "salaryCalculationFormulaDesc": MessageLookupByLibrary.simpleMessage(
-      "يتم احتساب الراتب الأساسي",
-    ),
-    "salaryCalculationMethod": MessageLookupByLibrary.simpleMessage(
-      "طريقة احتساب الراتب",
-    ),
-    "sampleExercisesHomework": MessageLookupByLibrary.simpleMessage(
-      "حل تمرين 45",
-    ),
-    "sampleGrammarLesson": MessageLookupByLibrary.simpleMessage("قواعد النحو"),
-    "sampleQuadraticEquations": MessageLookupByLibrary.simpleMessage(
-      "المعادلات التربيعية",
-    ),
-    "sampleTeacherOne": MessageLookupByLibrary.simpleMessage("سارة عبدالله"),
-    "sampleTeacherTwo": MessageLookupByLibrary.simpleMessage("منى أحمد"),
-    "sarCurrency": MessageLookupByLibrary.simpleMessage("ريال سعودي (ر.س)"),
-    "sarShort": MessageLookupByLibrary.simpleMessage("ريال"),
-    "saturday": MessageLookupByLibrary.simpleMessage("السبت"),
-    "saudi": MessageLookupByLibrary.simpleMessage("سعودي"),
-    "saudiCurriculum": MessageLookupByLibrary.simpleMessage("المنهج السعودي"),
-    "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
-      "نقدم جميع المواد الدراسية للمرحلة الابتدائية، المتوسطة، والثانوية وفق المنهج المعتمد.",
-    ),
-    "saudiDepartment": MessageLookupByLibrary.simpleMessage("القسم السعودي"),
-    "saudiRiyal": MessageLookupByLibrary.simpleMessage("الريال السعودي"),
-    "save": MessageLookupByLibrary.simpleMessage("حفظ"),
-    "saveAmount": m28,
-    "saveChanges": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
-    "savedAccounts": MessageLookupByLibrary.simpleMessage("الحسابات المحفوظة"),
-    "savedInLocation": m29,
-    "savingCertificate": MessageLookupByLibrary.simpleMessage(
-      "جاري حفظ الشهادة...",
-    ),
-    "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
-    "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
-    "scheduleCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة الجدول بنجاح",
-    ),
-    "scheduleDateInPast": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن إضافة حصة في تاريخ مضى",
-    ),
-    "scheduleDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حذف الجدول بنجاح",
-    ),
-    "scheduleForDay": m30,
-    "scheduleImageRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى اختيار صورة الجدول",
-    ),
-    "scheduleTimeInPast": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن إضافة حصة في وقت مضى",
-    ),
-    "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
-      "تم تعديل جدول الأسبوع القادم",
-    ),
-    "schoolSubjects": MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
-    "science": MessageLookupByLibrary.simpleMessage("العلوم"),
-    "scoreRange": m31,
-    "scoreRequired": MessageLookupByLibrary.simpleMessage("الدرجة مطلوبة"),
-    "searchByNameOrPhone": MessageLookupByLibrary.simpleMessage(
-      "بحث بالاسم أو الهاتف",
-    ),
-    "searchConversations": MessageLookupByLibrary.simpleMessage(
-      "البحث في المحادثات",
-    ),
-    "searchForStudent": MessageLookupByLibrary.simpleMessage("ابحث عن طالب"),
-    "searchForSubject": MessageLookupByLibrary.simpleMessage("ابحث عن مادة"),
-    "secondPrimaryClassroom": MessageLookupByLibrary.simpleMessage(
-      "الصف الثاني الابتدائي",
-    ),
-    "secondSecondaryClassroom": MessageLookupByLibrary.simpleMessage(
-      "الصف الثاني الثانوي",
-    ),
-    "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
-    "selectChild": MessageLookupByLibrary.simpleMessage("اختر الابن"),
-    "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
-    "selectClassroomFirst": MessageLookupByLibrary.simpleMessage(
-      "اختر الفصل أولاً",
-    ),
-    "selectCurriculum": MessageLookupByLibrary.simpleMessage("اختر المنهج"),
-    "selectCurriculumFirst": MessageLookupByLibrary.simpleMessage(
-      "يرجى اختيار المنهج",
-    ),
-    "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
-    "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
-    "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
-      "اختر الصف لعرض بيانات الحضور",
-    ),
-    "selectIdealSupervisor": MessageLookupByLibrary.simpleMessage(
-      "اختر المشرف المثالي",
-    ),
-    "selectIdealTeacher": MessageLookupByLibrary.simpleMessage(
-      "اختر المعلم المثالي",
-    ),
-    "selectLesson": MessageLookupByLibrary.simpleMessage("اختر الحصة"),
-    "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
-    "selectStudentFirst": MessageLookupByLibrary.simpleMessage(
-      "اختر الطالب أولاً",
-    ),
-    "selectSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
-    "selectTeacher": MessageLookupByLibrary.simpleMessage("اختر المعلم"),
-    "selectWeek": MessageLookupByLibrary.simpleMessage("اختر الأسبوع"),
-    "selectedLessonDatePreview": MessageLookupByLibrary.simpleMessage(
-      "الخميس 07 مايو 2026",
-    ),
-    "selectedMessagesLabel": MessageLookupByLibrary.simpleMessage("محددة"),
-    "selectedPackage": MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
-    "semesterName": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
-    "semesterOne": MessageLookupByLibrary.simpleMessage("فصل ١"),
-    "semesterThree": MessageLookupByLibrary.simpleMessage("فصل ٣"),
-    "semesterTwo": MessageLookupByLibrary.simpleMessage("فصل ٢"),
-    "send": MessageLookupByLibrary.simpleMessage("أرسلت"),
-    "sendAll": MessageLookupByLibrary.simpleMessage("إرسال الكل"),
-    "sendCorrection": MessageLookupByLibrary.simpleMessage("إرسال التصحيح"),
-    "sendNotificationToParentAndStudent": MessageLookupByLibrary.simpleMessage(
-      "إرسال إشعار لولي الأمر والطالب",
-    ),
-    "sendResetCode": MessageLookupByLibrary.simpleMessage(
-      "إرسال كود الاستعادة",
-    ),
-    "sendResetLink": MessageLookupByLibrary.simpleMessage(
-      "إرسال كود الاستعادة",
-    ),
-    "sending": MessageLookupByLibrary.simpleMessage("جاري الإرسال..."),
-    "services": MessageLookupByLibrary.simpleMessage("الخدمات"),
-    "sessionEnding": MessageLookupByLibrary.simpleMessage("جارٍ إنهاء الحصة"),
-    "sessionExpiredLoginAgain": MessageLookupByLibrary.simpleMessage(
-      "انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى",
-    ),
-    "sessionRecording": MessageLookupByLibrary.simpleMessage("تسجيل الحصة"),
-    "sessionStartUnauthorized": MessageLookupByLibrary.simpleMessage(
-      "غير مصرح لك ببدء الحصة",
-    ),
-    "sessionStarted": MessageLookupByLibrary.simpleMessage("تم بدء الحصة"),
-    "sessionStartedLinkOpenFailed": MessageLookupByLibrary.simpleMessage(
-      "بدأت الحصة ولكن تعذر فتح الرابط",
-    ),
-    "sessionStarting": MessageLookupByLibrary.simpleMessage("جارٍ بدء الحصة"),
-    "sessionSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
-      "بيانات المادة غير متاحة",
-    ),
-    "sessionSummary": MessageLookupByLibrary.simpleMessage("ملخص الحصة"),
-    "sessions": MessageLookupByLibrary.simpleMessage("حصة"),
-    "sessionsThisMonth": MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
-    "shortVideoLinkOptional": MessageLookupByLibrary.simpleMessage(
-      "رابط فيديو قصير (اختياري)",
-    ),
-    "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
-    "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
-    "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),
-    "specialization": MessageLookupByLibrary.simpleMessage("التخصص"),
-    "start": MessageLookupByLibrary.simpleMessage("ابدأ"),
-    "startDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
-    "startLessonViaZoom": MessageLookupByLibrary.simpleMessage(
-      "ابدأ الحصة عبر Zoom",
-    ),
-    "startNow": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
-    "startSession": MessageLookupByLibrary.simpleMessage("بدء الحصة"),
-    "startTime": MessageLookupByLibrary.simpleMessage("وقت البداية"),
-    "status": MessageLookupByLibrary.simpleMessage("الحالة"),
-    "student": MessageLookupByLibrary.simpleMessage("طالب"),
-    "studentAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تعيين الطالب بنجاح",
-    ),
-    "studentAssignmentAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
-      "هذا الطالب مُعيّن بالفعل",
-    ),
-    "studentAssignmentNoClassrooms": MessageLookupByLibrary.simpleMessage(
-      "لا توجد فصول متاحة لهذا الطالب",
-    ),
-    "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن تعيين هذا الطالب لأنه لم يتم اعتماد حسابه بعد",
-    ),
-    "studentCallAlertBody": MessageLookupByLibrary.simpleMessage(
-      "افتح بنان للاستجابة للمشرف",
-    ),
-    "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال التنبيه بالفعل، حاول بعد قليل",
-    ),
-    "studentCallAlertSent": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال التنبيه للطالب بنجاح",
-    ),
-    "studentCallAlertTitle": MessageLookupByLibrary.simpleMessage(
-      "المشرف يناديك",
-    ),
-    "studentCertificate": MessageLookupByLibrary.simpleMessage("شهادة الطالب"),
-    "studentCertificates": MessageLookupByLibrary.simpleMessage(
-      "شهادات الطلاب",
-    ),
-    "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل الفصول، حاول مرة أخرى",
-    ),
-    "studentEmail": MessageLookupByLibrary.simpleMessage("ايميل الطالب"),
-    "studentInfo": MessageLookupByLibrary.simpleMessage("معلومات الطالب"),
-    "studentName": MessageLookupByLibrary.simpleMessage("اسم الطالب"),
-    "studentNotes": MessageLookupByLibrary.simpleMessage("ملاحظات الطالب"),
-    "studentNotesAndSchedule": MessageLookupByLibrary.simpleMessage(
-      "ملاحظات الطالب وتفضيلات المواعيد",
-    ),
-    "studentNotesAndScheduleHint": MessageLookupByLibrary.simpleMessage(
-      "ملاحظات (الدروس التي تحتاج شرحها، الأهداف، أي ملاحظات أخرى)",
-    ),
-    "studentNotesExample": MessageLookupByLibrary.simpleMessage(
-      "مثال: يحتاج شرح درس الكسور والقسمة المطولة ...",
-    ),
-    "studentPassword": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور للدخول على المنصة",
-    ),
-    "studentPasswordField": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور للطالب",
-    ),
-    "studentProfileClass": MessageLookupByLibrary.simpleMessage("القسم المصري"),
-    "studentProfileGrade": MessageLookupByLibrary.simpleMessage(
-      "الصف الثاني الإعدادي",
-    ),
-    "studentRegistrationForm": MessageLookupByLibrary.simpleMessage(
-      "نموذج تسجيل الطالب",
-    ),
-    "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(
-      "سيتم إنشاء مجموعة دراسية وتحويل الطالب إليك مباشرة",
-    ),
-    "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
-      "يستخدمه الطالب للدخول على الداشبورد",
-    ),
-    "students": MessageLookupByLibrary.simpleMessage("الطلاب"),
-    "studentsByDepartment": MessageLookupByLibrary.simpleMessage(
-      "الطلاب حسب القسم",
-    ),
-    "studyCurriculaTitle": MessageLookupByLibrary.simpleMessage(
-      "المناهج الدراسية ",
-    ),
-    "studyMaterials": MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
-    "studyNotStarted": MessageLookupByLibrary.simpleMessage(
-      "لم تبدأ الدراسة بعد",
-    ),
-    "studyPlanFor": MessageLookupByLibrary.simpleMessage("الخطة الدراسية"),
-    "studyPlanTitlePrefix": MessageLookupByLibrary.simpleMessage(
-      "الخطة الدراسية لـ",
-    ),
-    "studySchedule": MessageLookupByLibrary.simpleMessage("الجدول الدراسي"),
-    "subject": MessageLookupByLibrary.simpleMessage("المادة"),
-    "subjectCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تمت إضافة المادة بنجاح",
-    ),
-    "subjectLabel": MessageLookupByLibrary.simpleMessage("المادة"),
-    "subjectName": MessageLookupByLibrary.simpleMessage("اسم المادة"),
-    "subjectRequestAdminReview": MessageLookupByLibrary.simpleMessage(
-      "قيد مراجعة الإدارة",
-    ),
-    "subjectRequestAssigned": MessageLookupByLibrary.simpleMessage(
-      "تم تعيين المدرس",
-    ),
-    "subjectRequestChoosePackage": MessageLookupByLibrary.simpleMessage(
-      "اختر الباقة",
-    ),
-    "subjectRequestChooseSubject": MessageLookupByLibrary.simpleMessage(
-      "اختر المادة",
-    ),
-    "subjectRequestMyRequests": MessageLookupByLibrary.simpleMessage(
-      "طلباتي الحالية",
-    ),
-    "subjectRequestNoPackages": MessageLookupByLibrary.simpleMessage(
-      "لا توجد باقات متاحة لطلب مادة حاليًا",
-    ),
-    "subjectRequestNotesCounter": m32,
-    "subjectRequestPaymentCompleted": MessageLookupByLibrary.simpleMessage(
-      "تم الدفع وجارٍ البحث عن مدرس",
-    ),
-    "subjectRequestPaymentTimeout": MessageLookupByLibrary.simpleMessage(
-      "تعذر تأكيد الدفع تلقائيًا. تحقق من حالته يدويًا.",
-    ),
-    "subjectRequestRejected": MessageLookupByLibrary.simpleMessage(
-      "تم رفض الطلب",
-    ),
-    "subjectRequestSearchingTeacher": MessageLookupByLibrary.simpleMessage(
-      "جارٍ البحث عن مدرس",
-    ),
-    "subjectRequestSubmitted": MessageLookupByLibrary.simpleMessage(
-      "تم إرسال الطلب للإدارة للمراجعة",
-    ),
-    "subjectRequestVerifyPayment": MessageLookupByLibrary.simpleMessage(
-      "التحقق من حالة الدفع",
-    ),
-    "subjectRequired": MessageLookupByLibrary.simpleMessage("المادة مطلوبة"),
-    "subjects": MessageLookupByLibrary.simpleMessage("المواد"),
-    "subjectsGrades": MessageLookupByLibrary.simpleMessage("درجات المواد"),
-    "subjectsManagement": MessageLookupByLibrary.simpleMessage(
-      "إدارة المواد الدراسية",
-    ),
-    "submissionDate": MessageLookupByLibrary.simpleMessage("تم التسليم:"),
-    "submitAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
-    "submitAssignmentCorrection": MessageLookupByLibrary.simpleMessage(
-      "تصحيح تسليم",
-    ),
-    "submitRegistrationRequest": MessageLookupByLibrary.simpleMessage(
-      "إرسال طلب التسجيل",
-    ),
-    "submitRequest": MessageLookupByLibrary.simpleMessage("إرسال الطلب"),
-    "submitted": MessageLookupByLibrary.simpleMessage("مسلم"),
-    "submittedBadge": MessageLookupByLibrary.simpleMessage("مرفوع"),
-    "submittingAssignment": MessageLookupByLibrary.simpleMessage(
-      "جاري التسليم...",
-    ),
-    "subscribeNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
-    "subscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
-    "subscriptionAccessExpired": MessageLookupByLibrary.simpleMessage(
-      "انتهى اشتراكك، يرجى تجديد الاشتراك للمتابعة.",
-    ),
-    "subscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
-      "اشتراكك سينتهي خلال 5 أيام",
-    ),
-    "subscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
-    "sunday": MessageLookupByLibrary.simpleMessage("الأحد"),
-    "supervisedClasses": MessageLookupByLibrary.simpleMessage(
-      "الصفوف المشرف عليها",
-    ),
-    "supervisor": MessageLookupByLibrary.simpleMessage("مشرف"),
-    "supervisorAbdelfattah": MessageLookupByLibrary.simpleMessage("عبدالفتاح"),
-    "supervisorAssignedNotification": MessageLookupByLibrary.simpleMessage(
-      "تم تعيينك مشرفًا في الصف الثالث",
-    ),
-    "supervisorAssignment": MessageLookupByLibrary.simpleMessage(
-      "توظيف المشرف",
-    ),
-    "supervisorNotActive": MessageLookupByLibrary.simpleMessage(
-      "حساب المشرف المحدد غير نشط",
-    ),
-    "supervisorNotFound": MessageLookupByLibrary.simpleMessage(
-      "المشرف المحدد لم يعد موجودًا",
-    ),
-    "supervisorRequired": MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
-    "supervisorSaraAhmed": MessageLookupByLibrary.simpleMessage("سارة أحمد"),
-    "supervisorSomaya": MessageLookupByLibrary.simpleMessage("سمية"),
-    "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
-    "tabbyTamara": MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
-    "taughtOnlineBefore": MessageLookupByLibrary.simpleMessage(
-      "هل سبق لك التدريس أونلاين؟",
-    ),
-    "taughtSubjects": MessageLookupByLibrary.simpleMessage(
-      "المواد التي درّسها",
-    ),
-    "teachableGrades": MessageLookupByLibrary.simpleMessage(
-      "الصفوف الممكن تدريسها",
-    ),
-    "teacher": MessageLookupByLibrary.simpleMessage("معلم"),
-    "teacherAhmedFouad": MessageLookupByLibrary.simpleMessage("أ/ أحمد فؤاد"),
-    "teacherApplicationDetailsTitle": m33,
-    "teacherApplications": MessageLookupByLibrary.simpleMessage(
-      "طلبات تقديم المعلمين",
-    ),
-    "teacherApplySubtitle": MessageLookupByLibrary.simpleMessage(
-      "سيتم مراجعة طلبك والرد عليك قريبًا",
-    ),
-    "teacherApplyTitle": MessageLookupByLibrary.simpleMessage(
-      "التقديم كمعلم في أكاديمية بنان",
-    ),
-    "teacherAssignedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم توظيف المعلم بنجاح",
-    ),
-    "teacherCertificateIssuedSuccessfully":
-        MessageLookupByLibrary.simpleMessage("تم إصدار شهادة المعلم بنجاح"),
-    "teacherCertificates": MessageLookupByLibrary.simpleMessage(
-      "شهادات المعلمين",
-    ),
-    "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
-      "أقر بصحة جميع البيانات المذكورة أعلاه، وأتعهد بالالتزام بقواعد وسياسات أكاديمية بنان",
-    ),
-    "teacherMyEarnings": MessageLookupByLibrary.simpleMessage("مستحقاتي"),
-    "teacherNotAssignedToSessionSubject": MessageLookupByLibrary.simpleMessage(
-      "لا يوجد مدرس مكلّف بهذه المادة",
-    ),
-    "teacherNote": MessageLookupByLibrary.simpleMessage("ملاحظة المعلم"),
-    "teacherNoteText": MessageLookupByLibrary.simpleMessage(
-      "ممتاز على حل الواجبات هذه المرة.",
-    ),
-    "teacherPayrollAccountAddress": MessageLookupByLibrary.simpleMessage(
-      "العنوان",
-    ),
-    "teacherPayrollAccountName": MessageLookupByLibrary.simpleMessage(
-      "اسم الحساب",
-    ),
-    "teacherPayrollAddPayoutContact": MessageLookupByLibrary.simpleMessage(
-      "تواصل مع الإدارة لإضافة بيانات الاستلام.",
-    ),
-    "teacherPayrollAll": MessageLookupByLibrary.simpleMessage("الكل"),
-    "teacherPayrollContactAdmin": MessageLookupByLibrary.simpleMessage(
-      "للتعديل تواصل مع الإدارة",
-    ),
-    "teacherPayrollDraftNote": MessageLookupByLibrary.simpleMessage(
-      "هذا المبلغ قيد المراجعة وقد يتم تحديثه قبل التحويل.",
-    ),
-    "teacherPayrollEmpty": MessageLookupByLibrary.simpleMessage(
-      "لا توجد مستحقات أو تقارير رواتب حتى الآن",
-    ),
-    "teacherPayrollMethod": MessageLookupByLibrary.simpleMessage(
-      "طريقة الاستلام",
-    ),
-    "teacherPayrollNoPayout": MessageLookupByLibrary.simpleMessage(
-      "لا توجد بيانات استلام راتب مسجلة",
-    ),
-    "teacherPayrollNotTransferred": MessageLookupByLibrary.simpleMessage(
-      "لم يتم تحويل الراتب بعد",
-    ),
-    "teacherPayrollPaidAmount": MessageLookupByLibrary.simpleMessage("تم دفعه"),
-    "teacherPayrollPaidOn": MessageLookupByLibrary.simpleMessage("تم الدفع"),
-    "teacherPayrollPaymentDetails": MessageLookupByLibrary.simpleMessage(
-      "تفاصيل التحويل",
-    ),
-    "teacherPayrollPayoutDetails": MessageLookupByLibrary.simpleMessage(
-      "بيانات استلام الراتب",
-    ),
-    "teacherPayrollPreparingAmount": MessageLookupByLibrary.simpleMessage(
-      "قيد التجهيز",
-    ),
-    "teacherPayrollReceipt": MessageLookupByLibrary.simpleMessage(
-      "عرض إيصال الدفع",
-    ),
-    "teacherPayrollReceiptLater": MessageLookupByLibrary.simpleMessage(
-      "سيظهر إيصال التحويل هنا بعد إتمام الدفع.",
-    ),
-    "teacherPayrollReport": MessageLookupByLibrary.simpleMessage(
-      "تقرير الراتب",
-    ),
-    "teacherPayrollReportSummary": MessageLookupByLibrary.simpleMessage(
-      "ملخص التقرير",
-    ),
-    "teacherPayrollReportTitle": m34,
-    "teacherPayrollTransferredTo": MessageLookupByLibrary.simpleMessage(
-      "التحويل إلى",
-    ),
-    "teacherPayrollUnavailable": MessageLookupByLibrary.simpleMessage(
-      "تقرير الراتب غير متاح",
-    ),
-    "teacherPayrollUnderReview": MessageLookupByLibrary.simpleMessage(
-      "قيد التجهيز",
-    ),
-    "teacherPayrollViewReport": MessageLookupByLibrary.simpleMessage(
-      "عرض التقرير",
-    ),
-    "teacherPayrollViewReportReceipt": MessageLookupByLibrary.simpleMessage(
-      "عرض التقرير والإيصال",
-    ),
-    "teacherPayrolls": MessageLookupByLibrary.simpleMessage("رواتب المعلمين"),
-    "teacherRequestAcceptedSuccess": MessageLookupByLibrary.simpleMessage(
-      "تم قبول الطلب وإنشاء الفصل بنجاح",
-    ),
-    "teacherRequestAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
-      "تم قبول هذا الطلب بواسطة معلم آخر",
-    ),
-    "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
-      "تعذر قبول الطلب لأن بيانات تدريس المادة أو الصف تغيرت",
-    ),
-    "teacherSarahName": MessageLookupByLibrary.simpleMessage("أ/ سارة عبدالله"),
-    "teacherSarahShort": MessageLookupByLibrary.simpleMessage("أ/ سارة"),
-    "teacherStepAttachments": MessageLookupByLibrary.simpleMessage(
-      "المرفقات والإقرار",
-    ),
-    "teacherStepEvaluation": MessageLookupByLibrary.simpleMessage("التقييم"),
-    "teacherStepExperience": MessageLookupByLibrary.simpleMessage(
-      "الخبرة العملية",
-    ),
-    "teacherStepPersonalInfo": MessageLookupByLibrary.simpleMessage(
-      "البيانات الشخصية",
-    ),
-    "teacherStepQualification": MessageLookupByLibrary.simpleMessage(
-      "المؤهل العلمي",
-    ),
-    "teacherStepTeachingDetails": MessageLookupByLibrary.simpleMessage(
-      "تفاصيل التدريس",
-    ),
-    "teacherStepTechnicalSkills": MessageLookupByLibrary.simpleMessage(
-      "المهارات التقنية",
-    ),
-    "teacherUnassignedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم إلغاء توظيف المعلم بنجاح",
-    ),
-    "teacherWithdrawalRequestType": MessageLookupByLibrary.simpleMessage(
-      "اعتذار المعلم عن الاستمرار",
-    ),
-    "teachers": MessageLookupByLibrary.simpleMessage("المعلمون"),
-    "teachingInBnan": MessageLookupByLibrary.simpleMessage("التدريس في بنان"),
-    "technicalAppsLevel": MessageLookupByLibrary.simpleMessage(
-      "مستوى استخدام الكمبيوتر",
-    ),
-    "termPlan": MessageLookupByLibrary.simpleMessage("خطة الترم"),
-    "termPlanUploadedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم رفع خطة الترم بنجاح",
-    ),
-    "theRequiredLesson": MessageLookupByLibrary.simpleMessage("الدرس المطلوب"),
-    "theSupervisor": MessageLookupByLibrary.simpleMessage("المشرف"),
-    "thirdTermExercises": MessageLookupByLibrary.simpleMessage(
-      "تمارين الفصل الثالث",
-    ),
-    "threeDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 3 أيام"),
-    "thursday": MessageLookupByLibrary.simpleMessage("الخميس"),
-    "time": MessageLookupByLibrary.simpleMessage("الوقت"),
-    "tipToIncreasePoints": MessageLookupByLibrary.simpleMessage(
-      "نصيحة لزيادة النقاط",
-    ),
-    "to": MessageLookupByLibrary.simpleMessage("إلى"),
-    "today": MessageLookupByLibrary.simpleMessage("اليوم"),
-    "todayAtTime": m35,
-    "todayClasses": MessageLookupByLibrary.simpleMessage("حصص اليوم"),
-    "total": MessageLookupByLibrary.simpleMessage("المجموع"),
-    "totalSessions": MessageLookupByLibrary.simpleMessage("إجمالي الحصص"),
-    "totalStudents": MessageLookupByLibrary.simpleMessage("إجمالي الطلاب"),
-    "trainingHours": m36,
-    "tryAgain": MessageLookupByLibrary.simpleMessage("حاول مرة أخرى"),
-    "tuesday": MessageLookupByLibrary.simpleMessage("الثلاثاء"),
-    "twelveHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 12 ساعة"),
-    "twentyHoursPlan": MessageLookupByLibrary.simpleMessage("باقة الـ 20 ساعة"),
-    "twoDaysAgo": MessageLookupByLibrary.simpleMessage("منذ يومين"),
-    "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة....."),
-    "unableToDownloadFile": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل الملف",
-    ),
-    "unableToLoadAttachment": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل المرفق",
-    ),
-    "unableToLoadSubjects": MessageLookupByLibrary.simpleMessage(
-      "تعذر تحميل المواد الدراسية",
-    ),
-    "unableToOpenAttachment": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح المرفق",
-    ),
-    "unableToOpenDocument": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح المستند",
-    ),
-    "unableToOpenFile": MessageLookupByLibrary.simpleMessage("تعذر فتح الملف"),
-    "unableToOpenLink": MessageLookupByLibrary.simpleMessage("تعذر فتح الرابط"),
-    "unableToOpenPaymentReceipt": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح إيصال الدفع",
-    ),
-    "unableToOpenSessionRecording": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح تسجيل الحصة",
-    ),
-    "unableToOpenWhatsApp": MessageLookupByLibrary.simpleMessage(
-      "تعذر فتح واتساب",
-    ),
-    "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
-    "unexpectedError": MessageLookupByLibrary.simpleMessage(
-      "حدث خطأ غير متوقع",
-    ),
-    "universityOrInstitutionName": MessageLookupByLibrary.simpleMessage(
-      "اسم الجامعة/المؤهل",
-    ),
-    "upcomingLesson": MessageLookupByLibrary.simpleMessage("الحصة القادمة"),
-    "upcomingLessons": MessageLookupByLibrary.simpleMessage("الحصص القادمة"),
-    "upgradePackage": MessageLookupByLibrary.simpleMessage("ترقية الباقة"),
-    "uploadAction": MessageLookupByLibrary.simpleMessage("رفع"),
-    "uploadAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
-    "uploadCertificateFile": MessageLookupByLibrary.simpleMessage(
-      "صورة من الشهادة أو المؤهل (صورة/pdf)",
-    ),
-    "uploadCvFile": MessageLookupByLibrary.simpleMessage(
-      "رفع السيرة الذاتية (pdf)",
-    ),
-    "uploadNationalIdFile": MessageLookupByLibrary.simpleMessage(
-      "صورة بطاقة الرقم القومي/الهوية (صورة/pdf)",
-    ),
-    "uploadPaymentReceipt": MessageLookupByLibrary.simpleMessage(
-      "ارفع صورة الإيصال",
-    ),
-    "uploadReceipt": MessageLookupByLibrary.simpleMessage("رفع الإيصال"),
-    "uploadSchedule": MessageLookupByLibrary.simpleMessage("رفع الجدول"),
-    "uploadStudyPlan": MessageLookupByLibrary.simpleMessage(
-      "رفع الخطة الدراسية",
-    ),
-    "usedDays": m37,
-    "usedHours": m38,
-    "userCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم إنشاء المستخدم بنجاح",
-    ),
-    "userDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم حذف المستخدم بنجاح",
-    ),
-    "userDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المستخدم"),
-    "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
-    "userPasswordUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تحديث كلمة مرور المستخدم بنجاح",
-    ),
-    "userRole": MessageLookupByLibrary.simpleMessage("دور المستخدم"),
-    "userStatusUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تحديث حالة المستخدم بنجاح",
-    ),
-    "userUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
-      "تم تحديث المستخدم بنجاح",
-    ),
-    "usersCount": m39,
-    "usersManagement": MessageLookupByLibrary.simpleMessage("إدارة المستخدمين"),
-    "validIntegerScore": MessageLookupByLibrary.simpleMessage(
-      "أدخل درجة صحيحة بدون كسور",
-    ),
-    "verify": MessageLookupByLibrary.simpleMessage("تحقق"),
-    "verifyAccountTitle": MessageLookupByLibrary.simpleMessage("تفعيل الحساب"),
-    "veryGood": MessageLookupByLibrary.simpleMessage("جيد جدًا"),
-    "view": MessageLookupByLibrary.simpleMessage("عرض"),
-    "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
-    "viewTermPlan": MessageLookupByLibrary.simpleMessage("عرض خطة الترم"),
-    "visibleToCustomers": MessageLookupByLibrary.simpleMessage("ظاهر للعملاء"),
-    "waitingForCorrection": MessageLookupByLibrary.simpleMessage(
-      "بانتظار التصحيح",
-    ),
-    "waitingForReceiptReview": MessageLookupByLibrary.simpleMessage(
-      "بانتظار مراجعة الإيصال",
-    ),
-    "waitingForTeacherApproval": MessageLookupByLibrary.simpleMessage(
-      "بانتظار موافقة المعلم",
-    ),
-    "wallet": MessageLookupByLibrary.simpleMessage("محفظة إلكترونية"),
-    "wednesday": MessageLookupByLibrary.simpleMessage("الأربعاء"),
-    "week": MessageLookupByLibrary.simpleMessage("الأسبوع"),
-    "weekDays": MessageLookupByLibrary.simpleMessage("أيام الأسبوع"),
-    "weekNumber": m40,
-    "weekOne": MessageLookupByLibrary.simpleMessage("الأسبوع الأول"),
-    "weekStart": MessageLookupByLibrary.simpleMessage("بداية الأسبوع"),
-    "weekTwo": MessageLookupByLibrary.simpleMessage("الأسبوع الثاني"),
-    "weeklyEvaluation": MessageLookupByLibrary.simpleMessage(
-      "التقييم الأسبوعي",
-    ),
-    "weeklyEvaluationAddedNotification": MessageLookupByLibrary.simpleMessage(
-      "أضيف تقييم أسبوعي لفصل 4أ",
-    ),
-    "weeklyEvaluationStudentTitle": m41,
-    "weeklyEvaluations": MessageLookupByLibrary.simpleMessage(
-      "التقييمات الأسبوعية",
-    ),
-    "weeklyEvaluationsGulfClassroomConflict":
-        MessageLookupByLibrary.simpleMessage(
-          "توجد مشكلة في إعداد مادة الفصل، يرجى التواصل مع الإدارة",
-        ),
-    "weeklyEvaluationsStudentAccessDenied":
-        MessageLookupByLibrary.simpleMessage("غير مصرح بعرض بيانات هذا الطالب"),
-    "weeklyHours": MessageLookupByLibrary.simpleMessage("الساعات الأسبوعية"),
-    "weeklyIdealStudent": MessageLookupByLibrary.simpleMessage(
-      "الطالب المثالي للأسبوع",
-    ),
-    "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
-      "ترتيب الطلاب المثاليين هذا الأسبوع",
-    ),
-    "weeklyLessons": m42,
-    "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
-    "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),
-    "whatsappNumber": MessageLookupByLibrary.simpleMessage("رقم الواتساب"),
-    "whyJoinBananAcademy": MessageLookupByLibrary.simpleMessage(
-      "لماذا ترغب في الانضمام لأكاديمية بنان؟",
-    ),
-    "withTeacher": MessageLookupByLibrary.simpleMessage("مع أ/ سارة عبدالله"),
-    "years": MessageLookupByLibrary.simpleMessage("سنوات"),
-    "yes": MessageLookupByLibrary.simpleMessage("نعم"),
-    "yesterday": MessageLookupByLibrary.simpleMessage("أمس"),
-  };
+        "Packages": MessageLookupByLibrary.simpleMessage("باقات"),
+        "PackagesandSubscriptions":
+            MessageLookupByLibrary.simpleMessage("الباقات والاشتراكات"),
+        "absence": MessageLookupByLibrary.simpleMessage("غياب"),
+        "absent": MessageLookupByLibrary.simpleMessage("غياب"),
+        "academicPerformanceMessage":
+            MessageLookupByLibrary.simpleMessage("للتميز في الأداء الأكاديمي"),
+        "accept": MessageLookupByLibrary.simpleMessage("قبول"),
+        "acceptRequest": MessageLookupByLibrary.simpleMessage("قبول الطلب"),
+        "acceptStudentRequest":
+            MessageLookupByLibrary.simpleMessage("قبول طلب"),
+        "accountActivatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تفعيل الحساب بنجاح"),
+        "accountVerificationInstructions":
+            MessageLookupByLibrary.simpleMessage(" وأدخل الكود لتفعيل حسابك."),
+        "accountVerifiedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تفعيل حسابك بنجاح"),
+        "activated": MessageLookupByLibrary.simpleMessage("مفعل"),
+        "active": MessageLookupByLibrary.simpleMessage("نشطة"),
+        "active2": MessageLookupByLibrary.simpleMessage("نشط"),
+        "activeGroups":
+            MessageLookupByLibrary.simpleMessage("المجموعات النشطة"),
+        "activeSubscriptions":
+            MessageLookupByLibrary.simpleMessage("اشتراكات نشطة"),
+        "addAction": MessageLookupByLibrary.simpleMessage("إضافة"),
+        "addDailyPlanForStudents":
+            MessageLookupByLibrary.simpleMessage("إضافة خطة يومية للطلاب"),
+        "addDiscountCode":
+            MessageLookupByLibrary.simpleMessage("إضافة كود خصم"),
+        "addLesson": MessageLookupByLibrary.simpleMessage("إضافة حصة"),
+        "addNewChapter": MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
+        "addNewCurriculum":
+            MessageLookupByLibrary.simpleMessage("إضافة منهج جديد"),
+        "addNewEvaluation":
+            MessageLookupByLibrary.simpleMessage("إضافة تقييم جديد"),
+        "addNewGrade": MessageLookupByLibrary.simpleMessage("إضافة صف جديد"),
+        "addNewPackage":
+            MessageLookupByLibrary.simpleMessage("إضافة باقة جديدة"),
+        "addNewPackageTitle":
+            MessageLookupByLibrary.simpleMessage("إضافة باقة جديدة"),
+        "addNewSchedule":
+            MessageLookupByLibrary.simpleMessage("إضافة جدول جديد"),
+        "addNewSemester":
+            MessageLookupByLibrary.simpleMessage("إضافة فصل جديد"),
+        "addNewSubject":
+            MessageLookupByLibrary.simpleMessage("إضافة مادة جديد"),
+        "addNewUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم جديد"),
+        "addRewardPointsDesc": MessageLookupByLibrary.simpleMessage(
+            "يتم احتساب المكافآت بناءً على الأداء"),
+        "addRewardPointsTitle":
+            MessageLookupByLibrary.simpleMessage("إضافة نقاط التميز"),
+        "addScheduleEntry": MessageLookupByLibrary.simpleMessage("إضافة موعد"),
+        "addSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة"),
+        "addSubjectToClassroom":
+            MessageLookupByLibrary.simpleMessage("إضافة مادة لفصل"),
+        "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
+        "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
+        "adminNotes":
+            MessageLookupByLibrary.simpleMessage("ملاحظات الإدارة (اختياري)"),
+        "adminRegistrationRequestsSection":
+            MessageLookupByLibrary.simpleMessage("طلبات تسجيل"),
+        "adminSubjectRequestAmountOptional":
+            MessageLookupByLibrary.simpleMessage("المبلغ (اختياري)"),
+        "adminSubjectRequestApprove":
+            MessageLookupByLibrary.simpleMessage("موافقة"),
+        "adminSubjectRequestApproved":
+            MessageLookupByLibrary.simpleMessage("تمت الموافقة على طلب المادة"),
+        "adminSubjectRequestMethodOptional":
+            MessageLookupByLibrary.simpleMessage("طريقة الدفع (اختياري)"),
+        "adminSubjectRequestPaymentNotes":
+            MessageLookupByLibrary.simpleMessage("ملاحظات الدفع (اختياري)"),
+        "adminSubjectRequestPrice":
+            MessageLookupByLibrary.simpleMessage("السعر"),
+        "adminSubjectRequestReferenceNumber":
+            MessageLookupByLibrary.simpleMessage("رقم المرجع (اختياري)"),
+        "adminSubjectRequestRejectedSuccess":
+            MessageLookupByLibrary.simpleMessage("تم رفض طلب المادة"),
+        "adminSubjectRequestRequestedAt":
+            MessageLookupByLibrary.simpleMessage("تاريخ الطلب"),
+        "adminSubjectRequestsEmpty": MessageLookupByLibrary.simpleMessage(
+            "لا توجد طلبات مواد بهذه الحالة"),
+        "adminSubjectRequestsSection":
+            MessageLookupByLibrary.simpleMessage("طلبات مادة/درس"),
+        "adminSubscriptionRenewals":
+            MessageLookupByLibrary.simpleMessage("طلبات تجديد الاشتراكات"),
+        "adminSupervisors": MessageLookupByLibrary.simpleMessage("مشرفين"),
+        "adminUsers": MessageLookupByLibrary.simpleMessage("مستخدمين"),
+        "algebraCourseCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة إتمام دورة الجبر"),
+        "all": MessageLookupByLibrary.simpleMessage("الكل"),
+        "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
+        "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
+        "allDocuments": MessageLookupByLibrary.simpleMessage("جميع المستندات"),
+        "allGradeSubjectsAddedToClassroom":
+            MessageLookupByLibrary.simpleMessage(
+                "تمت إضافة جميع مواد هذا الصف إلى الفصل"),
+        "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
+        "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
+        "allSubjects": MessageLookupByLibrary.simpleMessage("كل المواد"),
+        "alreadyHaveAccount":
+            MessageLookupByLibrary.simpleMessage("لديك حساب؟ "),
+        "amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
+        "applePay": MessageLookupByLibrary.simpleMessage("أبل باي"),
+        "applyAsTeacher": MessageLookupByLibrary.simpleMessage("التقديم كمعلم"),
+        "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
+            "شارك خبراتك وانضم إلى فريقنا التعليمي"),
+        "approveAccountActivation":
+            MessageLookupByLibrary.simpleMessage("موافقة تفعيل الحساب"),
+        "approveRequest":
+            MessageLookupByLibrary.simpleMessage("الموافقة على الطلب"),
+        "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
+        "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
+        "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
+        "assignStudent": MessageLookupByLibrary.simpleMessage("تعيين طالب"),
+        "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
+        "assignSubjectToClassroom":
+            MessageLookupByLibrary.simpleMessage("برجاء تعيين مادة لهذا الفصل"),
+        "assignSupervisorToClassroom": m0,
+        "assignTeacherInSubject": m1,
+        "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
+            "برجاء تعيين معلم للمادة أولًا"),
+        "assignToClassroom":
+            MessageLookupByLibrary.simpleMessage("توظيف في فصل"),
+        "assignmentAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم توظيف المشرف بنجاح"),
+        "assignmentDescription": MessageLookupByLibrary.simpleMessage("الوصف"),
+        "assignmentNotSubmittedYet":
+            MessageLookupByLibrary.simpleMessage("لم يسلم الواجب بعد"),
+        "assignmentRemovedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إلغاء توظيف المشرف بنجاح"),
+        "assignmentSubmittedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم رفع الواجب بنجاح"),
+        "assignmentTitle": MessageLookupByLibrary.simpleMessage("العنوان"),
+        "assignments": MessageLookupByLibrary.simpleMessage("الواجبات"),
+        "assignmentsEvaluation":
+            MessageLookupByLibrary.simpleMessage("تقييم الواجبات"),
+        "atLeastSixChars":
+            MessageLookupByLibrary.simpleMessage("6 أحرف على الأقل"),
+        "attachedFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
+        "attachment": MessageLookupByLibrary.simpleMessage("المرفق"),
+        "attachmentFile": MessageLookupByLibrary.simpleMessage("ملف مرفق"),
+        "attendance": MessageLookupByLibrary.simpleMessage("الحضور"),
+        "attendanceRate": MessageLookupByLibrary.simpleMessage("نسبة الحضور"),
+        "attendanceRegisteredSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تسجيل الحضور بنجاح"),
+        "attendanceRegistration":
+            MessageLookupByLibrary.simpleMessage("تسجيل الحضور"),
+        "attendanceStudentsTitle": m2,
+        "attendanceUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الحضور بنجاح"),
+        "availability": MessageLookupByLibrary.simpleMessage("الأوقات المتاحة"),
+        "available": MessageLookupByLibrary.simpleMessage("المتاحة"),
+        "availableDay": MessageLookupByLibrary.simpleMessage("اليوم المتاح"),
+        "averagePercent": m3,
+        "back": MessageLookupByLibrary.simpleMessage("رجوع"),
+        "backToLogin":
+            MessageLookupByLibrary.simpleMessage("العودة لتسجيل الدخول"),
+        "bankTransfer": MessageLookupByLibrary.simpleMessage("تحويل بنكي"),
+        "behavior": MessageLookupByLibrary.simpleMessage("السلوك"),
+        "biology": MessageLookupByLibrary.simpleMessage("الأحياء"),
+        "birthDate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
+        "bonusPoints": MessageLookupByLibrary.simpleMessage("النقاط الإضافية"),
+        "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
+        "callStudentAlert":
+            MessageLookupByLibrary.simpleMessage("تنبيه الطالب للحضور"),
+        "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
+            "يمكنك تغيير العملة من القائمة"),
+        "canDemo":
+            MessageLookupByLibrary.simpleMessage("هل يمكن تقديم درس تجريبي؟"),
+        "canProvideTrialLesson":
+            MessageLookupByLibrary.simpleMessage("هل يمكنك تقديم حصة تجريبية؟"),
+        "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
+        "cancelAssignment": MessageLookupByLibrary.simpleMessage("إلغاء توظيف"),
+        "cancelAssignmentMessage": m4,
+        "cancelSubjectRequestType":
+            MessageLookupByLibrary.simpleMessage("إلغاء المادة"),
+        "cancelSupervisorAssignmentQuestion": m5,
+        "cancelTeacherAssignmentQuestion": m6,
+        "cancellationReason":
+            MessageLookupByLibrary.simpleMessage("سبب الإلغاء"),
+        "cancellationRequests":
+            MessageLookupByLibrary.simpleMessage("طلبات الإلغاء"),
+        "cannotAddLessonInPreviousWeek": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة حصة في أسبوع سابق"),
+        "cannotDisplayStudentCertificates":
+            MessageLookupByLibrary.simpleMessage(
+                "لا يمكن عرض شهادات هذا الطالب"),
+        "cardHolderName":
+            MessageLookupByLibrary.simpleMessage("اسم حامل البطاقة"),
+        "cardNumber": MessageLookupByLibrary.simpleMessage("رقم الكارت"),
+        "cash": MessageLookupByLibrary.simpleMessage("كاش"),
+        "certificateAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الشهادة بنجاح"),
+        "certificateDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الشهادة بنجاح"),
+        "certificateFileUnavailable":
+            MessageLookupByLibrary.simpleMessage("ملف الشهادة غير متاح"),
+        "certificateReceived":
+            MessageLookupByLibrary.simpleMessage("حصلت على شهادة شهر مايو"),
+        "certificateSavedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حفظ الشهادة بنجاح"),
+        "certificateUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الشهادة بنجاح"),
+        "certificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
+        "certificatesSentSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إرسال الشهادات بنجاح"),
+        "certificatesWithoutArticle":
+            MessageLookupByLibrary.simpleMessage("شهادات"),
+        "changePassword":
+            MessageLookupByLibrary.simpleMessage("تغيير كلمة المرور"),
+        "changePasswordTitle":
+            MessageLookupByLibrary.simpleMessage("تعديل كلمة المرور"),
+        "changePhoneTitle":
+            MessageLookupByLibrary.simpleMessage("تعديل رقم الهاتف"),
+        "changeRequestApproved": MessageLookupByLibrary.simpleMessage("مقبول"),
+        "changeRequestApprovedSuccess": MessageLookupByLibrary.simpleMessage(
+            "تمت الموافقة على الطلب بنجاح"),
+        "changeRequestPending":
+            MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
+        "changeRequestRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
+        "changeRequestRejectedSuccess":
+            MessageLookupByLibrary.simpleMessage("تم رفض الطلب بنجاح"),
+        "changeRequestSubmitted":
+            MessageLookupByLibrary.simpleMessage("تم إرسال طلبك بنجاح"),
+        "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
+            "لا توجد طلبات إلغاء أو تغيير معلم"),
+        "changeTeacherRequestAlreadyPending":
+            MessageLookupByLibrary.simpleMessage(
+                "لديك طلب تغيير معلم قيد المراجعة بالفعل"),
+        "changeTeacherRequestType":
+            MessageLookupByLibrary.simpleMessage("تغيير المعلم"),
+        "changeUsernameTitle":
+            MessageLookupByLibrary.simpleMessage("تعديل اسم المستخدم"),
+        "chatMsg1": MessageLookupByLibrary.simpleMessage(
+            "أهلا أحمد، كيف الأداء في الواجب الجديد؟"),
+        "chatMsg2": MessageLookupByLibrary.simpleMessage(
+            "تمام أ/ سارة وشكراً على الإنشاء."),
+        "chatMsg3": MessageLookupByLibrary.simpleMessage(
+            "ممتاز، لا تنسى مراجعة الفصل الثالث قبل الحصة."),
+        "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
+        "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
+        "checkYourEmailPrefix":
+            MessageLookupByLibrary.simpleMessage("تحقق من بريدك الإلكتروني "),
+        "chemistry": MessageLookupByLibrary.simpleMessage("الكيمياء"),
+        "child": MessageLookupByLibrary.simpleMessage("الابن"),
+        "children": MessageLookupByLibrary.simpleMessage("الأبناء"),
+        "childrenCount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
+        "childrenDiscount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
+        "childrenSubscriptions":
+            MessageLookupByLibrary.simpleMessage("اشتراكات الأبناء"),
+        "chooseAccountType":
+            MessageLookupByLibrary.simpleMessage("اختر نوع الحساب للمتابعة"),
+        "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
+        "chooseClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
+        "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
+            "اختر المنهج الدراسي المناسب وابدأ رحلة التعليم معنا"),
+        "chooseCurriculumIcon":
+            MessageLookupByLibrary.simpleMessage("اختر أيقونة المنهج"),
+        "chooseCurriculumType":
+            MessageLookupByLibrary.simpleMessage("اختر نوع المنهج"),
+        "chooseFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
+        "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
+        "chooseNewCurriculum":
+            MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "chooseSavedAccount":
+            MessageLookupByLibrary.simpleMessage("اختر حسابًا للمتابعة"),
+        "chooseScheduleImage":
+            MessageLookupByLibrary.simpleMessage("اختر صورة الجدول"),
+        "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
+        "city": MessageLookupByLibrary.simpleMessage("المدينة"),
+        "classDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الفصل"),
+        "classLabel": MessageLookupByLibrary.simpleMessage("الفصول"),
+        "className": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
+        "classNameRequired":
+            MessageLookupByLibrary.simpleMessage("اسم الفصل مطلوب"),
+        "classR": MessageLookupByLibrary.simpleMessage("فصل"),
+        "classRoom": MessageLookupByLibrary.simpleMessage("الفصل"),
+        "classRoomManagement":
+            MessageLookupByLibrary.simpleMessage("إدراة الصفوف"),
+        "classSchedulesManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة جداول الصفوف"),
+        "classes": MessageLookupByLibrary.simpleMessage("الصفوف"),
+        "classesCount": MessageLookupByLibrary.simpleMessage("الحصص"),
+        "classesManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة الفصول"),
+        "classroom": MessageLookupByLibrary.simpleMessage("الفصل"),
+        "classroomRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار الفصل"),
+        "classroomSessionAlreadyActive": MessageLookupByLibrary.simpleMessage(
+            "توجد حصة نشطة بالفعل لهذا الفصل"),
+        "classroomZoomNotConfigured": MessageLookupByLibrary.simpleMessage(
+            "إعداد Zoom غير مكتمل لهذا الفصل"),
+        "classrooms": MessageLookupByLibrary.simpleMessage("الفصول"),
+        "close": MessageLookupByLibrary.simpleMessage("إغلاق"),
+        "closePreview": MessageLookupByLibrary.simpleMessage("إغلاق المعاينة"),
+        "completed": MessageLookupByLibrary.simpleMessage("مكتمل"),
+        "completedSessions":
+            MessageLookupByLibrary.simpleMessage("الحصص المكتملة"),
+        "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
+        "confirmDelete": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد أنك تريد الحذف؟"),
+        "confirmNewPassword":
+            MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
+        "confirmPasswordCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+            "تأكيد كلمة المرور لا يمكن أن يكون فارغًا."),
+        "confirmPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
+        "confirmRequest": MessageLookupByLibrary.simpleMessage("تأكيد الطلب"),
+        "congrats": MessageLookupByLibrary.simpleMessage("مبروك"),
+        "congratsThisMonth":
+            MessageLookupByLibrary.simpleMessage("إتقان هذا الشهر"),
+        "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
+        "contactUs": MessageLookupByLibrary.simpleMessage("تواصل معنا"),
+        "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
+        "copiedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم النسخ بنجاح"),
+        "correctAssignment":
+            MessageLookupByLibrary.simpleMessage("تصحيح الواجب"),
+        "country": MessageLookupByLibrary.simpleMessage("الدولة"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+        "createAssignment":
+            MessageLookupByLibrary.simpleMessage("إنشاء الواجب"),
+        "createNewAccount":
+            MessageLookupByLibrary.simpleMessage("إنشاء حساب جديد"),
+        "createNewAssignment":
+            MessageLookupByLibrary.simpleMessage("إنشاء واجب جديد"),
+        "creditCard": MessageLookupByLibrary.simpleMessage("بطاقة إئتمانية"),
+        "currency": MessageLookupByLibrary.simpleMessage("العملة:"),
+        "currencyRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار العملة"),
+        "currentMonth": MessageLookupByLibrary.simpleMessage("الشهر الحالي"),
+        "currentPrice": m7,
+        "currentProfits":
+            MessageLookupByLibrary.simpleMessage("الأرباح الحالية"),
+        "curricula": MessageLookupByLibrary.simpleMessage("المناهج"),
+        "curriculum": MessageLookupByLibrary.simpleMessage("المنهج"),
+        "curriculumDescription":
+            MessageLookupByLibrary.simpleMessage("وصف المنهج"),
+        "curriculumIcon": MessageLookupByLibrary.simpleMessage("صورة المنهج"),
+        "curriculumName": MessageLookupByLibrary.simpleMessage("اسم المنهج"),
+        "curriculumRequired":
+            MessageLookupByLibrary.simpleMessage("المنهج مطلوب"),
+        "curriculumSelection":
+            MessageLookupByLibrary.simpleMessage("اختيار المنهج"),
+        "curriculums": MessageLookupByLibrary.simpleMessage("المناهج"),
+        "cv": MessageLookupByLibrary.simpleMessage("CV"),
+        "cvUnavailable": MessageLookupByLibrary.simpleMessage(
+            "رابط السيرة الذاتية غير متاح"),
+        "cvv": MessageLookupByLibrary.simpleMessage("رمز التحقق CVV"),
+        "dailyPlanAlreadyUploaded": MessageLookupByLibrary.simpleMessage(
+            "الخطة مرفوعة بالفعل لهذا اليوم."),
+        "dailyPlanCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تمت إضافة الخطة اليومية بنجاح"),
+        "dailyPlansTitle":
+            MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
+        "dailyProfits": MessageLookupByLibrary.simpleMessage("الأرباح اليومية"),
+        "dashboard": MessageLookupByLibrary.simpleMessage("الرئيسية"),
+        "dashboardPassword": MessageLookupByLibrary.simpleMessage(
+            "كلمة المرور للدخول على الداشبورد"),
+        "date": MessageLookupByLibrary.simpleMessage("التاريخ"),
+        "dateFormatHint": MessageLookupByLibrary.simpleMessage("mm/dd/yy"),
+        "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("مدة محددة"),
+        "day": MessageLookupByLibrary.simpleMessage("يوم"),
+        "days": MessageLookupByLibrary.simpleMessage("أيام"),
+        "daysPackage": m8,
+        "deductionsDesc":
+            MessageLookupByLibrary.simpleMessage("الغياب أو التأخير"),
+        "deductionsTitle":
+            MessageLookupByLibrary.simpleMessage("خصم أي استقطاعات"),
+        "degree": MessageLookupByLibrary.simpleMessage("الدرجة"),
+        "delete": MessageLookupByLibrary.simpleMessage("حذف"),
+        "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
+        "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف هذا الواجب؟"),
+        "deleteDiscountCode":
+            MessageLookupByLibrary.simpleMessage("حذف كود الخصم"),
+        "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف كود الخصم؟"),
+        "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
+        "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد أنك تريد حذف الصف"),
+        "deleteMessageQuestion":
+            MessageLookupByLibrary.simpleMessage("هل تريد حذف هذه الرسالة؟"),
+        "deletePackage": MessageLookupByLibrary.simpleMessage("حذف الباقة"),
+        "deletePackageConfirmation":
+            MessageLookupByLibrary.simpleMessage("هل تريد حذف هذه الباقة؟"),
+        "deleteSchedule": MessageLookupByLibrary.simpleMessage("حذف الجدول"),
+        "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف هذا الجدول؟"),
+        "deleteSelectedMessagesQuestion": MessageLookupByLibrary.simpleMessage(
+            "هل تريد حذف الرسائل المحددة؟"),
+        "deletedMessage":
+            MessageLookupByLibrary.simpleMessage("تم حذف هذه الرسالة"),
+        "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
+        "desiredSubjects":
+            MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
+        "details": MessageLookupByLibrary.simpleMessage("التفاصيل"),
+        "disable": MessageLookupByLibrary.simpleMessage("تعطيل"),
+        "disableAccount": MessageLookupByLibrary.simpleMessage("تعطيل الحساب"),
+        "disableAccountConfirmation":
+            MessageLookupByLibrary.simpleMessage("هل تريد تعطيل هذا الحساب؟"),
+        "disableUserDescription": MessageLookupByLibrary.simpleMessage(
+            "لن يستطيع الدخول حتى تقوم بتفعيله."),
+        "disableUserQuestion": m9,
+        "discountAmount": MessageLookupByLibrary.simpleMessage("الخصم"),
+        "discountCode": MessageLookupByLibrary.simpleMessage("كود الخصم"),
+        "discountCodeCreated":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة كود الخصم بنجاح"),
+        "discountCodeDeleted":
+            MessageLookupByLibrary.simpleMessage("تم حذف كود الخصم بنجاح"),
+        "discountCodeRequired":
+            MessageLookupByLibrary.simpleMessage("كود الخصم مطلوب"),
+        "discountCodeUpdated":
+            MessageLookupByLibrary.simpleMessage("تم تعديل كود الخصم بنجاح"),
+        "discountCodes": MessageLookupByLibrary.simpleMessage("أكواد الخصم"),
+        "discountDatesRequired": MessageLookupByLibrary.simpleMessage(
+            "تاريخ البداية والنهاية مطلوبان"),
+        "discountEndBeforeStart": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية"),
+        "discountPercentage":
+            MessageLookupByLibrary.simpleMessage("النسبة المئوية"),
+        "discountTitle": MessageLookupByLibrary.simpleMessage("عنوان الخصم"),
+        "discountTitleHint":
+            MessageLookupByLibrary.simpleMessage("مثال: وفر 120 ر.س"),
+        "discountType": MessageLookupByLibrary.simpleMessage("النوع"),
+        "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
+        "doNotHaveAccount":
+            MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
+        "done": MessageLookupByLibrary.simpleMessage("تم"),
+        "download": MessageLookupByLibrary.simpleMessage("تحميل"),
+        "downloadPdf": MessageLookupByLibrary.simpleMessage("تحميل PDF"),
+        "dueFriday": MessageLookupByLibrary.simpleMessage("حتى الجمعة"),
+        "dueSunday": MessageLookupByLibrary.simpleMessage("حتى الأحد"),
+        "dues": MessageLookupByLibrary.simpleMessage("المستحقات"),
+        "duplicateScheduleDay": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة أكثر من موعد لنفس اليوم"),
+        "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
+        "editAttendance": MessageLookupByLibrary.simpleMessage("تعديل الحضور"),
+        "editCertificate":
+            MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
+        "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
+        "editCurriculum": MessageLookupByLibrary.simpleMessage("تعديل المنهج"),
+        "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
+        "editDiscountCode":
+            MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
+        "editEvaluation": MessageLookupByLibrary.simpleMessage("تعديل التقييم"),
+        "editGrade": MessageLookupByLibrary.simpleMessage("تعديل الدرجة"),
+        "editLesson": MessageLookupByLibrary.simpleMessage("تعديل الحصة"),
+        "editPackage": MessageLookupByLibrary.simpleMessage("تعديل الباقة"),
+        "editScheduleEntry":
+            MessageLookupByLibrary.simpleMessage("تعديل الموعد"),
+        "editSubject": MessageLookupByLibrary.simpleMessage("تعديل المادة"),
+        "egpCurrency": MessageLookupByLibrary.simpleMessage("جنيه مصري (ج.م)"),
+        "egpShort": MessageLookupByLibrary.simpleMessage("ج.م"),
+        "egyptian": MessageLookupByLibrary.simpleMessage("مصري"),
+        "egyptianCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج المصري"),
+        "egyptianCurriculumDesc": MessageLookupByLibrary.simpleMessage(
+            "تعليم متكامل للصفوف الابتدائية والإعدادية والثانوية وفق المنهج المصري الحديث."),
+        "egyptianDepartment":
+            MessageLookupByLibrary.simpleMessage("القسم المصري"),
+        "egyptianPound": MessageLookupByLibrary.simpleMessage("الجنيه المصري"),
+        "egyptianRenewalRequestSubmitted": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التجديد بنجاح وهو الآن قيد مراجعة الإدارة"),
+        "egyptianStudentRegistrationSuccessMessage":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إرسال طلب التسجيل بنجاح، وسيتم مراجعته من الإدارة. يمكنك تسجيل الدخول بعد قبول الطلب."),
+        "eightHoursPlan":
+            MessageLookupByLibrary.simpleMessage("باقة الـ 8 ساعات"),
+        "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+        "emailAddress":
+            MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+        "emailCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+            "البريد الإلكتروني لا يمكن أن يكون فارغًا."),
+        "emailRequired": MessageLookupByLibrary.simpleMessage(
+            "يرجى إدخال البريد الإلكتروني"),
+        "emiratiCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج الإماراتي"),
+        "emptyLesson": MessageLookupByLibrary.simpleMessage("حصة فارغة"),
+        "enableAccount": MessageLookupByLibrary.simpleMessage("فك التعطيل"),
+        "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل تريد فك تعطيل هذا الحساب؟"),
+        "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
+        "endSession": MessageLookupByLibrary.simpleMessage("إنهاء الحصة"),
+        "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
+        "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
+        "enterDiscountCode":
+            MessageLookupByLibrary.simpleMessage("أدخل كود الخصم"),
+        "errorBadCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة SSL غير موثوقة."),
+        "errorBadRequest":
+            MessageLookupByLibrary.simpleMessage("طلب غير صالح."),
+        "errorCancel": MessageLookupByLibrary.simpleMessage("تم إلغاء الطلب."),
+        "errorConnectionTimeout":
+            MessageLookupByLibrary.simpleMessage("انتهت مهلة الاتصال بالخادم."),
+        "errorForbidden":
+            MessageLookupByLibrary.simpleMessage("تم رفض الوصول."),
+        "errorInternalServer":
+            MessageLookupByLibrary.simpleMessage("خطأ داخلي في الخادم."),
+        "errorNoInternet":
+            MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت."),
+        "errorNotFound":
+            MessageLookupByLibrary.simpleMessage("العنصر غير موجود."),
+        "errorReceiveTimeout":
+            MessageLookupByLibrary.simpleMessage("انتهت مهلة استلام البيانات."),
+        "errorSendTimeout":
+            MessageLookupByLibrary.simpleMessage("انتهت مهلة إرسال البيانات."),
+        "errorUnauthorized":
+            MessageLookupByLibrary.simpleMessage("انتهت صلاحية الجلسة."),
+        "errorUnknown":
+            MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع."),
+        "errorUnknownStatusCode": m10,
+        "errorValidation": MessageLookupByLibrary.simpleMessage(
+            "يرجى مراجعة البيانات المُدخلة والمحاولة مرة أخرى."),
+        "evaluationAbsent": MessageLookupByLibrary.simpleMessage("غائب"),
+        "evaluationAcceptable": MessageLookupByLibrary.simpleMessage("مقبول"),
+        "evaluationEvaluated":
+            MessageLookupByLibrary.simpleMessage("تم التقييم"),
+        "evaluationExcused": MessageLookupByLibrary.simpleMessage("غياب بعذر"),
+        "evaluationLate": MessageLookupByLibrary.simpleMessage("متأخر"),
+        "evaluationNotEvaluated":
+            MessageLookupByLibrary.simpleMessage("لم يتم التقييم"),
+        "evaluationPresent": MessageLookupByLibrary.simpleMessage("حاضر"),
+        "evaluationSavedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حفظ التقييم بنجاح"),
+        "evaluationStatusUnavailable":
+            MessageLookupByLibrary.simpleMessage("حالة التقييم غير متاحة"),
+        "evaluationWeak": MessageLookupByLibrary.simpleMessage("ضعيف"),
+        "evaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
+        "excellencePoints": MessageLookupByLibrary.simpleMessage("نقاط التميز"),
+        "excellent": MessageLookupByLibrary.simpleMessage("ممتاز"),
+        "excellentTeacher":
+            MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
+        "expected": MessageLookupByLibrary.simpleMessage("المتوقع"),
+        "expenses": MessageLookupByLibrary.simpleMessage("المصاريف"),
+        "experience": MessageLookupByLibrary.simpleMessage("الخبرة"),
+        "expiredSubscriptions":
+            MessageLookupByLibrary.simpleMessage("اشتراكات منتهية"),
+        "expiryDate": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
+        "failedToCopy": MessageLookupByLibrary.simpleMessage("تعذر النسخ"),
+        "failedToLoadAttendance":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل بيانات الحضور"),
+        "failedToOpenCv":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح السيرة الذاتية"),
+        "fieldIsRequired": m11,
+        "fieldRequired":
+            MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
+        "fileDownloadStarted":
+            MessageLookupByLibrary.simpleMessage("تم فتح ملف الواجب"),
+        "fileDownloadedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تحميل الملف بنجاح"),
+        "fileSavedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حفظ الملف بنجاح"),
+        "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
+            "يرجى ملء جميع الحقول المطلوبة."),
+        "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي"),
+        "finalDelete": MessageLookupByLibrary.simpleMessage("حذف نهائي"),
+        "finalDeleteDescription": MessageLookupByLibrary.simpleMessage(
+            "سيتم حذف هذا الحساب نهائيًا من النظام، بما في ذلك حساب الدخول وملف البيانات المرتبط به. لا يمكن التراجع عن هذا الإجراء."),
+        "finalDeleteUser":
+            MessageLookupByLibrary.simpleMessage("حذف نهائي للمستخدم"),
+        "finished": MessageLookupByLibrary.simpleMessage("منتهي"),
+        "firstPrimaryClassroom":
+            MessageLookupByLibrary.simpleMessage("الصف الأول الابتدائي"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+        "forgotPasswordSubtitle": MessageLookupByLibrary.simpleMessage(
+            "أدخل بريدك الإلكتروني وسنرسل لك كود إعادة التعيين"),
+        "forgotPasswordTitle":
+            MessageLookupByLibrary.simpleMessage("استعادة كلمة المرور"),
+        "fourDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 4 أيام"),
+        "fourHoursPlan":
+            MessageLookupByLibrary.simpleMessage("باقة الـ 4 ساعات"),
+        "fourthPrimaryClassroom":
+            MessageLookupByLibrary.simpleMessage("الصف الرابع الابتدائي"),
+        "friday": MessageLookupByLibrary.simpleMessage("الجمعة"),
+        "from": MessageLookupByLibrary.simpleMessage("من"),
+        "fullName": MessageLookupByLibrary.simpleMessage("الاسم بالكامل"),
+        "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن اختيار تاريخ مستقبلي"),
+        "generalTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة شكر وتقدير"),
+        "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
+        "good": MessageLookupByLibrary.simpleMessage("جيد"),
+        "grade": MessageLookupByLibrary.simpleMessage("الصف"),
+        "gradeAndAssignScore":
+            MessageLookupByLibrary.simpleMessage("تصحيح ووضع الدرجة"),
+        "gradeLabel": m12,
+        "gradeLevel": MessageLookupByLibrary.simpleMessage("المرحلة الدراسية"),
+        "gradeName": MessageLookupByLibrary.simpleMessage("اسم الصف"),
+        "gradeRequired": MessageLookupByLibrary.simpleMessage("الصف مطلوب"),
+        "graded": MessageLookupByLibrary.simpleMessage("مصحح"),
+        "gradesCount": m13,
+        "graduationGrade": MessageLookupByLibrary.simpleMessage("التقدير"),
+        "graduationYear": MessageLookupByLibrary.simpleMessage("سنة التخرج"),
+        "groupCreatedByYou":
+            MessageLookupByLibrary.simpleMessage("تم إنشاء المجموعة، ابدأ بكم"),
+        "groups": MessageLookupByLibrary.simpleMessage("المجموعات"),
+        "gulfClassroomSubjectUnavailable": MessageLookupByLibrary.simpleMessage(
+            "بيانات مادة الفصل تحتاج إلى مراجعة الإدارة"),
+        "gulfCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج الخليجي"),
+        "gulfScheduleEntryAdded":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الموعد"),
+        "gulfScheduleEntryDeleted":
+            MessageLookupByLibrary.simpleMessage("تم حذف الموعد"),
+        "gulfScheduleEntryUpdated":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الموعد"),
+        "gulfScheduleLoadFailed":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل الجدول"),
+        "hasClearMic":
+            MessageLookupByLibrary.simpleMessage("هل لديك مايك واضح؟"),
+        "hasGoodCamera":
+            MessageLookupByLibrary.simpleMessage("هل لديك كاميرا جيدة؟"),
+        "hasLaptopOrComputer":
+            MessageLookupByLibrary.simpleMessage("هل لديك لاب توب أو كمبيوتر؟"),
+        "hasStableInternet":
+            MessageLookupByLibrary.simpleMessage("هل لديك إنترنت مستقر؟"),
+        "hasTeachingExperience":
+            MessageLookupByLibrary.simpleMessage("هل لديك خبرة في التدريس؟"),
+        "hireTeachers": MessageLookupByLibrary.simpleMessage("توظيف المعلمين"),
+        "home": MessageLookupByLibrary.simpleMessage("الرئيسية"),
+        "homeworkLabel": MessageLookupByLibrary.simpleMessage("الواجب"),
+        "hourlyRate": MessageLookupByLibrary.simpleMessage("سعر الساعة(ر.س)"),
+        "hourlyRateMustBeNumber":
+            MessageLookupByLibrary.simpleMessage("سعر الساعة يجب أن يكون رقم"),
+        "hourlyRateRequired":
+            MessageLookupByLibrary.simpleMessage("سعر الساعة مطلوب"),
+        "hoursPackage": m14,
+        "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
+            "كيف تتعامل مع طالب ضعيف المستوى؟"),
+        "idealSupervisor":
+            MessageLookupByLibrary.simpleMessage("المشرف المثالي"),
+        "idealSupervisorCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة المشرف المثالي"),
+        "idealSupervisorCertificateAlreadyExists":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إصدار شهادة المشرف المثالي لهذا الشهر بالفعل"),
+        "idealSupervisorIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إصدار شهادة المشرف المثالي بنجاح"),
+        "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
+        "idealTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
+        "idealTeacherIssuedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم إصدار شهادة المعلم المثالي بنجاح"),
+        "inactive": MessageLookupByLibrary.simpleMessage("غير نشطة"),
+        "instapay": MessageLookupByLibrary.simpleMessage("إنستاباي"),
+        "interaction": MessageLookupByLibrary.simpleMessage("التفاعل"),
+        "interactionAppreciationCertificate":
+            MessageLookupByLibrary.simpleMessage("شكر وتقدير - التفاعل"),
+        "interactionLevel":
+            MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
+        "internetConnectionFailedRetry": MessageLookupByLibrary.simpleMessage(
+            "تعذر الاتصال بالإنترنت، حاول مرة أخرى"),
+        "invalidCertificateRecipient":
+            MessageLookupByLibrary.simpleMessage("الحساب المحدد ليس مشرفًا"),
+        "invalidChildrenCount":
+            MessageLookupByLibrary.simpleMessage("أدخل عدد أبناء موجبًا"),
+        "invalidCvUrl": MessageLookupByLibrary.simpleMessage(
+            "رابط السيرة الذاتية غير صالح"),
+        "invalidData": MessageLookupByLibrary.simpleMessage(
+            "يرجى التأكد من البيانات المدخلة"),
+        "invalidDiscountPercentage":
+            MessageLookupByLibrary.simpleMessage("أدخل نسبة مئوية صحيحة"),
+        "invalidEmail": MessageLookupByLibrary.simpleMessage(
+            "الرجاء إدخال عنوان بريد إلكتروني صالح."),
+        "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
+            "النقاط الإضافية يجب أن تكون من 0 إلى 5"),
+        "invalidIdealSupervisorSelection": MessageLookupByLibrary.simpleMessage(
+            "اختر مشرفًا صالحًا واحدًا على الأقل"),
+        "invalidLink": MessageLookupByLibrary.simpleMessage("رابط غير صالح"),
+        "invalidPackage":
+            MessageLookupByLibrary.simpleMessage("بيانات الباقة غير صالحة"),
+        "invalidPaymentAmount": MessageLookupByLibrary.simpleMessage(
+            "أدخل مبلغًا صحيحًا لا يقل عن 0.01"),
+        "invalidPhoneNumber":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم هاتف صحيح"),
+        "isActive": MessageLookupByLibrary.simpleMessage("نشط"),
+        "issueCertificate":
+            MessageLookupByLibrary.simpleMessage("إصدار الشهادة"),
+        "issueNewCertificate":
+            MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
+        "joinSession": MessageLookupByLibrary.simpleMessage("دخول الحصة"),
+        "joinSubjectNotInSubscription": MessageLookupByLibrary.simpleMessage(
+            "اشتراكك الحالي لا يشمل هذه المادة"),
+        "joinSubscriptionExpired": MessageLookupByLibrary.simpleMessage(
+            "انتهى اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة"),
+        "joinSubscriptionHoursExhausted": MessageLookupByLibrary.simpleMessage(
+            "نفدت ساعات اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة"),
+        "kuwaitiCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج الكويتي"),
+        "languageArabic": MessageLookupByLibrary.simpleMessage("العربية"),
+        "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
+        "lastSixMonths": MessageLookupByLibrary.simpleMessage("آخر ٦ شهور"),
+        "latestEarnedPoints":
+            MessageLookupByLibrary.simpleMessage("آخر النقاط المكتسبة"),
+        "lessonDate": MessageLookupByLibrary.simpleMessage("تاريخ الحصة"),
+        "lessonEndTimeMustBeAfterStart": MessageLookupByLibrary.simpleMessage(
+            "وقت نهاية الحصة يجب أن يكون بعد وقت البداية"),
+        "lessonLabel": MessageLookupByLibrary.simpleMessage("الدرس"),
+        "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
+            "حصة الرياضيات تبدأ خلال 15 د"),
+        "lessons": MessageLookupByLibrary.simpleMessage("حصة"),
+        "lessonsManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة الحصص"),
+        "lightAndShadowExperiment":
+            MessageLookupByLibrary.simpleMessage("تجربة الضوء والظل"),
+        "loading": MessageLookupByLibrary.simpleMessage("جاري التحميل..."),
+        "loadingClassrooms":
+            MessageLookupByLibrary.simpleMessage("جاري تحميل الفصول"),
+        "loadingStudents":
+            MessageLookupByLibrary.simpleMessage("جاري تحميل الطلاب"),
+        "login": MessageLookupByLibrary.simpleMessage("تسجيل دخول"),
+        "loginNow": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+        "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
+            "سجل دخولك للوصول إلى لوحة التحكم"),
+        "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
+        "loginWithAnotherAccount":
+            MessageLookupByLibrary.simpleMessage("تسجيل الدخول بحساب آخر"),
+        "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
+        "logoutSuccess":
+            MessageLookupByLibrary.simpleMessage("تم تسجيل الخروج بنجاح"),
+        "major": MessageLookupByLibrary.simpleMessage("التخصص العلمي"),
+        "manageStudentsAndClasses":
+            MessageLookupByLibrary.simpleMessage("إدارة الفصول والطلاب"),
+        "manualPaymentConfirmation":
+            MessageLookupByLibrary.simpleMessage("تأكيد الدفع يدوياً"),
+        "manualTransferReviewPending":
+            MessageLookupByLibrary.simpleMessage("بانتظار مراجعة الإيصال يدوي"),
+        "march2026": MessageLookupByLibrary.simpleMessage("مارس 2026"),
+        "markAllNotificationsRead":
+            MessageLookupByLibrary.simpleMessage("تحديد الكل كمقروء"),
+        "markAsRead": MessageLookupByLibrary.simpleMessage("تمييز كمقروءة"),
+        "materialsManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة المواد"),
+        "math": MessageLookupByLibrary.simpleMessage("الرياضيات"),
+        "mathShort": MessageLookupByLibrary.simpleMessage("رياضيات"),
+        "mathTeacherSarah":
+            MessageLookupByLibrary.simpleMessage("الرياضيات . أ/سارة عبدالله"),
+        "mayCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة شهر مايو"),
+        "meetingLinkOptional":
+            MessageLookupByLibrary.simpleMessage("رابط الاجتماع (اختياري)"),
+        "messageDocuments":
+            MessageLookupByLibrary.simpleMessage("مستندات الرسائل"),
+        "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
+        "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
+        "month": MessageLookupByLibrary.simpleMessage("الشهر"),
+        "monthlyCertificateTitle": m15,
+        "monthlyPackage": MessageLookupByLibrary.simpleMessage("باقة شهرية"),
+        "monthlyProfits":
+            MessageLookupByLibrary.simpleMessage("الأرباح الشهرية"),
+        "monthlyRevenue": MessageLookupByLibrary.simpleMessage("إيرادات الشهر"),
+        "mostPopular": MessageLookupByLibrary.simpleMessage("الأكثر طلباً"),
+        "moveToReview": MessageLookupByLibrary.simpleMessage("نقل للمراجعة"),
+        "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
+        "myGroups": MessageLookupByLibrary.simpleMessage("مجموعاتي"),
+        "myPerformance": MessageLookupByLibrary.simpleMessage("أدائي"),
+        "myRequests": MessageLookupByLibrary.simpleMessage("طلباتي"),
+        "name": MessageLookupByLibrary.simpleMessage("الاسم"),
+        "nameCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+            "الاسم لا يمكن أن يكون فارغًا."),
+        "nameMinLength": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يحتوي الاسم على 3 أحرف على الأقل."),
+        "nationality": MessageLookupByLibrary.simpleMessage("الجنسية"),
+        "net": MessageLookupByLibrary.simpleMessage("الصافي"),
+        "netAmount": MessageLookupByLibrary.simpleMessage("الصافي"),
+        "newAssignmentUploaded":
+            MessageLookupByLibrary.simpleMessage("تم رفع واجب جديد"),
+        "newBadge": MessageLookupByLibrary.simpleMessage("جديد"),
+        "newCertificate": MessageLookupByLibrary.simpleMessage("شهادة تقدير"),
+        "newClassMessageNotification":
+            MessageLookupByLibrary.simpleMessage("رسالة جديدة من الصف الرابع"),
+        "newCustomer": MessageLookupByLibrary.simpleMessage("عميل جديد"),
+        "newMessage":
+            MessageLookupByLibrary.simpleMessage("رسالة جديدة من أ/ سارة"),
+        "newMessages": MessageLookupByLibrary.simpleMessage("رسائل جديدة"),
+        "newPassword":
+            MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
+        "newPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
+        "newPrice": MessageLookupByLibrary.simpleMessage("السعر الجديد"),
+        "newPriceInvalid": MessageLookupByLibrary.simpleMessage(
+            "يرجى إدخال السعر الجديد بشكل صحيح"),
+        "newPriceMustBeLessThanOldPrice": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يكون السعر الجديد أقل من أو يساوي السعر القديم"),
+        "newRating":
+            MessageLookupByLibrary.simpleMessage("تقييم أسبوعي جديد لأحمد"),
+        "newWeeklyEvaluation":
+            MessageLookupByLibrary.simpleMessage("تقييم أسبوعي جديد"),
+        "next": MessageLookupByLibrary.simpleMessage("التالي"),
+        "nextLevelPointsText": m16,
+        "nextSteps": MessageLookupByLibrary.simpleMessage("الخطوات التالية"),
+        "no": MessageLookupByLibrary.simpleMessage("لا"),
+        "noActiveAccountsFound":
+            MessageLookupByLibrary.simpleMessage("لا توجد حسابات مفعلة"),
+        "noActiveSessionNow":
+            MessageLookupByLibrary.simpleMessage("لا توجد حصة مباشرة الآن"),
+        "noAssignedSubjectsForClassroom": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد مسندة لك في هذا الفصل"),
+        "noAssignmentsYet":
+            MessageLookupByLibrary.simpleMessage("لا توجد واجبات حالياً"),
+        "noAssignmentsYetSubtitle": MessageLookupByLibrary.simpleMessage(
+            "عند إضافة واجبات جديدة ستظهر في هذه الصفحة."),
+        "noAvailableClassrooms":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
+        "noCertificatesAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد شهادات متاحة حتى الآن"),
+        "noCertificatesForStudent":
+            MessageLookupByLibrary.simpleMessage("لا توجد شهادات لهذا الطالب"),
+        "noChildrenAvailable":
+            MessageLookupByLibrary.simpleMessage("لا يوجد أبناء متاحون"),
+        "noChildrenLinked": MessageLookupByLibrary.simpleMessage(
+            "لا يوجد أبناء مرتبطون بهذا الحساب"),
+        "noClassroomsAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول متاحة"),
+        "noClassroomsAvailableForGrade":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول لهذا الصف"),
+        "noCompletedAssignments":
+            MessageLookupByLibrary.simpleMessage("لا توجد واجبات مكتملة"),
+        "noCompletedAssignmentsSubtitle":
+            MessageLookupByLibrary.simpleMessage("عند حل الواجبات ستظهر هنا."),
+        "noCurriculumsAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد مناهج متاحة"),
+        "noCurriculumsFound":
+            MessageLookupByLibrary.simpleMessage("لا توجد مناهج"),
+        "noDataAvailable":
+            MessageLookupByLibrary.simpleMessage("لا يوجد معلومات حاليا"),
+        "noDiscountCodes":
+            MessageLookupByLibrary.simpleMessage("لا توجد أكواد خصم"),
+        "noEvaluationForStudent":
+            MessageLookupByLibrary.simpleMessage("لا يوجد تقييم لهذا الطالب"),
+        "noEvaluationRecordedThisWeek": MessageLookupByLibrary.simpleMessage(
+            "لم يتم تسجيل تقييم لهذا الأسبوع"),
+        "noEvaluationWeeksAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد أسابيع متاحة للتقييم"),
+        "noGradesAvailableForCurriculum":
+            MessageLookupByLibrary.simpleMessage("لا توجد صفوف لهذا المنهج"),
+        "noGroupsYet":
+            MessageLookupByLibrary.simpleMessage("لا توجد مجموعات حالياً"),
+        "noGroupsYetSubtitle": MessageLookupByLibrary.simpleMessage(
+            "عند الانضمام إلى مجموعة أو إرسال طلب جديد ستظهر هنا."),
+        "noGulfClassroomsAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد فصول خليجية متاحة"),
+        "noInactiveAccountsFound":
+            MessageLookupByLibrary.simpleMessage("لا توجد حسابات غير مفعلة"),
+        "noInternetConnection":
+            MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت"),
+        "noLessonsAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد حصص متاحة"),
+        "noLessonsForSelectedDay":
+            MessageLookupByLibrary.simpleMessage("لا توجد حصص في اليوم المحدد"),
+        "noMessageDocumentsAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مستندات في الرسائل حتى الآن"),
+        "noNewRegistrationRequests": MessageLookupByLibrary.simpleMessage(
+            "لا توجد طلبات تسجيل جديدة حاليًا"),
+        "noNotifications":
+            MessageLookupByLibrary.simpleMessage("لا توجد إشعارات"),
+        "noNotificationsYet":
+            MessageLookupByLibrary.simpleMessage("لا توجد إشعارات حتى الآن"),
+        "noPendingAssignments":
+            MessageLookupByLibrary.simpleMessage("لا توجد واجبات قيد الانتظار"),
+        "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
+            "كل الواجبات الحالية تم حلها أو لا توجد واجبات جديدة بعد."),
+        "noPlansAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد خطط متاحة"),
+        "noPlansForWeek":
+            MessageLookupByLibrary.simpleMessage("لا توجد خطط لهذا الأسبوع"),
+        "noRecordingsAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد تسجيلات متاحة حتى الآن"),
+        "noRegisteredChildren":
+            MessageLookupByLibrary.simpleMessage("لا يوجد أبناء مسجلون"),
+        "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد تقارير متاحة حتى الآن"),
+        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
+            "لا توجد حسابات محفوظة على هذا الجهاز"),
+        "noSchedule": MessageLookupByLibrary.simpleMessage("لا يوجد جدول"),
+        "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
+            "لم تتم إضافة مواعيد لهذا الفصل بعد"),
+        "noScheduleForWeek":
+            MessageLookupByLibrary.simpleMessage("لا يوجد جدول لهذا الأسبوع"),
+        "noScheduledLessonForDay": MessageLookupByLibrary.simpleMessage(
+            "لا توجد حصة مجدولة في هذا اليوم"),
+        "noStudentWithThisName":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طالب بهذا الاسم"),
+        "noStudentsInClass":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الفصل"),
+        "noStudentsInClassroom":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الفصل"),
+        "noStudyWeeksAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد أسابيع دراسية متاحة لهذا الفصل"),
+        "noSubjectEvaluationRecordedThisWeek":
+            MessageLookupByLibrary.simpleMessage(
+                "لم يتم تسجيل تقييم لهذه المادة في هذا الأسبوع"),
+        "noSubjectsAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد متاحة لهذا الصف"),
+        "noSubjectsAvailableForClassroom":
+            MessageLookupByLibrary.simpleMessage("لا توجد مواد لهذا الفصل"),
+        "noSubjectsAvailableForTeacherStudent":
+            MessageLookupByLibrary.simpleMessage(
+                "لا توجد مواد متاحة لك لهذا الطالب"),
+        "noSubjectsAvailableReadOnly":
+            MessageLookupByLibrary.simpleMessage("لا توجد مواد متاحة"),
+        "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد متاحة لهذا الطالب"),
+        "noSubjectsInClassroom": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد مضافة لهذا الفصل."),
+        "noSubjectsMatchSearch":
+            MessageLookupByLibrary.simpleMessage("لا توجد مواد مطابقة للبحث"),
+        "noSubjectsRegistered": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد دراسية مسجلة حتى الآن"),
+        "noSubmission": MessageLookupByLibrary.simpleMessage("تم التسليم"),
+        "noSummaryContent": MessageLookupByLibrary.simpleMessage(
+            "لا يوجد محتوى متاح لهذا الملخص"),
+        "noSupervisorsFound":
+            MessageLookupByLibrary.simpleMessage("لا يوجد مشرفون"),
+        "noTeachersAvailable":
+            MessageLookupByLibrary.simpleMessage("لا يوجد معلمون متاحون"),
+        "noTermPlansAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد خطط ترم متاحة"),
+        "noUnassignedStudents":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طلاب غير معينين"),
+        "noValidSubjectForClassroom": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مادة صالحة مرتبطة بهذا الفصل"),
+        "noWeeklyEvaluations":
+            MessageLookupByLibrary.simpleMessage("لا توجد تقييمات أسبوعية"),
+        "notActivated": MessageLookupByLibrary.simpleMessage("غير مفعل"),
+        "notAvailable": MessageLookupByLibrary.simpleMessage("غير متاحة"),
+        "notSubmitted": MessageLookupByLibrary.simpleMessage("لم يسلم"),
+        "notes": MessageLookupByLibrary.simpleMessage(
+            "ملاحظات إضافية أو تفاصيل تريد مشاركتها معنا"),
+        "notesHint": MessageLookupByLibrary.simpleMessage(
+            "مثال: كل يوم اثنين وأربعاء الساعة 5 مساءً"),
+        "notesText": MessageLookupByLibrary.simpleMessage("ملاحظات"),
+        "notificationAcademic":
+            MessageLookupByLibrary.simpleMessage("الأكاديمية"),
+        "notificationAdmin": MessageLookupByLibrary.simpleMessage("الإدارة"),
+        "notificationAnnouncements":
+            MessageLookupByLibrary.simpleMessage("الإعلانات"),
+        "notificationCategories":
+            MessageLookupByLibrary.simpleMessage("فئات الإشعارات"),
+        "notificationChannels":
+            MessageLookupByLibrary.simpleMessage("قنوات الإشعارات"),
+        "notificationChat": MessageLookupByLibrary.simpleMessage("المحادثات"),
+        "notificationFinance":
+            MessageLookupByLibrary.simpleMessage("المدفوعات والاشتراكات"),
+        "notificationHourAgo": MessageLookupByLibrary.simpleMessage("منذ ساعة"),
+        "notificationHoursAgo": m17,
+        "notificationInApp":
+            MessageLookupByLibrary.simpleMessage("الإشعارات داخل التطبيق"),
+        "notificationMinutesAgo": m18,
+        "notificationNow": MessageLookupByLibrary.simpleMessage("الآن"),
+        "notificationPush":
+            MessageLookupByLibrary.simpleMessage("إشعارات الجهاز"),
+        "notificationSettings":
+            MessageLookupByLibrary.simpleMessage("إعدادات الإشعارات"),
+        "notificationSupervisor":
+            MessageLookupByLibrary.simpleMessage("الإشراف"),
+        "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
+        "notificationsEmptySubtitle": MessageLookupByLibrary.simpleMessage(
+            "سنخبرك هنا عند وجود أي تحديث جديد"),
+        "numberOfHours": MessageLookupByLibrary.simpleMessage("عدد الساعات"),
+        "numberOfHoursHint":
+            MessageLookupByLibrary.simpleMessage("مثال: 12 ساعة"),
+        "oldPasswordLabel":
+            MessageLookupByLibrary.simpleMessage("كلمة المرور القديمة"),
+        "oldPrice": m19,
+        "oldPriceInvalid": MessageLookupByLibrary.simpleMessage(
+            "يرجى إدخال السعر القديم بشكل صحيح"),
+        "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
+            "منصة تعليمية تساعدك على تطوير مهاراتك"),
+        "onboardingSubtitle2": MessageLookupByLibrary.simpleMessage(
+            "استمتع بتجربة تعليمية مرنة تناسب يومك وأسلوبك"),
+        "onboardingSubtitle3": MessageLookupByLibrary.simpleMessage(
+            "محتوى تفاعلي يساعدك على التعلم بطريقة أكثر متعة"),
+        "onboardingTitle1":
+            MessageLookupByLibrary.simpleMessage("ابدأ رحلتك التعليمية بسهولة"),
+        "onboardingTitle2":
+            MessageLookupByLibrary.simpleMessage("دروس تفاعلية ومحتوى ممتع"),
+        "onboardingTitle3":
+            MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
+        "oneMonth": MessageLookupByLibrary.simpleMessage("شهر"),
+        "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
+        "openAction": MessageLookupByLibrary.simpleMessage("فتح"),
+        "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
+        "openFile": MessageLookupByLibrary.simpleMessage("فتح الملف"),
+        "openLink": MessageLookupByLibrary.simpleMessage("فتح الرابط"),
+        "openRecording": MessageLookupByLibrary.simpleMessage("فتح التسجيل"),
+        "openSessionLink":
+            MessageLookupByLibrary.simpleMessage("فتح رابط الحصة"),
+        "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
+        "optionalDiscountCode":
+            MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
+        "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
+        "other": MessageLookupByLibrary.simpleMessage("أخرى"),
+        "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
+        "packageAccessScope":
+            MessageLookupByLibrary.simpleMessage("نطاق الباقة"),
+        "packageCalculation": m20,
+        "packageCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الباقة بنجاح"),
+        "packageDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الباقة بنجاح"),
+        "packageDetails": MessageLookupByLibrary.simpleMessage("تفاصيل الباقة"),
+        "packageDuration": MessageLookupByLibrary.simpleMessage("مدة الباقة"),
+        "packageDurationHint":
+            MessageLookupByLibrary.simpleMessage("مثال: باقة الـ 4 ساعات"),
+        "packageDurationInvalid":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال مدة صحيحة للباقة"),
+        "packageExpiryText": MessageLookupByLibrary.simpleMessage(
+            "ينتهي خلال 18 يوم . تجديد تلقائي"),
+        "packageFormName": MessageLookupByLibrary.simpleMessage("اسم الباقة"),
+        "packageHoursType": MessageLookupByLibrary.simpleMessage("باقة ساعات"),
+        "packageNameRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال اسم الباقة"),
+        "packageOldPrice": MessageLookupByLibrary.simpleMessage("السعر القديم"),
+        "packagePrice": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
+        "packageType": MessageLookupByLibrary.simpleMessage("نوع الباقة"),
+        "packageUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعديل الباقة بنجاح"),
+        "packages": MessageLookupByLibrary.simpleMessage("الباقات"),
+        "packagesManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة الباقات"),
+        "paidAmount": MessageLookupByLibrary.simpleMessage("المبلغ المدفوع"),
+        "paidAmountHint": MessageLookupByLibrary.simpleMessage("مثال: 512 SAR"),
+        "parent": MessageLookupByLibrary.simpleMessage("ولي الأمر"),
+        "parentAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
+        "parentAddChild": MessageLookupByLibrary.simpleMessage("إضافة ابن"),
+        "parentAddChildFailed": MessageLookupByLibrary.simpleMessage(
+            "تعذر إضافة الابن الآن. حاول مرة أخرى."),
+        "parentAddChildTitle":
+            MessageLookupByLibrary.simpleMessage("إضافة ابن جديد"),
+        "parentAddressLine1": MessageLookupByLibrary.simpleMessage("العنوان"),
+        "parentAddressLine2":
+            MessageLookupByLibrary.simpleMessage("تفاصيل إضافية للعنوان"),
+        "parentBackToChildren":
+            MessageLookupByLibrary.simpleMessage("العودة إلى الأبناء"),
+        "parentCertificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
+        "parentCheckPaymentStatus":
+            MessageLookupByLibrary.simpleMessage("التحقق من حالة الدفع"),
+        "parentChildAccountStep":
+            MessageLookupByLibrary.simpleMessage("بيانات الابن"),
+        "parentChildAddedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الابن بنجاح"),
+        "parentChildEmailUsed": MessageLookupByLibrary.simpleMessage(
+            "البريد الإلكتروني مستخدم بالفعل"),
+        "parentChildren": MessageLookupByLibrary.simpleMessage("الأبناء"),
+        "parentChoosePackage": MessageLookupByLibrary.simpleMessage("اختيار"),
+        "parentDailyPlans":
+            MessageLookupByLibrary.simpleMessage("الخطط اليومية"),
+        "parentEvaluations": MessageLookupByLibrary.simpleMessage("التقييمات"),
+        "parentFirstPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الأول الإعدادي"),
+        "parentGuardian": MessageLookupByLibrary.simpleMessage("ولي أمر"),
+        "parentHomeTitle": MessageLookupByLibrary.simpleMessage("الرئيسية"),
+        "parentInfo": MessageLookupByLibrary.simpleMessage("معلومات ولي الأمر"),
+        "parentMessages": MessageLookupByLibrary.simpleMessage("الرسائل"),
+        "parentName": MessageLookupByLibrary.simpleMessage("اسم ولي الأمر"),
+        "parentNameHint":
+            MessageLookupByLibrary.simpleMessage("أدخل اسم ولي الأمر"),
+        "parentNotifications":
+            MessageLookupByLibrary.simpleMessage("الإشعارات"),
+        "parentOpenPaymentPage":
+            MessageLookupByLibrary.simpleMessage("فتح صفحة الدفع"),
+        "parentPackageSelected":
+            MessageLookupByLibrary.simpleMessage("تم الاختيار"),
+        "parentPackageStep":
+            MessageLookupByLibrary.simpleMessage("اختيار الباقة"),
+        "parentPackagesAndSubscription":
+            MessageLookupByLibrary.simpleMessage("الباقات والاشتراك"),
+        "parentPasswordMinLength": MessageLookupByLibrary.simpleMessage(
+            "يجب ألا تقل كلمة المرور عن 6 أحرف"),
+        "parentPaymentAddress":
+            MessageLookupByLibrary.simpleMessage("عنوان الدفع"),
+        "parentPaymentAddressRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى استكمال عنوان الدفع"),
+        "parentPaymentConfirmedWaiting": MessageLookupByLibrary.simpleMessage(
+            "تم تأكيد الدفع وهو بانتظار الاعتماد النهائي."),
+        "parentPaymentFailed": MessageLookupByLibrary.simpleMessage(
+            "لم تكتمل عملية الدفع. يمكنك المحاولة مرة أخرى."),
+        "parentPaymentMethodOptional":
+            MessageLookupByLibrary.simpleMessage("طريقة الدفع (اختياري)"),
+        "parentPaymentProcessing": MessageLookupByLibrary.simpleMessage(
+            "جاري التحقق من حالة الدفع..."),
+        "parentPaymentStatusTimeout": MessageLookupByLibrary.simpleMessage(
+            "تعذر تأكيد حالة الدفع حتى الآن."),
+        "parentPaymentStep": MessageLookupByLibrary.simpleMessage("الدفع"),
+        "parentReceiptError": MessageLookupByLibrary.simpleMessage(
+            "تعذر إرسال الإيصال. تحقق من الملف وحاول مجددًا."),
+        "parentReceiptPendingMessage": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال الإيصال وهو قيد المراجعة."),
+        "parentReceiptSelected":
+            MessageLookupByLibrary.simpleMessage("تم اختيار الإيصال"),
+        "parentReferenceNumberOptional":
+            MessageLookupByLibrary.simpleMessage("رقم المرجع (اختياري)"),
+        "parentRegion": MessageLookupByLibrary.simpleMessage("المنطقة"),
+        "parentRegistrationForm":
+            MessageLookupByLibrary.simpleMessage("نموذج تسجيل ولي الأمر"),
+        "parentRenew": MessageLookupByLibrary.simpleMessage("جدد"),
+        "parentRetryPayment":
+            MessageLookupByLibrary.simpleMessage("إعادة محاولة الدفع"),
+        "parentReviewStep":
+            MessageLookupByLibrary.simpleMessage("مراجعة السعر والخصم"),
+        "parentRole": MessageLookupByLibrary.simpleMessage("ولي أمر"),
+        "parentSchedule": MessageLookupByLibrary.simpleMessage("الجدول"),
+        "parentSecondPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
+        "parentShowAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "parentSingleSubjectRequired": MessageLookupByLibrary.simpleMessage(
+            "يجب اختيار مادة واحدة فقط لهذه الباقة"),
+        "parentSubjectsStep":
+            MessageLookupByLibrary.simpleMessage("اختيار المواد"),
+        "parentSubmitPayment":
+            MessageLookupByLibrary.simpleMessage("إرسال الدفع"),
+        "parentSubscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
+        "parentSubscriptionEndsSoon": MessageLookupByLibrary.simpleMessage(
+            "اشتراك ليلى سينتهي خلال 5 أيام"),
+        "parentSubscriptionRenewHint":
+            MessageLookupByLibrary.simpleMessage("جدده الآن لتجنب التعليق"),
+        "parentSubscriptions":
+            MessageLookupByLibrary.simpleMessage("الاشتراكات"),
+        "parentThirdPreparatoryGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الثالث الإعدادي"),
+        "parentUnableToOpenCheckout":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح رابط الدفع"),
+        "parentUnsupportedRegistrationMode":
+            MessageLookupByLibrary.simpleMessage(
+                "نظام التسجيل لهذا المنهج غير مدعوم."),
+        "parentWelcome": MessageLookupByLibrary.simpleMessage("أهلًا بك"),
+        "parentYourChildren": MessageLookupByLibrary.simpleMessage("أبناؤك"),
+        "participation": MessageLookupByLibrary.simpleMessage("المشاركة"),
+        "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+        "passwordAndConfirmRequired": MessageLookupByLibrary.simpleMessage(
+            "يرجى إدخال كلمة المرور وتأكيدها"),
+        "passwordCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+            "كلمة المرور لا يمكن أن تكون فارغة."),
+        "passwordChangedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تغيير كلمة المرور بنجاح"),
+        "passwordHint":
+            MessageLookupByLibrary.simpleMessage("6 أحرف علي الأقل"),
+        "passwordMinLength": MessageLookupByLibrary.simpleMessage(
+            "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل."),
+        "passwordMustHaveNumber": MessageLookupByLibrary.simpleMessage(
+            "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل."),
+        "passwordMustHaveUpperCase": MessageLookupByLibrary.simpleMessage(
+            "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل."),
+        "passwordWillBeUsed": MessageLookupByLibrary.simpleMessage(
+            "ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع"),
+        "passwordsDoNotMatch":
+            MessageLookupByLibrary.simpleMessage("كلمتا المرور غير متطابقتين."),
+        "payWithTamara": MessageLookupByLibrary.simpleMessage("الدفع مع تمارا"),
+        "paymentCompleted": MessageLookupByLibrary.simpleMessage("تم الدفع"),
+        "paymentConfirmedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تأكيد الدفع بنجاح"),
+        "paymentDoneOn": MessageLookupByLibrary.simpleMessage("تم الدفع في"),
+        "paymentInfo": MessageLookupByLibrary.simpleMessage("معلومات الدفع"),
+        "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
+        "paymentMethods": MessageLookupByLibrary.simpleMessage("طرق الدفع"),
+        "paymentReceipt": MessageLookupByLibrary.simpleMessage("إيصال الدفع"),
+        "paymentReceiptRequired":
+            MessageLookupByLibrary.simpleMessage("صورة إيصال الدفع مطلوبة"),
+        "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
+        "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
+            "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."),
+        "payrollAccountHolder":
+            MessageLookupByLibrary.simpleMessage("اسم صاحب الحساب"),
+        "payrollAccountNumber":
+            MessageLookupByLibrary.simpleMessage("رقم الحساب"),
+        "payrollAddPayoutProfile":
+            MessageLookupByLibrary.simpleMessage("إضافة بيانات الاستلام"),
+        "payrollAdjustmentNote":
+            MessageLookupByLibrary.simpleMessage("سبب المكافأة أو الخصم"),
+        "payrollAdjustments":
+            MessageLookupByLibrary.simpleMessage("المكافآت والخصومات"),
+        "payrollAllStatuses":
+            MessageLookupByLibrary.simpleMessage("كل الحالات"),
+        "payrollAllTeachers":
+            MessageLookupByLibrary.simpleMessage("كل المعلمين"),
+        "payrollAmount": MessageLookupByLibrary.simpleMessage("المبلغ"),
+        "payrollApplyFilters":
+            MessageLookupByLibrary.simpleMessage("تطبيق الفلاتر"),
+        "payrollBankAccount": MessageLookupByLibrary.simpleMessage("حساب بنكي"),
+        "payrollBankDestinationRequired":
+            MessageLookupByLibrary.simpleMessage("أدخل رقم الحساب أو الآيبان"),
+        "payrollBankName": MessageLookupByLibrary.simpleMessage("اسم البنك"),
+        "payrollBonus": MessageLookupByLibrary.simpleMessage("المكافآت"),
+        "payrollCancelled": MessageLookupByLibrary.simpleMessage("ملغي"),
+        "payrollChooseReceipt":
+            MessageLookupByLibrary.simpleMessage("اختر صورة الإيصال"),
+        "payrollConfirmPayment":
+            MessageLookupByLibrary.simpleMessage("تأكيد الدفع"),
+        "payrollContinueDraft":
+            MessageLookupByLibrary.simpleMessage("متابعة المسودة"),
+        "payrollCreate":
+            MessageLookupByLibrary.simpleMessage("إنشاء كشف الراتب"),
+        "payrollCurrentPeriod":
+            MessageLookupByLibrary.simpleMessage("الفترة الحالية"),
+        "payrollCurriculumsCount":
+            MessageLookupByLibrary.simpleMessage("عدد المناهج"),
+        "payrollDeduction": MessageLookupByLibrary.simpleMessage("الخصومات"),
+        "payrollDraft": MessageLookupByLibrary.simpleMessage("مسودة"),
+        "payrollDuration": MessageLookupByLibrary.simpleMessage("المدة"),
+        "payrollDurationMinutes":
+            MessageLookupByLibrary.simpleMessage("المدة بالدقائق"),
+        "payrollEditPayoutProfile":
+            MessageLookupByLibrary.simpleMessage("تعديل بيانات الاستلام"),
+        "payrollEgyptian": MessageLookupByLibrary.simpleMessage("مصري"),
+        "payrollEgyptianWork": MessageLookupByLibrary.simpleMessage("مصري"),
+        "payrollExcludedSessions": m21,
+        "payrollFilterAction":
+            MessageLookupByLibrary.simpleMessage("تصفية الرواتب"),
+        "payrollFilters": MessageLookupByLibrary.simpleMessage("فلاتر الرواتب"),
+        "payrollFromDate": MessageLookupByLibrary.simpleMessage("من تاريخ"),
+        "payrollGulf": MessageLookupByLibrary.simpleMessage("خليجي"),
+        "payrollGulfWork": MessageLookupByLibrary.simpleMessage("خليجي"),
+        "payrollHourlyRate": MessageLookupByLibrary.simpleMessage("سعر الساعة"),
+        "payrollIban": MessageLookupByLibrary.simpleMessage("رقم الآيبان"),
+        "payrollIncluded":
+            MessageLookupByLibrary.simpleMessage("داخلة في الحساب"),
+        "payrollInstapay": MessageLookupByLibrary.simpleMessage("إنستا باي"),
+        "payrollInstapayAddress":
+            MessageLookupByLibrary.simpleMessage("عنوان إنستا باي"),
+        "payrollInvalidAmount": MessageLookupByLibrary.simpleMessage(
+            "أدخل مبلغًا صحيحًا لا يقل عن صفر"),
+        "payrollNegativeTotal": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن أن يكون إجمالي الراتب سالبًا"),
+        "payrollNetTotal":
+            MessageLookupByLibrary.simpleMessage("صافي الإجمالي"),
+        "payrollNoMatchingTeachers": MessageLookupByLibrary.simpleMessage(
+            "لا يوجد معلمون مطابقون للفترة أو الفلاتر المحددة"),
+        "payrollNoPayoutProfile": MessageLookupByLibrary.simpleMessage(
+            "لا توجد بيانات استلام. يجب إضافتها قبل تسجيل الدفع."),
+        "payrollNoWork": MessageLookupByLibrary.simpleMessage(
+            "لا يوجد عمل مستحق لهذا المعلم في الفترة المحددة"),
+        "payrollPaid": MessageLookupByLibrary.simpleMessage("مدفوع"),
+        "payrollPaidAt": MessageLookupByLibrary.simpleMessage("تاريخ الدفع"),
+        "payrollPaymentConfirmationBody": m22,
+        "payrollPaymentConfirmationTitle":
+            MessageLookupByLibrary.simpleMessage("تأكيد دفع الراتب؟"),
+        "payrollPaymentDetails":
+            MessageLookupByLibrary.simpleMessage("تفاصيل الدفع"),
+        "payrollPayoutDetails":
+            MessageLookupByLibrary.simpleMessage("بيانات استلام الراتب"),
+        "payrollPayoutMethod":
+            MessageLookupByLibrary.simpleMessage("طريقة الاستلام"),
+        "payrollPeriod": MessageLookupByLibrary.simpleMessage("الفترة"),
+        "payrollReceiptInvalidType": MessageLookupByLibrary.simpleMessage(
+            "استخدم صورة PNG أو JPG أو JPEG أو WebP"),
+        "payrollReceiptMissing":
+            MessageLookupByLibrary.simpleMessage("الملف المحدد غير متاح"),
+        "payrollReceiptRequired":
+            MessageLookupByLibrary.simpleMessage("إيصال التحويل مطلوب"),
+        "payrollReceiptTooLarge": MessageLookupByLibrary.simpleMessage(
+            "يجب ألا يتجاوز الإيصال 5 ميجابايت"),
+        "payrollRemoveReceipt":
+            MessageLookupByLibrary.simpleMessage("إزالة الإيصال"),
+        "payrollResetFilters":
+            MessageLookupByLibrary.simpleMessage("إعادة ضبط الفلاتر"),
+        "payrollReviewSessions":
+            MessageLookupByLibrary.simpleMessage("مراجعة الحصص"),
+        "payrollSaveDraft": MessageLookupByLibrary.simpleMessage("حفظ كمسودة"),
+        "payrollSessionDetails":
+            MessageLookupByLibrary.simpleMessage("تفاصيل الحصص"),
+        "payrollSessionRate": MessageLookupByLibrary.simpleMessage("سعر الحصة"),
+        "payrollSessionsCount":
+            MessageLookupByLibrary.simpleMessage("عدد الحصص"),
+        "payrollStatus": MessageLookupByLibrary.simpleMessage("الحالة"),
+        "payrollSystem": MessageLookupByLibrary.simpleMessage("النظام"),
+        "payrollTeacherDetails":
+            MessageLookupByLibrary.simpleMessage("بيانات المعلم والفترة"),
+        "payrollToDate": MessageLookupByLibrary.simpleMessage("إلى تاريخ"),
+        "payrollTotal": MessageLookupByLibrary.simpleMessage("الإجمالي"),
+        "payrollTransactionReference":
+            MessageLookupByLibrary.simpleMessage("مرجع التحويل"),
+        "payrollTransferReceipt":
+            MessageLookupByLibrary.simpleMessage("إيصال التحويل"),
+        "payrollUnprepared": MessageLookupByLibrary.simpleMessage("لم يُجهز"),
+        "payrollViewDetails":
+            MessageLookupByLibrary.simpleMessage("عرض التفاصيل"),
+        "payrollWallet":
+            MessageLookupByLibrary.simpleMessage("محفظة إلكترونية"),
+        "payrollWalletPhone":
+            MessageLookupByLibrary.simpleMessage("رقم المحفظة"),
+        "payrollWalletProvider":
+            MessageLookupByLibrary.simpleMessage("مزود المحفظة"),
+        "payrollWorkSummary":
+            MessageLookupByLibrary.simpleMessage("ملخص العمل"),
+        "pending": MessageLookupByLibrary.simpleMessage("معلق"),
+        "pendingMathSubtitle":
+            MessageLookupByLibrary.simpleMessage("درس الكسور، بانتظار أي معلم"),
+        "pendingPayments":
+            MessageLookupByLibrary.simpleMessage("المدفوعات المعلقة"),
+        "pendingReceipts":
+            MessageLookupByLibrary.simpleMessage("إيصالات معلقة"),
+        "pendingRegisterRequests":
+            MessageLookupByLibrary.simpleMessage("طلبات تسجيل معلقة"),
+        "pendingRequests": MessageLookupByLibrary.simpleMessage("طلبات معلقة"),
+        "pendingReview": MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
+        "pendingScienceSubtitle": MessageLookupByLibrary.simpleMessage(
+            "درس بناء الضوء، بانتظار أي معلم"),
+        "pendingWaiting": MessageLookupByLibrary.simpleMessage("قيد الانتظار"),
+        "performance": MessageLookupByLibrary.simpleMessage("أدائي"),
+        "permanentlyDeleteFromSystem":
+            MessageLookupByLibrary.simpleMessage("حذف نهائي من النظام"),
+        "personalProfile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
+        "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+        "physics": MessageLookupByLibrary.simpleMessage("الفيزياء"),
+        "planFile": MessageLookupByLibrary.simpleMessage("ملف الخطة"),
+        "planFileRequired":
+            MessageLookupByLibrary.simpleMessage("ملف الخطة مطلوب"),
+        "plansTitle": MessageLookupByLibrary.simpleMessage("الخطط"),
+        "platformsUsed":
+            MessageLookupByLibrary.simpleMessage("المنصات المستخدمة"),
+        "pleaseAnswerAllQuestions": MessageLookupByLibrary.simpleMessage(
+            "برجاء الإجابة على جميع الأسئلة"),
+        "pleaseChooseAtLeastOneGrade": MessageLookupByLibrary.simpleMessage(
+            "برجاء اختيار صف واحد على الأقل"),
+        "pleaseChooseAtLeastOneSubjectForEachGrade":
+            MessageLookupByLibrary.simpleMessage(
+                "برجاء اختيار مادة واحدة على الأقل لكل صف"),
+        "pleaseChooseCurriculumGrades": m23,
+        "pleaseChooseCurriculumSubjects": m24,
+        "pleaseChooseTeachingCurriculum": MessageLookupByLibrary.simpleMessage(
+            "برجاء اختيار المنهج الذي تدرسه"),
+        "pleaseEnterSubjectsGrades":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال درجات المواد"),
+        "pleaseFillRequiredInfo": MessageLookupByLibrary.simpleMessage(
+            "يرجى ملء جميع الحقول المطلوبة"),
+        "pleaseSelectFile":
+            MessageLookupByLibrary.simpleMessage("من فضلك اختاري ملفًا أولًا"),
+        "pleaseSelectStudent":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار الطالب"),
+        "poemAnalysis": MessageLookupByLibrary.simpleMessage("تحليل القصيدة"),
+        "point": MessageLookupByLibrary.simpleMessage("نقطة"),
+        "points": MessageLookupByLibrary.simpleMessage("النقاط"),
+        "pointsCount": MessageLookupByLibrary.simpleMessage("نقطة"),
+        "pointsTipDescription": MessageLookupByLibrary.simpleMessage(
+            "احرص على تسليم التقييمات الأسبوعية في موعدها لكسب ٢٠ نقطة إضافية أسبوعيًا"),
+        "positiveWeekRequired": MessageLookupByLibrary.simpleMessage(
+            "أدخل رقم أسبوع صحيحًا موجبًا"),
+        "preferredDays":
+            MessageLookupByLibrary.simpleMessage("مواعيد الطالب المفضلة"),
+        "preferredDaysHint": MessageLookupByLibrary.simpleMessage(
+            "حدد الأيام والأوقات المفضلة للحضور"),
+        "preview": MessageLookupByLibrary.simpleMessage("معاينة"),
+        "previous": MessageLookupByLibrary.simpleMessage("السابق"),
+        "primaryGradeFive":
+            MessageLookupByLibrary.simpleMessage("الصف الخامس الابتدائي"),
+        "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
+        "qarCurrency": MessageLookupByLibrary.simpleMessage("ريال قطري (ر.ق)"),
+        "qarShort": MessageLookupByLibrary.simpleMessage("ر.ق"),
+        "qatariCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج القطري"),
+        "qatariCurriculumDesc": MessageLookupByLibrary.simpleMessage(
+            "منهج معتمد من وزارة التربية والتعليم في قطر، ويشمل المراحل الأساسية حتى الثانوية."),
+        "qualification": MessageLookupByLibrary.simpleMessage("المؤهل"),
+        "quotaReport": MessageLookupByLibrary.simpleMessage("تقرير الحصص"),
+        "quran": MessageLookupByLibrary.simpleMessage("القرآن الكريم"),
+        "ranking": MessageLookupByLibrary.simpleMessage("الترتيب"),
+        "rating": MessageLookupByLibrary.simpleMessage("تقييم"),
+        "readyGroupSubtitle":
+            MessageLookupByLibrary.simpleMessage("الرياضيات - مجموعة جاهزة"),
+        "recordings": MessageLookupByLibrary.simpleMessage("التسجيلات"),
+        "registerAsParent":
+            MessageLookupByLibrary.simpleMessage("التسجيل كولي أمر"),
+        "registerAsParentSubtitle": MessageLookupByLibrary.simpleMessage(
+            "تابع تقدم أبنائك وتواصل مع المعلمين"),
+        "registerAsStudent":
+            MessageLookupByLibrary.simpleMessage("التسجيل كطالب"),
+        "registerAsStudentSubtitle": MessageLookupByLibrary.simpleMessage(
+            "انضم للفصول الدراسية وابدأ رحلتك التعليمية"),
+        "registrationDate":
+            MessageLookupByLibrary.simpleMessage("تاريخ التسجيل"),
+        "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
+        "registrationRequestRejectedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
+        "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة."),
+        "registrationRequests":
+            MessageLookupByLibrary.simpleMessage("طلبات التسجيل"),
+        "reject": MessageLookupByLibrary.simpleMessage("رفض"),
+        "rejectRequest": MessageLookupByLibrary.simpleMessage("رفض الطلب"),
+        "rejectionReason": MessageLookupByLibrary.simpleMessage("سبب الرفض"),
+        "relationships": MessageLookupByLibrary.simpleMessage("العلاقات"),
+        "remainingDays": m25,
+        "remainingHours": m26,
+        "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
+        "removeAccountFromDevice":
+            MessageLookupByLibrary.simpleMessage("إزالة الحساب من هذا الجهاز"),
+        "renewSubscription":
+            MessageLookupByLibrary.simpleMessage("تجديد الاشتراك"),
+        "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
+            "هذه الباقة تشمل كل المواد ولا تحتاج إلى اختيار مادة."),
+        "renewalApprove":
+            MessageLookupByLibrary.simpleMessage("اعتماد التجديد"),
+        "renewalApproved":
+            MessageLookupByLibrary.simpleMessage("تم اعتماد التجديد"),
+        "renewalCompleted":
+            MessageLookupByLibrary.simpleMessage("تم تجديد الاشتراك بنجاح."),
+        "renewalConfirmPayment":
+            MessageLookupByLibrary.simpleMessage("تأكيد الدفع"),
+        "renewalCurrentSubscription":
+            MessageLookupByLibrary.simpleMessage("الاشتراك الحالي"),
+        "renewalExpiry": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
+        "renewalFailed": MessageLookupByLibrary.simpleMessage(
+            "تعذر تجديد الاشتراك. حاول مرة أخرى."),
+        "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
+            "يلزم بدء محاولة دفع جديدة. حاول مرة أخرى."),
+        "renewalInvalidPaymentStatus": MessageLookupByLibrary.simpleMessage(
+            "حالة طلب الدفع لا تسمح بتنفيذ هذا الإجراء."),
+        "renewalNoRequests":
+            MessageLookupByLibrary.simpleMessage("لا توجد طلبات"),
+        "renewalOptionalRejectionReason":
+            MessageLookupByLibrary.simpleMessage("سبب الرفض (اختياري)"),
+        "renewalPaymentConfirmed":
+            MessageLookupByLibrary.simpleMessage("تم تأكيد الدفع"),
+        "renewalPaymentNotConfirmed": MessageLookupByLibrary.simpleMessage(
+            "يجب تأكيد الدفع قبل اعتماد التجديد."),
+        "renewalPendingReview":
+            MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
+        "renewalPurchasedHours":
+            MessageLookupByLibrary.simpleMessage("الساعات المشتراة"),
+        "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التجديد والإيصال قيد المراجعة."),
+        "renewalReferenceNumber":
+            MessageLookupByLibrary.simpleMessage("رقم المرجع"),
+        "renewalRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
+        "renewalRemainingHours":
+            MessageLookupByLibrary.simpleMessage("الساعات المتبقية"),
+        "renewalRequestPending": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التجديد وهو قيد المراجعة."),
+        "renewalRequestedAt":
+            MessageLookupByLibrary.simpleMessage("تاريخ الطلب"),
+        "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
+            "غير مسموح لك بتجديد اشتراك هذا الطالب."),
+        "renewalSubjectNotAssigned": MessageLookupByLibrary.simpleMessage(
+            "هذه المادة غير مضافة للطالب."),
+        "renewalSubmitRequest":
+            MessageLookupByLibrary.simpleMessage("إرسال طلب التجديد"),
+        "renewalSubscriptionStillActive": MessageLookupByLibrary.simpleMessage(
+            "الاشتراك ما زال فعالًا ولا يمكن تجديده الآن."),
+        "renewalUsedHours":
+            MessageLookupByLibrary.simpleMessage("الساعات المستخدمة"),
+        "renewalViewReceipt":
+            MessageLookupByLibrary.simpleMessage("عرض الإيصال"),
+        "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
+        "requestAccepted":
+            MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
+        "requestNewLesson":
+            MessageLookupByLibrary.simpleMessage("طلب درس جديد"),
+        "requestReason": MessageLookupByLibrary.simpleMessage("سبب الطلب"),
+        "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلبك وهو الآن قيد المراجعة."),
+        "requestTeacherChangeOrCancellation":
+            MessageLookupByLibrary.simpleMessage(
+                "طلب تغيير المعلم / إلغاء الاستمرار"),
+        "requestTeacherWithdrawal":
+            MessageLookupByLibrary.simpleMessage("طلب اعتذار عن الاستمرار"),
+        "requestType": MessageLookupByLibrary.simpleMessage("نوع الطلب"),
+        "requester": MessageLookupByLibrary.simpleMessage("مقدم الطلب"),
+        "requesterType": MessageLookupByLibrary.simpleMessage("نوع مقدم الطلب"),
+        "resendCode": MessageLookupByLibrary.simpleMessage("إعادة الإرسال؟"),
+        "resetCodeRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال كود التحقق"),
+        "resetCodeSubtitle": MessageLookupByLibrary.simpleMessage(
+            "تحقق من بريدك الإلكتروني وأدخل الكود المرسل إليك"),
+        "resetPassword":
+            MessageLookupByLibrary.simpleMessage("إعادة تعيين كلمة المرور"),
+        "resetPasswordInstructions": MessageLookupByLibrary.simpleMessage(
+            " وأدخل الكود لإعادة تعيين كلمة المرور."),
+        "resetPasswordSuccessSubtitle": m27,
+        "resetPasswordSuccessTitle":
+            MessageLookupByLibrary.simpleMessage("تم الإرسال بنجاح"),
+        "retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
+        "revenues": MessageLookupByLibrary.simpleMessage("الإيرادات"),
+        "reviewNewStudents":
+            MessageLookupByLibrary.simpleMessage("عرض طلبات الطلاب"),
+        "reviewPaidRequests":
+            MessageLookupByLibrary.simpleMessage("عرض طلبات الدفع"),
+        "reviewRequest": MessageLookupByLibrary.simpleMessage("مراجعة الطلب"),
+        "reviews": MessageLookupByLibrary.simpleMessage("التقييمات"),
+        "rewardPoints": MessageLookupByLibrary.simpleMessage("نقاط المكافآت"),
+        "rewards": MessageLookupByLibrary.simpleMessage("مكافآت"),
+        "role": MessageLookupByLibrary.simpleMessage("دور"),
+        "salary": MessageLookupByLibrary.simpleMessage("الراتب"),
+        "salaryCalculationFormula":
+            MessageLookupByLibrary.simpleMessage("عدد الحصص * سعر الحصة"),
+        "salaryCalculationFormulaDesc":
+            MessageLookupByLibrary.simpleMessage("يتم احتساب الراتب الأساسي"),
+        "salaryCalculationMethod":
+            MessageLookupByLibrary.simpleMessage("طريقة احتساب الراتب"),
+        "sampleExercisesHomework":
+            MessageLookupByLibrary.simpleMessage("حل تمرين 45"),
+        "sampleGrammarLesson":
+            MessageLookupByLibrary.simpleMessage("قواعد النحو"),
+        "sampleQuadraticEquations":
+            MessageLookupByLibrary.simpleMessage("المعادلات التربيعية"),
+        "sampleTeacherOne":
+            MessageLookupByLibrary.simpleMessage("سارة عبدالله"),
+        "sampleTeacherTwo": MessageLookupByLibrary.simpleMessage("منى أحمد"),
+        "sarCurrency": MessageLookupByLibrary.simpleMessage("ريال سعودي (ر.س)"),
+        "sarShort": MessageLookupByLibrary.simpleMessage("ريال"),
+        "saturday": MessageLookupByLibrary.simpleMessage("السبت"),
+        "saudi": MessageLookupByLibrary.simpleMessage("سعودي"),
+        "saudiCurriculum":
+            MessageLookupByLibrary.simpleMessage("المنهج السعودي"),
+        "saudiCurriculumDesc": MessageLookupByLibrary.simpleMessage(
+            "نقدم جميع المواد الدراسية للمرحلة الابتدائية، المتوسطة، والثانوية وفق المنهج المعتمد."),
+        "saudiDepartment":
+            MessageLookupByLibrary.simpleMessage("القسم السعودي"),
+        "saudiRiyal": MessageLookupByLibrary.simpleMessage("الريال السعودي"),
+        "save": MessageLookupByLibrary.simpleMessage("حفظ"),
+        "saveAmount": m28,
+        "saveChanges": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
+        "savedAccounts":
+            MessageLookupByLibrary.simpleMessage("الحسابات المحفوظة"),
+        "savedInLocation": m29,
+        "savingCertificate":
+            MessageLookupByLibrary.simpleMessage("جاري حفظ الشهادة..."),
+        "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
+        "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
+        "scheduleCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الجدول بنجاح"),
+        "scheduleDateInPast": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة حصة في تاريخ مضى"),
+        "scheduleDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف الجدول بنجاح"),
+        "scheduleForDay": m30,
+        "scheduleImageRequired":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار صورة الجدول"),
+        "scheduleTimeInPast": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة حصة في وقت مضى"),
+        "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
+            "تم تعديل جدول الأسبوع القادم"),
+        "schoolSubjects":
+            MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
+        "science": MessageLookupByLibrary.simpleMessage("العلوم"),
+        "scoreRange": m31,
+        "scoreRequired": MessageLookupByLibrary.simpleMessage("الدرجة مطلوبة"),
+        "searchByNameOrPhone":
+            MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
+        "searchConversations":
+            MessageLookupByLibrary.simpleMessage("البحث في المحادثات"),
+        "searchForStudent":
+            MessageLookupByLibrary.simpleMessage("ابحث عن طالب"),
+        "searchForSubject":
+            MessageLookupByLibrary.simpleMessage("ابحث عن مادة"),
+        "secondPrimaryClassroom":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الابتدائي"),
+        "secondSecondaryClassroom":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الثانوي"),
+        "sections": MessageLookupByLibrary.simpleMessage("الفصول"),
+        "selectChild": MessageLookupByLibrary.simpleMessage("اختر الابن"),
+        "selectClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
+        "selectClassroomFirst":
+            MessageLookupByLibrary.simpleMessage("اختر الفصل أولاً"),
+        "selectCurriculum": MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "selectCurriculumFirst":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار المنهج"),
+        "selectFile": MessageLookupByLibrary.simpleMessage("اختر ملف"),
+        "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
+        "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
+            "اختر الصف لعرض بيانات الحضور"),
+        "selectIdealSupervisor":
+            MessageLookupByLibrary.simpleMessage("اختر المشرف المثالي"),
+        "selectIdealTeacher":
+            MessageLookupByLibrary.simpleMessage("اختر المعلم المثالي"),
+        "selectLesson": MessageLookupByLibrary.simpleMessage("اختر الحصة"),
+        "selectStudent": MessageLookupByLibrary.simpleMessage("اختر الطالب"),
+        "selectStudentFirst":
+            MessageLookupByLibrary.simpleMessage("اختر الطالب أولاً"),
+        "selectSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
+        "selectTeacher": MessageLookupByLibrary.simpleMessage("اختر المعلم"),
+        "selectWeek": MessageLookupByLibrary.simpleMessage("اختر الأسبوع"),
+        "selectedLessonDatePreview":
+            MessageLookupByLibrary.simpleMessage("الخميس 07 مايو 2026"),
+        "selectedMessagesLabel": MessageLookupByLibrary.simpleMessage("محددة"),
+        "selectedPackage":
+            MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
+        "semesterName": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
+        "semesterOne": MessageLookupByLibrary.simpleMessage("فصل ١"),
+        "semesterThree": MessageLookupByLibrary.simpleMessage("فصل ٣"),
+        "semesterTwo": MessageLookupByLibrary.simpleMessage("فصل ٢"),
+        "send": MessageLookupByLibrary.simpleMessage("أرسلت"),
+        "sendAll": MessageLookupByLibrary.simpleMessage("إرسال الكل"),
+        "sendCorrection": MessageLookupByLibrary.simpleMessage("إرسال التصحيح"),
+        "sendNotificationToParentAndStudent":
+            MessageLookupByLibrary.simpleMessage(
+                "إرسال إشعار لولي الأمر والطالب"),
+        "sendResetCode":
+            MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
+        "sendResetLink":
+            MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
+        "sending": MessageLookupByLibrary.simpleMessage("جاري الإرسال..."),
+        "services": MessageLookupByLibrary.simpleMessage("الخدمات"),
+        "sessionEnding":
+            MessageLookupByLibrary.simpleMessage("جارٍ إنهاء الحصة"),
+        "sessionExpiredLoginAgain": MessageLookupByLibrary.simpleMessage(
+            "انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى"),
+        "sessionRecording": MessageLookupByLibrary.simpleMessage("تسجيل الحصة"),
+        "sessionStartUnauthorized":
+            MessageLookupByLibrary.simpleMessage("غير مصرح لك ببدء الحصة"),
+        "sessionStarted": MessageLookupByLibrary.simpleMessage("تم بدء الحصة"),
+        "sessionStartedLinkOpenFailed": MessageLookupByLibrary.simpleMessage(
+            "بدأت الحصة ولكن تعذر فتح الرابط"),
+        "sessionStarting":
+            MessageLookupByLibrary.simpleMessage("جارٍ بدء الحصة"),
+        "sessionSubjectUnavailable":
+            MessageLookupByLibrary.simpleMessage("بيانات المادة غير متاحة"),
+        "sessionSummary": MessageLookupByLibrary.simpleMessage("ملخص الحصة"),
+        "sessions": MessageLookupByLibrary.simpleMessage("حصة"),
+        "sessionsThisMonth":
+            MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
+        "shortVideoLinkOptional":
+            MessageLookupByLibrary.simpleMessage("رابط فيديو قصير (اختياري)"),
+        "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
+        "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
+        "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),
+        "specialization": MessageLookupByLibrary.simpleMessage("التخصص"),
+        "start": MessageLookupByLibrary.simpleMessage("ابدأ"),
+        "startDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
+        "startLessonViaZoom":
+            MessageLookupByLibrary.simpleMessage("ابدأ الحصة عبر Zoom"),
+        "startNow": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
+        "startSession": MessageLookupByLibrary.simpleMessage("بدء الحصة"),
+        "startTime": MessageLookupByLibrary.simpleMessage("وقت البداية"),
+        "status": MessageLookupByLibrary.simpleMessage("الحالة"),
+        "student": MessageLookupByLibrary.simpleMessage("طالب"),
+        "studentAssignedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تعيين الطالب بنجاح"),
+        "studentAssignmentAlreadyAssigned":
+            MessageLookupByLibrary.simpleMessage("هذا الطالب مُعيّن بالفعل"),
+        "studentAssignmentNoClassrooms": MessageLookupByLibrary.simpleMessage(
+            "لا توجد فصول متاحة لهذا الطالب"),
+        "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن تعيين هذا الطالب لأنه لم يتم اعتماد حسابه بعد"),
+        "studentCallAlertBody":
+            MessageLookupByLibrary.simpleMessage("افتح بنان للاستجابة للمشرف"),
+        "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال التنبيه بالفعل، حاول بعد قليل"),
+        "studentCallAlertSent": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال التنبيه للطالب بنجاح"),
+        "studentCallAlertTitle":
+            MessageLookupByLibrary.simpleMessage("المشرف يناديك"),
+        "studentCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة الطالب"),
+        "studentCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادات الطلاب"),
+        "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
+            "تعذر تحميل الفصول، حاول مرة أخرى"),
+        "studentEmail": MessageLookupByLibrary.simpleMessage("ايميل الطالب"),
+        "studentInfo": MessageLookupByLibrary.simpleMessage("معلومات الطالب"),
+        "studentName": MessageLookupByLibrary.simpleMessage("اسم الطالب"),
+        "studentNotes": MessageLookupByLibrary.simpleMessage("ملاحظات الطالب"),
+        "studentNotesAndSchedule": MessageLookupByLibrary.simpleMessage(
+            "ملاحظات الطالب وتفضيلات المواعيد"),
+        "studentNotesAndScheduleHint": MessageLookupByLibrary.simpleMessage(
+            "ملاحظات (الدروس التي تحتاج شرحها، الأهداف، أي ملاحظات أخرى)"),
+        "studentNotesExample": MessageLookupByLibrary.simpleMessage(
+            "مثال: يحتاج شرح درس الكسور والقسمة المطولة ..."),
+        "studentPassword": MessageLookupByLibrary.simpleMessage(
+            "كلمة المرور للدخول على المنصة"),
+        "studentPasswordField":
+            MessageLookupByLibrary.simpleMessage("كلمة المرور للطالب"),
+        "studentProfileClass":
+            MessageLookupByLibrary.simpleMessage("القسم المصري"),
+        "studentProfileGrade":
+            MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
+        "studentRegistrationForm":
+            MessageLookupByLibrary.simpleMessage("نموذج تسجيل الطالب"),
+        "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(
+            "سيتم إنشاء مجموعة دراسية وتحويل الطالب إليك مباشرة"),
+        "studentUsesItForDashboard": MessageLookupByLibrary.simpleMessage(
+            "يستخدمه الطالب للدخول على الداشبورد"),
+        "students": MessageLookupByLibrary.simpleMessage("الطلاب"),
+        "studentsByDepartment":
+            MessageLookupByLibrary.simpleMessage("الطلاب حسب القسم"),
+        "studyCurriculaTitle":
+            MessageLookupByLibrary.simpleMessage("المناهج الدراسية "),
+        "studyMaterials":
+            MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
+        "studyNotStarted":
+            MessageLookupByLibrary.simpleMessage("لم تبدأ الدراسة بعد"),
+        "studyPlanFor": MessageLookupByLibrary.simpleMessage("الخطة الدراسية"),
+        "studyPlanTitlePrefix":
+            MessageLookupByLibrary.simpleMessage("الخطة الدراسية لـ"),
+        "studySchedule": MessageLookupByLibrary.simpleMessage("الجدول الدراسي"),
+        "subject": MessageLookupByLibrary.simpleMessage("المادة"),
+        "subjectCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تمت إضافة المادة بنجاح"),
+        "subjectLabel": MessageLookupByLibrary.simpleMessage("المادة"),
+        "subjectName": MessageLookupByLibrary.simpleMessage("اسم المادة"),
+        "subjectRequestAdminReview":
+            MessageLookupByLibrary.simpleMessage("قيد مراجعة الإدارة"),
+        "subjectRequestAssigned":
+            MessageLookupByLibrary.simpleMessage("تم تعيين المدرس"),
+        "subjectRequestChoosePackage":
+            MessageLookupByLibrary.simpleMessage("اختر الباقة"),
+        "subjectRequestChooseSubject":
+            MessageLookupByLibrary.simpleMessage("اختر المادة"),
+        "subjectRequestMyRequests":
+            MessageLookupByLibrary.simpleMessage("طلباتي الحالية"),
+        "subjectRequestNoPackages": MessageLookupByLibrary.simpleMessage(
+            "لا توجد باقات متاحة لطلب مادة حاليًا"),
+        "subjectRequestNotesCounter": m32,
+        "subjectRequestPaymentCompleted": MessageLookupByLibrary.simpleMessage(
+            "تم الدفع وجارٍ البحث عن مدرس"),
+        "subjectRequestPaymentTimeout": MessageLookupByLibrary.simpleMessage(
+            "تعذر تأكيد الدفع تلقائيًا. تحقق من حالته يدويًا."),
+        "subjectRequestRejected":
+            MessageLookupByLibrary.simpleMessage("تم رفض الطلب"),
+        "subjectRequestSearchingTeacher":
+            MessageLookupByLibrary.simpleMessage("جارٍ البحث عن مدرس"),
+        "subjectRequestSubmitted": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال الطلب للإدارة للمراجعة"),
+        "subjectRequestVerifyPayment":
+            MessageLookupByLibrary.simpleMessage("التحقق من حالة الدفع"),
+        "subjectRequired":
+            MessageLookupByLibrary.simpleMessage("المادة مطلوبة"),
+        "subjects": MessageLookupByLibrary.simpleMessage("المواد"),
+        "subjectsGrades": MessageLookupByLibrary.simpleMessage("درجات المواد"),
+        "subjectsManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة المواد الدراسية"),
+        "submissionDate": MessageLookupByLibrary.simpleMessage("تم التسليم:"),
+        "submitAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
+        "submitAssignmentCorrection":
+            MessageLookupByLibrary.simpleMessage("تصحيح تسليم"),
+        "submitRegistrationRequest":
+            MessageLookupByLibrary.simpleMessage("إرسال طلب التسجيل"),
+        "submitRequest": MessageLookupByLibrary.simpleMessage("إرسال الطلب"),
+        "submitted": MessageLookupByLibrary.simpleMessage("مسلم"),
+        "submittedBadge": MessageLookupByLibrary.simpleMessage("مرفوع"),
+        "submittingAssignment":
+            MessageLookupByLibrary.simpleMessage("جاري التسليم..."),
+        "subscribeNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
+        "subscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
+        "subscriptionAccessExpired": MessageLookupByLibrary.simpleMessage(
+            "انتهى اشتراكك، يرجى تجديد الاشتراك للمتابعة."),
+        "subscriptionEndsSoon":
+            MessageLookupByLibrary.simpleMessage("اشتراكك سينتهي خلال 5 أيام"),
+        "subscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
+        "sunday": MessageLookupByLibrary.simpleMessage("الأحد"),
+        "supervisedClasses":
+            MessageLookupByLibrary.simpleMessage("الصفوف المشرف عليها"),
+        "supervisor": MessageLookupByLibrary.simpleMessage("مشرف"),
+        "supervisorAbdelfattah":
+            MessageLookupByLibrary.simpleMessage("عبدالفتاح"),
+        "supervisorAssignedNotification": MessageLookupByLibrary.simpleMessage(
+            "تم تعيينك مشرفًا في الصف الثالث"),
+        "supervisorAssignment":
+            MessageLookupByLibrary.simpleMessage("توظيف المشرف"),
+        "supervisorNotActive":
+            MessageLookupByLibrary.simpleMessage("حساب المشرف المحدد غير نشط"),
+        "supervisorNotFound": MessageLookupByLibrary.simpleMessage(
+            "المشرف المحدد لم يعد موجودًا"),
+        "supervisorRequired":
+            MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
+        "supervisorSaraAhmed":
+            MessageLookupByLibrary.simpleMessage("سارة أحمد"),
+        "supervisorSomaya": MessageLookupByLibrary.simpleMessage("سمية"),
+        "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
+        "tabbyTamara":
+            MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
+        "taughtOnlineBefore":
+            MessageLookupByLibrary.simpleMessage("هل سبق لك التدريس أونلاين؟"),
+        "taughtSubjects":
+            MessageLookupByLibrary.simpleMessage("المواد التي درّسها"),
+        "teachableGrades":
+            MessageLookupByLibrary.simpleMessage("الصفوف الممكن تدريسها"),
+        "teacher": MessageLookupByLibrary.simpleMessage("معلم"),
+        "teacherAhmedFouad":
+            MessageLookupByLibrary.simpleMessage("أ/ أحمد فؤاد"),
+        "teacherApplicationDetailsTitle": m33,
+        "teacherApplications":
+            MessageLookupByLibrary.simpleMessage("طلبات تقديم المعلمين"),
+        "teacherApplySubtitle": MessageLookupByLibrary.simpleMessage(
+            "سيتم مراجعة طلبك والرد عليك قريبًا"),
+        "teacherApplyTitle": MessageLookupByLibrary.simpleMessage(
+            "التقديم كمعلم في أكاديمية بنان"),
+        "teacherAssignedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم توظيف المعلم بنجاح"),
+        "teacherCertificateIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إصدار شهادة المعلم بنجاح"),
+        "teacherCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادات المعلمين"),
+        "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
+            "أقر بصحة جميع البيانات المذكورة أعلاه، وأتعهد بالالتزام بقواعد وسياسات أكاديمية بنان"),
+        "teacherMyEarnings": MessageLookupByLibrary.simpleMessage("مستحقاتي"),
+        "teacherNotAssignedToSessionSubject":
+            MessageLookupByLibrary.simpleMessage(
+                "لا يوجد مدرس مكلّف بهذه المادة"),
+        "teacherNote": MessageLookupByLibrary.simpleMessage("ملاحظة المعلم"),
+        "teacherNoteText": MessageLookupByLibrary.simpleMessage(
+            "ممتاز على حل الواجبات هذه المرة."),
+        "teacherPayrollAccountAddress":
+            MessageLookupByLibrary.simpleMessage("العنوان"),
+        "teacherPayrollAccountName":
+            MessageLookupByLibrary.simpleMessage("اسم الحساب"),
+        "teacherPayrollAddPayoutContact": MessageLookupByLibrary.simpleMessage(
+            "تواصل مع الإدارة لإضافة بيانات الاستلام."),
+        "teacherPayrollAll": MessageLookupByLibrary.simpleMessage("الكل"),
+        "teacherPayrollContactAdmin":
+            MessageLookupByLibrary.simpleMessage("للتعديل تواصل مع الإدارة"),
+        "teacherPayrollDraftNote": MessageLookupByLibrary.simpleMessage(
+            "هذا المبلغ قيد المراجعة وقد يتم تحديثه قبل التحويل."),
+        "teacherPayrollEmpty": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مستحقات أو تقارير رواتب حتى الآن"),
+        "teacherPayrollMethod":
+            MessageLookupByLibrary.simpleMessage("طريقة الاستلام"),
+        "teacherPayrollNoPayout": MessageLookupByLibrary.simpleMessage(
+            "لا توجد بيانات استلام راتب مسجلة"),
+        "teacherPayrollNotTransferred":
+            MessageLookupByLibrary.simpleMessage("لم يتم تحويل الراتب بعد"),
+        "teacherPayrollPaidAmount":
+            MessageLookupByLibrary.simpleMessage("تم دفعه"),
+        "teacherPayrollPaidOn":
+            MessageLookupByLibrary.simpleMessage("تم الدفع"),
+        "teacherPayrollPaymentDetails":
+            MessageLookupByLibrary.simpleMessage("تفاصيل التحويل"),
+        "teacherPayrollPayoutDetails":
+            MessageLookupByLibrary.simpleMessage("بيانات استلام الراتب"),
+        "teacherPayrollPreparingAmount":
+            MessageLookupByLibrary.simpleMessage("قيد التجهيز"),
+        "teacherPayrollReceipt":
+            MessageLookupByLibrary.simpleMessage("عرض إيصال الدفع"),
+        "teacherPayrollReceiptLater": MessageLookupByLibrary.simpleMessage(
+            "سيظهر إيصال التحويل هنا بعد إتمام الدفع."),
+        "teacherPayrollReport":
+            MessageLookupByLibrary.simpleMessage("تقرير الراتب"),
+        "teacherPayrollReportSummary":
+            MessageLookupByLibrary.simpleMessage("ملخص التقرير"),
+        "teacherPayrollReportTitle": m34,
+        "teacherPayrollTransferredTo":
+            MessageLookupByLibrary.simpleMessage("التحويل إلى"),
+        "teacherPayrollUnavailable":
+            MessageLookupByLibrary.simpleMessage("تقرير الراتب غير متاح"),
+        "teacherPayrollUnderReview":
+            MessageLookupByLibrary.simpleMessage("قيد التجهيز"),
+        "teacherPayrollViewReport":
+            MessageLookupByLibrary.simpleMessage("عرض التقرير"),
+        "teacherPayrollViewReportReceipt":
+            MessageLookupByLibrary.simpleMessage("عرض التقرير والإيصال"),
+        "teacherPayrolls":
+            MessageLookupByLibrary.simpleMessage("رواتب المعلمين"),
+        "teacherRequestAcceptedSuccess": MessageLookupByLibrary.simpleMessage(
+            "تم قبول الطلب وإنشاء الفصل بنجاح"),
+        "teacherRequestAlreadyAssigned": MessageLookupByLibrary.simpleMessage(
+            "تم قبول هذا الطلب بواسطة معلم آخر"),
+        "teacherRequestNotEligible": MessageLookupByLibrary.simpleMessage(
+            "تعذر قبول الطلب لأن بيانات تدريس المادة أو الصف تغيرت"),
+        "teacherSarahName":
+            MessageLookupByLibrary.simpleMessage("أ/ سارة عبدالله"),
+        "teacherSarahShort": MessageLookupByLibrary.simpleMessage("أ/ سارة"),
+        "teacherStepAttachments":
+            MessageLookupByLibrary.simpleMessage("المرفقات والإقرار"),
+        "teacherStepEvaluation":
+            MessageLookupByLibrary.simpleMessage("التقييم"),
+        "teacherStepExperience":
+            MessageLookupByLibrary.simpleMessage("الخبرة العملية"),
+        "teacherStepPersonalInfo":
+            MessageLookupByLibrary.simpleMessage("البيانات الشخصية"),
+        "teacherStepQualification":
+            MessageLookupByLibrary.simpleMessage("المؤهل العلمي"),
+        "teacherStepTeachingDetails":
+            MessageLookupByLibrary.simpleMessage("تفاصيل التدريس"),
+        "teacherStepTechnicalSkills":
+            MessageLookupByLibrary.simpleMessage("المهارات التقنية"),
+        "teacherUnassignedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إلغاء توظيف المعلم بنجاح"),
+        "teacherWithdrawalRequestType":
+            MessageLookupByLibrary.simpleMessage("اعتذار المعلم عن الاستمرار"),
+        "teachers": MessageLookupByLibrary.simpleMessage("المعلمون"),
+        "teachingInBnan":
+            MessageLookupByLibrary.simpleMessage("التدريس في بنان"),
+        "technicalAppsLevel":
+            MessageLookupByLibrary.simpleMessage("مستوى استخدام الكمبيوتر"),
+        "termPlan": MessageLookupByLibrary.simpleMessage("خطة الترم"),
+        "termPlanUploadedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم رفع خطة الترم بنجاح"),
+        "theRequiredLesson":
+            MessageLookupByLibrary.simpleMessage("الدرس المطلوب"),
+        "theSupervisor": MessageLookupByLibrary.simpleMessage("المشرف"),
+        "thirdTermExercises":
+            MessageLookupByLibrary.simpleMessage("تمارين الفصل الثالث"),
+        "threeDaysAgo": MessageLookupByLibrary.simpleMessage("منذ 3 أيام"),
+        "thursday": MessageLookupByLibrary.simpleMessage("الخميس"),
+        "time": MessageLookupByLibrary.simpleMessage("الوقت"),
+        "tipToIncreasePoints":
+            MessageLookupByLibrary.simpleMessage("نصيحة لزيادة النقاط"),
+        "to": MessageLookupByLibrary.simpleMessage("إلى"),
+        "today": MessageLookupByLibrary.simpleMessage("اليوم"),
+        "todayAtTime": m35,
+        "todayClasses": MessageLookupByLibrary.simpleMessage("حصص اليوم"),
+        "total": MessageLookupByLibrary.simpleMessage("المجموع"),
+        "totalSessions": MessageLookupByLibrary.simpleMessage("إجمالي الحصص"),
+        "totalStudents": MessageLookupByLibrary.simpleMessage("إجمالي الطلاب"),
+        "trainingHours": m36,
+        "tryAgain": MessageLookupByLibrary.simpleMessage("حاول مرة أخرى"),
+        "tuesday": MessageLookupByLibrary.simpleMessage("الثلاثاء"),
+        "twelveHoursPlan":
+            MessageLookupByLibrary.simpleMessage("باقة الـ 12 ساعة"),
+        "twentyHoursPlan":
+            MessageLookupByLibrary.simpleMessage("باقة الـ 20 ساعة"),
+        "twoDaysAgo": MessageLookupByLibrary.simpleMessage("منذ يومين"),
+        "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة....."),
+        "unableToDownloadFile":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل الملف"),
+        "unableToLoadAttachment":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل المرفق"),
+        "unableToLoadSubjects":
+            MessageLookupByLibrary.simpleMessage("تعذر تحميل المواد الدراسية"),
+        "unableToOpenAttachment":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح المرفق"),
+        "unableToOpenDocument":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح المستند"),
+        "unableToOpenFile":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح الملف"),
+        "unableToOpenLink":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح الرابط"),
+        "unableToOpenPaymentReceipt":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح إيصال الدفع"),
+        "unableToOpenSessionRecording":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح تسجيل الحصة"),
+        "unableToOpenWhatsApp":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح واتساب"),
+        "underProcessing": MessageLookupByLibrary.simpleMessage("قيد المعالجة"),
+        "unexpectedError":
+            MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع"),
+        "universityOrInstitutionName":
+            MessageLookupByLibrary.simpleMessage("اسم الجامعة/المؤهل"),
+        "upcomingLesson": MessageLookupByLibrary.simpleMessage("الحصة القادمة"),
+        "upcomingLessons":
+            MessageLookupByLibrary.simpleMessage("الحصص القادمة"),
+        "upgradePackage": MessageLookupByLibrary.simpleMessage("ترقية الباقة"),
+        "uploadAction": MessageLookupByLibrary.simpleMessage("رفع"),
+        "uploadAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
+        "uploadCertificateFile": MessageLookupByLibrary.simpleMessage(
+            "صورة من الشهادة أو المؤهل (صورة/pdf)"),
+        "uploadCvFile":
+            MessageLookupByLibrary.simpleMessage("رفع السيرة الذاتية (pdf)"),
+        "uploadNationalIdFile": MessageLookupByLibrary.simpleMessage(
+            "صورة بطاقة الرقم القومي/الهوية (صورة/pdf)"),
+        "uploadPaymentReceipt":
+            MessageLookupByLibrary.simpleMessage("ارفع صورة الإيصال"),
+        "uploadReceipt": MessageLookupByLibrary.simpleMessage("رفع الإيصال"),
+        "uploadSchedule": MessageLookupByLibrary.simpleMessage("رفع الجدول"),
+        "uploadStudyPlan":
+            MessageLookupByLibrary.simpleMessage("رفع الخطة الدراسية"),
+        "usedDays": m37,
+        "usedHours": m38,
+        "userCreatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إنشاء المستخدم بنجاح"),
+        "userDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف المستخدم بنجاح"),
+        "userDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المستخدم"),
+        "userName": MessageLookupByLibrary.simpleMessage("اسم المستخدم"),
+        "userPasswordUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم تحديث كلمة مرور المستخدم بنجاح"),
+        "userRole": MessageLookupByLibrary.simpleMessage("دور المستخدم"),
+        "userStatusUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم تحديث حالة المستخدم بنجاح"),
+        "userUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تحديث المستخدم بنجاح"),
+        "usersCount": m39,
+        "usersManagement":
+            MessageLookupByLibrary.simpleMessage("إدارة المستخدمين"),
+        "validIntegerScore":
+            MessageLookupByLibrary.simpleMessage("أدخل درجة صحيحة بدون كسور"),
+        "verify": MessageLookupByLibrary.simpleMessage("تحقق"),
+        "verifyAccountTitle":
+            MessageLookupByLibrary.simpleMessage("تفعيل الحساب"),
+        "veryGood": MessageLookupByLibrary.simpleMessage("جيد جدًا"),
+        "view": MessageLookupByLibrary.simpleMessage("عرض"),
+        "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "viewTermPlan": MessageLookupByLibrary.simpleMessage("عرض خطة الترم"),
+        "visibleToCustomers":
+            MessageLookupByLibrary.simpleMessage("ظاهر للعملاء"),
+        "waitingForCorrection":
+            MessageLookupByLibrary.simpleMessage("بانتظار التصحيح"),
+        "waitingForReceiptReview":
+            MessageLookupByLibrary.simpleMessage("بانتظار مراجعة الإيصال"),
+        "waitingForTeacherApproval":
+            MessageLookupByLibrary.simpleMessage("بانتظار موافقة المعلم"),
+        "wallet": MessageLookupByLibrary.simpleMessage("محفظة إلكترونية"),
+        "wednesday": MessageLookupByLibrary.simpleMessage("الأربعاء"),
+        "week": MessageLookupByLibrary.simpleMessage("الأسبوع"),
+        "weekDays": MessageLookupByLibrary.simpleMessage("أيام الأسبوع"),
+        "weekNumber": m40,
+        "weekOne": MessageLookupByLibrary.simpleMessage("الأسبوع الأول"),
+        "weekStart": MessageLookupByLibrary.simpleMessage("بداية الأسبوع"),
+        "weekTwo": MessageLookupByLibrary.simpleMessage("الأسبوع الثاني"),
+        "weeklyEvaluation":
+            MessageLookupByLibrary.simpleMessage("التقييم الأسبوعي"),
+        "weeklyEvaluationAddedNotification":
+            MessageLookupByLibrary.simpleMessage("أضيف تقييم أسبوعي لفصل 4أ"),
+        "weeklyEvaluationStudentTitle": m41,
+        "weeklyEvaluations":
+            MessageLookupByLibrary.simpleMessage("التقييمات الأسبوعية"),
+        "weeklyEvaluationsGulfClassroomConflict":
+            MessageLookupByLibrary.simpleMessage(
+                "توجد مشكلة في إعداد مادة الفصل، يرجى التواصل مع الإدارة"),
+        "weeklyEvaluationsStudentAccessDenied":
+            MessageLookupByLibrary.simpleMessage(
+                "غير مصرح بعرض بيانات هذا الطالب"),
+        "weeklyHours":
+            MessageLookupByLibrary.simpleMessage("الساعات الأسبوعية"),
+        "weeklyIdealStudent":
+            MessageLookupByLibrary.simpleMessage("الطالب المثالي للأسبوع"),
+        "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
+            "ترتيب الطلاب المثاليين هذا الأسبوع"),
+        "weeklyLessons": m42,
+        "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
+        "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),
+        "whatsappNumber": MessageLookupByLibrary.simpleMessage("رقم الواتساب"),
+        "whyJoinBananAcademy": MessageLookupByLibrary.simpleMessage(
+            "لماذا ترغب في الانضمام لأكاديمية بنان؟"),
+        "withTeacher":
+            MessageLookupByLibrary.simpleMessage("مع أ/ سارة عبدالله"),
+        "years": MessageLookupByLibrary.simpleMessage("سنوات"),
+        "yes": MessageLookupByLibrary.simpleMessage("نعم"),
+        "yesterday": MessageLookupByLibrary.simpleMessage("أمس")
+      };
 }

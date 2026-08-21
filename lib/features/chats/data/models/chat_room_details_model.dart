@@ -3,6 +3,11 @@ import 'package:bnan_app/features/chats/data/models/chat_participant_model.dart'
 class ChatRoomDetailsModel {
   final String id;
   final String type;
+  final String? classroomId;
+  final String? accessScope;
+  final String? classroomSubjectId;
+  final bool? canRequestTeacherWithdrawal;
+  final bool? classroomSubjectAmbiguous;
   final List<ChatParticipantModel> participants;
   final bool isActive;
   final String? lastMessage;
@@ -12,6 +17,11 @@ class ChatRoomDetailsModel {
   const ChatRoomDetailsModel({
     required this.id,
     required this.type,
+    this.classroomId,
+    this.accessScope,
+    this.classroomSubjectId,
+    this.canRequestTeacherWithdrawal,
+    this.classroomSubjectAmbiguous,
     required this.participants,
     required this.isActive,
     this.lastMessage,
@@ -21,10 +31,28 @@ class ChatRoomDetailsModel {
 
   factory ChatRoomDetailsModel.fromJson(Map<String, dynamic> json) {
     final participantsJson = json['participants'] as List<dynamic>? ?? [];
+    String? text(Object? value) {
+      final result = value is String ? value.trim() : '';
+      return result.isEmpty ? null : result;
+    }
+
+    final classroom = json['classroom'];
+    final legacyClassroomId = classroom is Map
+        ? text(classroom['id'] ?? classroom['_id'])
+        : text(classroom);
 
     return ChatRoomDetailsModel(
       id: json['id']?.toString() ?? '',
       type: json['type']?.toString() ?? '',
+      classroomId: text(json['classroomId']) ?? legacyClassroomId,
+      accessScope: text(json['accessScope'])?.toLowerCase(),
+      classroomSubjectId: text(json['classroomSubjectId']),
+      canRequestTeacherWithdrawal: json['canRequestTeacherWithdrawal'] is bool
+          ? json['canRequestTeacherWithdrawal'] as bool
+          : null,
+      classroomSubjectAmbiguous: json['classroomSubjectAmbiguous'] is bool
+          ? json['classroomSubjectAmbiguous'] as bool
+          : null,
       participants: participantsJson
           .whereType<Map>()
           .map(
