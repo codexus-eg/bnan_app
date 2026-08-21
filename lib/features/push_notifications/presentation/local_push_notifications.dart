@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:bnan_app/features/push_notifications/data/models/chat_push_intent.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
@@ -10,6 +9,9 @@ import 'package:flutter/services.dart' show MethodChannel;
 class LocalPushNotifications {
   LocalPushNotifications(this._plugin);
   final FlutterLocalNotificationsPlugin _plugin;
+  static const _chatRingNotificationId = 1128352844;
+  static const _chatRingDurationMs = 15000;
+  static const _androidFlagInsistent = 4;
   static const _soundChannel = MethodChannel('bnan/notification_sound');
   static const _channel = AndroidNotificationChannel(
     'bnan_notifications',
@@ -54,6 +56,17 @@ class LocalPushNotifications {
     ]),
     audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
   );
+  static final _chatRingChannel = AndroidNotificationChannel(
+    'bnan_chat_ring_v1',
+    'Chat call alerts',
+    description: 'Incoming chat call alerts',
+    importance: Importance.max,
+    sound: const RawResourceAndroidNotificationSound('nudge_alert'),
+    enableVibration: true,
+    vibrationPattern: _nudgeAlertChannel.vibrationPattern,
+    audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
+  );
+  static final Set<String> _shownChatRingIds = {};
 
   Future<void> initialize(ValueChanged<String> onPayload) async {
     await _plugin.initialize(
@@ -65,9 +78,11 @@ class LocalPushNotifications {
           requestSoundPermission: false,
         ),
       ),
-      onDidReceiveNotificationResponse: (response) {
+      onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload;
-        if (payload?.isNotEmpty == true) onPayload(payload!);
+        if (payload?.isNotEmpty != true) return;
+        if (_isChatRingPayload(payload!)) await stopChatRing();
+        onPayload(payload);
       },
     );
     final android = _plugin
@@ -77,13 +92,17 @@ class LocalPushNotifications {
     await android?.createNotificationChannel(_channel);
     await android?.createNotificationChannel(_nudgeChannel);
     await android?.createNotificationChannel(_nudgeAlertChannel);
+    await android?.createNotificationChannel(_chatRingChannel);
   }
 
   Future<String?> initialPayload() async {
     final details = await _plugin.getNotificationAppLaunchDetails();
-    return details?.didNotificationLaunchApp == true
-        ? details?.notificationResponse?.payload
-        : null;
+    if (details?.didNotificationLaunchApp != true) return null;
+    final payload = details?.notificationResponse?.payload;
+    if (payload?.isNotEmpty == true && _isChatRingPayload(payload!)) {
+      await stopChatRing();
+    }
+    return payload;
   }
 
   Future<void> show(ChatPushIntent intent, Map<String, dynamic> data) {
@@ -119,48 +138,68 @@ class LocalPushNotifications {
   Future<void> showNotification(
     AppNotification notification, {
     bool playNudgeLocally = true,
+    String? appState,
   }) async {
-    final isNudge = notification.key.trim().toUpperCase() == 'CHAT_NUDGE';
+    final key = notification.key.trim().toUpperCase();
+    final isNudge = key == 'CHAT_NUDGE';
+    final isChatRing = key == 'STUDENT_CALL_ALERT';
+    if (isChatRing && !_claimChatRing(notification.id)) return;
+    final isForegroundChatRing = isChatRing && appState == 'foreground';
     final useNudgeChannel = isNudge && !playNudgeLocally;
     await _plugin.show(
-      id: notification.id.isEmpty
+      id: isChatRing
+          ? _chatRingNotificationId
+          : notification.id.isEmpty
           ? notification.hashCode
           : notification.id.hashCode,
       title: notification.title,
       body: notification.body,
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
-          useNudgeChannel
+          isChatRing
+              ? 'bnan_chat_ring_v1'
+              : useNudgeChannel
               ? 'bnan_nudge_alert_v2'
               : isNudge
               ? 'bnan_nudge_silent_v1'
               : 'bnan_notifications',
-          useNudgeChannel
+          isChatRing
+              ? 'Chat call alerts'
+              : useNudgeChannel
               ? 'Bnan long nudge alerts'
               : isNudge
               ? 'Bnan nudge notifications'
               : 'Bnan notifications',
           channelDescription: 'Bnan Academy notifications',
           icon: 'ic_notification',
-          importance: Importance.high,
-          priority: Priority.high,
-          playSound: !isNudge || useNudgeChannel,
-          sound: useNudgeChannel
+          importance: isChatRing ? Importance.max : Importance.high,
+          priority: isChatRing ? Priority.max : Priority.high,
+          playSound: isChatRing || !isNudge || useNudgeChannel,
+          sound: isChatRing || useNudgeChannel
               ? const RawResourceAndroidNotificationSound('nudge_alert')
               : null,
-          enableVibration: !isNudge || useNudgeChannel,
-          vibrationPattern: useNudgeChannel
+          enableVibration: isChatRing || !isNudge || useNudgeChannel,
+          vibrationPattern: isChatRing || useNudgeChannel
               ? _nudgeAlertChannel.vibrationPattern
               : null,
-          audioAttributesUsage: useNudgeChannel
+          audioAttributesUsage: isChatRing || useNudgeChannel
               ? AudioAttributesUsage.notificationRingtone
               : AudioAttributesUsage.notification,
+          timeoutAfter: isChatRing ? _chatRingDurationMs : null,
+          additionalFlags: isChatRing
+              ? Int32List.fromList(const [_androidFlagInsistent])
+              : null,
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,
-          presentSound: !isNudge || useNudgeChannel,
+          presentSound:
+              (isChatRing && !isForegroundChatRing) ||
+              !isNudge && !isChatRing ||
+              useNudgeChannel,
           presentBadge: true,
-          sound: useNudgeChannel ? 'nudge_alert.wav' : null,
+          sound: isChatRing && !isForegroundChatRing || useNudgeChannel
+              ? 'nudge_alert.wav'
+              : null,
         ),
       ),
       payload: jsonEncode(notification.toPayload()),
@@ -168,5 +207,39 @@ class LocalPushNotifications {
     if (isNudge && playNudgeLocally) {
       await _soundChannel.invokeMethod<void>('playNudgeNotificationSequence');
     }
+    if (isChatRing) {
+      if (isForegroundChatRing && defaultTargetPlatform == TargetPlatform.iOS) {
+        await _soundChannel.invokeMethod<void>('playChatRing');
+      }
+      debugPrint('[ChatRing] platform=${defaultTargetPlatform.name}');
+      debugPrint('[ChatRing] appState=${appState ?? 'unknown'}');
+      debugPrint('[ChatRing] sound/ring triggered');
+    }
+  }
+
+  Future<void> stopChatRing() async {
+    await _plugin.cancel(id: _chatRingNotificationId);
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await _soundChannel.invokeMethod<void>('stopChatRing');
+    }
+  }
+
+  bool _isChatRingPayload(String payload) {
+    try {
+      final value = jsonDecode(payload);
+      return value is Map &&
+          value['key']?.toString().trim().toUpperCase() == 'STUDENT_CALL_ALERT';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  bool _claimChatRing(String id) {
+    if (id.isEmpty) return true;
+    if (!_shownChatRingIds.add(id)) return false;
+    if (_shownChatRingIds.length > 100) {
+      _shownChatRingIds.remove(_shownChatRingIds.first);
+    }
+    return true;
   }
 }

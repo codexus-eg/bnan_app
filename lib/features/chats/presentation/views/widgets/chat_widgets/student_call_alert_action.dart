@@ -40,6 +40,7 @@ class _StudentCallAlertActionState extends State<StudentCallAlertAction> {
   );
 
   Future<void> _call() async {
+    debugPrint('[ChatRing] phone icon tapped');
     setState(() => _loading = true);
     final result = await getIt<AttendanceRepo>().callStudent(widget.studentId);
     if (!mounted) return;
@@ -57,6 +58,7 @@ class _StudentCallAlertActionState extends State<StudentCallAlertAction> {
         );
       },
       (_) {
+        debugPrint('[ChatRing] ring request sent');
         _startCooldown();
         showCustomSnackBar(context, S.of(context).studentCallAlertSent, true);
       },

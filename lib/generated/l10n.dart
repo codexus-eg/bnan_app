@@ -11253,6 +11253,146 @@ class S {
       args: [],
     );
   }
+
+  /// `Subscription Renewal Requests`
+  String get adminSubscriptionRenewals {
+    return Intl.message(
+      'Subscription Renewal Requests',
+      name: 'adminSubscriptionRenewals',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending review`
+  String get renewalPendingReview {
+    return Intl.message(
+      'Pending review',
+      name: 'renewalPendingReview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment confirmed`
+  String get renewalPaymentConfirmed {
+    return Intl.message(
+      'Payment confirmed',
+      name: 'renewalPaymentConfirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renewal approved`
+  String get renewalApproved {
+    return Intl.message(
+      'Renewal approved',
+      name: 'renewalApproved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejected`
+  String get renewalRejected {
+    return Intl.message(
+      'Rejected',
+      name: 'renewalRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm payment`
+  String get renewalConfirmPayment {
+    return Intl.message(
+      'Confirm payment',
+      name: 'renewalConfirmPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve renewal`
+  String get renewalApprove {
+    return Intl.message(
+      'Approve renewal',
+      name: 'renewalApprove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No requests`
+  String get renewalNoRequests {
+    return Intl.message(
+      'No requests',
+      name: 'renewalNoRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reference number`
+  String get renewalReferenceNumber {
+    return Intl.message(
+      'Reference number',
+      name: 'renewalReferenceNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requested at`
+  String get renewalRequestedAt {
+    return Intl.message(
+      'Requested at',
+      name: 'renewalRequestedAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View receipt`
+  String get renewalViewReceipt {
+    return Intl.message(
+      'View receipt',
+      name: 'renewalViewReceipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejection reason (optional)`
+  String get renewalOptionalRejectionReason {
+    return Intl.message(
+      'Rejection reason (optional)',
+      name: 'renewalOptionalRejectionReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This payment status does not allow that action.`
+  String get renewalInvalidPaymentStatus {
+    return Intl.message(
+      'This payment status does not allow that action.',
+      name: 'renewalInvalidPaymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm the payment before approving the renewal.`
+  String get renewalPaymentNotConfirmed {
+    return Intl.message(
+      'Confirm the payment before approving the renewal.',
+      name: 'renewalPaymentNotConfirmed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

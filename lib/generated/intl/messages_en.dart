@@ -225,6 +225,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "adminSubjectRequestsSection": MessageLookupByLibrary.simpleMessage(
       "Subject/lesson requests",
     ),
+    "adminSubscriptionRenewals": MessageLookupByLibrary.simpleMessage(
+      "Subscription Renewal Requests",
+    ),
     "adminSupervisors": MessageLookupByLibrary.simpleMessage("Supervisors"),
     "adminUsers": MessageLookupByLibrary.simpleMessage("Users"),
     "algebraCourseCertificate": MessageLookupByLibrary.simpleMessage(
@@ -261,11 +264,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
       "Please assign a subject to this classroom",
     ),
+    "assignSupervisorToClassroom": m0,
+    "assignTeacherInSubject": m1,
     "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
       "Please assign a teacher to the subject first",
     ),
-    "assignSupervisorToClassroom": m0,
-    "assignTeacherInSubject": m1,
     "assignToClassroom": MessageLookupByLibrary.simpleMessage(
       "Assign to classroom",
     ),
@@ -396,11 +399,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
       "Your request was submitted successfully",
     ),
-    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
-      "You already have a teacher change request under review",
-    ),
     "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
       "No cancellation or teacher-change requests",
+    ),
+    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
+      "You already have a teacher change request under review",
     ),
     "changeTeacherRequestType": MessageLookupByLibrary.simpleMessage(
       "Change teacher",
@@ -1076,7 +1079,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "messages": MessageLookupByLibrary.simpleMessage("Messages"),
     "monday": MessageLookupByLibrary.simpleMessage("Monday"),
     "month": MessageLookupByLibrary.simpleMessage("Month"),
-    "oneMonth": MessageLookupByLibrary.simpleMessage("1 month"),
     "monthlyCertificateTitle": m15,
     "monthlyPackage": MessageLookupByLibrary.simpleMessage("Monthly Package"),
     "monthlyProfits": MessageLookupByLibrary.simpleMessage("Monthly Profits"),
@@ -1394,6 +1396,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingTitle3": MessageLookupByLibrary.simpleMessage(
       "Success starts here",
     ),
+    "oneMonth": MessageLookupByLibrary.simpleMessage("1 month"),
     "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
     "openAction": MessageLookupByLibrary.simpleMessage("Open"),
     "openDocument": MessageLookupByLibrary.simpleMessage("Open Document"),
@@ -1912,8 +1915,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
       "This package includes all subjects; no subject selection is required.",
     ),
+    "renewalApprove": MessageLookupByLibrary.simpleMessage("Approve renewal"),
+    "renewalApproved": MessageLookupByLibrary.simpleMessage("Renewal approved"),
     "renewalCompleted": MessageLookupByLibrary.simpleMessage(
       "The subscription was renewed successfully.",
+    ),
+    "renewalConfirmPayment": MessageLookupByLibrary.simpleMessage(
+      "Confirm payment",
     ),
     "renewalCurrentSubscription": MessageLookupByLibrary.simpleMessage(
       "Current subscription",
@@ -1925,18 +1933,39 @@ class MessageLookup extends MessageLookupByLibrary {
     "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
       "A new payment attempt is required. Please try again.",
     ),
+    "renewalInvalidPaymentStatus": MessageLookupByLibrary.simpleMessage(
+      "This payment status does not allow that action.",
+    ),
+    "renewalNoRequests": MessageLookupByLibrary.simpleMessage("No requests"),
+    "renewalOptionalRejectionReason": MessageLookupByLibrary.simpleMessage(
+      "Rejection reason (optional)",
+    ),
+    "renewalPaymentConfirmed": MessageLookupByLibrary.simpleMessage(
+      "Payment confirmed",
+    ),
+    "renewalPaymentNotConfirmed": MessageLookupByLibrary.simpleMessage(
+      "Confirm the payment before approving the renewal.",
+    ),
+    "renewalPendingReview": MessageLookupByLibrary.simpleMessage(
+      "Pending review",
+    ),
     "renewalPurchasedHours": MessageLookupByLibrary.simpleMessage(
       "Purchased hours",
     ),
     "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
       "The renewal request and receipt were submitted for review.",
     ),
+    "renewalReferenceNumber": MessageLookupByLibrary.simpleMessage(
+      "Reference number",
+    ),
+    "renewalRejected": MessageLookupByLibrary.simpleMessage("Rejected"),
     "renewalRemainingHours": MessageLookupByLibrary.simpleMessage(
       "Remaining hours",
     ),
     "renewalRequestPending": MessageLookupByLibrary.simpleMessage(
       "The renewal request was submitted and is pending review.",
     ),
+    "renewalRequestedAt": MessageLookupByLibrary.simpleMessage("Requested at"),
     "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
       "You are not allowed to renew this student\'s subscription.",
     ),
@@ -1950,6 +1979,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "This subscription is still active and cannot be renewed yet.",
     ),
     "renewalUsedHours": MessageLookupByLibrary.simpleMessage("Used hours"),
+    "renewalViewReceipt": MessageLookupByLibrary.simpleMessage("View receipt"),
     "reports": MessageLookupByLibrary.simpleMessage("Reports"),
     "requestAccepted": MessageLookupByLibrary.simpleMessage(
       "Your request has been accepted!",

@@ -60,7 +60,9 @@ class PushNotificationService {
     }
     _subscriptions.addAll([
       _foregroundMessages.listen(_handleForeground),
-      _openedMessages.listen(_handleOpened),
+      _openedMessages.listen(
+        (message) => _handleOpened(message, appState: 'background'),
+      ),
       _messaging.tokenRefresh.listen(_handleTokenRefresh),
     ]);
     await _localNotifications?.initialize(_handleLocalPayload);
@@ -70,13 +72,14 @@ class PushNotificationService {
     }
     SessionManager.instance.addAccessTokenChangeListener(_onTokenChanged);
     SessionManager.instance.addBeforeClearListener(_beforeSessionClear);
-    _handleOpened(await _messaging.getInitialMessage());
+    _handleOpened(await _messaging.getInitialMessage(), appState: 'terminated');
     if (SessionManager.instance.accessToken?.isNotEmpty == true) {
       unawaited(_registrar.registerCurrent());
     }
   }
 
   Future<void> _handleForeground(RemoteMessage message) async {
+    _logChatRingReceived(message, 'foreground');
     final notification = _notification(message);
     final intent = _intent(message);
     final processingId = _processingId(message, notification, intent);
@@ -88,7 +91,10 @@ class PushNotificationService {
       final accepted =
           _notifications?.ingest(notification, emitIncoming: false) ?? true;
       if (accepted && notification.key.trim().toUpperCase() != 'NEW_MESSAGE') {
-        await _localNotifications?.showNotification(notification);
+        await _localNotifications?.showNotification(
+          notification,
+          appState: 'foreground',
+        );
       }
     }
     if (intent == null) return;
@@ -123,11 +129,22 @@ class PushNotificationService {
     return '';
   }
 
-  void _handleOpened(RemoteMessage? message) {
+  void _handleOpened(RemoteMessage? message, {required String appState}) {
     if (message != null) {
+      _logChatRingReceived(message, appState);
       _queueOrOpenNotification(_notification(message));
       _queueOrOpen(_intent(message));
     }
+  }
+
+  void _logChatRingReceived(RemoteMessage message, String appState) {
+    if (message.data['key']?.toString().trim().toUpperCase() !=
+        'STUDENT_CALL_ALERT') {
+      return;
+    }
+    debugPrint('[ChatRing] push received');
+    debugPrint('[ChatRing] platform=${defaultTargetPlatform.name}');
+    debugPrint('[ChatRing] appState=$appState');
   }
 
   ChatPushIntent? _intent(RemoteMessage message) => ChatPushIntent.tryParse(

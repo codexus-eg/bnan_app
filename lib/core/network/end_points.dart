@@ -12,6 +12,14 @@ abstract class EndPoints {
   static const String updatePassword = '/auth/updatePassword';
   static const String deviceToken = '/devices/token';
   static const String notifications = '/notifications';
+  static const String adminEgyptianSubscriptionRenewals =
+      '/admin/subscription-renewals/egyptian';
+  static String confirmEgyptianSubscriptionRenewal(String paymentId) =>
+      '$adminEgyptianSubscriptionRenewals/$paymentId/confirm';
+  static String approveEgyptianSubscriptionRenewal(String paymentId) =>
+      '$adminEgyptianSubscriptionRenewals/$paymentId/approve';
+  static String rejectEgyptianSubscriptionRenewal(String paymentId) =>
+      '$adminEgyptianSubscriptionRenewals/$paymentId/reject';
   static const String notificationsRead = '/notifications/read';
   static const String notificationPreferences = '/notification-preferences/me';
   static const String dashboard = '/dashboard';

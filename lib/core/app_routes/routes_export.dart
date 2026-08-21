@@ -81,6 +81,8 @@ export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent
 export 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscription_renewal_view.dart';
 export 'package:bnan_app/features/parent_home/presentation/views/parent_schedule_view.dart';
 export 'package:bnan_app/features/registration_requests/presentation/view/registration_requests_view.dart';
+export 'package:bnan_app/features/admin_subscription_renewals/presentation/manager/admin_subscription_renewals_cubit.dart';
+export 'package:bnan_app/features/admin_subscription_renewals/presentation/views/admin_subscription_renewals_view.dart';
 export 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
 export 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_request_actions_cubit.dart';
 export 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';

@@ -49,5 +49,9 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.addSubjectToClassroom,
       icon: ImageManager.teacherBookTwoIcon,
     ),
+    DrawerItemModel(
+      title: s.adminSubscriptionRenewals,
+      icon: ImageManager.wallet,
+    ),
   ];
 }

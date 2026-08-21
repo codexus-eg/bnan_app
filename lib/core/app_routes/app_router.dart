@@ -1322,6 +1322,16 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         ),
       ),
       GoRoute(
+        path: Routes.adminEgyptianSubscriptionRenewals,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) => getIt<AdminSubscriptionRenewalsCubit>()..load(),
+            child: const AdminSubscriptionRenewalsView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.gradesManagement,
         pageBuilder: (context, state) => buildTransitionPages(
           child: MultiBlocProvider(

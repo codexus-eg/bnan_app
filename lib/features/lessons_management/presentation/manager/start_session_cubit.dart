@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/utils/schedule_time_utils.dart';
+import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
+import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/start_session_repo.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
@@ -12,111 +14,176 @@ class StartSessionCubit extends Cubit<StartSessionState> {
   StartSessionCubit(
     this.repo,
     this.gulfScheduleRepo,
-    this.tableManagementRepo,
-  ) : super(const StartSessionState());
+    this.tableManagementRepo, [
+    this.chatRepo,
+  ]) : super(const StartSessionState());
   final StartSessionRepo repo;
   final GulfScheduleRepo gulfScheduleRepo;
   final TableManagementRepo tableManagementRepo;
+  final ChatRepo? chatRepo;
   final Map<String, int> _requestIds = {};
   final Map<String, int> _activeRequestIds = {};
+  int _scheduleRequestId = 0;
   static bool _timezonesInitialized = false;
 
   /// جلب الحصص المجدولة والمستحقة الآن للمعلم من النظامين (Gulf + Egyptian)
   /// حسب نافذة وقت بدء الحصة، واستخراج chatRoomId الخاص بكل حصة مستحقة.
   Future<void> loadScheduledLessons() async {
-    final chatRoomIds = <String>{};
+    final requestId = ++_scheduleRequestId;
+    final dueGulfLessons = <_DueGulfLesson>{};
+    final egyptianChatRoomIds = <String>{};
+    final roomsFuture = chatRepo?.getChatRooms();
 
     // 1. الجدول الخليجي (Gulf Schedule)
     try {
       final gulfResult = await gulfScheduleRepo.getMyGulfSchedule();
-      gulfResult.fold((failure) {
-        debugPrint('[DEBUG StartSession] GulfSchedule load failure: ${failure.message}');
-      }, (response) {
-        final now = _nowIn(response.data.timezone);
-        final todayName = _weekdayName(now.weekday);
-        for (final classroom in response.data.classrooms) {
-          for (final entry in classroom.entries) {
-            final isDayMatch = entry.day.trim().toLowerCase() == todayName;
-            final isDue = ScheduleTimeUtils.isDueNow(
-              entry.startTime,
-              entry.endTime,
-              now: now,
-            );
-            final cr = entry.chatRoomId ?? classroom.chatRoomId;
-            final csId = entry.classroomSubjectId ?? classroom.classroomSubjectId;
+      gulfResult.fold(
+        (failure) {
+          debugPrint(
+            '[DEBUG StartSession] GulfSchedule load failure: ${failure.message}',
+          );
+        },
+        (response) {
+          final now = _nowIn(response.data.timezone);
+          final todayName = _weekdayName(now.weekday);
+          for (final classroom in response.data.classrooms) {
+            for (final entry in classroom.entries) {
+              final isDayMatch = entry.day.trim().toLowerCase() == todayName;
+              final isDue = ScheduleTimeUtils.isDueNow(
+                entry.startTime,
+                entry.endTime,
+                now: now,
+              );
+              final cr = entry.chatRoomId ?? classroom.chatRoomId;
+              final csId =
+                  entry.classroomSubjectId ?? classroom.classroomSubjectId;
 
-            debugPrint(
-              '[DEBUG StartSession] Gulf Lesson -> '
-              'classroomId: ${classroom.id}, '
-              'classroomSubjectId: $csId, '
-              'chatRoomId: $cr, '
-              'day: ${entry.day} (today: $todayName -> match: $isDayMatch), '
-              'startTime: ${entry.startTime}, '
-              'endTime: ${entry.endTime}, '
-              'now: $now, '
-              'isDueNow: $isDue',
-            );
+              debugPrint(
+                '[DEBUG StartSession] Gulf Lesson -> '
+                'classroomId: ${classroom.id}, '
+                'classroomSubjectId: $csId, '
+                'chatRoomId: $cr, '
+                'day: ${entry.day} (today: $todayName -> match: $isDayMatch), '
+                'startTime: ${entry.startTime}, '
+                'endTime: ${entry.endTime}, '
+                'now: $now, '
+                'isDueNow: $isDue',
+              );
 
-            if (isDayMatch && isDue && cr != null && cr.isNotEmpty) {
-              chatRoomIds.add(cr);
+              if (isDayMatch && isDue) {
+                dueGulfLessons.add((
+                  classroomId: classroom.id.trim(),
+                  classroomSubjectId: csId?.trim(),
+                  chatRoomId: cr?.trim(),
+                ));
+              }
             }
           }
-        }
-      });
+        },
+      );
     } catch (e) {
       debugPrint('[DEBUG StartSession] GulfSchedule error: $e');
     }
 
     // 2. الجدول المصري (Egyptian Schedule)
     try {
-      final egyptResult =
-          await tableManagementRepo.getMyEgyptianDigitalSchedule();
-      egyptResult.fold((failure) {
-        debugPrint('[DEBUG StartSession] EgyptianSchedule load failure: ${failure.message}');
-      }, (week) {
-        final now = _nowIn(week.timezone);
-        final todayName = _weekdayName(now.weekday);
-        final todayIso = now.toIso8601String().split('T').first;
-        for (final day in week.days) {
-          final dayLower = day.date.trim().toLowerCase();
-          final isDayMatch = dayLower == todayName ||
-              dayLower == todayIso ||
-              _dayKey(day.date) == todayName;
-          for (final lesson in day.lessons) {
-            final isDue = ScheduleTimeUtils.isDueNow(
-              lesson.startTime,
-              lesson.endTime,
-              now: now,
-            );
-            final cr = lesson.chatRoomId;
+      final egyptResult = await tableManagementRepo
+          .getMyEgyptianDigitalSchedule();
+      egyptResult.fold(
+        (failure) {
+          debugPrint(
+            '[DEBUG StartSession] EgyptianSchedule load failure: ${failure.message}',
+          );
+        },
+        (week) {
+          final now = _nowIn(week.timezone);
+          final todayName = _weekdayName(now.weekday);
+          final todayIso = now.toIso8601String().split('T').first;
+          for (final day in week.days) {
+            final dayLower = day.date.trim().toLowerCase();
+            final isDayMatch =
+                dayLower == todayName ||
+                dayLower == todayIso ||
+                _dayKey(day.date) == todayName;
+            for (final lesson in day.lessons) {
+              final isDue = ScheduleTimeUtils.isDueNow(
+                lesson.startTime,
+                lesson.endTime,
+                now: now,
+              );
+              final cr = lesson.chatRoomId;
 
-            debugPrint(
-              '[DEBUG StartSession] Egyptian Lesson -> '
-              'classroomId: ${lesson.classroomId}, '
-              'classroomSubjectId: ${lesson.classroomSubjectId}, '
-              'chatRoomId: $cr, '
-              'date: ${day.date} (today: $todayName -> match: $isDayMatch), '
-              'startTime: ${lesson.startTime}, '
-              'endTime: ${lesson.endTime}, '
-              'now: $now, '
-              'isDueNow: $isDue',
-            );
+              debugPrint(
+                '[DEBUG StartSession] Egyptian Lesson -> '
+                'classroomId: ${lesson.classroomId}, '
+                'classroomSubjectId: ${lesson.classroomSubjectId}, '
+                'chatRoomId: $cr, '
+                'date: ${day.date} (today: $todayName -> match: $isDayMatch), '
+                'startTime: ${lesson.startTime}, '
+                'endTime: ${lesson.endTime}, '
+                'now: $now, '
+                'isDueNow: $isDue',
+              );
 
-            if (isDayMatch && isDue && cr != null && cr.isNotEmpty) {
-              chatRoomIds.add(cr);
+              if (isDayMatch && isDue && cr != null && cr.isNotEmpty) {
+                egyptianChatRoomIds.add(cr);
+              }
             }
           }
-        }
-      });
+        },
+      );
     } catch (e) {
       debugPrint('[DEBUG StartSession] EgyptianSchedule error: $e');
     }
 
-    debugPrint('[DEBUG StartSession] Final scheduledChatRoomIds: $chatRoomIds');
+    final rooms = <ChatRoomSummaryModel>[];
+    final pendingRooms = roomsFuture;
+    if (pendingRooms != null) {
+      final roomsResult = await pendingRooms;
+      roomsResult.fold(
+        (failure) => debugPrint(
+          '[DEBUG StartSession] ChatRooms load failure: ${failure.message}',
+        ),
+        (response) => rooms.addAll(response.rooms),
+      );
+    }
 
-    if (!isClosed) {
+    if (isClosed || requestId != _scheduleRequestId) return;
+    _emitScheduledChatRoomIds(
+      dueGulfLessons: dueGulfLessons,
+      egyptianChatRoomIds: egyptianChatRoomIds,
+      rooms: rooms,
+    );
+  }
+
+  void _emitScheduledChatRoomIds({
+    required Set<_DueGulfLesson> dueGulfLessons,
+    required Set<String> egyptianChatRoomIds,
+    required List<ChatRoomSummaryModel> rooms,
+  }) {
+    final chatRoomIds = {...egyptianChatRoomIds};
+    for (final lesson in dueGulfLessons) {
+      final directRoomId = lesson.chatRoomId?.trim() ?? '';
+      if (directRoomId.isNotEmpty) chatRoomIds.add(directRoomId);
+      for (final room in rooms) {
+        if (_matchesGulfLesson(room, lesson)) chatRoomIds.add(room.id.trim());
+      }
+    }
+    debugPrint('[DEBUG StartSession] Final scheduledChatRoomIds: $chatRoomIds');
+    if (!setEquals(state.scheduledChatRoomIds, chatRoomIds)) {
       emit(state.copyWith(scheduledChatRoomIds: chatRoomIds));
     }
+  }
+
+  bool _matchesGulfLesson(ChatRoomSummaryModel room, _DueGulfLesson lesson) {
+    final roomId = room.id.trim();
+    final classroomId = room.classroomId?.trim() ?? '';
+    if (roomId.isEmpty || classroomId != lesson.classroomId) return false;
+    final lessonSubject = lesson.classroomSubjectId?.trim() ?? '';
+    final roomSubject = room.classroomSubjectId?.trim() ?? '';
+    return lessonSubject.isEmpty ||
+        roomSubject.isEmpty ||
+        lessonSubject == roomSubject;
   }
 
   Future<void> loadActive(String classroomId) async {
@@ -381,3 +448,9 @@ class StartSessionCubit extends Cubit<StartSessionState> {
   bool _isCurrent(String classroomId, int requestId) =>
       !isClosed && _requestIds[classroomId] == requestId;
 }
+
+typedef _DueGulfLesson = ({
+  String classroomId,
+  String? classroomSubjectId,
+  String? chatRoomId,
+});

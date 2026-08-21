@@ -77,6 +77,8 @@ abstract class Routes {
   static const String lessonsManagement = '/lessonsManagement';
   static const String teacherApplication = '/teacherApplication';
   static const String registrationRequests = '/registrationRequests';
+  static const String adminEgyptianSubscriptionRenewals =
+      '/admin/subscription-renewals/egyptian';
   static const String gradesManagement = '/gradesManagement';
   static const String studentClassroomAssignment =
       '/studentClassroomAssignment';

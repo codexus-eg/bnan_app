@@ -1378,5 +1378,19 @@
     "assignSubjectToClassroom": "Please assign a subject to this classroom",
     "assignTeacherToSubjectFirst": "Please assign a teacher to the subject first",
     "cancellationReason": "Cancellation reason",
-    "paymentVerificationPending": "Payment status is being verified. This may take some time."
+    "paymentVerificationPending": "Payment status is being verified. This may take some time.",
+    "adminSubscriptionRenewals": "Subscription Renewal Requests",
+    "renewalPendingReview": "Pending review",
+    "renewalPaymentConfirmed": "Payment confirmed",
+    "renewalApproved": "Renewal approved",
+    "renewalRejected": "Rejected",
+    "renewalConfirmPayment": "Confirm payment",
+    "renewalApprove": "Approve renewal",
+    "renewalNoRequests": "No requests",
+    "renewalReferenceNumber": "Reference number",
+    "renewalRequestedAt": "Requested at",
+    "renewalViewReceipt": "View receipt",
+    "renewalOptionalRejectionReason": "Rejection reason (optional)",
+    "renewalInvalidPaymentStatus": "This payment status does not allow that action.",
+    "renewalPaymentNotConfirmed": "Confirm the payment before approving the renewal."
 }

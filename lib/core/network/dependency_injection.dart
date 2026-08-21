@@ -7,6 +7,9 @@ import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject
 import 'package:bnan_app/features/admin_subject_requests/data/repo/admin_subject_requests_repo_impl.dart';
 import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_request_actions_cubit.dart';
 import 'package:bnan_app/features/admin_subject_requests/presentation/manager/admin_subject_requests_cubit.dart';
+import 'package:bnan_app/features/admin_subscription_renewals/data/repo/admin_subscription_renewals_repo.dart';
+import 'package:bnan_app/features/admin_subscription_renewals/data/repo/admin_subscription_renewals_repo_impl.dart';
+import 'package:bnan_app/features/admin_subscription_renewals/presentation/manager/admin_subscription_renewals_cubit.dart';
 import 'package:bnan_app/features/classroom_change_requests/data/repo/classroom_change_requests_repo.dart';
 import 'package:bnan_app/features/classroom_change_requests/data/repo/classroom_change_requests_repo_impl.dart';
 import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_request_actions_cubit.dart';
@@ -126,6 +129,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<RegistrationRequestsRepo>(
     () => RegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<AdminSubscriptionRenewalsRepo>(
+    () => AdminSubscriptionRenewalsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<AdminSubjectRequestsRepo>(
     () => AdminSubjectRequestsRepoImpl(getIt<ApiConsumer>()),
@@ -275,6 +281,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
       getIt<StartSessionRepo>(),
       getIt<GulfScheduleRepo>(),
       getIt<TableManagementRepo>(),
+      getIt<ChatRepo>(),
     ),
   );
   getIt.registerFactory<curriculum_management.GetCurriculumsCubit>(
@@ -379,6 +386,10 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
 
   getIt.registerFactory<GetRegistrationRequestsCubit>(
     () => GetRegistrationRequestsCubit(getIt<RegistrationRequestsRepo>()),
+  );
+  getIt.registerFactory<AdminSubscriptionRenewalsCubit>(
+    () =>
+        AdminSubscriptionRenewalsCubit(getIt<AdminSubscriptionRenewalsRepo>()),
   );
   getIt.registerFactory<AdminSubjectRequestsCubit>(
     () => AdminSubjectRequestsCubit(getIt<AdminSubjectRequestsRepo>()),

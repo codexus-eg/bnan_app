@@ -214,6 +214,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "adminSubjectRequestsSection": MessageLookupByLibrary.simpleMessage(
       "طلبات مادة/درس",
     ),
+    "adminSubscriptionRenewals": MessageLookupByLibrary.simpleMessage(
+      "طلبات تجديد الاشتراكات",
+    ),
     "adminSupervisors": MessageLookupByLibrary.simpleMessage("مشرفين"),
     "adminUsers": MessageLookupByLibrary.simpleMessage("مستخدمين"),
     "algebraCourseCertificate": MessageLookupByLibrary.simpleMessage(
@@ -250,11 +253,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "assignSubjectToClassroom": MessageLookupByLibrary.simpleMessage(
       "برجاء تعيين مادة لهذا الفصل",
     ),
+    "assignSupervisorToClassroom": m0,
+    "assignTeacherInSubject": m1,
     "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
       "برجاء تعيين معلم للمادة أولًا",
     ),
-    "assignSupervisorToClassroom": m0,
-    "assignTeacherInSubject": m1,
     "assignToClassroom": MessageLookupByLibrary.simpleMessage("توظيف في فصل"),
     "assignmentAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "تم توظيف المشرف بنجاح",
@@ -381,11 +384,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "changeRequestSubmitted": MessageLookupByLibrary.simpleMessage(
       "تم إرسال طلبك بنجاح",
     ),
-    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
-      "لديك طلب تغيير معلم قيد المراجعة بالفعل",
-    ),
     "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
       "لا توجد طلبات إلغاء أو تغيير معلم",
+    ),
+    "changeTeacherRequestAlreadyPending": MessageLookupByLibrary.simpleMessage(
+      "لديك طلب تغيير معلم قيد المراجعة بالفعل",
     ),
     "changeTeacherRequestType": MessageLookupByLibrary.simpleMessage(
       "تغيير المعلم",
@@ -997,7 +1000,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
     "monday": MessageLookupByLibrary.simpleMessage("الإثنين"),
     "month": MessageLookupByLibrary.simpleMessage("الشهر"),
-    "oneMonth": MessageLookupByLibrary.simpleMessage("شهر"),
     "monthlyCertificateTitle": m15,
     "monthlyPackage": MessageLookupByLibrary.simpleMessage("باقة شهرية"),
     "monthlyProfits": MessageLookupByLibrary.simpleMessage("الأرباح الشهرية"),
@@ -1309,6 +1311,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "دروس تفاعلية ومحتوى ممتع",
     ),
     "onboardingTitle3": MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
+    "oneMonth": MessageLookupByLibrary.simpleMessage("شهر"),
     "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
     "openAction": MessageLookupByLibrary.simpleMessage("فتح"),
     "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
@@ -1806,8 +1809,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
       "هذه الباقة تشمل كل المواد ولا تحتاج إلى اختيار مادة.",
     ),
+    "renewalApprove": MessageLookupByLibrary.simpleMessage("اعتماد التجديد"),
+    "renewalApproved": MessageLookupByLibrary.simpleMessage(
+      "تم اعتماد التجديد",
+    ),
     "renewalCompleted": MessageLookupByLibrary.simpleMessage(
       "تم تجديد الاشتراك بنجاح.",
+    ),
+    "renewalConfirmPayment": MessageLookupByLibrary.simpleMessage(
+      "تأكيد الدفع",
     ),
     "renewalCurrentSubscription": MessageLookupByLibrary.simpleMessage(
       "الاشتراك الحالي",
@@ -1819,18 +1829,39 @@ class MessageLookup extends MessageLookupByLibrary {
     "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
       "يلزم بدء محاولة دفع جديدة. حاول مرة أخرى.",
     ),
+    "renewalInvalidPaymentStatus": MessageLookupByLibrary.simpleMessage(
+      "حالة طلب الدفع لا تسمح بتنفيذ هذا الإجراء.",
+    ),
+    "renewalNoRequests": MessageLookupByLibrary.simpleMessage("لا توجد طلبات"),
+    "renewalOptionalRejectionReason": MessageLookupByLibrary.simpleMessage(
+      "سبب الرفض (اختياري)",
+    ),
+    "renewalPaymentConfirmed": MessageLookupByLibrary.simpleMessage(
+      "تم تأكيد الدفع",
+    ),
+    "renewalPaymentNotConfirmed": MessageLookupByLibrary.simpleMessage(
+      "يجب تأكيد الدفع قبل اعتماد التجديد.",
+    ),
+    "renewalPendingReview": MessageLookupByLibrary.simpleMessage(
+      "قيد المراجعة",
+    ),
     "renewalPurchasedHours": MessageLookupByLibrary.simpleMessage(
       "الساعات المشتراة",
     ),
     "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
       "تم إرسال طلب التجديد والإيصال قيد المراجعة.",
     ),
+    "renewalReferenceNumber": MessageLookupByLibrary.simpleMessage(
+      "رقم المرجع",
+    ),
+    "renewalRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
     "renewalRemainingHours": MessageLookupByLibrary.simpleMessage(
       "الساعات المتبقية",
     ),
     "renewalRequestPending": MessageLookupByLibrary.simpleMessage(
       "تم إرسال طلب التجديد وهو قيد المراجعة.",
     ),
+    "renewalRequestedAt": MessageLookupByLibrary.simpleMessage("تاريخ الطلب"),
     "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
       "غير مسموح لك بتجديد اشتراك هذا الطالب.",
     ),
@@ -1846,6 +1877,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "renewalUsedHours": MessageLookupByLibrary.simpleMessage(
       "الساعات المستخدمة",
     ),
+    "renewalViewReceipt": MessageLookupByLibrary.simpleMessage("عرض الإيصال"),
     "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
     "requestAccepted": MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
     "requestNewLesson": MessageLookupByLibrary.simpleMessage("طلب درس جديد"),

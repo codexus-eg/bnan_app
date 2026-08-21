@@ -1377,5 +1377,19 @@
     "assignSubjectToClassroom": "برجاء تعيين مادة لهذا الفصل",
     "assignTeacherToSubjectFirst": "برجاء تعيين معلم للمادة أولًا",
     "cancellationReason": "سبب الإلغاء",
-    "paymentVerificationPending": "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."
+    "paymentVerificationPending": "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت.",
+    "adminSubscriptionRenewals": "طلبات تجديد الاشتراكات",
+    "renewalPendingReview": "قيد المراجعة",
+    "renewalPaymentConfirmed": "تم تأكيد الدفع",
+    "renewalApproved": "تم اعتماد التجديد",
+    "renewalRejected": "مرفوض",
+    "renewalConfirmPayment": "تأكيد الدفع",
+    "renewalApprove": "اعتماد التجديد",
+    "renewalNoRequests": "لا توجد طلبات",
+    "renewalReferenceNumber": "رقم المرجع",
+    "renewalRequestedAt": "تاريخ الطلب",
+    "renewalViewReceipt": "عرض الإيصال",
+    "renewalOptionalRejectionReason": "سبب الرفض (اختياري)",
+    "renewalInvalidPaymentStatus": "حالة طلب الدفع لا تسمح بتنفيذ هذا الإجراء.",
+    "renewalPaymentNotConfirmed": "يجب تأكيد الدفع قبل اعتماد التجديد."
 }
