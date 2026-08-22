@@ -121,7 +121,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
 
   void toggleSubject(String id) {
     final selected = [...state.selectedSubjectIds];
-    if (state.isSingleSubject) {
+    if (state.isSingleSubject && !state.isEgyptianPrivate) {
       emit(state.copyWith(selectedSubjectIds: [id], errorMessage: null));
       return;
     }

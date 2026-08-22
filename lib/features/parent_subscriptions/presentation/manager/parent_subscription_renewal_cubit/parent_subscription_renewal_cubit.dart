@@ -82,6 +82,8 @@ class ParentSubscriptionRenewalCubit
       value,
       registrationMode: state.args.registrationMode,
       curriculumId: state.args.curriculumId,
+      currentAccessScope: state.args.subscription.accessScope,
+      currentPackageType: state.args.subscription.packageType,
     )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
@@ -125,6 +127,8 @@ class ParentSubscriptionRenewalCubit
           state.package!,
           registrationMode: state.args.registrationMode,
           curriculumId: state.args.curriculumId,
+          currentAccessScope: state.args.subscription.accessScope,
+          currentPackageType: state.args.subscription.packageType,
         )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
@@ -234,6 +238,10 @@ class ParentSubscriptionRenewalCubit
     if (packageId == null || packageId.isEmpty) {
       return _error('PACKAGE_NOT_FOUND');
     }
+    final subscriptionId = state.args.subscription.id.trim();
+    if (state.isEgyptianPrivate && subscriptionId.isEmpty) {
+      return emit(state.copyWith(errorMessage: S.current.invalidData));
+    }
     emit(
       state.copyWith(
         phase: ParentRenewalPhase.submitting,
@@ -245,7 +253,10 @@ class ParentSubscriptionRenewalCubit
     final result = await repo.renewEgyptian(
       EgyptianRenewalRequest(
         packageId: packageId,
-        subjectId: state.isSingleSubject ? state.subjectId : null,
+        subscriptionId: state.isEgyptianPrivate ? subscriptionId : null,
+        subjectId: !state.isEgyptianPrivate && state.isSingleSubject
+            ? state.subjectId
+            : null,
       ),
     );
     if (isClosed) return;

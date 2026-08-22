@@ -31,7 +31,7 @@ abstract class ParentAddChildValidation {
   static String? _subjects(ParentAddChildState state) {
     if (!state.requiresSubjectSelection) return null;
     final count = state.selectedSubjectIds.length;
-    if (state.isSingleSubject && count != 1) {
+    if (state.isSingleSubject && !state.isEgyptianPrivate && count != 1) {
       return S.current.parentSingleSubjectRequired;
     }
     if (count < 1) {

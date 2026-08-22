@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dartz/dartz.dart';
 
 void main() {
-  test('single-subject packages keep only one selected subject', () {
+  test('Egyptian private keeps multiple selected subjects in request', () {
     final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
     cubit.setRegisterFlowArgs(
       const RegisterFlowArgsModel(
@@ -23,6 +23,31 @@ void main() {
         packageCurrency: 'EGP',
         registrationMode: 'egyptian',
         accessScope: 'single_subject',
+        packageType: 'hours',
+      ),
+    );
+    cubit.setGrade(id: 'grade', name: 'Grade');
+
+    cubit.toggleSubject('math');
+    cubit.toggleSubject('science');
+
+    expect(cubit.selectedSubjectIds, ['math', 'science']);
+    expect(cubit.buildRegisterRequest()!.student.subjects, ['math', 'science']);
+  });
+
+  test('Gulf single-subject selection remains single', () {
+    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
+    cubit.setRegisterFlowArgs(
+      const RegisterFlowArgsModel(
+        curriculumId: 'curriculum',
+        curriculumName: 'Gulf',
+        packageId: 'package',
+        packageName: 'Single subject',
+        packagePrice: '250',
+        packageCurrency: 'SAR',
+        registrationMode: 'gulf',
+        accessScope: 'single_subject',
+        packageType: 'hours',
       ),
     );
 

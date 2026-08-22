@@ -93,13 +93,19 @@ void main() {
     expect(gulf.containsKey('studentId'), isFalse);
   });
 
-  test('Egyptian JSON uses minimal fields without receipt', () {
+  test('Egyptian private JSON uses only subscriptionId and packageId', () {
     final json = const EgyptianRenewalRequest(
+      subscriptionId: 'math-subscription-id',
       packageId: 'package-1',
       subjectId: 'subject-1',
     ).toJson();
-    expect(json.keys.toSet(), {'packageId', 'subjectId'});
-    expect(json.containsKey('receiptImage'), isFalse);
+    expect(json, {
+      'subscriptionId': 'math-subscription-id',
+      'packageId': 'package-1',
+    });
+    for (final key in ['subjectId', 'price', 'hours', 'packageType']) {
+      expect(json.containsKey(key), isFalse);
+    }
   });
 
   test('PackageModel reads the backend _id as packageId', () {
@@ -127,13 +133,74 @@ void main() {
           },
         ),
       );
-      await ParentSubscriptionsRepoImpl(
-        consumer,
-      ).renewEgyptian(const EgyptianRenewalRequest(packageId: 'package-1'));
+      await ParentSubscriptionsRepoImpl(consumer).renewEgyptian(
+        const EgyptianRenewalRequest(
+          subscriptionId: 'math-sub',
+          packageId: 'package-1',
+        ),
+      );
       expect(sent.path, EndPoints.egyptianSubscriptionRenewal);
-      expect(sent.data, {'packageId': 'package-1'});
+      expect(sent.data, {
+        'subscriptionId': 'math-sub',
+        'packageId': 'package-1',
+      });
     },
   );
+
+  test(
+    'Parent and Student private renew the exact selected subscription',
+    () async {
+      for (final isParent in [true, false]) {
+        final repo = _Repo();
+        final cubit = _cubit(
+          repo,
+          mode: 'egyptian',
+          isParent: isParent,
+          subscription: _mathPrivateSubscription,
+        )..nextStep();
+        cubit.selectPackage(_singlePackage);
+
+        expect(cubit.state.lastStep, 1);
+        await cubit.submit();
+
+        expect(repo.lastEgyptianRequest?.toJson(), {
+          'subscriptionId': 'math-sub',
+          'packageId': 'package-1',
+        });
+        await cubit.close();
+      }
+    },
+  );
+
+  test('Egyptian private only accepts single-subject hours packages', () async {
+    final cubit = _cubit(
+      _Repo(),
+      mode: 'egyptian',
+      subscription: _mathPrivateSubscription,
+    )..nextStep();
+
+    cubit.selectPackage(_monthlyAllPackage);
+    expect(cubit.state.package, isNull);
+    cubit.selectPackage(_singlePackage);
+    expect(cubit.state.package, _singlePackage);
+    await cubit.close();
+  });
+
+  test('Egyptian private without subscription ID does not call repo', () async {
+    final repo = _Repo();
+    final cubit = _cubit(
+      repo,
+      mode: 'egyptian',
+      subscription: _missingIdPrivateSubscription,
+    )..nextStep();
+    cubit.selectPackage(_singlePackage);
+
+    await cubit.submit();
+
+    expect(repo.egyptianRenewCalls, 0);
+    expect(cubit.state.errorMessage, S.current.invalidData);
+    await cubit.close();
+  });
 
   test(
     'single subject requires one assigned subject and package curriculum',
@@ -546,6 +613,23 @@ const _subscription = ParentChildSubscriptionModel(
   packageName: 'Old',
   curriculumId: 'curriculum-1',
 );
+const _mathPrivateSubscription = ParentChildSubscriptionModel(
+  id: 'math-sub',
+  packageId: 'old-private',
+  packageName: 'Math',
+  curriculumId: 'curriculum-1',
+  accessScope: 'single_subject',
+  packageType: 'hours',
+  subject: ParentSubscriptionSubjectModel(id: 'math', name: 'Math'),
+);
+const _missingIdPrivateSubscription = ParentChildSubscriptionModel(
+  id: '',
+  packageId: 'old-private',
+  packageName: 'Math',
+  curriculumId: 'curriculum-1',
+  accessScope: 'single_subject',
+  packageType: 'hours',
+);
 const _singlePackage = PackageModel(
   id: 'package-1',
   curriculum: 'curriculum-1',
@@ -593,6 +677,7 @@ ParentSubscriptionRenewalCubit _cubit(
   RenewalPaymentStore? store,
   bool isParent = true,
   Future<void> Function()? onCompleted,
+  ParentChildSubscriptionModel subscription = _subscription,
 }) => ParentSubscriptionRenewalCubit(
   repo: repo,
   keyGenerator: _Keys(),
@@ -600,7 +685,7 @@ ParentSubscriptionRenewalCubit _cubit(
   args: ParentSubscriptionRenewalArgs(
     studentId: 'child-1',
     curriculumId: 'curriculum-1',
-    subscription: _subscription,
+    subscription: subscription,
     subjects: const [
       ParentSubscriptionSubjectModel(id: 'subject-1', name: 'Math'),
     ],

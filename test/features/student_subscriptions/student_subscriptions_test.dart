@@ -6,6 +6,16 @@ import 'package:bnan_app/features/student_subscriptions/data/repo/student_subscr
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('student main home does not request subjects', () async {
+    final api = _Api();
+    final result = await StudentSubscriptionsRepoImpl(
+      api,
+    ).getHomeSubscriptions();
+
+    expect(result.isRight(), isTrue);
+    expect(api.paths, [EndPoints.studentHome]);
+  });
+
   test('student subscriptions use home and subjects endpoints', () async {
     final api = _Api();
     final result = await StudentSubscriptionsRepoImpl(api).getSubscriptions();
@@ -13,9 +23,15 @@ void main() {
 
     expect(api.paths, [EndPoints.studentHome, EndPoints.mySubjects]);
     expect(student.registrationMode, 'egyptian');
-    expect(student.subscriptions.map((item) => item.id), ['new-1', 'new-2']);
+    expect(student.subscriptions.map((item) => item.id), [
+      'math-sub',
+      'arabic-sub',
+      'english-sub',
+    ]);
     expect(student.subscriptions.first.canRenew, isTrue);
-    expect(student.subjects.single.id, 'subject-1');
+    expect(student.subscriptions[1].subject?.name, 'Arabic');
+    expect(student.subscriptions[1].remainingHours, 5);
+    expect(student.subscriptions.last.canRenew, isFalse);
   });
 
   test('student home and subjects requests start in parallel', () async {
@@ -85,8 +101,24 @@ class _Api implements ApiConsumer {
         },
         'subscription': {'id': 'legacy'},
         'subscriptions': [
-          {'id': 'new-1', 'canRenew': true},
-          {'id': 'new-2'},
+          {
+            'id': 'math-sub',
+            'subject': {'id': 'subject-1', 'name': 'Math'},
+            'remainingHours': 0,
+            'canRenew': true,
+          },
+          {
+            'id': 'arabic-sub',
+            'subject': {'id': 'subject-2', 'name': 'Arabic'},
+            'remainingHours': 5,
+            'canRenew': true,
+          },
+          {
+            'id': 'english-sub',
+            'subject': {'id': 'subject-3', 'name': 'English'},
+            'remainingHours': 8,
+            'canRenew': false,
+          },
         ],
       },
     };

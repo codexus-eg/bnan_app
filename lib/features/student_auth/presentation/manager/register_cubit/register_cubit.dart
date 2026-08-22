@@ -29,6 +29,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   String packageCurrency = '';
   String? registrationMode;
   bool isSingleSubjectPackage = false;
+  bool isEgyptianPrivate = false;
   String? selectedCurriculumName;
 
   final parentFormKey = GlobalKey<FormState>();
@@ -54,6 +55,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     packageCurrency = args.packageCurrency;
     registrationMode = args.registrationMode;
     isSingleSubjectPackage = args.isSingleSubject;
+    isEgyptianPrivate = args.isEgyptianPrivate;
   }
 
   bool get isGulf => registrationMode == 'gulf';
@@ -69,7 +71,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   void toggleSubject(String subjectId) {
-    if (isSingleSubjectPackage) {
+    if (isSingleSubjectPackage && !isEgyptianPrivate) {
       selectedSubjectIds = selectedSubjectIds.contains(subjectId)
           ? []
           : [subjectId];
@@ -119,7 +121,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     final validForm = studentFormKey.currentState?.validate() ?? false;
     final validSubjects = !requiresSubjectSelection
         ? true
-        : isSingleSubjectPackage
+        : isSingleSubjectPackage && !isEgyptianPrivate
         ? selectedSubjectIds.length == 1
         : selectedSubjectIds.isNotEmpty;
     return validForm && selectedGradeId != null && validSubjects;
@@ -129,7 +131,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     final subjectCount = selectedSubjectIds.length;
     final validSubjects = !requiresSubjectSelection
         ? true
-        : isSingleSubjectPackage
+        : isSingleSubjectPackage && !isEgyptianPrivate
         ? subjectCount == 1
         : subjectCount > 0;
     if (selectedGradeId == null || !validSubjects) return null;

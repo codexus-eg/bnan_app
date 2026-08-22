@@ -9,7 +9,8 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/dashboard/data/models/student_dashboard_model.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:bnan_app/features/dashboard/presentation/widgets/dashboard_builder.dart';
-import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/package_details/package_details_card.dart';
+import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/student_home_subscription_section.dart';
+import 'package:bnan_app/features/student_subscriptions/presentation/manager/student_subscriptions_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,15 +59,18 @@ class StudentHomePage extends StatelessWidget {
         ),
         Expanded(
           child: RefreshIndicator(
-            onRefresh: context.read<DashboardCubit>().refresh,
+            onRefresh: () => Future.wait([
+              context.read<DashboardCubit>().refresh(),
+              context.read<StudentSubscriptionsCubit>().loadHome(),
+            ]),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: AppSkeletonizer(
                 isLoading: loading,
                 child: Column(
                   children: [
-                    PackageDetailsCard(
-                      subscription: data.subscription,
+                    StudentHomeSubscriptionSection(
+                      dashboardSubscription: data.subscription,
                       loading: loading,
                     ),
                     const SizedBox(height: 16),

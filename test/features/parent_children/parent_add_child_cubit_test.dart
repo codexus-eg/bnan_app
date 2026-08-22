@@ -95,7 +95,7 @@ void main() {
       password: 'password',
     );
     expect(cubit.nextStep(), isTrue);
-    expect(cubit.state.currentStep, 3);
+    expect(cubit.state.currentStep, 4);
     await cubit.close();
   });
 
@@ -127,28 +127,30 @@ void main() {
     await cubit.close();
   });
 
-  test(
-    'single subject replaces prior selection and requires exactly one',
-    () async {
-      final cubit = _cubit(_Repo())..selectPackage(_singlePackage);
-      expect(cubit.nextStep(), isTrue);
-      cubit.selectGrade(_grade);
-      expect(cubit.nextStep(), isTrue);
-      cubit.updateAccount(
-        fullName: 'Student Name',
-        email: 'student@example.com',
-        password: 'Password1',
-      );
-      expect(cubit.nextStep(), isTrue);
-      expect(cubit.nextStep(), isFalse);
-      cubit.toggleSubject('subject-1');
-      expect(cubit.nextStep(), isTrue);
-      cubit.previousStep();
-      cubit.toggleSubject('subject-2');
-      expect(cubit.state.selectedSubjectIds, ['subject-2']);
-      await cubit.close();
-    },
-  );
+  test('Egyptian private keeps and submits multiple subjects', () async {
+    final repo = _Repo();
+    final cubit = _cubit(repo)..selectPackage(_singlePackage);
+    expect(cubit.nextStep(), isTrue);
+    cubit.selectGrade(_grade);
+    expect(cubit.nextStep(), isTrue);
+    cubit.updateAccount(
+      fullName: 'Student Name',
+      email: 'student@example.com',
+      password: 'Password1',
+    );
+    expect(cubit.nextStep(), isTrue);
+    expect(cubit.nextStep(), isFalse);
+    cubit.toggleSubject('subject-1');
+    cubit.toggleSubject('subject-2');
+    expect(cubit.state.selectedSubjectIds, ['subject-1', 'subject-2']);
+    expect(cubit.nextStep(), isTrue);
+    await cubit.submit();
+    expect(repo.lastEgyptianRequest?.student.subjectIds, [
+      'subject-1',
+      'subject-2',
+    ]);
+    await cubit.close();
+  });
 
   test('completed Gulf payment preserves parent session', () async {
     try {
@@ -352,6 +354,7 @@ const _grade = AcademicGradeModel(id: 'grade', name: 'Grade');
 const _allPackage = PackageModel(
   id: 'all',
   name: 'All',
+  type: 'monthly',
   accessScope: PackageAccessScope.allSubjects,
   isActive: true,
 );
@@ -419,9 +422,11 @@ class _Repo implements ParentAddChildRepo {
   final List<String> keys = [];
   int checkoutCalls = 0;
   int egyptianCalls = 0;
+  ParentAddChildEgyptianRequest? lastEgyptianRequest;
 
   @override
   registerEgyptian(ParentAddChildEgyptianRequest request) async {
+    lastEgyptianRequest = request;
     egyptianCalls++;
     return const Right(ParentAddChildSubmission(status: 'pending_review'));
   }

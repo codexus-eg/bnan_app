@@ -32,6 +32,10 @@ class _PendingRepo implements StudentSubscriptionsRepo {
     calls++;
     return completer.future;
   }
+
+  @override
+  Future<Either<Failure, ParentChildSubscriptionsModel>>
+  getHomeSubscriptions() => getSubscriptions();
 }
 
 const _student = ParentChildSubscriptionsModel(

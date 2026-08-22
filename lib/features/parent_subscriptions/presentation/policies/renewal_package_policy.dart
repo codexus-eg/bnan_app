@@ -7,10 +7,21 @@ abstract class RenewalPackagePolicy {
     PackageModel package, {
     required String registrationMode,
     required String curriculumId,
-  }) =>
-      package.isActive &&
-      ParentPackagePolicy.isRegistrationModeSupported(registrationMode) &&
-      package.curriculum == curriculumId &&
-      (registrationMode != 'egyptian' ||
-          EgyptianPackagePolicy.isValid(package));
+    String currentAccessScope = '',
+    String currentPackageType = '',
+  }) {
+    final valid =
+        package.isActive &&
+        ParentPackagePolicy.isRegistrationModeSupported(registrationMode) &&
+        package.curriculum == curriculumId &&
+        (registrationMode != 'egyptian' ||
+            EgyptianPackagePolicy.isValid(package));
+    final isEgyptianPrivate =
+        registrationMode == 'egyptian' &&
+        currentAccessScope == 'single_subject' &&
+        currentPackageType == 'hours';
+    return valid &&
+        (!isEgyptianPrivate ||
+            package.accessScope == 'single_subject' && package.type == 'hours');
+  }
 }

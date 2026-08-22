@@ -21,6 +21,7 @@ class SubscriptionPlanCard extends StatelessWidget {
     required this.curriculumName,
     this.bottomWidget,
     this.registrationMode,
+    this.packageType = '',
     this.isSelected = false,
   });
 
@@ -29,6 +30,7 @@ class SubscriptionPlanCard extends StatelessWidget {
   final String curriculumName;
   final Widget? bottomWidget;
   final String? registrationMode;
+  final String packageType;
   final bool isSelected;
   @override
   Widget build(BuildContext context) {
@@ -173,6 +175,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                           accessScope: plan.isSingleSubject
                               ? 'single_subject'
                               : 'all_subjects',
+                          packageType: packageType,
                         ),
                       );
                     },

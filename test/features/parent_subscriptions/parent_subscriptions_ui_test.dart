@@ -39,6 +39,14 @@ void main() {
         accessScope: 'single_subject',
         subject: ParentSubscriptionSubjectModel(id: 'science', name: 'Science'),
       ),
+      ParentChildSubscriptionModel(
+        id: 'three',
+        packageId: 'p',
+        packageName: 'English package',
+        curriculumId: 'c',
+        accessScope: 'single_subject',
+        subject: ParentSubscriptionSubjectModel(id: 'english', name: 'English'),
+      ),
     ];
     await tester.pumpWidget(
       MaterialApp(
@@ -66,9 +74,10 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.byType(ParentSubscriptionCard), findsNWidgets(2));
+    expect(find.byType(ParentSubscriptionCard), findsNWidgets(3));
     expect(find.text('Math'), findsOneWidget);
     expect(find.text('Science'), findsOneWidget);
+    expect(find.text('English'), findsOneWidget);
   });
 
   testWidgets('long subscription text does not overflow on a small screen', (

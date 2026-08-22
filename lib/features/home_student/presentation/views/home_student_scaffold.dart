@@ -12,6 +12,7 @@ import 'package:bnan_app/features/home_student/presentation/views/widgets/home_s
 import 'package:bnan_app/features/chats/presentation/navigation/chat_role_navigation.dart';
 import 'package:bnan_app/features/shared_profile/data/models/logged_user_model.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
+import 'package:bnan_app/features/student_subscriptions/presentation/manager/student_subscriptions_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +61,10 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
   }
 
   void _loadTab(int index) {
-    if (index == 0) context.read<DashboardCubit>().refresh();
+    if (index == 0) {
+      context.read<DashboardCubit>().refresh();
+      context.read<StudentSubscriptionsCubit>().loadHome();
+    }
     if (index == 4) StudentProfileCubit.get(context).getLoggedUser();
   }
 

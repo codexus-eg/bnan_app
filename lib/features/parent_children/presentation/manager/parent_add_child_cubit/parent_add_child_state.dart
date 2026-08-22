@@ -63,6 +63,10 @@ class ParentAddChildState {
   bool get hasSupportedRegistrationMode =>
       curriculum?.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
+  bool get isEgyptianPrivate =>
+      curriculum?.registrationMode == 'egyptian' &&
+      isSingleSubject &&
+      package?.type == 'hours';
   bool get requiresSubjectSelection => isGulf || isSingleSubject;
   int get lastStep => isGulf ? 5 : 4;
   bool get isBusy =>

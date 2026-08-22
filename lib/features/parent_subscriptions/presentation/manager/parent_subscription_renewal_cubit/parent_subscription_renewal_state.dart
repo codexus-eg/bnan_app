@@ -40,10 +40,16 @@ class ParentSubscriptionRenewalState {
   final PaymentAmountSummary? paymentSummary;
   final bool shouldOpenCheckout;
   bool get isGulf => args.registrationMode == 'gulf';
+  bool get isEgyptianPrivate =>
+      args.registrationMode == 'egyptian' &&
+      args.subscription.accessScope == 'single_subject' &&
+      args.subscription.packageType == 'hours';
   bool get hasSupportedRegistrationMode =>
       args.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
-  int get lastStep => isGulf
+  int get lastStep => isEgyptianPrivate
+      ? 1
+      : isGulf
       ? 5
       : isSingleSubject
       ? 2

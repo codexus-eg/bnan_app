@@ -255,6 +255,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                     getIt<DashboardCubit>(param1: DashboardRole.student)
                       ..load(),
               ),
+              BlocProvider(
+                create: (_) => getIt<StudentSubscriptionsCubit>()..loadHome(),
+              ),
             ],
             child: const HomeStudentView(),
           ),
