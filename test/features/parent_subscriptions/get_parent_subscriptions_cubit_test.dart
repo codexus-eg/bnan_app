@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscriptions_response.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
@@ -36,6 +39,34 @@ void main() {
     expect(state.selectedChild?.subscriptions, isNotEmpty);
     await cubit.close();
   });
+
+  test('concurrent loads share one active repository request', () async {
+    final repo = _PendingRepo();
+    final cubit = GetParentSubscriptionsCubit(repo);
+
+    final first = cubit.load();
+    final second = cubit.load();
+
+    expect(repo.calls, 1);
+    repo.completer.complete(const Right(ParentSubscriptionsResponse()));
+    await Future.wait([first, second]);
+    expect(repo.calls, 1);
+    await cubit.close();
+  });
+}
+
+class _PendingRepo implements ParentSubscriptionsRepo {
+  final completer = Completer<Either<Failure, ParentSubscriptionsResponse>>();
+  int calls = 0;
+
+  @override
+  Future<Either<Failure, ParentSubscriptionsResponse>> getSubscriptions() {
+    calls++;
+    return completer.future;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class _Repo implements ParentSubscriptionsRepo {

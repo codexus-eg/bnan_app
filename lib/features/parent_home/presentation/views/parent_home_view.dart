@@ -10,6 +10,7 @@ import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_bottom_nav_bar.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_body.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_drawer.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/manager/get_parent_subscriptions_cubit/get_parent_subscriptions_cubit.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,8 @@ class _ParentHomeViewState extends State<ParentHomeView> {
 
   int currentIndex = 0;
   int _tabRevision = 0;
+  late final GetParentSubscriptionsCubit _subscriptionsCubit;
+  bool _subscriptionsLoaded = false;
   bool _isNavigating = false;
   bool _isLoggingOut = false;
 
@@ -41,6 +44,18 @@ class _ParentHomeViewState extends State<ParentHomeView> {
     9: 4,
   };
 
+  @override
+  void initState() {
+    super.initState();
+    _subscriptionsCubit = getIt<GetParentSubscriptionsCubit>();
+  }
+
+  @override
+  void dispose() {
+    _subscriptionsCubit.close();
+    super.dispose();
+  }
+
   void _changeIndex(int index) {
     if (index == currentIndex) return;
     setState(() {
@@ -52,6 +67,10 @@ class _ParentHomeViewState extends State<ParentHomeView> {
 
   void _loadTab(int index) {
     if (index == 0) context.read<DashboardCubit>().refresh();
+    if (index == 3 && !_subscriptionsLoaded) {
+      _subscriptionsLoaded = true;
+      _subscriptionsCubit.load();
+    }
     if (index == 4) StudentProfileCubit.get(context).getLoggedUser();
   }
 
@@ -143,11 +162,14 @@ class _ParentHomeViewState extends State<ParentHomeView> {
                   onLogoutTap: _logout,
                 )
               : null,
-          body: ParentHomeBody(
-            key: ValueKey('$currentIndex:$_tabRevision'),
-            index: currentIndex,
-            onMenuTap: _openDrawer,
-            onShowAllChildren: () => _changeIndex(1),
+          body: BlocProvider.value(
+            value: _subscriptionsCubit,
+            child: ParentHomeBody(
+              key: ValueKey('$currentIndex:$_tabRevision'),
+              index: currentIndex,
+              onMenuTap: _openDrawer,
+              onShowAllChildren: () => _changeIndex(1),
+            ),
           ),
           bottomNavigationBar: ParentBottomNavBar(
             currentIndex: currentIndex,

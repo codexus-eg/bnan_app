@@ -11,16 +11,18 @@ class StudentSubscriptionsCubit extends Cubit<StudentSubscriptionsState> {
   Future<void> load() async {
     if (_loading || isClosed) return;
     _loading = true;
-    emit(const StudentSubscriptionsLoading());
-    final result = await repo.getSubscriptions();
-    if (isClosed) {
-      _loading = false;
-      return;
+    if (state is! StudentSubscriptionsSuccess) {
+      emit(const StudentSubscriptionsLoading());
     }
-    result.fold(
-      (failure) => emit(StudentSubscriptionsFailure(failure.message)),
-      (student) => emit(StudentSubscriptionsSuccess(student)),
-    );
-    _loading = false;
+    try {
+      final result = await repo.getSubscriptions();
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(StudentSubscriptionsFailure(failure.message)),
+        (student) => emit(StudentSubscriptionsSuccess(student)),
+      );
+    } finally {
+      _loading = false;
+    }
   }
 }

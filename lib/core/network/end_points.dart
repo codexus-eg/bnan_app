@@ -1,6 +1,6 @@
 abstract class EndPoints {
-  static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
-  static String get socketUrl => 'https://bnan.0xcode7.xyz';
+  static String get baseUrl => 'https://api.bnanacademysa.com/api/v1';
+  static String get socketUrl => 'https://api.bnanacademysa.com';
   static const String register = '/auth/register';
   static const String login = '/auth/login';
   static const String refreshToken = '/auth/refresh-token';

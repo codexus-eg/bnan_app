@@ -11,11 +11,12 @@ class StudentSubscriptionsRepoImpl implements StudentSubscriptionsRepo {
 
   @override
   getSubscriptions() => repoGuard(() async {
-    final home = await api.get(EndPoints.studentHome, isProtected: true);
-    final subjectsResponse = await api.get(
-      EndPoints.mySubjects,
-      isProtected: true,
-    );
+    final responses = await Future.wait<dynamic>([
+      api.get(EndPoints.studentHome, isProtected: true),
+      api.get(EndPoints.mySubjects, isProtected: true),
+    ], eagerError: true);
+    final home = responses[0];
+    final subjectsResponse = responses[1];
     final subjects = StudentSubjectModel.listFromResponse(subjectsResponse)
         .map(
           (item) =>

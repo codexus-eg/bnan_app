@@ -22,6 +22,7 @@ class StudentSubscriptionsList extends StatelessWidget {
           )
         : ListView.separated(
             padding: const EdgeInsets.all(16),
+            physics: const AlwaysScrollableScrollPhysics(),
             itemCount: student.subscriptions.length,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (_, index) => ParentSubscriptionCard(
