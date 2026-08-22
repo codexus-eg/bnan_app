@@ -10,6 +10,7 @@
     "errorValidation": "Please check the entered data and try again.",
     "errorUnauthorized": "Session expired.",
     "searchForStudent": "Search for a student",
+    
     "noStudentWithThisName": "No student found with this name",
     "studentAssignmentNotApproved": "This student cannot be assigned because the account has not been approved yet",
     "studentAssignmentNoClassrooms": "No classrooms are available for this student",

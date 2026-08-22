@@ -4,6 +4,8 @@ import 'package:bnan_app/core/network/dio_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_payment_address.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/egyptian_renewal_request.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/gulf_renewal_request.dart';
@@ -209,8 +211,13 @@ void main() {
         ),
         GoRoute(
           path: '/renewal',
-          builder: (_, __) => BlocProvider.value(
-            value: cubit,
+          builder: (_, __) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: cubit),
+              BlocProvider(
+                create: (_) => GetPackagesCubit(_UnusedPackagesRepo()),
+              ),
+            ],
             child: const ParentSubscriptionRenewalView(),
           ),
         ),
@@ -245,7 +252,7 @@ void main() {
       await cubit.submit();
 
       expect(repo.egyptianRenewCalls, 1);
-      expect(repo.lastEgyptianRequest?.packageId, 'package-1');
+      expect(repo.lastEgyptianRequest?.packageId, _monthlyAllPackage.id);
       expect(refreshes, 0);
       expect(repo.egyptianStatusCalls, 0);
       expect(cubit.state.phase, ParentRenewalPhase.pending);
@@ -260,6 +267,7 @@ void main() {
         final cubit = _ready(repo, mode: 'gulf', isParent: isParent);
 
         await cubit.submit();
+        cubit.checkoutOpened();
         await cubit.reconcilePayment();
 
         expect(repo.lastGulfRequest?.studentId, isParent ? 'child-1' : null);
@@ -301,6 +309,7 @@ void main() {
       );
 
       await cubit.submit();
+      cubit.checkoutOpened();
       await cubit.reconcilePayment();
 
       expect(refreshes, 1);
@@ -325,8 +334,12 @@ void main() {
         ]);
       final cubit = _ready(repo, mode: 'gulf');
       await cubit.submit();
+      cubit.checkoutOpened();
+      await cubit.reconcilePayment();
       await _waitFor(cubit, ParentRenewalPhase.failure);
       await cubit.retry();
+      cubit.checkoutOpened();
+      await cubit.reconcilePayment();
       await _waitFor(cubit, ParentRenewalPhase.completed);
       expect(repo.keys, ['key-1', 'key-2']);
       expect(repo.refreshCalls, 0);
@@ -368,11 +381,12 @@ void main() {
   );
 
   test(
-    'active Egyptian monthly single-subject package is selectable',
+    'Egyptian monthly single-subject package is rejected by current policy',
     () async {
       final cubit = _cubit(_Repo(), mode: 'egyptian')..nextStep();
       cubit.selectPackage(_monthlySinglePackage);
-      expect(cubit.state.package?.id, _monthlySinglePackage.id);
+      expect(cubit.state.package, isNull);
+      expect(cubit.state.errorMessage, S.current.invalidPackage);
       await cubit.close();
     },
   );
@@ -429,6 +443,8 @@ void main() {
       if (state.phase == ParentRenewalPhase.completed) completedEmissions++;
     });
     await cubit.submit();
+    cubit.checkoutOpened();
+    await cubit.reconcilePayment();
     await _waitFor(cubit, ParentRenewalPhase.paymentStatusUnknown);
     repo.terminalStatuses.add(RenewalPaymentStatus.completed);
     await cubit.checkPaymentStatus();
@@ -444,6 +460,8 @@ void main() {
     final repo = _Repo();
     final cubit = _ready(repo, mode: 'gulf');
     await cubit.submit();
+    cubit.checkoutOpened();
+    await cubit.reconcilePayment();
     await _waitFor(cubit, ParentRenewalPhase.paymentStatusUnknown);
     final calls = repo.renewCalls;
     cubit.reopenCheckout();
@@ -497,6 +515,7 @@ void main() {
     final repo = _Repo(statusDelay: const Duration(milliseconds: 20));
     final cubit = _ready(repo, mode: 'gulf');
     await cubit.submit();
+    cubit.checkoutOpened();
     await Future<void>.delayed(Duration.zero);
     await Future.wait([cubit.reconcilePayment(), cubit.reconcilePayment()]);
     await _waitFor(cubit, ParentRenewalPhase.paymentStatusUnknown);
@@ -510,7 +529,11 @@ void main() {
       final repo = _Repo(statusDelay: const Duration(milliseconds: 20));
       final cubit = _ready(repo, mode: 'gulf');
       await cubit.submit();
+      cubit.checkoutOpened();
+      final polling = cubit.reconcilePayment();
+      await Future<void>.delayed(Duration.zero);
       await cubit.close();
+      await polling;
       await Future<void>.delayed(const Duration(milliseconds: 25));
       expect(cubit.isClosed, isTrue);
     },
@@ -604,7 +627,7 @@ ParentSubscriptionRenewalCubit _ready(
           onCompleted: onCompleted,
         )
         ..nextStep()
-        ..selectPackage(_allPackage)
+        ..selectPackage(mode == 'egyptian' ? _monthlyAllPackage : _allPackage)
         ..nextStep()
         ..nextStep()
         ..nextStep()
@@ -726,4 +749,9 @@ class _Repo implements ParentSubscriptionsRepo {
       ),
     );
   }
+}
+
+class _UnusedPackagesRepo implements PackagesRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

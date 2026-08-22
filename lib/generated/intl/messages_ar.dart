@@ -1130,6 +1130,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "ينتهي خلال 18 يوم . تجديد تلقائي"),
         "packageFormName": MessageLookupByLibrary.simpleMessage("اسم الباقة"),
         "packageHoursType": MessageLookupByLibrary.simpleMessage("باقة ساعات"),
+        "packageName": MessageLookupByLibrary.simpleMessage("اسم الباقة"),
         "packageNameRequired":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال اسم الباقة"),
         "packageOldPrice": MessageLookupByLibrary.simpleMessage("السعر القديم"),

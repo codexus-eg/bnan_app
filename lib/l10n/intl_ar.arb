@@ -1009,6 +1009,7 @@
     "packageUpdatedSuccessfully": "تم تعديل الباقة بنجاح",
     "selectCurriculumFirst": "يرجى اختيار المنهج",
     "packageNameRequired": "يرجى إدخال اسم الباقة",
+    "packageName":"اسم الباقة",
     "packageDurationInvalid": "يرجى إدخال مدة صحيحة للباقة",
     "oldPriceInvalid": "يرجى إدخال السعر القديم بشكل صحيح",
     "newPriceInvalid": "يرجى إدخال السعر الجديد بشكل صحيح",
