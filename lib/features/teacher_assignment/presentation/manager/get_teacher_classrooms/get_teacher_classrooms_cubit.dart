@@ -7,11 +7,15 @@ class GetTeacherClassroomsCubit extends Cubit<GetTeacherClassroomsState> {
     : super(GetTeacherClassroomsInitial());
 
   final AssignmentsRepo assignmentsRepo;
+  int _requestId = 0;
 
   Future<void> getMyClassrooms() async {
+    if (isClosed) return;
+    final requestId = ++_requestId;
     emit(GetTeacherClassroomsLoading());
 
     final result = await assignmentsRepo.getMyClassrooms();
+    if (isClosed || requestId != _requestId) return;
 
     result.fold(
       (failure) {

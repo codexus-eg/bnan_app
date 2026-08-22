@@ -84,20 +84,61 @@ void main() {
     await cubit.close();
   });
 
+  test('simple child password is accepted by registration rules', () async {
+    final cubit = _cubit(_Repo())..selectPackage(_allPackage);
+    expect(cubit.nextStep(), isTrue);
+    cubit.selectGrade(_grade);
+    expect(cubit.nextStep(), isTrue);
+    cubit.updateAccount(
+      fullName: 'Student Name',
+      email: 'student@example.com',
+      password: 'password',
+    );
+    expect(cubit.nextStep(), isTrue);
+    expect(cubit.state.currentStep, 3);
+    await cubit.close();
+  });
+
+  test('Egyptian flow ends at review and submits without receipt', () async {
+    final repo = _Repo();
+    final cubit = _cubit(repo)
+      ..updateAccount(
+        fullName: 'Student Name',
+        email: 'student@example.com',
+        password: 'Password1',
+      );
+    expect(cubit.state.lastStep, 4);
+    cubit.selectPackage(_allPackage);
+    expect(cubit.nextStep(), isTrue);
+    cubit.selectGrade(_grade);
+    expect(cubit.nextStep(), isTrue);
+    cubit.updateAccount(
+      fullName: 'Student Name',
+      email: 'student@example.com',
+      password: 'Password1',
+    );
+    expect(cubit.nextStep(), isTrue);
+    cubit.toggleSubject('subject-1');
+    expect(cubit.nextStep(), isTrue);
+    await cubit.submit();
+    expect(repo.egyptianCalls, 1);
+    expect(cubit.state.receipt, isNull);
+    expect(cubit.state.phase, ParentAddChildPhase.pendingReview);
+    await cubit.close();
+  });
+
   test(
     'single subject replaces prior selection and requires exactly one',
     () async {
-      final cubit = _cubit(_Repo())
-        ..updateAccount(
-          fullName: 'Student Name',
-          email: 'student@example.com',
-          password: 'Password1',
-          confirmPassword: 'Password1',
-        );
+      final cubit = _cubit(_Repo())..selectPackage(_singlePackage);
       expect(cubit.nextStep(), isTrue);
       cubit.selectGrade(_grade);
       expect(cubit.nextStep(), isTrue);
-      cubit.selectPackage(_singlePackage);
+      cubit.updateAccount(
+        fullName: 'Student Name',
+        email: 'student@example.com',
+        password: 'Password1',
+      );
       expect(cubit.nextStep(), isTrue);
       expect(cubit.nextStep(), isFalse);
       cubit.toggleSubject('subject-1');
@@ -340,23 +381,24 @@ ParentAddChildCubit _readyGulf(
   PaymentDraftStore? store,
   IdempotencyKeyGenerator? keyGenerator,
 }) {
-  final cubit =
-      _cubit(repo, curriculum: _gulf, store: store, keyGenerator: keyGenerator)
-        ..updateAccount(
-          fullName: 'Student Name',
-          email: 'student@example.com',
-          password: 'Password1',
-          confirmPassword: 'Password1',
-        );
+  final cubit = _cubit(
+    repo,
+    curriculum: _gulf,
+    store: store,
+    keyGenerator: keyGenerator,
+  )..selectPackage(_allPackage);
   expect(cubit.nextStep(), isTrue);
   cubit.selectGrade(_grade);
   expect(cubit.nextStep(), isTrue);
-  cubit.selectPackage(_allPackage);
+  cubit.updateAccount(
+    fullName: 'Student Name',
+    email: 'student@example.com',
+    password: 'Password1',
+  );
   expect(cubit.nextStep(), isTrue);
   cubit.toggleSubject('subject-1');
   expect(cubit.nextStep(), isTrue);
   expect(cubit.nextStep(), isTrue);
-  cubit.updateAddress(city: 'Riyadh', region: 'Riyadh', line1: 'Street 1');
   return cubit;
 }
 
@@ -376,10 +418,13 @@ class _Repo implements ParentAddChildRepo {
   final List<Failure> checkoutFailures = [];
   final List<String> keys = [];
   int checkoutCalls = 0;
+  int egyptianCalls = 0;
 
   @override
-  registerEgyptian(ParentAddChildEgyptianRequest request) async =>
-      const Right(ParentAddChildSubmission(status: 'pending_review'));
+  registerEgyptian(ParentAddChildEgyptianRequest request) async {
+    egyptianCalls++;
+    return const Right(ParentAddChildSubmission(status: 'pending_review'));
+  }
 
   @override
   checkoutGulf({

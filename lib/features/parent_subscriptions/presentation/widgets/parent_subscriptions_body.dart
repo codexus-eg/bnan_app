@@ -18,7 +18,7 @@ class ParentSubscriptionsBody extends StatelessWidget {
     child: Column(
       children: [
         CustomAppbar(
-          headerText: S.of(context).parentSubscriptions,
+          headerText: S.of(context).childrenSubscriptions,
           iconNeeded: false,
         ),
         Expanded(
@@ -73,15 +73,19 @@ class ParentSubscriptionsBody extends StatelessWidget {
           Expanded(
             child: child == null || child.subscriptions.isEmpty
                 ? const Center(child: NoDataWidget())
-                : ListView.separated(
-                    itemCount: child.subscriptions.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (_, index) => ParentSubscriptionCard(
-                      child: child,
-                      subscription: child.subscriptions[index],
-                      onRenewed: context
-                          .read<GetParentSubscriptionsCubit>()
-                          .load,
+                : RefreshIndicator(
+                    onRefresh: context.read<GetParentSubscriptionsCubit>().load,
+                    child: ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: child.subscriptions.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (_, index) => ParentSubscriptionCard(
+                        child: child,
+                        subscription: child.subscriptions[index],
+                        onRenewed: context
+                            .read<GetParentSubscriptionsCubit>()
+                            .load,
+                      ),
                     ),
                   ),
           ),

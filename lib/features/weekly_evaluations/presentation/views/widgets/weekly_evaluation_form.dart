@@ -42,8 +42,8 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
     super.initState();
     _notesController = TextEditingController();
     _bonusController = TextEditingController(text: '0');
-    week = widget.data.week;
     final editor = widget.data.editor;
+    week = editor?.week ?? widget.data.week;
     if (editor == null) {
       attendance = 'present';
       participation = 'excellent';
@@ -70,9 +70,14 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
     return context.read<WeeklyEvaluationsCubit>().formStudents;
   }
 
-  List<EvaluationSubjectModel> get _subjects => widget.data.isEdit
-      ? [widget.data.editor!.subject]
-      : context.read<WeeklyEvaluationsCubit>().formSubjects;
+  List<EvaluationSubjectModel> get _subjects {
+    if (!widget.data.isEdit) {
+      return context.read<WeeklyEvaluationsCubit>().formSubjects;
+    }
+    return widget.data.editSubjects.isEmpty
+        ? [widget.data.editor!.subject]
+        : widget.data.editSubjects;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +113,10 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
                 onClassroomChanged: _selectClassroom,
                 onStudentChanged: _selectStudent,
                 onSubjectChanged: _selectSubject,
-                onWeekChanged: (value) =>
-                    setState(() => week = int.tryParse(value ?? '')),
+                onWeekChanged: widget.data.isEdit
+                    ? null
+                    : (value) =>
+                          setState(() => week = int.tryParse(value ?? '')),
               ),
               if (state is EvaluationOptionsFailure) ...[
                 const SizedBox(height: 12),
@@ -191,17 +198,30 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
     }
   }
 
-  void _selectSubject(String? value) => setState(() => subjectId = value);
+  void _selectSubject(String? value) {
+    final subject = _subjects.where((item) => item.id == value).firstOrNull;
+    setState(() {
+      subjectId = value;
+      if (widget.data.isEdit && subject != null) _fillFrom(subject);
+    });
+  }
 
   void _fillFrom(EvaluationSubjectModel subject) {
     final value = subject.evaluation;
-    if (value == null) return;
-    if (value.attendance.isNotEmpty) attendance = value.attendance;
-    if (value.participation.isNotEmpty) participation = value.participation;
-    if (value.homework.isNotEmpty) homework = value.homework;
-    if (value.behavior.isNotEmpty) behavior = value.behavior;
-    _notesController.text = value.notes;
-    _bonusController.text = value.bonus.toString();
+    attendance = value?.attendance.isNotEmpty == true
+        ? value!.attendance
+        : 'present';
+    participation = value?.participation.isNotEmpty == true
+        ? value!.participation
+        : 'excellent';
+    homework = value?.homework.isNotEmpty == true
+        ? value!.homework
+        : 'excellent';
+    behavior = value?.behavior.isNotEmpty == true
+        ? value!.behavior
+        : 'excellent';
+    _notesController.text = value?.notes ?? '';
+    _bonusController.text = (value?.bonus ?? 0).toString();
   }
 
   void _listen(BuildContext context, WeeklyEvaluationsState state) {
@@ -217,7 +237,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
         student: studentId!,
         classroom: classroomId!,
         subject: subject.id,
-        week: week!,
+        week: widget.data.editor?.week ?? week!,
         attendance: attendance!,
         participation: participation!,
         homework: homework!,

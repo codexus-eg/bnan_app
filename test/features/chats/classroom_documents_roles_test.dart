@@ -1,6 +1,9 @@
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/chats/data/models/chat_messages_response_model.dart';
+import 'package:bnan_app/features/chats/data/models/classroom_recording_model.dart';
 import 'package:bnan_app/features/chats/data/models/classroom_recordings_response.dart';
+import 'package:bnan_app/features/chats/data/models/classroom_summary_item_model.dart';
+import 'package:bnan_app/features/chats/data/models/classroom_summary_model.dart';
 import 'package:bnan_app/features/chats/data/models/classroom_summaries_response.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/data/repo/classroom_documents_repo.dart';
@@ -17,52 +20,50 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('recordings and reports access is limited to privileged roles', () {
-    for (final role in ['admin', 'supervisor', 'teacher']) {
+  test('all classroom member roles can access recordings and reports', () {
+    for (final role in [
+      'admin',
+      'supervisor',
+      'teacher',
+      'student',
+      'parent',
+    ]) {
       expect(_canPrivileged(role, 'classroom-id'), isTrue);
-    }
-    for (final role in ['student', 'parent']) {
-      expect(_canPrivileged(role, 'classroom-id'), isFalse);
     }
     expect(_canPrivileged('teacher', null), isFalse);
   });
 
   testWidgets(
-    'privileged roles see tabs in recordings reports messages order',
+    'all member roles see and load recordings reports and messages tabs',
     (tester) async {
-      for (final role in ['admin', 'supervisor', 'teacher']) {
-        await tester.pumpWidget(_documentsApp(role: role, privileged: true));
-        await tester.pump();
-        expect(find.text('Recordings'), findsOneWidget);
-        expect(find.text('Reports'), findsOneWidget);
-        expect(find.text('Messages'), findsOneWidget);
-      }
-    },
-  );
-
-  testWidgets(
-    'student and parent see messages only without forbidden requests',
-    (tester) async {
-      for (final role in ['student', 'parent']) {
+      for (final role in [
+        'admin',
+        'supervisor',
+        'teacher',
+        'student',
+        'parent',
+      ]) {
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pump();
         final documentsRepo = _DocumentsRepo();
-        final chatRepo = _ChatRepo();
         await tester.pumpWidget(
           _documentsApp(
             role: role,
-            privileged: false,
+            privileged: true,
             documentsRepo: documentsRepo,
-            chatRepo: chatRepo,
           ),
         );
         await tester.pumpAndSettle();
+        expect(find.text('Recordings'), findsOneWidget);
+        expect(find.text('Reports'), findsOneWidget);
         expect(find.text('Messages'), findsOneWidget);
-        expect(find.text('Recordings'), findsNothing);
-        expect(find.text('Reports'), findsNothing);
-        expect(documentsRepo.recordingCalls, 0);
-        expect(documentsRepo.summaryCalls, 0);
-        expect(chatRepo.roomIds, ['room-id'], reason: role);
+        expect(find.text('Shared recording'), findsOneWidget);
+        expect(documentsRepo.recordingCalls, 1, reason: role);
+        await tester.tap(find.text('Reports'));
+        await tester.pumpAndSettle();
+        expect(find.text('Shared report session'), findsOneWidget);
+        expect(find.text('Shared report'), findsOneWidget);
+        expect(documentsRepo.summaryCalls, 1, reason: role);
       }
     },
   );
@@ -71,7 +72,7 @@ void main() {
     await tester.pumpWidget(
       _documentsApp(
         role: 'student',
-        privileged: false,
+        privileged: true,
         locale: const Locale('ar'),
       ),
     );
@@ -136,7 +137,12 @@ class _DocumentsRepo implements ClassroomDocumentsRepo {
   getRecordings(String classroomId) async {
     recordingCalls++;
     return const Right<Failure, ClassroomRecordingsResponse>(
-      ClassroomRecordingsResponse([]),
+      ClassroomRecordingsResponse([
+        ClassroomRecordingModel(
+          sessionName: 'Shared recording',
+          recordingLink: 'https://example.com/recording',
+        ),
+      ]),
     );
   }
 
@@ -144,7 +150,17 @@ class _DocumentsRepo implements ClassroomDocumentsRepo {
   getSummaries(String classroomId) async {
     summaryCalls++;
     return const Right<Failure, ClassroomSummariesResponse>(
-      ClassroomSummariesResponse([]),
+      ClassroomSummariesResponse([
+        ClassroomSummaryItemModel(
+          sessionName: 'Shared report session',
+          summary: ClassroomSummaryModel(
+            title: 'Shared report',
+            content: 'Shared content',
+            docUrl: 'https://example.com/report.pdf',
+            nextSteps: [],
+          ),
+        ),
+      ]),
     );
   }
 }

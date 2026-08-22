@@ -9,12 +9,16 @@ import 'package:bnan_app/features/student_auth/presentation/manager/forgot_passw
 import 'package:bnan_app/features/student_auth/presentation/manager/reset_password_cubit/reset_password_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/reset_password_cubit/reset_password_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/forget_password_widgets/otp_widget.dart';
+import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ForgetPasswordVerificationForm extends StatelessWidget {
-  const ForgetPasswordVerificationForm({super.key});
+  const ForgetPasswordVerificationForm({super.key, required this.args});
+
+  final OtpFlowArgs args;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +50,23 @@ class ForgetPasswordVerificationForm extends StatelessWidget {
               );
             }
 
+            if (state is VerifyAccountSuccess) {
+              showCustomSnackBar(
+                context,
+                S.of(context).accountVerifiedSuccessfully,
+                true,
+              );
+              MyNavigator.goToOffAll(
+                context,
+                Routes.logIn,
+                extra: LoginRouteArgs(
+                  email: args.email,
+                  showEgyptianRegistrationSuccess:
+                      args.showEgyptianRegistrationSuccess,
+                ),
+              );
+            }
+
             if (state is ResetPasswordFailure) {
               showCustomSnackBar(context, state.errorMessage, false);
             }
@@ -66,15 +87,22 @@ class ForgetPasswordVerificationForm extends StatelessWidget {
                   OtpWidget(pinController: resetCubit.otpController),
                   const SizedBox(height: 8),
                   TextButton(
-                    onPressed: isLoading ? null : forgotCubit.resendCode,
+                    onPressed: isLoading || forgotCubit.resendSeconds > 0
+                        ? null
+                        : () => forgotCubit.resendCode(
+                            accountVerification: args.isAccountVerification,
+                          ),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: const Size(0, 28),
                     ),
                     child: Text(
-                      S.of(context).resendCode,
+                      forgotCubit.resendSeconds > 0
+                          ? '${S.of(context).resendCode} '
+                                '(${forgotCubit.resendSeconds})'
+                          : S.of(context).resendCode,
                       style: StylesManager.styleBold12(context).copyWith(
-                        color: isLoading
+                        color: isLoading || forgotCubit.resendSeconds > 0
                             ? ColorManager.greyA8AF
                             : ColorManager.secondaryColor,
                       ),
@@ -84,7 +112,9 @@ class ForgetPasswordVerificationForm extends StatelessWidget {
                   CustomAppButton(
                     text: S.of(context).verify,
                     isLoading: isVerifyLoading,
-                    onPressed: resetCubit.verifyResetCode,
+                    onPressed: args.isAccountVerification
+                        ? () => resetCubit.verifyAccount(email: args.email)
+                        : resetCubit.verifyResetCode,
                   ),
                 ],
               );

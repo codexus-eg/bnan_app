@@ -13,9 +13,11 @@ class GetCurriculumsCubit extends Cubit<GetCurriculumsState> {
   }
 
   Future<void> getAllCurriculums() async {
+    if (isClosed) return;
     emit(GetCurriculumsLoading());
 
     final result = await authRepo.getAllCurriculums();
+    if (isClosed) return;
 
     result.fold(
       (failure) {

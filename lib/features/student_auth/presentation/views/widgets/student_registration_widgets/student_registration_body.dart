@@ -13,12 +13,12 @@ class StudentRegistrationBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> stepHeaderText = [
+    final cubit = context.read<RegisterCubit>();
+    final stepHeaderText = [
       S.of(context).parentInfo,
       S.of(context).curriculumSelection,
       S.of(context).studentInfo,
-      S.of(context).paymentMethod,
-      S.of(context).paymentInfo,
+      cubit.isGulf ? S.of(context).paymentMethod : S.of(context).reviewRequest,
     ];
     return SafeArea(
       bottom: false,
@@ -32,8 +32,8 @@ class StudentRegistrationBody extends StatelessWidget {
                   subtitle: S.of(context).pleaseFillRequiredInfo,
                   currentStep: state.currentStep,
                   textColor: ColorManager.mainColor14,
-                  listLength: 5,
-                  stepHeader: stepHeaderText[state.currentStep-1],
+                  listLength: cubit.lastStep,
+                  stepHeader: stepHeaderText[state.currentStep - 1],
                 ),
               ),
               // const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -57,6 +57,16 @@ class StudentRegistrationBody extends StatelessWidget {
                   ),
                 ),
               ),
+              if (state is RegisterFailure)
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      state.errorMessage,
+                      style: TextStyle(color: ColorManager.red),
+                    ),
+                  ),
+                ),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               const SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 16),

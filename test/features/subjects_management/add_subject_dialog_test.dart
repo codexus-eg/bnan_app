@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/shared_widget/custom_option_tile.dart';
+import 'package:bnan_app/core/shared_widget/selection_circle.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_classroom_model.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_curriculum_model.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_grade_model.dart';
@@ -13,6 +15,7 @@ import 'package:bnan_app/features/subjects_management/data/repo/subjects_repo.da
 import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/dialogs/add_subject_dialog.dart';
+import 'package:bnan_app/features/subjects_management/presentation/widgets/dialogs/edit_subject_dialog.dart';
 import 'package:bnan_app/features/subjects_management/presentation/widgets/subject_management_body.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
@@ -33,15 +36,18 @@ void main() {
     final dropdowns = tester.widgetList<CustomDropdown>(
       find.byType(CustomDropdown),
     );
-    expect(dropdowns.map((item) => item.label), ['Curriculum', 'Grade']);
-    expect(dropdowns.last.hint, 'Choose a grade');
+    expect(dropdowns.map((item) => item.label), ['Curriculum']);
 
     await lookups.selectCurriculum(_firstCurriculum);
     await tester.pump();
-    lookups.selectGrade(_grade);
+    await tester.pump();
+    await tester.tap(find.widgetWithText(CustomOptionTile, 'Grade one'));
     await tester.pump();
     expect(lookupsRepo.gradeScopes, ['curriculum-1']);
-    expect(lookups.state.selectedGrade?.id, 'grade-1');
+    expect(
+      tester.widget<ElevatedButton>(find.byType(ElevatedButton)).onPressed,
+      isNull,
+    );
 
     await lookups.selectCurriculum(_emptyCurriculum);
     await tester.pump();
@@ -60,9 +66,19 @@ void main() {
     final subjects = _SubjectsRepo(failFirst: true);
     await _pump(tester, lookups, subjects);
     await lookups.selectCurriculum(_firstCurriculum);
-    lookups.selectGrade(_grade);
     await tester.pump();
+    await tester.tap(find.widgetWithText(CustomOptionTile, 'Grade one'));
+    await tester.pump();
+    expect(
+      tester.widget<SelectionCircle>(find.byType(SelectionCircle)).isSelected,
+      isTrue,
+    );
     await tester.enterText(find.byType(TextFormField), 'Arabic22');
+    await tester.pump();
+    expect(
+      tester.widget<ElevatedButton>(find.byType(ElevatedButton)).onPressed,
+      isNotNull,
+    );
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
@@ -72,7 +88,7 @@ void main() {
     expect(subjects.request?.toJson(), {
       'name': 'Arabic22',
       'curriculum': 'curriculum-1',
-      'grade': 'grade-1',
+      'grades': ['grade-1'],
     });
 
     await tester.tap(find.text('Save'));
@@ -121,7 +137,7 @@ void main() {
             BlocProvider.value(value: listCubit),
             BlocProvider.value(value: actions),
           ],
-          child: const SubjectManagementBody(),
+          child: const Scaffold(body: SubjectManagementBody()),
         ),
       ),
     );
@@ -130,14 +146,58 @@ void main() {
     final dialogContext = tester.element(find.byType(AddSubjectDialog));
     final lookups = dialogContext.read<AcademicLookupsCubit>();
     await lookups.selectCurriculum(_firstCurriculum);
-    lookups.selectGrade(_grade);
+    await tester.pump();
+    await tester.tap(find.widgetWithText(CustomOptionTile, 'Grade one'));
     await tester.pump();
     await tester.enterText(find.byType(TextFormField), 'Arabic22');
+    await tester.pump();
+    expect(
+      tester.widget<ElevatedButton>(find.byType(ElevatedButton)).onPressed,
+      isNotNull,
+    );
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     expect(subjects.getCalls, 1);
     expect(find.text('Subject added successfully'), findsOneWidget);
+  });
+
+  testWidgets('edit preselects grades and sends the final list', (
+    tester,
+  ) async {
+    final lookups = _lookups(_LookupsRepo(includeSecondGrade: true));
+    final subjects = _SubjectsRepo();
+    final actions = SubjectActionsCubit(subjects);
+    addTearDown(lookups.close);
+    addTearDown(actions.close);
+    await tester.pumpWidget(
+      _LocalizedApp(
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: lookups),
+            BlocProvider.value(value: actions),
+          ],
+          child: const Scaffold(body: EditSubjectDialog(subject: _subject)),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      tester
+          .widgetList<SelectionCircle>(find.byType(SelectionCircle))
+          .every((item) => item.isSelected),
+      isTrue,
+    );
+    await tester.tap(find.widgetWithText(CustomOptionTile, 'Grade two'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(subjects.updateRequest?.toJson(), {
+      'name': 'Arabic',
+      'grades': ['grade-1'],
+    });
   });
 }
 
@@ -192,10 +252,17 @@ class _LocalizedApp extends StatelessWidget {
 }
 
 class _LookupsRepo implements AcademicLookupsRepo {
-  _LookupsRepo({this.failGrades = false});
+  _LookupsRepo({this.failGrades = false, this.includeSecondGrade = false});
 
   final bool failGrades;
+  final bool includeSecondGrade;
   final gradeScopes = <String?>[];
+
+  @override
+  Future<Either<Failure, Unit>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+  }) async => const Right(unit);
 
   @override
   Future<Either<Failure, List<AcademicCurriculumModel>>>
@@ -207,9 +274,8 @@ class _LookupsRepo implements AcademicLookupsRepo {
   }) async {
     gradeScopes.add(curriculumId);
     if (failGrades) return Left(Failure(message: 'grades failed'));
-    return Right(
-      curriculumId == _firstCurriculum.id ? const [_grade] : const [],
-    );
+    if (curriculumId != _firstCurriculum.id) return const Right([]);
+    return Right(includeSecondGrade ? const [_grade, _grade2] : const [_grade]);
   }
 
   @override
@@ -232,6 +298,7 @@ class _SubjectsRepo implements SubjectsRepo {
   int calls = 0;
   int getCalls = 0;
   AddSubjectRequestModel? request;
+  UpdateSubjectRequestModel? updateRequest;
 
   @override
   Future<Either<Failure, Unit>> addSubject({
@@ -258,7 +325,10 @@ class _SubjectsRepo implements SubjectsRepo {
   Future<Either<Failure, Unit>> updateSubject({
     required String subjectId,
     required UpdateSubjectRequestModel request,
-  }) async => const Right(unit);
+  }) async {
+    updateRequest = request;
+    return const Right(unit);
+  }
 }
 
 const _firstCurriculum = AcademicCurriculumModel(
@@ -270,3 +340,18 @@ const _emptyCurriculum = AcademicCurriculumModel(
   name: 'Curriculum two',
 );
 const _grade = AcademicGradeModel(id: 'grade-1', name: 'Grade one');
+const _grade2 = AcademicGradeModel(id: 'grade-2', name: 'Grade two');
+const _subject = SubjectModel(
+  id: 'subject-1',
+  name: 'Arabic',
+  isActive: true,
+  curriculum: SubjectCurriculumModel(
+    id: 'curriculum-1',
+    name: 'Curriculum one',
+    icon: '',
+  ),
+  grades: [
+    SubjectGradeModel(id: 'grade-1', name: 'Grade one'),
+    SubjectGradeModel(id: 'grade-2', name: 'Grade two'),
+  ],
+);

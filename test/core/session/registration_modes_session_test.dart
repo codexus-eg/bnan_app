@@ -26,6 +26,18 @@ void main() {
     expect(session.registrationModes, containsAll(RegistrationMode.values));
     expect(session.hasEgyptianRegistration, isTrue);
     expect(session.hasGulfRegistration, isTrue);
+    expect(session.canAccessTeacherSubjectRequests, isTrue);
+  });
+
+  test('Egyptian-only teacher can access subject requests', () async {
+    await session.saveSession(
+      accessToken: 'token',
+      refreshToken: '',
+      userRole: 'teacher',
+      registrationModes: const [RegistrationMode.egyptian],
+    );
+
+    expect(session.canAccessTeacherSubjectRequests, isTrue);
   });
 
   test('student and supervisor helpers respect the current role', () async {

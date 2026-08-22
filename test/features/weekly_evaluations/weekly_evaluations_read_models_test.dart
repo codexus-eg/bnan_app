@@ -126,9 +126,29 @@ void main() {
     expect(data.subjects.last.evaluation, isNull);
   });
 
+  test('read-only bonus prioritizes bonus and falls back to bouns', () {
+    final correct = _parse({
+      'subjects': [
+        {
+          'evaluation': {'bonus': 4, 'bouns': 2},
+        },
+      ],
+    }).data.subjects.single.evaluation;
+    final legacy = _parse({
+      'subjects': [
+        {
+          'evaluation': {'bonus': null, 'bouns': '3'},
+        },
+      ],
+    }).data.subjects.single.evaluation;
+    expect(correct?.bonus, 4);
+    expect(legacy?.bonus, 3);
+  });
+
   test('parent child still supports multiple classroom references', () {
     final child = ParentEvaluationChildModel.fromJson({
       '_id': 'child',
+      'userId': 'user-child',
       'name': 'Child Name',
       'classrooms': [
         {'id': 'c1', 'name': 'Class 1'},
@@ -136,6 +156,7 @@ void main() {
       ],
     });
     expect(child.id, 'child');
+    expect(child.userId, 'user-child');
     expect(child.fullName, 'Child Name');
     expect(child.classroom, isNull);
     expect(child.classrooms, hasLength(2));

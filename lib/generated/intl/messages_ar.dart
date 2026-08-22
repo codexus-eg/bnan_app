@@ -58,55 +58,61 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m16(teachers, points) =>
       "المرتبة التالية بعد ${teachers} معلماً، ${points} نقطة للمستوى التالي";
 
-  static String m17(price) => "${price} ر.س";
+  static String m17(count) => "منذ ${count} ساعات";
 
-  static String m18(price, studentsCount, total) =>
+  static String m18(count) => "منذ ${count} دقائق";
+
+  static String m19(price) => "${price} ر.س";
+
+  static String m20(price, studentsCount, total) =>
       "${price} ريال × ${studentsCount} طالب = ${total} ريال";
 
-  static String m19(count) =>
+  static String m21(count) =>
       "تم استبعاد ${count} حصة لعدم اكتمال بيانات المدة";
 
-  static String m20(total, currency) =>
+  static String m22(total, currency) =>
       "سيتم تسجيل مبلغ ${total} ${currency} كمدفوع، ولن يمكن تعديل كشف الراتب بعد التأكيد.";
 
-  static String m21(curriculum) => "برجاء اختيار صفوف المنهج ${curriculum}";
+  static String m23(curriculum) => "برجاء اختيار صفوف المنهج ${curriculum}";
 
-  static String m22(curriculum) => "برجاء اختيار مواد المنهج ${curriculum}";
+  static String m24(curriculum) => "برجاء اختيار مواد المنهج ${curriculum}";
 
-  static String m23(days) => "${days} أيام متبقية";
+  static String m25(days) => "${days} أيام متبقية";
 
-  static String m24(hours) => "${hours} ساعات متبقية";
+  static String m26(hours) => "${hours} ساعات متبقية";
 
-  static String m25(email) =>
+  static String m27(email) =>
       "تحقق من بريدك الإلكتروني ${email} واتبع التعليمات لإعادة تعيين كلمة المرور.";
 
-  static String m26(amount) => "وفر ${amount} ر.س";
+  static String m28(amount) => "وفر ${amount} ر.س";
 
-  static String m27(day) => "مواعيد يوم ${day}";
+  static String m29(location) => "مكان الحفظ: ${location}";
 
-  static String m28(totalPoints) => "يجب أن تكون الدرجة بين 0 و${totalPoints}";
+  static String m30(day) => "مواعيد يوم ${day}";
 
-  static String m29(count) => "${count} / 2000";
+  static String m31(totalPoints) => "يجب أن تكون الدرجة بين 0 و${totalPoints}";
 
-  static String m30(name) => "تفاصيل الطلب - ${name}";
+  static String m32(count) => "${count} / 2000";
 
-  static String m31(month, year) => "راتب ${month} ${year}";
+  static String m33(name) => "تفاصيل الطلب - ${name}";
 
-  static String m32(time) => "اليوم، ${time}";
+  static String m34(month, year) => "راتب ${month} ${year}";
 
-  static String m33(hours) => "${hours} ساعة تدريبية";
+  static String m35(time) => "اليوم، ${time}";
 
-  static String m34(used, total) => "تم استخدام ${used} من ${total} أيام";
+  static String m36(hours) => "${hours} ساعة تدريبية";
 
-  static String m35(used, total) => "تم استخدام ${used} من ${total}";
+  static String m37(used, total) => "تم استخدام ${used} من ${total} أيام";
 
-  static String m36(count) => "${count} مستخدم";
+  static String m38(used, total) => "تم استخدام ${used} من ${total}";
 
-  static String m37(number) => "الأسبوع ${number}";
+  static String m39(count) => "${count} مستخدم";
 
-  static String m38(name) => "الطالب/ة: ${name}";
+  static String m40(number) => "الأسبوع ${number}";
 
-  static String m39(count) => "${count} محاضرة أسبوعية";
+  static String m41(name) => "الطالب/ة: ${name}";
+
+  static String m42(count) => "${count} محاضرة أسبوعية";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -123,6 +129,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("قبول طلب"),
         "accountActivatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تفعيل الحساب بنجاح"),
+        "accountVerificationInstructions":
+            MessageLookupByLibrary.simpleMessage(" وأدخل الكود لتفعيل حسابك."),
+        "accountVerifiedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم تفعيل حسابك بنجاح"),
         "activated": MessageLookupByLibrary.simpleMessage("مفعل"),
         "active": MessageLookupByLibrary.simpleMessage("نشطة"),
         "active2": MessageLookupByLibrary.simpleMessage("نشط"),
@@ -159,8 +169,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إضافة نقاط التميز"),
         "addScheduleEntry": MessageLookupByLibrary.simpleMessage("إضافة موعد"),
         "addSubject": MessageLookupByLibrary.simpleMessage("إضافة مادة"),
+        "addSubjectToClassroom":
+            MessageLookupByLibrary.simpleMessage("إضافة مادة لفصل"),
         "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
         "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
+        "adminNotes":
+            MessageLookupByLibrary.simpleMessage("ملاحظات الإدارة (اختياري)"),
         "adminRegistrationRequestsSection":
             MessageLookupByLibrary.simpleMessage("طلبات تسجيل"),
         "adminSubjectRequestAmountOptional":
@@ -173,6 +187,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("طريقة الدفع (اختياري)"),
         "adminSubjectRequestPaymentNotes":
             MessageLookupByLibrary.simpleMessage("ملاحظات الدفع (اختياري)"),
+        "adminSubjectRequestPrice":
+            MessageLookupByLibrary.simpleMessage("السعر"),
         "adminSubjectRequestReferenceNumber":
             MessageLookupByLibrary.simpleMessage("رقم المرجع (اختياري)"),
         "adminSubjectRequestRejectedSuccess":
@@ -183,6 +199,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا توجد طلبات مواد بهذه الحالة"),
         "adminSubjectRequestsSection":
             MessageLookupByLibrary.simpleMessage("طلبات مادة/درس"),
+        "adminSubscriptionRenewals":
+            MessageLookupByLibrary.simpleMessage("طلبات تجديد الاشتراكات"),
         "adminSupervisors": MessageLookupByLibrary.simpleMessage("مشرفين"),
         "adminUsers": MessageLookupByLibrary.simpleMessage("مستخدمين"),
         "algebraCourseCertificate":
@@ -191,6 +209,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "allClassrooms": MessageLookupByLibrary.simpleMessage("كل الفصول"),
         "allCurriculms": MessageLookupByLibrary.simpleMessage("كل المناهج"),
         "allDocuments": MessageLookupByLibrary.simpleMessage("جميع المستندات"),
+        "allGradeSubjectsAddedToClassroom":
+            MessageLookupByLibrary.simpleMessage(
+                "تمت إضافة جميع مواد هذا الصف إلى الفصل"),
         "allGrades": MessageLookupByLibrary.simpleMessage("كل الصفوف"),
         "allStudents": MessageLookupByLibrary.simpleMessage("كل الطلاب"),
         "allSubjects": MessageLookupByLibrary.simpleMessage("كل المواد"),
@@ -203,13 +224,19 @@ class MessageLookup extends MessageLookupByLibrary {
             "شارك خبراتك وانضم إلى فريقنا التعليمي"),
         "approveAccountActivation":
             MessageLookupByLibrary.simpleMessage("موافقة تفعيل الحساب"),
+        "approveRequest":
+            MessageLookupByLibrary.simpleMessage("الموافقة على الطلب"),
         "april2026": MessageLookupByLibrary.simpleMessage("أبريل 2026"),
         "arabic": MessageLookupByLibrary.simpleMessage("عربي"),
         "arabicLanguage": MessageLookupByLibrary.simpleMessage("اللغة العربية"),
         "assignStudent": MessageLookupByLibrary.simpleMessage("تعيين طالب"),
         "assignSubject": MessageLookupByLibrary.simpleMessage("توظيف في مادة"),
+        "assignSubjectToClassroom":
+            MessageLookupByLibrary.simpleMessage("برجاء تعيين مادة لهذا الفصل"),
         "assignSupervisorToClassroom": m0,
         "assignTeacherInSubject": m1,
+        "assignTeacherToSubjectFirst": MessageLookupByLibrary.simpleMessage(
+            "برجاء تعيين معلم للمادة أولًا"),
         "assignToClassroom":
             MessageLookupByLibrary.simpleMessage("توظيف في فصل"),
         "assignmentAddedSuccessfully":
@@ -252,6 +279,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthDate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
         "bonusPoints": MessageLookupByLibrary.simpleMessage("النقاط الإضافية"),
         "browseSection": MessageLookupByLibrary.simpleMessage("تصفح القسم"),
+        "callStudentAlert":
+            MessageLookupByLibrary.simpleMessage("تنبيه الطالب للحضور"),
         "canChangeCurrency": MessageLookupByLibrary.simpleMessage(
             "يمكنك تغيير العملة من القائمة"),
         "canDemo":
@@ -261,8 +290,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "cancelAssignment": MessageLookupByLibrary.simpleMessage("إلغاء توظيف"),
         "cancelAssignmentMessage": m4,
+        "cancelSubjectRequestType":
+            MessageLookupByLibrary.simpleMessage("إلغاء المادة"),
         "cancelSupervisorAssignmentQuestion": m5,
         "cancelTeacherAssignmentQuestion": m6,
+        "cancellationReason":
+            MessageLookupByLibrary.simpleMessage("سبب الإلغاء"),
+        "cancellationRequests":
+            MessageLookupByLibrary.simpleMessage("طلبات الإلغاء"),
+        "cannotAddLessonInPreviousWeek": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة حصة في أسبوع سابق"),
         "cannotDisplayStudentCertificates":
             MessageLookupByLibrary.simpleMessage(
                 "لا يمكن عرض شهادات هذا الطالب"),
@@ -278,6 +315,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ملف الشهادة غير متاح"),
         "certificateReceived":
             MessageLookupByLibrary.simpleMessage("حصلت على شهادة شهر مايو"),
+        "certificateSavedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حفظ الشهادة بنجاح"),
         "certificateUpdatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تعديل الشهادة بنجاح"),
         "certificates": MessageLookupByLibrary.simpleMessage("الشهادات"),
@@ -291,6 +330,23 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعديل كلمة المرور"),
         "changePhoneTitle":
             MessageLookupByLibrary.simpleMessage("تعديل رقم الهاتف"),
+        "changeRequestApproved": MessageLookupByLibrary.simpleMessage("مقبول"),
+        "changeRequestApprovedSuccess": MessageLookupByLibrary.simpleMessage(
+            "تمت الموافقة على الطلب بنجاح"),
+        "changeRequestPending":
+            MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
+        "changeRequestRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
+        "changeRequestRejectedSuccess":
+            MessageLookupByLibrary.simpleMessage("تم رفض الطلب بنجاح"),
+        "changeRequestSubmitted":
+            MessageLookupByLibrary.simpleMessage("تم إرسال طلبك بنجاح"),
+        "changeRequestsEmpty": MessageLookupByLibrary.simpleMessage(
+            "لا توجد طلبات إلغاء أو تغيير معلم"),
+        "changeTeacherRequestAlreadyPending":
+            MessageLookupByLibrary.simpleMessage(
+                "لديك طلب تغيير معلم قيد المراجعة بالفعل"),
+        "changeTeacherRequestType":
+            MessageLookupByLibrary.simpleMessage("تغيير المعلم"),
         "changeUsernameTitle":
             MessageLookupByLibrary.simpleMessage("تعديل اسم المستخدم"),
         "chatMsg1": MessageLookupByLibrary.simpleMessage(
@@ -300,6 +356,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chatMsg3": MessageLookupByLibrary.simpleMessage(
             "ممتاز، لا تنسى مراجعة الفصل الثالث قبل الحصة."),
         "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
+        "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
         "checkYourEmailPrefix":
             MessageLookupByLibrary.simpleMessage("تحقق من بريدك الإلكتروني "),
         "chemistry": MessageLookupByLibrary.simpleMessage("الكيمياء"),
@@ -307,12 +364,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "children": MessageLookupByLibrary.simpleMessage("الأبناء"),
         "childrenCount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
         "childrenDiscount": MessageLookupByLibrary.simpleMessage("عدد الأبناء"),
+        "childrenSubscriptions":
+            MessageLookupByLibrary.simpleMessage("اشتراكات الأبناء"),
         "chooseAccountType":
             MessageLookupByLibrary.simpleMessage("اختر نوع الحساب للمتابعة"),
         "chooseClassRoom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "chooseClassroom": MessageLookupByLibrary.simpleMessage("اختر الفصل"),
         "chooseCurriculum": MessageLookupByLibrary.simpleMessage(
-            "اختر المنهج الدراسي المناسب لأبنائك وابدأ رحلة التعليم معنا"),
+            "اختر المنهج الدراسي المناسب وابدأ رحلة التعليم معنا"),
         "chooseCurriculumIcon":
             MessageLookupByLibrary.simpleMessage("اختر أيقونة المنهج"),
         "chooseCurriculumType":
@@ -321,6 +380,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "chooseNewCurriculum":
             MessageLookupByLibrary.simpleMessage("اختر المنهج"),
+        "chooseSavedAccount":
+            MessageLookupByLibrary.simpleMessage("اختر حسابًا للمتابعة"),
         "chooseScheduleImage":
             MessageLookupByLibrary.simpleMessage("اختر صورة الجدول"),
         "chooseSubject": MessageLookupByLibrary.simpleMessage("اختر المادة"),
@@ -367,6 +428,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "congratsThisMonth":
             MessageLookupByLibrary.simpleMessage("إتقان هذا الشهر"),
         "contactInfo": MessageLookupByLibrary.simpleMessage("معلومات الاتصال"),
+        "contactUs": MessageLookupByLibrary.simpleMessage("تواصل معنا"),
         "contactWhatsApp": MessageLookupByLibrary.simpleMessage("تواصل واتساب"),
         "copiedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم النسخ بنجاح"),
@@ -435,12 +497,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteGrade": MessageLookupByLibrary.simpleMessage("حذف الصف"),
         "deleteGradeConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد أنك تريد حذف الصف"),
+        "deleteMessageQuestion":
+            MessageLookupByLibrary.simpleMessage("هل تريد حذف هذه الرسالة؟"),
         "deletePackage": MessageLookupByLibrary.simpleMessage("حذف الباقة"),
         "deletePackageConfirmation":
             MessageLookupByLibrary.simpleMessage("هل تريد حذف هذه الباقة؟"),
         "deleteSchedule": MessageLookupByLibrary.simpleMessage("حذف الجدول"),
         "deleteScheduleConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد من حذف هذا الجدول؟"),
+        "deleteSelectedMessagesQuestion": MessageLookupByLibrary.simpleMessage(
+            "هل تريد حذف الرسائل المحددة؟"),
+        "deletedMessage":
+            MessageLookupByLibrary.simpleMessage("تم حذف هذه الرسالة"),
         "deliveryDate": MessageLookupByLibrary.simpleMessage("موعد التسليم"),
         "desiredSubjects":
             MessageLookupByLibrary.simpleMessage("المواد المرغوبة"),
@@ -476,6 +544,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "discounts": MessageLookupByLibrary.simpleMessage("خصومات"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
+        "done": MessageLookupByLibrary.simpleMessage("تم"),
         "download": MessageLookupByLibrary.simpleMessage("تحميل"),
         "downloadPdf": MessageLookupByLibrary.simpleMessage("تحميل PDF"),
         "dueFriday": MessageLookupByLibrary.simpleMessage("حتى الجمعة"),
@@ -509,6 +578,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "egyptianDepartment":
             MessageLookupByLibrary.simpleMessage("القسم المصري"),
         "egyptianPound": MessageLookupByLibrary.simpleMessage("الجنيه المصري"),
+        "egyptianRenewalRequestSubmitted": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التجديد بنجاح وهو الآن قيد مراجعة الإدارة"),
+        "egyptianStudentRegistrationSuccessMessage":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إرسال طلب التسجيل بنجاح، وسيتم مراجعته من الإدارة. يمكنك تسجيل الدخول بعد قبول الطلب."),
         "eightHoursPlan":
             MessageLookupByLibrary.simpleMessage("باقة الـ 8 ساعات"),
         "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
@@ -525,6 +599,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enableAccountConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل تريد فك تعطيل هذا الحساب؟"),
         "endDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
+        "endSession": MessageLookupByLibrary.simpleMessage("إنهاء الحصة"),
         "endTime": MessageLookupByLibrary.simpleMessage("وقت النهاية"),
         "english": MessageLookupByLibrary.simpleMessage("إنجليزي"),
         "enterDiscountCode":
@@ -592,6 +667,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم فتح ملف الواجب"),
         "fileDownloadedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تحميل الملف بنجاح"),
+        "fileSavedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حفظ الملف بنجاح"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "يرجى ملء جميع الحقول المطلوبة."),
         "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي"),
@@ -619,6 +696,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "fullName": MessageLookupByLibrary.simpleMessage("الاسم بالكامل"),
         "futurePlanDateNotAllowed": MessageLookupByLibrary.simpleMessage(
             "لا يمكن اختيار تاريخ مستقبلي"),
+        "generalTeacherCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة شكر وتقدير"),
         "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
         "good": MessageLookupByLibrary.simpleMessage("جيد"),
         "grade": MessageLookupByLibrary.simpleMessage("الصف"),
@@ -668,6 +747,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "hoursPackage": m14,
         "howHandleWeakStudent": MessageLookupByLibrary.simpleMessage(
             "كيف تتعامل مع طالب ضعيف المستوى؟"),
+        "idealSupervisor":
+            MessageLookupByLibrary.simpleMessage("المشرف المثالي"),
+        "idealSupervisorCertificate":
+            MessageLookupByLibrary.simpleMessage("شهادة المشرف المثالي"),
+        "idealSupervisorCertificateAlreadyExists":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إصدار شهادة المشرف المثالي لهذا الشهر بالفعل"),
+        "idealSupervisorIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage(
+                "تم إصدار شهادة المشرف المثالي بنجاح"),
         "idealTeacher": MessageLookupByLibrary.simpleMessage("المعلم المثالي"),
         "idealTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة المعلم المثالي"),
@@ -680,6 +769,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شكر وتقدير - التفاعل"),
         "interactionLevel":
             MessageLookupByLibrary.simpleMessage("مستوى التفاعل"),
+        "internetConnectionFailedRetry": MessageLookupByLibrary.simpleMessage(
+            "تعذر الاتصال بالإنترنت، حاول مرة أخرى"),
+        "invalidCertificateRecipient":
+            MessageLookupByLibrary.simpleMessage("الحساب المحدد ليس مشرفًا"),
         "invalidChildrenCount":
             MessageLookupByLibrary.simpleMessage("أدخل عدد أبناء موجبًا"),
         "invalidCvUrl": MessageLookupByLibrary.simpleMessage(
@@ -692,6 +785,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "الرجاء إدخال عنوان بريد إلكتروني صالح."),
         "invalidEvaluationBonus": MessageLookupByLibrary.simpleMessage(
             "النقاط الإضافية يجب أن تكون من 0 إلى 5"),
+        "invalidIdealSupervisorSelection": MessageLookupByLibrary.simpleMessage(
+            "اختر مشرفًا صالحًا واحدًا على الأقل"),
         "invalidLink": MessageLookupByLibrary.simpleMessage("رابط غير صالح"),
         "invalidPackage":
             MessageLookupByLibrary.simpleMessage("بيانات الباقة غير صالحة"),
@@ -704,12 +799,23 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إصدار الشهادة"),
         "issueNewCertificate":
             MessageLookupByLibrary.simpleMessage("إصدار شهادة جديدة"),
+        "joinSession": MessageLookupByLibrary.simpleMessage("دخول الحصة"),
+        "joinSubjectNotInSubscription": MessageLookupByLibrary.simpleMessage(
+            "اشتراكك الحالي لا يشمل هذه المادة"),
+        "joinSubscriptionExpired": MessageLookupByLibrary.simpleMessage(
+            "انتهى اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة"),
+        "joinSubscriptionHoursExhausted": MessageLookupByLibrary.simpleMessage(
+            "نفدت ساعات اشتراكك، يرجى تجديد الاشتراك للانضمام إلى الحصة"),
         "kuwaitiCurriculum":
             MessageLookupByLibrary.simpleMessage("المنهج الكويتي"),
+        "languageArabic": MessageLookupByLibrary.simpleMessage("العربية"),
+        "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
         "lastSixMonths": MessageLookupByLibrary.simpleMessage("آخر ٦ شهور"),
         "latestEarnedPoints":
             MessageLookupByLibrary.simpleMessage("آخر النقاط المكتسبة"),
         "lessonDate": MessageLookupByLibrary.simpleMessage("تاريخ الحصة"),
+        "lessonEndTimeMustBeAfterStart": MessageLookupByLibrary.simpleMessage(
+            "وقت نهاية الحصة يجب أن يكون بعد وقت البداية"),
         "lessonLabel": MessageLookupByLibrary.simpleMessage("الدرس"),
         "lessonStartsSoon": MessageLookupByLibrary.simpleMessage(
             "حصة الرياضيات تبدأ خلال 15 د"),
@@ -728,6 +834,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginWelcomeSubtitle": MessageLookupByLibrary.simpleMessage(
             "سجل دخولك للوصول إلى لوحة التحكم"),
         "loginWelcomeTitle": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
+        "loginWithAnotherAccount":
+            MessageLookupByLibrary.simpleMessage("تسجيل الدخول بحساب آخر"),
         "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
         "logoutSuccess":
             MessageLookupByLibrary.simpleMessage("تم تسجيل الخروج بنجاح"),
@@ -739,6 +847,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "manualTransferReviewPending":
             MessageLookupByLibrary.simpleMessage("بانتظار مراجعة الإيصال يدوي"),
         "march2026": MessageLookupByLibrary.simpleMessage("مارس 2026"),
+        "markAllNotificationsRead":
+            MessageLookupByLibrary.simpleMessage("تحديد الكل كمقروء"),
         "markAsRead": MessageLookupByLibrary.simpleMessage("تمييز كمقروءة"),
         "materialsManagement":
             MessageLookupByLibrary.simpleMessage("إدارة المواد"),
@@ -748,6 +858,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الرياضيات . أ/سارة عبدالله"),
         "mayCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة شهر مايو"),
+        "meetingLinkOptional":
+            MessageLookupByLibrary.simpleMessage("رابط الاجتماع (اختياري)"),
         "messageDocuments":
             MessageLookupByLibrary.simpleMessage("مستندات الرسائل"),
         "messages": MessageLookupByLibrary.simpleMessage("الرسائل"),
@@ -781,6 +893,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newCustomer": MessageLookupByLibrary.simpleMessage("عميل جديد"),
         "newMessage":
             MessageLookupByLibrary.simpleMessage("رسالة جديدة من أ/ سارة"),
+        "newMessages": MessageLookupByLibrary.simpleMessage("رسائل جديدة"),
         "newPassword":
             MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
         "newPasswordLabel":
@@ -800,6 +913,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "no": MessageLookupByLibrary.simpleMessage("لا"),
         "noActiveAccountsFound":
             MessageLookupByLibrary.simpleMessage("لا توجد حسابات مفعلة"),
+        "noActiveSessionNow":
+            MessageLookupByLibrary.simpleMessage("لا توجد حصة مباشرة الآن"),
         "noAssignedSubjectsForClassroom": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد مسندة لك في هذا الفصل"),
         "noAssignmentsYet":
@@ -860,6 +975,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا توجد طلبات تسجيل جديدة حاليًا"),
         "noNotifications":
             MessageLookupByLibrary.simpleMessage("لا توجد إشعارات"),
+        "noNotificationsYet":
+            MessageLookupByLibrary.simpleMessage("لا توجد إشعارات حتى الآن"),
         "noPendingAssignments":
             MessageLookupByLibrary.simpleMessage("لا توجد واجبات قيد الانتظار"),
         "noPendingAssignmentsSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -874,10 +991,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا يوجد أبناء مسجلون"),
         "noReportsAvailable": MessageLookupByLibrary.simpleMessage(
             "لا توجد تقارير متاحة حتى الآن"),
+        "noSavedAccounts": MessageLookupByLibrary.simpleMessage(
+            "لا توجد حسابات محفوظة على هذا الجهاز"),
+        "noSchedule": MessageLookupByLibrary.simpleMessage("لا يوجد جدول"),
         "noScheduleEntriesForClassroom": MessageLookupByLibrary.simpleMessage(
             "لم تتم إضافة مواعيد لهذا الفصل بعد"),
+        "noScheduleForWeek":
+            MessageLookupByLibrary.simpleMessage("لا يوجد جدول لهذا الأسبوع"),
         "noScheduledLessonForDay": MessageLookupByLibrary.simpleMessage(
             "لا توجد حصة مجدولة في هذا اليوم"),
+        "noStudentWithThisName":
+            MessageLookupByLibrary.simpleMessage("لا يوجد طالب بهذا الاسم"),
         "noStudentsInClass":
             MessageLookupByLibrary.simpleMessage("لا يوجد طلاب في هذا الفصل"),
         "noStudentsInClassroom":
@@ -898,6 +1022,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد مواد متاحة"),
         "noSubjectsForStudent": MessageLookupByLibrary.simpleMessage(
             "لا توجد مواد متاحة لهذا الطالب"),
+        "noSubjectsInClassroom": MessageLookupByLibrary.simpleMessage(
+            "لا توجد مواد مضافة لهذا الفصل."),
         "noSubjectsMatchSearch":
             MessageLookupByLibrary.simpleMessage("لا توجد مواد مطابقة للبحث"),
         "noSubjectsRegistered": MessageLookupByLibrary.simpleMessage(
@@ -925,13 +1051,39 @@ class MessageLookup extends MessageLookupByLibrary {
         "notesHint": MessageLookupByLibrary.simpleMessage(
             "مثال: كل يوم اثنين وأربعاء الساعة 5 مساءً"),
         "notesText": MessageLookupByLibrary.simpleMessage("ملاحظات"),
+        "notificationAcademic":
+            MessageLookupByLibrary.simpleMessage("الأكاديمية"),
+        "notificationAdmin": MessageLookupByLibrary.simpleMessage("الإدارة"),
+        "notificationAnnouncements":
+            MessageLookupByLibrary.simpleMessage("الإعلانات"),
+        "notificationCategories":
+            MessageLookupByLibrary.simpleMessage("فئات الإشعارات"),
+        "notificationChannels":
+            MessageLookupByLibrary.simpleMessage("قنوات الإشعارات"),
+        "notificationChat": MessageLookupByLibrary.simpleMessage("المحادثات"),
+        "notificationFinance":
+            MessageLookupByLibrary.simpleMessage("المدفوعات والاشتراكات"),
+        "notificationHourAgo": MessageLookupByLibrary.simpleMessage("منذ ساعة"),
+        "notificationHoursAgo": m17,
+        "notificationInApp":
+            MessageLookupByLibrary.simpleMessage("الإشعارات داخل التطبيق"),
+        "notificationMinutesAgo": m18,
+        "notificationNow": MessageLookupByLibrary.simpleMessage("الآن"),
+        "notificationPush":
+            MessageLookupByLibrary.simpleMessage("إشعارات الجهاز"),
+        "notificationSettings":
+            MessageLookupByLibrary.simpleMessage("إعدادات الإشعارات"),
+        "notificationSupervisor":
+            MessageLookupByLibrary.simpleMessage("الإشراف"),
         "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
+        "notificationsEmptySubtitle": MessageLookupByLibrary.simpleMessage(
+            "سنخبرك هنا عند وجود أي تحديث جديد"),
         "numberOfHours": MessageLookupByLibrary.simpleMessage("عدد الساعات"),
         "numberOfHoursHint":
             MessageLookupByLibrary.simpleMessage("مثال: 12 ساعة"),
         "oldPasswordLabel":
             MessageLookupByLibrary.simpleMessage("كلمة المرور القديمة"),
-        "oldPrice": m17,
+        "oldPrice": m19,
         "oldPriceInvalid": MessageLookupByLibrary.simpleMessage(
             "يرجى إدخال السعر القديم بشكل صحيح"),
         "onboardingSubtitle1": MessageLookupByLibrary.simpleMessage(
@@ -946,7 +1098,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("دروس تفاعلية ومحتوى ممتع"),
         "onboardingTitle3":
             MessageLookupByLibrary.simpleMessage("النجاح يبدأ هنا"),
+        "oneMonth": MessageLookupByLibrary.simpleMessage("شهر"),
         "onlineNow": MessageLookupByLibrary.simpleMessage("متصل الآن"),
+        "openAction": MessageLookupByLibrary.simpleMessage("فتح"),
         "openDocument": MessageLookupByLibrary.simpleMessage("فتح المستند"),
         "openFile": MessageLookupByLibrary.simpleMessage("فتح الملف"),
         "openLink": MessageLookupByLibrary.simpleMessage("فتح الرابط"),
@@ -961,7 +1115,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
         "packageAccessScope":
             MessageLookupByLibrary.simpleMessage("نطاق الباقة"),
-        "packageCalculation": m18,
+        "packageCalculation": m20,
         "packageCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة الباقة بنجاح"),
         "packageDeletedSuccessfully":
@@ -1113,6 +1267,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "ستستخدمها للدخول مع البريد الإلكتروني بعد إتمام الدفع"),
         "passwordsDoNotMatch":
             MessageLookupByLibrary.simpleMessage("كلمتا المرور غير متطابقتين."),
+        "payWithTamara": MessageLookupByLibrary.simpleMessage("الدفع مع تمارا"),
         "paymentCompleted": MessageLookupByLibrary.simpleMessage("تم الدفع"),
         "paymentConfirmedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تأكيد الدفع بنجاح"),
@@ -1124,6 +1279,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentReceiptRequired":
             MessageLookupByLibrary.simpleMessage("صورة إيصال الدفع مطلوبة"),
         "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
+        "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
+            "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("اسم صاحب الحساب"),
         "payrollAccountNumber":
@@ -1168,7 +1325,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعديل بيانات الاستلام"),
         "payrollEgyptian": MessageLookupByLibrary.simpleMessage("مصري"),
         "payrollEgyptianWork": MessageLookupByLibrary.simpleMessage("مصري"),
-        "payrollExcludedSessions": m19,
+        "payrollExcludedSessions": m21,
         "payrollFilterAction":
             MessageLookupByLibrary.simpleMessage("تصفية الرواتب"),
         "payrollFilters": MessageLookupByLibrary.simpleMessage("فلاتر الرواتب"),
@@ -1196,7 +1353,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا يوجد عمل مستحق لهذا المعلم في الفترة المحددة"),
         "payrollPaid": MessageLookupByLibrary.simpleMessage("مدفوع"),
         "payrollPaidAt": MessageLookupByLibrary.simpleMessage("تاريخ الدفع"),
-        "payrollPaymentConfirmationBody": m20,
+        "payrollPaymentConfirmationBody": m22,
         "payrollPaymentConfirmationTitle":
             MessageLookupByLibrary.simpleMessage("تأكيد دفع الراتب؟"),
         "payrollPaymentDetails":
@@ -1280,8 +1437,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseChooseAtLeastOneSubjectForEachGrade":
             MessageLookupByLibrary.simpleMessage(
                 "برجاء اختيار مادة واحدة على الأقل لكل صف"),
-        "pleaseChooseCurriculumGrades": m21,
-        "pleaseChooseCurriculumSubjects": m22,
+        "pleaseChooseCurriculumGrades": m23,
+        "pleaseChooseCurriculumSubjects": m24,
         "pleaseChooseTeachingCurriculum": MessageLookupByLibrary.simpleMessage(
             "برجاء اختيار المنهج الذي تدرسه"),
         "pleaseEnterSubjectsGrades":
@@ -1310,6 +1467,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الصف الخامس الابتدائي"),
         "privacy": MessageLookupByLibrary.simpleMessage("الخصوصية"),
         "qarCurrency": MessageLookupByLibrary.simpleMessage("ريال قطري (ر.ق)"),
+        "qarShort": MessageLookupByLibrary.simpleMessage("ر.ق"),
         "qatariCurriculum":
             MessageLookupByLibrary.simpleMessage("المنهج القطري"),
         "qatariCurriculumDesc": MessageLookupByLibrary.simpleMessage(
@@ -1335,19 +1493,31 @@ class MessageLookup extends MessageLookupByLibrary {
         "registrationMode": MessageLookupByLibrary.simpleMessage("نوع التسجيل"),
         "registrationRequestRejectedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم رفض طلب التسجيل بنجاح"),
+        "registrationRequestSuccessMessage": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التسجيل بنجاح. طلبك قيد المراجعة، وسيتم تفعيل الحساب بعد موافقة الإدارة."),
         "registrationRequests":
             MessageLookupByLibrary.simpleMessage("طلبات التسجيل"),
         "reject": MessageLookupByLibrary.simpleMessage("رفض"),
+        "rejectRequest": MessageLookupByLibrary.simpleMessage("رفض الطلب"),
+        "rejectionReason": MessageLookupByLibrary.simpleMessage("سبب الرفض"),
         "relationships": MessageLookupByLibrary.simpleMessage("العلاقات"),
-        "remainingDays": m23,
-        "remainingHours": m24,
+        "remainingDays": m25,
+        "remainingHours": m26,
         "remainingSessions": MessageLookupByLibrary.simpleMessage("المتبقية"),
+        "removeAccountFromDevice":
+            MessageLookupByLibrary.simpleMessage("إزالة الحساب من هذا الجهاز"),
         "renewSubscription":
             MessageLookupByLibrary.simpleMessage("تجديد الاشتراك"),
         "renewalAllSubjectsNoSelection": MessageLookupByLibrary.simpleMessage(
             "هذه الباقة تشمل كل المواد ولا تحتاج إلى اختيار مادة."),
+        "renewalApprove":
+            MessageLookupByLibrary.simpleMessage("اعتماد التجديد"),
+        "renewalApproved":
+            MessageLookupByLibrary.simpleMessage("تم اعتماد التجديد"),
         "renewalCompleted":
             MessageLookupByLibrary.simpleMessage("تم تجديد الاشتراك بنجاح."),
+        "renewalConfirmPayment":
+            MessageLookupByLibrary.simpleMessage("تأكيد الدفع"),
         "renewalCurrentSubscription":
             MessageLookupByLibrary.simpleMessage("الاشتراك الحالي"),
         "renewalExpiry": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
@@ -1355,27 +1525,59 @@ class MessageLookup extends MessageLookupByLibrary {
             "تعذر تجديد الاشتراك. حاول مرة أخرى."),
         "renewalIdempotencyRequired": MessageLookupByLibrary.simpleMessage(
             "يلزم بدء محاولة دفع جديدة. حاول مرة أخرى."),
+        "renewalInvalidPaymentStatus": MessageLookupByLibrary.simpleMessage(
+            "حالة طلب الدفع لا تسمح بتنفيذ هذا الإجراء."),
+        "renewalNoRequests":
+            MessageLookupByLibrary.simpleMessage("لا توجد طلبات"),
+        "renewalOptionalRejectionReason":
+            MessageLookupByLibrary.simpleMessage("سبب الرفض (اختياري)"),
+        "renewalPaymentConfirmed":
+            MessageLookupByLibrary.simpleMessage("تم تأكيد الدفع"),
+        "renewalPaymentNotConfirmed": MessageLookupByLibrary.simpleMessage(
+            "يجب تأكيد الدفع قبل اعتماد التجديد."),
+        "renewalPendingReview":
+            MessageLookupByLibrary.simpleMessage("قيد المراجعة"),
         "renewalPurchasedHours":
             MessageLookupByLibrary.simpleMessage("الساعات المشتراة"),
         "renewalReceiptPending": MessageLookupByLibrary.simpleMessage(
             "تم إرسال طلب التجديد والإيصال قيد المراجعة."),
+        "renewalReferenceNumber":
+            MessageLookupByLibrary.simpleMessage("رقم المرجع"),
+        "renewalRejected": MessageLookupByLibrary.simpleMessage("مرفوض"),
         "renewalRemainingHours":
             MessageLookupByLibrary.simpleMessage("الساعات المتبقية"),
+        "renewalRequestPending": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال طلب التجديد وهو قيد المراجعة."),
+        "renewalRequestedAt":
+            MessageLookupByLibrary.simpleMessage("تاريخ الطلب"),
         "renewalStudentAccessDenied": MessageLookupByLibrary.simpleMessage(
             "غير مسموح لك بتجديد اشتراك هذا الطالب."),
         "renewalSubjectNotAssigned": MessageLookupByLibrary.simpleMessage(
             "هذه المادة غير مضافة للطالب."),
+        "renewalSubmitRequest":
+            MessageLookupByLibrary.simpleMessage("إرسال طلب التجديد"),
         "renewalSubscriptionStillActive": MessageLookupByLibrary.simpleMessage(
             "الاشتراك ما زال فعالًا ولا يمكن تجديده الآن."),
         "renewalUsedHours":
             MessageLookupByLibrary.simpleMessage("الساعات المستخدمة"),
+        "renewalViewReceipt":
+            MessageLookupByLibrary.simpleMessage("عرض الإيصال"),
         "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
         "requestAccepted":
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
         "requestNewLesson":
             MessageLookupByLibrary.simpleMessage("طلب درس جديد"),
+        "requestReason": MessageLookupByLibrary.simpleMessage("سبب الطلب"),
         "requestSubmittedUnderReview": MessageLookupByLibrary.simpleMessage(
             "تم إرسال طلبك وهو الآن قيد المراجعة."),
+        "requestTeacherChangeOrCancellation":
+            MessageLookupByLibrary.simpleMessage(
+                "طلب تغيير المعلم / إلغاء الاستمرار"),
+        "requestTeacherWithdrawal":
+            MessageLookupByLibrary.simpleMessage("طلب اعتذار عن الاستمرار"),
+        "requestType": MessageLookupByLibrary.simpleMessage("نوع الطلب"),
+        "requester": MessageLookupByLibrary.simpleMessage("مقدم الطلب"),
+        "requesterType": MessageLookupByLibrary.simpleMessage("نوع مقدم الطلب"),
         "resendCode": MessageLookupByLibrary.simpleMessage("إعادة الإرسال؟"),
         "resetCodeRequired":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كود التحقق"),
@@ -1384,8 +1586,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "resetPassword":
             MessageLookupByLibrary.simpleMessage("إعادة تعيين كلمة المرور"),
         "resetPasswordInstructions": MessageLookupByLibrary.simpleMessage(
-            " واتبع التعليمات لإعادة تعيين كلمة المرور."),
-        "resetPasswordSuccessSubtitle": m25,
+            " وأدخل الكود لإعادة تعيين كلمة المرور."),
+        "resetPasswordSuccessSubtitle": m27,
         "resetPasswordSuccessTitle":
             MessageLookupByLibrary.simpleMessage("تم الإرسال بنجاح"),
         "retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
@@ -1394,6 +1596,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("عرض طلبات الطلاب"),
         "reviewPaidRequests":
             MessageLookupByLibrary.simpleMessage("عرض طلبات الدفع"),
+        "reviewRequest": MessageLookupByLibrary.simpleMessage("مراجعة الطلب"),
         "reviews": MessageLookupByLibrary.simpleMessage("التقييمات"),
         "rewardPoints": MessageLookupByLibrary.simpleMessage("نقاط المكافآت"),
         "rewards": MessageLookupByLibrary.simpleMessage("مكافآت"),
@@ -1426,25 +1629,39 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("القسم السعودي"),
         "saudiRiyal": MessageLookupByLibrary.simpleMessage("الريال السعودي"),
         "save": MessageLookupByLibrary.simpleMessage("حفظ"),
-        "saveAmount": m26,
+        "saveAmount": m28,
         "saveChanges": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
+        "savedAccounts":
+            MessageLookupByLibrary.simpleMessage("الحسابات المحفوظة"),
+        "savedInLocation": m29,
+        "savingCertificate":
+            MessageLookupByLibrary.simpleMessage("جاري حفظ الشهادة..."),
+        "savingFile": MessageLookupByLibrary.simpleMessage("جاري حفظ الملف..."),
         "schedule": MessageLookupByLibrary.simpleMessage("الجدول"),
         "scheduleCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة الجدول بنجاح"),
+        "scheduleDateInPast": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة حصة في تاريخ مضى"),
         "scheduleDeletedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حذف الجدول بنجاح"),
-        "scheduleForDay": m27,
+        "scheduleForDay": m30,
         "scheduleImageRequired":
             MessageLookupByLibrary.simpleMessage("يرجى اختيار صورة الجدول"),
+        "scheduleTimeInPast": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن إضافة حصة في وقت مضى"),
         "scheduleUpdated": MessageLookupByLibrary.simpleMessage(
             "تم تعديل جدول الأسبوع القادم"),
         "schoolSubjects":
             MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
         "science": MessageLookupByLibrary.simpleMessage("العلوم"),
-        "scoreRange": m28,
+        "scoreRange": m31,
         "scoreRequired": MessageLookupByLibrary.simpleMessage("الدرجة مطلوبة"),
         "searchByNameOrPhone":
             MessageLookupByLibrary.simpleMessage("بحث بالاسم أو الهاتف"),
+        "searchConversations":
+            MessageLookupByLibrary.simpleMessage("البحث في المحادثات"),
+        "searchForStudent":
+            MessageLookupByLibrary.simpleMessage("ابحث عن طالب"),
         "searchForSubject":
             MessageLookupByLibrary.simpleMessage("ابحث عن مادة"),
         "secondPrimaryClassroom":
@@ -1463,6 +1680,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectGrade": MessageLookupByLibrary.simpleMessage("اختر الصف"),
         "selectGradeToViewAttendance": MessageLookupByLibrary.simpleMessage(
             "اختر الصف لعرض بيانات الحضور"),
+        "selectIdealSupervisor":
+            MessageLookupByLibrary.simpleMessage("اختر المشرف المثالي"),
         "selectIdealTeacher":
             MessageLookupByLibrary.simpleMessage("اختر المعلم المثالي"),
         "selectLesson": MessageLookupByLibrary.simpleMessage("اختر الحصة"),
@@ -1474,6 +1693,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectWeek": MessageLookupByLibrary.simpleMessage("اختر الأسبوع"),
         "selectedLessonDatePreview":
             MessageLookupByLibrary.simpleMessage("الخميس 07 مايو 2026"),
+        "selectedMessagesLabel": MessageLookupByLibrary.simpleMessage("محددة"),
         "selectedPackage":
             MessageLookupByLibrary.simpleMessage("الباقة المختارة"),
         "semesterName": MessageLookupByLibrary.simpleMessage("اسم الفصل"),
@@ -1492,6 +1712,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("إرسال كود الاستعادة"),
         "sending": MessageLookupByLibrary.simpleMessage("جاري الإرسال..."),
         "services": MessageLookupByLibrary.simpleMessage("الخدمات"),
+        "sessionEnding":
+            MessageLookupByLibrary.simpleMessage("جارٍ إنهاء الحصة"),
+        "sessionExpiredLoginAgain": MessageLookupByLibrary.simpleMessage(
+            "انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى"),
         "sessionRecording": MessageLookupByLibrary.simpleMessage("تسجيل الحصة"),
         "sessionStartUnauthorized":
             MessageLookupByLibrary.simpleMessage("غير مصرح لك ببدء الحصة"),
@@ -1523,8 +1747,26 @@ class MessageLookup extends MessageLookupByLibrary {
         "student": MessageLookupByLibrary.simpleMessage("طالب"),
         "studentAssignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تعيين الطالب بنجاح"),
+        "studentAssignmentAlreadyAssigned":
+            MessageLookupByLibrary.simpleMessage("هذا الطالب مُعيّن بالفعل"),
+        "studentAssignmentNoClassrooms": MessageLookupByLibrary.simpleMessage(
+            "لا توجد فصول متاحة لهذا الطالب"),
+        "studentAssignmentNotApproved": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن تعيين هذا الطالب لأنه لم يتم اعتماد حسابه بعد"),
+        "studentCallAlertBody":
+            MessageLookupByLibrary.simpleMessage("افتح بنان للاستجابة للمشرف"),
+        "studentCallAlertCooldown": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال التنبيه بالفعل، حاول بعد قليل"),
+        "studentCallAlertSent": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال التنبيه للطالب بنجاح"),
+        "studentCallAlertTitle":
+            MessageLookupByLibrary.simpleMessage("المشرف يناديك"),
         "studentCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة الطالب"),
+        "studentCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادات الطلاب"),
+        "studentClassroomsLoadFailed": MessageLookupByLibrary.simpleMessage(
+            "تعذر تحميل الفصول، حاول مرة أخرى"),
         "studentEmail": MessageLookupByLibrary.simpleMessage("ايميل الطالب"),
         "studentInfo": MessageLookupByLibrary.simpleMessage("معلومات الطالب"),
         "studentName": MessageLookupByLibrary.simpleMessage("اسم الطالب"),
@@ -1556,6 +1798,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المناهج الدراسية "),
         "studyMaterials":
             MessageLookupByLibrary.simpleMessage("المواد الدراسية"),
+        "studyNotStarted":
+            MessageLookupByLibrary.simpleMessage("لم تبدأ الدراسة بعد"),
         "studyPlanFor": MessageLookupByLibrary.simpleMessage("الخطة الدراسية"),
         "studyPlanTitlePrefix":
             MessageLookupByLibrary.simpleMessage("الخطة الدراسية لـ"),
@@ -1577,7 +1821,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("طلباتي الحالية"),
         "subjectRequestNoPackages": MessageLookupByLibrary.simpleMessage(
             "لا توجد باقات متاحة لطلب مادة حاليًا"),
-        "subjectRequestNotesCounter": m29,
+        "subjectRequestNotesCounter": m32,
         "subjectRequestPaymentCompleted": MessageLookupByLibrary.simpleMessage(
             "تم الدفع وجارٍ البحث عن مدرس"),
         "subjectRequestPaymentTimeout": MessageLookupByLibrary.simpleMessage(
@@ -1600,11 +1844,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "submitAssignment": MessageLookupByLibrary.simpleMessage("رفع الواجب"),
         "submitAssignmentCorrection":
             MessageLookupByLibrary.simpleMessage("تصحيح تسليم"),
+        "submitRegistrationRequest":
+            MessageLookupByLibrary.simpleMessage("إرسال طلب التسجيل"),
         "submitRequest": MessageLookupByLibrary.simpleMessage("إرسال الطلب"),
         "submitted": MessageLookupByLibrary.simpleMessage("مسلم"),
         "submittedBadge": MessageLookupByLibrary.simpleMessage("مرفوع"),
+        "submittingAssignment":
+            MessageLookupByLibrary.simpleMessage("جاري التسليم..."),
         "subscribeNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
         "subscription": MessageLookupByLibrary.simpleMessage("الاشتراك"),
+        "subscriptionAccessExpired": MessageLookupByLibrary.simpleMessage(
+            "انتهى اشتراكك، يرجى تجديد الاشتراك للمتابعة."),
         "subscriptionEndsSoon":
             MessageLookupByLibrary.simpleMessage("اشتراكك سينتهي خلال 5 أيام"),
         "subscriptions": MessageLookupByLibrary.simpleMessage("الاشتراكات"),
@@ -1618,11 +1868,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "تم تعيينك مشرفًا في الصف الثالث"),
         "supervisorAssignment":
             MessageLookupByLibrary.simpleMessage("توظيف المشرف"),
+        "supervisorNotActive":
+            MessageLookupByLibrary.simpleMessage("حساب المشرف المحدد غير نشط"),
+        "supervisorNotFound": MessageLookupByLibrary.simpleMessage(
+            "المشرف المحدد لم يعد موجودًا"),
         "supervisorRequired":
             MessageLookupByLibrary.simpleMessage("المشرف مطلوب"),
         "supervisorSaraAhmed":
             MessageLookupByLibrary.simpleMessage("سارة أحمد"),
         "supervisorSomaya": MessageLookupByLibrary.simpleMessage("سمية"),
+        "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
         "taughtOnlineBefore":
@@ -1634,7 +1889,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "teacher": MessageLookupByLibrary.simpleMessage("معلم"),
         "teacherAhmedFouad":
             MessageLookupByLibrary.simpleMessage("أ/ أحمد فؤاد"),
-        "teacherApplicationDetailsTitle": m30,
+        "teacherApplicationDetailsTitle": m33,
         "teacherApplications":
             MessageLookupByLibrary.simpleMessage("طلبات تقديم المعلمين"),
         "teacherApplySubtitle": MessageLookupByLibrary.simpleMessage(
@@ -1643,6 +1898,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "التقديم كمعلم في أكاديمية بنان"),
         "teacherAssignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم توظيف المعلم بنجاح"),
+        "teacherCertificateIssuedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم إصدار شهادة المعلم بنجاح"),
+        "teacherCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادات المعلمين"),
         "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
             "أقر بصحة جميع البيانات المذكورة أعلاه، وأتعهد بالالتزام بقواعد وسياسات أكاديمية بنان"),
         "teacherMyEarnings": MessageLookupByLibrary.simpleMessage("مستحقاتي"),
@@ -1689,7 +1948,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تقرير الراتب"),
         "teacherPayrollReportSummary":
             MessageLookupByLibrary.simpleMessage("ملخص التقرير"),
-        "teacherPayrollReportTitle": m31,
+        "teacherPayrollReportTitle": m34,
         "teacherPayrollTransferredTo":
             MessageLookupByLibrary.simpleMessage("التحويل إلى"),
         "teacherPayrollUnavailable":
@@ -1727,6 +1986,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المهارات التقنية"),
         "teacherUnassignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إلغاء توظيف المعلم بنجاح"),
+        "teacherWithdrawalRequestType":
+            MessageLookupByLibrary.simpleMessage("اعتذار المعلم عن الاستمرار"),
         "teachers": MessageLookupByLibrary.simpleMessage("المعلمون"),
         "teachingInBnan":
             MessageLookupByLibrary.simpleMessage("التدريس في بنان"),
@@ -1747,12 +2008,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("نصيحة لزيادة النقاط"),
         "to": MessageLookupByLibrary.simpleMessage("إلى"),
         "today": MessageLookupByLibrary.simpleMessage("اليوم"),
-        "todayAtTime": m32,
+        "todayAtTime": m35,
         "todayClasses": MessageLookupByLibrary.simpleMessage("حصص اليوم"),
         "total": MessageLookupByLibrary.simpleMessage("المجموع"),
         "totalSessions": MessageLookupByLibrary.simpleMessage("إجمالي الحصص"),
         "totalStudents": MessageLookupByLibrary.simpleMessage("إجمالي الطلاب"),
-        "trainingHours": m33,
+        "trainingHours": m36,
+        "tryAgain": MessageLookupByLibrary.simpleMessage("حاول مرة أخرى"),
         "tuesday": MessageLookupByLibrary.simpleMessage("الثلاثاء"),
         "twelveHoursPlan":
             MessageLookupByLibrary.simpleMessage("باقة الـ 12 ساعة"),
@@ -1803,8 +2065,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploadSchedule": MessageLookupByLibrary.simpleMessage("رفع الجدول"),
         "uploadStudyPlan":
             MessageLookupByLibrary.simpleMessage("رفع الخطة الدراسية"),
-        "usedDays": m34,
-        "usedHours": m35,
+        "usedDays": m37,
+        "usedHours": m38,
         "userCreatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إنشاء المستخدم بنجاح"),
         "userDeletedSuccessfully":
@@ -1818,12 +2080,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "تم تحديث حالة المستخدم بنجاح"),
         "userUpdatedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم تحديث المستخدم بنجاح"),
-        "usersCount": m36,
+        "usersCount": m39,
         "usersManagement":
             MessageLookupByLibrary.simpleMessage("إدارة المستخدمين"),
         "validIntegerScore":
             MessageLookupByLibrary.simpleMessage("أدخل درجة صحيحة بدون كسور"),
         "verify": MessageLookupByLibrary.simpleMessage("تحقق"),
+        "verifyAccountTitle":
+            MessageLookupByLibrary.simpleMessage("تفعيل الحساب"),
         "veryGood": MessageLookupByLibrary.simpleMessage("جيد جدًا"),
         "view": MessageLookupByLibrary.simpleMessage("عرض"),
         "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
@@ -1840,7 +2104,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "wednesday": MessageLookupByLibrary.simpleMessage("الأربعاء"),
         "week": MessageLookupByLibrary.simpleMessage("الأسبوع"),
         "weekDays": MessageLookupByLibrary.simpleMessage("أيام الأسبوع"),
-        "weekNumber": m37,
+        "weekNumber": m40,
         "weekOne": MessageLookupByLibrary.simpleMessage("الأسبوع الأول"),
         "weekStart": MessageLookupByLibrary.simpleMessage("بداية الأسبوع"),
         "weekTwo": MessageLookupByLibrary.simpleMessage("الأسبوع الثاني"),
@@ -1848,7 +2112,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("التقييم الأسبوعي"),
         "weeklyEvaluationAddedNotification":
             MessageLookupByLibrary.simpleMessage("أضيف تقييم أسبوعي لفصل 4أ"),
-        "weeklyEvaluationStudentTitle": m38,
+        "weeklyEvaluationStudentTitle": m41,
         "weeklyEvaluations":
             MessageLookupByLibrary.simpleMessage("التقييمات الأسبوعية"),
         "weeklyEvaluationsGulfClassroomConflict":
@@ -1863,7 +2127,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الطالب المثالي للأسبوع"),
         "weeklyIdealStudentsRanking": MessageLookupByLibrary.simpleMessage(
             "ترتيب الطلاب المثاليين هذا الأسبوع"),
-        "weeklyLessons": m39,
+        "weeklyLessons": m42,
         "weeklyPlans": MessageLookupByLibrary.simpleMessage("الخطط الأسبوعية"),
         "welcomeYou": MessageLookupByLibrary.simpleMessage("أهلاً بك"),
         "whatsappNumber": MessageLookupByLibrary.simpleMessage("رقم الواتساب"),

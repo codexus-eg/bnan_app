@@ -27,22 +27,10 @@ class HomeStudentBottomNavBar extends StatelessWidget {
     final s = S.of(context);
 
     return [
-      BottomNavItemModel(
-        icon: ImageManager.homeIcon,
-        title: s.home,
-      ),
-      BottomNavItemModel(
-        icon: ImageManager.tableIcon,
-        title: s.schedule,
-      ),
-      BottomNavItemModel(
-        icon: ImageManager.fileIcon,
-        title: s.assignments,
-      ),
-      BottomNavItemModel(
-        icon: ImageManager.certificateBadgeIcon,
-        title: s.certificates,
-      ),
+      BottomNavItemModel(icon: ImageManager.homeIcon, title: s.home),
+      BottomNavItemModel(icon: ImageManager.tableIcon, title: s.schedule),
+      BottomNavItemModel(icon: ImageManager.fileIcon, title: s.assignments),
+      BottomNavItemModel(icon: ImageManager.chatIcon, title: s.messages),
       BottomNavItemModel(
         icon: ImageManager.userProfileIcon,
         title: s.myAccount,

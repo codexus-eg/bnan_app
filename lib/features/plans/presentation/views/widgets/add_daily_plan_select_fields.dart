@@ -80,7 +80,10 @@ class AddDailyPlanSelectFields extends StatelessWidget {
       final items = state is GetClassroomSubjectsSuccess
           ? state.classroomSubjects.subjects
           : const [];
-      return (s.selectSubject, {for (final item in items) item.id: item.name});
+      return (
+        s.selectSubject,
+        {for (final item in items) item.subjectId: item.name},
+      );
     }
     final state = context.watch<GetTeacherAssignedSubjectsCubit>().state;
     if (state is GetTeacherAssignedSubjectsLoading) {

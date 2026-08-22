@@ -55,6 +55,7 @@ void main() {
     tester.state<ScaffoldState>(find.byType(Scaffold).first).openDrawer();
     await tester.pumpAndSettle();
     await tester.tap(find.text(S.of(context).parentSchedule));
+    await tester.tap(find.text(S.of(context).parentSchedule));
     await tester.pumpAndSettle();
 
     expect(find.text('schedule-target'), findsOneWidget);

@@ -36,7 +36,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   final int maxPollAttempts;
 
   Timer? _timer;
-  TamaraCheckoutRequest? _request;
   PaymentDraft? _draft;
   bool _statusInFlight = false;
   bool _checkoutInFlight = false;
@@ -50,13 +49,17 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
   PaymentDraft? get draft => _draft;
   PaymentAmountSummary? get paymentSummary => _paymentSummary;
+  bool get isAwaitingVerification =>
+      _draft?.paymentId.isNotEmpty == true &&
+      _draft?.checkoutOpenedAt != null &&
+      _draft?.lastKnownStatus == PaymentStatus.pending;
 
   Future<void> restore() async {
     _draft = await _readOwnedDraft();
     final draft = _draft;
     if (draft?.lastKnownStatus == PaymentStatus.pending &&
         draft?.paymentId.isNotEmpty == true) {
-      emit(TamaraPaymentPending(checkoutUrl: draft?.checkoutUrl));
+      emit(const TamaraPaymentVerificationPending());
     }
   }
 
@@ -68,7 +71,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       await _resetAttempt();
       existing = null;
     }
-    _request = request;
     if (existing?.lastKnownStatus == PaymentStatus.completed) {
       emit(const TamaraPaymentResult(status: PaymentStatus.completed));
       return;
@@ -80,7 +82,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     if (existing != null && existing.payloadFingerprint != fingerprint) {
       await _resetAttempt();
       existing = null;
-      _request = request;
     }
     if (existing != null &&
         existing.lastKnownStatus == PaymentStatus.pending &&
@@ -187,6 +188,20 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     await _reconcileAndCheckStatus();
   }
 
+  Future<void> verifyProviderSuccess() async {
+    _reconciledThisForeground = false;
+    await _reconcileAndCheckStatus();
+  }
+
+  Future<void> verifyCheckoutClosed() async {
+    if (_draft?.lastKnownStatus != PaymentStatus.pending) return;
+    _stopPolling();
+    _checkoutLaunchClaimed = true;
+    _reconciledThisForeground = false;
+    if (!isClosed) emit(const TamaraPaymentVerificationPending());
+    await _reconcileAndCheckStatus();
+  }
+
   Future<void> _reconcileAndCheckStatus() async {
     final draft = _draft;
     if (draft == null ||
@@ -200,14 +215,17 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconcileInFlight = true;
     final paymentId = draft.paymentId;
     final generation = _attemptGeneration;
-    await repo.reconcile(paymentId);
+    final reconciled = await repo.reconcile(paymentId);
     if (generation != _attemptGeneration || _draft?.paymentId != paymentId) {
       return;
     }
     _reconcileInFlight = false;
     if (isClosed) return;
-    final canPoll = await checkStatus();
-    if (canPoll && _draft?.lastKnownStatus == PaymentStatus.pending) {
+    await reconciled.fold((_) async {}, _handleStatus);
+    if (_draft?.lastKnownStatus.isTerminal == true) return;
+    await checkStatus();
+    if (_checkoutLaunchClaimed &&
+        _draft?.lastKnownStatus == PaymentStatus.pending) {
       _startPolling();
     }
   }
@@ -230,10 +248,15 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       return false;
     }
     final paymentId = draft.paymentId;
+    final generation = _attemptGeneration;
     _statusInFlight = true;
     final result = await repo.status(paymentId);
     _statusInFlight = false;
-    if (isClosed || _draft?.paymentId != paymentId) return false;
+    if (isClosed ||
+        generation != _attemptGeneration ||
+        _draft?.paymentId != paymentId) {
+      return false;
+    }
     await result.fold(
       (failure) async => emit(TamaraPaymentFailure(failure.message)),
       _handleStatus,
@@ -268,16 +291,21 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
     if (effectiveStatus == PaymentStatus.completed) {
       _stopPolling();
-      await _loginStudent();
+      await _completeRegistration();
       return;
     }
     if (effectiveStatus.isTerminal) {
       _stopPolling();
+      if (effectiveStatus != PaymentStatus.refunded) await store.clear();
       // TODO: Refunded subscription behavior must remain a backend rule.
       emit(TamaraPaymentResult(status: effectiveStatus));
       return;
     }
-    emit(TamaraPaymentPending(checkoutUrl: _draft!.checkoutUrl));
+    emit(
+      _checkoutLaunchClaimed
+          ? TamaraPaymentPending(checkoutUrl: _draft!.checkoutUrl)
+          : const TamaraPaymentVerificationPending(),
+    );
   }
 
   Future<void> retryAfterTerminal(TamaraCheckoutRequest request) async {
@@ -294,6 +322,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _timer = Timer.periodic(pollInterval, (_) {
       if (_pollAttempts >= maxPollAttempts) {
         _stopPolling();
+        _checkoutLaunchClaimed = false;
+        if (!isClosed) emit(const TamaraPaymentVerificationPending());
         return;
       }
       _pollAttempts++;
@@ -336,43 +366,28 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     if (!opened) _checkoutLaunchClaimed = false;
   }
 
+  Future<void> abandonCheckout() async {
+    _attemptGeneration++;
+    _stopPolling();
+    _statusInFlight = false;
+    _checkoutInFlight = false;
+    _reconcileInFlight = false;
+    _reconciledThisForeground = false;
+    _checkoutLaunchClaimed = false;
+    if (!isClosed && _draft?.lastKnownStatus == PaymentStatus.pending) {
+      emit(const TamaraPaymentVerificationPending());
+    }
+  }
+
   void _stopPolling() {
     _timer?.cancel();
     _timer = null;
   }
 
-  Future<void> _loginStudent() async {
-    final request = _request;
-    if (request == null) {
-      await _retainCompletedEmail();
-      if (isClosed) return;
-      emit(const TamaraPaymentResult(status: PaymentStatus.completed));
-      return;
-    }
-    final result = await authRepo.loginStudentAfterPayment(
-      email: request.student.email,
-      password: request.student.password,
-    );
+  Future<void> _completeRegistration() async {
+    await _retainCompletedEmail();
     if (isClosed) return;
-    await result.fold(
-      (_) async {
-        _request = null;
-        await _retainCompletedEmail();
-        if (isClosed) return;
-        emit(const TamaraPaymentResult(status: PaymentStatus.completed));
-      },
-      (response) async {
-        _request = null;
-        await store.clear();
-        if (isClosed) return;
-        emit(
-          const TamaraPaymentResult(
-            status: PaymentStatus.completed,
-            studentLoggedIn: true,
-          ),
-        );
-      },
-    );
+    emit(const TamaraPaymentResult(status: PaymentStatus.completed));
   }
 
   Future<void> _retainCompletedEmail() async {
@@ -440,7 +455,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   Future<void> _resetAttempt() async {
     _attemptGeneration++;
     _stopPolling();
-    _request = null;
     _draft = null;
     _paymentSummary = null;
     _statusInFlight = false;

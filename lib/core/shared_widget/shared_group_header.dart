@@ -8,11 +8,12 @@ class SharedGroupHeader extends StatelessWidget {
   const SharedGroupHeader({
     super.key,
     required this.title,
-    required this.path,
-    required this.badgeTitle,
+    this.path,
+    this.badgeTitle,
     this.isIcon = false,
   });
-  final String title, path, badgeTitle;
+  final String title;
+  final String? path, badgeTitle;
   final bool isIcon;
 
   @override
@@ -29,24 +30,25 @@ class SharedGroupHeader extends StatelessWidget {
           const SizedBox(width: 4),
           Text(title, style: StylesManager.styleBold16(context)),
           const Spacer(),
-          InkWell(
-            onTap: () => MyNavigator.goToOff(context, path),
-            child: Container(
-              padding: const EdgeInsetsDirectional.fromSTEB(8, 5, 8, 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: ColorManager.mainColor14,
+          if (path?.isNotEmpty == true && badgeTitle?.isNotEmpty == true)
+            InkWell(
+              onTap: () => MyNavigator.goToOff(context, path!),
+              child: Container(
+                padding: const EdgeInsetsDirectional.fromSTEB(8, 5, 8, 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color: ColorManager.mainColor14,
+                ),
+                child: isIcon
+                    ? const Icon(Icons.add, color: ColorManager.white)
+                    : Text(
+                        badgeTitle!,
+                        style: StylesManager.styleBold14(
+                          context,
+                        ).copyWith(color: ColorManager.white),
+                      ),
               ),
-              child: isIcon
-                  ? const Icon(Icons.add, color: ColorManager.white)
-                  : Text(
-                      badgeTitle,
-                      style: StylesManager.styleBold14(
-                        context,
-                      ).copyWith(color: ColorManager.white),
-                    ),
             ),
-          ),
         ],
       ),
     ),

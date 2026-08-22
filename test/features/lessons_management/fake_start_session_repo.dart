@@ -25,6 +25,20 @@ class FakeStartSessionRepo implements StartSessionRepo {
     if (failure != null) return Left(failure!);
     return Right(startedSessionData(classroomId));
   }
+
+  @override
+  Future<Either<Failure, StartSessionData?>> getActiveSession({
+    required String classroomId,
+  }) async => Right(startedSessionData(classroomId));
+
+  @override
+  Future<Either<Failure, String>> joinActiveSession({
+    required String classroomId,
+  }) async => Right('https://zoom.us/j/$classroomId');
+
+  @override
+  Future<Either<Failure, void>> endSession({required String sessionId}) async =>
+      const Right(null);
 }
 
 StartSessionData startedSessionData(String classroomId) => StartSessionData(

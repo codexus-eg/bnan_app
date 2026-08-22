@@ -8,6 +8,9 @@ String certificateTitle(BuildContext context, CertificateModel certificate) {
   if (certificate.certificateType == 'ideal_teacher') {
     return s.idealTeacherCertificate;
   }
+  if (certificate.certificateType == 'ideal_supervisor') {
+    return s.idealSupervisorCertificate;
+  }
   final month = certificate.period.month;
   if (certificate.certificateType != 'student_monthly' ||
       month < 1 ||

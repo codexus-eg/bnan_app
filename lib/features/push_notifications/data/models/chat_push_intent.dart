@@ -8,14 +8,12 @@ class ChatPushIntent {
     required this.notificationId,
     required this.title,
     required this.body,
+    this.roomName = '',
   });
 
   final String roomId, messageId, senderId, notificationId, title, body;
-  String get dedupKey => notificationId.isNotEmpty
-      ? notificationId
-      : messageId.isNotEmpty
-      ? messageId
-      : '$roomId|$senderId|$body';
+  final String roomName;
+  String get dedupKey => notificationId.isNotEmpty ? notificationId : messageId;
 
   static ChatPushIntent? tryParse(
     Map<String, dynamic> data, {
@@ -40,6 +38,7 @@ class ChatPushIntent {
       notificationId: _text(data['notificationId']),
       title: title,
       body: body,
+      roomName: _roomName(data, fallback),
     );
   }
 
@@ -53,4 +52,15 @@ class ChatPushIntent {
   }
 
   static String _text(dynamic value) => value?.toString().trim() ?? '';
+
+  static String _roomName(
+    Map<String, dynamic> data,
+    Map<String, dynamic> params,
+  ) {
+    for (final key in const ['roomName', 'chatName', 'name', 'title']) {
+      final value = _text(params[key] ?? data[key]);
+      if (value.isNotEmpty) return value;
+    }
+    return '';
+  }
 }

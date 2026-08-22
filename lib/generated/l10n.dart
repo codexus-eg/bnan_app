@@ -150,6 +150,96 @@ class S {
     );
   }
 
+  /// `Search for a student`
+  String get searchForStudent {
+    return Intl.message(
+      'Search for a student',
+      name: 'searchForStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No student found with this name`
+  String get noStudentWithThisName {
+    return Intl.message(
+      'No student found with this name',
+      name: 'noStudentWithThisName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This student cannot be assigned because the account has not been approved yet`
+  String get studentAssignmentNotApproved {
+    return Intl.message(
+      'This student cannot be assigned because the account has not been approved yet',
+      name: 'studentAssignmentNotApproved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No classrooms are available for this student`
+  String get studentAssignmentNoClassrooms {
+    return Intl.message(
+      'No classrooms are available for this student',
+      name: 'studentAssignmentNoClassrooms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This student is already assigned`
+  String get studentAssignmentAlreadyAssigned {
+    return Intl.message(
+      'This student is already assigned',
+      name: 'studentAssignmentAlreadyAssigned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your session has expired. Please sign in again`
+  String get sessionExpiredLoginAgain {
+    return Intl.message(
+      'Your session has expired. Please sign in again',
+      name: 'sessionExpiredLoginAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your subscription has ended. Please renew it to continue.`
+  String get subscriptionAccessExpired {
+    return Intl.message(
+      'Your subscription has ended. Please renew it to continue.',
+      name: 'subscriptionAccessExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to connect to the internet. Please try again`
+  String get internetConnectionFailedRetry {
+    return Intl.message(
+      'Unable to connect to the internet. Please try again',
+      name: 'internetConnectionFailedRetry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load classrooms. Please try again`
+  String get studentClassroomsLoadFailed {
+    return Intl.message(
+      'Unable to load classrooms. Please try again',
+      name: 'studentClassroomsLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Access denied.`
   String get errorForbidden {
     return Intl.message(
@@ -345,6 +435,16 @@ class S {
     return Intl.message(
       ' and follow the instructions to reset your password.',
       name: 'resetPasswordInstructions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` and enter the code to verify your account.`
+  String get accountVerificationInstructions {
+    return Intl.message(
+      ' and enter the code to verify your account.',
+      name: 'accountVerificationInstructions',
       desc: '',
       args: [],
     );
@@ -560,10 +660,10 @@ class S {
     );
   }
 
-  /// `Choose the suitable curriculum for your children and start the learning journey with us`
+  /// `Choose the suitable curriculum  and start the learning journey with us`
   String get chooseCurriculum {
     return Intl.message(
-      'Choose the suitable curriculum for your children and start the learning journey with us',
+      'Choose the suitable curriculum  and start the learning journey with us',
       name: 'chooseCurriculum',
       desc: '',
       args: [],
@@ -825,6 +925,16 @@ class S {
     return Intl.message(
       'Qatari Riyal (QAR)',
       name: 'qarCurrency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QAR`
+  String get qarShort {
+    return Intl.message(
+      'QAR',
+      name: 'qarShort',
       desc: '',
       args: [],
     );
@@ -1280,6 +1390,16 @@ class S {
     );
   }
 
+  /// `Pay with Tamara`
+  String get payWithTamara {
+    return Intl.message(
+      'Pay with Tamara',
+      name: 'payWithTamara',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter {fieldName}`
   String fieldIsRequired(Object fieldName) {
     return Intl.message(
@@ -1445,6 +1565,26 @@ class S {
     return Intl.message(
       'Forgot Password',
       name: 'forgotPasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify Account`
+  String get verifyAccountTitle {
+    return Intl.message(
+      'Verify Account',
+      name: 'verifyAccountTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your account has been verified successfully`
+  String get accountVerifiedSuccessfully {
+    return Intl.message(
+      'Your account has been verified successfully',
+      name: 'accountVerifiedSuccessfully',
       desc: '',
       args: [],
     );
@@ -2145,6 +2285,16 @@ class S {
     return Intl.message(
       'Submit Assignment',
       name: 'submitAssignment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitting...`
+  String get submittingAssignment {
+    return Intl.message(
+      'Submitting...',
+      name: 'submittingAssignment',
       desc: '',
       args: [],
     );
@@ -2930,30 +3080,30 @@ class S {
     );
   }
 
-  /// `معلومات الاتصال`
+  /// `Contact Info`
   String get contactInfo {
     return Intl.message(
-      'معلومات الاتصال',
+      'Contact Info',
       name: 'contactInfo',
       desc: '',
       args: [],
     );
   }
 
-  /// `اسم المستخدم`
+  /// `userName`
   String get userName {
     return Intl.message(
-      'اسم المستخدم',
+      'userName',
       name: 'userName',
       desc: '',
       args: [],
     );
   }
 
-  /// `الخصوصية`
+  /// `privacy`
   String get privacy {
     return Intl.message(
-      'الخصوصية',
+      'privacy',
       name: 'privacy',
       desc: '',
       args: [],
@@ -4950,6 +5100,16 @@ class S {
     );
   }
 
+  /// `1 month`
+  String get oneMonth {
+    return Intl.message(
+      '1 month',
+      name: 'oneMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Salary`
   String get salary {
     return Intl.message(
@@ -5055,6 +5215,136 @@ class S {
     return Intl.message(
       'Ideal Teacher Certificate',
       name: 'idealTeacherCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Student Certificates`
+  String get studentCertificates {
+    return Intl.message(
+      'Student Certificates',
+      name: 'studentCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher Certificates`
+  String get teacherCertificates {
+    return Intl.message(
+      'Teacher Certificates',
+      name: 'teacherCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate of Appreciation`
+  String get generalTeacherCertificate {
+    return Intl.message(
+      'Certificate of Appreciation',
+      name: 'generalTeacherCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher certificate issued successfully`
+  String get teacherCertificateIssuedSuccessfully {
+    return Intl.message(
+      'Teacher certificate issued successfully',
+      name: 'teacherCertificateIssuedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal Supervisor`
+  String get idealSupervisor {
+    return Intl.message(
+      'Ideal Supervisor',
+      name: 'idealSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select the ideal supervisor`
+  String get selectIdealSupervisor {
+    return Intl.message(
+      'Select the ideal supervisor',
+      name: 'selectIdealSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal supervisor certificate issued successfully`
+  String get idealSupervisorIssuedSuccessfully {
+    return Intl.message(
+      'Ideal supervisor certificate issued successfully',
+      name: 'idealSupervisorIssuedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ideal Supervisor Certificate`
+  String get idealSupervisorCertificate {
+    return Intl.message(
+      'Ideal Supervisor Certificate',
+      name: 'idealSupervisorCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select at least one valid supervisor`
+  String get invalidIdealSupervisorSelection {
+    return Intl.message(
+      'Select at least one valid supervisor',
+      name: 'invalidIdealSupervisorSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected supervisor no longer exists`
+  String get supervisorNotFound {
+    return Intl.message(
+      'The selected supervisor no longer exists',
+      name: 'supervisorNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected account is not a supervisor`
+  String get invalidCertificateRecipient {
+    return Intl.message(
+      'The selected account is not a supervisor',
+      name: 'invalidCertificateRecipient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected supervisor is not active`
+  String get supervisorNotActive {
+    return Intl.message(
+      'The selected supervisor is not active',
+      name: 'supervisorNotActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An ideal supervisor certificate was already issued this month`
+  String get idealSupervisorCertificateAlreadyExists {
+    return Intl.message(
+      'An ideal supervisor certificate was already issued this month',
+      name: 'idealSupervisorCertificateAlreadyExists',
       desc: '',
       args: [],
     );
@@ -5335,6 +5625,16 @@ class S {
     return Intl.message(
       'Subscriptions',
       name: 'parentSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Children subscriptions`
+  String get childrenSubscriptions {
+    return Intl.message(
+      'Children subscriptions',
+      name: 'childrenSubscriptions',
       desc: '',
       args: [],
     );
@@ -6440,6 +6740,26 @@ class S {
     );
   }
 
+  /// `Add Subject to Classroom`
+  String get addSubjectToClassroom {
+    return Intl.message(
+      'Add Subject to Classroom',
+      name: 'addSubjectToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All grade subjects have already been added to this classroom`
+  String get allGradeSubjectsAddedToClassroom {
+    return Intl.message(
+      'All grade subjects have already been added to this classroom',
+      name: 'allGradeSubjectsAddedToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add New Subject`
   String get addNewSubject {
     return Intl.message(
@@ -6880,6 +7200,16 @@ class S {
     );
   }
 
+  /// `Lesson end time must be after start time`
+  String get lessonEndTimeMustBeAfterStart {
+    return Intl.message(
+      'Lesson end time must be after start time',
+      name: 'lessonEndTimeMustBeAfterStart',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Week days`
   String get weekDays {
     return Intl.message(
@@ -7035,6 +7365,76 @@ class S {
     return Intl.message(
       'Start lesson',
       name: 'startSession',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Join lesson`
+  String get joinSession {
+    return Intl.message(
+      'Join lesson',
+      name: 'joinSession',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your subscription has expired. Please renew your subscription to join the lesson`
+  String get joinSubscriptionExpired {
+    return Intl.message(
+      'Your subscription has expired. Please renew your subscription to join the lesson',
+      name: 'joinSubscriptionExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your subscription hours have been exhausted. Please renew your subscription to join the lesson`
+  String get joinSubscriptionHoursExhausted {
+    return Intl.message(
+      'Your subscription hours have been exhausted. Please renew your subscription to join the lesson',
+      name: 'joinSubscriptionHoursExhausted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your current subscription does not include this subject`
+  String get joinSubjectNotInSubscription {
+    return Intl.message(
+      'Your current subscription does not include this subject',
+      name: 'joinSubjectNotInSubscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End lesson`
+  String get endSession {
+    return Intl.message(
+      'End lesson',
+      name: 'endSession',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ending lesson`
+  String get sessionEnding {
+    return Intl.message(
+      'Ending lesson',
+      name: 'sessionEnding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no live lesson now`
+  String get noActiveSessionNow {
+    return Intl.message(
+      'There is no live lesson now',
+      name: 'noActiveSessionNow',
       desc: '',
       args: [],
     );
@@ -7475,6 +7875,26 @@ class S {
     return Intl.message(
       'No internet connection',
       name: 'noInternetConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العربية`
+  String get languageArabic {
+    return Intl.message(
+      'العربية',
+      name: 'languageArabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get languageEnglish {
+    return Intl.message(
+      'English',
+      name: 'languageEnglish',
       desc: '',
       args: [],
     );
@@ -8345,6 +8765,26 @@ class S {
     return Intl.message(
       'No plans for this week',
       name: 'noPlansForWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No schedule for this week`
+  String get noScheduleForWeek {
+    return Intl.message(
+      'No schedule for this week',
+      name: 'noScheduleForWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No schedule`
+  String get noSchedule {
+    return Intl.message(
+      'No schedule',
+      name: 'noSchedule',
       desc: '',
       args: [],
     );
@@ -10770,6 +11210,36 @@ class S {
     );
   }
 
+  /// `The renewal request was submitted and is pending review.`
+  String get renewalRequestPending {
+    return Intl.message(
+      'The renewal request was submitted and is pending review.',
+      name: 'renewalRequestPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The renewal request was submitted successfully and is now pending administration review.`
+  String get egyptianRenewalRequestSubmitted {
+    return Intl.message(
+      'The renewal request was submitted successfully and is now pending administration review.',
+      name: 'egyptianRenewalRequestSubmitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit renewal request`
+  String get renewalSubmitRequest {
+    return Intl.message(
+      'Submit renewal request',
+      name: 'renewalSubmitRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The subscription was renewed successfully.`
   String get renewalCompleted {
     return Intl.message(
@@ -11310,6 +11780,16 @@ class S {
     );
   }
 
+  /// `Price`
+  String get adminSubjectRequestPrice {
+    return Intl.message(
+      'Price',
+      name: 'adminSubjectRequestPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Reference number (optional)`
   String get adminSubjectRequestReferenceNumber {
     return Intl.message(
@@ -11345,6 +11825,956 @@ class S {
     return Intl.message(
       'Payment method (optional)',
       name: 'adminSubjectRequestMethodOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File saved successfully`
+  String get fileSavedSuccessfully {
+    return Intl.message(
+      'File saved successfully',
+      name: 'fileSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate saved successfully`
+  String get certificateSavedSuccessfully {
+    return Intl.message(
+      'Certificate saved successfully',
+      name: 'certificateSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saving file...`
+  String get savingFile {
+    return Intl.message(
+      'Saving file...',
+      name: 'savingFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saving certificate...`
+  String get savingCertificate {
+    return Intl.message(
+      'Saving certificate...',
+      name: 'savingCertificate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try again`
+  String get tryAgain {
+    return Intl.message(
+      'Try again',
+      name: 'tryAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved in: {location}`
+  String savedInLocation(Object location) {
+    return Intl.message(
+      'Saved in: $location',
+      name: 'savedInLocation',
+      desc: '',
+      args: [location],
+    );
+  }
+
+  /// `Open`
+  String get openAction {
+    return Intl.message(
+      'Open',
+      name: 'openAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification settings`
+  String get notificationSettings {
+    return Intl.message(
+      'Notification settings',
+      name: 'notificationSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark all as read`
+  String get markAllNotificationsRead {
+    return Intl.message(
+      'Mark all as read',
+      name: 'markAllNotificationsRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No notifications yet`
+  String get noNotificationsYet {
+    return Intl.message(
+      'No notifications yet',
+      name: 'noNotificationsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We will let you know when there is an update`
+  String get notificationsEmptySubtitle {
+    return Intl.message(
+      'We will let you know when there is an update',
+      name: 'notificationsEmptySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Now`
+  String get notificationNow {
+    return Intl.message(
+      'Now',
+      name: 'notificationNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} minutes ago`
+  String notificationMinutesAgo(int count) {
+    return Intl.message(
+      '$count minutes ago',
+      name: 'notificationMinutesAgo',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `An hour ago`
+  String get notificationHourAgo {
+    return Intl.message(
+      'An hour ago',
+      name: 'notificationHourAgo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} hours ago`
+  String notificationHoursAgo(int count) {
+    return Intl.message(
+      '$count hours ago',
+      name: 'notificationHoursAgo',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Notification categories`
+  String get notificationCategories {
+    return Intl.message(
+      'Notification categories',
+      name: 'notificationCategories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification channels`
+  String get notificationChannels {
+    return Intl.message(
+      'Notification channels',
+      name: 'notificationChannels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chats`
+  String get notificationChat {
+    return Intl.message(
+      'Chats',
+      name: 'notificationChat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Academic`
+  String get notificationAcademic {
+    return Intl.message(
+      'Academic',
+      name: 'notificationAcademic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payments and subscriptions`
+  String get notificationFinance {
+    return Intl.message(
+      'Payments and subscriptions',
+      name: 'notificationFinance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Announcements`
+  String get notificationAnnouncements {
+    return Intl.message(
+      'Announcements',
+      name: 'notificationAnnouncements',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Administration`
+  String get notificationAdmin {
+    return Intl.message(
+      'Administration',
+      name: 'notificationAdmin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supervision`
+  String get notificationSupervisor {
+    return Intl.message(
+      'Supervision',
+      name: 'notificationSupervisor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Device notifications`
+  String get notificationPush {
+    return Intl.message(
+      'Device notifications',
+      name: 'notificationPush',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In-app notifications`
+  String get notificationInApp {
+    return Intl.message(
+      'In-app notifications',
+      name: 'notificationInApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Conversation`
+  String get chatTitleFallback {
+    return Intl.message(
+      'Conversation',
+      name: 'chatTitleFallback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact us`
+  String get contactUs {
+    return Intl.message(
+      'Contact us',
+      name: 'contactUs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search conversations`
+  String get searchConversations {
+    return Intl.message(
+      'Search conversations',
+      name: 'searchConversations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support`
+  String get supportBadge {
+    return Intl.message(
+      'Support',
+      name: 'supportBadge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `selected`
+  String get selectedMessagesLabel {
+    return Intl.message(
+      'selected',
+      name: 'selectedMessagesLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to delete this message?`
+  String get deleteMessageQuestion {
+    return Intl.message(
+      'Do you want to delete this message?',
+      name: 'deleteMessageQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to delete the selected messages?`
+  String get deleteSelectedMessagesQuestion {
+    return Intl.message(
+      'Do you want to delete the selected messages?',
+      name: 'deleteSelectedMessagesQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This message was deleted`
+  String get deletedMessage {
+    return Intl.message(
+      'This message was deleted',
+      name: 'deletedMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New messages`
+  String get newMessages {
+    return Intl.message(
+      'New messages',
+      name: 'newMessages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Review request`
+  String get reviewRequest {
+    return Intl.message(
+      'Review request',
+      name: 'reviewRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit registration request`
+  String get submitRegistrationRequest {
+    return Intl.message(
+      'Submit registration request',
+      name: 'submitRegistrationRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.`
+  String get registrationRequestSuccessMessage {
+    return Intl.message(
+      'Your registration request was sent successfully. It is pending review and the account will be activated after administration approval.',
+      name: 'registrationRequestSuccessMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved.`
+  String get egyptianStudentRegistrationSuccessMessage {
+    return Intl.message(
+      'Your registration request was sent successfully and will be reviewed by the administration. You can log in after the request is approved.',
+      name: 'egyptianStudentRegistrationSuccessMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get done {
+    return Intl.message(
+      'Done',
+      name: 'done',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Study has not started yet`
+  String get studyNotStarted {
+    return Intl.message(
+      'Study has not started yet',
+      name: 'studyNotStarted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A lesson cannot be added in a previous week`
+  String get cannotAddLessonInPreviousWeek {
+    return Intl.message(
+      'A lesson cannot be added in a previous week',
+      name: 'cannotAddLessonInPreviousWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A lesson cannot be added on a past date`
+  String get scheduleDateInPast {
+    return Intl.message(
+      'A lesson cannot be added on a past date',
+      name: 'scheduleDateInPast',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A lesson cannot be added at a past time`
+  String get scheduleTimeInPast {
+    return Intl.message(
+      'A lesson cannot be added at a past time',
+      name: 'scheduleTimeInPast',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subjects have been added to this classroom.`
+  String get noSubjectsInClassroom {
+    return Intl.message(
+      'No subjects have been added to this classroom.',
+      name: 'noSubjectsInClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Call student`
+  String get callStudentAlert {
+    return Intl.message(
+      'Call student',
+      name: 'callStudentAlert',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The student alert was sent successfully`
+  String get studentCallAlertSent {
+    return Intl.message(
+      'The student alert was sent successfully',
+      name: 'studentCallAlertSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The alert was already sent. Try again shortly`
+  String get studentCallAlertCooldown {
+    return Intl.message(
+      'The alert was already sent. Try again shortly',
+      name: 'studentCallAlertCooldown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your supervisor is calling you`
+  String get studentCallAlertTitle {
+    return Intl.message(
+      'Your supervisor is calling you',
+      name: 'studentCallAlertTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open Bnan to respond to your supervisor`
+  String get studentCallAlertBody {
+    return Intl.message(
+      'Open Bnan to respond to your supervisor',
+      name: 'studentCallAlertBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved accounts`
+  String get savedAccounts {
+    return Intl.message(
+      'Saved accounts',
+      name: 'savedAccounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose an account to continue`
+  String get chooseSavedAccount {
+    return Intl.message(
+      'Choose an account to continue',
+      name: 'chooseSavedAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No saved accounts on this device`
+  String get noSavedAccounts {
+    return Intl.message(
+      'No saved accounts on this device',
+      name: 'noSavedAccounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log in with another account`
+  String get loginWithAnotherAccount {
+    return Intl.message(
+      'Log in with another account',
+      name: 'loginWithAnotherAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove account from this device`
+  String get removeAccountFromDevice {
+    return Intl.message(
+      'Remove account from this device',
+      name: 'removeAccountFromDevice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request teacher change / discontinuation`
+  String get requestTeacherChangeOrCancellation {
+    return Intl.message(
+      'Request teacher change / discontinuation',
+      name: 'requestTeacherChangeOrCancellation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request withdrawal from teaching`
+  String get requestTeacherWithdrawal {
+    return Intl.message(
+      'Request withdrawal from teaching',
+      name: 'requestTeacherWithdrawal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request reason`
+  String get requestReason {
+    return Intl.message(
+      'Request reason',
+      name: 'requestReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your request was submitted successfully`
+  String get changeRequestSubmitted {
+    return Intl.message(
+      'Your request was submitted successfully',
+      name: 'changeRequestSubmitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You already have a teacher change request under review`
+  String get changeTeacherRequestAlreadyPending {
+    return Intl.message(
+      'You already have a teacher change request under review',
+      name: 'changeTeacherRequestAlreadyPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancellation requests`
+  String get cancellationRequests {
+    return Intl.message(
+      'Cancellation requests',
+      name: 'cancellationRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No cancellation or teacher-change requests`
+  String get changeRequestsEmpty {
+    return Intl.message(
+      'No cancellation or teacher-change requests',
+      name: 'changeRequestsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requester`
+  String get requester {
+    return Intl.message(
+      'Requester',
+      name: 'requester',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requester type`
+  String get requesterType {
+    return Intl.message(
+      'Requester type',
+      name: 'requesterType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request type`
+  String get requestType {
+    return Intl.message(
+      'Request type',
+      name: 'requestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change teacher`
+  String get changeTeacherRequestType {
+    return Intl.message(
+      'Change teacher',
+      name: 'changeTeacherRequestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel subject`
+  String get cancelSubjectRequestType {
+    return Intl.message(
+      'Cancel subject',
+      name: 'cancelSubjectRequestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher withdrawal`
+  String get teacherWithdrawalRequestType {
+    return Intl.message(
+      'Teacher withdrawal',
+      name: 'teacherWithdrawalRequestType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending`
+  String get changeRequestPending {
+    return Intl.message(
+      'Pending',
+      name: 'changeRequestPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approved`
+  String get changeRequestApproved {
+    return Intl.message(
+      'Approved',
+      name: 'changeRequestApproved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejected`
+  String get changeRequestRejected {
+    return Intl.message(
+      'Rejected',
+      name: 'changeRequestRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve request`
+  String get approveRequest {
+    return Intl.message(
+      'Approve request',
+      name: 'approveRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reject request`
+  String get rejectRequest {
+    return Intl.message(
+      'Reject request',
+      name: 'rejectRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Admin notes (optional)`
+  String get adminNotes {
+    return Intl.message(
+      'Admin notes (optional)',
+      name: 'adminNotes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejection reason`
+  String get rejectionReason {
+    return Intl.message(
+      'Rejection reason',
+      name: 'rejectionReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request approved successfully`
+  String get changeRequestApprovedSuccess {
+    return Intl.message(
+      'Request approved successfully',
+      name: 'changeRequestApprovedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request rejected successfully`
+  String get changeRequestRejectedSuccess {
+    return Intl.message(
+      'Request rejected successfully',
+      name: 'changeRequestRejectedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Meeting link (optional)`
+  String get meetingLinkOptional {
+    return Intl.message(
+      'Meeting link (optional)',
+      name: 'meetingLinkOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please assign a subject to this classroom`
+  String get assignSubjectToClassroom {
+    return Intl.message(
+      'Please assign a subject to this classroom',
+      name: 'assignSubjectToClassroom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please assign a teacher to the subject first`
+  String get assignTeacherToSubjectFirst {
+    return Intl.message(
+      'Please assign a teacher to the subject first',
+      name: 'assignTeacherToSubjectFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancellation reason`
+  String get cancellationReason {
+    return Intl.message(
+      'Cancellation reason',
+      name: 'cancellationReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment status is being verified. This may take some time.`
+  String get paymentVerificationPending {
+    return Intl.message(
+      'Payment status is being verified. This may take some time.',
+      name: 'paymentVerificationPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription Renewal Requests`
+  String get adminSubscriptionRenewals {
+    return Intl.message(
+      'Subscription Renewal Requests',
+      name: 'adminSubscriptionRenewals',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pending review`
+  String get renewalPendingReview {
+    return Intl.message(
+      'Pending review',
+      name: 'renewalPendingReview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment confirmed`
+  String get renewalPaymentConfirmed {
+    return Intl.message(
+      'Payment confirmed',
+      name: 'renewalPaymentConfirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renewal approved`
+  String get renewalApproved {
+    return Intl.message(
+      'Renewal approved',
+      name: 'renewalApproved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejected`
+  String get renewalRejected {
+    return Intl.message(
+      'Rejected',
+      name: 'renewalRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm payment`
+  String get renewalConfirmPayment {
+    return Intl.message(
+      'Confirm payment',
+      name: 'renewalConfirmPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve renewal`
+  String get renewalApprove {
+    return Intl.message(
+      'Approve renewal',
+      name: 'renewalApprove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No requests`
+  String get renewalNoRequests {
+    return Intl.message(
+      'No requests',
+      name: 'renewalNoRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reference number`
+  String get renewalReferenceNumber {
+    return Intl.message(
+      'Reference number',
+      name: 'renewalReferenceNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requested at`
+  String get renewalRequestedAt {
+    return Intl.message(
+      'Requested at',
+      name: 'renewalRequestedAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View receipt`
+  String get renewalViewReceipt {
+    return Intl.message(
+      'View receipt',
+      name: 'renewalViewReceipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejection reason (optional)`
+  String get renewalOptionalRejectionReason {
+    return Intl.message(
+      'Rejection reason (optional)',
+      name: 'renewalOptionalRejectionReason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This payment status does not allow that action.`
+  String get renewalInvalidPaymentStatus {
+    return Intl.message(
+      'This payment status does not allow that action.',
+      name: 'renewalInvalidPaymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm the payment before approving the renewal.`
+  String get renewalPaymentNotConfirmed {
+    return Intl.message(
+      'Confirm the payment before approving the renewal.',
+      name: 'renewalPaymentNotConfirmed',
       desc: '',
       args: [],
     );

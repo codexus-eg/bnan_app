@@ -1,21 +1,39 @@
+import 'package:bnan_app/features/lessons_management/data/models/start_session_models.dart';
+
 class GulfSchedulesResponse {
   const GulfSchedulesResponse({required this.success, required this.data});
 
   final bool success;
   final GulfSchedulesData data;
 
-  factory GulfSchedulesResponse.fromJson(Map<String, dynamic> json) =>
-      GulfSchedulesResponse(
-        success: json['success'] == true,
-        data: GulfSchedulesData.fromJson(_map(json['data'])),
-      );
+  factory GulfSchedulesResponse.fromJson(Map<String, dynamic> json) {
+    final data = _map(json['data']);
+    return GulfSchedulesResponse(
+      success: json['success'] == true,
+      data: GulfSchedulesData.fromJson(
+        data,
+        metadata: data.containsKey('currentWeek') ? data : json,
+      ),
+    );
+  }
 }
 
 class GulfSchedulesData {
-  const GulfSchedulesData({required this.classrooms});
+  const GulfSchedulesData({
+    required this.classrooms,
+    this.currentWeek,
+    this.currentWeekStart,
+    this.timezone,
+  });
   final List<GulfClassroom> classrooms;
+  final int? currentWeek;
+  final DateTime? currentWeekStart;
+  final String? timezone;
 
-  factory GulfSchedulesData.fromJson(Map<String, dynamic> json) {
+  factory GulfSchedulesData.fromJson(
+    Map<String, dynamic> json, {
+    Map<String, dynamic> metadata = const {},
+  }) {
     final students = _maps(json['students']);
     final classrooms = students.isNotEmpty
         ? _maps(students.first['classrooms'])
@@ -25,6 +43,11 @@ class GulfSchedulesData {
           .map(GulfClassroom.fromJson)
           .where((item) => item.id.isNotEmpty)
           .toList(growable: false),
+      currentWeek: int.tryParse(_stringValue(metadata['currentWeek'])),
+      currentWeekStart: DateTime.tryParse(
+        _stringValue(metadata['currentWeekStart']),
+      ),
+      timezone: _nonEmpty(_stringValue(metadata['timezone'])),
     );
   }
 }
@@ -38,6 +61,7 @@ class GulfClassroom {
     this.subject,
     this.schedule,
     this.classroomSubject,
+    this.chatRoomId,
     this.hasSubjectConflict = false,
   });
 
@@ -47,23 +71,36 @@ class GulfClassroom {
   final GulfSubject? subject;
   final GulfSchedule? schedule;
   final String? classroomSubject;
+  final String? chatRoomId;
   final bool hasSubjectConflict;
 
   String? get classroomSubjectId =>
-      _nonEmpty(schedule?.classroomSubject) ?? _nonEmpty(classroomSubject);
+      _nonEmpty(classroomSubject) ?? _nonEmpty(schedule?.classroomSubject);
   List<GulfScheduleEntry> get entries =>
       schedule?.isActive == false ? const [] : schedule?.entries ?? const [];
 
-  factory GulfClassroom.fromJson(Map<String, dynamic> json) => GulfClassroom(
-    id: _id(json),
-    name: _string(json['name']),
-    grade: _nullable(json['grade'], GulfGrade.fromJson),
-    curriculum: _nullable(json['curriculum'], GulfCurriculum.fromJson),
-    subject: _nullable(json['subject'], GulfSubject.fromJson),
-    schedule: _nullable(json['schedule'], GulfSchedule.fromJson),
-    classroomSubject: _referenceId(json['classroomSubject']),
-    hasSubjectConflict: json['hasSubjectConflict'] == true,
-  );
+  factory GulfClassroom.fromJson(Map<String, dynamic> json) {
+    final classroomSubject = _map(json['classroomSubject']);
+    final schedule = _map(json['schedule']);
+    return GulfClassroom(
+      id: _id(json),
+      name: _string(json['name']),
+      grade: _nullable(json['grade'], GulfGrade.fromJson),
+      curriculum: _nullable(json['curriculum'], GulfCurriculum.fromJson),
+      subject: _nullable(json['subject'], GulfSubject.fromJson),
+      schedule: _nullable(json['schedule'], GulfSchedule.fromJson),
+      classroomSubject: _referenceId(json['classroomSubject']),
+      chatRoomId: _referenceId(
+        json['chatRoomId'] ??
+            json['chatRoom'] ??
+            classroomSubject['chatRoomId'] ??
+            classroomSubject['chatRoom'] ??
+            schedule['chatRoomId'] ??
+            schedule['chatRoom'],
+      ),
+      hasSubjectConflict: json['hasSubjectConflict'] == true,
+    );
+  }
 }
 
 class GulfGrade extends GulfReference {
@@ -73,9 +110,17 @@ class GulfGrade extends GulfReference {
 }
 
 class GulfCurriculum extends GulfReference {
-  const GulfCurriculum({required super.id, required super.name});
-  factory GulfCurriculum.fromJson(Map<String, dynamic> json) =>
-      GulfCurriculum(id: _id(json), name: _string(json['name']));
+  const GulfCurriculum({
+    required super.id,
+    required super.name,
+    required this.registrationMode,
+  });
+  final String registrationMode;
+  factory GulfCurriculum.fromJson(Map<String, dynamic> json) => GulfCurriculum(
+    id: _id(json),
+    name: _string(json['name']),
+    registrationMode: _string(json['registrationMode']).toLowerCase(),
+  );
 }
 
 class GulfSubject extends GulfReference {
@@ -118,17 +163,51 @@ class GulfSchedule {
 }
 
 class GulfScheduleEntry {
-  const GulfScheduleEntry({required this.day, required this.startTime});
+  const GulfScheduleEntry({
+    required this.day,
+    required this.startTime,
+    this.endTime,
+    this.activeSession,
+    this.chatRoomId,
+    this.classroomSubjectId,
+    this.occurrenceKey,
+  });
   final String day, startTime;
+  final String? endTime;
+  final StartedSession? activeSession;
+  final String? chatRoomId;
+  final String? classroomSubjectId;
+  final String? occurrenceKey;
   bool get isValid => day.isNotEmpty && startTime.isNotEmpty;
 
-  factory GulfScheduleEntry.fromJson(Map<String, dynamic> json) =>
-      GulfScheduleEntry(
-        day: _string(json['day']).toLowerCase(),
-        startTime: _string(json['startTime']),
-      );
+  factory GulfScheduleEntry.fromJson(Map<String, dynamic> json) {
+    final classroomSubject = _map(json['classroomSubject']);
+    return GulfScheduleEntry(
+      day: _string(json['day']).toLowerCase(),
+      startTime: _string(json['startTime']),
+      endTime: _nonEmpty(_string(json['endTime'])),
+      activeSession: _nullable(
+        json['activeSession'],
+        StartedSession.fromJson,
+      ),
+      chatRoomId: _referenceId(
+        json['chatRoomId'] ??
+            json['chatRoom'] ??
+            classroomSubject['chatRoomId'] ??
+            classroomSubject['chatRoom'],
+      ),
+      classroomSubjectId: _referenceId(
+        json['classroomSubjectId'] ?? json['classroomSubject'],
+      ),
+      occurrenceKey: _nonEmpty(_string(json['occurrenceKey'])),
+    );
+  }
 
-  Map<String, dynamic> toJson() => {'day': day, 'startTime': startTime};
+  Map<String, dynamic> toJson() => {
+    'day': day,
+    'startTime': startTime,
+    if (endTime != null) 'endTime': endTime,
+  };
 }
 
 Map<String, dynamic> _map(Object? value) =>
@@ -140,6 +219,7 @@ List<Map<String, dynamic>> _maps(Object? value) => value is List
           .toList()
     : const [];
 String _string(Object? value) => value is String ? value.trim() : '';
+String _stringValue(Object? value) => value?.toString().trim() ?? '';
 String _id(Map<String, dynamic> json) =>
     _string(json['id']).isNotEmpty ? _string(json['id']) : _string(json['_id']);
 String? _nonEmpty(String? value) =>

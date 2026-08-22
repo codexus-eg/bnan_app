@@ -23,7 +23,7 @@ List<DrawerItemModel> parentDrawerItems(BuildContext context) {
     ),
     DrawerItemModel(title: s.parentNotifications, icon: ImageManager.bellIcon),
     DrawerItemModel(
-      title: s.parentPackagesAndSubscription,
+      title: s.childrenSubscriptions,
       icon: ImageManager.subscription,
     ),
     DrawerItemModel(

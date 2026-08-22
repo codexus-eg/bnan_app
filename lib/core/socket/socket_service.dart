@@ -20,7 +20,9 @@ class SocketService {
   bool get isConnected => _socket?.connected ?? false;
 
   void _updateAuthToken(String? token) {
-    if (token?.isNotEmpty == true) _socket?.auth = {'token': token};
+    if (token?.isNotEmpty == true) {
+      _socket?.auth = {'token': token, 'lang': 'ar'};
+    }
   }
 
   Future<void> connect() {
@@ -50,7 +52,7 @@ class SocketService {
         OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()
-            .setAuth({'token': token})
+            .setAuth({'token': token, 'lang': 'ar'})
             .enableReconnection()
             .setReconnectionAttempts(5)
             .setReconnectionDelay(1000)
@@ -78,7 +80,11 @@ class SocketService {
 
   void _registerConnectionListeners() {
     _socket?.onConnect((_) {
-      debugPrint('Socket connected: ${_socket?.id}');
+      debugPrint('SOCKET CONNECTED');
+      debugPrint('socketId: ${_socket?.id ?? ''}');
+      debugPrint(
+        'currentUserId: ${SessionManager.instance.userId?.trim() ?? ''}',
+      );
       final completer = _connectionCompleter;
       if (completer != null && !completer.isCompleted) {
         completer.complete();
@@ -105,6 +111,10 @@ class SocketService {
   void joinRoom(String roomId) {
     if (!isConnected) return;
 
+    if (roomId.startsWith('user_')) {
+      debugPrint('USER ROOM JOIN REQUEST');
+      debugPrint('room: $roomId');
+    }
     _socket?.emit('joinRoom', roomId);
   }
 
@@ -179,7 +189,11 @@ class SocketService {
   VoidCallback listenToNotification(
     void Function(Map<String, dynamic> notification) onNotification,
   ) {
+    debugPrint('NOTIFICATION LISTENER REGISTERED');
+    debugPrint('eventName: notification');
     return _listen('notification', (data) {
+      debugPrint('NOTIFICATION RECEIVED');
+      debugPrint('payload: $data');
       try {
         final notification = Map<String, dynamic>.from(data);
 
@@ -189,6 +203,19 @@ class SocketService {
       }
     });
   }
+
+  VoidCallback listenToChatNudge(
+    void Function(Map<String, dynamic> notification) onNudge,
+  ) => _listen('chat:nudge:received', (data) {
+    try {
+      final json = Map<String, dynamic>.from(data);
+      json['key'] ??= 'CHAT_NUDGE';
+      json['type'] ??= 'chat';
+      onNudge(json);
+    } catch (error) {
+      debugPrint('Chat nudge parsing error: ${error.runtimeType}');
+    }
+  });
 
   VoidCallback listenToReconnect(VoidCallback onReconnect) {
     final socket = _socket;

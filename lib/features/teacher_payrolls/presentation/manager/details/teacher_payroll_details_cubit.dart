@@ -15,7 +15,7 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
     required String from,
     required String to,
   }) async {
-    if (_busy) return;
+    if (isClosed || _busy) return;
     _busy = true;
     emit(const TeacherPayrollDetailsLoading());
     final result = await repo.getTeacherPreview(
@@ -24,30 +24,48 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
       to: to,
     );
     _busy = false;
+    if (isClosed) return;
     result.fold(
-      (f) => emit(TeacherPayrollDetailsFailure(f.message)),
-      (p) => emit(TeacherPayrollDetailsReady(p, p.payoutProfile)),
+      (f) {
+        if (isClosed) return;
+        emit(TeacherPayrollDetailsFailure(f.message));
+      },
+      (p) {
+        if (isClosed) return;
+        emit(TeacherPayrollDetailsReady(p, p.payoutProfile));
+      },
     );
   }
 
   Future<void> loadPayroll(String id) async {
-    if (_busy) return;
+    if (isClosed || _busy) return;
     _busy = true;
     emit(const TeacherPayrollDetailsLoading());
     final result = await repo.getPayroll(id);
+    if (isClosed) return;
     await result.fold(
-      (f) async => emit(TeacherPayrollDetailsFailure(f.message)),
+      (f) async {
+        if (isClosed) return;
+        emit(TeacherPayrollDetailsFailure(f.message));
+      },
       (p) async {
+        if (isClosed) return;
         PayoutProfileModel? profile;
         if (p.status == 'draft' &&
             p.teacher.id.isNotEmpty &&
             p.period.from.isNotEmpty) {
-          (await repo.getTeacherPreview(
+          final previewResult = await repo.getTeacherPreview(
             teacherId: p.teacher.id,
             from: p.period.from,
             to: p.period.to,
-          )).fold((_) {}, (preview) => profile = preview.payoutProfile);
+          );
+          if (isClosed) return;
+          previewResult.fold((_) {}, (preview) {
+            if (isClosed) return;
+            profile = preview.payoutProfile;
+          });
         }
+        if (isClosed) return;
         emit(TeacherPayrollDetailsReady(p, profile));
       },
     );
@@ -55,6 +73,7 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
   }
 
   Future<void> save(SavePayrollRequest request) async {
+    if (isClosed) return;
     final current = state;
     if (_busy || current is! TeacherPayrollDetailsReady) return;
     _busy = true;
@@ -69,37 +88,59 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
         ? await repo.create(request)
         : await repo.update(current.payroll.id, request);
     _busy = false;
-    await result.fold((f) async {
-      final shouldReload =
-          current.payroll.id.isNotEmpty &&
-          (f.code == 'PAID_PAYROLL_IMMUTABLE' ||
-              f.code == 'PAYROLL_SESSIONS_ALREADY_USED');
-      if (!shouldReload) {
-        emit(
-          TeacherPayrollDetailsReady(
-            current.payroll,
-            current.profile,
-            error: f.message,
-          ),
+    if (isClosed) return;
+    await result.fold(
+      (f) async {
+        if (isClosed) return;
+        final shouldReload =
+            current.payroll.id.isNotEmpty &&
+            (f.code == 'PAID_PAYROLL_IMMUTABLE' ||
+                f.code == 'PAYROLL_SESSIONS_ALREADY_USED');
+        if (!shouldReload) {
+          if (isClosed) return;
+          emit(
+            TeacherPayrollDetailsReady(
+              current.payroll,
+              current.profile,
+              error: f.message,
+            ),
+          );
+          return;
+        }
+        final latestResult = await repo.getPayroll(current.payroll.id);
+        if (isClosed) return;
+        latestResult.fold(
+          (_) {
+            if (isClosed) return;
+            emit(
+              TeacherPayrollDetailsReady(
+                current.payroll,
+                current.profile,
+                error: f.message,
+              ),
+            );
+          },
+          (latest) {
+            if (isClosed) return;
+            emit(
+              TeacherPayrollDetailsReady(
+                latest,
+                current.profile,
+                error: f.message,
+              ),
+            );
+          },
         );
-        return;
-      }
-      (await repo.getPayroll(current.payroll.id)).fold(
-        (_) => emit(
-          TeacherPayrollDetailsReady(
-            current.payroll,
-            current.profile,
-            error: f.message,
-          ),
-        ),
-        (latest) => emit(
-          TeacherPayrollDetailsReady(latest, current.profile, error: f.message),
-        ),
-      );
-    }, (p) async => emit(TeacherPayrollDetailsReady(p, current.profile)));
+      },
+      (p) async {
+        if (isClosed) return;
+        emit(TeacherPayrollDetailsReady(p, current.profile));
+      },
+    );
   }
 
   void updateProfile(PayoutProfileModel profile) {
+    if (isClosed) return;
     final current = state;
     if (current is TeacherPayrollDetailsReady) {
       emit(TeacherPayrollDetailsReady(current.payroll, profile));
@@ -107,6 +148,7 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
   }
 
   void replacePayroll(TeacherPayrollModel payroll) {
+    if (isClosed) return;
     final current = state;
     final profile = current is TeacherPayrollDetailsReady
         ? current.profile

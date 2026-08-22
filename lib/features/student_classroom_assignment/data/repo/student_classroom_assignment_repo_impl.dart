@@ -27,6 +27,7 @@ class StudentClassroomAssignmentRepoImpl
       final data = asMap(response)['data'] as List? ?? [];
 
       return data
+          .whereType<Map>()
           .map(
             (item) => UnassignedStudentModel.fromJson(
               Map<String, dynamic>.from(item),
@@ -51,9 +52,7 @@ class StudentClassroomAssignmentRepoImpl
         isProtected: true,
       );
 
-      return AvailableClassroomsResponseModel.fromJson(
-        asMap(response),
-      );
+      return AvailableClassroomsResponseModel.fromJson(asMap(response));
     });
   }
 
@@ -72,16 +71,11 @@ class StudentClassroomAssignmentRepoImpl
 
       final response = await apiConsumer.post(
         EndPoints.assignStudentToClassroom,
-        data: {
-          'student': student,
-          'classroom': classroom,
-        },
+        data: {'student': student, 'classroom': classroom},
         isProtected: true,
       );
 
-      return AssignStudentResponseModel.fromJson(
-        asMap(response),
-      );
+      return AssignStudentResponseModel.fromJson(asMap(response));
     });
   }
 }

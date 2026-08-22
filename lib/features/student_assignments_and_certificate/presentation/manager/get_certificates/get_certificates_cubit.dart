@@ -10,6 +10,7 @@ class GetCertificatesCubit extends Cubit<GetCertificatesState> {
   int _requestId = 0;
 
   Future<void> getMyCertificates({String? studentId}) async {
+    if (isClosed) return;
     final normalizedId = studentId?.trim();
     _studentId = normalizedId == null || normalizedId.isEmpty
         ? null

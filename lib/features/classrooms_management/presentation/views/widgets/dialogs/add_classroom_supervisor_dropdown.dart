@@ -21,18 +21,24 @@ class AddClassroomSupervisorDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final items = supervisors.map((item) => item.id).toList();
+    final selectedValue = items.contains(value) ? value : null;
+
     return CustomDropdownFormField(
       label: s.theSupervisor,
-      value: value,
+      value: selectedValue,
       hint: hint,
-      items: supervisors.map((item) => item.id).toList(),
+      items: items,
       itemsLabels: {
-        for (final item in supervisors) item.id: item.user?.fullName ?? item.id,
+        for (final item in supervisors)
+          item.id: item.user?.fullName.trim().isNotEmpty == true
+              ? item.user!.fullName
+              : item.id,
       },
       isRequired: true,
       backgroundColor: ColorManager.white,
-      validator: (value) =>
-          value?.isNotEmpty == true ? null : s.supervisorRequired,
+      validator: (val) =>
+          val?.isNotEmpty == true ? null : s.supervisorRequired,
       onChanged: onChanged,
     );
   }

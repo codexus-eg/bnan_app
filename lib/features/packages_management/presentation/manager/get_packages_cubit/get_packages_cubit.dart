@@ -9,6 +9,7 @@ class GetPackagesCubit extends Cubit<GetPackagesState> {
   int _requestVersion = 0;
 
   Future<void> getPackages() async {
+    if (isClosed) return;
     final version = ++_requestVersion;
     emit(GetPackagesLoading());
 
@@ -22,6 +23,7 @@ class GetPackagesCubit extends Cubit<GetPackagesState> {
   }
 
   Future<void> getPackagesByCurriculum(String curriculumId) async {
+    if (isClosed) return;
     final version = ++_requestVersion;
     emit(GetPackagesLoading());
 

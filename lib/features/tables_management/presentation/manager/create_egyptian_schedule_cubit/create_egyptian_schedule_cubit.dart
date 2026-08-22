@@ -14,16 +14,24 @@ class CreateEgyptianScheduleCubit extends Cubit<CreateEgyptianScheduleState> {
     required String classroomId,
     required File scheduleImage,
   }) async {
+    if (isClosed) return;
     emit(CreateEgyptianScheduleLoading());
 
     final result = await repo.createEgyptianSchedule(
       classroomId: classroomId,
       scheduleImage: scheduleImage,
     );
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(CreateEgyptianScheduleFailure(failure.message)),
-      (response) => emit(CreateEgyptianScheduleSuccess(response)),
+      (failure) {
+        if (isClosed) return;
+        emit(CreateEgyptianScheduleFailure(failure.message));
+      },
+      (response) {
+        if (isClosed) return;
+        emit(CreateEgyptianScheduleSuccess(response));
+      },
     );
   }
 }

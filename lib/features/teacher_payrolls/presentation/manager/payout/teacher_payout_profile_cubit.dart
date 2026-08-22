@@ -9,14 +9,21 @@ class TeacherPayoutProfileCubit extends Cubit<TeacherPayoutProfileState> {
   final TeacherPayrollRepo repo;
   bool _saving = false;
   Future<void> save(String teacherId, PayoutProfileRequest request) async {
-    if (_saving || !request.isValid) return;
+    if (isClosed || _saving || !request.isValid) return;
     _saving = true;
     emit(const TeacherPayoutProfileSaving());
     final result = await repo.updatePayoutProfile(teacherId, request);
     _saving = false;
+    if (isClosed) return;
     result.fold(
-      (f) => emit(TeacherPayoutProfileFailure(f.message)),
-      (p) => emit(TeacherPayoutProfileSuccess(p)),
+      (f) {
+        if (isClosed) return;
+        emit(TeacherPayoutProfileFailure(f.message));
+      },
+      (p) {
+        if (isClosed) return;
+        emit(TeacherPayoutProfileSuccess(p));
+      },
     );
   }
 }

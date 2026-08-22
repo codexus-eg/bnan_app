@@ -55,14 +55,16 @@ class CertificateActions extends StatelessWidget {
             title: S.of(context).preview,
             onTap: () => _showPreview(context),
           ),
-          const SizedBox(width: 17),
-          CertificateActionButton(
-            title: S.of(context).edit,
-            onTap: () => _showEditDialog(context, certificateId),
-          ),
-          const SizedBox(width: 17),
-          if (certificateId?.isNotEmpty == true)
-            DeleteCertificatesSection(certificateId: certificateId!),
+          if (!certificate.isIssued) ...[
+            const SizedBox(width: 17),
+            CertificateActionButton(
+              title: S.of(context).edit,
+              onTap: () => _showEditDialog(context, certificateId),
+            ),
+            const SizedBox(width: 17),
+            if (certificateId?.isNotEmpty == true)
+              DeleteCertificatesSection(certificateId: certificateId!),
+          ],
         ],
       ),
     );

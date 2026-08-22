@@ -52,6 +52,9 @@ export 'package:bnan_app/features/ideal_student/presentation/manager/ideal_stude
 export 'package:bnan_app/features/ideal_teacher/data/repos/supervisor_ideal_teacher_repo.dart';
 export 'package:bnan_app/features/ideal_teacher/data/repos/supervisor_ideal_teacher_repo_impl.dart';
 export 'package:bnan_app/features/ideal_teacher/presentation/manager/supervisor_ideal_teacher_cubit.dart';
+export 'package:bnan_app/features/ideal_supervisor/data/repos/admin_ideal_supervisor_repo.dart';
+export 'package:bnan_app/features/ideal_supervisor/data/repos/admin_ideal_supervisor_repo_impl.dart';
+export 'package:bnan_app/features/ideal_supervisor/presentation/manager/admin_ideal_supervisor_cubit.dart';
 export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo.dart';
 export 'package:bnan_app/features/discount_codes/data/repos/discount_codes_repo_impl.dart';
 export 'package:bnan_app/features/discount_codes/presentation/manager/discount_codes_cubit.dart';
@@ -83,6 +86,7 @@ export 'package:bnan_app/features/certificates_management/presentation/manager/d
 export 'package:bnan_app/features/certificates_management/presentation/manager/get_certificate_details_cubit/get_certificate_details_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/get_monthly_certificates_cubit/get_monthly_certificates_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/issue_monthly_certificates_cubit/issue_monthly_certificates_cubit.dart';
+export 'package:bnan_app/features/certificates_management/presentation/manager/teacher_certificates_cubit/teacher_certificates_cubit.dart';
 export 'package:bnan_app/features/certificates_management/presentation/manager/update_monthly_certificate_cubit/update_monthly_certificate_cubit.dart';
 export 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 export 'package:bnan_app/features/tables_management/data/repo/table_management_repo_impl.dart';
@@ -117,6 +121,7 @@ export 'package:bnan_app/features/teacher_subject_assignment/presentation/manage
 export 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
 export 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo_impl.dart';
 export 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+export 'package:bnan_app/features/add_classroom_subject/presentation/manager/add_classroom_subject_cubit.dart';
 export 'package:bnan_app/features/grades_management/data/repo/grades_repo.dart';
 export 'package:bnan_app/features/grades_management/data/repo/grades_repo_impl.dart';
 export 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';

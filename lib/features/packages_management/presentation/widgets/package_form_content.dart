@@ -11,12 +11,14 @@ class PackageFormContent extends StatelessWidget {
     required this.currency,
     required this.onCurrencyChanged,
     required this.isSingleSubject,
+    required this.showDuration,
   });
 
   final PackageFormControllers controllers;
   final String currency;
   final ValueChanged<String?> onCurrencyChanged;
   final bool isSingleSubject;
+  final bool showDuration;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,18 +30,20 @@ class PackageFormContent extends StatelessWidget {
           isRequired: true,
         ),
         const SizedBox(height: 14),
-        CustomTextField(
-          label: isSingleSubject
-              ? S.of(context).numberOfHours
-              : S.of(context).packageDuration,
-          hintText: isSingleSubject
-              ? S.of(context).numberOfHoursHint
-              : S.of(context).packageDurationHint,
-          controller: controllers.duration,
-          keyboardType: TextInputType.number,
-          isRequired: true,
-        ),
-        const SizedBox(height: 14),
+        if (showDuration) ...[
+          CustomTextField(
+            label: isSingleSubject
+                ? S.of(context).numberOfHours
+                : S.of(context).packageDuration,
+            hintText: isSingleSubject
+                ? S.of(context).numberOfHoursHint
+                : S.of(context).packageDurationHint,
+            controller: controllers.duration,
+            keyboardType: TextInputType.number,
+            isRequired: true,
+          ),
+          const SizedBox(height: 14),
+        ],
         PackagePricesRow(
           oldPrice: controllers.oldPrice,
           newPrice: controllers.newPrice,

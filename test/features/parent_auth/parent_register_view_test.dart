@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
@@ -9,6 +10,7 @@ import 'package:bnan_app/features/parent_auth/data/models/parent_register_user_m
 import 'package:bnan_app/features/parent_auth/data/repo/parent_auth_repo.dart';
 import 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_cubit.dart';
 import 'package:bnan_app/features/parent_auth/presentation/views/parent_register_view.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +68,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('success navigates directly to parent home', (tester) async {
+  testWidgets('success navigates to account verification OTP', (tester) async {
     final repo = _ImmediateRepo(const Right(_response));
     final router = GoRouter(
       initialLocation: '/parent-registration',
@@ -79,8 +81,14 @@ void main() {
           ),
         ),
         GoRoute(
-          path: '/parentHome',
-          builder: (_, _) => const Scaffold(key: Key('parent-home')),
+          path: Routes.forgetPassword,
+          builder: (_, state) {
+            final args = state.extra! as OtpFlowArgs;
+            return Scaffold(
+              key: const Key('account-verification'),
+              body: Text(args.email),
+            );
+          },
         ),
       ],
     );
@@ -89,7 +97,8 @@ void main() {
     await _tapNext(tester);
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('parent-home')), findsOneWidget);
+    expect(find.byKey(const Key('account-verification')), findsOneWidget);
+    expect(find.text('parent@bnan.edu'), findsOneWidget);
     expect(repo.calls, 1);
   });
 }

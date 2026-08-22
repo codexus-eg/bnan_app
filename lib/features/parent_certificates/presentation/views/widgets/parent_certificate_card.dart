@@ -1,10 +1,9 @@
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
-import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/core/shared_widget/download_icon_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/parent_certificates/data/models/parent_certificate_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ParentCertificateCard extends StatelessWidget {
   const ParentCertificateCard({super.key, required this.certificate});
@@ -19,7 +18,7 @@ class ParentCertificateCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius:  BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10),
             child: Image.asset(
               certificate.image,
               height: 180,
@@ -60,14 +59,9 @@ class ParentCertificateCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                SvgPicture.asset(
-                  ImageManager.downloadIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    ColorManager.mainColor14,
-                    BlendMode.srcIn,
-                  ),
+                DownloadIconButton(
+                  url: certificate.image,
+                  fileName: '${certificate.title}.png',
                 ),
               ],
             ),

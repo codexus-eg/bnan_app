@@ -12,6 +12,7 @@ class ParentChildModel {
     this.registrationMode,
     this.curriculum,
     this.directGrade,
+    this.accountStatus,
   }) : fullName = fullName ?? name ?? '',
        _legacyGrade = grade ?? '';
 
@@ -23,10 +24,16 @@ class ParentChildModel {
   final ParentChildCurriculumModel? curriculum;
   final ParentChildGradeModel? directGrade;
   final String _legacyGrade;
+  final String? accountStatus;
 
   String get name => fullName;
   String get grade =>
       directGrade?.name ?? classroom?.grade?.name ?? _legacyGrade;
+  bool? get isActive => switch (accountStatus?.trim().toLowerCase()) {
+    'active' || 'activated' => true,
+    'inactive' || 'deactivated' => false,
+    _ => null,
+  };
 
   factory ParentChildModel.fromJson(Map<String, dynamic> json) {
     final classroom = json['classroom'];
@@ -37,6 +44,7 @@ class ParentChildModel {
       userId: json['userId']?.toString() ?? '',
       fullName: json['fullName']?.toString(),
       name: json['name']?.toString(),
+      accountStatus: json['accountStatus']?.toString(),
       grade: directGrade is Map ? null : directGrade?.toString(),
       directGrade: directGrade is Map
           ? ParentChildGradeModel.fromJson(

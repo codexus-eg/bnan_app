@@ -4,5 +4,6 @@ import 'package:flutter/material.dart';
 class ParentSubscriptionsView extends StatelessWidget {
   const ParentSubscriptionsView({super.key});
   @override
-  Widget build(BuildContext context) => const ParentSubscriptionsBody();
+  Widget build(BuildContext context) =>
+      const Scaffold(body: ParentSubscriptionsBody());
 }

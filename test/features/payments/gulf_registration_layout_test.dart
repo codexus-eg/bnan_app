@@ -17,11 +17,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Gulf address stays scrollable on a small screen with keyboard', (
-    tester,
-  ) async {
+  setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
     await CacheHelper.init();
+  });
+
+  testWidgets('Gulf payment shows SAR and no Tamara address fields', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(320, 568);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -40,24 +43,93 @@ void main() {
         ),
       )
       ..nextStep()
+      ..nextStep()
       ..nextStep();
 
     await tester.pumpWidget(_app(auth, register));
-    final lastField = find.byType(TextFormField).last;
-    tester.view.viewInsets = const FakeViewPadding(bottom: 260);
-    await tester.pump();
-    await tester.drag(
-      find.byType(CustomScrollView),
-      const Offset(0, -1200),
-    );
-    await tester.pumpAndSettle();
-
+    expect(find.text(S.current.city), findsNothing);
+    expect(find.text('المنطقة'), findsNothing);
+    expect(find.text('العنوان'), findsNothing);
+    expect(find.textContaining('ريال'), findsWidgets);
+    expect(find.text(S.current.creditCard), findsNothing);
+    expect(find.text(S.current.applePay), findsNothing);
+    expect(find.text(S.current.tabbyTamara), findsOneWidget);
+    expect(find.text(S.current.payWithTamara), findsOneWidget);
     expect(tester.takeException(), isNull);
-    expect(tester.getBottomLeft(lastField).dy, lessThanOrEqualTo(308));
+  });
+
+  testWidgets('student step shows the grade hint only once', (tester) async {
+    final auth = _UnusedAuthRepo();
+    final register = _register(auth, steps: 2);
+    await tester.pumpWidget(_app(auth, register));
+    expect(find.text(S.current.selectGrade), findsOneWidget);
+  });
+
+  testWidgets('system back moves through registration steps', (tester) async {
+    final auth = _UnusedAuthRepo();
+    final register = _register(auth, steps: 3);
+    await tester.pumpWidget(_app(auth, register));
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    expect(register.state.currentStep, 3);
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    expect(register.state.currentStep, 2);
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    expect(register.state.currentStep, 1);
+  });
+
+  testWidgets('system back leaves registration from the first step', (
+    tester,
+  ) async {
+    final auth = _UnusedAuthRepo();
+    final register = _register(auth, steps: 0);
+    late BuildContext hostContext;
+    await tester.pumpWidget(
+      _localizedApp(
+        Builder(
+          builder: (context) {
+            hostContext = context;
+            return const Text('outside-registration');
+          },
+        ),
+      ),
+    );
+    Navigator.of(
+      hostContext,
+    ).push(MaterialPageRoute(builder: (_) => _providers(auth, register)));
+    await tester.pumpAndSettle();
+    expect(find.byType(StudentRegistrationView), findsOneWidget);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.byType(StudentRegistrationView), findsNothing);
   });
 }
 
-Widget _app(AuthRepo auth, RegisterCubit register) => MultiBlocProvider(
+RegisterCubit _register(AuthRepo auth, {required int steps}) {
+  final register = RegisterCubit(auth, _UnusedParentRepo())
+    ..setRegisterFlowArgs(
+      const RegisterFlowArgsModel(
+        curriculumId: 'curriculum',
+        curriculumName: 'Gulf',
+        packageId: 'package',
+        packageName: 'Package',
+        packagePrice: '1000',
+        packageCurrency: 'SAR',
+        registrationMode: 'gulf',
+      ),
+    );
+  for (var index = 0; index < steps; index++) {
+    register.nextStep();
+  }
+  return register;
+}
+
+Widget _app(AuthRepo auth, RegisterCubit register) =>
+    _localizedApp(_providers(auth, register));
+
+Widget _providers(AuthRepo auth, RegisterCubit register) => MultiBlocProvider(
   providers: [
     BlocProvider.value(value: register),
     BlocProvider(create: (_) => GetGradesCubit(auth)),
@@ -70,17 +142,19 @@ Widget _app(AuthRepo auth, RegisterCubit register) => MultiBlocProvider(
       ),
     ),
   ],
-  child: MaterialApp(
-    locale: const Locale('ar'),
-    localizationsDelegates: const [
-      S.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: S.delegate.supportedLocales,
-    home: const StudentRegistrationView(),
-  ),
+  child: const StudentRegistrationView(),
+);
+
+Widget _localizedApp(Widget home) => MaterialApp(
+  locale: const Locale('ar'),
+  localizationsDelegates: const [
+    S.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: S.delegate.supportedLocales,
+  home: home,
 );
 
 class _UnusedAuthRepo implements AuthRepo {

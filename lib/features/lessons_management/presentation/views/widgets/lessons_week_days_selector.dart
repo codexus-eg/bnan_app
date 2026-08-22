@@ -8,10 +8,12 @@ class LessonsWeekDaysSelector extends StatelessWidget {
     super.key,
     required this.selectedDay,
     required this.onSelected,
+    this.days = lessonDays,
   });
 
   final String selectedDay;
   final ValueChanged<String> onSelected;
+  final List<String> days;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +23,13 @@ class LessonsWeekDaysSelector extends StatelessWidget {
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
       child: Row(
         children: [
-          for (final day in lessonDays) ...[
+          for (final day in days) ...[
             LessonWeekDayItem(
               day: lessonDayLabel(s, day),
               isSelected: selectedDay == day,
               onTap: () => onSelected(day),
             ),
-            if (day != lessonDays.last) const SizedBox(width: 8),
+            if (day != days.last) const SizedBox(width: 8),
           ],
         ],
       ),

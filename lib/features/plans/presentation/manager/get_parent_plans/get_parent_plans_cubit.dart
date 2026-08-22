@@ -1,13 +1,10 @@
-import 'package:bnan_app/core/error/failure.dart';
-import 'package:bnan_app/features/plans/data/models/parent_child_plans_model.dart';
-import 'package:bnan_app/features/plans/data/models/parent_children_plans_response_model.dart';
+import 'package:bnan_app/features/plans/data/models/elapsed_weeks_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/parent_children_response_model.dart';
 import 'package:bnan_app/features/plans/data/models/parent_plan_child_model.dart';
 import 'package:bnan_app/features/plans/data/models/plan_classroom_model.dart';
 import 'package:bnan_app/features/plans/data/models/weekly_plans_response_model.dart';
 import 'package:bnan_app/features/plans/data/repo/plans_repo.dart';
 import 'package:bnan_app/features/plans/presentation/manager/get_parent_plans/get_parent_plans_state.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetParentPlansCubit extends Cubit<GetParentPlansState> {
@@ -15,38 +12,23 @@ class GetParentPlansCubit extends Cubit<GetParentPlansState> {
 
   final PlansRepo repo;
   List<ParentPlanChildModel> children = const [];
-  List<ParentChildPlansModel> allChildrenPlans = const [];
-  ParentChildPlansModel? currentPlan;
+  ElapsedWeeksResponseModel? weeksMetadata;
+  WeeklyPlansResponseModel? currentWeeklyPlan;
   String? selectedChildId;
   String selectedChildName = '';
   int selectedWeek = 1;
   int _requestId = 0;
 
   List<int> get availableWeeks {
-    final weeks = <int>{};
-    for (final plan in allChildrenPlans) {
-      if (plan.week > 0) weeks.add(plan.week);
-    }
-    return weeks.toList()..sort();
+    final count = weeksMetadata?.data.weeksCount ?? 0;
+    return List.generate(count, (index) => index + 1);
   }
 
-  WeeklyPlansResponseModel? get currentWeeklyPlan {
-    final plan = currentPlan;
-    if (plan == null) return null;
-    return WeeklyPlansResponseModel(
-      success: true,
-      results: plan.subjects.length,
-      data: WeeklyPlansDataModel(
-        classroom:
-            plan.classrooms.firstOrNull ??
-            PlanClassroomModel(
-              id: selectedChildId ?? '',
-              name: selectedChildName,
-            ),
-        week: selectedWeek,
-        subjects: plan.subjects,
-      ),
-    );
+  PlanClassroomModel? get selectedClassroom {
+    for (final child in children) {
+      if (child.id == selectedChildId) return child.classroom;
+    }
+    return null;
   }
 
   Future<void> loadParentPlans() async {
@@ -54,100 +36,100 @@ class GetParentPlansCubit extends Cubit<GetParentPlansState> {
     emit(GetParentPlansLoading());
     final result = await repo.getParentChildren();
     if (!_isCurrent(requestId)) return;
-    final response = _childrenResponse(result);
+    ParentChildrenResponseModel? response;
+    result.fold(
+      (failure) => emit(GetParentPlansFailure(failure.message)),
+      (value) => response = value,
+    );
     if (response == null) return;
-    children = response.data;
+    children = response!.data;
     if (children.isEmpty) return emit(GetParentPlansEmpty());
-    selectedChildId = children.first.id;
-    selectedChildName = children.first.fullName;
-    await _loadPlans(requestId, selectInitialWeek: true);
+    _selectChildValue(children.first);
+    await _loadWeeks(requestId);
+  }
+
+  Future<void> selectChild(String? childId) async {
+    if (childId == null || childId == selectedChildId) return;
+    for (final child in children) {
+      if (child.id != childId) continue;
+      final requestId = ++_requestId;
+      _selectChildValue(child);
+      emit(GetParentPlansLoading());
+      await _loadWeeks(requestId);
+      return;
+    }
+  }
+
+  Future<void> selectWeek(int? week) async {
+    if (week == null ||
+        !availableWeeks.contains(week) ||
+        week == selectedWeek) {
+      return;
+    }
+    final requestId = ++_requestId;
+    selectedWeek = week;
+    currentWeeklyPlan = null;
+    emit(GetParentPlansLoading());
+    await _loadWeek(requestId);
   }
 
   Future<void> retry() async {
     if (children.isEmpty) return loadParentPlans();
     final requestId = ++_requestId;
     emit(GetParentPlansLoading());
-    await _loadPlans(requestId);
-  }
-
-  void selectChild(String? childId) {
-    if (childId == null || childId == selectedChildId) return;
-    for (final child in children) {
-      if (child.id != childId) continue;
-      selectedChildId = child.id;
-      selectedChildName = child.fullName;
-      _selectCurrentPlan();
-      _emitCurrent();
-      return;
+    if (weeksMetadata == null) {
+      await _loadWeeks(requestId);
+    } else {
+      await _loadWeek(requestId);
     }
   }
 
-  void selectWeek(int? week) {
-    if (week == null || week < 1 || week == selectedWeek) return;
-    selectedWeek = week;
-    _selectCurrentPlan();
-    _emitCurrent();
+  void _selectChildValue(ParentPlanChildModel child) {
+    selectedChildId = child.id;
+    selectedChildName = child.fullName;
+    selectedWeek = 1;
+    weeksMetadata = null;
+    currentWeeklyPlan = null;
   }
 
-  Future<void> _loadPlans(
-    int requestId, {
-    bool selectInitialWeek = false,
-  }) async {
-    final result = await repo.getParentChildrenPlans();
+  Future<void> _loadWeeks(int requestId) async {
+    final classroomId = selectedClassroom?.id ?? '';
+    if (classroomId.isEmpty) return emit(GetParentPlansEmpty());
+    final result = await repo.getElapsedWeeks(classroomId: classroomId);
     if (!_isCurrent(requestId)) return;
-    final response = _plansResponse(result);
+    ElapsedWeeksResponseModel? response;
+    result.fold(
+      (failure) => emit(GetParentPlansFailure(failure.message)),
+      (value) => response = value,
+    );
     if (response == null) return;
-    allChildrenPlans = response.data;
-    if (selectInitialWeek) _selectFirstAvailableWeek();
-    _selectCurrentPlan();
-    _emitCurrent();
+    weeksMetadata = response;
+    final data = response!.data;
+    if (data.weeksCount < 1) return emit(GetParentPlansEmpty());
+    selectedWeek = data.currentWeek >= 1 && data.currentWeek <= data.weeksCount
+        ? data.currentWeek
+        : data.weeksCount;
+    await _loadWeek(requestId);
   }
 
-  void _emitCurrent() => emit(
-    currentPlan == null || currentPlan!.subjects.isEmpty
-        ? GetParentPlansEmpty()
-        : GetParentPlansSuccess(),
-  );
-
-  void _selectFirstAvailableWeek() {
-    for (final plan in allChildrenPlans) {
-      if (plan.student.id == selectedChildId && plan.week > 0) {
-        selectedWeek = plan.week;
-        return;
-      }
-    }
-  }
-
-  void _selectCurrentPlan() {
-    currentPlan = null;
-    for (final plan in allChildrenPlans) {
-      if (plan.student.id == selectedChildId && plan.week == selectedWeek) {
-        currentPlan = plan;
-        return;
-      }
-    }
-  }
-
-  ParentChildrenResponseModel? _childrenResponse(
-    Either<Failure, ParentChildrenResponseModel> result,
-  ) {
-    ParentChildrenResponseModel? response;
-    result.fold(
-      (failure) => emit(GetParentPlansFailure(failure.message)),
-      (value) => response = value,
+  Future<void> _loadWeek(int requestId) async {
+    final classroomId = selectedClassroom?.id ?? '';
+    if (classroomId.isEmpty) return emit(GetParentPlansEmpty());
+    final result = await repo.getPlansByWeek(
+      classroomId: classroomId,
+      week: selectedWeek,
     );
-    return response;
-  }
-
-  ParentChildrenPlansResponseModel? _plansResponse(
-    Either<Failure, ParentChildrenPlansResponseModel> result,
-  ) {
-    ParentChildrenPlansResponseModel? response;
-    result.fold(
-      (failure) => emit(GetParentPlansFailure(failure.message)),
-      (value) => response = value,
-    );
-    return response;
+    if (!_isCurrent(requestId)) return;
+    result.fold((failure) => emit(GetParentPlansFailure(failure.message)), (
+      response,
+    ) {
+      currentWeeklyPlan = response;
+      emit(
+        response.data.subjects.isEmpty
+            ? GetParentPlansEmpty()
+            : GetParentPlansSuccess(),
+      );
+    });
   }
 
   bool _isCurrent(int requestId) => !isClosed && requestId == _requestId;

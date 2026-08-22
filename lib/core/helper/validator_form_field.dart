@@ -91,6 +91,14 @@ abstract class MyValidator {
     return null;
   }
 
+  static String? validateRegistrationPassword(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return S.current.passwordCannotBeEmpty;
+    }
+    if (value.length < 6) return S.current.parentPasswordMinLength;
+    return null;
+  }
+
   static String? validateConfirmPassword(String? value, String passwordValue) {
     if (value == null || value.trim().isEmpty) {
       return S.current.confirmPasswordCannotBeEmpty;

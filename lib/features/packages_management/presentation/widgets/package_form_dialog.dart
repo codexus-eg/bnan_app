@@ -171,12 +171,20 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
   }
 
   String? _validate(PackageFormState state) {
-    final duration = int.tryParse(controllers.duration.text.trim());
+    final duration = state.isEgyptianAllSubjects
+        ? 1
+        : int.tryParse(controllers.duration.text.trim());
     final oldPrice = num.tryParse(controllers.oldPrice.text.trim());
     final newPrice = num.tryParse(controllers.newPrice.text.trim());
 
     if (state.curriculumId?.isEmpty ?? true) return 'curriculum';
     if (state.isGulf && state.packageType != 'hours') return 'packageType';
+    if (state.isEgyptianAllSubjects && state.packageType != 'monthly') {
+      return 'packageType';
+    }
+    if (state.isSingleSubject && state.packageType != 'hours') {
+      return 'packageType';
+    }
     if (controllers.name.text.trim().isEmpty) return 'name';
     if (duration == null || duration <= 0) return 'duration';
     if (oldPrice == null || oldPrice < 0) return 'oldPrice';
@@ -210,7 +218,9 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
   }
 
   AddPackageRequestModel _addRequest(PackageFormState state) {
-    final duration = int.parse(controllers.duration.text.trim());
+    final duration = state.isEgyptianAllSubjects
+        ? 1
+        : int.parse(controllers.duration.text.trim());
     final type = state.effectivePackageType;
 
     return AddPackageRequestModel(
@@ -230,7 +240,9 @@ class _PackageFormDialogState extends State<PackageFormDialog> {
   }
 
   UpdatePackageRequestModel _updateRequest(PackageFormState state) {
-    final duration = int.parse(controllers.duration.text.trim());
+    final duration = state.isEgyptianAllSubjects
+        ? 1
+        : int.parse(controllers.duration.text.trim());
     final type = state.effectivePackageType;
 
     return UpdatePackageRequestModel(

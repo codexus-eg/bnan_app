@@ -50,6 +50,8 @@ class DioConsumer extends ApiConsumer {
         tokens: tokens,
         refresh: TokenRefreshCoordinator(dio: refreshDio, tokens: tokens),
         invalidate: SessionInvalidator.instance.invalidate,
+        invalidateAccess:
+            SessionInvalidator.instance.invalidateSubscriptionAccess,
         isInvalidating: () => SessionInvalidator.instance.isInvalidating,
       ),
     );

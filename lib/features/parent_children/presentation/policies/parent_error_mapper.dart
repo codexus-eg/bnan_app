@@ -7,13 +7,6 @@ const _paymentInputCodes = {
   'INVALID_PAYMENT_PHONE',
 };
 
-const _paymentFlowCodes = {
-  ..._paymentInputCodes,
-  'PAYMENT_PROCESSING_FAILED',
-  'TAMARA_NOT_SUPPORTED',
-  'IDEMPOTENCY_KEY_REUSED',
-};
-
 bool isParentPaymentInputFailure(Failure failure) {
   final value = (failure.code ?? failure.message).toUpperCase();
   return _paymentInputCodes.any(value.contains);
@@ -21,7 +14,9 @@ bool isParentPaymentInputFailure(Failure failure) {
 
 String mapParentFlowFailure(Failure failure, {required String fallback}) {
   final value = (failure.code ?? failure.message).toUpperCase();
-  if (_paymentFlowCodes.any(value.contains)) return failure.message;
+  if (value.contains('TAMARA_NOT_SUPPORTED')) return fallback;
+  if (value.contains('IDEMPOTENCY_KEY_REUSED')) return fallback;
+  if (_paymentInputCodes.any(value.contains)) return failure.message;
   if (value.contains('SUBSCRIPTION_STILL_ACTIVE')) {
     return S.current.renewalSubscriptionStillActive;
   }
@@ -36,6 +31,9 @@ String mapParentFlowFailure(Failure failure, {required String fallback}) {
   }
   if (value.contains('IDEMPOTENCY_KEY_REQUIRED')) {
     return S.current.renewalIdempotencyRequired;
+  }
+  if (value.contains('EGYPTIAN_STUDENT_ONLY')) {
+    return S.current.parentUnsupportedRegistrationMode;
   }
   if (value.contains('PACKAGE')) return S.current.invalidPackage;
   if (value.contains('RECEIPT')) return S.current.paymentReceiptRequired;

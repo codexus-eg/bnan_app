@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
@@ -11,6 +12,7 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
   final StudentSubjectRequestsRepo _repo;
 
   Future<void> load({bool refresh = false}) async {
+    if (isClosed) return;
     emit(
       state.copyWith(
         phase: state.availability == null
@@ -21,29 +23,39 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
       ),
     );
     final availabilityResult = await _repo.getAvailableSubjects();
+    if (isClosed) return;
     await availabilityResult.fold(
-      (failure) async => emit(
-        state.copyWith(
-          phase: SubjectRequestsPhase.failure,
-          isRefreshing: false,
-          message: failure.message,
-        ),
-      ),
+      (failure) async {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            phase: SubjectRequestsPhase.failure,
+            isRefreshing: false,
+            message: failure.message,
+          ),
+        );
+      },
       (availability) async {
         final packagesResult = await _repo.getPackages(
           availability.curriculum.id,
         );
-        final requestsResult = await _repo.getRequests();
+        if (isClosed) return;
         packagesResult.fold(
-          (failure) => emit(
-            state.copyWith(
-              phase: SubjectRequestsPhase.failure,
-              isRefreshing: false,
-              message: failure.message,
-            ),
-          ),
+          (failure) {
+            if (isClosed) return;
+            emit(
+              state.copyWith(
+                phase: SubjectRequestsPhase.failure,
+                isRefreshing: false,
+                message: failure.message,
+              ),
+            );
+          },
           (packages) {
-            final filteredPackages = filterPackages(packages);
+            final filteredPackages = filterPackages(
+              packages,
+              availability.registrationMode,
+            );
             final selectedSubjectId = state.selectedSubjectId;
             final selectedPackageId = state.selectedPackageId;
             final keepSubject =
@@ -54,24 +66,15 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
             final keepPackage =
                 selectedPackageId != null &&
                 filteredPackages.any((item) => item.id == selectedPackageId);
-            requestsResult.fold(
-              (failure) => emit(
-                state.copyWith(
-                  phase: SubjectRequestsPhase.failure,
-                  isRefreshing: false,
-                  message: failure.message,
-                ),
-              ),
-              (requests) => emit(
-                state.copyWith(
-                  phase: SubjectRequestsPhase.ready,
-                  availability: availability,
-                  packages: filteredPackages,
-                  requests: requests,
-                  isRefreshing: false,
-                  clearSubject: !keepSubject,
-                  clearPackage: !keepPackage,
-                ),
+            if (isClosed) return;
+            emit(
+              state.copyWith(
+                phase: SubjectRequestsPhase.ready,
+                availability: availability,
+                packages: filteredPackages,
+                isRefreshing: false,
+                clearSubject: !keepSubject,
+                clearPackage: !keepPackage,
               ),
             );
           },
@@ -80,35 +83,51 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
     );
   }
 
-  static List<PackageModel> filterPackages(List<PackageModel> packages) =>
-      packages
-          .where(
-            (item) =>
-                item.accessScope == PackageAccessScope.singleSubject &&
-                item.type == 'hours' &&
-                item.isActive,
-          )
-          .toList();
+  static List<PackageModel> filterPackages(
+    List<PackageModel> packages,
+    RegistrationMode registrationMode,
+  ) {
+    final accessScope = registrationMode == RegistrationMode.egyptian
+        ? PackageAccessScope.singleSubject
+        : PackageAccessScope.allSubjects;
+    return packages
+        .where(
+          (item) =>
+              item.accessScope == accessScope &&
+              item.type == 'hours' &&
+              item.isActive,
+        )
+        .toList();
+  }
 
   void selectSubject(String id) {
+    if (isClosed) return;
     final subject = state.availability?.subjects
         .where((item) => item.id == id)
         .firstOrNull;
     if (subject?.isSelectable != true) return;
-    emit(state.copyWith(selectedSubjectId: id, clearMessage: true));
+    emit(
+      state.copyWith(
+        selectedSubjectId: id,
+        clearPackage: state.selectedSubjectId != id,
+        clearMessage: true,
+      ),
+    );
   }
 
   void selectPackage(String id) {
+    if (isClosed) return;
     if (!state.packages.any((item) => item.id == id)) return;
     emit(state.copyWith(selectedPackageId: id, clearMessage: true));
   }
 
   void updateNotes(String value) {
+    if (isClosed) return;
     if (value.length <= 2000) emit(state.copyWith(notes: value));
   }
 
   Future<void> submitEgyptian() async {
-    if (!state.canSubmit || state.isSubmitting) return;
+    if (isClosed || !state.canSubmit || state.isSubmitting) return;
     emit(state.copyWith(isSubmitting: true, clearMessage: true));
     final result = await _repo.submitEgyptian(
       EgyptianSubjectRequestPayload(
@@ -117,25 +136,37 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
         notes: state.notes,
       ),
     );
+    if (isClosed) return;
     await result.fold(
       (failure) async {
         if (failure.code == 'SUBJECT_ALREADY_REQUESTED') {
           final message = failure.message;
           await load(refresh: true);
-          if (!isClosed) emit(state.copyWith(message: message));
+          if (!isClosed) {
+            emit(state.copyWith(isSubmitting: false, message: message));
+          }
         } else {
+          if (isClosed) return;
           emit(state.copyWith(isSubmitting: false, message: failure.message));
         }
       },
       (_) async {
         await load(refresh: true);
-        emit(state.copyWith(message: 'subject_request_submitted'));
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            message: 'subject_request_submitted',
+          ),
+        );
       },
     );
   }
 
   Future<void> paymentCompleted() async {
+    if (isClosed) return;
     await load(refresh: true);
+    if (isClosed) return;
     emit(state.copyWith(message: 'subject_request_payment_completed'));
   }
 }

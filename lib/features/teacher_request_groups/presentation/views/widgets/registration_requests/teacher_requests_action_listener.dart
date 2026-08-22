@@ -16,6 +16,7 @@ void handleTeacherRequestsAction(
   if (state is TeacherRequestAccepted) {
     Navigator.of(context).pop();
     showCustomSnackBar(context, s.teacherRequestAcceptedSuccess, true);
+    unawaited(context.read<TeacherRegistrationRequestsCubit>().refresh());
     unawaited(context.read<GetTeacherClassroomsCubit>().getMyClassrooms());
   } else if (state is TeacherRequestAlreadyAssigned) {
     _closeAndRefresh(context, s.teacherRequestAlreadyAssigned);

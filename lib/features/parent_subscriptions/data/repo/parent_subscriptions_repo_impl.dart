@@ -46,16 +46,20 @@ class ParentSubscriptionsRepoImpl implements ParentSubscriptionsRepo {
     return parsed;
   });
   @override
-  renewEgyptian(EgyptianRenewalRequest request) => repoGuard(
-    () async => RenewalStatusResponse.fromJson(
+  renewEgyptian(EgyptianRenewalRequest request) => repoGuard(() async {
+    _log(
+      'POST ${Uri.parse(EndPoints.baseUrl).path}'
+      '${EndPoints.egyptianSubscriptionRenewal}',
+    );
+    return RenewalStatusResponse.fromJson(
       _map(
         await _post(
           EndPoints.egyptianSubscriptionRenewal,
-          data: await request.toFormData(),
+          data: request.toJson(),
         ),
       ),
-    ),
-  );
+    );
+  });
   @override
   egyptianStatus(String id) => repoGuard(
     () async => RenewalStatusResponse.fromJson(

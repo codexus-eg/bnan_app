@@ -3,6 +3,7 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_attachments_list.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_formatters.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
@@ -11,13 +12,17 @@ class ChatBubble extends StatelessWidget {
     required this.message,
     required this.currentUserId,
     this.highlighted = false,
+    this.selected = false,
   });
 
   final ChatMessageModel message;
   final String currentUserId;
   final bool highlighted;
+  final bool selected;
 
-  bool get isMe => message.sender.id == currentUserId;
+  bool get isMe {
+    return message.isMine(currentUserId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +43,29 @@ class ChatBubble extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (message.attachments.isNotEmpty)
+            if (!isMe && message.sender.fullName.trim().isNotEmpty) ...[
+              Text(
+                ChatFormatters.senderLabel(
+                  context,
+                  message.sender.fullName,
+                  message.sender.role,
+                ),
+                style: StylesManager.styleMedium14(
+                  context,
+                ).copyWith(color: ColorManager.mainColor14),
+              ),
+              const SizedBox(height: 4),
+            ],
+            if (message.deletedForEveryone)
+              _buildDeletedMessage(context)
+            else if (message.attachments.isNotEmpty)
               ChatAttachmentsList(attachments: message.attachments, isMe: isMe),
-            if (message.attachments.isNotEmpty && hasText)
+            if (!message.deletedForEveryone &&
+                message.attachments.isNotEmpty &&
+                hasText)
               const SizedBox(height: 8),
-            if (hasText) _buildMessageText(context),
+            if (!message.deletedForEveryone && hasText)
+              _buildMessageText(context),
             const SizedBox(height: 8),
             _buildTime(context),
           ],
@@ -62,7 +85,9 @@ class ChatBubble extends StatelessWidget {
           offset: const Offset(0, 4),
         ),
       ],
-      border: highlighted
+      border: selected
+          ? Border.all(color: ColorManager.blueE3, width: 3)
+          : highlighted
           ? Border.all(color: ColorManager.orangeE6, width: 2)
           : null,
     );
@@ -79,9 +104,30 @@ class ChatBubble extends StatelessWidget {
     );
   }
 
+  Widget _buildDeletedMessage(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(
+        Icons.block,
+        size: 16,
+        color: isMe ? ColorManager.grey9D9D : ColorManager.grey7A7C,
+      ),
+      const SizedBox(width: 6),
+      Flexible(
+        child: Text(
+          S.of(context).deletedMessage,
+          style: StylesManager.styleRegular14(context).copyWith(
+            color: isMe ? ColorManager.grey9D9D : ColorManager.grey7A7C,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      ),
+    ],
+  );
+
   Widget _buildTime(BuildContext context) {
     return Text(
-      ChatFormatters.formatTime(message.createdAt),
+      ChatFormatters.formatTime(message.createdAt, context: context),
       style: StylesManager.styleRegular14(context).copyWith(
         fontSize: 11,
         color: isMe ? ColorManager.grey9D9D : ColorManager.grey7A7C,

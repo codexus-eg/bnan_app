@@ -15,6 +15,7 @@ class SupervisorAssignmentActionsCubit
     required String supervisorId,
     required List<String> classroomIds,
   }) async {
+    if (isClosed) return;
     final ids = classroomIds.where((id) => id.trim().isNotEmpty).toList();
     if (supervisorId.isEmpty || ids.isEmpty) return;
     emit(AssignSupervisorLoading(supervisorId));
@@ -27,11 +28,21 @@ class SupervisorAssignmentActionsCubit
       supervisorId: supervisorId,
       request: request,
     );
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(AssignSupervisorFailure(supervisorId, failure.message)),
-      (response) => emit(
-        AssignSupervisorSuccess(supervisorId: supervisorId, response: response),
-      ),
+      (failure) {
+        if (isClosed) return;
+        emit(AssignSupervisorFailure(supervisorId, failure.message));
+      },
+      (response) {
+        if (isClosed) return;
+        emit(
+          AssignSupervisorSuccess(
+            supervisorId: supervisorId,
+            response: response,
+          ),
+        );
+      },
     );
   }
 
@@ -39,27 +50,35 @@ class SupervisorAssignmentActionsCubit
     required String supervisorId,
     required String classroomId,
   }) async {
+    if (isClosed) return;
     if (supervisorId.isEmpty || classroomId.isEmpty) return;
     emit(UnassignSupervisorLoading(supervisorId, classroomId));
     final result = await repo.unassignSupervisorFromClassroom(
       supervisorId: supervisorId,
       classroomId: classroomId,
     );
+    if (isClosed) return;
     result.fold(
-      (failure) => emit(
-        UnassignSupervisorFailure(
-          supervisorId: supervisorId,
-          classroomId: classroomId,
-          errorMessage: failure.message,
-        ),
-      ),
-      (response) => emit(
-        UnassignSupervisorSuccess(
-          supervisorId: supervisorId,
-          classroomId: classroomId,
-          response: response,
-        ),
-      ),
+      (failure) {
+        if (isClosed) return;
+        emit(
+          UnassignSupervisorFailure(
+            supervisorId: supervisorId,
+            classroomId: classroomId,
+            errorMessage: failure.message,
+          ),
+        );
+      },
+      (response) {
+        if (isClosed) return;
+        emit(
+          UnassignSupervisorSuccess(
+            supervisorId: supervisorId,
+            classroomId: classroomId,
+            response: response,
+          ),
+        );
+      },
     );
   }
 }

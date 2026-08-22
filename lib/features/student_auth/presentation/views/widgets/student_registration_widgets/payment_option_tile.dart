@@ -21,7 +21,7 @@ class PaymentOptionTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           color: ColorManager.white,
           borderRadius: BorderRadius.circular(10),
@@ -37,11 +37,16 @@ class PaymentOptionTile extends StatelessWidget {
           children: [
             Image.asset(icon, width: 24, height: 24, fit: BoxFit.contain),
             const SizedBox(width: 8),
-            Text(
-              title,
-              style: StylesManager.styleBold16(
-                context,
-              ).copyWith(color: ColorManager.mainColor15),
+            Flexible(
+              child: Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: StylesManager.styleBold16(
+                  context,
+                ).copyWith(color: ColorManager.mainColor15),
+              ),
             ),
           ],
         ),

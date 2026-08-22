@@ -28,6 +28,8 @@ class MonthlyCertificateSummaryModel {
   final DateTime? createdAt;
   final DateTime? issuedAt;
 
+  bool get isIssued => status?.trim().toLowerCase() == 'issued';
+
   factory MonthlyCertificateSummaryModel.fromJson(Map<String, dynamic> json) {
     final periodMap = RelationParser.mapOf(json['period']);
 

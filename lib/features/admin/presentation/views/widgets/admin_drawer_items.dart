@@ -32,7 +32,7 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.classRoomManagement,
       icon: ImageManager.teacherBookTwoIcon,
     ),
-    DrawerItemModel(title: s.schedule, icon: ImageManager.tableIcon),
+    DrawerItemModel(title: s.lessonsManagement, icon: ImageManager.tableIcon),
     DrawerItemModel(
       title: s.messages,
       icon: ImageManager.parentChatConversationCircleIcon,
@@ -44,5 +44,14 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
     DrawerItemModel(title: s.supervisorAssignment, icon: ImageManager.userAdd),
     DrawerItemModel(title: s.discountCodes, icon: ImageManager.wallet),
     DrawerItemModel(title: s.teacherPayrolls, icon: ImageManager.wallet),
+    DrawerItemModel(title: s.idealSupervisor, icon: ImageManager.crownSimple),
+    DrawerItemModel(
+      title: s.addSubjectToClassroom,
+      icon: ImageManager.teacherBookTwoIcon,
+    ),
+    DrawerItemModel(
+      title: s.adminSubscriptionRenewals,
+      icon: ImageManager.wallet,
+    ),
   ];
 }

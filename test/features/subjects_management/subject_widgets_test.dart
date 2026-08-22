@@ -13,6 +13,9 @@ void main() {
     expect(find.text('Saudi'), findsOneWidget);
     expect(find.text('Grade two'), findsOneWidget);
 
+    await _pump(tester, SubjectCardManagement(subject: _multipleGrades));
+    expect(find.text('Grade one, Grade two'), findsOneWidget);
+
     await _pump(tester, SubjectCardManagement(subject: _subject(null)));
     expect(find.text('Grade two'), findsNothing);
     expect(find.text('-'), findsOneWidget);
@@ -25,7 +28,17 @@ SubjectModel _subject(String? grade) => SubjectModel(
   name: 'Math',
   isActive: true,
   curriculum: const SubjectCurriculumModel(id: 'c1', name: 'Saudi', icon: ''),
-  grade: grade == null ? null : SubjectGradeModel(id: 'g1', name: grade),
+  grades: grade == null ? const [] : [SubjectGradeModel(id: 'g1', name: grade)],
+);
+
+const _multipleGrades = SubjectModel(
+  id: 'subject-2',
+  name: 'Math',
+  isActive: true,
+  grades: [
+    SubjectGradeModel(id: 'g1', name: 'Grade one'),
+    SubjectGradeModel(id: 'g2', name: 'Grade two'),
+  ],
 );
 
 Future<void> _pump(WidgetTester tester, Widget child) {

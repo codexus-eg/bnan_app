@@ -11,28 +11,30 @@ class ReadOnlyWeekFilter extends StatelessWidget {
     required this.selectedWeek,
     required this.maxAvailableWeek,
   });
-  final int selectedWeek, maxAvailableWeek;
+  final int? selectedWeek, maxAvailableWeek;
 
   static Widget? fromState(ReadOnlyWeeklyEvaluationsState state) =>
-      state.selectedWeek == null || state.maxAvailableWeek == null
+      state.role == null
       ? null
       : ReadOnlyWeekFilter(
-          selectedWeek: state.selectedWeek!,
-          maxAvailableWeek: state.maxAvailableWeek!,
+          selectedWeek: state.selectedWeek,
+          maxAvailableWeek: state.maxAvailableWeek,
         );
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      for (var value = 1; value <= maxAvailableWeek; value++) '$value',
-    ];
+    final maxWeek = maxAvailableWeek;
+    final items = maxWeek == null
+        ? null
+        : [for (var value = 1; value <= maxWeek; value++) '$value'];
     return CustomDropdown(
       key: const Key('readOnlyWeekDropdown'),
       label: S.of(context).week,
-      value: '$selectedWeek',
+      value: selectedWeek?.toString(),
       items: items,
       itemsLabels: {
-        for (final item in items) item: S.of(context).weekNumber(item),
+        for (final item in items ?? const <String>[])
+          item: S.of(context).weekNumber(item),
       },
       onChanged: (value) {
         final selected = int.tryParse(value ?? '');

@@ -8,10 +8,12 @@ class ForgetPasswordSubtitle extends StatelessWidget {
     super.key,
     required this.isCodeSent,
     required this.email,
+    this.isAccountVerification = false,
   });
 
   final bool isCodeSent;
   final String email;
+  final bool isAccountVerification;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,9 @@ class ForgetPasswordSubtitle extends StatelessWidget {
             ).copyWith(color: ColorManager.mainColor14),
           ),
           TextSpan(
-            text: S.of(context).resetPasswordInstructions,
+            text: isAccountVerification
+                ? S.of(context).accountVerificationInstructions
+                : S.of(context).resetPasswordInstructions,
             style: StylesManager.styleRegular12(context),
           ),
         ],

@@ -8,15 +8,19 @@ class GetGradesmanagementCubit extends Cubit<GetGradesManagementState> {
   final GradesRepo gradesRepo;
 
   Future<void> getGrades() async {
+    if (isClosed) return;
     emit(GetGradesLoading());
 
     final result = await gradesRepo.getGrades();
+    if (isClosed) return;
 
     result.fold(
       (failure) {
+        if (isClosed) return;
         emit(GetGradesFailure(errorMessage: failure.message));
       },
       (grades) {
+        if (isClosed) return;
         emit(GetGradesSuccess(grades: grades));
       },
     );

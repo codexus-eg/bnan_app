@@ -16,6 +16,16 @@ import 'package:bnan_app/features/parent_home/presentation/manager/get_parent_ch
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_child_card.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_body.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_content.dart';
+import 'package:bnan_app/features/dashboard/data/models/dashboard_data.dart';
+import 'package:bnan_app/features/dashboard/data/models/parent_dashboard_model.dart';
+import 'package:bnan_app/features/dashboard/data/repo/dashboard_repo.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
+import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
+import 'package:bnan_app/features/chats/data/models/chat_rooms_response_model.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
+import 'package:bnan_app/features/shared_profile/data/repo/student_profile_repo/student_profile_repo.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/student_profile_cubit/student_profile_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscriptions_response.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/get_parent_subscriptions_cubit/get_parent_subscriptions_cubit.dart';
@@ -43,6 +53,9 @@ void main() {
     });
     getIt.registerFactory<GetParentSubscriptionsCubit>(
       () => GetParentSubscriptionsCubit(_FakeParentSubscriptionsRepo()),
+    );
+    getIt.registerFactory<GetChatRoomsCubit>(
+      () => GetChatRoomsCubit(_FakeChatRepo()),
     );
 
     await _pumpContent(tester, index: 0);
@@ -187,6 +200,54 @@ void main() {
     expect(find.byType(ParentChildrenBody), findsOneWidget);
     expect(find.byType(AddNewTopicButton), findsOneWidget);
   });
+
+  testWidgets('completed Add child refreshes children and dashboard', (
+    tester,
+  ) async {
+    final parentRepo = _FakeParentHomeRepo(
+      () async =>
+          const Right(GetParentChildrenResponseModel(data: [_egyptianChild])),
+    );
+    final childrenCubit = GetParentChildrenCubit(parentRepo);
+    final dashboardRepo = _DashboardRepo();
+    final dashboardCubit = DashboardCubit(dashboardRepo, DashboardRole.parent);
+    await childrenCubit.getParentChildren();
+    addTearDown(childrenCubit.close);
+    addTearDown(dashboardCubit.close);
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (_, __) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: childrenCubit),
+              BlocProvider.value(value: dashboardCubit),
+            ],
+            child: const Scaffold(body: ParentChildrenBody()),
+          ),
+        ),
+        GoRoute(
+          path: Routes.parentAddChild,
+          builder: (context, _) => Scaffold(
+            body: TextButton(
+              onPressed: () => context.pop(ParentFlowResult.completed),
+              child: const Text('Complete Add Child'),
+            ),
+          ),
+        ),
+      ],
+    );
+    addTearDown(router.dispose);
+    await tester.pumpWidget(_localizedRouter(router));
+
+    await tester.tap(find.text('Add child'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Complete Add Child'));
+    await tester.pumpAndSettle();
+
+    expect(parentRepo.calls, 2);
+    expect(dashboardRepo.calls, 1);
+  });
 }
 
 Future<ParentAddChildArgs> _tapAddChild(
@@ -282,10 +343,21 @@ Future<void> _pumpContent(WidgetTester tester, {required int index}) {
       ],
       supportedLocales: S.delegate.supportedLocales,
       home: Scaffold(
-        body: ParentHomeContent(
-          index: index,
-          onMenuTap: _emptyCallback,
-          onShowAllChildren: _emptyCallback,
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) =>
+                  DashboardCubit(_DashboardRepo(), DashboardRole.parent),
+            ),
+            BlocProvider(
+              create: (_) => StudentProfileCubit(_StudentProfileRepo()),
+            ),
+          ],
+          child: ParentHomeContent(
+            index: index,
+            onMenuTap: _emptyCallback,
+            onShowAllChildren: _emptyCallback,
+          ),
         ),
       ),
     ),
@@ -312,6 +384,39 @@ class _FakeParentSubscriptionsRepo implements ParentSubscriptionsRepo {
   @override
   getSubscriptions() async => const Right(ParentSubscriptionsResponse());
 
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _DashboardRepo implements DashboardRepo {
+  int calls = 0;
+
+  @override
+  Future<Either<Failure, DashboardData>> getDashboard() async {
+    calls++;
+    return const Right(
+      ParentDashboardModel(
+        generatedAt: null,
+        childrenCount: 1,
+        certificates: 0,
+        evaluations: 0,
+        subscriptions: 0,
+        children: [_egyptianChild],
+      ),
+    );
+  }
+}
+
+class _FakeChatRepo implements ChatRepo {
+  @override
+  Future<Either<Failure, ChatRoomsResponseModel>> getChatRooms() async =>
+      const Right(ChatRoomsResponseModel(success: true, results: 0, rooms: []));
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _StudentProfileRepo implements StudentProfileRepo {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

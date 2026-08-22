@@ -1,14 +1,27 @@
 abstract class EndPoints {
-  static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
-  static String get socketUrl => 'https://bnan.0xcode7.xyz';
+  static String get baseUrl => 'https://api.bnanacademysa.com/api/v1';
+  static String get socketUrl => 'https://api.bnanacademysa.com';
   static const String register = '/auth/register';
   static const String login = '/auth/login';
   static const String refreshToken = '/auth/refresh-token';
   static const String forgotPassword = '/auth/forgotPassword';
   static const String verifyResetCode = '/auth/verifyResetCode';
   static const String resetPassword = '/auth/resetPassword';
+  static const String verifyAccount = '/auth/verify-account';
+  static const String resendVerificationCode = '/auth/resend-verification-code';
   static const String updatePassword = '/auth/updatePassword';
   static const String deviceToken = '/devices/token';
+  static const String notifications = '/notifications';
+  static const String adminEgyptianSubscriptionRenewals =
+      '/admin/subscription-renewals/egyptian';
+  static String confirmEgyptianSubscriptionRenewal(String paymentId) =>
+      '$adminEgyptianSubscriptionRenewals/$paymentId/confirm';
+  static String approveEgyptianSubscriptionRenewal(String paymentId) =>
+      '$adminEgyptianSubscriptionRenewals/$paymentId/approve';
+  static String rejectEgyptianSubscriptionRenewal(String paymentId) =>
+      '$adminEgyptianSubscriptionRenewals/$paymentId/reject';
+  static const String notificationsRead = '/notifications/read';
+  static const String notificationPreferences = '/notification-preferences/me';
   static const String dashboard = '/dashboard';
   static const String registerTeacher = '/auth/register-teacher';
   static const String registerParent = '/auth/register-parent';
@@ -17,6 +30,7 @@ abstract class EndPoints {
   static const String updateLoggedUserPhone = '/users/me/phone';
   static const String myAssignments = '/students/me/assignments';
   static const String mySubjects = '/students/me/subjects';
+  static const String studentHome = '/students/me/home';
   static const String myCertificates = '/certificates/my';
   static const String curriculums = '/curriculums';
   static const String myEnrollments = '/students/me/enrollments';
@@ -27,6 +41,8 @@ abstract class EndPoints {
   static const String gulfTeacherRequests = '/gulf-teacher-requests';
   static const String supervisorMyClassrooms = '/supervisors/me/classrooms';
   static const String supervisorTeachers = '/supervisors/me/teachers';
+  static const String supervisorTeacherCertificates =
+      '/supervisors/me/teacher-certificates';
   static const String supervisorIdealTeachers =
       '/supervisors/me/ideal-teachers';
   static const String teacherAssignedSubjects =
@@ -37,9 +53,11 @@ abstract class EndPoints {
   static const String egyptianSchedules = '/egyptianSchedules';
   static const String myEgyptianSchedule = '$egyptianSchedules/mySchedule';
   static const String subjects = '/subjects';
+  static const String classroomSubjectsRoot = '/classroomsubjects/';
   static const String grades = '/grades';
   static const String teachers = '/teachers';
   static const String supervisors = '/supervisors';
+  static const String adminIdealSupervisors = '/supervisors/ideal-supervisors';
   static const String studentMonthlyCertificates =
       '/certificates/student-monthly/';
   static const String issueMonthlyCertificates =
@@ -49,11 +67,15 @@ abstract class EndPoints {
   static const String adminDiscountCodes = '/admin/discount-codes';
   static const String adminPayrolls = '/admin/payrolls';
   static const String adminSubjectRequests = '/admin/subject-requests';
+  static const String adminClassroomChangeRequests =
+      '/admin/classroom-change-requests';
   static const String adminPayrollsPreview = '$adminPayrolls/preview';
   static const String teacherMyPayrolls = '/teachers/me/payrolls';
   static const String teacherMyPayoutProfile = '/teachers/me/payout-profile';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
+  static const String supervisorStudentRoom = '/chats/supervisor-student-room';
+  static const String adminChatRooms = '/chats/admin/rooms';
   static const String getMyChatRooms = '/chats/rooms';
   static const String sendMessage = '/messages';
   static const String enrollments = '/enrollments';
@@ -83,8 +105,8 @@ abstract class EndPoints {
   static const String studentSubjectRequestCheckout =
       '$studentSubjectRequests/checkout';
 
-  static String egyptianWeeklyRankings(String classroomId) {
-    return '/egyptian-weekly-rankings/$classroomId';
+  static String classroomWeeklyRanking(String classroomId) {
+    return '$classrooms/$classroomId/weekly-ranking';
   }
 
   static String updateCurriculum(String curriculumId) {
@@ -118,6 +140,21 @@ abstract class EndPoints {
 
   static String rejectAdminSubjectRequest(String id) =>
       '$adminSubjectRequests/$id/reject';
+
+  static String classroomChangeRequests(String classroomId) =>
+      '$classrooms/$classroomId/change-requests';
+
+  static String classroomTeacherRequests(String classroomId) =>
+      '$classrooms/$classroomId/teacher-requests';
+
+  static String adminClassroomChangeRequest(String id) =>
+      '$adminClassroomChangeRequests/$id';
+
+  static String approveClassroomChangeRequest(String id) =>
+      '${adminClassroomChangeRequest(id)}/approve';
+
+  static String rejectClassroomChangeRequest(String id) =>
+      '${adminClassroomChangeRequest(id)}/reject';
 
   static String teacherMyPayroll(String id) => '$teacherMyPayrolls/$id';
 
@@ -157,6 +194,14 @@ abstract class EndPoints {
     return '/chats/rooms/$roomId/messages';
   }
 
+  static String markRoomAsRead(String roomId) {
+    return '/chats/rooms/$roomId/read';
+  }
+
+  static String deleteRoomMessages(String roomId) {
+    return '/chats/rooms/$roomId/messages';
+  }
+
   // Chats - Messages
 
   static String editMessage(String messageId) {
@@ -173,6 +218,10 @@ abstract class EndPoints {
     }
 
     return '/certificates/monthly?classroomId=$classroomId';
+  }
+
+  static String createMonthlyStudentCertificate(String studentId) {
+    return '/certificates/monthly/student/$studentId';
   }
 
   static String teachersByStatus(String status) {
@@ -352,6 +401,14 @@ abstract class EndPoints {
     return '$classrooms/$classroomId/students';
   }
 
+  static String supervisorCallStudent(String studentId) {
+    return '/supervisors/me/students/$studentId/call';
+  }
+
+  static String supervisorTeacherCertificate(String teacherId) {
+    return '/supervisors/me/teachers/$teacherId/certificate';
+  }
+
   static String classroomSessions(String classroomId) {
     return '$classrooms/$classroomId/sessions';
   }
@@ -367,6 +424,16 @@ abstract class EndPoints {
   static String startClassroomSession(String classroomId) {
     return '${classroomSessions(classroomId)}/start';
   }
+
+  static String activeClassroomSession(String classroomId) {
+    return '${classroomSessions(classroomId)}/active';
+  }
+
+  static String joinActiveClassroomSession(String classroomId) {
+    return '${activeClassroomSession(classroomId)}/join';
+  }
+
+  static String endSession(String sessionId) => '/sessions/$sessionId/end';
 
   static String attendanceById(String attendanceId) {
     return '$attendance/$attendanceId';
@@ -395,6 +462,10 @@ abstract class EndPoints {
 
   static String egyptianSchedulesByClassroom(String classroomId) {
     return '$egyptianSchedules/classroom/$classroomId';
+  }
+
+  static String egyptianScheduleDay(String classroomId, String date) {
+    return '${egyptianSchedulesByClassroom(classroomId)}/days/$date';
   }
 
   static String deleteEgyptianSchedule(String scheduleId) {

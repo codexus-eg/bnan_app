@@ -30,6 +30,7 @@ class TeacherHomePage extends StatelessWidget {
         child: DashboardBuilder<TeacherDashboardModel>(
           skeleton: const TeacherDashboardModel(
             generatedAt: null,
+            isIdealTeacher: false,
             points: 0,
             classrooms: 0,
             students: 0,
@@ -44,7 +45,8 @@ class TeacherHomePage extends StatelessWidget {
                   isLoading: loading,
                   child: Column(
                     children: [
-                      TeacherHomeCard(points: data.points),
+                      if (data.isIdealTeacher)
+                        TeacherHomeCard(points: data.points),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: HomeStatsSection(states: _stats(context, data)),

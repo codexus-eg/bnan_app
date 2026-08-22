@@ -17,17 +17,11 @@ class AcademicGradeModel {
     final curriculum = json['curriculum'];
 
     return AcademicGradeModel(
-      id: json['id']?.toString() ?? '',
+      id: (json['id'] ?? json['_id'])?.toString() ?? '',
       name: json['name']?.toString() ?? '',
-      curriculumId: curriculum is Map
-          ? curriculum['id']?.toString()
-          : null,
-      curriculumName: curriculum is Map
-          ? curriculum['name']?.toString()
-          : null,
-      curriculumIcon: curriculum is Map
-          ? curriculum['icon']?.toString()
-          : null,
+      curriculumId: curriculum is Map ? curriculum['id']?.toString() : null,
+      curriculumName: curriculum is Map ? curriculum['name']?.toString() : null,
+      curriculumIcon: curriculum is Map ? curriculum['icon']?.toString() : null,
     );
   }
 

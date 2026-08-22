@@ -1,9 +1,10 @@
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
-import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/models/unassigned_student_model.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_available_classrooms_cubit/get_available_classrooms_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_unassigned_students_cubit/get_unassigned_students_cubit.dart';
 import 'package:bnan_app/features/student_classroom_assignment/presentation/manager/get_unassigned_students_cubit/get_unassigned_students_state.dart';
+import 'package:bnan_app/features/student_classroom_assignment/presentation/views/widgets/student_picker_sheet.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,28 +50,17 @@ class UnassignedStudentDropdown extends StatelessWidget {
     required List<UnassignedStudentModel> students,
     required bool isLoading,
   }) {
-    final displayStudents = isLoading
-        ? const [
-            UnassignedStudentModel(id: 'loading', fullName: 'Loading student'),
-          ]
-        : students;
-
-    final items = displayStudents.map((student) => student.id).toList();
-
-    final labels = {
-      for (final student in displayStudents) student.id: student.fullName,
-    };
-
-    return CustomDropdown(
+    return CustomTextField(
+      key: ValueKey(value?.id ?? isLoading),
       label: S.of(context).student,
-      hint: _getHint(context, students, isLoading),
+      hintText: _getHint(context, students, isLoading),
       isRequired: true,
-      items: items,
-      itemsLabels: labels,
-      value: isLoading ? null : value?.id,
-      onChanged: isLoading
+      initialValue: isLoading ? null : value?.fullName,
+      readOnly: true,
+      suffixIcon: const Icon(Icons.keyboard_arrow_down),
+      onTap: isLoading || students.isEmpty
           ? null
-          : (studentId) => _onStudentChanged(context, studentId, students),
+          : () => _pickStudent(context, students),
     );
   }
 
@@ -90,21 +80,21 @@ class UnassignedStudentDropdown extends StatelessWidget {
     return S.of(context).selectStudent;
   }
 
-  void _onStudentChanged(
+  Future<void> _pickStudent(
     BuildContext context,
-    String? studentId,
     List<UnassignedStudentModel> students,
-  ) {
-    if (studentId == null) {
-      onChanged(null);
-      context.read<GetAvailableClassroomsCubit>().reset();
-      return;
-    }
-
-    final student = students.firstWhere((student) => student.id == studentId);
-
+  ) async {
+    final student = await showModalBottomSheet<UnassignedStudentModel>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) => FractionallySizedBox(
+        heightFactor: .7,
+        child: StudentPickerSheet(students: students),
+      ),
+    );
+    if (student == null || !context.mounted) return;
     onChanged(student);
-
     context.read<GetAvailableClassroomsCubit>().getAvailableClassrooms(
       student.id,
     );

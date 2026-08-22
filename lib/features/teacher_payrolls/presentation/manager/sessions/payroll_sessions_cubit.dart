@@ -11,6 +11,7 @@ class PayrollSessionsCubit extends Cubit<PayrollSessionsState> {
     required String from,
     required String to,
   }) async {
+    if (isClosed) return;
     emit(const PayrollSessionsLoading());
     final result = await repo.getSessions(
       teacherId: teacherId,
@@ -18,9 +19,16 @@ class PayrollSessionsCubit extends Cubit<PayrollSessionsState> {
       from: from,
       to: to,
     );
+    if (isClosed) return;
     result.fold(
-      (f) => emit(PayrollSessionsFailure(f.message)),
-      (v) => emit(PayrollSessionsSuccess(v)),
+      (f) {
+        if (isClosed) return;
+        emit(PayrollSessionsFailure(f.message));
+      },
+      (v) {
+        if (isClosed) return;
+        emit(PayrollSessionsSuccess(v));
+      },
     );
   }
 }

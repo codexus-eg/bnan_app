@@ -12,9 +12,11 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/teacher_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/repo/certificates_management_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   const CertificatesManagementRepoImpl(this.apiConsumer);
@@ -57,14 +59,37 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
     required CreateMonthlyCertificateRequestModel request,
   }) {
     return repoGuard(() async {
+      final endpoint = EndPoints.createMonthlyStudentCertificate(
+        request.studentId,
+      );
+      final body = request.toJson();
+      _logCreateRequest(endpoint, request, body);
       final response = await apiConsumer.post(
-        EndPoints.studentMonthlyCertificates,
-        data: request.toJson(),
+        endpoint,
+        data: body,
         isProtected: true,
       );
 
       return CreateMonthlyCertificateResponseModel.fromJson(asMap(response));
     });
+  }
+
+  void _logCreateRequest(
+    String endpoint,
+    CreateMonthlyCertificateRequestModel request,
+    Map<String, dynamic> body,
+  ) {
+    if (!kDebugMode) return;
+    debugPrint('Certificate create endpoint: ${EndPoints.baseUrl}$endpoint');
+    debugPrint('Certificate create studentId path param: ${request.studentId}');
+    debugPrint('Certificate create subjects count: ${request.subjects.length}');
+    for (final subject in request.subjects) {
+      debugPrint(
+        'subjectId=${subject.subjectId}, scoreType=${subject.score.runtimeType}, '
+        'maxScoreType=${subject.maxScore.runtimeType}',
+      );
+    }
+    debugPrint('Certificate create body keys: ${body.keys.toList()}');
   }
 
   @override
@@ -138,6 +163,45 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
       );
 
       return StudentSubjectsResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getTeacherCertificates({required int page, int limit = 20}) {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.supervisorTeacherCertificates,
+        queryParameter: {'page': page, 'limit': limit},
+        isProtected: true,
+      );
+      return TeacherCertificatesResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getMyTeacherCertificates() {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.myCertificates,
+        isProtected: true,
+      );
+      return TeacherCertificatesResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> issueGeneralTeacherCertificate({
+    required String teacherId,
+    required String signerName,
+  }) {
+    return repoGuard(() async {
+      await apiConsumer.post(
+        EndPoints.supervisorTeacherCertificate(teacherId),
+        data: {'signerName': signerName.trim()},
+        isProtected: true,
+      );
     });
   }
 }

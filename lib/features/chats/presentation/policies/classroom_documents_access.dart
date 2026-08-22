@@ -18,13 +18,8 @@ class ClassroomDocumentsAccess {
     required String? classroomId,
     required String? role,
   }) {
-    final userRole = UserRole.fromValue(role);
     return roomType == 'classroom' &&
         classroomId?.trim().isNotEmpty == true &&
-        const {
-          UserRole.admin,
-          UserRole.supervisor,
-          UserRole.teacher,
-        }.contains(userRole);
+        UserRole.fromValue(role) != null;
   }
 }

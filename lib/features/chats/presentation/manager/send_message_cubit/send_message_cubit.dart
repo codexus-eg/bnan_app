@@ -6,12 +6,14 @@ class SendMessageCubit extends Cubit<SendMessageState> {
   SendMessageCubit(this.chatRepo) : super(SendMessageInitial());
 
   final ChatRepo chatRepo;
+  bool _sending = false;
 
   Future<void> sendMessage({
     required String roomId,
     String? text,
     List<String>? attachmentPaths,
   }) async {
+    if (isClosed || _sending) return;
     final trimmedText = text?.trim();
 
     final hasText = trimmedText != null && trimmedText.isNotEmpty;
@@ -22,6 +24,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
       return;
     }
 
+    _sending = true;
     emit(SendMessageLoading());
 
     final result = await chatRepo.sendMessage(
@@ -29,6 +32,8 @@ class SendMessageCubit extends Cubit<SendMessageState> {
       text: hasText ? trimmedText : null,
       attachmentPaths: hasAttachments ? attachmentPaths : null,
     );
+    _sending = false;
+    if (isClosed) return;
 
     result.fold(
       (failure) {
@@ -63,6 +68,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
   }
 
   void resetState() {
+    if (isClosed) return;
     emit(SendMessageInitial());
   }
 }

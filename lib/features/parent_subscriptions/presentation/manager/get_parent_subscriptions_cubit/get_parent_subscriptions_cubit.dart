@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscriptions_response.dart';
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_error_mapper.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/get_parent_subscriptions_cubit/get_parent_subscriptions_state.dart';
@@ -9,44 +10,53 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
   GetParentSubscriptionsCubit(this.repo)
     : super(const GetParentSubscriptionsInitial());
   final ParentSubscriptionsRepo repo;
+  bool _loading = false;
 
   Future<void> load() async {
+    if (_loading || isClosed) return;
+    _loading = true;
     final previous = state is GetParentSubscriptionsSuccess
         ? (state as GetParentSubscriptionsSuccess).selectedChildId
         : null;
-    emit(const GetParentSubscriptionsLoading());
-    final result = await repo.getSubscriptions();
-    if (isClosed) return;
-    result.fold(
-      (failure) {
+    if (state is! GetParentSubscriptionsSuccess) {
+      emit(const GetParentSubscriptionsLoading());
+    }
+    try {
+      final result = await repo.getSubscriptions();
+      if (isClosed) return;
+      result.fold((failure) {
+        if (isClosed) return;
         _log('final state emitted: failure');
         emit(
           GetParentSubscriptionsFailure(
             mapParentFlowFailure(failure, fallback: S.current.errorUnknown),
           ),
         );
-      },
-      (response) {
-        final firstSubscribed = response.children
-            .where((child) => child.subscriptions.isNotEmpty)
-            .firstOrNull;
-        final selected =
-            response.children.any((item) => item.studentId == previous)
-            ? previous
-            : firstSubscribed?.studentId ??
-                  response.children.firstOrNull?.studentId;
-        final count = response.children.fold<int>(
-          0,
-          (total, child) => total + child.subscriptions.length,
-        );
-        _log('final state emitted: success; subscriptions=$count');
-        emit(
-          GetParentSubscriptionsSuccess(
-            response.children,
-            selectedChildId: selected,
-          ),
-        );
-      },
+      }, (response) => _emitSuccess(response, previous));
+    } finally {
+      _loading = false;
+    }
+  }
+
+  void _emitSuccess(ParentSubscriptionsResponse response, String? previous) {
+    if (isClosed) return;
+    final firstSubscribed = response.children
+        .where((child) => child.subscriptions.isNotEmpty)
+        .firstOrNull;
+    final selected = response.children.any((item) => item.studentId == previous)
+        ? previous
+        : firstSubscribed?.studentId ??
+              response.children.firstOrNull?.studentId;
+    final count = response.children.fold<int>(
+      0,
+      (total, child) => total + child.subscriptions.length,
+    );
+    _log('final state emitted: success; subscriptions=$count');
+    emit(
+      GetParentSubscriptionsSuccess(
+        response.children,
+        selectedChildId: selected,
+      ),
     );
   }
 

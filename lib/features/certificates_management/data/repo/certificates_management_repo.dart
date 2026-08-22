@@ -8,6 +8,7 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/teacher_certificates_response_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class CertificatesManagementRepo {
@@ -42,5 +43,16 @@ abstract class CertificatesManagementRepo {
   Future<Either<Failure, StudentSubjectsResponseModel>> getStudentSubjects({
     required String classroomId,
     required String studentId,
+  });
+
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getTeacherCertificates({required int page, int limit = 20});
+
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getMyTeacherCertificates();
+
+  Future<Either<Failure, void>> issueGeneralTeacherCertificate({
+    required String teacherId,
+    required String signerName,
   });
 }

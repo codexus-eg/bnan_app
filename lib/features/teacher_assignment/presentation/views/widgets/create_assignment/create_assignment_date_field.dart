@@ -11,8 +11,22 @@ class CreateAssignmentDateField extends StatelessWidget {
 
   Future<void> _pickDate(BuildContext context) async {
     final cubit = context.read<CreateAssignmentCubit>();
-    final date = await AppPickers.pickDate(context: context);
+
+    final now = DateTime.now();
+    final tomorrow = DateTime(
+      now.year,
+      now.month,
+      now.day + 1,
+    );
+
+    final date = await AppPickers.pickDate(
+      context: context,
+      initialDate: tomorrow,
+      firstDate: tomorrow,
+    );
+
     if (date == null) return;
+
     cubit.changeDueDate(date.toIso8601String());
   }
 

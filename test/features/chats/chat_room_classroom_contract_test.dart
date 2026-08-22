@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
+import 'package:bnan_app/features/chats/data/models/chat_room_details_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -47,6 +48,66 @@ void main() {
       expect(room.classroomId, isNull);
     }
   });
+
+  test('classroom access contract is parsed directly', () {
+    final private = _room({
+      'type': 'classroom',
+      'accessScope': 'private',
+      'classroomSubjectId': ' classroom-subject ',
+      'canRequestTeacherWithdrawal': true,
+      'classroomSubjectAmbiguous': false,
+    });
+    expect(private.accessScope, 'private');
+    expect(private.classroomSubjectId, 'classroom-subject');
+    expect(private.canRequestTeacherWithdrawal, isTrue);
+    expect(private.classroomSubjectAmbiguous, isFalse);
+
+    final shared = _room({'type': 'classroom', 'accessScope': 'shared_group'});
+    expect(shared.accessScope, 'shared_group');
+    expect(shared.classroomSubjectId, isNull);
+  });
+
+  test('room details preserve the same eligibility contract', () {
+    final details = ChatRoomDetailsModel.fromJson({
+      'id': 'room-id',
+      'type': 'classroom',
+      'classroom': {'_id': 'classroom-id'},
+      'accessScope': 'PRIVATE',
+      'classroomSubjectId': ' subject-id ',
+      'canRequestTeacherWithdrawal': true,
+      'classroomSubjectAmbiguous': false,
+    });
+    expect(details.classroomId, 'classroom-id');
+    expect(details.accessScope, 'private');
+    expect(details.classroomSubjectId, 'subject-id');
+    expect(details.canRequestTeacherWithdrawal, isTrue);
+    expect(details.classroomSubjectAmbiguous, isFalse);
+  });
+
+  test('support room subtitle is the non-admin participant role', () {
+    final room = _room({
+      'type': 'support',
+      'lastMessage': 'Do not show me as subtitle',
+      'participants': [
+        {
+          'user': {'id': 'admin', 'role': 'admin'},
+        },
+        {
+          'user': {'id': 'teacher', 'role': 'teacher'},
+        },
+      ],
+    });
+
+    expect(room.subtitle, 'معلم');
+    expect(room.subtitle, isNot(room.lastMessage));
+  });
+
+  test(
+    'support room without a participant role falls back to conversation',
+    () {
+      expect(_room({'type': 'support'}).subtitle, 'محادثة');
+    },
+  );
 }
 
 ChatRoomSummaryModel _room(Map<String, dynamic> values) {

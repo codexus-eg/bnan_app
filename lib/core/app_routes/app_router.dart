@@ -2,15 +2,24 @@ import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/session/saved_account_store.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_state.dart';
+import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/presentation/manager/send_message_cubit/send_message_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_recordings_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/classroom_summaries_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/message_documents_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/models/chat_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_members_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/views/classroom_documents_view.dart';
+import 'package:bnan_app/features/chats/presentation/views/classroom_members_view.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_request_actions_cubit.dart';
+import 'package:bnan_app/features/classroom_change_requests/presentation/manager/admin_change_requests_cubit.dart';
+import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
@@ -19,6 +28,11 @@ import 'package:bnan_app/features/plans/presentation/policies/plans_access_polic
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
 import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_student_access_policy.dart';
 import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teacher_access_policy.dart';
+import 'package:bnan_app/features/ideal_supervisor/presentation/policies/ideal_supervisor_access_policy.dart';
+import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
+import 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_state.dart';
+import 'package:bnan_app/features/saved_accounts/presentation/views/saved_accounts_view.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/presentation/views/certificates_view.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
@@ -30,11 +44,12 @@ import 'package:bnan_app/features/curriculum_management/presentation/manager/get
     as curriculum_management;
 import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/views/supervisor_classroom_assignment_view.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'routes_export.dart';
 
-GoRouter buildRouter() {
+GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
   return GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: Routes.splash,
     routes: [
       GoRoute(
@@ -50,12 +65,29 @@ GoRouter buildRouter() {
 
       GoRoute(
         path: Routes.logIn,
+        redirect: (context, state) async {
+          if (state.extra != null ||
+              state.uri.queryParameters['direct'] == 'true') {
+            return null;
+          }
+          return await SavedAccountStore.hasAccounts()
+              ? Routes.savedAccounts
+              : null;
+        },
         pageBuilder: (context, state) {
-          final email = state.extra is String ? state.extra as String : null;
+          final args = state.extra is LoginRouteArgs
+              ? state.extra as LoginRouteArgs
+              : null;
+          final email =
+              args?.email ??
+              (state.extra is String ? state.extra as String : null);
           return buildTransitionPages(
             child: BlocProvider(
               create: (_) => getIt<LoginCubit>()..prefillEmail(email),
-              child: const LoginView(),
+              child: LoginView(
+                showEgyptianRegistrationSuccess:
+                    args?.showEgyptianRegistrationSuccess ?? false,
+              ),
             ),
             key: state.pageKey,
           );
@@ -63,17 +95,34 @@ GoRouter buildRouter() {
       ),
 
       GoRoute(
-        path: Routes.forgetPassword,
+        path: Routes.savedAccounts,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => getIt<ForgotPasswordCubit>()),
-              BlocProvider(create: (_) => getIt<ResetPasswordCubit>()),
-            ],
-            child: const ForgetPasswordView(),
-          ),
+          child: const SavedAccountsView(),
           key: state.pageKey,
         ),
+      ),
+
+      GoRoute(
+        path: Routes.forgetPassword,
+        pageBuilder: (context, state) {
+          final args = state.extra is OtpFlowArgs
+              ? state.extra as OtpFlowArgs
+              : const OtpFlowArgs();
+          return buildTransitionPages(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<ForgotPasswordCubit>()
+                    ..prefillEmail(args.email)
+                    ..startResendCooldown(),
+                ),
+                BlocProvider(create: (_) => getIt<ResetPasswordCubit>()),
+              ],
+              child: ForgetPasswordView(args: args),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
 
       GoRoute(
@@ -109,8 +158,16 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.subscription,
+        redirect: (_, state) =>
+            state.extra is CurriculumCardModel ? null : Routes.curriculum,
         pageBuilder: (context, state) {
-          final curriculum = state.extra as CurriculumCardModel;
+          final curriculum = state.extra;
+          if (curriculum is! CurriculumCardModel) {
+            return buildTransitionPages(
+              child: const SizedBox.shrink(),
+              key: state.pageKey,
+            );
+          }
           return buildTransitionPages(
             child: BlocProvider(
               create: (_) =>
@@ -128,8 +185,16 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: Routes.studentRegistration,
+        redirect: (_, state) =>
+            state.extra is RegisterFlowArgsModel ? null : Routes.curriculum,
         pageBuilder: (context, state) {
-          final args = state.extra as RegisterFlowArgsModel;
+          final args = state.extra;
+          if (args is! RegisterFlowArgsModel) {
+            return buildTransitionPages(
+              child: const SizedBox.shrink(),
+              key: state.pageKey,
+            );
+          }
           return buildTransitionPages(
             child: MultiBlocProvider(
               providers: [
@@ -184,9 +249,7 @@ GoRouter buildRouter() {
         pageBuilder: (context, state) => buildTransitionPages(
           child: MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (_) => getIt<StudentProfileCubit>()..getLoggedUser(),
-              ),
+              BlocProvider(create: (_) => getIt<StudentProfileCubit>()),
               BlocProvider(
                 create: (_) =>
                     getIt<DashboardCubit>(param1: DashboardRole.student)
@@ -208,6 +271,14 @@ GoRouter buildRouter() {
       ),
 
       GoRoute(
+        path: Routes.notificationSettings,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: const NotificationPreferencesView(),
+          key: state.pageKey,
+        ),
+      ),
+
+      GoRoute(
         path: Routes.chat,
         pageBuilder: (context, state) {
           final args = switch (state.extra) {
@@ -224,19 +295,29 @@ GoRouter buildRouter() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
+                  create: (_) => ChatRoomMetadataCubit(
+                    getIt<ChatRepo>(),
+                    ChatRoomMetadataState.fromArgs(args),
+                  )..load(roomId),
+                ),
+                BlocProvider(
                   create: (_) =>
                       getIt<GetRoomMessagesCubit>()
                         ..initializeChat(roomId: roomId),
                 ),
                 BlocProvider(create: (_) => getIt<SendMessageCubit>()),
+                BlocProvider(create: (_) => getIt<StartSessionCubit>()),
+                BlocProvider(
+                  create: (_) => getIt<GetTeacherAssignedSubjectsCubit>(),
+                ),
               ],
               child: ChatView(
                 roomId: roomId,
-                roomType: args?.roomType,
-                classroomId: args?.classroomId,
                 classroomName: args?.classroomName,
                 currentUserRole:
                     args?.currentUserRole ?? SessionManager.instance.userRole,
+                studentId: args?.studentId,
+                targetMessageId: args?.targetMessageId,
               ),
             ),
           );
@@ -288,6 +369,25 @@ GoRouter buildRouter() {
       ),
 
       GoRoute(
+        path: Routes.classroomMembers,
+        redirect: (_, _) => SessionManager.instance.role == UserRole.supervisor
+            ? null
+            : Routes.groups,
+        pageBuilder: (context, state) {
+          final args = state.extra as ClassroomMembersRouteArgs;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: BlocProvider(
+              create: (_) =>
+                  getIt<GetClassroomStudentsCubit>()
+                    ..getClassroomStudents(classroomId: args.classroomId),
+              child: const ClassroomMembersView(),
+            ),
+          );
+        },
+      ),
+
+      GoRoute(
         path: Routes.studentGroups,
         pageBuilder: (context, state) => buildTransitionPages(
           child: BlocProvider(
@@ -311,14 +411,69 @@ GoRouter buildRouter() {
               BlocProvider(
                 create: (_) => getIt<StudentSubjectRequestsCubit>()..load(),
               ),
-              BlocProvider(
-                create: (_) => getIt<SubjectRequestPaymentCubit>()..restore(),
-              ),
+              BlocProvider(create: (_) => getIt<SubjectRequestPaymentCubit>()),
             ],
             child: const StudentSubjectRequestsView(),
           ),
           key: state.pageKey,
         ),
+      ),
+      GoRoute(
+        path: Routes.studentSubscriptions,
+        redirect: (context, state) =>
+            SessionManager.instance.role == UserRole.student
+            ? null
+            : HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+                  Routes.splash,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<StudentSubscriptionsCubit>()..load(),
+            child: const StudentSubscriptionsView(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.studentSubscriptionRenewal,
+        redirect: (context, state) {
+          if (SessionManager.instance.role != UserRole.student) {
+            return HomeRouteResolver.forRole(
+                  SessionManager.instance.userRole,
+                ) ??
+                Routes.splash;
+          }
+          final extra = state.extra;
+          return extra is ParentSubscriptionRenewalArgs &&
+                  !extra.isParent &&
+                  extra.curriculumId.trim().isNotEmpty
+              ? null
+              : Routes.studentSubscriptions;
+        },
+        pageBuilder: (context, state) {
+          final args = state.extra! as ParentSubscriptionRenewalArgs;
+          return buildTransitionPages(
+            key: state.pageKey,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<ParentSubscriptionRenewalCubit>(param1: args)
+                        ..restore(),
+                ),
+                BlocProvider(
+                  create: (_) {
+                    final cubit = getIt<GetPackagesCubit>();
+                    if (args.curriculumId.trim().isNotEmpty) {
+                      cubit.getPackagesByCurriculum(args.curriculumId);
+                    }
+                    return cubit;
+                  },
+                ),
+              ],
+              child: const ParentSubscriptionRenewalView(),
+            ),
+          );
+        },
       ),
       GoRoute(
         path: Routes.studentSubjects,
@@ -371,14 +526,20 @@ GoRouter buildRouter() {
               BlocProvider(create: (_) => getIt<TeacherMyPayrollsCubit>()),
               BlocProvider(
                 create: (_) =>
-                    getIt<DashboardCubit>(param1: DashboardRole.teacher)
-                      ..load(),
+                    getIt<TeacherProfileCubit>()..getTeacherProfile(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    getIt<DashboardCubit>(param1: DashboardRole.teacher),
               ),
             ],
-            child: TeacherHomeView(
-              initialIndex: state.uri.queryParameters['tab'] == 'payrolls'
-                  ? teacherPayrollTabIndex
-                  : 0,
+            child: BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
+              buildWhen: (_, current) => current is TeacherProfileSuccess,
+              builder: (_, _) => TeacherHomeView(
+                initialIndex: state.uri.queryParameters['tab'] == 'payrolls'
+                    ? teacherPayrollTabIndex
+                    : 0,
+              ),
             ),
           ),
           key: state.pageKey,
@@ -511,15 +672,35 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
-        path: Routes.supervisorHome,
+        path: Routes.teacherMyEarnings,
+        redirect: _teacherOnly,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<DashboardCubit>(param1: DashboardRole.supervisor)..load(),
-            child: const SupervisorHomeView(),
-          ),
           key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<TeacherMyPayrollsCubit>(),
+            child: const Scaffold(
+              body: TeacherMyPayrollsBody(showBackButton: true),
+            ),
+          ),
         ),
+      ),
+      GoRoute(
+        path: Routes.supervisorHome,
+        pageBuilder: (context, state) {
+          final tabRoute =
+              state.uri.queryParameters['tab'] ??
+              state.uri.queryParameters['route'] ??
+              state.extra as String?;
+          return buildTransitionPages(
+            child: BlocProvider(
+              create: (_) =>
+                  getIt<DashboardCubit>(param1: DashboardRole.supervisor)
+                    ..load(),
+              child: SupervisorHomeView(initialRoute: tabRoute),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.parentHome,
@@ -530,9 +711,7 @@ GoRouter buildRouter() {
                 create: (_) =>
                     getIt<DashboardCubit>(param1: DashboardRole.parent)..load(),
               ),
-              BlocProvider(
-                create: (_) => getIt<StudentProfileCubit>()..getLoggedUser(),
-              ),
+              BlocProvider(create: (_) => getIt<StudentProfileCubit>()),
             ],
             child: const ParentHomeView(),
           ),
@@ -593,12 +772,17 @@ GoRouter buildRouter() {
               providers: [
                 BlocProvider(
                   create: (_) =>
-                      getIt<ParentSubscriptionRenewalCubit>(param1: args),
+                      getIt<ParentSubscriptionRenewalCubit>(param1: args)
+                        ..restore(),
                 ),
                 BlocProvider(
-                  create: (_) =>
-                      getIt<GetPackagesCubit>()
-                        ..getPackagesByCurriculum(args.curriculumId),
+                  create: (_) {
+                    final cubit = getIt<GetPackagesCubit>();
+                    if (args.curriculumId.trim().isNotEmpty) {
+                      cubit.getPackagesByCurriculum(args.curriculumId);
+                    }
+                    return cubit;
+                  },
                 ),
               ],
               child: const ParentSubscriptionRenewalView(),
@@ -668,8 +852,7 @@ GoRouter buildRouter() {
         path: Routes.teacherRegistrationRequest,
         redirect: (context, state) {
           final session = SessionManager.instance;
-          final allowed =
-              session.role == UserRole.teacher && session.hasGulfRegistration;
+          final allowed = session.canAccessTeacherSubjectRequests;
           if (allowed) return null;
           return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
         },
@@ -770,6 +953,21 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: Routes.idealSupervisor,
+        redirect: (context, state) {
+          if (IdealSupervisorAccessPolicy.canAccessCurrent) return null;
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) => getIt<AdminIdealSupervisorCubit>(),
+            child: const IdealSupervisorView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
         path: Routes.weeklyEvaluations,
         pageBuilder: (context, state) {
           final role = SessionManager.instance.role;
@@ -777,8 +975,9 @@ GoRouter buildRouter() {
             return buildTransitionPages(
               child: BlocProvider(
                 create: (_) => role == UserRole.student
-                    ? (getIt<ReadOnlyWeeklyEvaluationsCubit>()
-                        ..loadForStudent())
+                    ? (getIt<ReadOnlyWeeklyEvaluationsCubit>()..loadForStudent(
+                        classroomId: state.uri.queryParameters['classroomId'],
+                      ))
                     : (getIt<ReadOnlyWeeklyEvaluationsCubit>()
                         ..loadForParent()),
                 child: const WeeklyEvaluationsView(),
@@ -893,6 +1092,7 @@ GoRouter buildRouter() {
                   ),
                 if (role == UserRole.parent)
                   BlocProvider(
+                    lazy: false,
                     create: (_) =>
                         getIt<GetParentPlansCubit>()..loadParentPlans(),
                   ),
@@ -984,54 +1184,63 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
-        path: Routes.tablesManagement,
-        redirect: (context, state) {
-          if (SessionManager.instance.role == UserRole.admin) return null;
-          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
-              Routes.splash;
-        },
+        path: Routes.addClassroomSubject,
         pageBuilder: (context, state) => buildTransitionPages(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (_) =>
-                    getIt<GetEgyptianSchedulesCubit>()..getEgyptianSchedules(),
-              ),
-              BlocProvider(create: (_) => getIt<CreateEgyptianScheduleCubit>()),
-              BlocProvider(create: (_) => getIt<DeleteEgyptianScheduleCubit>()),
-              BlocProvider(
-                create: (_) => AcademicLookupsCubit(
-                  repo: getIt<AcademicLookupsRepo>(),
-                  loadClassroomsOnGrade: false,
-                  loadSubjectsWithoutClassroom: false,
-                )..loadGrades(),
-              ),
-            ],
-            child: const TablesManagementView(),
+          child: BlocProvider(
+            create: (_) => getIt<AddClassroomSubjectCubit>()..load(),
+            child: const AddClassroomSubjectView(),
           ),
           key: state.pageKey,
         ),
+      ),
+      GoRoute(
+        path: Routes.tablesManagement,
+        redirect: (context, state) {
+          final session = SessionManager.instance;
+          if (session.role == UserRole.admin || session.isEgyptianSupervisor) {
+            return null;
+          }
+          return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
+              Routes.splash;
+        },
+        pageBuilder: (context, state) {
+          final isSupervisor = SessionManager.instance.isEgyptianSupervisor;
+          return buildTransitionPages(
+            child: isSupervisor
+                ? BlocProvider(
+                    create: (_) =>
+                        getIt<GetSupervisorClassroomsCubit>()
+                          ..getMyClassrooms(),
+                    child: const TablesManagementView(
+                      useSupervisorClassrooms: true,
+                    ),
+                  )
+                : BlocProvider(
+                    create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
+                    child: const TablesManagementView(),
+                  ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.egyptianSchedulesReadOnly,
         redirect: (context, state) {
           final session = SessionManager.instance;
           final isAllowed =
-              session.isEgyptianSupervisor ||
               session.isEgyptianStudent ||
               (session.role == UserRole.teacher &&
                   session.hasEgyptianRegistration);
           if (isAllowed) return null;
           return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
         },
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<GetEgyptianSchedulesCubit>()..getMyEgyptianSchedule(),
-            child: const EgyptianSchedulesReadOnlyView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final session = SessionManager.instance;
+          final child = session.role == UserRole.teacher
+              ? const TeacherEgyptianScheduleView()
+              : const StudentEgyptianScheduleView();
+          return buildTransitionPages(child: child, key: state.pageKey);
+        },
       ),
       GoRoute(
         path: Routes.gulfStudentScheduleReadOnly,
@@ -1100,8 +1309,25 @@ GoRouter buildRouter() {
                       .read<AdminSubjectRequestsCubit>()
                       .load(refresh: true),
               ),
+              BlocProvider(create: (_) => getIt<AdminChangeRequestsCubit>()),
+              BlocProvider(
+                create: (context) =>
+                    getIt<AdminChangeRequestActionsCubit>()
+                      ..onRefresh = () =>
+                          context.read<AdminChangeRequestsCubit>().load(),
+              ),
             ],
             child: const RegistrationRequestsView(),
+          ),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: Routes.adminEgyptianSubscriptionRenewals,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: BlocProvider(
+            create: (_) => getIt<AdminSubscriptionRenewalsCubit>()..load(),
+            child: const AdminSubscriptionRenewalsView(),
           ),
           key: state.pageKey,
         ),

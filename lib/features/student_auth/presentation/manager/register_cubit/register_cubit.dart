@@ -1,8 +1,8 @@
-import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
-import 'package:bnan_app/core/helper/phone_number_normalizer.dart';
+import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/register_parent_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_student_model.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
@@ -20,7 +20,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   static RegisterCubit get(context) => BlocProvider.of(context);
 
   static const int firstStep = 1;
-  static const int lastStep = 5;
+  int get lastStep => 4;
   String curriculumId = '';
   String curriculumName = '';
   String packageId = '';
@@ -34,18 +34,11 @@ class RegisterCubit extends Cubit<RegisterState> {
   final parentFormKey = GlobalKey<FormState>();
   final studentFormKey = GlobalKey<FormState>();
 
-  final parentNameController = TextEditingController();
   final parentEmailController = TextEditingController();
-  final parentPhoneController = TextEditingController();
-  final parentWhatsappController = TextEditingController();
   final parentPasswordController = TextEditingController();
   final studentPasswordController = TextEditingController();
   final studentNameController = TextEditingController();
   final studentEmailController = TextEditingController();
-  final cityController = TextEditingController();
-  final regionController = TextEditingController();
-  final addressLine1Controller = TextEditingController();
-  final addressLine2Controller = TextEditingController();
   final discountCodeController = TextEditingController();
 
   String? selectedGradeId;
@@ -64,11 +57,9 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   bool get isGulf => registrationMode == 'gulf';
-  String? get normalizedParentPhone => PhoneNumberNormalizer.normalize(
-    parentPhoneController.text,
-    currency: packageCurrency,
-  );
-
+  bool get requiresSubjectSelection => isGulf || isSingleSubjectPackage;
+  bool _authenticating = false;
+  bool _submitting = false;
   void setGrade({required String id, required String name}) {
     selectedGradeId = id;
     selectedGradeName = name;
@@ -94,6 +85,16 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(RegisterStepChanged(currentStep: state.currentStep));
   }
 
+  void setAllSubjectIds(Iterable<String> subjectIds) {
+    if (requiresSubjectSelection) return;
+    selectedSubjectIds = subjectIds
+        .map((id) => id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList(growable: false);
+    emit(RegisterStepChanged(currentStep: state.currentStep));
+  }
+
   void setPackageId(String id) {
     packageId = id;
   }
@@ -114,31 +115,66 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 
-  Future<void> authenticateParentAndContinue() async {
-    if (!(parentFormKey.currentState?.validate() ?? false)) return;
-    final parentPhone = normalizedParentPhone;
-    if (parentPhone == null) return;
-    emit(RegisterLoading(currentStep: state.currentStep));
-    final result = await gulfParentAuthRepo.authenticate(
-      ParentRegisterRequestModel(
-        fullName: parentNameController.text,
-        email: parentEmailController.text,
+  bool validateStudent() {
+    final validForm = studentFormKey.currentState?.validate() ?? false;
+    final validSubjects = !requiresSubjectSelection
+        ? true
+        : isSingleSubjectPackage
+        ? selectedSubjectIds.length == 1
+        : selectedSubjectIds.isNotEmpty;
+    return validForm && selectedGradeId != null && validSubjects;
+  }
+
+  RegisterRequestModel? buildRegisterRequest() {
+    final subjectCount = selectedSubjectIds.length;
+    final validSubjects = !requiresSubjectSelection
+        ? true
+        : isSingleSubjectPackage
+        ? subjectCount == 1
+        : subjectCount > 0;
+    if (selectedGradeId == null || !validSubjects) return null;
+    return RegisterRequestModel(
+      parent: RegisterParentModel(
+        email: parentEmailController.text.trim(),
         password: parentPasswordController.text,
-        phone: parentPhone,
-        whatsappNumber: parentWhatsappController.text.trim().isEmpty
-            ? parentPhone
-            : parentWhatsappController.text,
       ),
+      student: RegisterStudentModel(
+        fullName: studentNameController.text.trim(),
+        email: studentEmailController.text.trim(),
+        password: studentPasswordController.text,
+        grade: selectedGradeId!,
+        subjects: List.unmodifiable(selectedSubjectIds),
+      ),
+      curriculum: curriculumId,
+      packageId: packageId,
     );
-    result.fold(
-      (failure) => emit(
-        RegisterFailure(
-          errorMessage: failure.message,
-          currentStep: state.currentStep,
+  }
+
+  Future<void> authenticateParentAndContinue() async {
+    if (_authenticating) return;
+    if (!(parentFormKey.currentState?.validate() ?? false)) return;
+    _authenticating = true;
+    emit(RegisterLoading(currentStep: state.currentStep));
+    try {
+      final result = await gulfParentAuthRepo.authenticate(
+        RegisterParentModel(
+          email: parentEmailController.text,
+          password: parentPasswordController.text,
         ),
-      ),
-      (_) => nextStep(),
-    );
+      );
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(
+          RegisterFailure(
+            errorMessage: failure.message,
+            currentStep: state.currentStep,
+          ),
+        ),
+        (_) => nextStep(),
+      );
+    } finally {
+      _authenticating = false;
+    }
   }
 
   TamaraCheckoutRequest? buildTamaraRequest({bool validateForm = true}) {
@@ -164,11 +200,11 @@ class RegisterCubit extends Cubit<RegisterState> {
       discountCode: discountCodeController.text.trim().isEmpty
           ? null
           : discountCodeController.text.trim(),
-      address: PaymentAddress(
-        city: cityController.text,
-        region: regionController.text,
-        line1: addressLine1Controller.text,
-        line2: addressLine2Controller.text,
+      address: const PaymentAddress(
+        city: TamaraDefaultAddress.city,
+        region: TamaraDefaultAddress.region,
+        line1: TamaraDefaultAddress.line1,
+        line2: TamaraDefaultAddress.line2,
       ),
     );
   }
@@ -180,41 +216,36 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   Future<void> register({required RegisterRequestModel request}) async {
-    emit(RegisterLoading(currentStep: state.currentStep));
-
-    final result = await authRepo.register(request: request);
-
-    result.fold(
-      (failure) {
-        emit(
+    if (_submitting) return;
+    _submitting = true;
+    final currentStep = state.currentStep;
+    emit(RegisterLoading(currentStep: currentStep));
+    try {
+      final result = await authRepo.register(request: request);
+      if (isClosed) return;
+      result.fold(
+        (failure) => emit(
           RegisterFailure(
             errorMessage: failure.message,
-            currentStep: state.currentStep,
+            currentStep: currentStep,
           ),
-        );
-      },
-      (response) {
-        emit(
-          RegisterSuccess(user: response.user, currentStep: state.currentStep),
-        );
-      },
-    );
+        ),
+        (response) => emit(
+          RegisterSuccess(user: response.user, currentStep: currentStep),
+        ),
+      );
+    } finally {
+      _submitting = false;
+    }
   }
 
   @override
   Future<void> close() {
-    parentNameController.dispose();
     parentEmailController.dispose();
-    parentPhoneController.dispose();
-    parentWhatsappController.dispose();
     parentPasswordController.dispose();
     studentPasswordController.dispose();
     studentNameController.dispose();
     studentEmailController.dispose();
-    cityController.dispose();
-    regionController.dispose();
-    addressLine1Controller.dispose();
-    addressLine2Controller.dispose();
     discountCodeController.dispose();
     return super.close();
   }

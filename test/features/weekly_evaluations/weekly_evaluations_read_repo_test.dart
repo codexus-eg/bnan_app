@@ -37,6 +37,34 @@ void main() {
     expect(api.query, {'week': 3, 'studentId': 'child'});
   });
 
+  test('request sends trimmed classroomId', () async {
+    await repo.getMyEvaluations(classroomId: ' classroom ');
+    expect(api.query, {'classroomId': 'classroom'});
+  });
+
+  test('empty classroomId does not create a query', () async {
+    await repo.getMyEvaluations(classroomId: '  ');
+    expect(api.query, isNull);
+  });
+
+  test('classroom options reuse chat rooms and deduplicate by id', () async {
+    api.response = {
+      'success': true,
+      'data': [
+        {'id': 'room-1', 'classroomId': 'general', 'displayName': 'General'},
+        {'id': 'room-2', 'classroomId': 'arabic', 'displayName': 'Arabic'},
+        {'id': 'room-3', 'classroomId': 'arabic', 'displayName': 'Duplicate'},
+        {'id': 'support', 'type': 'support', 'displayName': 'Support'},
+      ],
+    };
+
+    final result = await repo.getMyClassrooms();
+    final classrooms = result.getOrElse(() => throw StateError('failure'));
+    expect(api.path, '/chats/rooms');
+    expect(classrooms.map((item) => item.id), ['general', 'arabic']);
+    expect(classrooms.map((item) => item.name), ['General', 'Arabic']);
+  });
+
   test('empty studentId and null week do not create null query keys', () async {
     await repo.getMyEvaluations(studentId: '  ');
     expect(api.query, isNull);

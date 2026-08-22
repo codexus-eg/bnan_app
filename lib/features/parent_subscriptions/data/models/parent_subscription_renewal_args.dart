@@ -7,8 +7,14 @@ class ParentSubscriptionRenewalArgs {
     required this.subscription,
     required this.subjects,
     required this.registrationMode,
+    this.studentName = '',
+    this.isParent = true,
+    this.onCompleted,
   });
   final String studentId, curriculumId, registrationMode;
   final ParentChildSubscriptionModel subscription;
   final List<ParentSubscriptionSubjectModel> subjects;
+  final String studentName;
+  final bool isParent;
+  final Future<void> Function()? onCompleted;
 }

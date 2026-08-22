@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/app_logout.dart';
+import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
@@ -22,13 +24,17 @@ class AdminHomeShell extends StatefulWidget {
 
 class _AdminHomeShellState extends State<AdminHomeShell> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _drawerNavigation = DrawerNavigationGuard();
   int currentIndex = 0;
   bool _isLoggingOut = false;
   static const int subjectAssignmentDrawerIndex = 2;
   static const int classesDrawerIndex = 5;
   static const int notificationsDrawerIndex = 10;
+  static const int addClassroomSubjectDrawerIndex = 18;
+  static const int subscriptionRenewalsDrawerIndex = 19;
 
   void _changeIndex(int index) {
+    if (index == currentIndex) return;
     if (index == 0 && currentIndex != 0) {
       context.read<DashboardCubit>().refresh();
     }
@@ -44,6 +50,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
   static const Map<int, int> drawerToBottomNavIndex = {0: 0, 1: 1, 6: 2};
 
   void _onDrawerItemTap(int index) {
+    if (!_drawerNavigation.begin()) return;
     final bottomNavIndex = drawerToBottomNavIndex[index];
 
     _closeDrawer();
@@ -58,7 +65,11 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
   }
 
   void _navigateFromDrawer(int index) {
-    if (index == subjectAssignmentDrawerIndex) {
+    if (index == addClassroomSubjectDrawerIndex) {
+      MyNavigator.goTo(context, Routes.addClassroomSubject);
+    } else if (index == subscriptionRenewalsDrawerIndex) {
+      MyNavigator.goTo(context, Routes.adminEgyptianSubscriptionRenewals);
+    } else if (index == subjectAssignmentDrawerIndex) {
       MyNavigator.goTo(context, Routes.teacherSubjectAssignmentView);
     } else if (index == classesDrawerIndex) {
       MyNavigator.goTo(context, Routes.classRoomManagement);
@@ -90,6 +101,8 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
       MyNavigator.goTo(context, Routes.discountCodes);
     } else if (index == 16) {
       MyNavigator.goTo(context, Routes.teacherPayrolls);
+    } else if (index == 17) {
+      MyNavigator.goTo(context, Routes.idealSupervisor);
     }
   }
 
@@ -103,8 +116,9 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
         throw StateError('Authentication session was not cleared');
       }
       getIt<SocketService>().disconnect();
+      final destination = await AppLogout.destinationAfterLogout();
       if (!mounted) return;
-      MyNavigator.goToOffAll(context, Routes.logIn);
+      MyNavigator.goToOffAll(context, destination);
     } catch (error) {
       _isLoggingOut = false;
       if (!mounted) return;
@@ -126,6 +140,7 @@ class _AdminHomeShellState extends State<AdminHomeShell> {
         },
         child: Scaffold(
           key: scaffoldKey,
+          onDrawerChanged: _drawerNavigation.drawerChanged,
           drawer: currentIndex == 0
               ? AdminHomeDrawer(
                   onItemTap: _onDrawerItemTap,

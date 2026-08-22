@@ -3,6 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/lessons_management/data/models/lesson_ui_model.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_state.dart';
@@ -22,15 +23,23 @@ class LessonForm extends StatefulWidget {
     required this.actionText,
     required this.onSave,
     this.initialTime,
+    this.initialEndTime,
     this.onDelete,
   });
 
   final LessonClassroomUiModel classroom;
   final String initialDay, actionText;
   final String? initialTime;
+  final String? initialEndTime;
   final Set<String> blockedDays;
-  final Future<bool> Function({required String day, required String startTime})
+
+  final Future<bool> Function({
+    required String day,
+    required String startTime,
+    required String endTime,
+  })
   onSave;
+
   final Future<bool> Function()? onDelete;
 
   @override
@@ -40,10 +49,16 @@ class LessonForm extends StatefulWidget {
 class _LessonFormState extends State<LessonForm> {
   late String day = widget.initialDay;
   late String? startTime = widget.initialTime;
-  late final classroom = TextEditingController(text: widget.classroom.name);
+  late String? endTime = widget.initialEndTime;
+
+  late final classroom = TextEditingController(
+    text: widget.classroom.name,
+  );
+
   late final subject = TextEditingController(
     text: widget.classroom.subjectName,
   );
+
   String? localError;
 
   @override
@@ -53,53 +68,131 @@ class _LessonFormState extends State<LessonForm> {
     super.dispose();
   }
 
-  Future<void> _pickTime() async {
-    final parts = startTime?.split(':');
+  Future<void> _pickTime({required bool end}) async {
+    final selected = end ? endTime : startTime;
+    final parts = selected?.split(':');
+
     final initial = parts?.length == 2
         ? TimeOfDay(
             hour: int.tryParse(parts![0]) ?? 0,
             minute: int.tryParse(parts[1]) ?? 0,
           )
         : null;
+
     final value = await AppPickers.pickTime(
       context: context,
       initialTime: initial,
     );
+
     if (!mounted || value == null) return;
+
+    // Keep the stored/API value in 24-hour format.
+    final time =
+        '${value.hour.toString().padLeft(2, '0')}:'
+        '${value.minute.toString().padLeft(2, '0')}';
+
     setState(() {
-      startTime =
-          '${value.hour.toString().padLeft(2, '0')}:'
-          '${value.minute.toString().padLeft(2, '0')}';
+      if (end) {
+        endTime = time;
+      } else {
+        startTime = time;
+      }
+
       localError = null;
     });
   }
 
+  String? _formatDisplayTime(String? time) {
+    if (time == null || time.trim().isEmpty) {
+      return null;
+    }
+
+    final parts = time.split(':');
+
+    if (parts.length != 2) {
+      return time;
+    }
+
+    final hour = int.tryParse(parts[0]);
+    final minute = int.tryParse(parts[1]);
+
+    if (hour == null || minute == null) {
+      return time;
+    }
+
+    final timeOfDay = TimeOfDay(
+      hour: hour,
+      minute: minute,
+    );
+
+    return MaterialLocalizations.of(
+      context,
+    ).formatTimeOfDay(
+      timeOfDay,
+      alwaysUse24HourFormat: false,
+    );
+  }
+
   Future<void> _submit() async {
     if (widget.blockedDays.contains(day)) {
-      setState(() => localError = S.of(context).duplicateScheduleDay);
+      setState(() {
+        localError = S.of(context).duplicateScheduleDay;
+      });
       return;
     }
-    if (startTime == null) {
-      setState(() => localError = S.of(context).fillAllRequiredFields);
+
+    if (startTime == null || endTime == null) {
+      setState(() {
+        localError = S.of(context).fillAllRequiredFields;
+      });
       return;
     }
-    final saved = await widget.onSave(day: day, startTime: startTime!);
-    if (saved && mounted) Navigator.pop(context);
+
+    if (!ScheduleTimeUtils.isEndAfter(startTime!, endTime!)) {
+      setState(() {
+        localError = S.of(context).lessonEndTimeMustBeAfterStart;
+      });
+      return;
+    }
+
+    final saved = await widget.onSave(
+      day: day,
+      startTime: startTime!,
+      endTime: endTime!,
+    );
+
+    if (saved && mounted) {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _delete() async {
     final deleted = await widget.onDelete?.call() ?? false;
-    if (deleted && mounted) Navigator.pop(context);
+
+    if (deleted && mounted) {
+      Navigator.pop(context);
+    }
   }
 
-  String? _issueMessage(BuildContext context, GulfScheduleState state) {
-    if (localError != null) return localError;
-    if (state.actionError != null) return state.actionError;
+  String? _issueMessage(
+    BuildContext context,
+    GulfScheduleState state,
+  ) {
+    if (localError != null) {
+      return localError;
+    }
+
+    if (state.actionError != null) {
+      return state.actionError;
+    }
+
     return switch (state.actionIssue) {
       GulfScheduleIssue.missingClassroomSubject =>
         S.of(context).gulfClassroomSubjectUnavailable,
-      GulfScheduleIssue.duplicateDay => S.of(context).duplicateScheduleDay,
-      GulfScheduleIssue.invalidData => S.of(context).fillAllRequiredFields,
+      GulfScheduleIssue.duplicateDay =>
+        S.of(context).duplicateScheduleDay,
+      GulfScheduleIssue.invalidData =>
+        S.of(context).fillAllRequiredFields,
       null => null,
     };
   }
@@ -109,6 +202,7 @@ class _LessonFormState extends State<LessonForm> {
     return BlocBuilder<GulfScheduleCubit, GulfScheduleState>(
       builder: (context, state) {
         final error = _issueMessage(context, state);
+
         return Column(
           children: [
             CustomTextField(
@@ -117,44 +211,73 @@ class _LessonFormState extends State<LessonForm> {
               readOnly: true,
               backgroundColor: ColorManager.greyF4F6,
             ),
+
             const SizedBox(height: 16),
+
             CustomTextField(
               label: S.of(context).subject,
               controller: subject,
               readOnly: true,
               backgroundColor: ColorManager.greyF4F6,
             ),
+
             const SizedBox(height: 16),
+
             LessonDayDropdown(
               value: day,
               onChanged: state.isSaving
                   ? null
-                  : (value) => setState(() {
-                      day = value ?? day;
-                      localError = null;
-                      context.read<GulfScheduleCubit>().clearActionFeedback();
-                    }),
+                  : (value) {
+                      setState(() {
+                        day = value ?? day;
+                        localError = null;
+
+                        context
+                            .read<GulfScheduleCubit>()
+                            .clearActionFeedback();
+                      });
+                    },
             ),
+
             const SizedBox(height: 16),
+
             LessonStartTimeField(
-              value: startTime,
-              onTap: state.isSaving ? () {} : _pickTime,
+              value: _formatDisplayTime(startTime),
+              onTap: state.isSaving
+                  ? () {}
+                  : () => _pickTime(end: false),
             ),
+
+            const SizedBox(height: 16),
+
+            LessonStartTimeField(
+              value: _formatDisplayTime(endTime),
+              isEndTime: true,
+              onTap: state.isSaving
+                  ? () {}
+                  : () => _pickTime(end: true),
+            ),
+
             if (error != null) ...[
               const SizedBox(height: 10),
               Text(
                 error,
                 style: StylesManager.styleRegular12(
                   context,
-                ).copyWith(color: ColorManager.red),
+                ).copyWith(
+                  color: ColorManager.red,
+                ),
               ),
             ],
+
             const SizedBox(height: 16),
+
             CustomAppButton(
               text: widget.actionText,
               isLoading: state.isSaving,
               onPressed: state.isSaving ? null : _submit,
             ),
+
             if (widget.onDelete != null) ...[
               const SizedBox(height: 12),
               DeleteLessonButton(

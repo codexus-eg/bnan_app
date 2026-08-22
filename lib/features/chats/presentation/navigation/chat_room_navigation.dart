@@ -11,12 +11,20 @@ abstract final class ChatRoomNavigation {
   static ChatRouteArgs arguments(
     ChatRoomSummaryModel room, {
     required String? currentUserRole,
+    String? displayName,
+    String? targetMessageId,
   }) {
     return ChatRouteArgs(
       roomType: room.type,
       classroomId: room.classroomId,
-      classroomName: room.displayName,
+      accessScope: room.accessScope,
+      classroomSubjectId: room.classroomSubjectId,
+      canRequestTeacherWithdrawal: room.canRequestTeacherWithdrawal,
+      classroomSubjectAmbiguous: room.classroomSubjectAmbiguous,
+      classroomName: displayName ?? room.displayName,
       currentUserRole: currentUserRole,
+      studentId: room.studentId,
+      targetMessageId: targetMessageId,
     );
   }
 }

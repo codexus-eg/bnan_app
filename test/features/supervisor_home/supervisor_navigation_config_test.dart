@@ -34,27 +34,34 @@ void main() {
     );
   });
 
-  test('Egyptian supervisor sees only the read-only schedule', () async {
-    await _saveSupervisor(RegistrationMode.egyptian);
-    final drawer = SupervisorNavigationConfig.drawer(S());
+  test(
+    'Egyptian supervisor sees lessons management without old schedule',
+    () async {
+      await _saveSupervisor(RegistrationMode.egyptian);
+      final drawer = SupervisorNavigationConfig.drawer(S());
 
-    expect(
-      drawer.where((item) => item.route == Routes.egyptianSchedulesReadOnly),
-      hasLength(1),
-    );
-    expect(
-      drawer.where((item) => item.route == Routes.lessonsManagement),
-      isEmpty,
-    );
-    expect(
-      drawer.where((item) => item.route == Routes.weeklyIdealStudents),
-      hasLength(1),
-    );
-    expect(
-      drawer.where((item) => item.route == Routes.idealTeacher),
-      hasLength(1),
-    );
-  });
+      expect(
+        drawer.where((item) => item.route == Routes.egyptianSchedulesReadOnly),
+        isEmpty,
+      );
+      expect(
+        drawer.where((item) => item.route == Routes.tablesManagement),
+        hasLength(1),
+      );
+      expect(
+        drawer.where((item) => item.route == Routes.lessonsManagement),
+        isEmpty,
+      );
+      expect(
+        drawer.where((item) => item.route == Routes.weeklyIdealStudents),
+        hasLength(1),
+      );
+      expect(
+        drawer.where((item) => item.route == Routes.idealTeacher),
+        hasLength(1),
+      );
+    },
+  );
 
   test('Gulf supervisor sees only lessons management', () async {
     await _saveSupervisor(RegistrationMode.gulf);

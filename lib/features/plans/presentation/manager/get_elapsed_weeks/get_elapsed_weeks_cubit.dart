@@ -10,6 +10,7 @@ class GetElapsedWeeksCubit extends Cubit<GetElapsedWeeksState> {
   int _requestId = 0;
 
   Future<void> getElapsedWeeks({required String classroomId}) async {
+    if (isClosed) return;
     _activeClassroomId = classroomId;
     final requestId = ++_requestId;
     emit(GetElapsedWeeksLoading());

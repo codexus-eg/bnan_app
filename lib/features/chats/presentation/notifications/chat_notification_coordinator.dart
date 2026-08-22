@@ -5,24 +5,29 @@ import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/data/models/chat_notification_model.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 abstract interface class ChatForegroundAlert {
   Future<void> play();
 }
 
-class SystemChatForegroundAlert implements ChatForegroundAlert {
-  const SystemChatForegroundAlert();
+class NativeChatForegroundAlert implements ChatForegroundAlert {
+  const NativeChatForegroundAlert();
+
+  static const _channel = MethodChannel('bnan/notification_sound');
 
   @override
-  Future<void> play() => SystemSound.play(SystemSoundType.alert);
+  Future<void> play() =>
+      _channel.invokeMethod<void>('playDefaultNotificationSound');
 }
+
+enum ChatForegroundNotificationResult { shown, currentChat, duplicate, ignored }
 
 class ChatNotificationCoordinator {
   ChatNotificationCoordinator(
     this.socketService, {
-    ChatForegroundAlert alert = const SystemChatForegroundAlert(),
+    ChatForegroundAlert alert = const NativeChatForegroundAlert(),
     SessionManager? session,
     String? Function()? currentUserId,
   }) : _alert = alert,
@@ -41,12 +46,19 @@ class ChatNotificationCoordinator {
   String? _currentRoomId;
   bool _initialized = false;
   bool _starting = false;
+  void Function(Map<String, dynamic> payload)? _notificationHandler;
 
   Stream<ChatNotificationEvent> get roomEvents => _roomEvents.stream;
   Stream<ChatNotificationEvent> get foregroundEvents =>
       _foregroundEvents.stream;
   String? get currentRoomId => _currentRoomId;
   int get listenerCount => _listenerDisposers.length;
+
+  void setNotificationHandler(
+    void Function(Map<String, dynamic> payload) handler,
+  ) {
+    _notificationHandler = handler;
+  }
 
   Future<void> initialize() async {
     if (_initialized) return;
@@ -85,25 +97,30 @@ class ChatNotificationCoordinator {
   }
 
   void handleNotification(Map<String, dynamic> payload) {
+    _notificationHandler?.call(payload);
     final notification = ChatNotificationModel.fromJson(payload);
     if (!notification.isChatMessage) return;
     _handle(ChatNotificationEvent.fromNotification(notification));
   }
 
-  void handlePush({
+  ChatForegroundNotificationResult handlePush({
     required String messageId,
+    required String notificationId,
     required String roomId,
     required String senderId,
     required String title,
     required String body,
+    String roomName = '',
   }) {
-    _handle(
+    return _handle(
       ChatNotificationEvent.fromPush(
         messageId: messageId,
+        notificationId: notificationId,
         roomId: roomId,
         senderId: senderId,
         senderName: title,
         message: body,
+        roomName: roomName,
       ),
       updateRoom: false,
     );
@@ -122,22 +139,68 @@ class ChatNotificationCoordinator {
     return roomId.trim().isNotEmpty && roomId.trim() != _currentRoomId;
   }
 
-  void _handle(ChatNotificationEvent event, {bool updateRoom = true}) {
+  ChatForegroundNotificationResult _handle(
+    ChatNotificationEvent event, {
+    bool updateRoom = true,
+  }) {
     final id = event.messageId.trim();
-    if (id.isEmpty) return;
+    final notificationId = event.notificationId.trim();
+    final keys = {
+      if (notificationId.isNotEmpty) notificationId,
+      if (id.isNotEmpty) id,
+    };
+    if (keys.isEmpty) return ChatForegroundNotificationResult.ignored;
 
     if (updateRoom && event.roomId.isNotEmpty && _roomUpdateIds.add(id)) {
       _roomEvents.add(event);
     }
-    if (!_notifiedIds.add(id)) return;
+    if (keys.any(_notifiedIds.contains)) {
+      _soundSkipped(notificationId.isEmpty ? id : notificationId, 'duplicate');
+      return ChatForegroundNotificationResult.duplicate;
+    }
+    _notifiedIds.addAll(keys);
     _trimDedupSets();
 
     final currentUserId = _currentUserId()?.trim() ?? '';
-    if (event.senderId.isNotEmpty && event.senderId == currentUserId) return;
-    if (event.roomId.isNotEmpty && event.roomId == _currentRoomId) return;
+    if (event.senderId.isNotEmpty && event.senderId == currentUserId) {
+      return ChatForegroundNotificationResult.ignored;
+    }
+    if (event.roomId.isNotEmpty && event.roomId == _currentRoomId) {
+      _soundSkipped(
+        notificationId.isEmpty ? id : notificationId,
+        'current_chat',
+      );
+      return ChatForegroundNotificationResult.currentChat;
+    }
 
-    unawaited(_alert.play());
+    unawaited(_playSound(notificationId.isEmpty ? id : notificationId));
     _foregroundEvents.add(event);
+    return ChatForegroundNotificationResult.shown;
+  }
+
+  Future<void> _playSound(String notificationId) async {
+    debugPrint('IN_APP_SOUND_REQUESTED');
+    debugPrint('notificationId: $notificationId');
+    debugPrint('implementation: ${_alert.runtimeType}');
+    debugPrint(
+      'appLifecycleState: '
+      '${WidgetsBinding.instance.lifecycleState?.name ?? 'unknown'}',
+    );
+    try {
+      await _alert.play();
+      debugPrint('IN_APP_SOUND_CALL_COMPLETED');
+      debugPrint('notificationId: $notificationId');
+    } catch (error) {
+      debugPrint('IN_APP_SOUND_ERROR');
+      debugPrint('notificationId: $notificationId');
+      debugPrint('error: $error');
+    }
+  }
+
+  void _soundSkipped(String notificationId, String reason) {
+    debugPrint('IN_APP_NOTIFICATION_SOUND_SKIPPED');
+    debugPrint('reason: $reason');
+    debugPrint('notificationId: $notificationId');
   }
 
   void _trimDedupSets() {
@@ -166,6 +229,7 @@ class ChatNotificationCoordinator {
 
   Future<void> dispose() async {
     stop();
+    _notificationHandler = null;
     _session.removeSessionChangeListener(_onSessionChanged);
     await _roomEvents.close();
     await _foregroundEvents.close();

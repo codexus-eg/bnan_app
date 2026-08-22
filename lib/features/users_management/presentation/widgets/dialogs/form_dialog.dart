@@ -193,6 +193,7 @@ class _FormDialogState extends State<FormDialog> {
       updatedAt: originalUser?.updatedAt ?? '',
       curriculum: originalUser?.curriculum ?? const [],
       grade: originalUser?.grade ?? const [],
+      registrationMode: originalUser?.registrationMode ?? '',
     );
   }
 }

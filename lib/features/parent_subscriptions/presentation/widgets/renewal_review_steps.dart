@@ -4,6 +4,7 @@ import 'package:bnan_app/features/student_auth/presentation/views/widgets/studen
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 
 class RenewalDiscountStep extends StatelessWidget {
   const RenewalDiscountStep({super.key});
@@ -22,6 +23,13 @@ class RenewalPriceStep extends StatelessWidget {
     final price = _format(package.price ?? 0);
     return Column(
       children: [
+        if (state.args.studentName.trim().isNotEmpty) ...[
+          Text(
+            state.args.studentName,
+            style: StylesManager.styleBold16(context),
+          ),
+          const SizedBox(height: 12),
+        ],
         PaymentMethodCard(
           packageName: package.name ?? '',
           price: price,

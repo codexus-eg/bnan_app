@@ -15,8 +15,15 @@ class IdealStudentRepoImpl implements IdealStudentRepo {
     required int page,
     required int limit,
   }) => repoGuard(() async {
+    final endpoint = EndPoints.classroomWeeklyRanking(classroomId);
+    if (kDebugMode) {
+      debugPrint(
+        '[IdealStudentRepo] classroomId=$classroomId '
+        'page=$page limit=$limit endpoint=$endpoint',
+      );
+    }
     final response = await api.get(
-      EndPoints.egyptianWeeklyRankings(classroomId),
+      endpoint,
       queryParameter: {'page': page, 'limit': limit},
       isProtected: true,
     );

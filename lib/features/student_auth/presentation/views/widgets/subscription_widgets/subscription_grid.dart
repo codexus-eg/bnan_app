@@ -7,6 +7,8 @@ import 'package:bnan_app/features/student_auth/data/models/package_card_model.da
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscription_plan_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/generated/l10n.dart';
 
 class SubscriptionGrid extends StatelessWidget {
   const SubscriptionGrid({
@@ -18,6 +20,7 @@ class SubscriptionGrid extends StatelessWidget {
     this.registrationMode,
     this.packageFilter,
     this.planMapper,
+    this.selectedPackageId,
   });
 
   final String curriculumId;
@@ -26,6 +29,7 @@ class SubscriptionGrid extends StatelessWidget {
   final String? registrationMode;
   final bool Function(PackageModel package)? packageFilter;
   final PackageCardModel Function(BuildContext, PackageModel)? planMapper;
+  final String? selectedPackageId;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -37,14 +41,21 @@ class SubscriptionGrid extends StatelessWidget {
         final isLoading = state is GetPackagesLoading;
 
         if (state is GetPackagesFailure) {
-          return _wrap(Center(child: Text(state.message)));
-        }
-
-        if (state is GetPackagesSuccess && state.packages.isEmpty) {
           return _wrap(
-            SizedBox(
-              height: MediaQuery.sizeOf(context).height * .5,
-              child: const Center(child: NoDataWidget()),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(state.message, textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                CustomAppButton(
+                  text: S.of(context).retry,
+                  onPressed: () => curriculumId.isEmpty
+                      ? context.read<GetPackagesCubit>().getPackages()
+                      : context
+                            .read<GetPackagesCubit>()
+                            .getPackagesByCurriculum(curriculumId),
+                ),
+              ],
             ),
           );
         }
@@ -56,6 +67,14 @@ class SubscriptionGrid extends StatelessWidget {
                   .reversed
                   .toList()
             : <PackageModel>[];
+        if (state is GetPackagesSuccess && packages.isEmpty) {
+          return _wrap(
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * .5,
+              child: const Center(child: NoDataWidget()),
+            ),
+          );
+        }
 
         final plans = state is GetPackagesSuccess
             ? packages
@@ -65,10 +84,14 @@ class SubscriptionGrid extends StatelessWidget {
                         PackageCardModel.fromPackage(
                           context: context,
                           package: package,
+                          hidePrices: registrationMode == 'egyptian',
                         ),
                   )
                   .toList()
-            : PackageCardModel.placeholders(context);
+            : PackageCardModel.placeholders(
+                context,
+                hidePrices: registrationMode == 'egyptian',
+              );
 
         final grid = Padding(
           padding: const EdgeInsets.only(top: 8),
@@ -81,6 +104,7 @@ class SubscriptionGrid extends StatelessWidget {
               curriculumName: curriculumName,
               registrationMode: registrationMode,
               bottomWidget: bottomWidget,
+              selectedPackageId: selectedPackageId,
             ),
           ),
         );
@@ -104,6 +128,7 @@ class PackagesGrid extends StatelessWidget {
     required this.curriculumName,
     this.bottomWidget,
     this.registrationMode,
+    this.selectedPackageId,
   });
 
   final List<PackageCardModel> plans;
@@ -111,6 +136,7 @@ class PackagesGrid extends StatelessWidget {
   final String curriculumId;
   final String curriculumName;
   final String? registrationMode;
+  final String? selectedPackageId;
 
   final Widget Function(PackageCardModel plan, PackageModel package)?
   bottomWidget;
@@ -153,6 +179,7 @@ class PackagesGrid extends StatelessWidget {
       curriculumId: curriculumId,
       curriculumName: curriculumName,
       registrationMode: registrationMode,
+      isSelected: plan.id == selectedPackageId,
       bottomWidget: index < packages.length
           ? bottomWidget?.call(plan, packages[index])
           : null,

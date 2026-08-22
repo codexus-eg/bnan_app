@@ -16,7 +16,7 @@ class LessonsManagementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<GulfScheduleCubit>()..load(),
+      create: (_) => getIt<GulfScheduleCubit>()..refresh(),
       child: Builder(
         builder: (context) =>
             BlocListener<GulfScheduleCubit, GulfScheduleState>(

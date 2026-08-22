@@ -47,7 +47,9 @@ class ClassroomDetailsDialog extends StatelessWidget {
                   ),
                   ClassMetaRow(
                     label: s.theSupervisor,
-                    value: '-',
+                    value: classroomItem.supervisor?.name.isNotEmpty == true
+                        ? classroomItem.supervisor!.name
+                        : '-',
                     spacing: true,
                   ),
                   ClassMetaRow(

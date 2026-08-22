@@ -1,6 +1,9 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
+import 'package:bnan_app/features/lessons_management/data/repo/start_session_repo.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
+import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,7 +12,7 @@ import 'fake_start_session_repo.dart';
 void main() {
   test('success is keyed by classroom and stores session/link', () async {
     final repo = FakeStartSessionRepo()..defer = true;
-    final cubit = StartSessionCubit(repo);
+    final cubit = _cubit(repo);
     final request = cubit.start(classroomId: 'class-1', subjectId: 'subject-1');
     expect(cubit.state.isLoading('class-1'), isTrue);
     expect(cubit.state.isLoading('class-2'), isFalse);
@@ -22,7 +25,7 @@ void main() {
 
   test('double submit for the same classroom sends one request', () async {
     final repo = FakeStartSessionRepo()..defer = true;
-    final cubit = StartSessionCubit(repo);
+    final cubit = _cubit(repo);
     final first = cubit.start(classroomId: 'class-1', subjectId: 'subject-1');
     expect(
       await cubit.start(classroomId: 'class-1', subjectId: 'subject-1'),
@@ -36,7 +39,7 @@ void main() {
 
   test('two classrooms keep independent loading and results', () async {
     final repo = FakeStartSessionRepo()..defer = true;
-    final cubit = StartSessionCubit(repo);
+    final cubit = _cubit(repo);
     final first = cubit.start(classroomId: 'class-1', subjectId: 'subject-1');
     final second = cubit.start(classroomId: 'class-2', subjectId: 'subject-2');
     repo.pending['class-2']!.complete(Right(startedSessionData('class-2')));
@@ -51,7 +54,7 @@ void main() {
 
   test('missing subject is rejected before API call', () async {
     final repo = FakeStartSessionRepo();
-    final cubit = StartSessionCubit(repo);
+    final cubit = _cubit(repo);
     expect(await cubit.start(classroomId: 'class-1', subjectId: ''), isFalse);
     expect(cubit.state.eventIssue, StartSessionIssue.missingSubject);
     expect(repo.calls, isEmpty);
@@ -61,7 +64,7 @@ void main() {
   test('API conflict clears loading and preserves backend key', () async {
     final repo = FakeStartSessionRepo()
       ..failure = Failure(message: 'CLASSROOM_SESSION_ALREADY_ACTIVE');
-    final cubit = StartSessionCubit(repo);
+    final cubit = _cubit(repo);
     expect(
       await cubit.start(classroomId: 'class-1', subjectId: 'subject-1'),
       isFalse,
@@ -73,10 +76,26 @@ void main() {
 
   test('response after cubit close is ignored safely', () async {
     final repo = FakeStartSessionRepo()..defer = true;
-    final cubit = StartSessionCubit(repo);
+    final cubit = _cubit(repo);
     final request = cubit.start(classroomId: 'class-1', subjectId: 'subject-1');
     await cubit.close();
     repo.pending['class-1']!.complete(Right(startedSessionData('class-1')));
     expect(await request, isFalse);
   });
+}
+
+StartSessionCubit _cubit(StartSessionRepo repo) => StartSessionCubit(
+  repo,
+  _UnusedGulfScheduleRepo(),
+  _UnusedTableManagementRepo(),
+);
+
+class _UnusedGulfScheduleRepo implements GulfScheduleRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _UnusedTableManagementRepo implements TableManagementRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

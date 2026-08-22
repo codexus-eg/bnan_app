@@ -32,8 +32,6 @@ class SubscriptionPlanModel {
     final price = package.price ?? 0;
     final saveAmount = oldPrice - price;
     final hoursCount = package.hours ?? 0;
-    final monthsCount = package.months ?? 0;
-
     final isHours = package.type == PackageType.hours;
 
     return SubscriptionPlanModel(
@@ -41,10 +39,10 @@ class SubscriptionPlanModel {
       title: package.name ?? '',
       hours: isHours
           ? S.of(context).trainingHours(hoursCount.toString())
-          : '$monthsCount شهر',
+          : S.of(context).oneMonth,
       lessons: isHours
           ? S.of(context).weeklyLessons(hoursCount.toString())
-          : '$monthsCount شهر',
+          : S.of(context).oneMonth,
       oldPrice: S.of(context).oldPrice(oldPrice.toInt().toString()),
       price: S.of(context).currentPrice(price.toInt().toString()),
       save: S.of(context).saveAmount(saveAmount.toInt().toString()),

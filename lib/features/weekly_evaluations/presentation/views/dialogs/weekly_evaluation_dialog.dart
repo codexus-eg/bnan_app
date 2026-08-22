@@ -11,26 +11,20 @@ class WeeklyEvaluationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedPadding(
-      duration: const Duration(milliseconds: 150),
-      padding: EdgeInsetsDirectional.only(
-        bottom: MediaQuery.viewInsetsOf(context).bottom,
-      ),
-      child: CustomAppDialog(
-        width: 360,
-        child: SafeArea(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.sizeOf(context).height * .86,
-            ),
-            child: Padding(
-              padding: const EdgeInsetsDirectional.all(16),
-              child: WeeklyEvaluationForm(
-                title: data.isEdit
-                    ? S.of(context).editEvaluation
-                    : S.of(context).newWeeklyEvaluation,
-                data: data,
-              ),
+    return CustomAppDialog(
+      width: 360,
+      child: SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * .86,
+          ),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.all(16),
+            child: WeeklyEvaluationForm(
+              title: data.isEdit
+                  ? S.of(context).editEvaluation
+                  : S.of(context).newWeeklyEvaluation,
+              data: data,
             ),
           ),
         ),

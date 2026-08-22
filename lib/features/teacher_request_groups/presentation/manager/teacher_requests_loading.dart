@@ -2,7 +2,8 @@ part of 'teacher_registration_requests_cubit.dart';
 
 extension TeacherRequestsLoadingFlow on TeacherRegistrationRequestsCubit {
   Future<void> refresh() async {
-    if (state is TeacherRequestsLoading ||
+    if (isClosed ||
+        state is TeacherRequestsLoading ||
         _isLoadingMore ||
         _acceptingRequestId != null) {
       return;
@@ -12,6 +13,7 @@ extension TeacherRequestsLoadingFlow on TeacherRegistrationRequestsCubit {
       page: 1,
       limit: TeacherRegistrationRequestsCubit.limit,
     );
+    if (isClosed) return;
     result.fold(
       (failure) => _emitState(TeacherRequestsFailure(failure.message)),
       (response) {

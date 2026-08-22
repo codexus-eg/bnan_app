@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/app_logout.dart';
+import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
@@ -24,29 +26,34 @@ class TeacherHomeView extends StatefulWidget {
 
 class _TeacherHomeViewState extends State<TeacherHomeView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _drawerNavigation = DrawerNavigationGuard();
 
   late int currentIndex;
   bool _isLoggingOut = false;
 
-  static const int notificationsDrawerIndex = 12;
-  static const int plansDrawerIndex = 10;
+  static const int notificationsDrawerIndex = 7;
+  static const int plansDrawerIndex = 6;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.initialIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _loadTab(currentIndex);
+    });
   }
 
   void _changeIndex(int index) {
-    if (index == 0 && currentIndex != 0) {
-      context.read<DashboardCubit>().refresh();
-    }
+    if (index == currentIndex) return;
     setState(() => currentIndex = index);
+    _loadTab(index);
   }
 
-  void _goHomeTab() {
-    setState(() => currentIndex = 0);
+  void _loadTab(int index) {
+    if (index == 0) context.read<DashboardCubit>().load();
   }
+
+  void _goHomeTab() => _changeIndex(0);
 
   void _openDrawer() {
     scaffoldKey.currentState?.openDrawer();
@@ -57,15 +64,16 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _onDrawerItemTap(int index) {
+    if (!_drawerNavigation.begin()) return;
     final drawerItemCount = teacherDrawerItems(context).length;
     final scheduleRoutes = teacherScheduleRoutes();
-    const scheduleStartIndex = 2;
+    const scheduleStartIndex = 1;
     final scheduleIndex = index - scheduleStartIndex;
 
     _closeDrawer();
 
     if (ChatRoleNavigation.isTeacherMessagesIndex(index, drawerItemCount)) {
-      MyNavigator.goTo(context, ChatRoleNavigation.messagesRoute);
+      _changeIndex(teacherMessagesTabIndex);
       return;
     }
 
@@ -75,12 +83,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
       return;
     }
 
-    var legacyIndex = index < scheduleStartIndex
+    final legacyIndex = index < scheduleStartIndex
         ? index
         : index - scheduleRoutes.length + 1;
-    if (!SessionManager.instance.hasGulfRegistration && legacyIndex >= 6) {
-      legacyIndex++;
-    }
     final bottomIndex = teacherDrawerToBottomNavIndex[legacyIndex];
 
     if (bottomIndex != null) {
@@ -93,17 +98,19 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _navigateFromDrawer(int index) {
-    if (index == 4) {
+    if (index == 2) {
       MyNavigator.goTo(context, Routes.weeklyEvaluations);
-    } else if (index == 6) {
+    } else if (index == 4) {
       MyNavigator.goTo(context, Routes.teacherRegistrationRequest);
+    } else if (index == 5) {
+      MyNavigator.goTo(context, Routes.teacherMyEarnings);
     } else if (index == notificationsDrawerIndex) {
       MyNavigator.goTo(context, Routes.notification);
     } else if (index == plansDrawerIndex) {
       MyNavigator.goTo(context, Routes.plans);
-    } else if (index == 13) {
+    } else if (index == 8) {
       MyNavigator.goTo(context, Routes.attendance);
-    } else if (index == 15) {
+    } else if (index == 10) {
       MyNavigator.goTo(context, Routes.weeklyIdealStudents);
     }
   }
@@ -120,8 +127,9 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         throw StateError('Authentication session was not cleared');
       }
       getIt<SocketService>().disconnect();
+      final destination = await AppLogout.destinationAfterLogout();
       if (!mounted) return;
-      MyNavigator.goToOffAll(context, Routes.logIn);
+      MyNavigator.goToOffAll(context, destination);
     } catch (error) {
       _isLoggingOut = false;
       if (!mounted) return;
@@ -143,13 +151,18 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
         },
         child: Scaffold(
           key: scaffoldKey,
+          onDrawerChanged: _drawerNavigation.drawerChanged,
           drawer: currentIndex == 0
               ? TeacherHomeDrawer(
                   onItemTap: _onDrawerItemTap,
                   onLogoutTap: _logout,
                 )
               : null,
-          body: TeacherHomeBody(index: currentIndex, onMenuTap: _openDrawer),
+          body: TeacherHomeBody(
+            key: ValueKey(currentIndex),
+            index: currentIndex,
+            onMenuTap: _openDrawer,
+          ),
           bottomNavigationBar: TeacherBottomNavBar(
             currentIndex: currentIndex,
             onTap: _onBottomNavTap,
@@ -160,11 +173,6 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 }
 
-const teacherPayrollTabIndex = 3;
-const teacherDrawerToBottomNavIndex = <int, int>{
-  0: 0,
-  3: 1,
-  5: 2,
-  8: teacherPayrollTabIndex,
-  14: 4,
-};
+const teacherMessagesTabIndex = 2;
+const teacherPayrollTabIndex = teacherMessagesTabIndex;
+const teacherDrawerToBottomNavIndex = <int, int>{0: 0, 3: 1, 9: 4};

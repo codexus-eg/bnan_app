@@ -8,7 +8,13 @@ import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_m
 List<PlanClassroomOption> mapTeacherClassroomsToPlanOptions(
   List<TeacherClassroomModel> classrooms,
 ) => _unique(
-  classrooms.map((item) => PlanClassroomOption(id: item.id, name: item.name)),
+  classrooms.map(
+    (item) => PlanClassroomOption(
+      id: item.id,
+      name: item.name,
+      registrationMode: item.registrationMode,
+    ),
+  ),
 );
 
 List<PlanClassroomOption> mapStudentEnrollmentsToPlanOptions(
@@ -49,7 +55,11 @@ List<PlanClassroomOption> _unique(Iterable<PlanClassroomOption> options) {
   for (final option in options) {
     final id = option.id.trim();
     if (id.isNotEmpty) {
-      uniqueById[id] = PlanClassroomOption(id: id, name: option.name.trim());
+      uniqueById[id] = PlanClassroomOption(
+        id: id,
+        name: option.name.trim(),
+        registrationMode: option.registrationMode,
+      );
     }
   }
   return uniqueById.values.toList(growable: false);

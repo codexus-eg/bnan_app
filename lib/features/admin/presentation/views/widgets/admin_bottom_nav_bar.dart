@@ -33,6 +33,7 @@ class AdminBottomNavBar extends StatelessWidget {
         title: s.subjects,
       ),
       BottomNavItemModel(icon: ImageManager.subscription, title: s.packages),
+      BottomNavItemModel(icon: ImageManager.chatIcon, title: s.messages),
     ];
   }
 }

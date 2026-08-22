@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/attachment_file.dart';
 import 'package:bnan_app/features/student_assignments_and_certificate/data/models/assignment_status.dart';
 import 'package:bnan_app/generated/l10n.dart';
 
@@ -32,6 +33,7 @@ class AssignmentModel {
   final AssignmentStatus status;
   final bool canSubmit;
   final String attachment;
+  final String attachmentName;
   final bool submitted;
   final num? grade;
   final int totalPoints;
@@ -45,23 +47,29 @@ class AssignmentModel {
     required this.status,
     required this.canSubmit,
     required this.attachment,
+    required this.attachmentName,
     required this.submitted,
     required this.grade,
     required this.totalPoints,
   });
 
   factory AssignmentModel.fromJson(Map<String, dynamic> json) {
+    final attachment = AttachmentFile.fromJson(json['attachment']);
     final submitted = json['submitted'] ?? false;
-    final grade = json['grade'];
+    final gradeValue = json['grade'];
+    final grade = gradeValue is num
+        ? gradeValue
+        : num.tryParse(gradeValue?.toString() ?? '');
     final totalPoints = json['totalPoints'] ?? 0;
-    final isCompleted = submitted == true && grade != null && grade > 0;
+    final isCompleted = submitted == true;
 
     return AssignmentModel(
       id: json['id'] ?? '',
       subject: json['subjectName'] ?? '',
       title: json['title'] ?? '',
       dueDate: json['description'] ?? '',
-      attachment: json['attachment'] ?? '',
+      attachment: attachment.source,
+      attachmentName: attachment.name,
       submitted: submitted,
       grade: grade,
       totalPoints: totalPoints,
@@ -87,6 +95,7 @@ class AssignmentModel {
       status: AssignmentStatus.pending,
       canSubmit: true,
       attachment: '',
+      attachmentName: '',
       submitted: false,
       grade: null,
       totalPoints: 20,
@@ -98,8 +107,8 @@ class AssignmentModel {
     required num? grade,
     required int totalPoints,
   }) {
-    if (submitted == true && grade != null && grade >= 0) {
-      return '${grade.toInt()}/$totalPoints';
+    if (grade != null) {
+      return '${grade.toInt()} / $totalPoints';
     }
 
     if (submitted == true) {
@@ -110,9 +119,6 @@ class AssignmentModel {
   }
 
   static List<AssignmentModel> placeholderList() {
-    return List.generate(
-      5,
-      (_) => AssignmentModel.placeholder(),
-    );
+    return List.generate(5, (_) => AssignmentModel.placeholder());
   }
 }

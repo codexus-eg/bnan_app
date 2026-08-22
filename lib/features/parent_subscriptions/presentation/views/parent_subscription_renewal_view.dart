@@ -1,5 +1,7 @@
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
+import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/parent_subscription_renewal_body.dart';
@@ -41,14 +43,33 @@ class _State extends State<ParentSubscriptionRenewalView>
         ParentSubscriptionRenewalCubit,
         ParentSubscriptionRenewalState
       >(
-        listenWhen: (before, after) =>
-            !before.shouldOpenCheckout && after.shouldOpenCheckout,
-        listener: _open,
+        listenWhen: (before, after) {
+          if (after.isGulf) {
+            return !before.shouldOpenCheckout && after.shouldOpenCheckout;
+          }
+          return before.phase == ParentRenewalPhase.submitting &&
+              (after.phase == ParentRenewalPhase.pending ||
+                  after.phase == ParentRenewalPhase.editing &&
+                      after.errorMessage != null);
+        },
+        listener: _onState,
         child: Scaffold(
           appBar: CustomAppbar(headerText: S.of(context).renewSubscription),
           body: const ParentSubscriptionRenewalBody(),
         ),
       );
+
+  Future<void> _onState(
+    BuildContext context,
+    ParentSubscriptionRenewalState state,
+  ) async {
+    if (state.isGulf) return _open(context, state);
+    if (state.phase == ParentRenewalPhase.pending) {
+      MyNavigator.pop(context, ParentFlowResult.pendingReview);
+      return;
+    }
+    showCustomSnackBar(context, state.errorMessage!, false);
+  }
 
   Future<void> _open(
     BuildContext context,
@@ -56,12 +77,22 @@ class _State extends State<ParentSubscriptionRenewalView>
   ) async {
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
+    final cubit = context.read<ParentSubscriptionRenewalCubit>();
     final result = url == null
         ? const TamaraCheckoutLaunchResult(opened: false)
-        : await TamaraCheckoutLauncher.open(context, url);
-    if (!context.mounted) return;
+        : await TamaraCheckoutLauncher.open(
+            context,
+            url,
+            completionStream: cubit.stream.map(
+              (value) => value.phase == ParentRenewalPhase.completed,
+            ),
+            isCompleted: () =>
+                cubit.state.phase == ParentRenewalPhase.completed,
+            onOpened: cubit.reconcilePayment,
+          );
+    if (!context.mounted || cubit.isClosed) return;
     if (!result.opened) {
-      context.read<ParentSubscriptionRenewalCubit>().checkoutOpenFailed();
+      cubit.checkoutOpenFailed();
       showCustomSnackBar(
         context,
         S.of(context).parentUnableToOpenCheckout,
@@ -69,6 +100,6 @@ class _State extends State<ParentSubscriptionRenewalView>
       );
       return;
     }
-    await context.read<ParentSubscriptionRenewalCubit>().reconcilePayment();
+    await cubit.reconcilePayment();
   }
 }

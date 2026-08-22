@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/dio_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
@@ -22,6 +25,20 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('request payload contract', () {
+    test('assigned request parses teacher and navigation ids', () {
+      final request = StudentSubjectRequest.fromJson({
+        'id': 'request-1',
+        'status': 'assigned',
+        'teacher': {'_id': 'teacher-1', 'fullName': 'Ahmed'},
+        'classroom': {'id': 'class-1', 'displayName': 'Math class'},
+        'chatRoom': 'room-1',
+      });
+
+      expect(request.teacher?.name, 'Ahmed');
+      expect(request.classroom?.name, 'Math class');
+      expect(request.chatRoom?.id, 'room-1');
+    });
+
     test('Egyptian submit uses subjectIds array and omits empty notes', () {
       final json = const EgyptianSubjectRequestPayload(
         subjectId: 's1',
@@ -81,7 +98,11 @@ void main() {
             final data = switch (options.path) {
               EndPoints.studentSubjectRequestAvailableSubjects => {
                 'data': {
-                  'curriculum': {'id': 'c1', 'name': 'Curriculum'},
+                  'curriculum': {
+                    'id': 'c1',
+                    'name': 'Curriculum',
+                    'registrationMode': 'egyptian',
+                  },
                   'grade': {'id': 'g1', 'name': 'Grade'},
                   'subjects': <dynamic>[],
                 },
@@ -131,7 +152,7 @@ void main() {
   );
 
   group('student subject requests cubit', () {
-    test('filters single_subject hours packages only', () {
+    test('filters Egyptian single-subject hours packages only', () {
       final result = StudentSubjectRequestsCubit.filterPackages(const [
         PackageModel(
           id: 'valid',
@@ -151,8 +172,39 @@ void main() {
           type: 'hours',
           accessScope: PackageAccessScope.singleSubject,
         ),
-      ]);
+      ], RegistrationMode.egyptian);
       expect(result.map((item) => item.id), ['valid']);
+    });
+
+    test('filters Gulf all-subjects hours packages only', () {
+      final result = StudentSubjectRequestsCubit.filterPackages(const [
+        PackageModel(
+          id: 'single',
+          type: 'hours',
+          accessScope: PackageAccessScope.singleSubject,
+          isActive: true,
+        ),
+        PackageModel(id: 'all', type: 'hours', isActive: true),
+        PackageModel(id: 'inactive', type: 'hours'),
+      ], RegistrationMode.gulf);
+
+      expect(result.map((item) => item.id), ['all']);
+    });
+
+    test('availability parses curriculum registration mode', () {
+      final availability = SubjectRequestAvailability.fromJson({
+        'data': {
+          'curriculum': {
+            'id': 'c1',
+            'name': 'Curriculum',
+            'registrationMode': 'gulf',
+          },
+          'grade': {'id': 'g1', 'name': 'Grade'},
+          'subjects': <dynamic>[],
+        },
+      });
+
+      expect(availability.registrationMode, RegistrationMode.gulf);
     });
 
     test(
@@ -170,14 +222,37 @@ void main() {
       },
     );
 
-    test('completed payment reloads subjects and requests', () async {
+    test('completed payment reloads creation availability only', () async {
       final repo = FakeRepo();
       final cubit = StudentSubjectRequestsCubit(repo);
       await cubit.load();
       await cubit.paymentCompleted();
       expect(repo.availableCalls, 2);
-      expect(repo.requestCalls, 2);
+      expect(repo.requestCalls, 0);
       await cubit.close();
+    });
+
+    test('changing subject clears the selected package', () async {
+      final cubit = StudentSubjectRequestsCubit(FakeRepo());
+      await cubit.load();
+      cubit.selectSubject('enabled');
+      cubit.selectPackage('valid');
+      cubit.selectSubject('other');
+
+      expect(cubit.state.selectedSubjectId, 'other');
+      expect(cubit.state.selectedPackageId, isNull);
+      await cubit.close();
+    });
+
+    test('delayed availability response after close is ignored', () async {
+      final repo = PendingAvailabilityRepo();
+      final cubit = StudentSubjectRequestsCubit(repo);
+      final request = cubit.load();
+
+      await cubit.close();
+      repo.complete(_availability());
+
+      await expectLater(request, completes);
     });
 
     test('refresh keeps valid selections and clears stale ones', () async {
@@ -198,29 +273,40 @@ void main() {
       await cubit.close();
     });
 
-    test(
-      'SUBJECT_ALREADY_REQUESTED refreshes availability and requests',
-      () async {
-        final repo = FakeRepo()
-          ..submitResult = Left(
-            Failure(
-              message: 'duplicate',
-              statusCode: 409,
-              code: 'SUBJECT_ALREADY_REQUESTED',
-              responseReceived: true,
-            ),
-          );
-        final cubit = StudentSubjectRequestsCubit(repo);
-        await cubit.load();
-        cubit.selectSubject('enabled');
-        cubit.selectPackage('valid');
-        await cubit.submitEgyptian();
-        expect(repo.availableCalls, 2);
-        expect(repo.requestCalls, 2);
-        expect(cubit.state.message, 'duplicate');
-        await cubit.close();
-      },
-    );
+    test('SUBJECT_ALREADY_REQUESTED refreshes creation availability', () async {
+      final repo = FakeRepo()
+        ..submitResult = Left(
+          Failure(
+            message: 'duplicate',
+            statusCode: 409,
+            code: 'SUBJECT_ALREADY_REQUESTED',
+            responseReceived: true,
+          ),
+        );
+      final cubit = StudentSubjectRequestsCubit(repo);
+      await cubit.load();
+      cubit.selectSubject('enabled');
+      cubit.selectPackage('valid');
+      await cubit.submitEgyptian();
+      expect(repo.availableCalls, 2);
+      expect(repo.requestCalls, 0);
+      expect(cubit.state.message, 'duplicate');
+      expect(cubit.state.isSubmitting, isFalse);
+      await cubit.close();
+    });
+
+    test('Egyptian success resets submitting state', () async {
+      final cubit = StudentSubjectRequestsCubit(FakeRepo());
+      await cubit.load();
+      cubit.selectSubject('enabled');
+      cubit.selectPackage('valid');
+
+      await cubit.submitEgyptian();
+
+      expect(cubit.state.message, 'subject_request_submitted');
+      expect(cubit.state.isSubmitting, isFalse);
+      await cubit.close();
+    });
   });
 
   group('subject request payment cubit', () {
@@ -468,16 +554,33 @@ class FakeRepo implements StudentSubjectRequestsRepo {
       : reconcileResults.removeAt(0);
 }
 
+class PendingAvailabilityRepo implements StudentSubjectRequestsRepo {
+  final _availability =
+      Completer<Either<Failure, SubjectRequestAvailability>>();
+
+  @override
+  Future<Either<Failure, SubjectRequestAvailability>> getAvailableSubjects() =>
+      _availability.future;
+
+  void complete(SubjectRequestAvailability value) =>
+      _availability.complete(Right(value));
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 SubjectRequestAvailability _availability({bool enabledSelectable = true}) =>
     SubjectRequestAvailability(
       curriculum: const SubjectRequestLookup(id: 'c1', name: 'Curriculum'),
       grade: const SubjectRequestLookup(id: 'g1', name: 'Grade'),
+      registrationMode: RegistrationMode.egyptian,
       subjects: [
         AvailableSubject(
           id: 'enabled',
           name: 'Math',
           isSelectable: enabledSelectable,
         ),
+        const AvailableSubject(id: 'other', name: 'Arabic', isSelectable: true),
         const AvailableSubject(
           id: 'disabled',
           name: 'Science',

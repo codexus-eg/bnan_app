@@ -10,20 +10,15 @@ class ParentScheduleChildSelector extends StatelessWidget {
   final GetParentChildrenSuccess state;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(16),
-      child: ParentChildSelector(
-        selectorKey: const Key('parentScheduleChildDropdown'),
-        children: state.children
-            .map(
-              (child) =>
-                  ParentChildSelectorItem(id: child.id, name: child.fullName),
-            )
-            .toList(),
-        selectedChildId: state.selectedChildId,
-        onChanged: context.read<GetParentChildrenCubit>().selectChild,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => ParentChildSelector(
+    selectorKey: const Key('parentScheduleChildDropdown'),
+    children: state.children
+        .map(
+          (child) =>
+              ParentChildSelectorItem(id: child.id, name: child.fullName),
+        )
+        .toList(),
+    selectedChildId: state.selectedChildId,
+    onChanged: context.read<GetParentChildrenCubit>().selectChild,
+  );
 }

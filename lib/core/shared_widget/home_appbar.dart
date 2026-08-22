@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/shared_widget/home_appbar_icon.dart';
 import 'package:bnan_app/core/shared_widget/home_appbar_title.dart';
+import 'package:bnan_app/core/shared_widget/notification_appbar_icon.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +40,7 @@ class HomeAppBar extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(child: HomeAppBarTitle(userName: userName)),
               const SizedBox(width: 12),
-              HomeAppBarIcon(
-                icon: ImageManager.bellIcon,
-                onTap: onNotificationTap,
-              ),
+              NotificationAppBarIcon(onTap: onNotificationTap),
             ],
           ),
         ),

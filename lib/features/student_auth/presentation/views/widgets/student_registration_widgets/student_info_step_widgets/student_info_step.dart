@@ -2,9 +2,11 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/shared_widget/custom_password_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_info_step_widgets/student_notes_widget.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_info_step_widgets/subjects_list.dart';
@@ -75,7 +77,7 @@ class StudentInfoStep extends StatelessWidget {
                       hint: S.of(context).selectGrade,
                       items: gradeNames,
                       isRequired: true,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         if (value == null) return;
 
                         final selectedGrade = state.grades.firstWhere(
@@ -87,13 +89,20 @@ class StudentInfoStep extends StatelessWidget {
                           name: selectedGrade.name,
                         );
 
-                        context
-                            .read<GetCurriculmSubjectsCubit>()
-                            .getCurriculumSubjects(
-                              curriculumId: registerCubit.curriculumId,
-                              gradeId: selectedGrade.id,
-                              isGulf: registerCubit.isGulf,
-                            );
+                        final subjectsCubit = context
+                            .read<GetCurriculmSubjectsCubit>();
+                        await subjectsCubit.getCurriculumSubjects(
+                          curriculumId: registerCubit.curriculumId,
+                          gradeId: selectedGrade.id,
+                          isGulf: registerCubit.isGulf,
+                        );
+                        if (!context.mounted) return;
+                        final subjectsState = subjectsCubit.state;
+                        if (subjectsState is GetSubjectsSuccess) {
+                          registerCubit.setAllSubjectIds(
+                            subjectsState.subjects.map((item) => item.id),
+                          );
+                        }
                       },
                     );
                   }
@@ -111,8 +120,10 @@ class StudentInfoStep extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 16),
-          const SubjectsList(),
+          if (registerCubit.requiresSubjectSelection) ...[
+            const SizedBox(height: 16),
+            const SubjectsList(),
+          ],
           const SizedBox(height: 16),
           LayoutBuilder(
             builder: (context, constraints) {
@@ -125,13 +136,10 @@ class StudentInfoStep extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                   validator: MyValidator.validateEmail,
                 ),
-                CustomTextField(
+                CustomPasswordField(
                   controller: registerCubit.studentPasswordController,
                   label: S.of(context).studentPasswordField,
                   hintText: S.of(context).passwordHint,
-                  isRequired: true,
-                  obscureText: true,
-                  validator: MyValidator.validateStrongPassword,
                 ),
               ];
               if (constraints.maxWidth < 360) {
@@ -154,35 +162,6 @@ class StudentInfoStep extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const StudentNotesWidget(),
-          if (registerCubit.isGulf) ...[
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.cityController,
-              label: S.of(context).city,
-              isRequired: true,
-              validator: (value) =>
-                  MyValidator.requiredField(value, S.of(context).city),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.regionController,
-              label: 'المنطقة',
-              isRequired: true,
-              validator: (value) => MyValidator.requiredField(value, 'المنطقة'),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.addressLine1Controller,
-              label: 'العنوان',
-              isRequired: true,
-              validator: (value) => MyValidator.requiredField(value, 'العنوان'),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: registerCubit.addressLine2Controller,
-              label: 'تفاصيل إضافية للعنوان',
-            ),
-          ],
         ],
       ),
     );

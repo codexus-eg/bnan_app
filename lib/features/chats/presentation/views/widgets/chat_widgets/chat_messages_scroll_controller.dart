@@ -4,6 +4,11 @@ class _ChatMessagesScrollController {
   static const _nearBottomThreshold = 100.0;
   static const _animationDuration = Duration(milliseconds: 220);
 
+  _ChatMessagesScrollController({this.onInitialPositioned}) {
+    controller.addListener(_markReadAtBottom);
+  }
+
+  final VoidCallback? onInitialPositioned;
   final controller = ScrollController();
   bool _initialPositioned = false;
   bool _disposed = false;
@@ -11,6 +16,8 @@ class _ChatMessagesScrollController {
   void initialize(bool isLoading, List<ChatMessageModel> messages) {
     if (!isLoading) _positionInitially(messages);
   }
+
+  void claimInitialPosition() => _initialPositioned = true;
 
   void update({
     required bool wasLoading,
@@ -52,6 +59,10 @@ class _ChatMessagesScrollController {
         _nearBottomThreshold;
   }
 
+  void _markReadAtBottom() {
+    if (_initialPositioned && _isNearBottom) onInitialPositioned?.call();
+  }
+
   void _scheduleScroll({required bool animated}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_disposed || !controller.hasClients) return;
@@ -65,6 +76,7 @@ class _ChatMessagesScrollController {
       } else {
         controller.jumpTo(target);
       }
+      if (!animated) onInitialPositioned?.call();
     });
   }
 

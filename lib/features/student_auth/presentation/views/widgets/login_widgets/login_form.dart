@@ -6,6 +6,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/login_cubit/login_cubit.dart';
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/login_cubit/login_state.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -33,6 +34,16 @@ class LoginForm extends StatelessWidget {
           }
         }
         if (state is LoginFailure) {
+          if (state.code?.trim().toUpperCase() == 'ACCOUNT_NOT_VERIFIED') {
+            MyNavigator.goTo(
+              context,
+              Routes.forgetPassword,
+              extra: OtpFlowArgs.accountVerification(
+                cubit.emailController.text.trim(),
+              ),
+            );
+            return;
+          }
           showCustomSnackBar(context, state.errorMessage, false);
         }
       },

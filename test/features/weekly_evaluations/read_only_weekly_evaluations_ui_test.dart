@@ -33,7 +33,8 @@ void main() {
     expect(find.byType(WeeklyEvaluationsSkeleton), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(LinearProgressIndicator), findsNothing);
-    expect(find.byKey(const Key('readOnlyWeekDropdown')), findsNothing);
+    expect(find.byKey(const Key('readOnlyWeekDropdown')), findsOneWidget);
+    expect(find.byKey(const Key('readOnlyClassroomDropdown')), findsOneWidget);
   });
 
   testWidgets('parent without children has one empty state', (tester) async {
@@ -46,14 +47,15 @@ void main() {
       ),
     );
     expect(find.text('No children are linked to this account'), findsOneWidget);
-    expect(find.byKey(const Key('readOnlyChildDropdown')), findsNothing);
+    expect(find.byKey(const Key('readOnlyChildDropdown')), findsOneWidget);
+    expect(find.byKey(const Key('readOnlyWeekDropdown')), findsOneWidget);
+    expect(find.byKey(const Key('readOnlyClassroomDropdown')), findsOneWidget);
   });
 
-  testWidgets('one child has a header but no dropdown', (tester) async {
+  testWidgets('one child keeps the parent dropdown layout', (tester) async {
     await _pump(tester, _parentState(children: const [_child1]));
-    expect(find.byKey(const Key('readOnlySingleChild')), findsOneWidget);
-    expect(find.textContaining('Child One'), findsOneWidget);
-    expect(find.byKey(const Key('readOnlyChildDropdown')), findsNothing);
+    expect(find.byKey(const Key('readOnlySingleChild')), findsNothing);
+    expect(find.byKey(const Key('readOnlyChildDropdown')), findsOneWidget);
   });
 
   testWidgets('multiple children have dropdown and selection calls cubit', (
@@ -71,11 +73,11 @@ void main() {
     expect(harness.cubit.state.selectedChildId, 'child-2');
   });
 
-  testWidgets('week dropdown is absent until backend supplies a week', (
+  testWidgets('week dropdown stays visible until backend supplies a week', (
     tester,
   ) async {
     await _pump(tester, _studentState(_gulfData(), week: null));
-    expect(find.byKey(const Key('readOnlyWeekDropdown')), findsNothing);
+    expect(find.byKey(const Key('readOnlyWeekDropdown')), findsOneWidget);
   });
 
   testWidgets('week dropdown keeps max week after selecting an older week', (
@@ -97,7 +99,59 @@ void main() {
     expect(find.text('Week 2'), findsWidgets);
     await tester.tap(find.text('Week 2').last);
     await tester.pumpAndSettle();
-    expect(harness.repo.calls.last, (week: 2, studentId: null));
+    expect(harness.repo.calls.last, (
+      week: 2,
+      studentId: null,
+      classroomId: 'general',
+    ));
+  });
+
+  testWidgets('week appears before classroom and both scopes stay combined', (
+    tester,
+  ) async {
+    final state = _studentState(_gulfData(), week: 2).copyWith(
+      classrooms: const [
+        ReadEvaluationReferenceModel(id: 'general', name: 'General'),
+        ReadEvaluationReferenceModel(id: 'arabic', name: 'Private Arabic'),
+      ],
+      selectedClassroomId: 'general',
+    );
+    final harness = await _pump(tester, state);
+    final week = find.byKey(const Key('readOnlyWeekDropdown'));
+    final classroom = find.byKey(const Key('readOnlyClassroomDropdown'));
+    expect(
+      tester.getTopLeft(week).dx,
+      lessThan(tester.getTopLeft(classroom).dx),
+    );
+
+    await tester.tap(classroom);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Private Arabic').last);
+    await tester.pumpAndSettle();
+    expect(harness.repo.calls.last, (
+      week: 2,
+      studentId: null,
+      classroomId: 'arabic',
+    ));
+
+    await tester.tap(week);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Week 1').last);
+    await tester.pumpAndSettle();
+    expect(harness.repo.calls.last, (
+      week: 1,
+      studentId: null,
+      classroomId: 'arabic',
+    ));
+  });
+
+  testWidgets('classroom dropdown never shows aggregate option', (
+    tester,
+  ) async {
+    await _pump(tester, _studentState(_gulfData()));
+    await tester.tap(find.byKey(const Key('readOnlyClassroomDropdown')));
+    await tester.pumpAndSettle();
+    expect(find.text('All Classrooms'), findsNothing);
   });
 
   testWidgets('gulf table shows subjects only and maps evaluated values', (
@@ -231,13 +285,21 @@ void main() {
         role: ReadOnlyEvaluationsRole.student,
         status: ReadOnlyEvaluationsStatus.failure,
         selectedWeek: 2,
+        selectedClassroomId: 'general',
+        classrooms: [
+          ReadEvaluationReferenceModel(id: 'general', name: 'General'),
+        ],
         failureMessage: 'Failed',
       ),
     );
     expect(find.text('Failed'), findsOneWidget);
     await tester.tap(find.byKey(const Key('readOnlyRetry')));
     await tester.pumpAndSettle();
-    expect(harness.repo.calls.single, (week: 2, studentId: null));
+    expect(harness.repo.calls.single, (
+      week: 2,
+      studentId: null,
+      classroomId: 'general',
+    ));
   });
 
   testWidgets('failure with previous data keeps content and inline error', (
@@ -270,6 +332,17 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byKey(const Key('readOnlyWeekDropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('changing classroom hides previous data', (tester) async {
+    await _pump(
+      tester,
+      _studentState(
+        _gulfData(),
+      ).copyWith(isLoading: true, isChangingClassroom: true, data: null),
+    );
+    expect(find.byType(WeeklyEvaluationsSkeleton), findsOneWidget);
+    expect(find.text('Physics'), findsNothing);
   });
 
   testWidgets('changing child keeps filters and uses management skeleton', (
@@ -316,10 +389,12 @@ void main() {
 const _child1 = ParentEvaluationChildModel(
   id: 'child-1',
   fullName: 'Child One',
+  classrooms: [ReadEvaluationReferenceModel(id: 'class-1', name: 'Class One')],
 );
 const _child2 = ParentEvaluationChildModel(
   id: 'child-2',
   fullName: 'Child Two',
+  classrooms: [ReadEvaluationReferenceModel(id: 'class-2', name: 'Class Two')],
 );
 const _evaluation = MeEvaluationValueModel(
   attendance: 'present',
@@ -339,6 +414,10 @@ ReadOnlyWeeklyEvaluationsState _studentState(
   status: status,
   selectedWeek: week,
   maxAvailableWeek: week,
+  classrooms: const [
+    ReadEvaluationReferenceModel(id: 'general', name: 'General'),
+  ],
+  selectedClassroomId: 'general',
   data: data,
   failureMessage: failureMessage,
 );
@@ -351,6 +430,8 @@ ReadOnlyWeeklyEvaluationsState _parentState({
   status: ReadOnlyEvaluationsStatus.success,
   children: children,
   selectedChildId: children.first.id,
+  classrooms: children.first.classrooms,
+  selectedClassroomId: children.first.classrooms.first.id,
   selectedWeek: 2,
   maxAvailableWeek: 2,
   data: data ?? _gulfData(week: 2),
@@ -456,18 +537,23 @@ class _SeedCubit extends ReadOnlyWeeklyEvaluationsCubit {
 }
 
 class _UiRepo implements WeeklyEvaluationsReadRepo {
-  final calls = <({int? week, String? studentId})>[];
+  final calls = <({int? week, String? studentId, String? classroomId})>[];
 
   @override
   Future<Either<Failure, List<ParentEvaluationChildModel>>>
   getParentChildren() async => const Right([]);
 
   @override
+  Future<Either<Failure, List<ReadEvaluationReferenceModel>>>
+  getMyClassrooms() async => const Right([]);
+
+  @override
   Future<Either<Failure, MeWeeklyEvaluationsResponseModel>> getMyEvaluations({
     int? week,
     String? studentId,
+    String? classroomId,
   }) async {
-    calls.add((week: week, studentId: studentId));
+    calls.add((week: week, studentId: studentId, classroomId: classroomId));
     return Right(
       MeWeeklyEvaluationsResponseModel(
         success: true,

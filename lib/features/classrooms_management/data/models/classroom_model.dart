@@ -8,6 +8,8 @@ class ClassroomModel {
     required this.isActive,
     required this.approvedStudentsCount,
     required this.assignedTeachersCount,
+    this.supervisor,
+    this.meetingLink = '',
   });
 
   final String id;
@@ -18,6 +20,8 @@ class ClassroomModel {
   final bool isActive;
   final int approvedStudentsCount;
   final int assignedTeachersCount;
+  final ClassroomSupervisorModel? supervisor;
+  final String meetingLink;
 
   static const List<ClassroomModel> skeletonClassrooms = [
     ClassroomModel(
@@ -47,8 +51,28 @@ class ClassroomModel {
   ];
 
   factory ClassroomModel.fromJson(Map<String, dynamic> json) {
+    final rawSupervisor = json['supervisor'];
+    ClassroomSupervisorModel? supervisor;
+    if (rawSupervisor is Map<String, dynamic>) {
+      supervisor = ClassroomSupervisorModel.fromJson(rawSupervisor);
+    } else if (rawSupervisor is Map) {
+      supervisor = ClassroomSupervisorModel.fromJson(
+        Map<String, dynamic>.from(rawSupervisor),
+      );
+    } else if (rawSupervisor != null && rawSupervisor.toString().isNotEmpty) {
+      supervisor = ClassroomSupervisorModel(
+        id: rawSupervisor.toString(),
+        name: '',
+      );
+    } else if (json['supervisorId'] != null) {
+      supervisor = ClassroomSupervisorModel(
+        id: json['supervisorId'].toString(),
+        name: '',
+      );
+    }
+
     return ClassroomModel(
-      id: json['id'] ?? '',
+      id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
       name: json['name'] ?? '',
       curriculum: ClassroomLookupModel.fromJson(json['curriculum'] ?? {}),
       grade: ClassroomLookupModel.fromJson(json['grade'] ?? {}),
@@ -58,18 +82,51 @@ class ClassroomModel {
       isActive: json['isActive'] ?? false,
       approvedStudentsCount: json['approvedStudentsCount'] ?? 0,
       assignedTeachersCount: json['assignedTeachersCount'] ?? 0,
+      supervisor: supervisor,
+      meetingLink: json['meetingLink']?.toString() ?? '',
     );
   }
 }
 
-class ClassroomLookupModel {
-  const ClassroomLookupModel({required this.id, required this.name});
+class ClassroomSupervisorModel {
+  const ClassroomSupervisorModel({
+    required this.id,
+    required this.name,
+  });
 
   final String id;
   final String name;
 
+  factory ClassroomSupervisorModel.fromJson(Map<String, dynamic> json) {
+    final id = json['id']?.toString() ?? json['_id']?.toString() ?? '';
+    final userMap = json['user'] is Map ? json['user'] as Map : null;
+    final userFullName = userMap?['fullName']?.toString() ??
+        userMap?['name']?.toString() ??
+        '';
+    final name = json['name']?.toString() ??
+        json['fullName']?.toString() ??
+        userFullName;
+    return ClassroomSupervisorModel(id: id, name: name);
+  }
+}
+
+class ClassroomLookupModel {
+  const ClassroomLookupModel({
+    required this.id,
+    required this.name,
+    this.registrationMode,
+  });
+
+  final String id;
+  final String name;
+  final String? registrationMode;
+
   factory ClassroomLookupModel.fromJson(Map<String, dynamic> json) {
-    return ClassroomLookupModel(id: json['id'] ?? '', name: json['name'] ?? '');
+    return ClassroomLookupModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      registrationMode: json['registrationMode']?.toString().trim(),
+    );
   }
 }
 

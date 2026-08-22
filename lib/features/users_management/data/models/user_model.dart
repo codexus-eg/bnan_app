@@ -13,6 +13,7 @@ class UserItem {
     required this.updatedAt,
     required this.curriculum,
     required this.grade,
+    this.registrationMode = '',
   });
 
   final String id;
@@ -28,9 +29,11 @@ class UserItem {
   final String updatedAt;
   final List<String> curriculum;
   final List<String> grade;
+  final String registrationMode;
 
   factory UserItem.fromJson(Map<String, dynamic> json) {
     final grade = _asList(json['grade']);
+    final classes = _asList(json['classes']);
     final createdAt = _asString(json['createdAt']);
 
     return UserItem(
@@ -40,13 +43,16 @@ class UserItem {
       email: _asString(json['email']),
       registrationDate: _asString(json['registrationDate'] ?? createdAt),
       parentName: _asString(json['parentName'] ?? json['parent']),
-      classes: _asString(json['classes'] ?? grade.join(', ')),
-      roles: _asString(json['role'] ?? json['roles']),
+      classes: classes.isEmpty ? grade.join(', ') : classes.join(', '),
+      roles: _asList(json['roles'] ?? json['role']).join(', '),
       status: _asString(json['status']),
       createdAt: createdAt,
       updatedAt: _asString(json['updatedAt']),
       curriculum: _asList(json['curriculum']),
       grade: grade,
+      registrationMode: _asList(
+        json['registrationModes'] ?? json['registrationMode'],
+      ).join(', '),
     );
   }
 
@@ -55,7 +61,14 @@ class UserItem {
   }
 }
 
-String _asString(Object? value) => value?.toString().trim() ?? '';
+String _asString(Object? value) {
+  if (value is Map) {
+    return _asString(
+      value['fullName'] ?? value['name'] ?? value['id'] ?? value['_id'],
+    );
+  }
+  return value?.toString().trim() ?? '';
+}
 
 List<String> _asList(Object? value) {
   final values = value is List ? value : [if (value != null) value];

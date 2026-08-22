@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_preview_cards.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
@@ -11,11 +12,13 @@ class ParentChildrenSection extends StatelessWidget {
     required this.onShowAll,
     required this.children,
     required this.loading,
+    required this.showNoData,
   });
 
   final VoidCallback onShowAll;
   final List<ParentChildModel> children;
   final bool loading;
+  final bool showNoData;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,10 @@ class ParentChildrenSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        ParentChildrenPreviewCards(children: children, loading: loading),
+        if (showNoData)
+          NoDataWidget(title: S.of(context).noChildrenLinked)
+        else
+          ParentChildrenPreviewCards(children: children, loading: loading),
       ],
     );
   }

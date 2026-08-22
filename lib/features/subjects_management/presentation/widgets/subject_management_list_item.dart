@@ -1,3 +1,6 @@
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/subjects_management/data/models/subject_response_model.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/get_subjects_cubit/get_subjects_cubit.dart';
 import 'package:bnan_app/features/subjects_management/presentation/manager/subjects_actions_cubit/subject_actions_cubit.dart';
@@ -27,8 +30,18 @@ class SubjectManagementListItem extends StatelessWidget {
   Future<void> _editSubject(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (_) => BlocProvider.value(
-        value: context.read<SubjectActionsCubit>(),
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: context.read<SubjectActionsCubit>()),
+          BlocProvider(
+            create: (_) => AcademicLookupsCubit(
+              repo: getIt<AcademicLookupsRepo>(),
+              loadClassroomsOnGrade: false,
+              loadSubjectsWithoutClassroom: false,
+              loadSubjectsOnClassroom: false,
+            ),
+          ),
+        ],
         child: EditSubjectDialog(subject: subject),
       ),
     );

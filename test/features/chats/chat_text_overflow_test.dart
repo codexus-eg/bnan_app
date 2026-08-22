@@ -49,7 +49,30 @@ void main() {
       );
 
       expect(tester.takeException(), isNull);
+      expect(find.text('Sender (Teacher)'), findsOneWidget);
       expect(find.text('$long $unbroken'), findsOneWidget);
     });
   }
+
+  testWidgets('current user name is hidden above own message', (tester) async {
+    const message = ChatMessageModel(
+      id: 'message',
+      roomId: 'room',
+      sender: ChatSenderModel(id: 'me', fullName: 'My Name', role: 'teacher'),
+      text: 'Hello',
+      attachments: [],
+      messageType: 'text',
+      deletedForEveryone: false,
+    );
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ChatBubble(message: message, currentUserId: 'me'),
+        ),
+      ),
+    );
+
+    expect(find.text('My Name'), findsNothing);
+    expect(find.text('Hello'), findsOneWidget);
+  });
 }

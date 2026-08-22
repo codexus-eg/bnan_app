@@ -7,4 +7,14 @@ abstract class StartSessionRepo {
     required String classroomId,
     required String subjectId,
   });
+
+  Future<Either<Failure, StartSessionData?>> getActiveSession({
+    required String classroomId,
+  });
+
+  Future<Either<Failure, String>> joinActiveSession({
+    required String classroomId,
+  });
+
+  Future<Either<Failure, void>> endSession({required String sessionId});
 }

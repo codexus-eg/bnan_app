@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/lessons_management/data/models/lesson_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,7 +53,7 @@ class LessonCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      lesson.startTime,
+                      ScheduleTimeUtils.range(lesson.startTime, lesson.endTime),
                       style: StylesManager.styleRegular12(
                         context,
                       ).copyWith(color: ColorManager.greyA8AF),
@@ -73,6 +74,15 @@ class LessonCard extends StatelessWidget {
                     context,
                   ).copyWith(color: ColorManager.greyA8AF),
                 ),
+                if (lesson.teacherName != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    lesson.teacherName!,
+                    style: StylesManager.styleRegular12(
+                      context,
+                    ).copyWith(color: ColorManager.greyA8AF),
+                  ),
+                ],
               ],
             ),
           ),

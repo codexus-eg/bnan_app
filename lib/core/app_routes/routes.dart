@@ -3,6 +3,7 @@ abstract class Routes {
   static const String onboarding = '/onboarding';
   static const String signUp = '/SignUp';
   static const String logIn = '/logIn';
+  static const String savedAccounts = '/saved-accounts';
   static const String forgetPassword = '/forget-password';
   static const String register = '/register';
   static const String curriculum = '/curriculum';
@@ -12,18 +13,24 @@ abstract class Routes {
   static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String notification = '/notification';
+  static const String notificationSettings = '/notification/settings';
   static const String chat = '/chat/:roomId';
   static const String legacyChat = '/chat';
   static const String classroomDocuments = '/classroomDocuments';
+  static const String classroomMembers = '/classroomMembers';
   static const String studentGroups = '/studentGroups';
   static const String requestLesson = '/requestLesson';
   static const String studentSubjects = '/studentSubjects';
+  static const String studentSubscriptions = '/student/subscriptions';
+  static const String studentSubscriptionRenewal =
+      '/student/subscriptions/renew';
   static const String updatePhone = '/updatePhone';
   static const String updateUserName = '/updateUserName';
   static const String updatePassword = '/updatePassword';
   static const String teacherRegistration = '/teacherRegistration';
   static const String teacherHome = '/teacherHome';
   static const String adminHome = '/adminHome';
+  static const String addClassroomSubject = '/admin/classroom-subjects/add';
   static const String discountCodes = '/discountCodes';
   static const String teacherPayrolls = '/admin/teacher-payrolls';
   static const String teacherPayrollCreate =
@@ -49,8 +56,10 @@ abstract class Routes {
       '/teacherRegistrationRequest';
   static const String groups = '/groups';
   static const String teacherPerformance = '/teacherPerformance';
+  static const String teacherMyEarnings = '/teacherMyEarnings';
   static const String weeklyIdealStudents = '/weeklyIdealStudents';
   static const String idealTeacher = '/idealTeacher';
+  static const String idealSupervisor = '/idealSupervisor';
   static const String weeklyEvaluations = '/weeklyEvaluations';
   static const String attendance = '/attendance';
   static const String classSchedules = '/classSchedules';
@@ -68,6 +77,8 @@ abstract class Routes {
   static const String lessonsManagement = '/lessonsManagement';
   static const String teacherApplication = '/teacherApplication';
   static const String registrationRequests = '/registrationRequests';
+  static const String adminEgyptianSubscriptionRenewals =
+      '/admin/subscription-renewals/egyptian';
   static const String gradesManagement = '/gradesManagement';
   static const String studentClassroomAssignment =
       '/studentClassroomAssignment';
@@ -76,6 +87,7 @@ abstract class Routes {
 
   static String teacherPayrollCreatePath(String teacherId) =>
       teacherPayrollCreate.replaceFirst(':teacherId', teacherId);
+  static String get directLogIn => '$logIn?direct=true';
   static String chatPath(String roomId) =>
       chat.replaceFirst(':roomId', Uri.encodeComponent(roomId));
   static String parentSubscriptionRenewalPath(String studentId) =>

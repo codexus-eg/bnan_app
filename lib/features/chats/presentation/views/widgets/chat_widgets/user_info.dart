@@ -26,11 +26,15 @@ class UserInfo extends StatelessWidget {
           children: [
             const CircleAvatar(radius: 4, backgroundColor: Colors.green),
             const SizedBox(width: 4),
-            Text(
-              S.of(context).onlineNow,
-              style: StylesManager.styleRegular14(
-                context,
-              ).copyWith(color: ColorManager.greyE8E9),
+            Flexible(
+              child: Text(
+                S.of(context).onlineNow,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: StylesManager.styleRegular14(
+                  context,
+                ).copyWith(color: ColorManager.greyE8E9),
+              ),
             ),
           ],
         ),

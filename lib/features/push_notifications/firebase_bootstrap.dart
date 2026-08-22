@@ -1,7 +1,10 @@
 import 'package:bnan_app/firebase_options.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
+import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<bool> initializeFirebase() async {
   if (kIsWeb ||
@@ -26,5 +29,23 @@ Future<bool> initializeFirebase() async {
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await initializeFirebase();
+  if (!await initializeFirebase() || message.notification != null) return;
+  final data = <String, dynamic>{...message.data};
+  final isChatRing =
+      data['key']?.toString().trim().toUpperCase() == 'STUDENT_CALL_ALERT';
+  if (isChatRing) {
+    debugPrint('[ChatRing] push received');
+    debugPrint('[ChatRing] platform=${defaultTargetPlatform.name}');
+    debugPrint('[ChatRing] appState=background/terminated');
+    data['screen'] = 'student_home';
+  }
+  final notification = AppNotification.fromJson(data);
+  if (notification.id.isEmpty && notification.key.isEmpty) return;
+  final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
+  await local.initialize((_) {});
+  await local.showNotification(
+    notification,
+    playNudgeLocally: false,
+    appState: 'background/terminated',
+  );
 }

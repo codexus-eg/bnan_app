@@ -10,16 +10,27 @@ void main() {
   const request = AddSubjectRequestModel(
     name: 'Arabic22',
     curriculumId: 'curriculum-1',
-    gradeId: 'grade-1',
+    gradeIds: ['grade-1', 'grade-2'],
   );
 
   test('add request sends the exact backend contract', () {
     expect(request.toJson(), {
       'name': 'Arabic22',
       'curriculum': 'curriculum-1',
-      'grade': 'grade-1',
+      'grades': ['grade-1', 'grade-2'],
     });
-    expect(request.toJson(), isNot(contains('gradeId')));
+    expect(request.toJson(), isNot(contains('grade')));
+  });
+
+  test('update request sends the final grades list', () {
+    const update = UpdateSubjectRequestModel(
+      name: 'Arabic',
+      gradeIds: ['grade-2'],
+    );
+    expect(update.toJson(), {
+      'name': 'Arabic',
+      'grades': ['grade-2'],
+    });
   });
 
   test('subject response safely parses optional grade', () {
@@ -30,7 +41,22 @@ void main() {
     });
     expect(subject.grade?.id, 'grade-1');
     expect(subject.grade?.name, 'Grade one');
+    expect(subject.grades, hasLength(1));
     expect(SubjectModel.fromJson({'id': 'subject-2'}).grade, isNull);
+  });
+
+  test('subject response parses grade from the list endpoint grades array', () {
+    final subject = SubjectModel.fromJson({
+      'id': 'subject-1',
+      'name': 'Arabic',
+      'grades': [
+        {'id': 'grade-1', 'name': 'صف اول ابتدائي'},
+        {'id': 'grade-2', 'name': 'صف ثاني ابتدائي'},
+      ],
+    });
+
+    expect(subject.grades.map((item) => item.id), ['grade-1', 'grade-2']);
+    expect(subject.grades.first.name, 'صف اول ابتدائي');
   });
 
   test('repository posts protected request through repoGuard', () async {

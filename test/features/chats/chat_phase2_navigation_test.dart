@@ -74,6 +74,11 @@ void main() {
       expect(ChatRoomNavigation.path(room), Routes.chatPath('room-id'));
       expect(args.roomType, type);
       expect(args.classroomId, type == 'classroom' ? 'classroom-id' : isNull);
+      expect(args.accessScope, type == 'classroom' ? 'private' : isNull);
+      expect(
+        args.classroomSubjectId,
+        type == 'classroom' ? 'classroom-subject-id' : isNull,
+      );
     }
   });
 
@@ -89,6 +94,8 @@ ChatRoomSummaryModel _room({required String type, String id = 'room-id'}) {
     displayName: 'Room',
     subtitle: '',
     classroomId: type == 'classroom' ? 'classroom-id' : null,
+    accessScope: type == 'classroom' ? 'private' : null,
+    classroomSubjectId: type == 'classroom' ? 'classroom-subject-id' : null,
   );
 }
 

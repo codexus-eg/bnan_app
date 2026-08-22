@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -177,9 +178,9 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
 
     context.read<CreateMonthlyCertificateCubit>().createMonthlyCertificate(
       request: CreateMonthlyCertificateRequestModel(
-        classroomId: selectedClassroomId,
         studentId: studentId,
         subjects: subjectRequests,
+        signerName: SessionManager.instance.userName?.trim() ?? '',
       ),
     );
   }

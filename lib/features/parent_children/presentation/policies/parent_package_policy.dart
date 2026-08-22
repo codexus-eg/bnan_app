@@ -1,6 +1,6 @@
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
+import 'package:bnan_app/features/packages_management/data/models/egyptian_package_policy.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
-import 'package:bnan_app/features/packages_management/data/models/package_type.dart';
 
 abstract class ParentPackagePolicy {
   static bool isRegistrationModeSupported(String? mode) =>
@@ -13,8 +13,11 @@ abstract class ParentPackagePolicy {
     if (!package.isActive || !isRegistrationModeSupported(registrationMode)) {
       return false;
     }
+    if (registrationMode == 'egyptian') {
+      return EgyptianPackagePolicy.isValid(package);
+    }
     if (package.accessScope != PackageAccessScope.singleSubject) return true;
-    return registrationMode == 'egyptian' && package.type == PackageType.hours;
+    return false;
   }
 
   static bool isVisible(

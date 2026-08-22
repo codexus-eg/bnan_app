@@ -128,6 +128,23 @@ void main() {
     expect(rig.totalRequests, 1);
     expect(rig.invalidation.count, 0);
   });
+
+  for (final code in const [
+    'SUBSCRIPTION_SUSPENDED',
+    'SUBSCRIPTION_EXPIRED',
+    'SUBSCRIPTION_CANCELLED',
+    'NO_VALID_SUBSCRIPTION',
+  ]) {
+    test('$code invalidates access without refreshing', () async {
+      final rig = _Rig((_) => _json(403, {'code': code}));
+      await expectLater(
+        rig.dio.get('/resource', options: _protected()),
+        throwsA(isA<DioException>()),
+      );
+      expect(rig.accessInvalidationCode, code);
+      expect(rig.refreshRequests, 0);
+    });
+  }
 }
 
 Options _protected() => Options(extra: {'isProtected': true});
@@ -178,6 +195,10 @@ class _Rig {
         tokens: store,
         refresh: TokenRefreshCoordinator(dio: refreshDio, tokens: store),
         invalidate: invalidation.call,
+        invalidateAccess: (code) async {
+          accessInvalidationCode = code;
+          await invalidation();
+        },
       ),
     );
   }
@@ -187,6 +208,7 @@ class _Rig {
   late final Dio dio;
   int totalRequests = 0, refreshRequests = 0, resourceRequests = 0;
   String? lastAuthorization;
+  String? accessInvalidationCode;
 }
 
 class _TokenStore implements TokenStore {

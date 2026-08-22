@@ -1,55 +1,61 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:bnan_app/core/utils/device_file_saver.dart';
+import 'package:bnan_app/core/utils/download_save_result.dart';
+import 'package:bnan_app/core/utils/download_source.dart';
+import 'package:flutter/foundation.dart';
 
 class FileDownloader {
   const FileDownloader._();
 
-  static Future<bool> download({
+  static Future<DownloadSaveResult> download({
     required String url,
     required String fileName,
   }) async {
     final value = url.trim();
-    if (value.isEmpty) return false;
+    if (value.isEmpty) return const DownloadSaveResult.failed();
 
     try {
-      final directory = await _getDownloadDirectory();
-      if (directory == null) return false;
-
-      final name = fileName.trim().isEmpty
+      final requestedName = fileName.trim().isEmpty
           ? 'downloaded_file'
           : fileName.trim();
-
-      final path = '${directory.path}/$name';
-
-      await Dio().download(
-        value,
-        path,
+      final name = requestedName.replaceAll(
+        RegExp(r'[<>:"/\\|?*\x00-\x1F]'),
+        '_',
       );
 
-      return true;
+      final downloaded = await DownloadSource.obtain(value, name);
+      if (downloaded == null) return const DownloadSaveResult.failed();
+      try {
+        final savedName = _nameForMimeType(name, downloaded.mimeType);
+        return await DeviceFileSaver.save(
+          source: downloaded.file,
+          fileName: savedName,
+          mimeType: downloaded.mimeType,
+        );
+      } finally {
+        if (await downloaded.file.exists()) await downloaded.file.delete();
+      }
     } catch (error) {
-      print('DOWNLOAD ERROR: $error');
-      return false;
+      debugPrint('DOWNLOAD ERROR: $error');
+      return const DownloadSaveResult.failed();
     }
   }
 
-  static Future<Directory?> _getDownloadDirectory() async {
-    if (Platform.isAndroid) {
-      final downloads = await getDownloadsDirectory();
-
-      if (downloads != null) {
-        return downloads;
-      }
-
-      return getExternalStorageDirectory();
+  static String _nameForMimeType(String name, String mimeType) {
+    final extension = switch (mimeType) {
+      'image/png' => 'png',
+      'image/jpeg' => 'jpg',
+      'image/webp' => 'webp',
+      'application/pdf' => 'pdf',
+      _ => null,
+    };
+    if (extension == null) return name;
+    final current = name.split('.').last.toLowerCase();
+    if (current == extension || mimeType == 'image/jpeg' && current == 'jpeg') {
+      return name;
     }
-
-    if (Platform.isIOS) {
-      return getApplicationDocumentsDirectory();
-    }
-
-    return null;
+    final base = name.contains('.')
+        ? name.substring(0, name.lastIndexOf('.'))
+        : name;
+    return '$base.$extension';
   }
 }

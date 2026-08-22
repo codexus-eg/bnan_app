@@ -11,23 +11,26 @@ class RegistrationTopSection extends StatelessWidget {
     required this.subtitle,
     required this.currentStep,
     required this.listLength,
-    required this.stepHeader, this.textColor,
+    required this.stepHeader,
+    this.textColor,
+    this.showHeader = true,
   });
   final String title, subtitle, stepHeader;
   final int currentStep, listLength;
   final Color? textColor;
+  final bool showHeader;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        RegistrationHeader(title: title, subtitle: subtitle),
+        if (showHeader) RegistrationHeader(title: title, subtitle: subtitle),
         RegistrationStepper(currentStep: currentStep, listLength: listLength),
         Text(
           stepHeader,
           style: StylesManager.styleBold16(
             context,
-          ).copyWith(color:textColor?? ColorManager.black),
+          ).copyWith(color: textColor ?? ColorManager.black),
         ),
         const SizedBox(height: 16),
       ],

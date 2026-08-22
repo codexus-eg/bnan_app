@@ -15,6 +15,7 @@ abstract class AttendanceRepo {
   Future<Either<Failure, List<AttendanceStudent>>> getStudents(
     String classroomId,
   );
+  Future<Either<Failure, void>> callStudent(String studentId);
   Future<Either<Failure, List<AttendanceRecord>>> submitBulk(
     BulkAttendanceRequest request,
   );

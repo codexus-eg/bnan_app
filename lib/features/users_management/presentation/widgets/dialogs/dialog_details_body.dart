@@ -19,37 +19,66 @@ class DialogDetailsBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DetailRow(
-            label: s.email,
-            value: user.email,
-            showCopy: true,
-            onCopy: user.email.trim().isEmpty
-                ? null
-                : () => ClipboardHelper.copy(context, user.email),
-            icon: ImageManager.usersManagementEmailIcon,
-          ),
-          DetailRow(
-            label: s.phoneNumber,
-            value: user.phone,
-            showCopy: true,
-            onCopy: user.phone.trim().isEmpty
-                ? null
-                : () => ClipboardHelper.copy(context, user.phone),
-            icon: ImageManager.usersManagementPhoneIcon,
-          ),
-          DetailRow(
-            label: s.password,
-            value: 'غير متاحة',
-            icon: ImageManager.usersManagementKeyIcon,
-          ),
-          DetailRow(
-            label: s.registrationDate,
-            value: user.registrationDate,
-            icon: ImageManager.usersManagementCalendarIcon,
-          ),
-          RoleRowSection(s: s, user: user),
+          if (user.id.isNotEmpty)
+            _copyRow(
+              context,
+              'ID',
+              user.id,
+              ImageManager.usersManagementUserIcon,
+            ),
+          if (user.email.isNotEmpty)
+            _copyRow(
+              context,
+              s.email,
+              user.email,
+              ImageManager.usersManagementEmailIcon,
+            ),
+          if (user.phone.isNotEmpty)
+            _copyRow(
+              context,
+              s.phoneNumber,
+              user.phone,
+              ImageManager.usersManagementPhoneIcon,
+            ),
+          ..._extraRows(s),
+          if (user.roles.isNotEmpty) RoleRowSection(s: s, user: user),
         ],
       ),
     );
+  }
+
+  DetailRow _copyRow(
+    BuildContext context,
+    String label,
+    String value,
+    String icon,
+  ) => DetailRow(
+    label: label,
+    value: value,
+    showCopy: true,
+    onCopy: () => ClipboardHelper.copy(context, value),
+    icon: icon,
+  );
+
+  List<Widget> _extraRows(S s) {
+    final values = <({String label, String value})>[
+      (label: s.status, value: user.status),
+      (label: s.registrationMode, value: user.registrationMode),
+      (label: s.registrationDate, value: user.registrationDate),
+      (label: s.curriculums, value: user.curriculum.join(', ')),
+      (label: s.grade, value: user.grade.join(', ')),
+      (label: s.classes, value: user.classes),
+      (label: s.parent, value: user.parentName),
+    ];
+    return values
+        .where((item) => item.value.trim().isNotEmpty)
+        .map(
+          (item) => DetailRow(
+            label: item.label,
+            value: item.value,
+            icon: ImageManager.usersManagementUserIcon,
+          ),
+        )
+        .toList(growable: false);
   }
 }

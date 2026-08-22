@@ -10,12 +10,14 @@ class EmptyStateWidget extends StatelessWidget {
     required this.title,
     this.width = 170,
     this.imageHeight = 150,
+    this.titleStyle,
   });
 
   final String image;
   final String title;
   final double width;
   final double imageHeight;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +39,11 @@ class EmptyStateWidget extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: StylesManager.styleBold20(
-                context,
-              ).copyWith(color: ColorManager.grey7D7D),
+              style:
+                  titleStyle ??
+                  StylesManager.styleBold20(
+                    context,
+                  ).copyWith(color: ColorManager.grey7D7D),
             ),
           ],
         ),

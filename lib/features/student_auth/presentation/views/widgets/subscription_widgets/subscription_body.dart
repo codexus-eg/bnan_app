@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/currency_selector.dart';
+import 'package:bnan_app/features/packages_management/data/models/egyptian_package_policy.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscription_grid.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/subscription_header.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +22,15 @@ class SubscriptionBody extends StatelessWidget {
         slivers: [
           const SliverToBoxAdapter(child: SubscriptionHeader()),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
-          const SliverToBoxAdapter(child: CurrencySelector()),
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
             padding: EdgeInsetsDirectional.only(start: 14, end: 18),
             sliver: SubscriptionGrid(
               curriculumId: curriculumId,
               curriculumName: curriculumName,
               registrationMode: registrationMode,
+              packageFilter: registrationMode == 'egyptian'
+                  ? EgyptianPackagePolicy.isValid
+                  : null,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),

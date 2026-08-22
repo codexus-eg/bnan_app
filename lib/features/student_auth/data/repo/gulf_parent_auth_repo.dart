@@ -3,13 +3,13 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
-import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/auth_response_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/register_parent_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class GulfParentAuthRepo {
   Future<Either<Failure, AuthResponseModel>> authenticate(
-    ParentRegisterRequestModel request,
+    RegisterParentModel request,
   );
 }
 
@@ -20,7 +20,7 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
 
   @override
   Future<Either<Failure, AuthResponseModel>> authenticate(
-    ParentRegisterRequestModel request,
+    RegisterParentModel request,
   ) async {
     try {
       try {
@@ -28,10 +28,7 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
           EndPoints.login,
           data: {'email': request.email, 'password': request.password},
         );
-        return _validateSaveAndSync(
-          AuthResponseModel.fromJson(response),
-          request.phone,
-        );
+        return _validateAndSave(AuthResponseModel.fromJson(response));
       } on AppException {
         final response = await api.post(
           EndPoints.registerParent,
@@ -51,7 +48,11 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
   ) async {
     final role = response.user.role.trim().toLowerCase();
     final status = response.user.status.trim().toLowerCase();
-    if (!response.hasToken || role != 'parent' || status != 'active') {
+    if (role != 'parent') {
+      return Left(Failure(message: 'Parent account is not active'));
+    }
+    if (!response.hasToken) return Right(response);
+    if (status != 'active') {
       return Left(Failure(message: 'Parent account is not active'));
     }
     await SessionManager.instance.saveSession(
@@ -64,19 +65,5 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
       userPhone: response.user.phone,
     );
     return Right(response);
-  }
-
-  Future<Either<Failure, AuthResponseModel>> _validateSaveAndSync(
-    AuthResponseModel response,
-    String phone,
-  ) async {
-    final validated = await _validateAndSave(response);
-    if (validated.isLeft()) return validated;
-    await api.patch(
-      EndPoints.updateLoggedUserPhone,
-      data: {'phone': phone},
-      isProtected: true,
-    );
-    return validated;
   }
 }

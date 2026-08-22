@@ -13,10 +13,12 @@ class CustomDeleteDialog extends StatelessWidget {
     required this.dialogHeader,
     required this.subtitle,
     this.onPressed,
+    this.showCancelButton = false,
   });
 
   final String gradeId;
   final bool isLoading;
+  final bool showCancelButton;
   final String dialogHeader, subtitle;
   final Function()? onPressed;
 
@@ -37,14 +39,33 @@ class CustomDeleteDialog extends StatelessWidget {
             ).copyWith(color: ColorManager.mainColor14),
           ),
           const SizedBox(height: 16),
-          CustomAppButton(
-            text: S.of(context).delete,
-            backgroundColor: ColorManager.redBA,
-            isLoading: isLoading,
-            onPressed: onPressed,
-          ),
+          if (showCancelButton)
+            Row(
+              children: [
+                Expanded(
+                  child: CustomAppButton(
+                    text: S.of(context).cancel,
+                    onPressed: isLoading ? null : () => Navigator.pop(context),
+                    backgroundColor: ColorManager.white,
+                    borderColor: ColorManager.blueE3,
+                    textColor: ColorManager.mainColor15,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(child: _deleteButton(context)),
+              ],
+            )
+          else
+            _deleteButton(context),
         ],
       ),
     );
   }
+
+  Widget _deleteButton(BuildContext context) => CustomAppButton(
+    text: S.of(context).delete,
+    backgroundColor: ColorManager.redBA,
+    isLoading: isLoading,
+    onPressed: onPressed,
+  );
 }

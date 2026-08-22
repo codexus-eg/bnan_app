@@ -4,7 +4,6 @@ import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_page.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
-import 'package:bnan_app/features/parent_subscriptions/presentation/manager/get_parent_subscriptions_cubit/get_parent_subscriptions_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscriptions_view.dart';
 import 'package:bnan_app/features/shared_profile/presentation/views/bodies/parent_profile_body.dart';
 import 'package:flutter/material.dart';
@@ -29,23 +28,18 @@ class ParentHomeContent extends StatelessWidget {
         onMenuTap: onMenuTap,
         onShowAllChildren: onShowAllChildren,
       ),
-      const ParentChildrenBody(),
-      const GroupsView(showBackButton: false),
+      BlocProvider(
+        create: (_) => getIt<GetParentChildrenCubit>()..getParentChildren(),
+        child: const ParentChildrenBody(),
+      ),
+      BlocProvider(
+        create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+        child: const GroupsView(showBackButton: false),
+      ),
       const ParentSubscriptionsView(),
       const ParentProfileBody(),
     ];
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<GetParentChildrenCubit>()..getParentChildren(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<GetParentSubscriptionsCubit>()..load(),
-        ),
-        BlocProvider(create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms()),
-      ],
-      child: IndexedStack(index: index, children: pages),
-    );
+    return pages[index];
   }
 }

@@ -11,12 +11,14 @@ class ProfileInfoRow extends StatelessWidget {
     required this.value,
     required this.icon,
     this.onEdit,
+    this.iconColor,
   });
 
   final String label;
   final String value;
   final String icon;
   final VoidCallback? onEdit;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,12 @@ class ProfileInfoRow extends StatelessWidget {
       padding: const EdgeInsetsDirectional.only(bottom: 8),
       child: Row(
         children: [
-          SvgPicture.asset(icon),
+          SvgPicture.asset(
+            icon,
+            colorFilter: iconColor != null
+                ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
+                : null,
+          ),
           const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/attachment_file.dart';
 import 'package:bnan_app/generated/l10n.dart';
 
 class AssignmentModel {
@@ -36,6 +37,7 @@ class AssignmentModel {
   });
 
   factory AssignmentModel.fromJson(Map<String, dynamic> json) {
+    final attachment = AttachmentFile.fromJson(json['attachment']);
     return AssignmentModel(
       id: json['id'] ?? '',
       classroomSubject: _classroomSubjectId(json['classroomSubject']),
@@ -49,7 +51,7 @@ class AssignmentModel {
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       dueDate: json['dueDate'] ?? '',
-      attachment: json['attachment'] ?? '',
+      attachment: attachment.source,
       totalPoints: json['totalPoints'] ?? 0,
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',

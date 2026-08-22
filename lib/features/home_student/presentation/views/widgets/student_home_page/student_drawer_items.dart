@@ -18,10 +18,6 @@ List<DrawerItemModel> studentDrawerItems(BuildContext context) {
       icon: ImageManager.fileQuestionIcon,
     ),
     DrawerItemModel(
-      title: S.of(context).myGroups,
-      icon: ImageManager.userProfileGroupIcon,
-    ),
-    DrawerItemModel(
       title: S.of(context).certificates,
       icon: ImageManager.certificateBadgeIcon,
     ),

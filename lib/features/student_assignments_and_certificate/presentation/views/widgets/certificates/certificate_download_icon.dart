@@ -1,42 +1,17 @@
-import 'package:bnan_app/core/utils/assets.dart';
+import 'package:bnan_app/core/shared_widget/download_icon_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
-class CertificateDownloadIcon extends StatefulWidget {
-  const CertificateDownloadIcon({super.key, required this.onTap});
+class CertificateDownloadIcon extends StatelessWidget {
+  const CertificateDownloadIcon({
+    super.key,
+    required this.url,
+    required this.fileName,
+  });
 
-  final Future<void> Function() onTap;
-
-  @override
-  State<CertificateDownloadIcon> createState() =>
-      _CertificateDownloadIconState();
-}
-
-class _CertificateDownloadIconState extends State<CertificateDownloadIcon> {
-  bool isLoading = false;
+  final String url;
+  final String fileName;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: isLoading ? null : _download,
-      behavior: HitTestBehavior.opaque,
-      child: isLoading
-          ? const SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : SvgPicture.asset(
-              ImageManager.downloadIcon,
-              height: 20,
-              width: 20,
-              fit: BoxFit.contain,
-            ),
-    );
-  }
-
-  Future<void> _download() async {
-    setState(() => isLoading = true);
-    await widget.onTap();
-    if (mounted) setState(() => isLoading = false);
-  }
+  Widget build(BuildContext context) =>
+      DownloadIconButton(url: url, fileName: fileName);
 }

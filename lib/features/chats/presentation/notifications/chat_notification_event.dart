@@ -3,20 +3,24 @@ import 'package:bnan_app/features/chats/data/models/chat_notification_model.dart
 
 class ChatNotificationEvent {
   const ChatNotificationEvent({
+    this.notificationId = '',
     required this.messageId,
     required this.roomId,
     required this.senderId,
     required this.senderName,
     required this.message,
     required this.createdAt,
+    this.roomName = '',
   });
 
   final String messageId;
+  final String notificationId;
   final String roomId;
   final String senderId;
   final String senderName;
   final String message;
   final DateTime createdAt;
+  final String roomName;
 
   factory ChatNotificationEvent.fromMessage(ChatMessageModel message) {
     final attachmentName = message.attachments.firstOrNull?.fileName ?? '';
@@ -37,6 +41,7 @@ class ChatNotificationEvent {
   ) {
     final data = notification.data;
     return ChatNotificationEvent(
+      notificationId: notification.notificationId.trim(),
       messageId: data.messageId.trim().isNotEmpty
           ? data.messageId.trim()
           : notification.resource.id.trim().isNotEmpty
@@ -47,21 +52,26 @@ class ChatNotificationEvent {
       senderName: data.senderName.trim(),
       message: data.message.trim(),
       createdAt: DateTime.now(),
+      roomName: data.roomName.trim(),
     );
   }
 
   factory ChatNotificationEvent.fromPush({
     required String messageId,
+    required String notificationId,
     required String roomId,
     required String senderId,
     required String senderName,
     required String message,
+    String roomName = '',
   }) => ChatNotificationEvent(
-    messageId: messageId,
+    messageId: messageId.trim().isEmpty ? notificationId : messageId,
+    notificationId: notificationId,
     roomId: roomId,
     senderId: senderId,
     senderName: senderName,
     message: message,
     createdAt: DateTime.now(),
+    roomName: roomName.trim(),
   );
 }

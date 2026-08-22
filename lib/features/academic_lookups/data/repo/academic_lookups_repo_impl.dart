@@ -85,6 +85,19 @@ class AcademicLookupsRepoImpl implements AcademicLookupsRepo {
     });
   }
 
+  @override
+  Future<Either<Failure, Unit>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+  }) => _guard(() async {
+    await apiConsumer.post(
+      EndPoints.classroomSubjectsRoot,
+      data: {'classroom': classroomId, 'subject': subjectId},
+      isProtected: true,
+    );
+    return unit;
+  });
+
   Future<List<AcademicSubjectModel>> _getCurriculumSubjects(
     String curriculumId,
     String gradeId,

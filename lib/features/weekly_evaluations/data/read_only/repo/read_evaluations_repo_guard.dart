@@ -12,7 +12,14 @@ Future<Either<Failure, T>> readEvaluationsRepoGuard<T>(
   } on AppException catch (error) {
     return Left(
       Failure(
-        message: ReadEvaluationsFailureMapper.map(message: error.message),
+        message: ReadEvaluationsFailureMapper.map(
+          message: error.message,
+          code: error.code,
+          statusCode: error.statusCode,
+        ),
+        responseReceived: error.responseReceived,
+        statusCode: error.statusCode,
+        code: error.code,
       ),
     );
   } catch (_) {

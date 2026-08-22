@@ -5,6 +5,7 @@ import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/home_appbar.dart';
 import 'package:bnan_app/features/dashboard/data/models/parent_dashboard_model.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_state.dart';
 import 'package:bnan_app/features/dashboard/presentation/widgets/dashboard_builder.dart';
 import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_children_section.dart';
@@ -56,6 +57,10 @@ class ParentHomePage extends StatelessWidget {
                       onShowAll: onShowAllChildren,
                       children: data.children,
                       loading: loading,
+                      showNoData:
+                          context.read<DashboardCubit>().state
+                              is DashboardSuccess &&
+                          data.children.isEmpty,
                     ),
                   ],
                 ),

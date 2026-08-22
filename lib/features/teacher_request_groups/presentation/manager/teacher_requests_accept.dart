@@ -2,11 +2,12 @@ part of 'teacher_registration_requests_cubit.dart';
 
 extension TeacherRequestsAcceptFlow on TeacherRegistrationRequestsCubit {
   Future<void> acceptRequest(String requestId) async {
-    if (requestId.isEmpty || _acceptingRequestId != null) return;
+    if (isClosed || requestId.isEmpty || _acceptingRequestId != null) return;
     _acceptingRequestId = requestId;
     _emitState(TeacherRequestAccepting(requests, _pagination, requestId));
     final result = await repo.acceptRequest(requestId);
     _acceptingRequestId = null;
+    if (isClosed) return;
     result.fold((failure) => _handleAcceptFailure(requestId, failure), (
       accepted,
     ) {

@@ -2,6 +2,7 @@ import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_m
 import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_request.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_state.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GulfScheduleCubit extends Cubit<GulfScheduleState> {
@@ -25,9 +26,12 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
     'thursday',
     'friday',
   };
-  static final _timePattern = RegExp(r'^(?:[01]\d|2[0-3]):[0-5]\d$');
-
   Future<void> load() => _load(showLoading: true);
+
+  Future<void> refresh() {
+    repo.invalidateScheduleCache();
+    return _load(showLoading: false);
+  }
 
   void selectClassroom(String? id) {
     if (id == null || !state.classrooms.any((item) => item.id == id)) return;
@@ -47,12 +51,16 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
     String? originalDay,
     required String day,
     required String startTime,
+    required String endTime,
   }) async {
     if (!canManage) return false;
     final classroom = state.selectedClassroom;
     if (state.isSaving || classroom == null) return false;
     final entries = [...classroom.entries];
-    if (!_days.contains(day) || !_timePattern.hasMatch(startTime)) {
+    if (!_days.contains(day) ||
+        !ScheduleTimeUtils.isValid(startTime) ||
+        !ScheduleTimeUtils.isValid(endTime) ||
+        !ScheduleTimeUtils.isEndAfter(startTime, endTime)) {
       return _reject(GulfScheduleIssue.invalidData);
     }
     if (entries.any((item) => item.day == day && item.day != originalDay)) {
@@ -63,7 +71,9 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
       return _reject(GulfScheduleIssue.missingClassroomSubject);
     }
     final next = entries.where((item) => item.day != originalDay).toList()
-      ..add(GulfScheduleEntry(day: day, startTime: startTime));
+      ..add(
+        GulfScheduleEntry(day: day, startTime: startTime, endTime: endTime),
+      );
     return _mutate(
       classroom: classroom,
       request: GulfScheduleRequest(
@@ -108,6 +118,7 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
   }
 
   Future<void> _load({required bool showLoading}) async {
+    if (isClosed) return;
     final generation = ++_loadGeneration;
     if (showLoading) {
       emit(
@@ -124,7 +135,12 @@ class GulfScheduleCubit extends Cubit<GulfScheduleState> {
         ),
       ),
       (response) {
-        final realClassrooms = response.data.classrooms;
+        final realClassrooms = response.data.classrooms
+            .where((item) {
+              final mode = item.curriculum?.registrationMode;
+              return mode == null || mode.isEmpty || mode == 'gulf';
+            })
+            .toList(growable: false);
         final classrooms = realClassrooms.isEmpty
             ? emptySuccessFallback
             : realClassrooms;

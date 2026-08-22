@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class ChatNotificationModel {
+  final String notificationId;
   final String type;
   final String key;
   final String notificationType;
@@ -10,6 +11,7 @@ class ChatNotificationModel {
   final ChatLocalizedTextModel body;
 
   const ChatNotificationModel({
+    required this.notificationId,
     required this.type,
     required this.key,
     required this.notificationType,
@@ -22,13 +24,34 @@ class ChatNotificationModel {
   factory ChatNotificationModel.fromJson(Map<String, dynamic> json) {
     final rawData = Map<String, dynamic>.from(json['data'] as Map? ?? {});
     final params = _params(rawData['params']);
-    for (final key in ['roomId', 'messageId', 'senderId']) {
+    for (final key in [
+      'roomId',
+      'roomName',
+      'chatName',
+      'name',
+      'messageId',
+      'senderId',
+    ]) {
       rawData.putIfAbsent(key, () => params[key]);
     }
-    for (final key in ['roomId', 'room', 'messageId', 'senderId', 'sender']) {
+    for (final key in [
+      'roomId',
+      'room',
+      'roomName',
+      'chatName',
+      'name',
+      'messageId',
+      'senderId',
+      'sender',
+    ]) {
       rawData.putIfAbsent(key, () => json[key]);
     }
     return ChatNotificationModel(
+      notificationId:
+          (json['notificationId'] ?? json['id'] ?? rawData['notificationId'])
+              ?.toString()
+              .trim() ??
+          '',
       type: json['type']?.toString() ?? '',
       key: (json['key'] ?? rawData['key'])?.toString() ?? '',
       notificationType:
@@ -82,6 +105,7 @@ class ChatNotificationDataModel {
   final String roomId;
   final String messageId;
   final String message;
+  final String roomName;
 
   const ChatNotificationDataModel({
     required this.senderName,
@@ -89,6 +113,7 @@ class ChatNotificationDataModel {
     required this.roomId,
     required this.messageId,
     required this.message,
+    this.roomName = '',
   });
 
   factory ChatNotificationDataModel.fromJson(Map<String, dynamic> json) {
@@ -98,6 +123,7 @@ class ChatNotificationDataModel {
       roomId: _id(json['roomId'] ?? json['room']),
       messageId: _id(json['messageId']),
       message: json['message']?.toString() ?? '',
+      roomName: _name(json),
     );
   }
 
@@ -106,6 +132,14 @@ class ChatNotificationDataModel {
       return value['id']?.toString() ?? value['_id']?.toString() ?? '';
     }
     return value?.toString() ?? '';
+  }
+
+  static String _name(Map<String, dynamic> json) {
+    for (final key in const ['roomName', 'chatName', 'name']) {
+      final value = json[key]?.toString().trim() ?? '';
+      if (value.isNotEmpty) return value;
+    }
+    return '';
   }
 }
 

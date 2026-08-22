@@ -25,4 +25,12 @@ class FirebasePushMessaging implements PushMessaging {
   Future<void> requestPermission() async {
     await _messaging.requestPermission(alert: true, badge: true, sound: true);
   }
+
+  Future<void> configureIosForegroundPresentation() {
+    return _messaging.setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: false,
+      sound: false,
+    );
+  }
 }

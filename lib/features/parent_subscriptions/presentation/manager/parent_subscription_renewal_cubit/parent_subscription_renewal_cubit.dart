@@ -1,19 +1,23 @@
 import 'dart:async';
-import 'dart:io';
+
+import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_payment_address.dart';
 import 'package:bnan_app/features/parent_children/data/parent_payment_poller.dart';
 import 'package:bnan_app/features/parent_children/data/parent_payment_attempt.dart';
-import 'package:bnan_app/features/parent_children/presentation/policies/parent_package_policy.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/policies/renewal_package_policy.dart';
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_error_mapper.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/egyptian_renewal_request.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/gulf_renewal_request.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_status_response.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_payment_draft.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_payment_store.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ParentSubscriptionRenewalCubit
@@ -22,11 +26,13 @@ class ParentSubscriptionRenewalCubit
     required this.repo,
     required IdempotencyKeyGenerator keyGenerator,
     required ParentSubscriptionRenewalArgs args,
+    this.store,
     this.pollInterval = const Duration(seconds: 3),
     this.maxPollAttempts = 20,
   }) : _attempt = ParentPaymentAttempt(keyGenerator),
        super(ParentSubscriptionRenewalState(args: args));
   final ParentSubscriptionsRepo repo;
+  final RenewalPaymentStore? store;
   final ParentPaymentAttempt _attempt;
   final Duration pollInterval;
   final int maxPollAttempts;
@@ -35,13 +41,48 @@ class ParentSubscriptionRenewalCubit
   String? _pollingPaymentId;
   final Set<String> _completedPaymentIds = {};
 
+  Future<void> restore() async {
+    if (isClosed) return;
+    final draft = store?.read();
+    if (draft == null ||
+        draft.ownerUserId != (SessionManager.instance.userId ?? '') ||
+        draft.studentId != state.args.studentId ||
+        draft.isParent != state.args.isParent ||
+        draft.registrationMode != state.args.registrationMode ||
+        draft.paymentId.isEmpty) {
+      return;
+    }
+    if (!state.isGulf) {
+      await store?.clear();
+      return;
+    }
+    _attempt.restore(
+      fingerprint: draft.payloadFingerprint,
+      key: draft.idempotencyKey,
+    );
+    emit(
+      state.copyWith(
+        phase: state.isGulf
+            ? ParentRenewalPhase.processing
+            : ParentRenewalPhase.pending,
+        paymentId: draft.paymentId,
+        checkoutUrl: draft.checkoutUrl,
+        status: RenewalPaymentStatus.pending,
+      ),
+    );
+    if (state.isGulf) {
+      await _pollGulf(draft.paymentId, reconcile: true);
+    } else {
+      await _pollEgyptian(draft.paymentId);
+    }
+  }
+
   void selectPackage(PackageModel value) {
-    if (!ParentPackagePolicy.isValid(
-          value,
-          registrationMode: state.args.registrationMode,
-        ) ||
-        value.curriculum != null &&
-            value.curriculum != state.args.curriculumId) {
+    if (!RenewalPackagePolicy.isVisible(
+      value,
+      registrationMode: state.args.registrationMode,
+      curriculumId: state.args.curriculumId,
+    )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
     emit(state.copyWith(package: value, subjectId: null, errorMessage: null));
@@ -56,37 +97,13 @@ class ParentSubscriptionRenewalCubit
 
   void updateDiscount(String value) =>
       emit(state.copyWith(discountCode: value, errorMessage: null));
-  void updateEgyptian({String? method, String? reference, File? receipt}) =>
-      emit(
-        state.copyWith(
-          method: method,
-          referenceNumber: reference,
-          receipt: receipt ?? state.receipt,
-          errorMessage: null,
-        ),
-      );
-  void updateAddress({
-    String? city,
-    String? region,
-    String? line1,
-    String? line2,
-  }) => emit(
-    state.copyWith(
-      city: city,
-      region: region,
-      line1: line1,
-      line2: line2,
-      errorMessage: null,
-    ),
-  );
-
   bool nextStep() {
     final error = _validation();
     if (error != null) {
       _error(error);
       return false;
     }
-    if (state.currentStep < 5) {
+    if (state.currentStep < state.lastStep) {
       emit(state.copyWith(currentStep: state.currentStep + 1));
     }
     return true;
@@ -104,9 +121,10 @@ class ParentSubscriptionRenewalCubit
     if (_submitting) return;
     if (!state.hasSupportedRegistrationMode ||
         state.package == null ||
-        !ParentPackagePolicy.isValid(
+        !RenewalPackagePolicy.isVisible(
           state.package!,
           registrationMode: state.args.registrationMode,
+          curriculumId: state.args.curriculumId,
         )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
@@ -141,16 +159,14 @@ class ParentSubscriptionRenewalCubit
   }
 
   void checkoutOpened() {
-    final resumePolling =
-        state.phase == ParentRenewalPhase.paymentStatusUnknown &&
-        state.paymentId != null;
     emit(
       state.copyWith(
         shouldOpenCheckout: false,
-        phase: resumePolling ? ParentRenewalPhase.processing : state.phase,
+        phase: state.phase == ParentRenewalPhase.paymentStatusUnknown
+            ? ParentRenewalPhase.processing
+            : state.phase,
       ),
     );
-    if (resumePolling) unawaited(_pollGulf(state.paymentId!));
   }
 
   void checkoutOpenFailed() => emit(
@@ -166,7 +182,16 @@ class ParentSubscriptionRenewalCubit
     }
   }
 
-  Future<void> reconcilePayment() => checkPaymentStatus();
+  Future<void> reconcilePayment() async {
+    if (isClosed || state.phase == ParentRenewalPhase.completed) return;
+    final id = state.paymentId;
+    if (id == null || id.isEmpty) return;
+    if (state.isGulf) {
+      await _pollGulf(id, reconcile: true);
+    } else {
+      await checkPaymentStatus();
+    }
+  }
 
   Future<void> checkPaymentStatus() async {
     final id = state.paymentId;
@@ -187,13 +212,16 @@ class ParentSubscriptionRenewalCubit
         (await repo.gulfReconcile(
           id,
         )).fold((_) {}, (value) => response = value);
+        if (isClosed) return;
         if (response == null || !response!.status.isTerminal) {
           (await repo.gulfStatus(id)).fold((_) {}, (value) => response = value);
+          if (isClosed) return;
         }
       } else {
         (await repo.egyptianStatus(
           id,
         )).fold((_) {}, (value) => response = value);
+        if (isClosed) return;
       }
       if (response != null) await _handle(response!);
     } finally {
@@ -202,6 +230,10 @@ class ParentSubscriptionRenewalCubit
   }
 
   Future<void> _submitEgyptian() async {
+    final packageId = state.package?.id?.trim();
+    if (packageId == null || packageId.isEmpty) {
+      return _error('PACKAGE_NOT_FOUND');
+    }
     emit(
       state.copyWith(
         phase: ParentRenewalPhase.submitting,
@@ -212,20 +244,17 @@ class ParentSubscriptionRenewalCubit
     );
     final result = await repo.renewEgyptian(
       EgyptianRenewalRequest(
-        studentId: state.args.studentId,
-        packageId: state.package!.id!,
+        packageId: packageId,
         subjectId: state.isSingleSubject ? state.subjectId : null,
-        discountCode: state.discountCode,
-        method: state.method,
-        referenceNumber: state.referenceNumber,
-        receiptImage: state.receipt!,
       ),
     );
-    result.fold(
-      (failure) {
+    if (isClosed) return;
+    await result.fold<Future<void>>(
+      (failure) async {
+        if (isClosed) return;
         emit(
           state.copyWith(
-            phase: ParentRenewalPhase.failure,
+            phase: ParentRenewalPhase.editing,
             errorMessage: mapParentFlowFailure(
               failure,
               fallback: S.current.renewalFailed,
@@ -234,20 +263,17 @@ class ParentSubscriptionRenewalCubit
         );
       },
       (response) async {
+        if (isClosed) return;
+        await store?.clear();
+        if (isClosed) return;
         emit(
           state.copyWith(
             phase: ParentRenewalPhase.pending,
             paymentId: response.paymentId,
             status: response.status,
-            paymentSummary: response.paymentSummary,
             errorMessage: null,
           ),
         );
-        if (response.status.isTerminal) {
-          await _handle(response);
-        } else if (response.paymentId.isNotEmpty) {
-          unawaited(_pollEgyptian(response.paymentId));
-        }
       },
     );
   }
@@ -264,23 +290,23 @@ class ParentSubscriptionRenewalCubit
       ),
     );
     final request = GulfRenewalRequest(
-      studentId: state.args.studentId,
+      studentId: state.args.isParent ? state.args.studentId : null,
       packageId: state.package!.id!,
       subjectId: state.isSingleSubject ? state.subjectId : null,
       discountCode: state.discountCode,
-      paymentAddress: ParentPaymentAddress(
-        city: state.city,
-        region: state.region,
-        line1: state.line1,
-        line2: state.line2,
+      paymentAddress: const ParentPaymentAddress(
+        city: TamaraDefaultAddress.city,
+        region: TamaraDefaultAddress.region,
+        line1: TamaraDefaultAddress.line1,
+        line2: TamaraDefaultAddress.line2,
       ),
     );
-    final result = await repo.renewGulf(
-      request: request,
-      idempotencyKey: _attempt.keyFor(request.toJson()),
-    );
-    result.fold(
-      (failure) {
+    final key = _attempt.keyFor(request.toJson());
+    final result = await repo.renewGulf(request: request, idempotencyKey: key);
+    if (isClosed) return;
+    await result.fold<Future<void>>(
+      (failure) async {
+        if (isClosed) return;
         if (failure.responseReceived) _attempt.startNew();
         emit(
           state.copyWith(
@@ -293,10 +319,34 @@ class ParentSubscriptionRenewalCubit
         );
       },
       (response) async {
+        if (isClosed) return;
         if (response.status.isTerminal) {
           await _handle(response);
           return;
         }
+        if (response.paymentId.isEmpty || response.checkoutUrl == null) {
+          emit(
+            state.copyWith(
+              phase: ParentRenewalPhase.failure,
+              errorMessage: S.current.renewalFailed,
+            ),
+          );
+          return;
+        }
+        await store?.save(
+          RenewalPaymentDraft(
+            paymentId: response.paymentId,
+            checkoutUrl: response.checkoutUrl ?? '',
+            studentId: state.args.studentId,
+            ownerUserId: SessionManager.instance.userId ?? '',
+            idempotencyKey: key,
+            payloadFingerprint: _attempt.fingerprintFor(request.toJson()),
+            isParent: state.args.isParent,
+            createdAt: DateTime.now().toUtc().toIso8601String(),
+            registrationMode: state.args.registrationMode,
+          ),
+        );
+        if (isClosed) return;
         emit(
           state.copyWith(
             phase: ParentRenewalPhase.processing,
@@ -308,7 +358,6 @@ class ParentSubscriptionRenewalCubit
             errorMessage: null,
           ),
         );
-        unawaited(_pollGulf(response.paymentId));
       },
     );
   }
@@ -321,10 +370,10 @@ class ParentSubscriptionRenewalCubit
     );
   }
 
-  Future<void> _pollGulf(String id) async {
+  Future<void> _pollGulf(String id, {bool reconcile = false}) async {
     await _poll(
       id,
-      reconcile: () => repo.gulfReconcile(id),
+      reconcile: reconcile ? () => repo.gulfReconcile(id) : null,
       status: () => repo.gulfStatus(id),
       canContinue: () =>
           !isClosed && state.phase == ParentRenewalPhase.processing,
@@ -374,6 +423,8 @@ class ParentSubscriptionRenewalCubit
           ? state.paymentId
           : response.paymentId;
       if (id == null || !_completedPaymentIds.add(id)) return;
+      await store?.clear();
+      if (isClosed) return;
       emit(
         state.copyWith(
           phase: ParentRenewalPhase.completed,
@@ -382,13 +433,16 @@ class ParentSubscriptionRenewalCubit
           errorMessage: null,
         ),
       );
+      await state.args.onCompleted?.call();
     } else if (response.status.isTerminal) {
       _attempt.startNew();
+      await store?.clear();
+      if (isClosed) return;
       emit(
         state.copyWith(
           phase: ParentRenewalPhase.failure,
           status: response.status,
-          errorMessage: _mapped(response.status.name),
+          errorMessage: response.message ?? _mapped(response.status.name),
         ),
       );
     } else {
@@ -412,17 +466,6 @@ class ParentSubscriptionRenewalCubit
         state.isSingleSubject &&
         state.subjectId == null) {
       return 'SINGLE_SUBJECT_SUBSCRIPTION_SUBJECT_REQUIRED';
-    }
-    if (payment || state.currentStep == 5) {
-      if (!state.isGulf && state.receipt == null) return 'RECEIPT_REQUIRED';
-      if (state.isGulf &&
-          [
-            state.city,
-            state.region,
-            state.line1,
-          ].any((v) => v.trim().isEmpty)) {
-        return 'ADDRESS_REQUIRED';
-      }
     }
     return null;
   }

@@ -3,8 +3,10 @@ import 'dart:math' as math;
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/evaluation_mode.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/me_weekly_evaluations_data_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/parent_evaluation_child_model.dart';
+import 'package:bnan_app/features/weekly_evaluations/data/read_only/models/read_evaluation_reference_model.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_state.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_evaluations_request_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReadOnlyWeeklyEvaluationsCubit
@@ -15,7 +17,7 @@ class ReadOnlyWeeklyEvaluationsCubit
   final WeeklyEvaluationsReadRepo repo;
   int _requestId = 0;
 
-  Future<void> loadForStudent({int? week}) async {
+  Future<void> loadForStudent({int? week, String? classroomId}) async {
     final requestId = ++_requestId;
     emit(
       ReadOnlyWeeklyEvaluationsState(
@@ -23,6 +25,19 @@ class ReadOnlyWeeklyEvaluationsCubit
         status: ReadOnlyEvaluationsStatus.loading,
         isLoading: true,
         selectedWeek: week,
+      ),
+    );
+    final classroomsResult = await repo.getMyClassrooms();
+    if (!_isCurrent(requestId)) return;
+    final failure = classroomsResult.fold((value) => value, (_) => null);
+    if (failure != null) return _emitFailure(failure.message);
+    final available = classroomsResult.getOrElse(() => const []);
+    if (available.isEmpty) return _emitNoClassrooms();
+    final selectedClassroomId = available.first.id;
+    emit(
+      state.copyWith(
+        classrooms: available,
+        selectedClassroomId: selectedClassroomId,
       ),
     );
     await _loadEvaluations(requestId: requestId, week: week);
@@ -57,18 +72,21 @@ class ReadOnlyWeeklyEvaluationsCubit
           return;
         }
         final childId = stableChildren.first.id;
+        final child = stableChildren.first;
+        final classrooms = _classroomsFor(child);
+        final classroomId = classrooms.firstOrNull?.id;
         emit(
           state.copyWith(
             children: stableChildren,
             selectedChildId: childId,
+            classrooms: classrooms,
+            selectedClassroomId: classroomId,
             hasLoadedChildren: true,
           ),
         );
+        if (classroomId == null) return _emitNoClassrooms();
         final evaluationsId = ++_requestId;
-        await _loadEvaluations(
-          requestId: evaluationsId,
-          studentId: stableChildren.length > 1 ? childId : null,
-        );
+        await _loadEvaluations(requestId: evaluationsId, studentId: childId);
       },
     );
   }
@@ -82,20 +100,56 @@ class ReadOnlyWeeklyEvaluationsCubit
       return;
     }
     final requestId = ++_requestId;
+    final child = state.children.firstWhere((item) => item.id == id);
+    final classrooms = _classroomsFor(child);
+    final classroomId = classrooms.firstOrNull?.id;
     emit(
       state.copyWith(
         selectedChildId: id,
-        maxAvailableWeek: null,
+        classrooms: classrooms,
+        selectedClassroomId: classroomId,
         isLoading: true,
         isChangingChild: true,
         isChangingWeek: false,
+        isChangingClassroom: false,
+        data: null,
+        failureMessage: null,
+        hasNoClassroom: false,
+      ),
+    );
+    if (classroomId == null) return _emitNoClassrooms();
+    await _loadEvaluations(
+      requestId: requestId,
+      week: state.selectedWeek,
+      studentId: id,
+    );
+  }
+
+  Future<void> selectClassroom(String classroomId) async {
+    final id = classroomId.trim();
+    if (id.isEmpty ||
+        id == state.selectedClassroomId ||
+        !state.classrooms.any((item) => item.id == id)) {
+      return;
+    }
+    final requestId = ++_requestId;
+    emit(
+      state.copyWith(
+        selectedClassroomId: id,
+        isLoading: true,
+        isChangingChild: false,
+        isChangingWeek: false,
+        isChangingClassroom: true,
+        data: null,
         failureMessage: null,
       ),
     );
     await _loadEvaluations(
       requestId: requestId,
-      studentId: id,
-      resetMaxAvailableWeek: true,
+      week: state.selectedWeek,
+      studentId: state.role == ReadOnlyEvaluationsRole.parent
+          ? state.selectedChildId
+          : null,
     );
   }
 
@@ -103,14 +157,13 @@ class ReadOnlyWeeklyEvaluationsCubit
     if (week < 1 ||
         week == state.selectedWeek ||
         state.role == null ||
+        state.selectedClassroomId == null ||
         (state.role == ReadOnlyEvaluationsRole.parent &&
             state.children.isEmpty)) {
       return;
     }
     final requestId = ++_requestId;
-    final studentId =
-        state.role == ReadOnlyEvaluationsRole.parent &&
-            state.children.length > 1
+    final studentId = state.role == ReadOnlyEvaluationsRole.parent
         ? state.selectedChildId
         : null;
     emit(
@@ -119,6 +172,7 @@ class ReadOnlyWeeklyEvaluationsCubit
         isLoading: true,
         isChangingChild: false,
         isChangingWeek: true,
+        isChangingClassroom: false,
         failureMessage: null,
       ),
     );
@@ -135,14 +189,18 @@ class ReadOnlyWeeklyEvaluationsCubit
         (!state.hasLoadedChildren || state.children.isEmpty)) {
       return loadForParent();
     }
+    if (state.selectedClassroomId == null) {
+      if (state.role == ReadOnlyEvaluationsRole.student) {
+        return loadForStudent(week: state.selectedWeek);
+      }
+      return;
+    }
     final requestId = ++_requestId;
     emit(state.copyWith(isLoading: true, failureMessage: null));
     await _loadEvaluations(
       requestId: requestId,
       week: state.selectedWeek,
-      studentId:
-          state.role == ReadOnlyEvaluationsRole.parent &&
-              state.children.length > 1
+      studentId: state.role == ReadOnlyEvaluationsRole.parent
           ? state.selectedChildId
           : null,
     );
@@ -152,20 +210,28 @@ class ReadOnlyWeeklyEvaluationsCubit
     required int requestId,
     int? week,
     String? studentId,
-    bool resetMaxAvailableWeek = false,
   }) async {
+    final classroomId = state.selectedClassroomId;
+    if (classroomId == null) return _emitNoClassrooms();
+    final child = _selectedChild(studentId);
+    logReadOnlyEvaluationsRequest(
+      role: state.role?.name ?? 'unknown',
+      studentProfileId: studentId,
+      userId: child?.userId,
+      classroomId: classroomId,
+      week: week,
+    );
     final result = await repo.getMyEvaluations(
       week: week,
       studentId: studentId,
+      classroomId: classroomId,
     );
     if (!_isCurrent(requestId)) return;
     result.fold((failure) => _emitFailure(failure.message), (response) {
       final data = response.data;
       final responseWeek = data.week ?? week ?? state.selectedWeek;
       final previousMax = state.maxAvailableWeek ?? 0;
-      final nextMax = resetMaxAvailableWeek
-          ? responseWeek
-          : math.max(previousMax, responseWeek ?? 0);
+      final nextMax = math.max(previousMax, responseWeek ?? 0);
       emit(
         state.copyWith(
           status: _isEmpty(data)
@@ -174,10 +240,12 @@ class ReadOnlyWeeklyEvaluationsCubit
           isLoading: false,
           isChangingChild: false,
           isChangingWeek: false,
+          isChangingClassroom: false,
           selectedWeek: responseWeek,
           maxAvailableWeek: nextMax == 0 ? null : nextMax,
           data: data,
           failureMessage: null,
+          hasNoClassroom: false,
         ),
       );
     });
@@ -189,12 +257,47 @@ class ReadOnlyWeeklyEvaluationsCubit
     EvaluationMode.unknown => data.classrooms.isEmpty && data.subjects.isEmpty,
   };
 
+  List<ReadEvaluationReferenceModel> _classroomsFor(
+    ParentEvaluationChildModel child,
+  ) {
+    final ids = <String>{};
+    return [
+      for (final classroom in [
+        if (child.classroom != null) child.classroom!,
+        ...child.classrooms,
+      ])
+        if (classroom.id.isNotEmpty && ids.add(classroom.id)) classroom,
+    ];
+  }
+
+  ParentEvaluationChildModel? _selectedChild(String? studentId) {
+    for (final child in state.children) {
+      if (child.id == studentId) return child;
+    }
+    return null;
+  }
+
+  void _emitNoClassrooms() => emit(
+    state.copyWith(
+      status: ReadOnlyEvaluationsStatus.empty,
+      isLoading: false,
+      isChangingChild: false,
+      isChangingWeek: false,
+      isChangingClassroom: false,
+      selectedClassroomId: null,
+      data: null,
+      failureMessage: null,
+      hasNoClassroom: true,
+    ),
+  );
+
   void _emitFailure(String message) => emit(
     state.copyWith(
       status: ReadOnlyEvaluationsStatus.failure,
       isLoading: false,
       isChangingChild: false,
       isChangingWeek: false,
+      isChangingClassroom: false,
       failureMessage: message,
     ),
   );

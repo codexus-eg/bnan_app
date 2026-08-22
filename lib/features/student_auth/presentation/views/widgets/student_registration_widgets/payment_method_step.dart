@@ -3,10 +3,13 @@ import 'package:bnan_app/features/student_auth/presentation/views/widgets/studen
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
-import 'package:bnan_app/generated/l10n.dart';
 
 class PaymentMethodStep extends StatelessWidget {
   const PaymentMethodStep({super.key});
@@ -14,7 +17,8 @@ class PaymentMethodStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = RegisterCubit.get(context);
-    final paymentSummary = context.watch<TamaraPaymentCubit>().paymentSummary;
+    final paymentCubit = context.watch<TamaraPaymentCubit>();
+    final paymentSummary = paymentCubit.paymentSummary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -26,12 +30,11 @@ class PaymentMethodStep extends StatelessWidget {
         // ),
         // const SizedBox(height: 16),
         PaymentMethodCard(
-          packageName: cubit.isGulf
-              ? cubit.packageName
-              : S.of(context).package4Hours,
-          price: cubit.isGulf ? cubit.packagePrice : '160',
+          packageName: cubit.packageName,
+          price: cubit.packagePrice,
           studentsCount: '1',
-          total: cubit.isGulf ? cubit.packagePrice : '160',
+          total: cubit.packagePrice,
+          currency: cubit.packageCurrency,
         ),
         if (cubit.isGulf) ...[
           const SizedBox(height: 16),
@@ -43,6 +46,16 @@ class PaymentMethodStep extends StatelessWidget {
         ],
         const SizedBox(height: 16),
         const PaymentMethodsOptions(),
+        if (paymentCubit.state is TamaraPaymentVerificationPending) ...[
+          const SizedBox(height: 12),
+          Text(
+            S.of(context).paymentVerificationPending,
+            textAlign: TextAlign.center,
+            style: StylesManager.styleRegular14(
+              context,
+            ).copyWith(color: ColorManager.mainColor14),
+          ),
+        ],
       ],
     );
   }

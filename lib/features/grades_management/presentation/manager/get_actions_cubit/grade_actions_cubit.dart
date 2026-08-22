@@ -9,24 +9,40 @@ class GradeActionsCubit extends Cubit<GradeActionsState> {
   final GradesRepo gradesRepo;
 
   Future<void> createGrade(CreateGradeRequestModel model) async {
+    if (isClosed) return;
     emit(CreateGradeLoading());
 
     final result = await gradesRepo.createGrade(model);
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(CreateGradeFailure(failure.message)),
-      (_) => emit(CreateGradeSuccess()),
+      (failure) {
+        if (isClosed) return;
+        emit(CreateGradeFailure(failure.message));
+      },
+      (_) {
+        if (isClosed) return;
+        emit(CreateGradeSuccess());
+      },
     );
   }
 
   Future<void> deleteGrade(String gradeId) async {
+    if (isClosed) return;
     emit(DeleteGradeLoading());
 
     final result = await gradesRepo.deleteGrade(gradeId);
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(DeleteGradeFailure(failure.message)),
-      (_) => emit(DeleteGradeSuccess()),
+      (failure) {
+        if (isClosed) return;
+        emit(DeleteGradeFailure(failure.message));
+      },
+      (_) {
+        if (isClosed) return;
+        emit(DeleteGradeSuccess());
+      },
     );
   }
 }

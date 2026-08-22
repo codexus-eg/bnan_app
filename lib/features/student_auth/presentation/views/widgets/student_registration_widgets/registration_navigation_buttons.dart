@@ -1,5 +1,3 @@
-import 'package:bnan_app/core/app_routes/routes.dart';
-import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -12,6 +10,7 @@ import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_s
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
 
 class RegistrationNavigationButtons extends StatelessWidget {
   const RegistrationNavigationButtons({super.key});
@@ -26,21 +25,38 @@ class RegistrationNavigationButtons extends StatelessWidget {
         children: [
           CustomAppButton(
             backgroundColor: step == 4 ? ColorManager.orangeED : null,
-            text: step == 5
-                ? S.of(context).confirm
+            text: !RegisterCubit.get(context).isGulf && step == 4
+                ? S.of(context).submitRegistrationRequest
+                : RegisterCubit.get(context).isGulf &&
+                      step == 4 &&
+                      paymentState is TamaraPaymentVerificationPending
+                ? S.of(context).parentRetryPayment
                 : step == 4
-                ? S.of(context).goToPayment
+                ? S.of(context).payWithTamara
                 : S.of(context).next,
             isLoading:
                 registerState is RegisterLoading ||
                 paymentState is TamaraPaymentLoading,
             onPressed: () async {
               final cubit = RegisterCubit.get(context);
-              if (step == 5) {
-                MyNavigator.goToOffAll(context, Routes.logIn);
-                return;
-              }
               if (!cubit.isGulf) {
+                if (step == 1 &&
+                    !(cubit.parentFormKey.currentState?.validate() ?? false)) {
+                  return;
+                }
+                if (step == 3 && !cubit.validateStudent()) {
+                  showCustomSnackBar(
+                    context,
+                    S.of(context).errorValidation,
+                    false,
+                  );
+                  return;
+                }
+                if (step == 4) {
+                  final request = cubit.buildRegisterRequest();
+                  if (request != null) await cubit.register(request: request);
+                  return;
+                }
                 cubit.nextStep();
                 return;
               }
@@ -58,7 +74,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
                 if (context.mounted) {
                   showCustomSnackBar(
                     context,
-                    'يرجى استكمال البيانات المطلوبة',
+                    S.of(context).errorValidation,
                     false,
                   );
                 }
@@ -74,17 +90,13 @@ class RegistrationNavigationButtons extends StatelessWidget {
               cubit.nextStep();
             },
           ),
-          if (step > 1 && step < 5) ...[
+          if (step > 1) ...[
             const SizedBox(height: 16),
             CustomAppButton(
               text: S.of(context).previous,
               backgroundColor: ColorManager.secondaryColor,
               textColor: ColorManager.mainColor14,
-              onPressed: () async {
-                await context.read<TamaraPaymentCubit>().discardStaleAttempt();
-                if (!context.mounted) return;
-                RegisterCubit.get(context).previousStep();
-              },
+              onPressed: () => RegistrationBackHandler.previous(context),
             ),
           ],
         ],
@@ -103,24 +115,63 @@ class RegistrationNavigationButtons extends StatelessWidget {
     if (state is TamaraPaymentPending && state.shouldOpenCheckout) {
       final url = state.checkoutUrl;
       if (url == null) {
-        showCustomSnackBar(context, 'تعذر فتح رابط الدفع', false);
+        showCustomSnackBar(
+          context,
+          S.of(context).parentUnableToOpenCheckout,
+          false,
+        );
         return;
       }
       final cubit = context.read<TamaraPaymentCubit>();
       if (!cubit.claimCheckoutLaunch(url)) return;
-      final result = await TamaraCheckoutLauncher.open(context, url);
-      await cubit.completeCheckoutLaunch(opened: result.opened);
+      final result = await TamaraCheckoutLauncher.open(
+        context,
+        url,
+        completionStream: cubit.stream.map(
+          (value) =>
+              value is TamaraPaymentResult &&
+              value.status == PaymentStatus.completed,
+        ),
+        isCompleted: () =>
+            cubit.state is TamaraPaymentResult &&
+            (cubit.state as TamaraPaymentResult).status ==
+                PaymentStatus.completed,
+        onPaymentSuccess: cubit.verifyProviderSuccess,
+        onOpened: () async {
+          await cubit.completeCheckoutLaunch(opened: true);
+          await cubit.onForeground();
+        },
+      );
       if (!context.mounted) return;
       if (!result.opened) {
-        showCustomSnackBar(context, 'تعذر فتح رابط الدفع', false);
-      } else {
-        await cubit.onForeground();
+        await cubit.completeCheckoutLaunch(opened: false);
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            S.of(context).parentUnableToOpenCheckout,
+            false,
+          );
+        }
+        return;
       }
+      await cubit.verifyCheckoutClosed();
+      return;
+    }
+    if (state is TamaraPaymentVerificationPending) {
+      showCustomSnackBar(
+        context,
+        S.of(context).paymentVerificationPending,
+        true,
+      );
       return;
     }
     if (state is TamaraPaymentResult &&
-        state.status != PaymentStatus.completed) {
-      showCustomSnackBar(context, state.status.name, false);
+        const {
+          PaymentStatus.failed,
+          PaymentStatus.cancelled,
+          PaymentStatus.expired,
+        }.contains(state.status)) {
+      showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);
     }
   }
 }

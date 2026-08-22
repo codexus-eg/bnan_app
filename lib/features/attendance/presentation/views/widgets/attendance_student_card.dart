@@ -1,5 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_avatar.dart';
-import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
+import 'package:bnan_app/core/shared_widget/selection_circle.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/attendance/data/models/attendance_lookup_models.dart';
@@ -37,51 +37,65 @@ class AttendanceStudentCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: ColorManager.greyE8E9),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomAvatar(
-            firstName: student.name,
-            radius: 23,
-            backgroundColor: ColorManager.blueE3,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  student.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: StylesManager.styleBold14(context),
+          Row(
+            children: [
+              CustomAvatar(
+                firstName: student.name,
+                radius: 23,
+                backgroundColor: ColorManager.blueE3,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      student.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: StylesManager.styleBold14(context),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: StylesManager.styleRegular12(context),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: StylesManager.styleRegular12(context),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 104,
-            child: CustomDropdown(
-              key: Key('attendance-status-${student.id}'),
-              label: S.of(context).attendance,
-              showLabel: false,
-              fieldHeight: 38,
-              isDense: true,
-              useDefaultIcon: true,
-              value: status.name,
-              items: AttendanceStatus.values.map((item) => item.name).toList(),
-              itemsLabels: labels,
-              onChanged: (value) => context
-                  .read<AttendanceCubit>()
-                  .updateStatus(student.id, AttendanceStatusApi.fromApi(value)),
-            ),
+          const SizedBox(height: 10),
+          Wrap(
+            key: Key('attendance-status-${student.id}'),
+            spacing: 16,
+            runSpacing: 8,
+            children: AttendanceStatus.values
+                .map(
+                  (item) => GestureDetector(
+                    onTap: () => context.read<AttendanceCubit>().updateStatus(
+                      student.id,
+                      item,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SelectionCircle(isSelected: status == item),
+                        const SizedBox(width: 6),
+                        Text(
+                          labels[item.name]!,
+                          style: StylesManager.styleRegular12(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),

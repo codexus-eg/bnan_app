@@ -77,6 +77,8 @@ class PackageFormBody extends StatelessWidget {
           onChanged: onTypeChanged,
           showMonthly: showMonthly,
           monthlyEnabled: accessScope != 'single_subject',
+          hoursEnabled:
+              !canSelectSingleSubject || accessScope == 'single_subject',
         ),
         const SizedBox(height: 16),
         PackageFormContent(
@@ -84,6 +86,8 @@ class PackageFormBody extends StatelessWidget {
           currency: currency,
           onCurrencyChanged: onCurrencyChanged,
           isSingleSubject: accessScope == 'single_subject',
+          showDuration:
+              !canSelectSingleSubject || accessScope == 'single_subject',
         ),
         const SizedBox(height: 16),
         PackagePopularSwitch(value: isPopular, onChanged: onPopularChanged),

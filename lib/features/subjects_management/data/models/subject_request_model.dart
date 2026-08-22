@@ -2,23 +2,24 @@ class AddSubjectRequestModel {
   const AddSubjectRequestModel({
     required this.name,
     required this.curriculumId,
-    required this.gradeId,
+    required this.gradeIds,
   });
   final String name;
   final String curriculumId;
-  final String gradeId;
+  final List<String> gradeIds;
 
   Map<String, dynamic> toJson() => {
     'name': name,
     'curriculum': curriculumId,
-    'grade': gradeId,
+    'grades': gradeIds,
   };
 }
 
 class UpdateSubjectRequestModel {
-  const UpdateSubjectRequestModel({required this.name});
+  const UpdateSubjectRequestModel({required this.name, required this.gradeIds});
 
   final String name;
+  final List<String> gradeIds;
 
-  Map<String, dynamic> toJson() => {'name': name};
+  Map<String, dynamic> toJson() => {'name': name, 'grades': gradeIds};
 }

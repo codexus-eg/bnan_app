@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/helper/app_pickers.dart';
+import 'package:bnan_app/core/helper/package_display_formatter.dart';
 import 'package:bnan_app/core/shared_widget/class_meta_row.dart';
 import 'package:bnan_app/core/shared_widget/info_text.dart';
 import 'package:bnan_app/features/admin_subject_requests/data/models/admin_subject_request_model.dart';
@@ -21,6 +22,11 @@ class AdminSubjectRequestInfo extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
+              if (request.studentName.trim().isNotEmpty)
+                ClassMetaRow(
+                  label: s.studentName,
+                  value: request.studentName.trim(),
+                ),
               ClassMetaRow(
                 label: s.curriculum,
                 value: request.curriculum ?? '-',
@@ -29,11 +35,16 @@ class AdminSubjectRequestInfo extends StatelessWidget {
               ClassMetaRow(label: s.subjects, value: request.subject ?? '-'),
               ClassMetaRow(
                 label: s.packages,
-                value: request.packageName ?? '-',
+                value: request.packageName == null
+                    ? '-'
+                    : PackageDisplayFormatter.name(
+                        context,
+                        request.packageName!,
+                      ),
               ),
               if (request.price != null)
                 ClassMetaRow(
-                  label: s.packagePrice,
+                  label: s.adminSubjectRequestPrice,
                   value: '${request.price} ${request.currency ?? ''}'.trim(),
                 ),
               if (request.notes != null)

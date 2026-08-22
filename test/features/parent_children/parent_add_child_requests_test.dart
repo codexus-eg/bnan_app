@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_add_child_egyptian_request.dart';
@@ -14,34 +11,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('Egyptian FormData contains exactly the documented fields', () async {
-    final directory = await Directory.systemTemp.createTemp('parent-child-');
-    final receipt = File('${directory.path}/receipt.png');
-    await receipt.writeAsBytes([1, 2, 3]);
-    final form = await ParentAddChildEgyptianRequest(
+  test('Egyptian payload contains registration fields only', () {
+    final json = ParentAddChildEgyptianRequest(
       student: _student,
       curriculumId: 'curriculum-1',
       packageId: 'package-1',
-      receiptImage: receipt,
       discountCode: 'SAVE',
-      method: 'bank',
-      referenceNumber: 'REF-1',
-    ).toFormData();
+    ).toJson();
 
-    expect(form.fields.map((item) => item.key).toSet(), {
-      'student',
-      'curriculum',
-      'packageId',
-      'discountCode',
-      'method',
-      'referenceNumber',
-    });
-    expect(form.files.single.key, 'receiptImage');
-    final student =
-        jsonDecode(
-              form.fields.firstWhere((item) => item.key == 'student').value,
-            )
-            as Map<String, dynamic>;
+    expect(json.keys, {'student', 'curriculum', 'packageId', 'discountCode'});
+    final student = json['student'] as Map<String, dynamic>;
     expect(student.keys, {
       'fullName',
       'email',
@@ -49,9 +28,9 @@ void main() {
       'grade',
       'subjects',
     });
-    expect(form.fields.any((item) => item.key.startsWith('parent')), isFalse);
-    await receipt.delete();
-    await directory.delete();
+    expect(json.containsKey('receiptImage'), isFalse);
+    expect(json.containsKey('method'), isFalse);
+    expect(json.containsKey('referenceNumber'), isFalse);
   });
 
   test('Gulf payload never contains parent credentials', () {

@@ -53,14 +53,14 @@ class AppException implements Exception {
       code: backendCode,
     );
 
-    final backendMessage = _extractBackendMessage(data);
-    if (backendMessage != null) {
-      return confirmed(_safeBackendMessage(backendMessage));
-    }
-
     final validationMessage = _extractValidationMessage(data);
     if (validationMessage != null) {
       return confirmed(_safeBackendMessage(validationMessage));
+    }
+
+    final backendMessage = _extractBackendMessage(data);
+    if (backendMessage != null) {
+      return confirmed(_safeBackendMessage(backendMessage));
     }
 
     switch (statusCode) {
@@ -141,26 +141,36 @@ class AppException implements Exception {
 
     const technicalIdKeys = {
       'teacherId',
+      'studentId',
       'classroomId',
       'subjectId',
       'classroomSubjectId',
+      'packageId',
+      'subscriptionId',
     };
     if (errors is Map && errors.isNotEmpty) {
       for (final entry in errors.entries) {
-        if (technicalIdKeys.contains(entry.key?.toString())) continue;
         final error = entry.value;
         if (error is List && error.isNotEmpty) {
           final message = error.first.toString().trim();
           if (message.isNotEmpty) return message;
         }
         if (error is String && error.trim().isNotEmpty) {
-          return error.trim();
+          final message = error.trim();
+          if (!technicalIdKeys.contains(entry.key?.toString()) ||
+              !_looksLikeIdentifier(message)) {
+            return message;
+          }
         }
       }
     }
 
     return null;
   }
+
+  static bool _looksLikeIdentifier(String value) =>
+      RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(value) ||
+      RegExp(r'^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*-id$').hasMatch(value);
 
   static String _safeBackendMessage(String message) {
     final lowerMessage = message.toLowerCase();

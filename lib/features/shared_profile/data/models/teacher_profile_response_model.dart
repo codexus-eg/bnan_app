@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/enums/registration_mode.dart';
+
 class TeacherProfileResponseModel {
   final bool success;
   final TeacherProfileModel teacherProfile;
@@ -20,6 +22,7 @@ class TeacherProfileModel {
   final TeacherProfileUserModel user;
   final String phone;
   final String specialization;
+  final List<RegistrationMode> registrationModes;
   final List<TeacherProfileItemModel> curriculums;
   final int grades;
   final List<TeacherProfileItemModel> subjects;
@@ -31,6 +34,7 @@ class TeacherProfileModel {
     required this.user,
     required this.phone,
     required this.specialization,
+    required this.registrationModes,
     required this.curriculums,
     required this.grades,
     required this.subjects,
@@ -44,6 +48,7 @@ class TeacherProfileModel {
       user: TeacherProfileUserModel.placeholder(),
       phone: '',
       specialization: '',
+      registrationModes: const [],
       curriculums: const [],
       grades: 0,
       subjects: const [],
@@ -58,6 +63,7 @@ class TeacherProfileModel {
       user: TeacherProfileUserModel.fromJson(json['user'] ?? {}),
       phone: json['phone'] ?? '',
       specialization: json['specialization'] ?? '',
+      registrationModes: RegistrationMode.fromList(json['registrationModes']),
       curriculums: _items(json['curriculums']),
       grades: _count(json['grades']),
       subjects: _items(json['subjects']),

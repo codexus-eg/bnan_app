@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_curriculum_model.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_grade_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
@@ -70,20 +71,15 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     unawaited(checkPaymentStatus());
   }
 
-  void updateAccount({
-    String? fullName,
-    String? email,
-    String? password,
-    String? confirmPassword,
-  }) => emit(
-    state.copyWith(
-      fullName: fullName,
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      errorMessage: null,
-    ),
-  );
+  void updateAccount({String? fullName, String? email, String? password}) =>
+      emit(
+        state.copyWith(
+          fullName: fullName,
+          email: email,
+          password: password,
+          errorMessage: null,
+        ),
+      );
 
   void selectCurriculum(AcademicCurriculumModel? value) {
     if (state.parentHasChildren || state.curriculum?.id == value?.id) return;
@@ -149,38 +145,28 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     ),
   );
 
-  void updateAddress({
-    String? city,
-    String? region,
-    String? line1,
-    String? line2,
-  }) => emit(
-    state.copyWith(
-      city: city,
-      region: region,
-      addressLine1: line1,
-      addressLine2: line2,
-      errorMessage: null,
-    ),
-  );
-
   bool nextStep() {
     final error = ParentAddChildValidation.currentStep(state);
     if (error != null) {
       emit(state.copyWith(errorMessage: error));
       return false;
     }
-    if (state.currentStep < 5) {
-      emit(state.copyWith(currentStep: state.currentStep + 1));
+    if (state.currentStep < state.lastStep) {
+      final nextStep = state.currentStep == 2 && !state.requiresSubjectSelection
+          ? 4
+          : state.currentStep + 1;
+      emit(state.copyWith(currentStep: nextStep));
     }
     return true;
   }
 
   void previousStep() {
     if (state.currentStep == 0 || state.isBusy) return;
-    emit(
-      state.copyWith(currentStep: state.currentStep - 1, errorMessage: null),
-    );
+    final previousStep =
+        state.currentStep == 4 && !state.requiresSubjectSelection
+        ? 2
+        : state.currentStep - 1;
+    emit(state.copyWith(currentStep: previousStep, errorMessage: null));
   }
 
   Future<void> submit() async {
@@ -201,13 +187,6 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     if (error != null) {
       _log('submit rejected: current-step validation failed');
       return emit(state.copyWith(errorMessage: error));
-    }
-    if (!state.isGulf) {
-      _log('egyptian validation passed');
-      _log(
-        'receipt ${state.receipt == null ? 'null' : 'ready'}; '
-        'exists=${state.receipt?.existsSync() ?? false}',
-      );
     }
     _submitting = true;
     try {
@@ -259,6 +238,19 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     ),
   );
 
+  void checkoutClosed() {
+    if (state.phase != ParentAddChildPhase.processingPayment) return;
+    _attempt.startNew();
+    emit(
+      state.copyWith(
+        phase: ParentAddChildPhase.failure,
+        paymentStatus: PaymentStatus.cancelled,
+        shouldOpenCheckout: false,
+        errorMessage: S.current.parentPaymentFailed,
+      ),
+    );
+  }
+
   void reopenCheckout() {
     if (state.checkoutUrl?.isNotEmpty == true) {
       emit(state.copyWith(shouldOpenCheckout: true, errorMessage: null));
@@ -281,10 +273,12 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     _checkingPayment = true;
     try {
       final reconciled = await repo.reconcile(id);
+      if (isClosed) return;
       TamaraStatusResponse? response;
       reconciled.fold((_) {}, (value) => response = value);
       if (response == null || !response!.status.isTerminal) {
         final status = await repo.status(id);
+        if (isClosed) return;
         status.fold((_) {}, (value) => response = value);
       }
       if (response != null) await _handlePaymentStatus(response!);
@@ -308,14 +302,12 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       student: _student(),
       curriculumId: state.curriculum!.id,
       packageId: state.package!.id!,
-      receiptImage: state.receipt!,
       discountCode: state.discountCode,
-      method: state.paymentMethod,
-      referenceNumber: state.referenceNumber,
     );
     _log('Egyptian request model built');
     _log('Egyptian repository call started');
     final result = await repo.registerEgyptian(request);
+    if (isClosed) return;
     _log('Egyptian repository call completed');
     result.fold(
       (failure) {
@@ -351,20 +343,22 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       curriculumId: state.curriculum!.id,
       packageId: state.package!.id!,
       discountCode: state.discountCode,
-      paymentAddress: ParentPaymentAddress(
-        city: state.city,
-        region: state.region,
-        line1: state.addressLine1,
-        line2: state.addressLine2,
+      paymentAddress: const ParentPaymentAddress(
+        city: TamaraDefaultAddress.city,
+        region: TamaraDefaultAddress.region,
+        line1: TamaraDefaultAddress.line1,
+        line2: TamaraDefaultAddress.line2,
       ),
     );
     final key = await _beginAttempt(request);
+    if (isClosed) return;
     _log('idempotency attempt prepared');
     _log('combined checkout started');
     final result = await repo.checkoutGulf(
       request: request,
       idempotencyKey: key,
     );
+    if (isClosed) return;
     await result.fold(
       (failure) async {
         _log(
@@ -376,6 +370,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       (checkout) async {
         _log('checkout response accepted; paymentId present');
         await _saveCheckout(request, checkout.paymentId, checkout.checkoutUrl!);
+        if (isClosed) return;
         emit(
           state.copyWith(
             phase: ParentAddChildPhase.processingPayment,
@@ -436,6 +431,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
           : response.paymentId;
       if (id == null || !_completedPaymentIds.add(id)) return;
       await store?.clear();
+      if (isClosed) return;
       emit(
         state.copyWith(
           phase: ParentAddChildPhase.completed,

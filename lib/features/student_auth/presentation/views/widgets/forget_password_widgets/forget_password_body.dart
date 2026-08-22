@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/forget_password_widgets/forget_password_form.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/forget_password_widgets/forget_password_subtitle.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/forget_password_widgets/forget_password_verification_form.dart';
@@ -7,15 +8,24 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPasswordBody extends StatefulWidget {
-  const ForgetPasswordBody({super.key});
+  const ForgetPasswordBody({super.key, required this.args});
+
+  final OtpFlowArgs args;
 
   @override
   State<ForgetPasswordBody> createState() => _ForgetPasswordBodyState();
 }
 
 class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
-  bool isCodeSent = false;
-  String email = 'bnan@gmail.com';
+  late bool isCodeSent;
+  late String email;
+
+  @override
+  void initState() {
+    super.initState();
+    isCodeSent = widget.args.isAccountVerification;
+    email = widget.args.email;
+  }
 
   void showVerification(String userEmail) {
     setState(() {
@@ -38,17 +48,20 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
                 children: [
                   const SizedBox(height: 16),
                   AuthHeader(
-                    title: S.of(context).forgotPasswordTitle,
+                    title: widget.args.isAccountVerification
+                        ? S.of(context).verifyAccountTitle
+                        : S.of(context).forgotPasswordTitle,
                     subtitle: null,
                   ),
                   const SizedBox(height: 8),
                   ForgetPasswordSubtitle(
                     isCodeSent: isCodeSent,
                     email: email,
+                    isAccountVerification: widget.args.isAccountVerification,
                   ),
                   const SizedBox(height: 28),
                   isCodeSent
-                      ?  ForgetPasswordVerificationForm()
+                      ? ForgetPasswordVerificationForm(args: widget.args)
                       : ForgetPasswordForm(onSuccess: showVerification),
                   const Spacer(),
                   const BnanFooter(),

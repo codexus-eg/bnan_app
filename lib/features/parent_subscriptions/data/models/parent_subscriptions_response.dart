@@ -8,17 +8,13 @@ class ParentSubscriptionsResponse {
     final list = _childrenList(json);
     return ParentSubscriptionsResponse(
       children: list
+          .whereType<Map>()
           .map(
             (item) => ParentChildSubscriptionsModel.fromJson(
-              Map<String, dynamic>.from(item as Map),
+              Map<String, dynamic>.from(item),
             ),
           )
-          .map((item) {
-            if (item.studentId.isEmpty) {
-              throw const FormatException('Missing child id');
-            }
-            return item;
-          })
+          .where((item) => item.studentId.isNotEmpty)
           .toList(growable: false),
     );
   }

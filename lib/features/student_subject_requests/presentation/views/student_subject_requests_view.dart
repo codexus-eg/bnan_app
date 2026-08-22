@@ -1,12 +1,16 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_state.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/student_subject_requests_body.dart';
-import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_skeleton.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +24,9 @@ class StudentSubjectRequestsView extends StatefulWidget {
 
 class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     with WidgetsBindingObserver {
+  bool _paymentRestoreChecked = false;
+  bool _returningHome = false;
+
   @override
   void initState() {
     super.initState();
@@ -41,24 +48,17 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    appBar: CustomAppbar(headerText: S.of(context).requestNewLesson),
     body: MultiBlocListener(
       listeners: [
         BlocListener<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
           listenWhen: (old, next) =>
-              old.message != next.message &&
-              next.message != null &&
-              next.availability != null,
-          listener: (context, state) {
-            final success =
-                state.message == 'subject_request_submitted' ||
-                state.message == 'subject_request_payment_completed';
-            final message = state.message == 'subject_request_submitted'
-                ? S.of(context).subjectRequestSubmitted
-                : state.message == 'subject_request_payment_completed'
-                ? S.of(context).subjectRequestPaymentCompleted
-                : state.message!;
-            showCustomSnackBar(context, message, success);
-          },
+              old.availability?.registrationMode !=
+                  next.availability?.registrationMode ||
+              (old.message != next.message &&
+                  next.message != null &&
+                  next.availability != null),
+          listener: _onStudentState,
         ),
         BlocListener<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
           listener: _onPayment,
@@ -68,7 +68,11 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
           BlocBuilder<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
             builder: (context, state) {
               if (state.phase == SubjectRequestsPhase.loading) {
-                return const SubjectRequestSkeleton();
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: ColorManager.mainColor14,
+                  ),
+                );
               }
               if (state.phase == SubjectRequestsPhase.failure &&
                   state.availability == null) {
@@ -97,7 +101,17 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     if (state.phase == SubjectRequestPaymentPhase.openingTamara) {
       final url = state.payment?.checkoutUrl;
       if (url == null) return;
-      final result = await TamaraCheckoutLauncher.open(context, url);
+      final cubit = context.read<SubjectRequestPaymentCubit>();
+      final result = await TamaraCheckoutLauncher.open(
+        context,
+        url,
+        completionStream: cubit.stream.map(
+          (value) => value.phase == SubjectRequestPaymentPhase.completed,
+        ),
+        isCompleted: () =>
+            cubit.state.phase == SubjectRequestPaymentPhase.completed,
+        onOpened: cubit.tamaraReturned,
+      );
       if (!context.mounted) return;
       if (result.opened) {
         await context.read<SubjectRequestPaymentCubit>().tamaraReturned();
@@ -119,6 +133,37 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
       );
     } else if (state.message != null) {
       showCustomSnackBar(context, state.message!, false);
+    }
+  }
+
+  Future<void> _onStudentState(
+    BuildContext context,
+    StudentSubjectRequestsState state,
+  ) async {
+    if (!_paymentRestoreChecked && state.availability != null) {
+      _paymentRestoreChecked = true;
+      if (state.availability!.registrationMode == RegistrationMode.gulf) {
+        await context.read<SubjectRequestPaymentCubit>().restore();
+        if (!context.mounted) return;
+      }
+    }
+    if (state.message == null) return;
+    final success =
+        state.message == 'subject_request_submitted' ||
+        state.message == 'subject_request_payment_completed';
+    final message = state.message == 'subject_request_submitted'
+        ? S.of(context).subjectRequestSubmitted
+        : state.message == 'subject_request_payment_completed'
+        ? S.of(context).subjectRequestPaymentCompleted
+        : state.message!;
+    showCustomSnackBar(context, message, success);
+    if (success && !_returningHome) {
+      _returningHome = true;
+      if (Navigator.of(context).canPop()) {
+        MyNavigator.pop(context);
+      } else {
+        MyNavigator.goToOffAll(context, Routes.home);
+      }
     }
   }
 }

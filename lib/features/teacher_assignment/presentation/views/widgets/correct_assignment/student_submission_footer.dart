@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/download_icon_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -9,11 +10,13 @@ class StudentSubmissionFooter extends StatelessWidget {
   const StudentSubmissionFooter({
     super.key,
     required this.attachment,
+    required this.attachmentName,
     required this.buttonText,
     required this.onCorrectionPressed,
   });
 
   final String? attachment;
+  final String? attachmentName;
   final String? buttonText;
   final VoidCallback? onCorrectionPressed;
 
@@ -42,13 +45,16 @@ class StudentSubmissionFooter extends StatelessWidget {
   }
 
   Widget _attachment(BuildContext context, String attachment) {
+    final fileName = attachmentName?.trim().isNotEmpty == true
+        ? attachmentName!.trim()
+        : _fileName(attachment);
     return Row(
       children: [
         SvgPicture.asset(ImageManager.teacherAssignmentPaperclipIcon),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
-            _fileName(attachment),
+            fileName,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: StylesManager.styleBold14(
@@ -56,10 +62,7 @@ class StudentSubmissionFooter extends StatelessWidget {
             ).copyWith(color: ColorManager.mainColor14),
           ),
         ),
-        SvgPicture.asset(
-          ImageManager.downloadIcon,
-          colorFilter: ColorFilter.mode(ColorManager.greyA8AF, BlendMode.srcIn),
-        ),
+        DownloadIconButton(url: attachment, fileName: fileName),
       ],
     );
   }

@@ -20,9 +20,14 @@ class StudentSubjectRequest {
   final SubjectRequestLookup? chatRoom;
 
   factory StudentSubjectRequest.fromJson(Map<String, dynamic> json) {
-    SubjectRequestLookup? lookup(dynamic value) => value is Map
-        ? SubjectRequestLookup.fromJson(Map<String, dynamic>.from(value))
-        : null;
+    SubjectRequestLookup? lookup(dynamic value) {
+      if (value is Map) {
+        return SubjectRequestLookup.fromJson(Map<String, dynamic>.from(value));
+      }
+      final id = value?.toString().trim() ?? '';
+      return id.isEmpty ? null : SubjectRequestLookup(id: id, name: '');
+    }
+
     return StudentSubjectRequest(
       id: (json['subjectRequestId'] ?? json['id'] ?? json['_id'] ?? '')
           .toString(),

@@ -27,6 +27,7 @@ class GetRegistrationRequestsCubit extends Cubit<GetRegistrationRequestsState> {
   bool get canLoadMore => !_isLoadingMore && _currentPage < _lastPage;
 
   Future<void> getRegistrationRequests({bool refresh = false}) async {
+    if (isClosed) return;
     final requestId = ++_requestId;
     _isLoadingMore = false;
     if (refresh) _reset();

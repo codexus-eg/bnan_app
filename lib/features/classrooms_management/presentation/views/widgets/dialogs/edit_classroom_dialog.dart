@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/core/shared_widget/custom_dropdown_form_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
@@ -24,8 +23,7 @@ class EditClassroomDialog extends StatefulWidget {
 class EditClassroomDialogState extends State<EditClassroomDialog> {
   final formKey = GlobalKey<FormState>();
   late final TextEditingController classNameController;
-  late final TextEditingController supervisorController;
-  String? supervisor;
+  late final TextEditingController meetingLinkController;
   String? validationMessage;
 
   @override
@@ -34,13 +32,15 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
     classNameController = TextEditingController(
       text: widget.classroomItem.name,
     );
-    supervisorController = TextEditingController(text: '-');
+    meetingLinkController = TextEditingController(
+      text: widget.classroomItem.meetingLink,
+    );
   }
 
   @override
   void dispose() {
     classNameController.dispose();
-    supervisorController.dispose();
+    meetingLinkController.dispose();
     super.dispose();
   }
 
@@ -59,7 +59,7 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
-              padding: const EdgeInsetsDirectional.all(24),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -67,7 +67,9 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
                   const SizedBox(height: 16),
                   CustomTextField(
                     label: s.className,
-                    hintStyle: getStyle(context),
+                    hintStyle: StylesManager.styleRegular16(
+                      context,
+                    ).copyWith(color: ColorManager.mainColor14),
                     controller: classNameController,
                     backgroundColor: ColorManager.white,
                     validator: (value) => value?.trim().isEmpty ?? true
@@ -76,17 +78,15 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
                     onChanged: (_) => setState(() => validationMessage = null),
                   ),
                   const SizedBox(height: 16),
-                  CustomDropdownFormField(
-                    label: s.theSupervisor,
-                    labelColor: ColorManager.mainColor14,
-                    hint: supervisorController.text,
-                    hintStyle: getStyle(context),
-                    items: const ['سلمى', 'رقية'],
-                    value: supervisor,
-                    onChanged: (value) => setState(() => supervisor = value),
+                  CustomTextField(
+                    label: s.meetingLinkOptional,
+                    controller: meetingLinkController,
+                    keyboardType: TextInputType.url,
+                    backgroundColor: ColorManager.white,
+                    onChanged: (_) => setState(() => validationMessage = null),
                   ),
                   if (validationMessage != null) ...[
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     Text(
                       validationMessage!,
                       style: StylesManager.styleRegular12(
@@ -109,18 +109,15 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
     );
   }
 
-  TextStyle getStyle(BuildContext context) {
-    return StylesManager.styleRegular16(
-      context,
-    ).copyWith(color: ColorManager.mainColor14);
-  }
-
   void submit() {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
     context.read<ClassroomActionsCubit>().updateClassroom(
       widget.classroomItem.id,
-      ClassroomRequestModel(name: classNameController.text.trim()),
+      ClassroomRequestModel(
+        name: classNameController.text.trim(),
+        meetingLink: meetingLinkController.text.trim(),
+      ),
     );
   }
 }

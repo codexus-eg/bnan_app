@@ -35,7 +35,7 @@ class EvaluationIdentityFields extends StatelessWidget {
   final bool showAvailabilityMessages;
   final ValueChanged<String?> onClassroomChanged;
   final ValueChanged<String?> onStudentChanged, onSubjectChanged;
-  final ValueChanged<String?> onWeekChanged;
+  final ValueChanged<String?>? onWeekChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -51,27 +51,27 @@ class EvaluationIdentityFields extends StatelessWidget {
             students.isEmpty)
           _message(s.noStudentsInClass),
         const SizedBox(height: 12),
-        data.isEdit
-            ? _fixed(s.subject, data.editor!.subject.name)
-            : _subject(s),
+        _subject(s),
         if (showAvailabilityMessages &&
             !data.isEdit &&
             studentId != null &&
             subjects.isEmpty)
           _message(emptySubjectsMessage),
         const SizedBox(height: 12),
-        CustomDropdown(
-          label: s.week,
-          value: week?.toString(),
-          hint: s.selectWeek,
-          items: availableWeeks.map((item) => '$item').toList(),
-          itemsLabels: {
-            for (final item in availableWeeks) '$item': '${s.week} $item',
-          },
-          isRequired: true,
-          backgroundColor: ColorManager.white,
-          onChanged: onWeekChanged,
-        ),
+        data.isEdit
+            ? _fixed(s.week, '${s.week} ${data.editor!.week}')
+            : CustomDropdown(
+                label: s.week,
+                value: week?.toString(),
+                hint: s.selectWeek,
+                items: availableWeeks.map((item) => '$item').toList(),
+                itemsLabels: {
+                  for (final item in availableWeeks) '$item': '${s.week} $item',
+                },
+                isRequired: true,
+                backgroundColor: ColorManager.white,
+                onChanged: onWeekChanged,
+              ),
       ],
     );
   }

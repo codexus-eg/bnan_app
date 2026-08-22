@@ -36,11 +36,9 @@ class ParentScheduleBody extends StatelessWidget {
             }
             final child = state.selectedChild;
             if (child == null) return const NoDataWidget();
-            return Column(
-              children: [
-                ParentScheduleChildSelector(state: state),
-                Expanded(child: ParentScheduleContent(child: child)),
-              ],
+            return ParentScheduleContent(
+              child: child,
+              childSelector: ParentScheduleChildSelector(state: state),
             );
           },
         ),

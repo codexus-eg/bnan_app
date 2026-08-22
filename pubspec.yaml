@@ -40,6 +40,7 @@ dependencies:
   bloc: ^8.0.3
   intl: ^0.20.1
   intl_utils: ^2.8.5
+  timezone: ^0.10.1
   intl_phone_number_input: ^0.7.4
   shared_preferences: ^2.5.3
   flutter_bloc: ^8.1.5
@@ -80,7 +81,7 @@ dependencies:
   firebase_core: ^4.13.0
   firebase_messaging: ^16.5.0
   flutter_local_notifications: ^20.1.0
-  flutter_native_splash: ^2.4.7
+  internet_connection_checker_plus: ^3.1.1
   package_info_plus: ^9.0.1
   uuid: ^4.6.0
 
@@ -155,17 +156,6 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 flutter_intl:
   enabled: true
-
-# flutter_native_splash:
-#   color: "#FFFFFF"
-#   image: assets/images/splash_and_auth/Bnanacademy.png
-
-#   android: true
-#   ios: true
-
-#   android_12:
-#     color: "#FFFFFF"
-#     image: assets/images/splash_and_auth/Bnanacademy.png
 
 flutter_launcher_icons:
   android: true

@@ -32,4 +32,33 @@ void main() {
     );
     expect(title, 'Ideal Teacher Certificate');
   });
+
+  testWidgets('ideal supervisor certificate uses its localized label', (
+    tester,
+  ) async {
+    final certificate = CertificateModel.fromJson({
+      '_id': 'certificate-2',
+      'certificateType': 'ideal_supervisor',
+      'recipientType': 'supervisor',
+    });
+    late String title;
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('en'),
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: Builder(
+          builder: (context) {
+            title = certificateTitle(context, certificate);
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    expect(title, 'Ideal Supervisor Certificate');
+  });
 }

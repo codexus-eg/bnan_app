@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/custom_app_drawer.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/custom_bottom_nav_bar.dart';
 import 'package:bnan_app/core/shared_widget/status_bar_widget.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/support_chat_drawer_item.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/models/supervisor_navigation_item.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +17,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
     required this.drawerItems,
     required this.bottomItems,
     required this.onDrawerTap,
+    required this.onDrawerChanged,
     required this.onBottomTap,
     required this.onLogoutTap,
   });
@@ -27,6 +30,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
   final List<SupervisorNavigationItem> drawerItems;
   final List<SupervisorNavigationItem> bottomItems;
   final ValueChanged<int> onDrawerTap;
+  final DrawerCallback onDrawerChanged;
   final ValueChanged<int> onBottomTap;
   final VoidCallback onLogoutTap;
 
@@ -35,6 +39,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
     return StatusBarWidget(
       child: Scaffold(
         key: scaffoldKey,
+        onDrawerChanged: onDrawerChanged,
         drawer: CustomAppDrawer(
           userName: userName,
           userSubtitle: userSubtitle,
@@ -42,6 +47,7 @@ class SupervisorHomeScaffold extends StatelessWidget {
           selectedIndex: 0,
           onItemTap: onDrawerTap,
           onLogoutTap: onLogoutTap,
+          footer: SupportChatDrawerItem.forRole(SessionManager.instance.role),
         ),
         body: body,
         bottomNavigationBar: CustomBottomNavBar(

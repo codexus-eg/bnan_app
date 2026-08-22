@@ -13,6 +13,7 @@ class GetWeeklyPlansCubit extends Cubit<GetWeeklyPlansState> {
   final Map<String, WeeklyPlansResponseModel> _cache = {};
 
   Future<void> getPlansByWeek({required String classroomId, int? week}) async {
+    if (isClosed) return;
     _activeClassroomId = classroomId;
     _activeWeek = week;
     final cached = _cache[_key(classroomId, week)];

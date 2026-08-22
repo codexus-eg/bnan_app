@@ -7,6 +7,11 @@ class LessonUiModel {
     required this.subjectName,
     required this.day,
     required this.startTime,
+    this.endTime,
+    this.teacherName,
+    this.chatRoomId,
+    this.classroomSubjectId,
+    this.occurrenceKey,
   });
 
   final String id;
@@ -16,8 +21,13 @@ class LessonUiModel {
   final String subjectName;
   final String day;
   final String startTime;
+  final String? endTime;
+  final String? teacherName;
+  final String? chatRoomId;
+  final String? classroomSubjectId;
+  final String? occurrenceKey;
 
-  LessonUiModel copyWith({String? day, String? startTime}) {
+  LessonUiModel copyWith({String? day, String? startTime, String? endTime}) {
     return LessonUiModel(
       id: id,
       classroomId: classroomId,
@@ -26,6 +36,11 @@ class LessonUiModel {
       subjectName: subjectName,
       day: day ?? this.day,
       startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      teacherName: teacherName,
+      chatRoomId: chatRoomId,
+      classroomSubjectId: classroomSubjectId,
+      occurrenceKey: occurrenceKey,
     );
   }
 }

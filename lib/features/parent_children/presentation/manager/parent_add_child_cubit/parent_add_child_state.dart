@@ -27,7 +27,6 @@ class ParentAddChildState {
     this.fullName = '',
     this.email = '',
     this.password = '',
-    this.confirmPassword = '',
     this.parentHasChildren = false,
     this.curriculum,
     this.grade,
@@ -37,10 +36,6 @@ class ParentAddChildState {
     this.paymentMethod = '',
     this.referenceNumber = '',
     this.receipt,
-    this.city = '',
-    this.region = '',
-    this.addressLine1 = '',
-    this.addressLine2 = '',
     this.paymentId,
     this.checkoutUrl,
     this.paymentSummary,
@@ -51,7 +46,7 @@ class ParentAddChildState {
 
   final ParentAddChildPhase phase;
   final int currentStep;
-  final String fullName, email, password, confirmPassword;
+  final String fullName, email, password;
   final bool parentHasChildren;
   final AcademicCurriculumModel? curriculum;
   final AcademicGradeModel? grade;
@@ -59,7 +54,6 @@ class ParentAddChildState {
   final List<String> selectedSubjectIds;
   final String discountCode, paymentMethod, referenceNumber;
   final File? receipt;
-  final String city, region, addressLine1, addressLine2;
   final String? paymentId, checkoutUrl, errorMessage;
   final PaymentAmountSummary? paymentSummary;
   final PaymentStatus? paymentStatus;
@@ -69,6 +63,8 @@ class ParentAddChildState {
   bool get hasSupportedRegistrationMode =>
       curriculum?.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
+  bool get requiresSubjectSelection => isGulf || isSingleSubject;
+  int get lastStep => isGulf ? 5 : 4;
   bool get isBusy =>
       phase == ParentAddChildPhase.submitting ||
       phase == ParentAddChildPhase.processingPayment;
@@ -79,7 +75,6 @@ class ParentAddChildState {
     String? fullName,
     String? email,
     String? password,
-    String? confirmPassword,
     bool? parentHasChildren,
     Object? curriculum = _unset,
     Object? grade = _unset,
@@ -89,10 +84,6 @@ class ParentAddChildState {
     String? paymentMethod,
     String? referenceNumber,
     Object? receipt = _unset,
-    String? city,
-    String? region,
-    String? addressLine1,
-    String? addressLine2,
     Object? paymentId = _unset,
     Object? checkoutUrl = _unset,
     Object? paymentSummary = _unset,
@@ -105,7 +96,6 @@ class ParentAddChildState {
     fullName: fullName ?? this.fullName,
     email: email ?? this.email,
     password: password ?? this.password,
-    confirmPassword: confirmPassword ?? this.confirmPassword,
     parentHasChildren: parentHasChildren ?? this.parentHasChildren,
     curriculum: identical(curriculum, _unset)
         ? this.curriculum
@@ -119,10 +109,6 @@ class ParentAddChildState {
     paymentMethod: paymentMethod ?? this.paymentMethod,
     referenceNumber: referenceNumber ?? this.referenceNumber,
     receipt: identical(receipt, _unset) ? this.receipt : receipt as File?,
-    city: city ?? this.city,
-    region: region ?? this.region,
-    addressLine1: addressLine1 ?? this.addressLine1,
-    addressLine2: addressLine2 ?? this.addressLine2,
     paymentId: identical(paymentId, _unset)
         ? this.paymentId
         : paymentId as String?,

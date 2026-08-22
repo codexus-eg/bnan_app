@@ -54,6 +54,27 @@ void main() {
     expect(request.toJson(), isNot(contains('supervisor')));
   });
 
+  test('classroom meeting link parsing is backward compatible', () {
+    expect(_classroomFromJson({}).meetingLink, isEmpty);
+    expect(
+      _classroomFromJson({
+        'meetingLink': 'https://meet.example/room',
+      }).meetingLink,
+      'https://meet.example/room',
+    );
+  });
+
+  test('meeting link is optional on create and can be cleared on update', () {
+    expect(
+      const ClassroomRequestModel(name: 'A').toJson(),
+      isNot(contains('meetingLink')),
+    );
+    expect(
+      const ClassroomRequestModel(name: 'A', meetingLink: '').toJson(),
+      containsPair('meetingLink', ''),
+    );
+  });
+
   test(
     'create forwards selected supervisor and preserves success flow',
     () async {
@@ -145,6 +166,15 @@ ClassroomModel _classroom(String id) => ClassroomModel(
   approvedStudentsCount: 1,
   assignedTeachersCount: 0,
 );
+
+ClassroomModel _classroomFromJson(Map<String, dynamic> values) =>
+    ClassroomModel.fromJson({
+      'id': 'classroom',
+      'name': 'Classroom',
+      'curriculum': <String, dynamic>{},
+      'grade': <String, dynamic>{},
+      ...values,
+    });
 
 ClassroomsResponseModel _classroomsResponse(List<ClassroomModel> data) =>
     ClassroomsResponseModel(

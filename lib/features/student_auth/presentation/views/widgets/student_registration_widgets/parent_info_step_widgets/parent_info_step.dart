@@ -2,6 +2,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/shared_widget/custom_password_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/core/helper/validator_form_field.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,6 @@ class ParentInfoStep extends StatelessWidget {
           // ),
           // const SizedBox(height: 16),
           CustomTextField(
-            controller: cubit.parentNameController,
-            label: S.of(context).parentName,
-            hintText: '',
-            isRequired: true,
-            validator: MyValidator.validateName,
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
             controller: cubit.parentEmailController,
             label: S.of(context).email,
             isRequired: true,
@@ -41,37 +34,10 @@ class ParentInfoStep extends StatelessWidget {
             validator: MyValidator.validateEmail,
           ),
           const SizedBox(height: 16),
-          CustomTextField(
-            controller: cubit.parentPhoneController,
-            label: S.of(context).phoneNumber,
-            keyboardType: TextInputType.phone,
-            isRequired: true,
-            validator: (value) =>
-                MyValidator.validatePhone(value, cubit.packageCurrency),
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
-            controller: cubit.parentWhatsappController,
-            label: S.of(context).whatsappNumber,
-            keyboardType: TextInputType.phone,
-          ),
-          const SizedBox(height: 16),
-          CustomTextField(
-            controller: cubit.isGulf
-                ? cubit.parentPasswordController
-                : cubit.studentPasswordController,
-            label: cubit.isGulf
-                ? S.of(context).password
-                : S.of(context).studentPassword,
+          CustomPasswordField(
+            controller: cubit.parentPasswordController,
+            label: S.of(context).password,
             hintText: S.of(context).passwordHint,
-            obscureText: true,
-            isRequired: true,
-            validator: cubit.isGulf ? MyValidator.validateStrongPassword : null,
-            suffixIcon: const Icon(
-              Icons.visibility_outlined,
-              size: 24,
-              color: ColorManager.greyA8AF,
-            ),
           ),
           const SizedBox(height: 16),
           Align(

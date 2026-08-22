@@ -10,20 +10,22 @@ export 'read_only_inline_failure.dart';
 
 class ReadOnlyEvaluationsFeedback extends StatelessWidget {
   const ReadOnlyEvaluationsFeedback({super.key, required this.state});
+  static const _notEnrolledMessage = 'الطالب غير مقيد في هذا الفصل';
+  static const _noClassroomMessage = 'الطالب غير مقيد في فصل';
   final ReadOnlyWeeklyEvaluationsState state;
 
   @override
   Widget build(BuildContext context) {
     if (state.isLoading) {
       return const SingleChildScrollView(
-        child: WeeklyEvaluationsSkeleton(
-          showActions: false,
-          showFilter: false,
-        ),
+        child: WeeklyEvaluationsSkeleton(showActions: false, showFilter: false),
       );
     }
     if (state.status == ReadOnlyEvaluationsStatus.failure) {
-      return ReadOnlyFailureFeedback(message: state.failureMessage ?? '');
+      final message = state.failureMessage ?? '';
+      return message.trim() == _notEnrolledMessage
+          ? const NoDataWidget(title: _noClassroomMessage)
+          : ReadOnlyFailureFeedback(message: message);
     }
     return NoDataWidget(title: _emptyTitle(context));
   }
@@ -35,6 +37,7 @@ class ReadOnlyEvaluationsFeedback extends StatelessWidget {
         state.children.isEmpty) {
       return s.noChildrenLinked;
     }
+    if (state.hasNoClassroom) return s.noClassroomsAvailable;
     return switch (state.data?.mode) {
       EvaluationMode.gulf => s.noClassroomsAvailable,
       EvaluationMode.egyptian => s.noSubjectsAvailableReadOnly,

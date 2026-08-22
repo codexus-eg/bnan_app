@@ -33,7 +33,7 @@ class TeacherTechnicalAppsLevel extends StatelessWidget {
                 const SizedBox(width: 16),
                 TeacherAnswerButton(
                   text: S.of(context).veryGood,
-                  isSelected: cubit.computerUsageLevel == 'very good',
+                  isSelected: cubit.computerUsageLevel == 'very-good',
                   onTap: () => cubit.changeComputerUsageLevel('very-good'),
                 ),
                 const SizedBox(width: 16),

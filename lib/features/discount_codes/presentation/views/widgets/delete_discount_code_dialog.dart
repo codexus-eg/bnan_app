@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_delete_dialog.dart';
 import 'package:bnan_app/features/discount_codes/presentation/manager/discount_code_actions_cubit.dart';
 import 'package:bnan_app/features/discount_codes/presentation/manager/discount_code_actions_state.dart';
@@ -37,14 +38,17 @@ class _DeleteDiscountCodeDialog extends StatelessWidget {
           Navigator.pop(context);
         }
       },
-      builder: (context, state) => CustomDeleteDialog(
-        gradeId: id,
-        isLoading: state is DiscountCodeActionLoading,
-        dialogHeader: S.of(context).deleteDiscountCode,
-        subtitle: S.of(context).deleteDiscountCodeConfirmation,
-        onPressed: state is DiscountCodeActionLoading
-            ? null
-            : () => context.read<DiscountCodeActionsCubit>().delete(id),
+      builder: (context, state) => CustomAppDialog(
+        child: CustomDeleteDialog(
+          gradeId: id,
+          isLoading: state is DiscountCodeActionLoading,
+          showCancelButton: true,
+          dialogHeader: S.of(context).deleteDiscountCode,
+          subtitle: S.of(context).deleteDiscountCodeConfirmation,
+          onPressed: state is DiscountCodeActionLoading
+              ? null
+              : () => context.read<DiscountCodeActionsCubit>().delete(id),
+        ),
       ),
     );
   }

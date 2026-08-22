@@ -11,17 +11,22 @@ class SubjectRequestPackageGrid extends StatelessWidget {
     super.key,
     required this.packages,
     this.selectedId,
+    this.hidePrices = false,
   });
 
   final List<PackageModel> packages;
   final String? selectedId;
+  final bool hidePrices;
 
   @override
   Widget build(BuildContext context) => PackagesGrid(
     plans: packages
         .map(
-          (item) =>
-              PackageCardModel.fromPackage(context: context, package: item),
+          (item) => PackageCardModel.fromPackage(
+            context: context,
+            package: item,
+            hidePrices: hidePrices,
+          ),
         )
         .toList(),
     packages: packages,

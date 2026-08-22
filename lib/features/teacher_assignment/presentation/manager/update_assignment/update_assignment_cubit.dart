@@ -4,7 +4,8 @@ import 'package:bnan_app/features/teacher_assignment/presentation/manager/update
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateAssignmentCubit extends Cubit<UpdateAssignmentState> {
-  UpdateAssignmentCubit(this.assignmentsRepo) : super(UpdateAssignmentInitial());
+  UpdateAssignmentCubit(this.assignmentsRepo)
+    : super(UpdateAssignmentInitial());
 
   final AssignmentsRepo assignmentsRepo;
 
@@ -12,12 +13,14 @@ class UpdateAssignmentCubit extends Cubit<UpdateAssignmentState> {
     required String assignmentId,
     required CreateAssignmentRequestModel request,
   }) async {
+    if (isClosed) return;
     emit(UpdateAssignmentLoading());
 
     final result = await assignmentsRepo.updateAssignment(
       assignmentId: assignmentId,
       request: request,
     );
+    if (isClosed) return;
 
     result.fold(
       (failure) {

@@ -1,4 +1,4 @@
-import 'package:bnan_app/features/student_auth/data/models/grade_model.dart';
+import 'package:bnan_app/features/grades_management/data/models/grade_model.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_cubit.dart';
 import 'package:bnan_app/core/shared_widget/custom_option.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/views/widgets/teacher_grades_subjects_data/teacher_subjects_options_list.dart';

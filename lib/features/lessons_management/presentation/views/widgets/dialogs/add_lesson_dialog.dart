@@ -17,7 +17,11 @@ class AddLessonDialog extends StatelessWidget {
   final LessonClassroomUiModel classroom;
   final String initialDay;
   final Set<String> blockedDays;
-  final Future<bool> Function({required String day, required String startTime})
+  final Future<bool> Function({
+    required String day,
+    required String startTime,
+    required String endTime,
+  })
   onSave;
 
   @override

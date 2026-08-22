@@ -10,6 +10,7 @@ class GetTermPlansCubit extends Cubit<GetTermPlansState> {
   int _requestId = 0;
 
   Future<void> getAllTermPlans({String? classroomId}) async {
+    if (isClosed) return;
     final id = classroomId?.trim();
     selectedClassroomId = id == null || id.isEmpty ? null : id;
     final requestId = ++_requestId;
@@ -30,6 +31,7 @@ class GetTermPlansCubit extends Cubit<GetTermPlansState> {
   Future<void> refresh() => getAllTermPlans(classroomId: selectedClassroomId);
 
   Future<void> getTermPlans({required String classroomId}) async {
+    if (isClosed) return;
     final requestId = ++_requestId;
     emit(GetTermPlansLoading());
 

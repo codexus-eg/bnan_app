@@ -20,12 +20,9 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
   registerEgyptian(ParentAddChildEgyptianRequest request) async {
     _log('Egyptian repository entered');
     final result = await repoGuard(() async {
-      _log('Egyptian FormData creation started');
-      final data = await request.toFormData();
-      _log('Egyptian FormData creation completed');
       final response = await _post(
         EndPoints.parentChildEgyptianRegistration,
-        data: data,
+        data: request.toJson(),
       );
       _log('Egyptian response parsing started');
       return ParentAddChildSubmission.fromJson(_map(response));
