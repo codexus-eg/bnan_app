@@ -40,6 +40,18 @@ void main() {
     await cubit.close();
   });
 
+  test('local pending marks only the selected child subscription', () async {
+    final cubit = GetParentSubscriptionsCubit(_Repo());
+    await cubit.load();
+
+    cubit.markRenewalPending('child-2', 'subscription');
+
+    expect(cubit.isRenewalPending('child-2', 'subscription'), isTrue);
+    expect(cubit.isRenewalPending('child-1', 'subscription'), isFalse);
+    expect(cubit.isRenewalPending('child-2', 'other'), isFalse);
+    await cubit.close();
+  });
+
   test('concurrent loads share one active repository request', () async {
     final repo = _PendingRepo();
     final cubit = GetParentSubscriptionsCubit(repo);

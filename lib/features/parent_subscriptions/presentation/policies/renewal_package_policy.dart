@@ -20,8 +20,18 @@ abstract class RenewalPackagePolicy {
         registrationMode == 'egyptian' &&
         currentAccessScope == 'single_subject' &&
         currentPackageType == 'hours';
+    final isEgyptianMonthly =
+        registrationMode == 'egyptian' && currentPackageType == 'monthly';
+    final matchesGulfType =
+        registrationMode != 'gulf' ||
+        currentPackageType.isEmpty ||
+        package.type == currentPackageType;
     return valid &&
+        matchesGulfType &&
         (!isEgyptianPrivate ||
-            package.accessScope == 'single_subject' && package.type == 'hours');
+            package.accessScope == 'single_subject' &&
+                package.type == 'hours') &&
+        (!isEgyptianMonthly ||
+            package.accessScope == 'all_subjects' && package.type == 'monthly');
   }
 }

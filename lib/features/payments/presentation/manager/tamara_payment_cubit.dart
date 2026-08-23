@@ -13,6 +13,8 @@ import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
@@ -119,6 +121,12 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _checkoutInFlight = false;
     await result.fold(
       (failure) async {
+        GulfRegistrationDiagnostics.uiFailure(
+          endpoint: EndPoints.tamaraCheckout,
+          cubit: 'TamaraPaymentCubit',
+          state: 'TamaraPaymentFailure',
+          message: failure.message,
+        );
         if (failure.responseReceived) {
           _draft = null;
           await store.clear();

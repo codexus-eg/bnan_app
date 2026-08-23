@@ -1,6 +1,8 @@
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/parent_subscription_card.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
+import 'package:bnan_app/features/student_subscriptions/presentation/manager/student_subscriptions_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StudentHomeSubscriptions extends StatelessWidget {
   const StudentHomeSubscriptions({
@@ -21,7 +23,13 @@ class StudentHomeSubscriptions extends StatelessWidget {
             child: student,
             subscription: subscriptions[index],
             isParent: false,
-            showRenew: false,
+            locallyPending: context
+                .read<StudentSubscriptionsCubit>()
+                .isRenewalPending(subscriptions[index].id),
+            onRenewalPending: () => context
+                .read<StudentSubscriptionsCubit>()
+                .markRenewalPending(subscriptions[index].id),
+            onRenewed: context.read<StudentSubscriptionsCubit>().loadHome,
           ),
           if (index < subscriptions.length - 1) const SizedBox(height: 12),
         ],

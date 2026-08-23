@@ -1,6 +1,8 @@
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 
 class GetGradesCubit extends Cubit<GetGradesState> {
   GetGradesCubit(this.authRepo) : super(GetGradesInitial());
@@ -22,7 +24,17 @@ class GetGradesCubit extends Cubit<GetGradesState> {
     if (isClosed || version != _requestVersion) return;
 
     result.fold(
-      (failure) => emit(GetGradesFailure(errorMessage: failure.message)),
+      (failure) {
+        if (isGulf) {
+          GulfRegistrationDiagnostics.uiFailure(
+            endpoint: EndPoints.gradesByCurriculum(curriculumId),
+            cubit: 'GetGradesCubit',
+            state: 'GetGradesFailure',
+            message: failure.message,
+          );
+        }
+        emit(GetGradesFailure(errorMessage: failure.message));
+      },
       (response) => emit(
         GetGradesSuccess(
           grades: response.data.where((grade) => grade.isActive).toList(),

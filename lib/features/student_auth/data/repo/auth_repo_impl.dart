@@ -8,6 +8,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/grades_management/data/models/grades_response_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_response_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/auth_response_model.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:bnan_app/features/student_auth/data/models/curriculum_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/simple_response_model.dart';
@@ -266,14 +267,17 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<Failure, GradesResponseModel>> getGulfCurriculumGrades({
     required String curriculumId,
   }) async {
+    final endpoint = EndPoints.gradesByCurriculum(curriculumId);
+    GulfRegistrationDiagnostics.started(endpoint);
     try {
-      final response = await apiConsumer.get(
-        EndPoints.gradesByCurriculum(curriculumId),
-      );
+      final response = await apiConsumer.get(endpoint);
+      GulfRegistrationDiagnostics.succeeded(endpoint);
       return Right(GradesResponseModel.fromJson(response));
     } on AppException catch (error) {
+      GulfRegistrationDiagnostics.failed(endpoint, error);
       return Left(Failure(message: error.message));
-    } catch (_) {
+    } catch (error) {
+      GulfRegistrationDiagnostics.failed(endpoint, error);
       return Left(Failure(message: S.current.unexpectedError));
     }
   }
@@ -298,12 +302,17 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<Failure, SubjectsResponseModel>> getGulfGradeSubjects({
     required String gradeId,
   }) async {
+    final endpoint = EndPoints.gradeSubjects(gradeId);
+    GulfRegistrationDiagnostics.started(endpoint);
     try {
-      final response = await apiConsumer.get(EndPoints.gradeSubjects(gradeId));
+      final response = await apiConsumer.get(endpoint);
+      GulfRegistrationDiagnostics.succeeded(endpoint);
       return Right(SubjectsResponseModel.fromJson(response));
     } on AppException catch (error) {
+      GulfRegistrationDiagnostics.failed(endpoint, error);
       return Left(Failure(message: error.message));
-    } catch (_) {
+    } catch (error) {
+      GulfRegistrationDiagnostics.failed(endpoint, error);
       return Left(Failure(message: S.current.unexpectedError));
     }
   }

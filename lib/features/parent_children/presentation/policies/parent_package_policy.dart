@@ -1,4 +1,3 @@
-import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/features/packages_management/data/models/egyptian_package_policy.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 
@@ -16,8 +15,7 @@ abstract class ParentPackagePolicy {
     if (registrationMode == 'egyptian') {
       return EgyptianPackagePolicy.isValid(package);
     }
-    if (package.accessScope != PackageAccessScope.singleSubject) return true;
-    return false;
+    return true;
   }
 
   static bool isVisible(

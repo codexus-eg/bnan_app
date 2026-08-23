@@ -44,13 +44,18 @@ class ParentSubscriptionRenewalState {
       args.registrationMode == 'egyptian' &&
       args.subscription.accessScope == 'single_subject' &&
       args.subscription.packageType == 'hours';
+  bool get isEgyptianMonthly =>
+      args.registrationMode == 'egyptian' &&
+      args.subscription.packageType == 'monthly';
   bool get hasSupportedRegistrationMode =>
       args.registrationMode == 'egyptian' || isGulf;
   bool get isSingleSubject => package?.accessScope == 'single_subject';
-  int get lastStep => isEgyptianPrivate
+  int get lastStep => isEgyptianMonthly
+      ? 0
+      : isEgyptianPrivate
       ? 1
       : isGulf
-      ? 5
+      ? 1
       : isSingleSubject
       ? 2
       : 1;

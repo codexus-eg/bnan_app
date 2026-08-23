@@ -1,6 +1,8 @@
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 
 class GetCurriculmSubjectsCubit extends Cubit<GetCurriculmSubjectsState> {
   GetCurriculmSubjectsCubit(this.authRepo) : super(GetSubjectsInitial());
@@ -25,9 +27,16 @@ class GetCurriculmSubjectsCubit extends Cubit<GetCurriculmSubjectsState> {
           );
     if (isClosed || version != _requestVersion) return;
 
-    result.fold(
-      (failure) => emit(GetSubjectsFailure(errorMessage: failure.message)),
-      (response) => emit(GetSubjectsSuccess(subjects: response.subjects)),
-    );
+    result.fold((failure) {
+      if (isGulf) {
+        GulfRegistrationDiagnostics.uiFailure(
+          endpoint: EndPoints.gradeSubjects(gradeId),
+          cubit: 'GetCurriculmSubjectsCubit',
+          state: 'GetSubjectsFailure',
+          message: failure.message,
+        );
+      }
+      emit(GetSubjectsFailure(errorMessage: failure.message));
+    }, (response) => emit(GetSubjectsSuccess(subjects: response.subjects)));
   }
 }

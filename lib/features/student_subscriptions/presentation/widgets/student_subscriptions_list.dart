@@ -8,9 +8,13 @@ class StudentSubscriptionsList extends StatelessWidget {
     super.key,
     required this.student,
     required this.onRefresh,
+    required this.isLocallyPending,
+    required this.onRenewalPending,
   });
   final ParentChildSubscriptionsModel student;
   final RefreshCallback onRefresh;
+  final bool Function(String subscriptionId) isLocallyPending;
+  final void Function(String subscriptionId) onRenewalPending;
 
   @override
   Widget build(BuildContext context) => RefreshIndicator(
@@ -29,6 +33,9 @@ class StudentSubscriptionsList extends StatelessWidget {
               child: student,
               subscription: student.subscriptions[index],
               isParent: false,
+              locallyPending: isLocallyPending(student.subscriptions[index].id),
+              onRenewalPending: () =>
+                  onRenewalPending(student.subscriptions[index].id),
               onRenewed: onRefresh,
             ),
           ),

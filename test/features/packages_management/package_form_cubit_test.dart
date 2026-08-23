@@ -21,16 +21,26 @@ void main() {
     expect(cubit.state.packageType, 'hours');
   });
 
-  test('changing to Gulf resets a single-subject package scope', () {
+  test('changing to Gulf forces a single-subject package scope', () {
     final cubit = PackageFormCubit();
     cubit.setCurriculum('egyptian-id', 'egyptian');
     cubit.setAccessScope(PackageAccessScope.singleSubject);
 
     cubit.setCurriculum('gulf-id', 'gulf');
 
-    expect(cubit.state.accessScope, PackageAccessScope.allSubjects);
+    expect(cubit.state.accessScope, PackageAccessScope.singleSubject);
     expect(cubit.state.canSelectSingleSubject, isFalse);
     expect(cubit.state.packageType, 'hours');
+  });
+
+  test('Gulf package scope cannot be changed to all subjects', () {
+    final cubit = PackageFormCubit();
+    cubit.setCurriculum('gulf-id', 'gulf');
+
+    cubit.setAccessScope(PackageAccessScope.allSubjects);
+
+    expect(cubit.state.accessScope, PackageAccessScope.singleSubject);
+    expect(cubit.state.effectiveAccessScope, PackageAccessScope.singleSubject);
   });
 
   test('Gulf rejects monthly type while Egyptian keeps it', () {
@@ -56,6 +66,7 @@ void main() {
     );
 
     expect(cubit.state.packageType, 'hours');
+    expect(cubit.state.accessScope, PackageAccessScope.singleSubject);
   });
 
   testWidgets('Gulf type selector does not build the monthly option', (

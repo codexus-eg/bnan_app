@@ -11,6 +11,8 @@ class RenewalNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
     final state = context.watch<ParentSubscriptionRenewalCubit>().state;
+    final waitingForMonthlyPackage =
+        state.isEgyptianMonthly && state.package == null;
     return Column(
       children: [
         CustomAppButton(
@@ -20,7 +22,9 @@ class RenewalNavigation extends StatelessWidget {
                     : S.of(context).renewalSubmitRequest
               : S.of(context).next,
           isLoading: state.isBusy,
-          onPressed: state.currentStep == state.lastStep
+          onPressed: waitingForMonthlyPackage
+              ? null
+              : state.currentStep == state.lastStep
               ? cubit.submit
               : cubit.nextStep,
         ),

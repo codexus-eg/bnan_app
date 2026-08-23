@@ -8,6 +8,7 @@ import 'package:bnan_app/features/parent_children/data/models/parent_add_child_s
 import 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -58,6 +59,10 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
       return checkout;
     } catch (error) {
       _log('checkout request/parsing error: ${error.runtimeType}');
+      GulfRegistrationDiagnostics.failed(
+        EndPoints.parentChildGulfCheckout,
+        error,
+      );
       rethrow;
     }
   });
@@ -91,6 +96,9 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
       if (path == EndPoints.parentChildEgyptianRegistration) {
         _log('Egyptian Dio POST started; endpoint=$path');
       }
+      if (path == EndPoints.parentChildGulfCheckout) {
+        GulfRegistrationDiagnostics.started(path);
+      }
       final response = await dio.post(
         path,
         data: data,
@@ -98,6 +106,10 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
       );
       if (path == EndPoints.parentChildGulfCheckout) {
         _log('combined response HTTP ${response.statusCode}');
+        GulfRegistrationDiagnostics.succeeded(
+          path,
+          statusCode: response.statusCode,
+        );
       }
       if (path == EndPoints.parentChildEgyptianRegistration) {
         _log('Egyptian Dio response received; status=${response.statusCode}');
@@ -107,6 +119,11 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
       final exception = AppException.fromDio(error);
       if (path == EndPoints.parentChildGulfCheckout) {
         _logBadResponse(error, exception);
+        GulfRegistrationDiagnostics.failed(
+          path,
+          exception,
+          statusCode: error.response?.statusCode,
+        );
       }
       if (path == EndPoints.parentChildEgyptianRegistration) {
         _log(

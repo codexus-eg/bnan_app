@@ -31,4 +31,6 @@ class PackageFormState {
       : packageType;
   bool get canSelectSingleSubject => isEgyptian;
   bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
+  String get effectiveAccessScope =>
+      isGulf ? PackageAccessScope.singleSubject : accessScope;
 }

@@ -19,7 +19,9 @@ class ParentSubjectsStep extends StatelessWidget {
           subjects: lookups.subjects,
           selectedSubjectIds: parent.state.selectedSubjectIds,
           selectionMode:
-              parent.state.isSingleSubject && !parent.state.isEgyptianPrivate
+              parent.state.isSingleSubject &&
+                  !parent.state.isEgyptianPrivate &&
+                  !parent.state.isGulf
               ? SubjectSelectionMode.single
               : SubjectSelectionMode.multiple,
           onChanged: (values) {

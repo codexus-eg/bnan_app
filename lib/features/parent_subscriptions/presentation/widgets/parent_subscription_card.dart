@@ -9,6 +9,7 @@ import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/policies/subscription_renewal_eligibility.dart';
 import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/package_scope_badge.dart';
@@ -23,18 +24,31 @@ class ParentSubscriptionCard extends StatelessWidget {
     required this.child,
     required this.subscription,
     this.onRenewed,
+    this.onRenewalPending,
+    this.locallyPending = false,
     this.showRenew = true,
     this.isParent = true,
   });
   final ParentChildSubscriptionsModel child;
   final ParentChildSubscriptionModel subscription;
   final Future<void> Function()? onRenewed;
+  final VoidCallback? onRenewalPending;
+  final bool locallyPending;
   final bool showRenew;
   final bool isParent;
 
   @override
   Widget build(BuildContext context) {
-    final renderRenew = showRenew && subscription.canRenew;
+    final renderPending =
+        showRenew &&
+        _isEgyptian &&
+        (subscription.hasPendingRenewal || locallyPending);
+    final renderRenew =
+        showRenew &&
+        SubscriptionRenewalEligibility.canRenew(
+          subscription,
+          registrationMode: child.registrationMode,
+        );
     return CustomDetailsWidgetBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,11 +121,25 @@ class ParentSubscriptionCard extends StatelessWidget {
                   subscription.currency!.trim(),
               ].join(' '),
             ),
-          if (renderRenew) ...[
+          if (renderPending) ...[
+            const SizedBox(height: 12),
+            Text(
+              S.of(context).renewalPendingReview,
+              style: StylesManager.styleBold14(
+                context,
+              ).copyWith(color: ColorManager.mainColor14),
+            ),
+          ] else if (renderRenew) ...[
             const SizedBox(height: 12),
             CustomAppButton(
               text: S.of(context).renewSubscription,
               onPressed: () async {
+                if (!SubscriptionRenewalEligibility.canRenew(
+                  subscription,
+                  registrationMode: child.registrationMode,
+                )) {
+                  return;
+                }
                 if (child.registrationMode == null) {
                   showCustomSnackBar(
                     context,
@@ -145,14 +173,16 @@ class ParentSubscriptionCard extends StatelessWidget {
                           : onRenewed,
                     ),
                   );
-                  if (child.registrationMode == 'egyptian' &&
-                      result == ParentFlowResult.pendingReview &&
+                  if (result == ParentFlowResult.pendingReview &&
                       context.mounted) {
-                    showCustomSnackBar(
-                      context,
-                      S.of(context).egyptianRenewalRequestSubmitted,
-                      true,
-                    );
+                    if (child.registrationMode == 'egyptian') {
+                      onRenewalPending?.call();
+                      showCustomSnackBar(
+                        context,
+                        S.of(context).egyptianRenewalRequestSubmitted,
+                        true,
+                      );
+                    }
                     await onRenewed?.call();
                   }
                 } finally {

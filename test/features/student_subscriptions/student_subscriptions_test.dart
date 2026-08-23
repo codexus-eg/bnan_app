@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/student_subscriptions/data/repo/student_subscriptions_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -42,6 +43,18 @@ void main() {
     expect(api.paths, [EndPoints.studentHome, EndPoints.mySubjects]);
     api.complete();
     expect((await result).isRight(), isTrue);
+  });
+
+  test('empty subscriptions ignores legacy singular subscription', () {
+    final student = ParentChildSubscriptionsModel.fromStudentHome({
+      'data': {
+        'student': {'id': 'student-1'},
+        'subscriptions': <Object?>[],
+        'subscription': {'id': 'legacy-sub', 'canRenew': true},
+      },
+    });
+
+    expect(student.subscriptions, isEmpty);
   });
 }
 

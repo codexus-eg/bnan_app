@@ -18,6 +18,7 @@ class PackageFormBody extends StatelessWidget {
     required this.curriculumId,
     required this.packageType,
     required this.accessScope,
+    required this.showScopeSelector,
     required this.canSelectSingleSubject,
     required this.showMonthly,
     required this.isPopular,
@@ -38,6 +39,7 @@ class PackageFormBody extends StatelessWidget {
   final String? curriculumId;
   final String packageType;
   final String accessScope;
+  final bool showScopeSelector;
   final bool canSelectSingleSubject;
   final bool showMonthly;
   final bool isPopular;
@@ -66,12 +68,14 @@ class PackageFormBody extends StatelessWidget {
           onChanged: onCurriculumChanged,
         ),
         const SizedBox(height: 16),
-        PackageScopeSelector(
-          value: accessScope,
-          showSingleSubject: canSelectSingleSubject,
-          onChanged: onScopeChanged,
-        ),
-        const SizedBox(height: 16),
+        if (showScopeSelector) ...[
+          PackageScopeSelector(
+            value: accessScope,
+            showSingleSubject: canSelectSingleSubject,
+            onChanged: onScopeChanged,
+          ),
+          const SizedBox(height: 16),
+        ],
         PackageTypeSelector(
           value: packageType,
           onChanged: onTypeChanged,

@@ -34,4 +34,55 @@ void main() {
       expect(session.hasGulfRegistration, testCase.$3);
     });
   }
+
+  test('pending Egyptian registration with empty subscriptions is success', () {
+    final response = AuthResponseModel.fromJson({
+      'success': true,
+      'data': {
+        'user': {'id': 'student-id', 'role': 'student'},
+        'registrationRequestId': 'request-id',
+        'registrationStatus': 'pending',
+        'paymentStatus': 'pending',
+        'paymentId': 'payment-id',
+        'paymentItems': [
+          {
+            'subject': {'id': 'math-id', 'name': 'Math'},
+            'package': {'id': 'package-id', 'name': '8 Hours'},
+          },
+        ],
+        'subscriptions': <Object?>[],
+        'subscription': {'id': 'legacy-must-not-be-used'},
+      },
+    });
+
+    expect(response.success, isTrue);
+    expect(response.registrationRequestId, 'request-id');
+    expect(response.registrationStatus, 'pending');
+    expect(response.paymentStatus, 'pending');
+    expect(response.paymentId, 'payment-id');
+    expect(response.paymentItems, hasLength(1));
+    expect(response.subscriptions, isEmpty);
+  });
+
+  test('registration response parses every subscription independently', () {
+    final response = AuthResponseModel.fromJson({
+      'success': true,
+      'subscriptions': [
+        {'id': 'math-sub', 'remainingHours': 2},
+        {'id': 'english-sub', 'remainingHours': 5},
+        {'id': 'arabic-sub', 'remainingHours': 8},
+      ],
+    });
+
+    expect(response.subscriptions.map((item) => item.id), [
+      'math-sub',
+      'english-sub',
+      'arabic-sub',
+    ]);
+    expect(response.subscriptions.map((item) => item.remainingHours), [
+      2,
+      5,
+      8,
+    ]);
+  });
 }

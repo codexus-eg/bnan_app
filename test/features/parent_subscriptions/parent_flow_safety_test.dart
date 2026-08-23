@@ -75,13 +75,59 @@ void main() {
       isFalse,
     );
   });
+
+  test('renewal route uses effective eligibility as a defensive guard', () {
+    for (final subscription in [
+      _subscription,
+      _subscriptionWith(canRenew: true, hasPendingRenewal: true),
+      _subscriptionWith(canRenew: false, hasPendingRenewal: false),
+      _subscriptionWith(
+        canRenew: true,
+        hasPendingRenewal: false,
+        remainingHours: 5,
+      ),
+    ]) {
+      final args = ParentSubscriptionRenewalArgs(
+        studentId: 'child',
+        curriculumId: 'curriculum',
+        subscription: subscription,
+        subjects: const [],
+        registrationMode: 'gulf',
+      );
+      final expected =
+          subscription.canRenew &&
+          !subscription.hasPendingRenewal &&
+          subscription.remainingHours <= 0;
+      expect(
+        isValidParentRenewalRoute(studentId: 'child', extra: args),
+        expected,
+      );
+    }
+  });
 }
+
+ParentChildSubscriptionModel _subscriptionWith({
+  required bool canRenew,
+  required bool hasPendingRenewal,
+  num remainingHours = 0,
+}) => ParentChildSubscriptionModel(
+  id: 'sub',
+  packageId: 'package',
+  packageName: 'Package',
+  curriculumId: 'curriculum',
+  packageType: 'hours',
+  remainingHours: remainingHours,
+  canRenew: canRenew,
+  hasPendingRenewal: hasPendingRenewal,
+);
 
 const _subscription = ParentChildSubscriptionModel(
   id: 'sub',
   packageId: 'package',
   packageName: 'Package',
   curriculumId: 'curriculum',
+  packageType: 'hours',
+  canRenew: true,
 );
 const _args = ParentSubscriptionRenewalArgs(
   studentId: 'child',

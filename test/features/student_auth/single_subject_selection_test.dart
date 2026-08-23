@@ -7,54 +7,157 @@ import 'package:bnan_app/features/student_auth/data/models/auth_user_model.dart'
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 import 'package:dartz/dartz.dart';
 
 void main() {
-  test('Egyptian private keeps multiple selected subjects in request', () {
-    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
-    cubit.setRegisterFlowArgs(
-      const RegisterFlowArgsModel(
-        curriculumId: 'curriculum',
-        curriculumName: 'Egyptian',
-        packageId: 'package',
-        packageName: 'Single subject',
-        packagePrice: '250',
-        packageCurrency: 'EGP',
-        registrationMode: 'egyptian',
-        accessScope: 'single_subject',
-        packageType: 'hours',
-      ),
-    );
-    cubit.setGrade(id: 'grade', name: 'Grade');
+  for (final subjects in const <List<String>>[
+    [],
+    ['math'],
+    ['math', 'arabic'],
+    ['math', 'arabic', 'english'],
+  ]) {
+    test('Egyptian private accepts ${subjects.length} selected subjects', () {
+      final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
+      cubit.setRegisterFlowArgs(_egyptianPrivateArgs);
+      cubit.setGrade(id: 'grade', name: 'Grade');
+      for (final subject in subjects) {
+        cubit.toggleSubject(subject);
+      }
 
-    cubit.toggleSubject('math');
-    cubit.toggleSubject('science');
+      final request = cubit.buildRegisterRequest();
+      if (subjects.isEmpty) {
+        expect(request, isNull);
+      } else {
+        expect(request?.student.subjects, subjects);
+        expect(request?.items, hasLength(subjects.length));
+        expect(request?.items.map((item) => item.subjectId), subjects);
+        expect(request?.items.map((item) => item.packageId).toSet(), {
+          'package',
+        });
+        expect(request?.toJson().containsKey('packageId'), isFalse);
+      }
+    });
+  }
 
-    expect(cubit.selectedSubjectIds, ['math', 'science']);
-    expect(cubit.buildRegisterRequest()!.student.subjects, ['math', 'science']);
+  for (final subjects in const <List<String>>[
+    [],
+    ['math'],
+    ['math', 'arabic'],
+    ['math', 'arabic', 'english'],
+  ]) {
+    test('Gulf private checkout accepts ${subjects.length} subjects', () {
+      final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+        ..setRegisterFlowArgs(_gulfPrivateArgs)
+        ..setGrade(id: 'grade', name: 'Grade');
+      for (final subject in subjects) {
+        cubit.toggleSubject(subject);
+      }
+
+      final request = cubit.buildTamaraRequest(validateForm: false);
+      if (subjects.isEmpty) {
+        expect(request, isNull);
+      } else {
+        expect(request?.student.subjects, subjects);
+        expect(request?.packageId, 'gulf-package');
+        expect(request?.toJson().containsKey('items'), isFalse);
+      }
+    });
+  }
+
+  test(
+    'parsed Egyptian private package reaches repository with two subjects',
+    () async {
+      final package = PackageModel.fromJson({
+        'id': 'private-package',
+        'packageType': 'hours',
+        'accessScope': 'single_subject',
+      });
+      final repo = _FakeAuthRepo();
+      final cubit = RegisterCubit(repo, _FakeGulfParentAuthRepo());
+      cubit.setRegisterFlowArgs(
+        RegisterFlowArgsModel(
+          curriculumId: 'curriculum',
+          curriculumName: 'Egyptian',
+          packageId: package.id!,
+          packageName: 'Private',
+          packagePrice: '250',
+          packageCurrency: 'EGP',
+          registrationMode: 'egyptian',
+          accessScope: package.accessScope,
+          packageType: package.type ?? '',
+        ),
+      );
+      cubit.setGrade(id: 'grade', name: 'Grade');
+      cubit.toggleSubject('math');
+      cubit.toggleSubject('arabic');
+
+      final request = cubit.buildRegisterRequest();
+      expect(cubit.isEgyptianPrivate, isTrue);
+      expect(request?.student.subjects, ['math', 'arabic']);
+      expect(request?.toJson()['items'], [
+        {'subjectId': 'math', 'packageId': 'private-package'},
+        {'subjectId': 'arabic', 'packageId': 'private-package'},
+      ]);
+      await cubit.register(request: request!);
+      expect(repo.lastRequest?.student.subjects, ['math', 'arabic']);
+      expect(repo.lastRequest?.items.map((item) => item.subjectId), [
+        'math',
+        'arabic',
+      ]);
+    },
+  );
+
+  test('Egyptian private items contain no duplicate or extra subjects', () {
+    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+      ..setRegisterFlowArgs(_egyptianPrivateArgs)
+      ..setGrade(id: 'grade', name: 'Grade')
+      ..selectedSubjectIds = ['math', 'math', 'arabic'];
+
+    final request = cubit.buildRegisterRequest()!;
+    expect(request.student.subjects, ['math', 'arabic']);
+    expect(request.items.map((item) => item.subjectId), ['math', 'arabic']);
   });
 
-  test('Gulf single-subject selection remains single', () {
-    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo());
-    cubit.setRegisterFlowArgs(
-      const RegisterFlowArgsModel(
-        curriculumId: 'curriculum',
-        curriculumName: 'Gulf',
-        packageId: 'package',
-        packageName: 'Single subject',
-        packagePrice: '250',
-        packageCurrency: 'SAR',
-        registrationMode: 'gulf',
-        accessScope: 'single_subject',
-        packageType: 'hours',
+  testWidgets('Egyptian private passes the real student form guard', (
+    tester,
+  ) async {
+    final repo = _FakeAuthRepo();
+    final cubit = RegisterCubit(repo, _FakeGulfParentAuthRepo())
+      ..setRegisterFlowArgs(_egyptianPrivateArgs)
+      ..studentNameController.text = 'Student Name'
+      ..studentEmailController.text = 'student@example.com'
+      ..studentPasswordController.text = 'Password1'
+      ..setGrade(id: 'grade', name: 'Grade')
+      ..toggleSubject('math')
+      ..toggleSubject('arabic');
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Form(
+            key: cubit.studentFormKey,
+            child: Column(
+              children: [
+                TextFormField(controller: cubit.studentNameController),
+                TextFormField(controller: cubit.studentEmailController),
+                TextFormField(controller: cubit.studentPasswordController),
+              ],
+            ),
+          ),
+        ),
       ),
     );
+    await tester.pump();
 
-    cubit.toggleSubject('math');
-    cubit.toggleSubject('science');
-
-    expect(cubit.selectedSubjectIds, ['science']);
+    expect(cubit.validateStudent(), isTrue);
+    final request = cubit.buildRegisterRequest();
+    final submission = cubit.register(request: request!);
+    await tester.pump(const Duration(milliseconds: 20));
+    await submission;
+    expect(repo.lastRequest?.student.subjects, ['math', 'arabic']);
   });
 
   test('Egyptian all-subjects payload uses every loaded grade subject', () {
@@ -64,7 +167,10 @@ void main() {
     cubit.setAllSubjectIds(const ['math', 'science']);
 
     expect(cubit.requiresSubjectSelection, isFalse);
-    expect(cubit.buildRegisterRequest()!.student.subjects, ['math', 'science']);
+    final request = cubit.buildRegisterRequest()!;
+    expect(request.student.subjects, ['math', 'science']);
+    expect(request.toJson()['packageId'], 'package');
+    expect(request.toJson().containsKey('items'), isFalse);
   });
 
   test('Egyptian and Gulf flows both end at their fourth step', () {
@@ -107,6 +213,30 @@ RegisterFlowArgsModel _args(String mode) => RegisterFlowArgsModel(
   registrationMode: mode,
 );
 
+const _egyptianPrivateArgs = RegisterFlowArgsModel(
+  curriculumId: 'curriculum',
+  curriculumName: 'Egyptian',
+  packageId: 'package',
+  packageName: 'Private',
+  packagePrice: '250',
+  packageCurrency: 'EGP',
+  registrationMode: 'egyptian',
+  accessScope: 'single_subject',
+  packageType: 'hours',
+);
+
+const _gulfPrivateArgs = RegisterFlowArgsModel(
+  curriculumId: 'gulf-curriculum',
+  curriculumName: 'Gulf',
+  packageId: 'gulf-package',
+  packageName: '8 Hours',
+  packagePrice: '250',
+  packageCurrency: 'SAR',
+  registrationMode: 'gulf',
+  accessScope: 'single_subject',
+  packageType: 'hours',
+);
+
 const _request = RegisterRequestModel(
   parent: RegisterParentModel(email: 'p@e.com', password: 'Password1'),
   student: RegisterStudentModel(
@@ -122,10 +252,12 @@ const _request = RegisterRequestModel(
 
 class _FakeAuthRepo implements AuthRepo {
   int registerCalls = 0;
+  RegisterRequestModel? lastRequest;
 
   @override
   register({required RegisterRequestModel request}) async {
     registerCalls++;
+    lastRequest = request;
     await Future<void>.delayed(const Duration(milliseconds: 10));
     return const Right(
       AuthResponseModel(

@@ -21,10 +21,12 @@ class RegisterFlowArgsModel {
     this.packageType = '',
   });
 
-  bool get isGulf => registrationMode == 'gulf';
-  bool get isSingleSubject => accessScope == 'single_subject';
+  bool get isGulf => _value(registrationMode) == 'gulf';
+  bool get isSingleSubject => _value(accessScope) == 'single_subject';
   bool get isEgyptianPrivate =>
-      registrationMode == 'egyptian' &&
+      _value(registrationMode) == 'egyptian' &&
       isSingleSubject &&
-      packageType == 'hours';
+      _value(packageType) == 'hours';
+
+  static String _value(String? value) => value?.trim().toLowerCase() ?? '';
 }

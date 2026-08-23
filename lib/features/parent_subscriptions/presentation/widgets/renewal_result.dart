@@ -3,6 +3,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_status_response.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/diagnostics/gulf_renewal_trace.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -26,7 +27,7 @@ class _RenewalResultState extends State<RenewalResult> {
     final state = widget.state;
     final completed = state.phase == ParentRenewalPhase.completed;
     final failed = state.phase == ParentRenewalPhase.failure;
-    final pending = state.phase == ParentRenewalPhase.pending;
+    final pending = !state.isGulf && state.phase == ParentRenewalPhase.pending;
     final unknown = state.phase == ParentRenewalPhase.paymentStatusUnknown;
     final message = completed
         ? S.of(context).renewalCompleted
@@ -100,6 +101,10 @@ class _RenewalResultState extends State<RenewalResult> {
   void _leave(ParentFlowResult result) {
     if (_leaving || !mounted) return;
     _leaving = true;
+    GulfRenewalTrace.log(
+      'navigation executed',
+      details: 'target=renewal-pop result=${result.name}',
+    );
     MyNavigator.pop(context, result);
   }
 }

@@ -3,8 +3,6 @@ import 'package:bnan_app/features/dashboard/data/models/dashboard_data.dart';
 import 'package:bnan_app/features/dashboard/data/models/student_dashboard_model.dart';
 import 'package:bnan_app/features/dashboard/data/repo/dashboard_repo.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
-import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/package_details/monthly_subscription_info.dart';
-import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/package_details/package_details_card.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/student_home_page.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_child_subscription_model.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/parent_subscription_card.dart';
@@ -23,26 +21,30 @@ void main() {
   ) async {
     await _pump(tester, student: _privateStudent);
     expect(find.byType(ParentSubscriptionCard), findsNWidgets(3));
-    expect(find.byType(PackageDetailsCard), findsNothing);
   });
 
-  testWidgets('Egyptian monthly keeps old card and remaining days', (
+  testWidgets('Egyptian monthly uses subscriptions list card', (tester) async {
+    await _pump(tester, student: _monthlyStudent);
+    expect(find.byType(ParentSubscriptionCard), findsOneWidget);
+    expect(find.text('Monthly'), findsOneWidget);
+  });
+
+  testWidgets('Gulf all-subjects uses subscriptions list card', (tester) async {
+    await _pump(tester, student: _legacyGulfStudent);
+    expect(find.byType(ParentSubscriptionCard), findsOneWidget);
+  });
+
+  testWidgets('Gulf private home renders three independent cards', (
     tester,
   ) async {
-    await _pump(
-      tester,
-      student: _monthlyStudent,
-      dashboardSubscription: _monthlyDashboard,
-    );
-    expect(find.byType(PackageDetailsCard), findsOneWidget);
-    expect(find.byType(MonthlySubscriptionInfo), findsOneWidget);
-    expect(find.textContaining('12'), findsOneWidget);
-    expect(find.byType(ParentSubscriptionCard), findsNothing);
+    await _pump(tester, student: _gulfStudent);
+    expect(find.byType(ParentSubscriptionCard), findsNWidgets(3));
   });
 
-  testWidgets('Gulf keeps old dashboard subscription card', (tester) async {
-    await _pump(tester, student: _gulfStudent);
-    expect(find.byType(PackageDetailsCard), findsOneWidget);
+  testWidgets('empty authoritative Gulf list ignores dashboard fallback', (
+    tester,
+  ) async {
+    await _pump(tester, student: _emptyGulf);
     expect(find.byType(ParentSubscriptionCard), findsNothing);
   });
 
@@ -50,20 +52,7 @@ void main() {
     tester,
   ) async {
     await _pump(tester, student: _emptyEgyptian);
-    expect(find.byType(PackageDetailsCard), findsNothing);
     expect(find.byType(ParentSubscriptionCard), findsNothing);
-  });
-
-  testWidgets('empty Egyptian monthly list keeps old monthly card', (
-    tester,
-  ) async {
-    await _pump(
-      tester,
-      student: _emptyEgyptian,
-      dashboardSubscription: _monthlyDashboard,
-    );
-    expect(find.byType(PackageDetailsCard), findsOneWidget);
-    expect(find.byType(MonthlySubscriptionInfo), findsOneWidget);
   });
 
   testWidgets('pull refresh reloads dashboard and subscriptions once', (
@@ -83,9 +72,10 @@ void main() {
     expect(repos.$2.fullCalls, 0);
   });
 
-  testWidgets('subscriptions failure keeps dashboard content', (tester) async {
+  testWidgets('subscriptions failure never displays legacy dashboard card', (
+    tester,
+  ) async {
     await _pump(tester, failure: Failure(message: 'subscriptions failed'));
-    expect(find.byType(PackageDetailsCard), findsOneWidget);
     expect(find.text('subscriptions failed'), findsOneWidget);
     expect(find.text('0%'), findsOneWidget);
   });
@@ -94,10 +84,9 @@ void main() {
 Future<(_DashboardRepo, _SubscriptionsRepo)> _pump(
   WidgetTester tester, {
   ParentChildSubscriptionsModel student = _gulfStudent,
-  DashboardSubscription dashboardSubscription = _gulfDashboard,
   Failure? failure,
 }) async {
-  final dashboardRepo = _DashboardRepo(dashboardSubscription);
+  final dashboardRepo = _DashboardRepo();
   final subscriptionsRepo = _SubscriptionsRepo(student, failure);
   final dashboard = DashboardCubit(dashboardRepo, DashboardRole.student);
   final subscriptions = StudentSubscriptionsCubit(subscriptionsRepo);
@@ -139,13 +128,11 @@ class _App extends StatelessWidget {
 void _noop() {}
 
 class _DashboardRepo implements DashboardRepo {
-  _DashboardRepo(this.subscription);
-  final DashboardSubscription subscription;
   int calls = 0;
   @override
   Future<Either<Failure, DashboardData>> getDashboard() async {
     calls++;
-    return Right(_dashboard(subscription));
+    return Right(_dashboard());
   }
 }
 
@@ -167,48 +154,24 @@ class _SubscriptionsRepo implements StudentSubscriptionsRepo {
   }
 }
 
-StudentDashboardModel _dashboard(DashboardSubscription subscription) =>
-    StudentDashboardModel(
-      generatedAt: null,
-      student: const DashboardStudent(
-        id: 'student',
-        fullName: 'Student',
-        email: '',
-      ),
-      subscription: subscription,
-      stats: const DashboardStudentStats(
-        certificates: 0,
-        attendance: DashboardAttendance(
-          total: 0,
-          present: 0,
-          late: 0,
-          absent: 0,
-          percentage: 0,
-        ),
-      ),
-      weeklyEvaluation: null,
-    );
-
-const _gulfDashboard = DashboardSubscription(
-  packageName: 'Gulf hours',
-  packageType: 'hours',
-  totalHours: 10,
-  usedHours: 2,
-  remainingHours: 8,
-  progressPercentage: 20,
-  isActive: true,
-);
-const _monthlyDashboard = DashboardSubscription(
-  packageName: 'Monthly',
-  packageType: 'monthly',
-  totalHours: 0,
-  usedHours: 0,
-  remainingHours: 0,
-  progressPercentage: 0,
-  isActive: true,
-  planKind: 'egyptian_monthly',
-  remainingType: 'days',
-  remainingValue: 12,
+StudentDashboardModel _dashboard() => StudentDashboardModel(
+  generatedAt: null,
+  student: const DashboardStudent(
+    id: 'student',
+    fullName: 'Student',
+    email: '',
+  ),
+  stats: const DashboardStudentStats(
+    certificates: 0,
+    attendance: DashboardAttendance(
+      total: 0,
+      present: 0,
+      late: 0,
+      absent: 0,
+      percentage: 0,
+    ),
+  ),
+  weeklyEvaluation: null,
 );
 
 const _privateStudent = ParentChildSubscriptionsModel(
@@ -227,7 +190,19 @@ const _gulfStudent = ParentChildSubscriptionsModel(
   studentId: 'student',
   studentName: 'Student',
   registrationMode: 'gulf',
-  subscriptions: [_math],
+  subscriptions: [_math, _arabic, _english],
+);
+const _legacyGulfStudent = ParentChildSubscriptionsModel(
+  studentId: 'student',
+  studentName: 'Student',
+  registrationMode: 'gulf',
+  subscriptions: [_legacyGulf],
+);
+const _emptyGulf = ParentChildSubscriptionsModel(
+  studentId: 'student',
+  studentName: 'Student',
+  registrationMode: 'gulf',
+  subscriptions: [],
 );
 const _emptyEgyptian = ParentChildSubscriptionsModel(
   studentId: 'student',
@@ -243,6 +218,14 @@ const _math = ParentChildSubscriptionModel(
   accessScope: 'single_subject',
   packageType: 'hours',
   subject: ParentSubscriptionSubjectModel(id: 'math', name: 'Math'),
+);
+const _legacyGulf = ParentChildSubscriptionModel(
+  id: 'legacy-gulf-sub',
+  packageId: 'legacy-gulf-package',
+  packageName: 'Legacy Gulf',
+  curriculumId: 'curriculum',
+  accessScope: 'all_subjects',
+  packageType: 'hours',
 );
 const _arabic = ParentChildSubscriptionModel(
   id: 'arabic-sub',

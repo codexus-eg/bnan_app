@@ -59,19 +59,21 @@ class ParentAddChildState {
   final PaymentStatus? paymentStatus;
   final bool shouldOpenCheckout;
 
-  bool get isGulf => curriculum?.registrationMode == 'gulf';
+  bool get isGulf => _value(curriculum?.registrationMode) == 'gulf';
   bool get hasSupportedRegistrationMode =>
-      curriculum?.registrationMode == 'egyptian' || isGulf;
-  bool get isSingleSubject => package?.accessScope == 'single_subject';
+      _value(curriculum?.registrationMode) == 'egyptian' || isGulf;
+  bool get isSingleSubject => _value(package?.accessScope) == 'single_subject';
   bool get isEgyptianPrivate =>
-      curriculum?.registrationMode == 'egyptian' &&
+      _value(curriculum?.registrationMode) == 'egyptian' &&
       isSingleSubject &&
-      package?.type == 'hours';
+      _value(package?.type) == 'hours';
   bool get requiresSubjectSelection => isGulf || isSingleSubject;
   int get lastStep => isGulf ? 5 : 4;
   bool get isBusy =>
       phase == ParentAddChildPhase.submitting ||
       phase == ParentAddChildPhase.processingPayment;
+
+  static String _value(String? value) => value?.trim().toLowerCase() ?? '';
 
   ParentAddChildState copyWith({
     ParentAddChildPhase? phase,

@@ -29,15 +29,6 @@ class StudentHomePage extends StatelessWidget {
     skeleton: StudentDashboardModel(
       generatedAt: null,
       student: DashboardStudent(id: '', fullName: userName, email: ''),
-      subscription: const DashboardSubscription(
-        packageName: '',
-        packageType: 'hours',
-        totalHours: 0,
-        usedHours: 0,
-        remainingHours: 0,
-        progressPercentage: 0,
-        isActive: true,
-      ),
       stats: const DashboardStudentStats(
         certificates: 0,
         attendance: DashboardAttendance(
@@ -69,10 +60,7 @@ class StudentHomePage extends StatelessWidget {
                 isLoading: loading,
                 child: Column(
                   children: [
-                    StudentHomeSubscriptionSection(
-                      dashboardSubscription: data.subscription,
-                      loading: loading,
-                    ),
+                    const StudentHomeSubscriptionSection(),
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),

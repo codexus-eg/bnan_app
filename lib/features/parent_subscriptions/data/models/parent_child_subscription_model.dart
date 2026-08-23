@@ -31,6 +31,7 @@ class ParentChildSubscriptionModel {
     this.price,
     this.currency,
     this.canRenew = false,
+    this.hasPendingRenewal = false,
     this.planKind = '',
     this.remainingValue,
     this.hasRemainingHours = false,
@@ -46,7 +47,7 @@ class ParentChildSubscriptionModel {
   final num? usedHoursValue, price;
   final String? currency;
   final DateTime? startDate, endDate, gracePeriodEndsAt, renewalDueDate;
-  final bool canRenew;
+  final bool canRenew, hasPendingRenewal;
   final String planKind;
   final num? remainingValue;
   final bool hasRemainingHours;
@@ -124,6 +125,9 @@ class ParentChildSubscriptionModel {
       price: _nullableNumber(json['paidPrice'] ?? json['price']),
       currency: _nullableText(json['currency'] ?? package['currency']),
       canRenew: json['canRenew'] is bool ? json['canRenew'] as bool : false,
+      hasPendingRenewal: json['hasPendingRenewal'] is bool
+          ? json['hasPendingRenewal'] as bool
+          : false,
       planKind: _text(json['planKind'] ?? summary['planKind']),
     );
   }
@@ -164,16 +168,7 @@ class ParentChildSubscriptionsModel {
               )
               .toList()
         : <ParentChildSubscriptionModel>[];
-    final subscriptions = rawList is List
-        ? listSubscriptions
-        : json['subscription'] is Map
-        ? [
-            ParentChildSubscriptionModel.fromJson(
-              Map<String, dynamic>.from(json['subscription'] as Map),
-              curriculumIdFallback: curriculumId,
-            ),
-          ]
-        : <ParentChildSubscriptionModel>[];
+    final subscriptions = listSubscriptions;
     final subjects = <ParentSubscriptionSubjectModel>[];
     final rawSubjects = source['subjects'];
     if (rawSubjects is List) {
@@ -210,8 +205,7 @@ class ParentChildSubscriptionsModel {
     final studentCurriculum = _map(student['curriculum']);
     final parsed = ParentChildSubscriptionsModel.fromJson({
       'student': student,
-      'subscriptions': data['subscriptions'] ?? student['subscriptions'],
-      'subscription': data['subscription'] ?? student['subscription'],
+      'subscriptions': data['subscriptions'],
     });
     return ParentChildSubscriptionsModel(
       studentId: parsed.studentId,

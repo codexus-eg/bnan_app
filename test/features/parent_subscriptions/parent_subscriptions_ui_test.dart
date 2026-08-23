@@ -22,22 +22,28 @@ void main() {
       studentName: 'Child',
       subscriptions: [],
     );
-    const subscriptions = [
+    final subscriptions = [
       ParentChildSubscriptionModel(
         id: 'one',
         packageId: 'p',
         packageName: 'Math package',
         curriculumId: 'c',
         accessScope: 'single_subject',
+        packageType: 'hours',
+        remainingHours: 0,
         subject: ParentSubscriptionSubjectModel(id: 'math', name: 'Math'),
+        canRenew: true,
       ),
       ParentChildSubscriptionModel(
         id: 'two',
         packageId: 'p',
-        packageName: 'Science package',
+        packageName: 'Arabic package',
         curriculumId: 'c',
         accessScope: 'single_subject',
-        subject: ParentSubscriptionSubjectModel(id: 'science', name: 'Science'),
+        packageType: 'hours',
+        remainingHours: 7,
+        subject: ParentSubscriptionSubjectModel(id: 'arabic', name: 'Arabic'),
+        canRenew: true,
       ),
       ParentChildSubscriptionModel(
         id: 'three',
@@ -45,7 +51,10 @@ void main() {
         packageName: 'English package',
         curriculumId: 'c',
         accessScope: 'single_subject',
+        packageType: 'monthly',
+        endDate: DateTime.utc(2020),
         subject: ParentSubscriptionSubjectModel(id: 'english', name: 'English'),
+        canRenew: true,
       ),
     ];
     await tester.pumpWidget(
@@ -62,11 +71,8 @@ void main() {
           body: ListView(
             children: subscriptions
                 .map(
-                  (item) => ParentSubscriptionCard(
-                    child: child,
-                    subscription: item,
-                    showRenew: false,
-                  ),
+                  (item) =>
+                      ParentSubscriptionCard(child: child, subscription: item),
                 )
                 .toList(),
           ),
@@ -76,8 +82,9 @@ void main() {
     await tester.pump();
     expect(find.byType(ParentSubscriptionCard), findsNWidgets(3));
     expect(find.text('Math'), findsOneWidget);
-    expect(find.text('Science'), findsOneWidget);
+    expect(find.text('Arabic'), findsOneWidget);
     expect(find.text('English'), findsOneWidget);
+    expect(find.text('Renew subscription'), findsNWidgets(2));
   });
 
   testWidgets('long subscription text does not overflow on a small screen', (
@@ -143,10 +150,63 @@ void main() {
         status: scenario.$3,
         packageType: scenario.$4,
         singleSubject: scenario.$5,
+        endDate: DateTime.utc(2020),
       );
       expect(find.text('Renew subscription'), findsOneWidget);
     });
   }
+
+  testWidgets('hours hide Renew while remaining hours are positive', (
+    tester,
+  ) async {
+    await _pumpRenewalCard(
+      tester,
+      isParent: false,
+      status: 'active',
+      packageType: 'hours',
+      singleSubject: true,
+      remainingHours: 5,
+    );
+    expect(find.text('Renew subscription'), findsNothing);
+  });
+
+  testWidgets('hours show Renew when remaining hours reach zero', (
+    tester,
+  ) async {
+    await _pumpRenewalCard(
+      tester,
+      isParent: false,
+      status: 'active',
+      packageType: 'hours',
+      singleSubject: true,
+      remainingHours: 0,
+    );
+    expect(find.text('Renew subscription'), findsOneWidget);
+  });
+
+  testWidgets('monthly hides Renew before end date', (tester) async {
+    await _pumpRenewalCard(
+      tester,
+      isParent: false,
+      status: 'active',
+      packageType: 'monthly',
+      singleSubject: false,
+      endDate: DateTime.utc(2100),
+    );
+    expect(find.text('Renew subscription'), findsNothing);
+  });
+
+  testWidgets('monthly shows Renew after end date', (tester) async {
+    await _pumpRenewalCard(
+      tester,
+      isParent: false,
+      status: 'expired',
+      packageType: 'monthly',
+      singleSubject: false,
+      endDate: DateTime.utc(2020),
+    );
+    expect(find.text('Renew subscription'), findsOneWidget);
+  });
 
   for (final status in const ['pending', 'confirmed']) {
     testWidgets('$status renewal hides duplicate action from canRenew', (
@@ -164,6 +224,36 @@ void main() {
     });
   }
 
+  testWidgets('pending renewal overrides backend canRenew true', (
+    tester,
+  ) async {
+    await _pumpRenewalCard(
+      tester,
+      isParent: false,
+      status: 'active',
+      packageType: 'hours',
+      singleSubject: true,
+      canRenew: true,
+      hasPendingRenewal: true,
+    );
+    expect(find.text('Pending review'), findsOneWidget);
+    expect(find.text('Renew subscription'), findsNothing);
+  });
+
+  testWidgets('expired display status cannot enable backend-denied renewal', (
+    tester,
+  ) async {
+    await _pumpRenewalCard(
+      tester,
+      isParent: false,
+      status: 'expired',
+      packageType: 'hours',
+      singleSubject: true,
+      canRenew: false,
+    );
+    expect(find.text('Renew subscription'), findsNothing);
+  });
+
   for (final source in const [(false, 'Student'), (true, 'Parent')]) {
     testWidgets('${source.$2} -> Renew -> Back', (tester) async {
       await _verifyRenewalReturn(tester, isParent: source.$1, success: false);
@@ -176,29 +266,37 @@ void main() {
   testWidgets('Egyptian pending return shows snackbar then refreshes', (
     tester,
   ) async {
+    var pending = false;
     var refreshes = 0;
     final router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
-          builder: (_, __) => Scaffold(
-            body: ParentSubscriptionCard(
-              child: const ParentChildSubscriptionsModel(
-                studentId: 'student',
-                studentName: 'Student',
-                curriculumId: 'egyptian-curriculum',
-                registrationMode: 'egyptian',
-                subscriptions: [],
+          builder: (_, __) => StatefulBuilder(
+            builder: (context, setState) => Scaffold(
+              body: ParentSubscriptionCard(
+                child: const ParentChildSubscriptionsModel(
+                  studentId: 'student',
+                  studentName: 'Student',
+                  curriculumId: 'egyptian-curriculum',
+                  registrationMode: 'egyptian',
+                  subscriptions: [],
+                ),
+                subscription: ParentChildSubscriptionModel(
+                  id: 'subscription',
+                  packageId: 'package',
+                  packageName: 'Package',
+                  curriculumId: 'curriculum',
+                  packageType: 'hours',
+                  canRenew: true,
+                  hasPendingRenewal: pending,
+                ),
+                isParent: true,
+                onRenewalPending: () => setState(() => pending = true),
+                onRenewed: () async {
+                  refreshes++;
+                },
               ),
-              subscription: const ParentChildSubscriptionModel(
-                id: 'subscription',
-                packageId: 'package',
-                packageName: 'Package',
-                curriculumId: 'curriculum',
-                canRenew: true,
-              ),
-              isParent: true,
-              onRenewed: () async => refreshes++,
             ),
           ),
         ),
@@ -219,12 +317,74 @@ void main() {
     await tester.tap(find.text('POST accepted'));
     await tester.pump(const Duration(milliseconds: 300));
     expect(refreshes, 1);
+    expect(find.text('Pending review'), findsOneWidget);
+    expect(find.text('Renew subscription'), findsNothing);
     expect(
       find.text(
         'The renewal request was submitted successfully and is now pending administration review.',
       ),
       findsWidgets,
     );
+  });
+
+  testWidgets('Gulf pending return refreshes the card to pending', (
+    tester,
+  ) async {
+    var pending = false;
+    var refreshes = 0;
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (_, __) => StatefulBuilder(
+            builder: (context, setState) => Scaffold(
+              body: ParentSubscriptionCard(
+                child: const ParentChildSubscriptionsModel(
+                  studentId: 'student',
+                  studentName: 'Student',
+                  curriculumId: 'gulf-curriculum',
+                  registrationMode: 'gulf',
+                  subscriptions: [],
+                ),
+                subscription: ParentChildSubscriptionModel(
+                  id: 'subscription',
+                  packageId: 'package',
+                  packageName: 'Package',
+                  curriculumId: 'gulf-curriculum',
+                  packageType: 'hours',
+                  remainingHours: 0,
+                  canRenew: true,
+                  hasPendingRenewal: pending,
+                ),
+                isParent: false,
+                onRenewed: () async {
+                  refreshes++;
+                  setState(() => pending = true);
+                },
+              ),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: Routes.studentSubscriptionRenewal,
+          builder: (context, _) => Scaffold(
+            body: TextButton(
+              onPressed: () => context.pop(ParentFlowResult.pendingReview),
+              child: const Text('POST accepted'),
+            ),
+          ),
+        ),
+      ],
+    );
+    await tester.pumpWidget(_localizedRouter(router));
+    await tester.tap(find.text('Renew subscription'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('POST accepted'));
+    await tester.pumpAndSettle();
+
+    expect(refreshes, 1);
+    expect(find.text('Pending review'), findsOneWidget);
+    expect(find.text('Renew subscription'), findsNothing);
   });
 
   testWidgets(
@@ -393,6 +553,9 @@ Future<void> _pumpRenewalCard(
   required String packageType,
   required bool singleSubject,
   bool canRenew = true,
+  bool hasPendingRenewal = false,
+  num remainingHours = 0,
+  DateTime? endDate,
 }) => tester.pumpWidget(
   MaterialApp(
     locale: const Locale('en'),
@@ -418,6 +581,9 @@ Future<void> _pumpRenewalCard(
           packageType: packageType,
           computedStatus: status,
           canRenew: canRenew,
+          hasPendingRenewal: hasPendingRenewal,
+          remainingHours: remainingHours,
+          endDate: endDate,
           accessScope: singleSubject ? 'single_subject' : 'all_subjects',
         ),
         isParent: isParent,

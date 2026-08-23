@@ -446,9 +446,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 Routes.splash;
           }
           final extra = state.extra;
-          return extra is ParentSubscriptionRenewalArgs &&
-                  !extra.isParent &&
-                  extra.curriculumId.trim().isNotEmpty
+          return isValidStudentRenewalRoute(extra)
               ? null
               : Routes.studentSubscriptions;
         },

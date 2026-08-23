@@ -127,30 +127,80 @@ void main() {
     await cubit.close();
   });
 
-  test('Egyptian private keeps and submits multiple subjects', () async {
-    final repo = _Repo();
-    final cubit = _cubit(repo)..selectPackage(_singlePackage);
-    expect(cubit.nextStep(), isTrue);
-    cubit.selectGrade(_grade);
-    expect(cubit.nextStep(), isTrue);
-    cubit.updateAccount(
-      fullName: 'Student Name',
-      email: 'student@example.com',
-      password: 'Password1',
+  for (final subjects in const <List<String>>[
+    [],
+    ['subject-1'],
+    ['subject-1', 'subject-2'],
+    ['subject-1', 'subject-2', 'subject-3'],
+  ]) {
+    test(
+      'Parent Egyptian private accepts ${subjects.length} subjects',
+      () async {
+        final repo = _Repo();
+        final cubit = _cubit(repo)..selectPackage(_singlePackage);
+        expect(cubit.nextStep(), isTrue);
+        cubit.selectGrade(_grade);
+        expect(cubit.nextStep(), isTrue);
+        cubit.updateAccount(
+          fullName: 'Student Name',
+          email: 'student@example.com',
+          password: 'Password1',
+        );
+        expect(cubit.nextStep(), isTrue);
+        for (final subject in subjects) {
+          cubit.toggleSubject(subject);
+        }
+
+        final valid = cubit.nextStep();
+        expect(valid, subjects.isNotEmpty);
+        if (subjects.isEmpty) {
+          expect(
+            cubit.state.errorMessage,
+            isNot(S.current.parentSingleSubjectRequired),
+          );
+          expect(repo.egyptianCalls, 0);
+        } else {
+          await cubit.submit();
+          expect(repo.lastEgyptianRequest?.student.subjectIds, subjects);
+        }
+        await cubit.close();
+      },
     );
-    expect(cubit.nextStep(), isTrue);
-    expect(cubit.nextStep(), isFalse);
-    cubit.toggleSubject('subject-1');
-    cubit.toggleSubject('subject-2');
-    expect(cubit.state.selectedSubjectIds, ['subject-1', 'subject-2']);
-    expect(cubit.nextStep(), isTrue);
-    await cubit.submit();
-    expect(repo.lastEgyptianRequest?.student.subjectIds, [
-      'subject-1',
-      'subject-2',
-    ]);
-    await cubit.close();
-  });
+  }
+
+  for (final subjects in const <List<String>>[
+    [],
+    ['subject-1'],
+    ['subject-1', 'subject-2'],
+    ['subject-1', 'subject-2', 'subject-3'],
+  ]) {
+    test('Parent Gulf private accepts ${subjects.length} subjects', () async {
+      final repo = _Repo()..statuses.add(_status(PaymentStatus.completed));
+      final cubit = _cubit(repo, curriculum: _gulf)
+        ..selectPackage(_singlePackage);
+      expect(cubit.nextStep(), isTrue);
+      cubit.selectGrade(_grade);
+      expect(cubit.nextStep(), isTrue);
+      cubit.updateAccount(
+        fullName: 'Student Name',
+        email: 'student@example.com',
+        password: 'Password1',
+      );
+      expect(cubit.nextStep(), isTrue);
+      for (final subject in subjects) {
+        cubit.toggleSubject(subject);
+      }
+
+      final valid = cubit.nextStep();
+      expect(valid, subjects.isNotEmpty);
+      if (subjects.isNotEmpty) {
+        expect(cubit.nextStep(), isTrue);
+        await cubit.submit();
+        expect(repo.lastGulfRequest?.student.subjectIds, subjects);
+      }
+      await cubit.close();
+    });
+  }
 
   test('completed Gulf payment preserves parent session', () async {
     try {
@@ -358,13 +408,13 @@ const _allPackage = PackageModel(
   accessScope: PackageAccessScope.allSubjects,
   isActive: true,
 );
-const _singlePackage = PackageModel(
-  id: 'single',
-  name: 'Single',
-  type: 'hours',
-  accessScope: PackageAccessScope.singleSubject,
-  isActive: true,
-);
+final _singlePackage = PackageModel.fromJson({
+  'id': 'single',
+  'name': 'Single',
+  'packageType': 'hours',
+  'accessScope': PackageAccessScope.singleSubject,
+  'isActive': true,
+});
 
 ParentAddChildCubit _cubit(
   _Repo repo, {
@@ -423,6 +473,7 @@ class _Repo implements ParentAddChildRepo {
   int checkoutCalls = 0;
   int egyptianCalls = 0;
   ParentAddChildEgyptianRequest? lastEgyptianRequest;
+  ParentAddChildGulfRequest? lastGulfRequest;
 
   @override
   registerEgyptian(ParentAddChildEgyptianRequest request) async {
@@ -437,6 +488,7 @@ class _Repo implements ParentAddChildRepo {
     required String idempotencyKey,
   }) async {
     checkoutCalls++;
+    lastGulfRequest = request;
     keys.add(idempotencyKey);
     await Future<void>.delayed(checkoutDelay);
     if (checkoutFailures.isNotEmpty) {
