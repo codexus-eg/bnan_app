@@ -34,13 +34,20 @@ class RenewalStatusResponse {
   final PaymentAmountSummary? paymentSummary;
   final String? message;
 
-  factory RenewalStatusResponse.fromJson(Map<String, dynamic> json) {
+  factory RenewalStatusResponse.fromJson(
+    Map<String, dynamic> json, {
+    bool successIsCompleted = false,
+  }) {
     final raw = json['data'];
     final data = raw is Map ? Map<String, dynamic>.from(raw) : json;
     final summary = PaymentAmountSummary.fromJson(data);
     return RenewalStatusResponse(
       paymentId: data['paymentId']?.toString() ?? '',
-      status: RenewalPaymentStatus.fromValue(data['status']),
+      status:
+          successIsCompleted &&
+              data['status']?.toString().trim().toLowerCase() == 'success'
+          ? RenewalPaymentStatus.completed
+          : RenewalPaymentStatus.fromValue(data['status']),
       checkoutUrl: data['checkoutUrl']?.toString(),
       paymentSummary: summary.hasAmounts || summary.hasDiscount
           ? summary

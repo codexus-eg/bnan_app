@@ -3,7 +3,6 @@ import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscr
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_error_mapper.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/get_parent_subscriptions_cubit/get_parent_subscriptions_state.dart';
-import 'package:bnan_app/features/parent_subscriptions/presentation/diagnostics/gulf_renewal_trace.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
 
@@ -39,7 +38,6 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
   Future<void> load() async {
     if (_loading || isClosed) return;
     _loading = true;
-    GulfRenewalTrace.log('parent subscription refresh started');
     final previous = state is GetParentSubscriptionsSuccess
         ? (state as GetParentSubscriptionsSuccess).selectedChildId
         : null;
@@ -60,7 +58,6 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
       }, (response) => _emitSuccess(response, previous));
     } finally {
       _loading = false;
-      GulfRenewalTrace.log('parent subscription refresh finished');
     }
   }
 

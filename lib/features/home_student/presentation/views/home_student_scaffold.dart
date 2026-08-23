@@ -17,6 +17,8 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_state.dart';
+import 'package:bnan_app/features/dashboard/data/models/student_dashboard_model.dart';
 
 class HomeStudentScaffold extends StatefulWidget {
   const HomeStudentScaffold({super.key, required this.loggedUser});
@@ -112,7 +114,13 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     if (index == subjectsDrawerIndex) {
       await MyNavigator.goTo(context, Routes.studentSubjects);
     } else if (index == requestLessonDrawerIndex) {
-      await MyNavigator.goTo(context, Routes.requestLesson);
+      await MyNavigator.goTo(
+        context,
+        Routes.requestLesson,
+        extra: SessionManager.instance.isGulfStudent
+            ? _studentCurriculumId
+            : null,
+      );
     } else if (index == 3) {
       await MyNavigator.goTo(context, Routes.parentCertificates);
     } else if (index == plansDrawerIndex) {
@@ -128,6 +136,15 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     } else if (index == subscriptionsDrawerIndex) {
       await MyNavigator.goTo(context, Routes.studentSubscriptions);
     }
+  }
+
+  String? get _studentCurriculumId {
+    final state = context.read<DashboardCubit>().state;
+    final data = state is DashboardDataState ? state.data : null;
+    final id = data is StudentDashboardModel
+        ? data.student.curriculum?.id.trim()
+        : null;
+    return id?.isNotEmpty == true ? id : widget.loggedUser.curriculum;
   }
 
   Future<void> _logout() async {

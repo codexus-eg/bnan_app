@@ -80,6 +80,18 @@ void main() {
     }
   });
 
+  test('Gulf success status is treated as completed', () {
+    final gulf = RenewalStatusResponse.fromJson({
+      'data': {'paymentId': 'payment-1', 'status': 'success'},
+    }, successIsCompleted: true);
+    final egyptian = RenewalStatusResponse.fromJson({
+      'data': {'paymentId': 'payment-1', 'status': 'success'},
+    });
+
+    expect(gulf.status, RenewalPaymentStatus.completed);
+    expect(egyptian.status, RenewalPaymentStatus.unknown);
+  });
+
   test('renewal payloads omit studentId when it is not supplied', () {
     final egyptian = const EgyptianRenewalRequest(
       packageId: 'package-1',
@@ -408,13 +420,19 @@ void main() {
     test(
       '$owner Gulf renewal uses exact subscription and package IDs',
       () async {
+        var refreshes = 0;
         final repo = _Repo()
           ..terminalStatuses.add(RenewalPaymentStatus.completed);
-        final cubit = _ready(repo, mode: 'gulf', isParent: isParent);
+        final cubit = _ready(
+          repo,
+          mode: 'gulf',
+          isParent: isParent,
+          onCompleted: () async => refreshes++,
+        );
 
         await cubit.submit();
         cubit.checkoutOpened();
-        await cubit.reconcilePayment();
+        await Future.wait([cubit.reconcilePayment(), cubit.reconcilePayment()]);
 
         expect(repo.lastGulfRequest?.subscriptionId, 'sub');
         expect(repo.lastGulfRequest?.toJson(), {
@@ -424,6 +442,9 @@ void main() {
         });
         expect(repo.keys.single, 'key-1');
         expect(cubit.state.phase, ParentRenewalPhase.completed);
+        expect(refreshes, 1);
+        await cubit.reconcilePayment();
+        expect(refreshes, 1);
         await cubit.close();
       },
     );

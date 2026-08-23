@@ -71,6 +71,7 @@ void main() {
       final json = const GulfSubjectRequestPayload(
         subjectId: 's1',
         packageId: 'p1',
+        curriculumId: 'c1',
         paymentAddress: PaymentAddress(
           city: 'Riyadh',
           region: 'Riyadh',
@@ -78,6 +79,7 @@ void main() {
         ),
       ).toJson();
       expect(json['subjectId'], 's1');
+      expect(json['curriculumId'], 'c1');
       expect(json.containsKey('subjectIds'), isFalse);
       expect(json['locale'], 'ar_SA');
       expect(json['isMobile'], isTrue);
@@ -176,7 +178,7 @@ void main() {
       expect(result.map((item) => item.id), ['valid']);
     });
 
-    test('filters Gulf all-subjects hours packages only', () {
+    test('filters Gulf single-subject hours packages only', () {
       final result = StudentSubjectRequestsCubit.filterPackages(const [
         PackageModel(
           id: 'single',
@@ -188,7 +190,40 @@ void main() {
         PackageModel(id: 'inactive', type: 'hours'),
       ], RegistrationMode.gulf);
 
-      expect(result.map((item) => item.id), ['all']);
+      expect(result.map((item) => item.id), ['single']);
+    });
+
+    test('Gulf load uses the student curriculum id once', () async {
+      final repo = FakeRepo()
+        ..availability = _availability(registrationMode: RegistrationMode.gulf);
+      final cubit = StudentSubjectRequestsCubit(repo);
+
+      await cubit.load(gulfCurriculumId: 'student-curriculum');
+
+      expect(repo.packageCurriculumIds, ['student-curriculum']);
+      expect(cubit.state.packages.map((item) => item.id), ['valid']);
+      await cubit.close();
+    });
+
+    test('Gulf rejects a selected package from another curriculum', () async {
+      final repo = FakeRepo()
+        ..availability = _availability(registrationMode: RegistrationMode.gulf)
+        ..packages = const [
+          PackageModel(
+            id: 'wrong',
+            type: 'hours',
+            curriculum: 'other-curriculum',
+            accessScope: PackageAccessScope.singleSubject,
+            isActive: true,
+          ),
+        ];
+      final cubit = StudentSubjectRequestsCubit(repo);
+
+      await cubit.load(gulfCurriculumId: 'student-curriculum');
+      cubit.selectPackage('wrong');
+
+      expect(cubit.hasValidSelectedGulfPackage, isFalse);
+      await cubit.close();
     });
 
     test('availability parses curriculum registration mode', () {
@@ -451,6 +486,7 @@ GulfSubjectRequestPayload _gulfPayload({
 }) => GulfSubjectRequestPayload(
   subjectId: subjectId,
   packageId: 'valid',
+  curriculumId: 'c1',
   notes: notes,
   paymentAddress: const PaymentAddress(
     city: 'Riyadh',
@@ -494,6 +530,7 @@ class FakeRepo implements StudentSubjectRequestsRepo {
   final checkoutResults = <Either<Failure, SubjectRequestPayment>>[];
   final statusResults = <Either<Failure, SubjectRequestPayment>>[];
   final reconcileResults = <Either<Failure, SubjectRequestPayment>>[];
+  final packageCurriculumIds = <String>[];
   Either<Failure, StudentSubjectRequest> submitResult = const Right(
     StudentSubjectRequest(id: 'r1', status: 'pending'),
   );
@@ -516,8 +553,10 @@ class FakeRepo implements StudentSubjectRequestsRepo {
   }
 
   @override
-  Future<Either<Failure, List<PackageModel>>> getPackages(String id) async =>
-      Right(packages);
+  Future<Either<Failure, List<PackageModel>>> getPackages(String id) async {
+    packageCurriculumIds.add(id);
+    return Right(packages);
+  }
 
   @override
   Future<Either<Failure, List<StudentSubjectRequest>>> getRequests() async {
@@ -569,23 +608,25 @@ class PendingAvailabilityRepo implements StudentSubjectRequestsRepo {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-SubjectRequestAvailability _availability({bool enabledSelectable = true}) =>
-    SubjectRequestAvailability(
-      curriculum: const SubjectRequestLookup(id: 'c1', name: 'Curriculum'),
-      grade: const SubjectRequestLookup(id: 'g1', name: 'Grade'),
-      registrationMode: RegistrationMode.egyptian,
-      subjects: [
-        AvailableSubject(
-          id: 'enabled',
-          name: 'Math',
-          isSelectable: enabledSelectable,
-        ),
-        const AvailableSubject(id: 'other', name: 'Arabic', isSelectable: true),
-        const AvailableSubject(
-          id: 'disabled',
-          name: 'Science',
-          isSelectable: false,
-          requestStatus: 'pending',
-        ),
-      ],
-    );
+SubjectRequestAvailability _availability({
+  bool enabledSelectable = true,
+  RegistrationMode registrationMode = RegistrationMode.egyptian,
+}) => SubjectRequestAvailability(
+  curriculum: const SubjectRequestLookup(id: 'c1', name: 'Curriculum'),
+  grade: const SubjectRequestLookup(id: 'g1', name: 'Grade'),
+  registrationMode: registrationMode,
+  subjects: [
+    AvailableSubject(
+      id: 'enabled',
+      name: 'Math',
+      isSelectable: enabledSelectable,
+    ),
+    const AvailableSubject(id: 'other', name: 'Arabic', isSelectable: true),
+    const AvailableSubject(
+      id: 'disabled',
+      name: 'Science',
+      isSelectable: false,
+      requestStatus: 'pending',
+    ),
+  ],
+);

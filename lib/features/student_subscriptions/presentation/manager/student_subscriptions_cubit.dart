@@ -1,6 +1,5 @@
 import 'package:bnan_app/features/student_subscriptions/data/repo/student_subscriptions_repo.dart';
 import 'package:bnan_app/features/student_subscriptions/presentation/manager/student_subscriptions_state.dart';
-import 'package:bnan_app/features/parent_subscriptions/presentation/diagnostics/gulf_renewal_trace.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StudentSubscriptionsCubit extends Cubit<StudentSubscriptionsState> {
@@ -31,10 +30,6 @@ class StudentSubscriptionsCubit extends Cubit<StudentSubscriptionsState> {
   Future<void> _load({required bool homeOnly}) async {
     if (_loading || isClosed) return;
     _loading = true;
-    GulfRenewalTrace.log(
-      'student subscription refresh started',
-      details: 'homeOnly=$homeOnly',
-    );
     if (state is! StudentSubscriptionsSuccess) {
       emit(const StudentSubscriptionsLoading());
     }
@@ -56,7 +51,6 @@ class StudentSubscriptionsCubit extends Cubit<StudentSubscriptionsState> {
       );
     } finally {
       _loading = false;
-      GulfRenewalTrace.log('student subscription refresh finished');
     }
   }
 }

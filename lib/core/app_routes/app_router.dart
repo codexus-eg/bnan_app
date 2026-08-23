@@ -408,18 +408,27 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
           return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
               Routes.splash;
         },
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (_) => getIt<StudentSubjectRequestsCubit>()..load(),
-              ),
-              BlocProvider(create: (_) => getIt<SubjectRequestPaymentCubit>()),
-            ],
-            child: const StudentSubjectRequestsView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final curriculumId = state.extra is String
+              ? state.extra as String
+              : null;
+          return buildTransitionPages(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<StudentSubjectRequestsCubit>()
+                        ..load(gulfCurriculumId: curriculumId),
+                ),
+                BlocProvider(
+                  create: (_) => getIt<SubjectRequestPaymentCubit>(),
+                ),
+              ],
+              child: const StudentSubjectRequestsView(),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.studentSubscriptions,

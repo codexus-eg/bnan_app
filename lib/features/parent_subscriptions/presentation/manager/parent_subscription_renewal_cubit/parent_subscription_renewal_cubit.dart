@@ -14,7 +14,6 @@ import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_statu
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_payment_draft.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscriptions_repo.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_payment_store.dart';
-import 'package:bnan_app/features/parent_subscriptions/presentation/diagnostics/gulf_renewal_trace.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -40,6 +39,8 @@ class ParentSubscriptionRenewalCubit
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
+  String? _reconcilingPaymentId;
+  Future<void>? _reconcileFlight;
   final Set<String> _completedPaymentIds = {};
 
   Future<void> restore() async {
@@ -212,24 +213,28 @@ class ParentSubscriptionRenewalCubit
     }
   }
 
-  Future<void> reconcilePayment() async {
-    GulfRenewalTrace.log(
-      'reconcile started',
-      details:
-          'owner=${state.args.isParent ? 'parent' : 'student'} '
-          'phase=${state.phase.name}',
-    );
+  Future<void> reconcilePayment() {
+    if (isClosed || state.phase == ParentRenewalPhase.completed) {
+      return Future.value();
+    }
+    final id = state.paymentId;
+    if (id == null || id.isEmpty) return Future.value();
+    if (!state.isGulf) return checkPaymentStatus();
+    if (_reconcilingPaymentId == id && _reconcileFlight != null) {
+      return _reconcileFlight!;
+    }
+    _reconcilingPaymentId = id;
+    return _reconcileFlight = _runGulfReconcile(id);
+  }
+
+  Future<void> _runGulfReconcile(String id) async {
     try {
-      if (isClosed || state.phase == ParentRenewalPhase.completed) return;
-      final id = state.paymentId;
-      if (id == null || id.isEmpty) return;
-      if (state.isGulf) {
-        await _pollGulf(id, reconcile: true);
-      } else {
-        await checkPaymentStatus();
-      }
+      await _pollGulf(id, reconcile: true);
     } finally {
-      GulfRenewalTrace.log('reconcile finished');
+      if (_reconcilingPaymentId == id) {
+        _reconcilingPaymentId = null;
+        _reconcileFlight = null;
+      }
     }
   }
 
@@ -457,24 +462,8 @@ class ParentSubscriptionRenewalCubit
   Future<void> _pollGulf(String id, {bool reconcile = false}) async {
     await _poll(
       id,
-      reconcile: reconcile
-          ? () async {
-              GulfRenewalTrace.log('gulf reconcile request started');
-              try {
-                return await repo.gulfReconcile(id);
-              } finally {
-                GulfRenewalTrace.log('gulf reconcile request finished');
-              }
-            }
-          : null,
-      status: () async {
-        GulfRenewalTrace.log('payment status request started');
-        try {
-          return await repo.gulfStatus(id);
-        } finally {
-          GulfRenewalTrace.log('payment status request finished');
-        }
-      },
+      reconcile: reconcile ? () => repo.gulfReconcile(id) : null,
+      status: () => repo.gulfStatus(id),
       canContinue: () =>
           !isClosed && state.phase == ParentRenewalPhase.processing,
     );
@@ -486,12 +475,8 @@ class ParentSubscriptionRenewalCubit
     required ParentPaymentRequest<RenewalStatusResponse> status,
     required bool Function() canContinue,
   }) async {
-    if (_pollingPaymentId != null) {
-      GulfRenewalTrace.log('payment status check skipped');
-      return;
-    }
+    if (_pollingPaymentId != null) return;
     _pollingPaymentId = id;
-    GulfRenewalTrace.log('payment status check started');
     try {
       final result =
           await ParentPaymentPoller<RenewalStatusResponse>(
@@ -517,7 +502,6 @@ class ParentSubscriptionRenewalCubit
       }
     } finally {
       if (_pollingPaymentId == id) _pollingPaymentId = null;
-      GulfRenewalTrace.log('payment status check finished');
     }
   }
 
@@ -530,6 +514,9 @@ class ParentSubscriptionRenewalCubit
       if (id == null || !_completedPaymentIds.add(id)) return;
       await store?.clear();
       if (isClosed) return;
+      final refresh = state.args.onCompleted;
+      if (refresh != null) await refresh();
+      if (isClosed) return;
       emit(
         state.copyWith(
           phase: ParentRenewalPhase.completed,
@@ -538,15 +525,6 @@ class ParentSubscriptionRenewalCubit
           errorMessage: null,
         ),
       );
-      final refresh = state.args.onCompleted;
-      if (refresh != null) {
-        GulfRenewalTrace.log('subscription refresh callback started');
-        try {
-          await refresh();
-        } finally {
-          GulfRenewalTrace.log('subscription refresh callback finished');
-        }
-      }
     } else if (response.status.isTerminal) {
       _attempt.startNew();
       await store?.clear();

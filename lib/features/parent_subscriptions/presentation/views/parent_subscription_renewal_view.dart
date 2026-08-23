@@ -2,7 +2,6 @@ import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
-import 'package:bnan_app/features/parent_subscriptions/presentation/diagnostics/gulf_renewal_trace.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/parent_subscription_renewal_body.dart';
@@ -21,6 +20,10 @@ class ParentSubscriptionRenewalView extends StatefulWidget {
 
 class _State extends State<ParentSubscriptionRenewalView>
     with WidgetsBindingObserver {
+  bool _tamaraOpen = false;
+  bool _tamaraReturned = false;
+  bool _successNavigationExecuted = false;
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +38,10 @@ class _State extends State<ParentSubscriptionRenewalView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && mounted) {
-      GulfRenewalTrace.log('reconcile triggered', details: 'source=lifecycle');
+    if (state == AppLifecycleState.resumed &&
+        mounted &&
+        _tamaraReturned &&
+        !_tamaraOpen) {
       context.read<ParentSubscriptionRenewalCubit>().reconcilePayment();
     }
   }
@@ -56,15 +61,7 @@ class _State extends State<ParentSubscriptionRenewalView>
               ParentSubscriptionRenewalCubit,
               ParentSubscriptionRenewalState
             >(
-              listenWhen: (before, after) {
-                if (after.isGulf) {
-                  return !before.shouldOpenCheckout && after.shouldOpenCheckout;
-                }
-                return before.phase == ParentRenewalPhase.submitting &&
-                    (after.phase == ParentRenewalPhase.pending ||
-                        after.phase == ParentRenewalPhase.editing &&
-                            after.errorMessage != null);
-              },
+              listenWhen: _shouldListen,
               listener: _onState,
               child: Scaffold(
                 appBar: CustomAppbar(
@@ -75,11 +72,29 @@ class _State extends State<ParentSubscriptionRenewalView>
             ),
       );
 
+  bool _shouldListen(
+    ParentSubscriptionRenewalState before,
+    ParentSubscriptionRenewalState after,
+  ) {
+    if (after.isGulf) {
+      return !before.shouldOpenCheckout && after.shouldOpenCheckout ||
+          before.phase != ParentRenewalPhase.completed &&
+              after.phase == ParentRenewalPhase.completed;
+    }
+    return before.phase == ParentRenewalPhase.submitting &&
+        (after.phase == ParentRenewalPhase.pending ||
+            after.phase == ParentRenewalPhase.editing &&
+                after.errorMessage != null);
+  }
+
   Future<void> _onState(
     BuildContext context,
     ParentSubscriptionRenewalState state,
   ) async {
     if (state.isGulf) {
+      if (state.phase == ParentRenewalPhase.completed) {
+        return _finishGulf(context);
+      }
       return _open(context, state);
     }
     if (state.phase == ParentRenewalPhase.pending) {
@@ -96,29 +111,17 @@ class _State extends State<ParentSubscriptionRenewalView>
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
-    GulfRenewalTrace.log('navigation executed', details: 'target=tamara');
-    final result = url == null
-        ? const TamaraCheckoutLaunchResult(opened: false)
-        : await TamaraCheckoutLauncher.open(
-            context,
-            url,
-            completionStream: cubit.stream.map(
-              (value) => value.phase == ParentRenewalPhase.completed,
-            ),
-            isCompleted: () =>
-                cubit.state.phase == ParentRenewalPhase.completed,
-            onOpened: () {
-              GulfRenewalTrace.log(
-                'reconcile triggered',
-                details: 'source=checkout-opened',
-              );
-              return cubit.reconcilePayment();
-            },
-          );
-    GulfRenewalTrace.log(
-      'Tamara returned',
-      details: 'opened=${result.opened} outcome=${result.outcome?.name}',
-    );
+    _tamaraReturned = false;
+    _tamaraOpen = true;
+    late final TamaraCheckoutLaunchResult result;
+    try {
+      result = url == null
+          ? const TamaraCheckoutLaunchResult(opened: false)
+          : await TamaraCheckoutLauncher.open(context, url);
+    } finally {
+      _tamaraOpen = false;
+      _tamaraReturned = true;
+    }
     if (!context.mounted || cubit.isClosed) return;
     if (!result.opened) {
       cubit.checkoutOpenFailed();
@@ -129,10 +132,12 @@ class _State extends State<ParentSubscriptionRenewalView>
       );
       return;
     }
-    GulfRenewalTrace.log(
-      'reconcile triggered',
-      details: 'source=tamara-returned',
-    );
     await cubit.reconcilePayment();
+  }
+
+  void _finishGulf(BuildContext context) {
+    if (_successNavigationExecuted || !context.mounted) return;
+    _successNavigationExecuted = true;
+    MyNavigator.pop(context, ParentFlowResult.completed);
   }
 }
