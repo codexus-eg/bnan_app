@@ -20,6 +20,7 @@ class AddDailyPlanSelectFields extends StatelessWidget {
     required this.classroom,
     required this.dateController,
     required this.selectedDate,
+    required this.startDate,
     required this.onDateChanged,
     required this.onTeacherChanged,
     required this.onSubjectChanged,
@@ -29,6 +30,7 @@ class AddDailyPlanSelectFields extends StatelessWidget {
   final PlanClassroomOption classroom;
   final TextEditingController dateController;
   final DateTime? selectedDate;
+  final DateTime startDate;
   final ValueChanged<DateTime> onDateChanged;
   final ValueChanged<String?> onTeacherChanged;
   final ValueChanged<String?> onSubjectChanged;
@@ -61,6 +63,7 @@ class AddDailyPlanSelectFields extends StatelessWidget {
         PlanDateField(
           controller: dateController,
           selectedDate: selectedDate,
+          startDate: startDate,
           onDateChanged: onDateChanged,
         ),
         const SizedBox(height: 12),

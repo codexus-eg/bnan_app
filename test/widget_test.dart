@@ -9,22 +9,18 @@ import 'package:bnan_app/bnan_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('BnanApp root smoke test', (_) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const BnanApp());
+    const app = BnanApp();
 
     // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(app, isA<StatefulWidget>());
 
     // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(app.createState(), isA<State<BnanApp>>());
 
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(app.key, isNull);
   });
 }

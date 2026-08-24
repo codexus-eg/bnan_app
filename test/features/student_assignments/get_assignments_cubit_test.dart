@@ -24,36 +24,38 @@ void main() {
   test('emits loading then success', () async {
     final repo = _AssignmentsRepo();
     final cubit = GetAssignmentsCubit(repo);
-    final states = <GetAssignmentsState>[];
-    final subscription = cubit.stream.listen(states.add);
+    final states = expectLater(
+      cubit.stream,
+      emitsInOrder([
+        isA<GetAssignmentsLoading>(),
+        isA<GetAssignmentsSuccess>(),
+      ]),
+    );
 
     final request = cubit.getMyAssignments();
     repo.complete(const Right(_response));
     await request;
+    await states;
 
-    expect(states, [
-      isA<GetAssignmentsLoading>(),
-      isA<GetAssignmentsSuccess>(),
-    ]);
-    await subscription.cancel();
     await cubit.close();
   });
 
   test('emits loading then failure', () async {
     final repo = _AssignmentsRepo();
     final cubit = GetAssignmentsCubit(repo);
-    final states = <GetAssignmentsState>[];
-    final subscription = cubit.stream.listen(states.add);
+    final states = expectLater(
+      cubit.stream,
+      emitsInOrder([
+        isA<GetAssignmentsLoading>(),
+        isA<GetAssignmentsFailure>(),
+      ]),
+    );
 
     final request = cubit.getMyAssignments();
     repo.complete(Left(Failure(message: 'server')));
     await request;
+    await states;
 
-    expect(states, [
-      isA<GetAssignmentsLoading>(),
-      isA<GetAssignmentsFailure>(),
-    ]);
-    await subscription.cancel();
     await cubit.close();
   });
 }

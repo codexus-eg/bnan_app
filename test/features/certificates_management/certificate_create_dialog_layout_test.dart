@@ -28,11 +28,17 @@ void main() {
       await tester.pumpWidget(const _TestApp());
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Select classroom'));
+      final classroomDropdown = find.byType(DropdownButton<String>).first;
+      await tester.ensureVisible(classroomDropdown);
+      await tester.pumpAndSettle();
+      await tester.tap(classroomDropdown);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Class A').last);
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Select student'));
+      final studentDropdown = find.byType(DropdownButton<String>).last;
+      await tester.ensureVisible(studentDropdown);
+      await tester.pumpAndSettle();
+      await tester.tap(studentDropdown);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Student One').last);
       await tester.pumpAndSettle();
@@ -45,7 +51,10 @@ void main() {
       await tester.scrollUntilVisible(
         find.text('Subject 8'),
         100,
-        scrollable: find.byKey(const Key('certificateCreateFieldsScroll')),
+        scrollable: find.descendant(
+          of: find.byKey(const Key('certificateCreateFieldsScroll')),
+          matching: find.byType(Scrollable),
+        ).first,
       );
       expect(find.text('Subject 8'), findsOneWidget);
       expect(tester.takeException(), isNull);

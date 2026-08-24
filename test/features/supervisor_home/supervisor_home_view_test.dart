@@ -1,6 +1,8 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/cache/cache_helper.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/localization/language_manager/language_manager.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/custom_bottom_nav_bar.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
@@ -24,9 +26,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  setUpAll(() {
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    await CacheHelper.init();
     getIt.registerSingleton<NotificationsCubit>(
       NotificationsCubit(
         _UnusedNotificationsRepo(),
@@ -97,9 +102,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await _openDrawer(tester);
-    await tester.tap(find.text('Certificates').first);
-    await tester.tap(find.text('Certificates').first);
-    await tester.pumpAndSettle();
+    await _tapDrawerItem(tester, 'Certificates');
 
     expect(find.text(Routes.certificatesManagement), findsOneWidget);
     expect(_bottomBar(tester).currentIndex, 3);
@@ -113,9 +116,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await _openDrawer(tester);
-    await tester.tap(find.text('Plans'));
-    await tester.tap(find.text('Plans'));
-    await tester.pumpAndSettle();
+    await _tapDrawerItem(tester, 'Plans');
 
     expect(find.text('Plans destination'), findsOneWidget);
     expect(find.byType(CustomBottomNavBar), findsNothing);
@@ -130,8 +131,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await _openDrawer(tester);
-    await tester.tap(find.text('Weekly Ideal Student'));
-    await tester.pumpAndSettle();
+    await _tapDrawerItem(tester, 'Weekly Ideal Student');
 
     expect(find.text('Ideal student destination'), findsOneWidget);
     expect(find.byType(CustomBottomNavBar), findsNothing);
@@ -236,7 +236,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Certificate detail'), findsOneWidget);
 
-    await tester.pageBack();
+    await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(find.text(Routes.certificatesManagement), findsOneWidget);
     expect(find.byType(CustomBottomNavBar), findsOneWidget);
@@ -369,16 +369,19 @@ Widget testApp({
       ),
     ],
   );
-  return MaterialApp.router(
-    routerConfig: router,
-    locale: locale,
-    localizationsDelegates: const [
-      S.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: S.delegate.supportedLocales,
+  return BlocProvider(
+    create: (_) => LanguageCubit(),
+    child: MaterialApp.router(
+      routerConfig: router,
+      locale: locale,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+    ),
   );
 }
 
@@ -402,6 +405,18 @@ Future<void> _openDrawer(WidgetTester tester) async {
     find.byType(SupervisorHomeView),
   );
   state.scaffoldKey.currentState?.openDrawer();
+  await tester.pumpAndSettle();
+}
+
+Future<void> _tapDrawerItem(WidgetTester tester, String label) async {
+  final drawer = find.byType(Drawer);
+  final item = find.descendant(of: drawer, matching: find.text(label));
+  await tester.scrollUntilVisible(
+    item,
+    200,
+    scrollable: find.descendant(of: drawer, matching: find.byType(Scrollable)),
+  );
+  await tester.tap(item);
   await tester.pumpAndSettle();
 }
 

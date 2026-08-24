@@ -21,11 +21,13 @@ class AddDailyPlanForm extends StatefulWidget {
     required this.policy,
     required this.classroom,
     required this.selectedWeek,
+    required this.startDate,
   }) : assert(selectedWeek > 0);
 
   final PlansAccessPolicy policy;
   final PlanClassroomOption classroom;
   final int selectedWeek;
+  final DateTime startDate;
 
   @override
   State<AddDailyPlanForm> createState() => _AddDailyPlanFormState();
@@ -70,6 +72,7 @@ class _AddDailyPlanFormState extends State<AddDailyPlanForm> {
               classroom: widget.classroom,
               dateController: _dateController,
               selectedDate: _selectedDate,
+              startDate: widget.startDate,
               onDateChanged: (date) => setState(() => _selectedDate = date),
               onTeacherChanged: (_) {},
               onSubjectChanged: (value) => _selectedSubjectId = value,

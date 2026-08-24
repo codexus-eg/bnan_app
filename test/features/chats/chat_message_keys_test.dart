@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/data/models/chat_sender_model.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_bubble/chat_bubble.dart';
@@ -49,16 +51,27 @@ void main() {
     await _pump(tester, harnessKey, _messages(20));
 
     final jump = harnessKey.currentState!.jump('message-0');
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
-    await jump;
+    await _pumpUntilComplete(tester, jump);
     expect(_bubble(tester, 'message-0').highlighted, isTrue);
 
     await harnessKey.currentState!.jump('missing');
     await tester.pump();
     expect(tester.takeException(), isNull);
-    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpWidget(const SizedBox());
   });
+}
+
+Future<void> _pumpUntilComplete(
+  WidgetTester tester,
+  Future<void> future,
+) async {
+  var completed = false;
+  unawaited(future.whenComplete(() => completed = true));
+  for (var frame = 0; frame < 10 && !completed; frame++) {
+    await tester.pump(const Duration(milliseconds: 50));
+  }
+  expect(completed, isTrue);
+  await future;
 }
 
 Future<void> _pump(

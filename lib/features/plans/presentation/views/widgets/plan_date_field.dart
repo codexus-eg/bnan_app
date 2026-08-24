@@ -11,11 +11,13 @@ class PlanDateField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.selectedDate,
+    required this.startDate,
     required this.onDateChanged,
   });
 
   final TextEditingController controller;
   final DateTime? selectedDate;
+  final DateTime startDate;
   final ValueChanged<DateTime> onDateChanged;
 
   @override
@@ -47,8 +49,7 @@ class PlanDateField extends StatelessWidget {
 
   Future<void> _pickDate(BuildContext context) async {
     final today = _dateOnly(DateTime.now());
-    // TODO: Replace firstAllowedDate with the plans start date from the API.
-    final firstAllowedDate = DateTime(today.year - 1, today.month, today.day);
+    final firstAllowedDate = _dateOnly(startDate);
     final date = await AppPickers.pickDate(
       context: context,
       initialDate: _clampDate(selectedDate ?? today, firstAllowedDate, today),

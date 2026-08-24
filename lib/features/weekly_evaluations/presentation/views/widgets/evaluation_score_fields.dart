@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_value_ui_mapper.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/models/evaluation_options.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -89,20 +90,38 @@ class EvaluationScoreFields extends StatelessWidget {
     List<String> options,
     ValueChanged<String> onChanged,
   ) {
-    return CustomDropdown(
-      label: label,
-      value: value,
-      hint: label,
-      items: options,
-      itemsLabels: {
-        for (final option in options)
-          option: evaluationValueLabel(context, option),
-      },
-      isRequired: true,
-      backgroundColor: ColorManager.white,
-      onChanged: (value) {
-        if (value != null) onChanged(value);
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            text: label,
+            style: StylesManager.styleBold14(
+              context,
+            ).copyWith(color: ColorManager.mainColor15),
+            children: const [
+              TextSpan(text: '*', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        CustomDropdown(
+          label: label,
+          value: value,
+          hint: label,
+          items: options,
+          itemsLabels: {
+            for (final option in options)
+              option: evaluationValueLabel(context, option),
+          },
+          isRequired: true,
+          showLabel: false,
+          backgroundColor: ColorManager.white,
+          onChanged: (value) {
+            if (value != null) onChanged(value);
+          },
+        ),
+      ],
     );
   }
 }

@@ -351,7 +351,8 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
         : BlocListener<TamaraPaymentCubit, TamaraPaymentState>(
             listener: (context, state) {
               if (state is! TamaraPaymentResult ||
-                  state.status != PaymentStatus.completed) {
+                  state.status != PaymentStatus.completed ||
+                  !cubit.canOpenAccountVerification) {
                 return;
               }
 

@@ -1,4 +1,3 @@
-library tamara_checkout;
 
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
@@ -15,11 +14,10 @@ class TamaraCheckout extends StatefulWidget {
 
   const TamaraCheckout(
       this.checkoutUrl, this.successUrl, this.failUrl, this.cancelUrl,
-      {Key? key,
+      {super.key,
       this.onPaymentSuccess,
       this.onPaymentFailed,
-      this.onPaymentCanceled})
-      : super(key: key);
+      this.onPaymentCanceled});
 
   final void Function()? onPaymentSuccess;
   final void Function()? onPaymentFailed;

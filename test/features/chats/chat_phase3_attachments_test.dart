@@ -24,11 +24,11 @@ void main() {
     test('normalizes relative URLs and preserves absolute URLs', () {
       expect(
         ChatAttachmentUrl.resolve('/uploads/file.pdf').toString(),
-        'https://bnan.0xcode7.xyz/uploads/file.pdf',
+        'https://api.bnanacademysa.com/uploads/file.pdf',
       );
       expect(
         ChatAttachmentUrl.resolve('uploads/image.png').toString(),
-        'https://bnan.0xcode7.xyz/uploads/image.png',
+        'https://api.bnanacademysa.com/uploads/image.png',
       );
       expect(
         ChatAttachmentUrl.resolve('https://cdn.example.com/a.png').toString(),
@@ -41,13 +41,13 @@ void main() {
         ChatAttachmentUrl.resolve(
           'http://127.0.0.1:3000/uploads/voice.m4a?version=1',
         ).toString(),
-        'https://bnan.0xcode7.xyz/uploads/voice.m4a?version=1',
+        'https://api.bnanacademysa.com/uploads/voice.m4a?version=1',
       );
       expect(
         ChatAttachmentUrl.resolve(
           'http://localhost:3000/uploads/voice.m4a',
         ).toString(),
-        'https://bnan.0xcode7.xyz/uploads/voice.m4a',
+        'https://api.bnanacademysa.com/uploads/voice.m4a',
       );
     });
 
@@ -162,7 +162,7 @@ void main() {
     );
     await tester.tap(find.text('report.pdf'));
     await tester.pump();
-    expect(openedUrls, ['https://bnan.0xcode7.xyz/files/report.pdf']);
+    expect(openedUrls, ['https://api.bnanacademysa.com/files/report.pdf']);
 
     await tester.pumpWidget(
       _app(
@@ -227,11 +227,11 @@ void main() {
     await tester.tap(find.byIcon(Icons.play_arrow_rounded));
     await tester.pump();
 
-    expect(player.url, 'https://bnan.0xcode7.xyz/voice/a.m4a');
+    expect(player.url, 'https://api.bnanacademysa.com/voice/a.m4a');
     expect(
       player.headers,
       ChatAttachmentUrl.headersFor(
-        Uri.parse('https://bnan.0xcode7.xyz/voice/a.m4a'),
+        Uri.parse('https://api.bnanacademysa.com/voice/a.m4a'),
       ),
     );
     expect(player.playCalls, 1);

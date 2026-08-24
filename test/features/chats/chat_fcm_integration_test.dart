@@ -23,10 +23,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() async {
+  setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    FlutterSecureStorage.setMockInitialValues({});
     await CacheHelper.init();
+  });
+
+  setUp(() async {
+    FlutterSecureStorage.setMockInitialValues({});
+    await CacheHelper.clear();
     await SessionManager.instance.clearSession();
     PackageInfo.setMockInitialValues(
       appName: 'Bnan',
@@ -60,9 +64,36 @@ void main() {
         hasLength(1),
       );
       expect(repo.registered.last.appVersion, '1.0.0');
-      expect(repo.deleted, ['fcm-2']);
+      expect(repo.deleted, ['fcm-1', 'fcm-2']);
     },
   );
+
+  test('account switch detaches token before registering new owner', () async {
+    await _login(userId: 'student-1');
+    final messaging = _Messaging('shared-fcm');
+    final repo = _TokenRepo();
+    final registrar = PushTokenRegistrar(
+      messaging,
+      repo,
+      InstallationIdStore(),
+    );
+    await registrar.registerCurrent();
+
+    final unregisterOldToken = registrar.deleteCurrent;
+    SessionManager.instance.addBeforeClearListener(unregisterOldToken);
+    try {
+      await _login(userId: 'supervisor-1');
+      await registrar.registerCurrent();
+    } finally {
+      SessionManager.instance.removeBeforeClearListener(unregisterOldToken);
+    }
+
+    expect(repo.operations, [
+      'register:shared-fcm',
+      'delete:shared-fcm',
+      'register:shared-fcm',
+    ]);
+  });
 
   test('payload prefers resourceId and safely falls back to params', () {
     final direct = ChatPushIntent.tryParse({
@@ -191,11 +222,12 @@ ChatMessageModel _socketMessage(String id, String roomId) => ChatMessageModel(
   deletedForEveryone: false,
 );
 
-Future<void> _login() => SessionManager.instance.saveSession(
-  accessToken: 'access',
-  refreshToken: 'refresh-token-must-not-be-sent',
-  userId: 'user-1',
-);
+Future<void> _login({String userId = 'user-1'}) =>
+    SessionManager.instance.saveSession(
+      accessToken: 'access',
+      refreshToken: 'refresh-token-must-not-be-sent',
+      userId: userId,
+    );
 
 Future<void> _flush() => Future<void>.delayed(Duration.zero);
 
@@ -219,11 +251,18 @@ class _Messaging implements PushMessaging {
 class _TokenRepo implements DeviceTokenRepo {
   final registered = <DeviceTokenPayload>[];
   final deleted = <String>[];
+  final operations = <String>[];
   @override
-  Future<void> register(DeviceTokenPayload payload) async =>
-      registered.add(payload);
+  Future<void> register(DeviceTokenPayload payload) async {
+    registered.add(payload);
+    operations.add('register:${payload.token}');
+  }
+
   @override
-  Future<void> delete({required String token}) async => deleted.add(token);
+  Future<void> delete({required String token}) async {
+    deleted.add(token);
+    operations.add('delete:$token');
+  }
 }
 
 class _Registrar implements PushTokenRegistrar {

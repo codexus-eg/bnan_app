@@ -1,21 +1,36 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/cache/cache_helper.dart';
+import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/localization/language_manager/language_manager.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/home_appbar.dart';
 import 'package:bnan_app/features/admin/presentation/views/widgets/admin_drawer_items.dart';
 import 'package:bnan_app/features/home_student/presentation/views/widgets/student_home_page/student_drawer_items.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_drawer_items.dart';
+import 'package:bnan_app/features/dashboard/data/models/dashboard_data.dart';
+import 'package:bnan_app/features/dashboard/data/models/teacher_dashboard_model.dart';
+import 'package:bnan_app/features/dashboard/data/repo/dashboard_repo.dart';
+import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_drawer_items.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    await CacheHelper.init();
+  });
+
   setUp(() async {
     FlutterSecureStorage.setMockInitialValues({});
     await SessionManager.instance.clearSession();
@@ -65,11 +80,10 @@ void main() {
         testCase.$1.toSet(),
       );
       expect(teacherScheduleRoutes(), testCase.$2);
-      final gulfItem = testCase.$1.contains(RegistrationMode.gulf) ? 1 : 0;
       final idealItem = testCase.$1.contains(RegistrationMode.egyptian) ? 1 : 0;
       expect(
         teacherDrawerItems(context).length,
-        14 + gulfItem + idealItem + testCase.$2.length,
+        10 + idealItem + testCase.$2.length,
       );
     }
   });
@@ -115,35 +129,30 @@ void main() {
           (title) =>
               title != s.schedule &&
               title != s.lessonsManagement &&
-              title != s.registrationRequests &&
               title != s.weeklyIdealStudent,
         )
         .toList();
 
     expect(mixedNonScheduleTitles, baseTitles);
-    expect(baseTitles, isNot(contains(s.registrationRequests)));
-    expect(
-      teacherDrawerItems(context).map((item) => item.title),
-      contains(s.registrationRequests),
-    );
+    expect(baseTitles, contains(s.registrationRequests));
     expect(
       teacherDrawerItems(context).map((item) => item.title),
       contains(s.weeklyIdealStudent),
     );
-    expect(adminDrawerItems(context), hasLength(18));
+    expect(adminDrawerItems(context), hasLength(20));
     expect(
       adminDrawerItems(context).where((item) => item.title == s.discountCodes),
       hasLength(1),
     );
     expect(
       adminDrawerItems(context).where((item) => item.title == s.schedule),
-      hasLength(1),
+      isEmpty,
     );
     expect(
       adminDrawerItems(
         context,
       ).where((item) => item.title == s.lessonsManagement),
-      isEmpty,
+      hasLength(1),
     );
     final studentItems = studentDrawerItems(context);
     expect(studentItems, hasLength(12));
@@ -175,15 +184,23 @@ Widget _app() {
       ),
     ],
   );
-  return MaterialApp.router(
-    routerConfig: router,
-    localizationsDelegates: const [
-      S.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (_) => LanguageCubit()),
+      BlocProvider(
+        create: (_) => DashboardCubit(_DashboardRepo(), DashboardRole.teacher),
+      ),
     ],
-    supportedLocales: S.delegate.supportedLocales,
+    child: MaterialApp.router(
+      routerConfig: router,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+    ),
   );
 }
 
@@ -213,5 +230,19 @@ Future<void> _saveTeacher(List<RegistrationMode> modes) async {
   });
   await SessionManager.instance.replaceTeacherRegistrationModes(
     profile.registrationModes,
+  );
+}
+
+class _DashboardRepo implements DashboardRepo {
+  @override
+  Future<Either<Failure, DashboardData>> getDashboard() async => const Right(
+    TeacherDashboardModel(
+      generatedAt: null,
+      isIdealTeacher: false,
+      points: 0,
+      classrooms: 0,
+      students: 0,
+      subjects: 0,
+    ),
   );
 }

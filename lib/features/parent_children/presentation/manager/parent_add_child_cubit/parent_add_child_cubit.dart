@@ -26,6 +26,7 @@ import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
+import 'package:bnan_app/features/student_auth/data/models/registration_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,6 +104,16 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       errorMessage: null,
     ),
   );
+
+  void setGradeSubjectIds(Iterable<String> subjectIds) {
+    if (state.isGulf || !state.isAllSubjects) return;
+    final ids = subjectIds
+        .map((id) => id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList(growable: false);
+    emit(state.copyWith(selectedSubjectIds: ids, errorMessage: null));
+  }
 
   void selectPackage(PackageModel value) {
     if (!_packageMatchesCurriculum(value) ||
@@ -344,6 +355,16 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       student: _student(),
       curriculumId: state.curriculum!.id,
       packageId: state.package!.id!,
+      items: state.isSingleSubject
+          ? state.selectedSubjectIds
+                .map(
+                  (subjectId) => RegistrationItem(
+                    subjectId: subjectId,
+                    packageId: state.package!.id!,
+                  ),
+                )
+                .toList(growable: false)
+          : const [],
       discountCode: state.discountCode,
       paymentAddress: const ParentPaymentAddress(
         city: TamaraDefaultAddress.city,

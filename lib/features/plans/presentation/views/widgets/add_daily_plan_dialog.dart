@@ -10,11 +10,13 @@ class AddDailyPlanDialog extends StatelessWidget {
     required this.policy,
     required this.classroom,
     required this.selectedWeek,
+    required this.startDate,
   });
 
   final PlansAccessPolicy policy;
   final PlanClassroomOption classroom;
   final int selectedWeek;
+  final DateTime startDate;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class AddDailyPlanDialog extends StatelessWidget {
               policy: policy,
               classroom: classroom,
               selectedWeek: selectedWeek,
+              startDate: startDate,
             ),
           ),
         ),

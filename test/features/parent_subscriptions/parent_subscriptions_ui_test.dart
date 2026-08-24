@@ -224,7 +224,7 @@ void main() {
     });
   }
 
-  testWidgets('pending renewal overrides backend canRenew true', (
+  testWidgets('Gulf renewal follows remaining hours despite pending flag', (
     tester,
   ) async {
     await _pumpRenewalCard(
@@ -235,9 +235,10 @@ void main() {
       singleSubject: true,
       canRenew: true,
       hasPendingRenewal: true,
+      registrationMode: 'gulf',
     );
-    expect(find.text('Pending review'), findsOneWidget);
-    expect(find.text('Renew subscription'), findsNothing);
+    expect(find.text('Pending review'), findsNothing);
+    expect(find.text('Renew subscription'), findsOneWidget);
   });
 
   testWidgets('expired display status cannot enable backend-denied renewal', (
@@ -327,7 +328,7 @@ void main() {
     );
   });
 
-  testWidgets('Gulf pending return refreshes the card to pending', (
+  testWidgets('Gulf pending return refreshes without Egyptian pending label', (
     tester,
   ) async {
     var pending = false;
@@ -383,8 +384,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(refreshes, 1);
-    expect(find.text('Pending review'), findsOneWidget);
-    expect(find.text('Renew subscription'), findsNothing);
+    expect(find.text('Pending review'), findsNothing);
+    expect(find.text('Renew subscription'), findsOneWidget);
   });
 
   testWidgets(
@@ -556,6 +557,7 @@ Future<void> _pumpRenewalCard(
   bool hasPendingRenewal = false,
   num remainingHours = 0,
   DateTime? endDate,
+  String? registrationMode,
 }) => tester.pumpWidget(
   MaterialApp(
     locale: const Locale('en'),
@@ -568,9 +570,10 @@ Future<void> _pumpRenewalCard(
     supportedLocales: S.delegate.supportedLocales,
     home: Scaffold(
       body: ParentSubscriptionCard(
-        child: const ParentChildSubscriptionsModel(
+        child: ParentChildSubscriptionsModel(
           studentId: 'student',
           studentName: 'Student',
+          registrationMode: registrationMode,
           subscriptions: [],
         ),
         subscription: ParentChildSubscriptionModel(

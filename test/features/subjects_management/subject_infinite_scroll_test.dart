@@ -26,7 +26,7 @@ void main() {
 
     expect(repo.calls, [(1, 10), (2, 10)]);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    expect(find.text('Subject 0'), findsOneWidget);
+    expect(cubit.subjects.first.name, 'Subject 0');
     expect(find.text('Previous'), findsNothing);
     expect(find.text('Next'), findsNothing);
 

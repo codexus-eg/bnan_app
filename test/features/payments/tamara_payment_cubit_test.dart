@@ -311,7 +311,7 @@ void main() {
     await cubit.close();
   });
 
-  test('completed payment keeps email for account verification', () async {
+  test('current payment keeps verification email in memory only', () async {
     final repo = _PaymentRepo();
     final auth = _AuthRepo();
     final cubit = _cubit(repo, store, auth: auth);
@@ -320,8 +320,10 @@ void main() {
     repo.statusResponse = _status(PaymentStatus.completed);
     await cubit.checkStatus();
     expect(auth.loginCalls, 0);
-    expect(store.read()?.studentEmail, 'student@example.com');
-    expect(store.read()?.lastKnownStatus, PaymentStatus.completed);
+    expect(cubit.draft?.studentEmail, 'student@example.com');
+    expect(cubit.draft?.lastKnownStatus, PaymentStatus.completed);
+    expect(cubit.canOpenAccountVerification, isTrue);
+    expect(store.read(), isNull);
     expect(
       cubit.state,
       isA<TamaraPaymentResult>().having(
@@ -369,17 +371,18 @@ void main() {
     await cubit.close();
   });
 
-  test('completed draft remains with email when student login fails', () async {
+  test('completed attempt keeps email only for the current run', () async {
     final repo = _PaymentRepo()
       ..statusResponse = _status(PaymentStatus.completed);
     final auth = _AuthRepo()..loginFailure = true;
     final cubit = _cubit(repo, store, auth: auth);
     await cubit.checkout(_request);
     await cubit.checkStatus();
-    final draft = store.read();
-    expect(draft?.lastKnownStatus, PaymentStatus.completed);
-    expect(draft?.studentEmail, 'student@example.com');
-    expect(draft?.packageId, isEmpty);
+    expect(cubit.draft?.lastKnownStatus, PaymentStatus.completed);
+    expect(cubit.draft?.studentEmail, 'student@example.com');
+    expect(cubit.draft?.packageId, isEmpty);
+    expect(cubit.canOpenAccountVerification, isTrue);
+    expect(store.read(), isNull);
     await cubit.checkout(_request);
     expect(repo.keys, ['key-1']);
     await cubit.close();
@@ -449,9 +452,67 @@ void main() {
     final cubit = _cubit(_PaymentRepo(), store);
     await cubit.restore();
     expect(cubit.draft?.idempotencyKey, 'saved-key');
+    expect(cubit.canOpenAccountVerification, isFalse);
     expect(cubit.state, isA<TamaraPaymentVerificationPending>());
     await cubit.close();
   });
+
+  test('restore clears completed account verification state', () async {
+    await store.save(
+      PaymentDraft(
+        paymentId: 'payment-1',
+        idempotencyKey: '',
+        packageId: '',
+        curriculumId: '',
+        gradeId: '',
+        subjectIds: const [],
+        studentEmail: 'student@example.com',
+        paymentStartedAt: DateTime(2026),
+        lastKnownStatus: PaymentStatus.completed,
+      ),
+    );
+    final cubit = _cubit(_PaymentRepo(), store);
+
+    await cubit.restore();
+
+    expect(cubit.draft, isNull);
+    expect(store.read(), isNull);
+    expect(cubit.canOpenAccountVerification, isFalse);
+    expect(cubit.state, isA<TamaraPaymentInitial>());
+    await cubit.close();
+  });
+
+  test(
+    'restored pending completion cannot reopen account verification',
+    () async {
+      await store.save(
+        PaymentDraft(
+          paymentId: 'payment-1',
+          checkoutUrl: _checkoutUrl,
+          checkoutOpenedAt: DateTime(2026),
+          idempotencyKey: 'saved-key',
+          packageId: 'package-1',
+          curriculumId: 'curriculum-1',
+          gradeId: 'grade-1',
+          subjectIds: const ['subject-1'],
+          studentEmail: 'student@example.com',
+          paymentStartedAt: DateTime(2026),
+          lastKnownStatus: PaymentStatus.pending,
+        ),
+      );
+      final repo = _PaymentRepo()
+        ..statusResponse = _status(PaymentStatus.completed);
+      final cubit = _cubit(repo, store);
+
+      await cubit.restore();
+      await cubit.onForeground();
+
+      expect(cubit.state, isA<TamaraPaymentResult>());
+      expect(cubit.canOpenAccountVerification, isFalse);
+      expect(store.read(), isNull);
+      await cubit.close();
+    },
+  );
 
   test('closing pending checkout stops polling and allows retry', () async {
     final repo = _PaymentRepo();

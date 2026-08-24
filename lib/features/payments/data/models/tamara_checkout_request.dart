@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/student_auth/data/models/register_student_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/registration_item.dart';
 
 class TamaraCheckoutRequest {
   const TamaraCheckoutRequest({
@@ -8,6 +9,7 @@ class TamaraCheckoutRequest {
     required this.curriculumId,
     required this.packageId,
     required this.address,
+    this.purchaseItems = const [],
     this.discountCode,
     this.locale = 'ar_SA',
   });
@@ -18,6 +20,7 @@ class TamaraCheckoutRequest {
   final String curriculumId;
   final String packageId;
   final PaymentAddress address;
+  final List<RegistrationItem> purchaseItems;
   final String? discountCode;
   final String locale;
 
@@ -25,7 +28,9 @@ class TamaraCheckoutRequest {
     'parent': {'email': parentEmail.trim(), 'password': parentPassword},
     'student': student.toJson(),
     'curriculum': curriculumId,
-    'packageId': packageId,
+    if (purchaseItems.isEmpty) 'packageId': packageId,
+    if (purchaseItems.isNotEmpty)
+      'items': purchaseItems.map((item) => item.toJson()).toList(),
     if (discountCode?.trim().isNotEmpty == true)
       'discountCode': discountCode!.trim(),
     'paymentAddress': address.toJson(),

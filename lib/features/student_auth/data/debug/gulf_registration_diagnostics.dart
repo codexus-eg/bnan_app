@@ -14,6 +14,11 @@ abstract final class GulfRegistrationDiagnostics {
     'endpoint=$endpoint; statusCode=${statusCode ?? 'not_exposed'}; succeeded',
   );
 
+  static void checkoutPayload(Map<String, dynamic> payload) => _log(
+    'checkout payload keys=${payload.keys.toList()}; '
+    'items=${payload['items']}',
+  );
+
   static void failed(String endpoint, Object error, {int? statusCode}) {
     lastEndpoint = endpoint;
     final exception = error is AppException ? error : null;

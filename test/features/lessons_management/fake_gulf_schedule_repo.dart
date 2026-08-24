@@ -38,6 +38,14 @@ class FakeGulfScheduleRepo implements GulfScheduleRepo {
   }
 
   @override
+  Future<Either<Failure, GulfSchedulesResponse>> getParentGulfSchedule({
+    required String studentId,
+  }) => getMyGulfSchedule(studentId: studentId);
+
+  @override
+  void invalidateScheduleCache() {}
+
+  @override
   Future<Either<Failure, Unit>> createClassroomSchedule(
     String classroomId,
     GulfScheduleRequest request,

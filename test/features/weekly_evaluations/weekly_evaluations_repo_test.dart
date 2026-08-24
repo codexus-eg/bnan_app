@@ -124,6 +124,7 @@ void main() {
         'participation',
         'homework',
         'behavior',
+        'bonus',
         'notes',
       ]),
     );

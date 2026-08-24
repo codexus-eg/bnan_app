@@ -94,10 +94,7 @@ void main() {
         subjects: const [],
         registrationMode: 'gulf',
       );
-      final expected =
-          subscription.canRenew &&
-          !subscription.hasPendingRenewal &&
-          subscription.remainingHours <= 0;
+      final expected = subscription.remainingHours <= 0;
       expect(
         isValidParentRenewalRoute(studentId: 'child', extra: args),
         expected,

@@ -10,7 +10,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'fake_gulf_schedule_repo.dart';
 
 void main() {
-  const sunday = GulfScheduleEntry(day: 'sunday', startTime: '18:00');
+  const sunday = GulfScheduleEntry(
+    day: 'sunday',
+    startTime: '18:00',
+    endTime: '19:00',
+  );
 
   test('load selects first classroom and handles empty/failure', () async {
     final repo = FakeGulfScheduleRepo(classrooms: [gulfClassroom()]);
@@ -43,7 +47,14 @@ void main() {
     );
     final cubit = GulfScheduleCubit(repo);
     await cubit.load();
-    expect(await cubit.saveEntry(day: 'sunday', startTime: '18:00'), isTrue);
+    expect(
+      await cubit.saveEntry(
+        day: 'sunday',
+        startTime: '18:00',
+        endTime: '19:00',
+      ),
+      isTrue,
+    );
     expect(repo.lastOperation, 'post');
     expect(repo.lastRequest?.classroomSubject, 'classroom-subject-1');
     await cubit.close();
@@ -57,13 +68,18 @@ void main() {
     );
     final cubit = GulfScheduleCubit(repo);
     await cubit.load();
-    await cubit.saveEntry(day: 'tuesday', startTime: '19:00');
+    await cubit.saveEntry(
+      day: 'tuesday',
+      startTime: '19:00',
+      endTime: '20:00',
+    );
     expect(repo.lastOperation, 'put');
     expect(repo.lastRequest?.schedule.length, 2);
     await cubit.saveEntry(
       originalDay: 'tuesday',
       day: 'wednesday',
       startTime: '20:00',
+      endTime: '21:00',
     );
     expect(
       repo.lastRequest?.schedule.map((item) => item.day),
@@ -80,7 +96,11 @@ void main() {
           gulfClassroom(
             entries: const [
               sunday,
-              GulfScheduleEntry(day: 'tuesday', startTime: '19:00'),
+              GulfScheduleEntry(
+                day: 'tuesday',
+                startTime: '19:00',
+                endTime: '20:00',
+              ),
             ],
           ),
         ],
@@ -104,13 +124,27 @@ void main() {
     );
     final cubit = GulfScheduleCubit(repo);
     await cubit.load();
-    expect(await cubit.saveEntry(day: 'sunday', startTime: '20:00'), isFalse);
+    expect(
+      await cubit.saveEntry(
+        day: 'sunday',
+        startTime: '20:00',
+        endTime: '21:00',
+      ),
+      isFalse,
+    );
     expect(cubit.state.actionIssue, GulfScheduleIssue.duplicateDay);
     repo.classrooms = [
       gulfClassroom(withSchedule: false, classroomSubject: null),
     ];
     await cubit.load();
-    expect(await cubit.saveEntry(day: 'monday', startTime: '10:00'), isFalse);
+    expect(
+      await cubit.saveEntry(
+        day: 'monday',
+        startTime: '10:00',
+        endTime: '11:00',
+      ),
+      isFalse,
+    );
     expect(cubit.state.actionIssue, GulfScheduleIssue.missingClassroomSubject);
     await cubit.close();
   });
@@ -119,8 +153,22 @@ void main() {
     final repo = FakeGulfScheduleRepo(classrooms: [gulfClassroom()]);
     final cubit = GulfScheduleCubit(repo);
     await cubit.load();
-    expect(await cubit.saveEntry(day: 'Sunday', startTime: '18:00'), isFalse);
-    expect(await cubit.saveEntry(day: 'sunday', startTime: '25:00'), isFalse);
+    expect(
+      await cubit.saveEntry(
+        day: 'Sunday',
+        startTime: '18:00',
+        endTime: '19:00',
+      ),
+      isFalse,
+    );
+    expect(
+      await cubit.saveEntry(
+        day: 'sunday',
+        startTime: '25:00',
+        endTime: '23:00',
+      ),
+      isFalse,
+    );
     expect(repo.lastOperation, isNull);
     expect(cubit.state.actionIssue, GulfScheduleIssue.invalidData);
     await cubit.close();

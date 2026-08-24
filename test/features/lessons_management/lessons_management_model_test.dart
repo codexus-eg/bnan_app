@@ -123,20 +123,26 @@ void main() {
     expect(result.data.classrooms.last.schedule?.updatedAt, isNotNull);
   });
 
-  test('request sends classroomSubject and day/startTime only', () {
+  test('request sends classroomSubject and the complete time range', () {
     const request = GulfScheduleRequest(
       classroomSubject: 'link-1',
-      schedule: [GulfScheduleEntry(day: 'tuesday', startTime: '09:30')],
+      schedule: [
+        GulfScheduleEntry(
+          day: 'tuesday',
+          startTime: '09:30',
+          endTime: '10:30',
+        ),
+      ],
     );
     expect(request.toJson(), {
       'classroomSubject': 'link-1',
       'schedule': [
-        {'day': 'tuesday', 'startTime': '09:30'},
+        {'day': 'tuesday', 'startTime': '09:30', 'endTime': '10:30'},
       ],
     });
   });
 
-  test('schedule entry ignores endTime from a response', () {
+  test('schedule entry preserves endTime from a response', () {
     final entry = GulfScheduleEntry.fromJson({
       'day': 'Monday',
       'startTime': '09:30',
@@ -144,7 +150,11 @@ void main() {
     });
 
     expect(entry.day, 'monday');
-    expect(entry.toJson(), {'day': 'monday', 'startTime': '09:30'});
+    expect(entry.toJson(), {
+      'day': 'monday',
+      'startTime': '09:30',
+      'endTime': '10:30',
+    });
   });
 }
 

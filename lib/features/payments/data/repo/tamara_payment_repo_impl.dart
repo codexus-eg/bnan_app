@@ -15,9 +15,11 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
   @override
   checkout({required request, required idempotencyKey}) async {
     final result = await repoGuard(() async {
+      final payload = request.toJson();
+      GulfRegistrationDiagnostics.checkoutPayload(payload);
       final response = await _post(
         EndPoints.tamaraCheckout,
-        data: request.toJson(),
+        data: payload,
         headers: {'Idempotency-Key': idempotencyKey, 'lang': 'ar'},
       );
       return TamaraCheckoutResponse.fromJson(asMap(response));

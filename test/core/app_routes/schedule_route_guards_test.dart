@@ -220,9 +220,10 @@ const _teacherRequestCases = [
     modes: [RegistrationMode.gulf],
   ),
   _GuardCase(
-    'teacher requests rejects Egyptian teacher',
+    'teacher requests allows Egyptian teacher',
     Routes.teacherRegistrationRequest,
     'teacher',
+    allowed: true,
     modes: [RegistrationMode.egyptian],
   ),
   _GuardCase(

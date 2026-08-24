@@ -23,6 +23,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key.currentState!.validate(), isFalse);
+    await tester.pump();
     expect(find.text('Supervisor is required'), findsOneWidget);
     await tester.tap(find.byType(DropdownButton<String>));
     await tester.pumpAndSettle();

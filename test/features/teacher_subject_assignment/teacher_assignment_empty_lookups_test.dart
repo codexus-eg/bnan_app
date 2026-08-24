@@ -160,6 +160,12 @@ class _AcademicRepo implements AcademicLookupsRepo {
   final _EmptyAt emptyAt;
 
   @override
+  Future<Either<Failure, Unit>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+  }) async => const Right(unit);
+
+  @override
   Future<Either<Failure, List<AcademicCurriculumModel>>>
   getCurriculums() async => const Right([
     AcademicCurriculumModel(id: 'curriculum-1', name: 'Curriculum one'),

@@ -62,7 +62,18 @@ void main() {
       } else {
         expect(request?.student.subjects, subjects);
         expect(request?.packageId, 'gulf-package');
-        expect(request?.toJson().containsKey('items'), isFalse);
+        final json = request!.toJson();
+        final items = (json['items'] as List).cast<Map<String, dynamic>>();
+        expect(json.containsKey('packageId'), isFalse);
+        expect(json.containsKey('purchaseItems'), isFalse);
+        expect(items, [
+          for (final subjectId in subjects)
+            {'subjectId': subjectId, 'packageId': 'gulf-package'},
+        ]);
+        expect(
+          items.map((item) => item['subjectId']),
+          (json['student'] as Map<String, dynamic>)['subjects'],
+        );
       }
     });
   }

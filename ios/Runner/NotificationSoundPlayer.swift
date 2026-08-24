@@ -6,6 +6,7 @@ final class NotificationSoundPlayer {
   private let channel: FlutterMethodChannel
   private var nudgePlayer: AVAudioPlayer?
   private var chatRingPlayer: AVAudioPlayer?
+  private var chatRingStop: DispatchWorkItem?
 
   init(controller: FlutterViewController) {
     channel = FlutterMethodChannel(
@@ -69,15 +70,21 @@ final class NotificationSoundPlayer {
     }
     do {
       let player = try AVAudioPlayer(contentsOf: url)
+      player.numberOfLoops = -1
       chatRingPlayer = player
       player.prepareToPlay()
       player.play()
+      let stop = DispatchWorkItem { [weak self] in self?.stopChatRing() }
+      chatRingStop = stop
+      DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: stop)
     } catch {
       stopChatRing()
     }
   }
 
   private func stopChatRing() {
+    chatRingStop?.cancel()
+    chatRingStop = nil
     chatRingPlayer?.stop()
     chatRingPlayer = nil
   }

@@ -96,9 +96,15 @@ bool get canAccessTeacherSubjectRequests =>
   }) async {
     debugPrint('SessionManager.saveSession started');
     final previousUserId = this.userId;
+    final nextUserId = _present(userId);
+    if (previousUserId != null &&
+        previousUserId != nextUserId &&
+        _accessToken?.isNotEmpty == true) {
+      await _notifyBeforeSessionClear();
+    }
 
     _currentUser = CurrentUser(
-      id: _present(userId),
+      id: nextUserId,
       role: _present(userRole),
       fullName: _present(userName),
       email: _present(userEmail),

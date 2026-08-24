@@ -36,8 +36,13 @@ void main() {
     'keeps filters for every page and preserves users without ids',
     () async {
       final repo = _FakeUsersRepo({
-        1: _response(1, [_user(''), _user(''), _user('1'), _user('1')]),
-        2: _response(2, [_user('2')]),
+        1: _response(1, [
+          _user('', name: 'Salma', role: 'teacher'),
+          _user('', name: 'Salma', role: 'teacher'),
+          _user('1', name: 'Salma', role: 'teacher'),
+          _user('1', name: 'Salma', role: 'teacher'),
+        ]),
+        2: _response(2, [_user('2', name: 'Salma', role: 'teacher')]),
       });
       final cubit = UsersManagementCubit(repo);
 
@@ -109,4 +114,5 @@ UsersResponseModel _response(int page, List<UserItem> users) {
 
 UserItem _parsed(Map<String, dynamic> json) => UserItem.fromJson(json);
 
-UserItem _user(String id) => UserItem.fromJson({'_id': id});
+UserItem _user(String id, {String name = '', String role = ''}) =>
+    UserItem.fromJson({'_id': id, 'fullName': name, 'roles': role});

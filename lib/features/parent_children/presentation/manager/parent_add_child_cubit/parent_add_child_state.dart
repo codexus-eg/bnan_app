@@ -63,6 +63,7 @@ class ParentAddChildState {
   bool get hasSupportedRegistrationMode =>
       _value(curriculum?.registrationMode) == 'egyptian' || isGulf;
   bool get isSingleSubject => _value(package?.accessScope) == 'single_subject';
+  bool get isAllSubjects => _value(package?.accessScope) == 'all_subjects';
   bool get isEgyptianPrivate =>
       _value(curriculum?.registrationMode) == 'egyptian' &&
       isSingleSubject &&

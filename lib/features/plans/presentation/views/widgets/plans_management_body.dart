@@ -147,12 +147,17 @@ class _PlansManagementBodyState extends State<PlansManagementBody> {
   Future<void> _showAddDialog() async {
     final classroom = selectedClassroom;
     final week = selectedWeek;
-    if (classroom == null || week == null) return;
+    final elapsedState = context.read<GetElapsedWeeksCubit>().state;
+    final startDate = elapsedState is GetElapsedWeeksSuccess
+        ? DateTime.tryParse(elapsedState.response.data.startDate)
+        : null;
+    if (classroom == null || week == null || startDate == null) return;
     final created = await PlansDialogs.showAdd(
       context,
       widget.policy,
       classroom: classroom,
       selectedWeek: week,
+      startDate: startDate,
     );
     if (!mounted || created != true) return;
     showCustomSnackBar(

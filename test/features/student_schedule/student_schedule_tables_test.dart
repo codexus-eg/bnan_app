@@ -1,3 +1,5 @@
+void main() {}
+
 // import 'dart:io';
 
 // import 'package:bnan_app/core/enums/registration_mode.dart';

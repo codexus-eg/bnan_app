@@ -1,8 +1,12 @@
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_curriculum_model.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_grade_model.dart';
+import 'package:bnan_app/features/academic_lookups/data/models/academic_subject_model.dart';
+import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_add_child_egyptian_request.dart';
@@ -11,6 +15,7 @@ import 'package:bnan_app/features/parent_children/data/models/parent_add_child_s
 import 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo.dart';
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_cubit.dart';
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_state.dart';
+import 'package:bnan_app/features/parent_children/presentation/widgets/parent_grade_step.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
@@ -20,7 +25,9 @@ import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -84,6 +91,48 @@ void main() {
     await cubit.close();
   });
 
+  testWidgets('all-subject package selects every loaded grade subject', (
+    tester,
+  ) async {
+    final parent = _cubit(_Repo())..selectPackage(_allPackage);
+    final lookups = AcademicLookupsCubit(
+      repo: _LookupRepo(),
+      loadClassroomsOnGrade: false,
+      loadSubjectsWithoutClassroom: true,
+    );
+    await lookups.selectCurriculum(_egypt);
+    await tester.pumpWidget(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: parent),
+          BlocProvider.value(value: lookups),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          home: const Scaffold(body: ParentGradeStep()),
+        ),
+      ),
+    );
+
+    tester.widget<CustomDropdown>(find.byType(CustomDropdown)).onChanged!(
+      _grade.id,
+    );
+    await tester.pumpAndSettle();
+    expect(parent.state.selectedSubjectIds, [
+      'subject-1',
+      'subject-2',
+      'subject-3',
+    ]);
+    await parent.close();
+    await lookups.close();
+  });
+
   test('simple child password is accepted by registration rules', () async {
     final cubit = _cubit(_Repo())..selectPackage(_allPackage);
     expect(cubit.nextStep(), isTrue);
@@ -99,7 +148,7 @@ void main() {
     await cubit.close();
   });
 
-  test('Egyptian flow ends at review and submits without receipt', () async {
+  test('Egyptian all-subject request submits every grade subject', () async {
     final repo = _Repo();
     final cubit = _cubit(repo)
       ..updateAccount(
@@ -118,10 +167,15 @@ void main() {
       password: 'Password1',
     );
     expect(cubit.nextStep(), isTrue);
-    cubit.toggleSubject('subject-1');
+    cubit.setGradeSubjectIds(['subject-1', 'subject-2', 'subject-3']);
     expect(cubit.nextStep(), isTrue);
     await cubit.submit();
     expect(repo.egyptianCalls, 1);
+    expect(repo.lastEgyptianRequest?.student.subjectIds, [
+      'subject-1',
+      'subject-2',
+      'subject-3',
+    ]);
     expect(cubit.state.receipt, isNull);
     expect(cubit.state.phase, ParentAddChildPhase.pendingReview);
     await cubit.close();
@@ -201,6 +255,39 @@ void main() {
       await cubit.close();
     });
   }
+
+  test('Gulf private checkout maps selected subjects to final items', () async {
+    final repo = _Repo()..statuses.add(_status(PaymentStatus.completed));
+    final cubit = _cubit(repo, curriculum: _gulf)
+      ..selectPackage(_singlePackage);
+    expect(cubit.nextStep(), isTrue);
+    cubit.selectGrade(_grade);
+    expect(cubit.nextStep(), isTrue);
+    cubit.updateAccount(
+      fullName: 'Student Name',
+      email: 'student@example.com',
+      password: 'Password1',
+    );
+    expect(cubit.nextStep(), isTrue);
+    cubit.toggleSubject('subject-1');
+    cubit.toggleSubject('subject-2');
+    expect(cubit.nextStep(), isTrue);
+    expect(cubit.nextStep(), isTrue);
+
+    await cubit.submit();
+
+    final json = repo.lastGulfRequest!.toJson();
+    expect(json.containsKey('packageId'), isFalse);
+    expect(json['items'], [
+      {'subjectId': 'subject-1', 'packageId': 'single'},
+      {'subjectId': 'subject-2', 'packageId': 'single'},
+    ]);
+    expect((json['student'] as Map<String, dynamic>)['subjects'], [
+      'subject-1',
+      'subject-2',
+    ]);
+    await cubit.close();
+  });
 
   test('completed Gulf payment preserves parent session', () async {
     try {
@@ -512,6 +599,25 @@ class _Repo implements ParentAddChildRepo {
 
   @override
   status(String paymentId) async => Right(_status(PaymentStatus.pending));
+}
+
+class _LookupRepo implements AcademicLookupsRepo {
+  @override
+  getGrades({String? curriculumId}) async => const Right([_grade]);
+
+  @override
+  getSubjects({
+    required String curriculumId,
+    required String gradeId,
+    String? classroomId,
+  }) async => const Right([
+    AcademicSubjectModel(id: 'subject-1', name: 'Subject 1'),
+    AcademicSubjectModel(id: 'subject-2', name: 'Subject 2'),
+    AcademicSubjectModel(id: 'subject-3', name: 'Subject 3'),
+  ]);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class _MemoryStore extends PaymentDraftStore {

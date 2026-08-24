@@ -214,7 +214,7 @@ void main() {
     expect(find.byType(CustomTableCell), findsWidgets);
     expect(find.text('Week 2'), findsOneWidget);
     expect(find.text('Thursday'), findsOneWidget);
-    expect(find.text('Lesson'), findsOneWidget);
+    expect(find.textContaining('Lesson'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -334,7 +334,7 @@ void main() {
     expect(find.text('Daily plan added successfully'), findsOneWidget);
     expect(repo.weekRequests.length, requestsBefore + 1);
     expect(repo.weekRequests.last, ('classroom', 3));
-    expect(find.text('Newly created lesson'), findsOneWidget);
+    expect(find.textContaining('Newly created lesson'), findsOneWidget);
     expect(find.text('Week 3'), findsOneWidget);
   });
 
@@ -419,7 +419,7 @@ void main() {
       find.byType(DatePickerDialog),
     );
     expect(picker.lastDate, now);
-    expect(picker.firstDate, DateTime(now.year - 1, now.month, now.day));
+    expect(picker.firstDate, DateTime(2025, 9));
     if (yesterday.month != now.month || yesterday.year != now.year) {
       await tester.tap(find.byIcon(Icons.chevron_left).last);
       await tester.pumpAndSettle();
@@ -799,7 +799,9 @@ class _AssignmentsRepo implements AssignmentsRepo {
     required String classroomId,
   }) async => const Right(
     ClassroomSubjectsResponseModel(
-      subjects: [SubjectDetailsModel(id: 'math', name: 'Math')],
+      subjects: [
+        SubjectDetailsModel(id: 'math', subjectId: 'math', name: 'Math'),
+      ],
     ),
   );
 
@@ -920,7 +922,11 @@ class _PlansRepo implements PlansRepo {
     return Right(
       elapsedResponses[classroomId] ??
           const ElapsedWeeksResponseModel(
-            data: ElapsedWeeksDataModel(weeksCount: 3, currentWeek: 2),
+            data: ElapsedWeeksDataModel(
+              startDate: '2025-09-01',
+              weeksCount: 3,
+              currentWeek: 2,
+            ),
           ),
     );
   }

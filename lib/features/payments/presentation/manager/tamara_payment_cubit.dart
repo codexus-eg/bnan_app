@@ -44,6 +44,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   bool _checkoutLaunchClaimed = false;
   bool _reconciledThisForeground = false;
   bool _reconcileInFlight = false;
+  bool _accountVerificationAttemptActive = false;
   final Set<String> _handledReturns = {};
   PaymentAmountSummary? _paymentSummary;
   int _pollAttempts = 0;
@@ -51,14 +52,21 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
   PaymentDraft? get draft => _draft;
   PaymentAmountSummary? get paymentSummary => _paymentSummary;
+  bool get canOpenAccountVerification => _accountVerificationAttemptActive;
   bool get isAwaitingVerification =>
       _draft?.paymentId.isNotEmpty == true &&
       _draft?.checkoutOpenedAt != null &&
       _draft?.lastKnownStatus == PaymentStatus.pending;
 
   Future<void> restore() async {
+    _accountVerificationAttemptActive = false;
     _draft = await _readOwnedDraft();
     final draft = _draft;
+    if (draft?.lastKnownStatus == PaymentStatus.completed) {
+      _draft = null;
+      await store.clear();
+      return;
+    }
     if (draft?.lastKnownStatus == PaymentStatus.pending &&
         draft?.paymentId.isNotEmpty == true) {
       emit(const TamaraPaymentVerificationPending());
@@ -74,6 +82,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       existing = null;
     }
     if (existing?.lastKnownStatus == PaymentStatus.completed) {
+      _accountVerificationAttemptActive = true;
       emit(const TamaraPaymentResult(status: PaymentStatus.completed));
       return;
     }
@@ -85,6 +94,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       await _resetAttempt();
       existing = null;
     }
+    _accountVerificationAttemptActive = true;
     if (existing != null &&
         existing.lastKnownStatus == PaymentStatus.pending &&
         existing.paymentId.isNotEmpty) {
@@ -414,7 +424,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       payloadFingerprint: '',
       ownerUserId: current.ownerUserId,
     );
-    await store.save(_draft!);
+    await store.clear();
   }
 
   PaymentDraft _newDraft(
@@ -470,6 +480,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _checkoutLaunchClaimed = false;
     _reconciledThisForeground = false;
     _reconcileInFlight = false;
+    _accountVerificationAttemptActive = false;
     _handledReturns.clear();
     await store.clear();
     if (!isClosed) emit(const TamaraPaymentInitial());

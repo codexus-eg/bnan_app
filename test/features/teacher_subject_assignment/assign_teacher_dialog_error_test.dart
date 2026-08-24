@@ -36,6 +36,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField), '300');
     await tester.pump();
 
+    await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(find.text(_backendMessage), findsOneWidget);
@@ -47,6 +48,7 @@ void main() {
     expect(errorText.softWrap, isTrue);
     expect(errorText.maxLines, isNull);
 
+    await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pump();
     expect(find.text(_backendMessage), findsNothing);
@@ -74,7 +76,7 @@ class _TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: const Locale('ar'),
+      locale: const Locale('en'),
       localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -117,6 +119,12 @@ class _TeacherRepo implements TeacherSubjectAssignmentRepo {
 }
 
 class _LookupsRepo implements AcademicLookupsRepo {
+  @override
+  Future<Either<Failure, Unit>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+  }) async => const Right(unit);
+
   @override
   Future<Either<Failure, List<AcademicCurriculumModel>>>
   getCurriculums() async => const Right([_curriculum]);

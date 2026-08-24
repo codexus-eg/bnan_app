@@ -17,9 +17,10 @@ void main() {
     final repo = _Repo();
     final cubit = TeacherSubjectAssignmentActionsCubit(repo);
     addTearDown(cubit.close);
-    final states = <TeacherSubjectAssignmentActionsState>[];
-    final subscription = cubit.stream.listen(states.add);
-    addTearDown(subscription.cancel);
+    final states = expectLater(
+      cubit.stream,
+      emitsInOrder([isA<AssignTeacherLoading>(), isA<AssignTeacherSuccess>()]),
+    );
 
     await cubit.assignTeacher(
       teacherId: 'teacher-1',
@@ -29,8 +30,8 @@ void main() {
       subjectId: 'subject-1',
       pricePerSession: 300,
     );
+    await states;
 
-    expect(states, [isA<AssignTeacherLoading>(), isA<AssignTeacherSuccess>()]);
     expect(repo.calls, 1);
     expect(repo.request?.toJson(), {
       'curriculum': 'curriculum-1',
@@ -61,19 +62,20 @@ void main() {
     final repo = _Repo();
     final cubit = TeacherSubjectAssignmentActionsCubit(repo);
     addTearDown(cubit.close);
-    final states = <TeacherSubjectAssignmentActionsState>[];
-    final subscription = cubit.stream.listen(states.add);
-    addTearDown(subscription.cancel);
+    final states = expectLater(
+      cubit.stream,
+      emitsInOrder([
+        isA<UnassignTeacherLoading>(),
+        isA<UnassignTeacherSuccess>(),
+      ]),
+    );
 
     await cubit.unassignTeacherFromClassroom(
       teacherId: 'teacher-1',
       classroomId: 'classroom-1',
     );
+    await states;
 
-    expect(states, [
-      isA<UnassignTeacherLoading>(),
-      isA<UnassignTeacherSuccess>(),
-    ]);
     expect(repo.unassignCalls, 1);
     expect(repo.unassignTeacherId, 'teacher-1');
     expect(repo.unassignClassroomId, 'classroom-1');

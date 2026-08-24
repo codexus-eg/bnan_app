@@ -228,6 +228,16 @@ class RegisterCubit extends Cubit<RegisterState> {
       ),
       curriculumId: curriculumId,
       packageId: packageId,
+      purchaseItems: isGulf
+          ? selectedSubjects
+                .map(
+                  (subjectId) => RegistrationItem(
+                    subjectId: subjectId,
+                    packageId: packageId,
+                  ),
+                )
+                .toList(growable: false)
+          : const [],
       discountCode: discountCodeController.text.trim().isEmpty
           ? null
           : discountCodeController.text.trim(),

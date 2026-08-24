@@ -10,6 +10,8 @@ class LocalPushNotifications {
   LocalPushNotifications(this._plugin);
   final FlutterLocalNotificationsPlugin _plugin;
   static const _chatRingNotificationId = 1128352844;
+  static const _chatRingDurationMs = 15000;
+  static const _androidFlagInsistent = 4;
   static const _soundChannel = MethodChannel('bnan/notification_sound');
   static const _channel = AndroidNotificationChannel(
     'bnan_notifications',
@@ -185,6 +187,10 @@ class LocalPushNotifications {
           audioAttributesUsage: isChatRing || useNudgeChannel
               ? AudioAttributesUsage.notificationRingtone
               : AudioAttributesUsage.notification,
+          timeoutAfter: isChatRing ? _chatRingDurationMs : null,
+          additionalFlags: isChatRing
+              ? Int32List.fromList(const [_androidFlagInsistent])
+              : null,
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,

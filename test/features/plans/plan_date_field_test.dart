@@ -17,6 +17,7 @@ void main() {
           child: PlanDateField(
             controller: controller,
             selectedDate: date,
+            startDate: today.subtract(const Duration(days: 30)),
             onDateChanged: (_) {},
           ),
         ),

@@ -4,11 +4,17 @@ import 'package:bnan_app/features/chats/data/models/classroom_summary_model.dart
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_header.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/documents/summary_details_sheet.dart';
+import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
+import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+
+import '../lessons_management/fake_gulf_schedule_repo.dart';
+import '../lessons_management/fake_start_session_repo.dart';
 
 void main() {
   testWidgets('documents action appears for supported roles in classroom', (
@@ -86,16 +92,19 @@ void main() {
       ],
     );
     await tester.pumpWidget(
-      MaterialApp.router(
-        routerConfig: router,
-        locale: const Locale('en'),
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
+      BlocProvider(
+        create: (_) => _sessionCubit(),
+        child: MaterialApp.router(
+          routerConfig: router,
+          locale: const Locale('en'),
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+        ),
       ),
     );
     await tester.tap(find.byKey(const Key('classroomDocumentsButton')));
@@ -128,14 +137,28 @@ void main() {
   );
 }
 
-Widget _app(Widget child) => MaterialApp(
-  locale: const Locale('en'),
-  localizationsDelegates: const [
-    S.delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-  ],
-  supportedLocales: S.delegate.supportedLocales,
-  home: child,
+Widget _app(Widget child) => BlocProvider(
+  create: (_) => _sessionCubit(),
+  child: MaterialApp(
+    locale: const Locale('en'),
+    localizationsDelegates: const [
+      S.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: S.delegate.supportedLocales,
+    home: child,
+  ),
 );
+
+StartSessionCubit _sessionCubit() => StartSessionCubit(
+  FakeStartSessionRepo(),
+  FakeGulfScheduleRepo(classrooms: const []),
+  _TableRepo(),
+);
+
+class _TableRepo implements TableManagementRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}

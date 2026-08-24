@@ -17,6 +17,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test(
     'coordinator forwards one notification payload to unread owner',
     () async {
@@ -188,14 +190,14 @@ void main() {
     );
 
     await coordinator.start();
-    expect(coordinator.listenerCount, 4);
-    expect(socket.joinedRooms, ['user_me']);
+    expect(coordinator.listenerCount, 2);
+    expect(socket.joinedRooms, isEmpty);
     socket.reconnect();
-    expect(socket.joinedRooms, ['user_me', 'user_me']);
+    expect(socket.joinedRooms, isEmpty);
     coordinator.stop(disconnect: true);
 
     expect(coordinator.listenerCount, 0);
-    expect(socket.disposedListeners, 4);
+    expect(socket.disposedListeners, 2);
     expect(socket.disconnects, 1);
     await coordinator.dispose();
   });

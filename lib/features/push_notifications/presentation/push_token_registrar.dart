@@ -36,10 +36,16 @@ class PushTokenRegistrar {
     final owner = SessionManager.instance.userId?.trim() ?? '';
     if (SessionManager.instance.accessToken?.isEmpty != false) return;
     final package = await PackageInfo.fromPlatform();
-    if (CacheHelper.getData(key: _registeredTokenKey) == token &&
-        CacheHelper.getData(key: _registeredOwnerKey) == owner &&
+    final registeredToken = _cached(_registeredTokenKey);
+    final registeredOwner = _cached(_registeredOwnerKey);
+    if (registeredToken == token &&
+        registeredOwner == owner &&
         CacheHelper.getData(key: _registeredVersionKey) == package.version) {
       return;
+    }
+    if (registeredToken.isNotEmpty &&
+        (registeredToken != token || registeredOwner != owner)) {
+      await _repo.delete(token: registeredToken);
     }
     final deviceId = await _installationIds.getOrCreate();
     await _repo.register(
@@ -59,19 +65,30 @@ class PushTokenRegistrar {
   }
 
   Future<void> deleteCurrent() async {
+    var failed = false;
+    final tokens = <String>{_cached(_registeredTokenKey)};
     try {
-      final token = await _messaging.getToken();
-      if (token?.isNotEmpty == true) {
-        await _repo.delete(token: token!);
-      }
+      tokens.add((await _messaging.getToken())?.trim() ?? '');
     } catch (error) {
-      _debug('Push token deletion failed', error);
-    } finally {
-      await CacheHelper.removeData(key: _registeredTokenKey);
-      await CacheHelper.removeData(key: _registeredOwnerKey);
-      await CacheHelper.removeData(key: _registeredVersionKey);
+      failed = true;
+      _debug('Push token lookup failed', error);
     }
+    for (final token in tokens.where((value) => value.isNotEmpty)) {
+      try {
+        await _repo.delete(token: token);
+      } catch (error) {
+        failed = true;
+        _debug('Push token deletion failed', error);
+      }
+    }
+    if (failed) return;
+    await CacheHelper.removeData(key: _registeredTokenKey);
+    await CacheHelper.removeData(key: _registeredOwnerKey);
+    await CacheHelper.removeData(key: _registeredVersionKey);
   }
+
+  String _cached(String key) =>
+      CacheHelper.getData(key: key)?.toString().trim() ?? '';
 
   Future<void> _requestPermissionOnce() async {
     if (CacheHelper.getData(key: _permissionKey) == true) return;

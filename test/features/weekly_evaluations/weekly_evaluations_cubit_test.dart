@@ -16,10 +16,14 @@ import 'package:bnan_app/features/weekly_evaluations/data/models/weekly_evaluati
 import 'package:bnan_app/features/weekly_evaluations/data/repo/weekly_evaluations_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_cubit.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/weekly_evaluations_state.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  setUpAll(() => S.load(const Locale('en')));
+
   test('classroom loads weeks and current week evaluations', () async {
     final repo = _FakeRepo();
     final cubit = _cubit(repo);

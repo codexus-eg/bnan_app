@@ -17,6 +17,7 @@ abstract class PlansDialogs {
     PlansAccessPolicy policy, {
     required PlanClassroomOption classroom,
     required int selectedWeek,
+    required DateTime startDate,
   }) {
     if (!policy.canAddDailyPlan) return Future.value(false);
     return AppDialogs.show<bool>(
@@ -34,6 +35,7 @@ abstract class PlansDialogs {
           policy: policy,
           classroom: classroom,
           selectedWeek: selectedWeek,
+          startDate: startDate,
         ),
       ),
     );

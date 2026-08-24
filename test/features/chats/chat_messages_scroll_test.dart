@@ -22,7 +22,7 @@ void main() {
     final key = GlobalKey<_ChatHarnessState>();
     await _pumpHarness(tester, key: key, messages: _messages(30));
 
-    await tester.drag(find.byType(ListView), const Offset(0, 50));
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, 50));
     key.currentState!.append(_message(30, senderId: 'other'));
     await tester.pumpAndSettle();
 
@@ -34,7 +34,7 @@ void main() {
   ) async {
     final key = GlobalKey<_ChatHarnessState>();
     await _pumpHarness(tester, key: key, messages: _messages(30));
-    await tester.drag(find.byType(ListView), const Offset(0, 350));
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, 350));
     await tester.pumpAndSettle();
     final before = _position(tester).pixels;
 
@@ -76,7 +76,7 @@ void main() {
   ) async {
     final key = GlobalKey<_ChatHarnessState>();
     await _pumpHarness(tester, key: key, messages: _messages(30));
-    await tester.drag(find.byType(ListView), const Offset(0, 350));
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, 350));
     await tester.pumpAndSettle();
     final before = _position(tester).pixels;
 

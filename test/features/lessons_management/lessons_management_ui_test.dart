@@ -56,7 +56,13 @@ void main() {
     final scheduled = FakeGulfScheduleRepo(
       classrooms: [
         gulfClassroom(
-          entries: const [GulfScheduleEntry(day: 'sunday', startTime: '18:00')],
+          entries: const [
+            GulfScheduleEntry(
+              day: 'sunday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
+          ],
         ),
       ],
     );
@@ -70,15 +76,19 @@ void main() {
       classrooms: [
         gulfClassroom(
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
       ],
     );
     await _pump(tester, repo);
     await tester.pumpAndSettle();
-    expect(find.text('18:00'), findsOneWidget);
-    await tester.tap(find.text('18:00'));
+    expect(find.text('06:00 PM - 07:00 PM'), findsOneWidget);
+    await tester.tap(find.text('06:00 PM - 07:00 PM'));
     await tester.pumpAndSettle();
     expect(find.text('Edit schedule entry'), findsOneWidget);
   });
@@ -90,14 +100,18 @@ void main() {
       classrooms: [
         gulfClassroom(
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
       ],
     );
     await _pump(tester, repo);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('18:00'));
+    await tester.tap(find.text('06:00 PM - 07:00 PM'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Save Changes'));
     await tester.pumpAndSettle();
@@ -112,17 +126,22 @@ void main() {
       classrooms: [
         gulfClassroom(
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
       ],
     );
     await _pump(tester, repo);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('18:00'));
+    await tester.tap(find.text('06:00 PM - 07:00 PM'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('deleteLessonIcon')), findsOneWidget);
     expect(find.text('Delete'), findsNothing);
+    await tester.ensureVisible(find.byKey(const Key('deleteLessonIcon')));
     await tester.tap(find.byKey(const Key('deleteLessonIcon')));
     await tester.pumpAndSettle();
     expect(repo.lastOperation, 'delete');
@@ -141,10 +160,8 @@ void main() {
     await tester.tap(find.text('Add Lesson'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('deleteLessonIcon')), findsNothing);
-    await tester.tap(find.text('Start time').last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('OK'));
-    await tester.pumpAndSettle();
+    await _pickTime(tester, 'Start time', '06', '00');
+    await _pickTime(tester, 'End time', '07', '00');
     await tester.tap(find.text('Add schedule entry'));
     await tester.pumpAndSettle();
     expect(repo.lastOperation, 'post');
@@ -161,10 +178,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Add Lesson'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Start time').last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('OK'));
-    await tester.pumpAndSettle();
+    await _pickTime(tester, 'Start time', '06', '00');
+    await _pickTime(tester, 'End time', '07', '00');
     await tester.tap(find.text('Add schedule entry'));
     await tester.pumpAndSettle();
     expect(find.text('Add schedule entry'), findsOneWidget);
@@ -178,7 +193,11 @@ void main() {
       classrooms: [
         gulfClassroom(
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
       ],
@@ -213,7 +232,11 @@ void main() {
       classrooms: [
         gulfClassroom(
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
       ],
@@ -239,7 +262,11 @@ void main() {
       classrooms: [
         gulfClassroom(
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
       ],
@@ -265,13 +292,21 @@ void main() {
         gulfClassroom(
           id: 'class-1',
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '18:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '18:00',
+              endTime: '19:00',
+            ),
           ],
         ),
         gulfClassroom(
           id: 'class-2',
           entries: const [
-            GulfScheduleEntry(day: 'saturday', startTime: '19:00'),
+            GulfScheduleEntry(
+              day: 'saturday',
+              startTime: '19:00',
+              endTime: '20:00',
+            ),
           ],
         ),
       ],
@@ -283,10 +318,30 @@ void main() {
       'class-2',
     );
     await tester.pumpAndSettle();
-    expect(find.text('19:00'), findsOneWidget);
-    expect(find.text('18:00'), findsNothing);
+    expect(find.text('07:00 PM - 08:00 PM'), findsOneWidget);
+    expect(find.text('06:00 PM - 07:00 PM'), findsNothing);
     expect(repo.loadCalls, calls);
   });
+}
+
+Future<void> _pickTime(
+  WidgetTester tester,
+  String label,
+  String hour,
+  String minute,
+) async {
+  await tester.tap(find.text(label).last);
+  await tester.pumpAndSettle();
+  await tester.tap(find.byTooltip('Switch to text input mode'));
+  await tester.pumpAndSettle();
+  final fields = find.descendant(
+    of: find.byType(TimePickerDialog),
+    matching: find.byType(TextField),
+  );
+  await tester.enterText(fields.first, hour);
+  await tester.enterText(fields.last, minute);
+  await tester.tap(find.text('OK'));
+  await tester.pumpAndSettle();
 }
 
 Future<void> _pump(

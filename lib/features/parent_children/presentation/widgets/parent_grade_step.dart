@@ -25,12 +25,19 @@ class ParentGradeStep extends StatelessWidget {
                 : state.grades.map((item) => item.id).toList(),
             itemsLabels: {for (final item in state.grades) item.id: item.name},
             isRequired: true,
-            onChanged: (id) {
+            onChanged: (id) async {
               final selected = state.grades
                   .where((item) => item.id == id)
                   .firstOrNull;
-              context.read<ParentAddChildCubit>().selectGrade(selected);
-              context.read<AcademicLookupsCubit>().selectGrade(selected);
+              final parent = context.read<ParentAddChildCubit>();
+              final lookups = context.read<AcademicLookupsCubit>();
+              parent.selectGrade(selected);
+              await lookups.selectGrade(selected);
+              if (!parent.isClosed) {
+                parent.setGradeSubjectIds(
+                  lookups.state.subjects.map((subject) => subject.id),
+                );
+              }
             },
           ),
         ],

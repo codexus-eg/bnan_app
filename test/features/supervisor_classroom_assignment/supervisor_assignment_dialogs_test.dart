@@ -93,7 +93,7 @@ void main() {
     );
 
     expect(
-      find.text('No grades available for this curriculum.'),
+      find.text('No grades are available for this curriculum'),
       findsOneWidget,
     );
     expect(_saveButton(tester).onPressed, isNull);
@@ -114,7 +114,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.text('No classrooms available for this grade.'),
+      find.text('No classrooms are available for this grade'),
       findsOneWidget,
     );
     expect(_saveButton(tester).onPressed, isNull);
@@ -229,6 +229,12 @@ class _AcademicRepo implements AcademicLookupsRepo {
 
   final List<AcademicGradeModel> grades;
   final List<AcademicClassroomModel> classrooms;
+
+  @override
+  Future<Either<Failure, Unit>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+  }) async => const Right(unit);
 
   @override
   Future<Either<Failure, List<AcademicGradeModel>>> getGrades({

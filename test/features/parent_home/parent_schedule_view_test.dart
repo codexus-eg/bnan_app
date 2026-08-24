@@ -9,13 +9,13 @@ import 'package:bnan_app/core/shared_widget/attachment_preview/network_attachmen
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_models.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
-import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
-import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lessons_management_body.dart';
 import 'package:bnan_app/features/parent_home/data/models/get_parent_children_response_model.dart';
 import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
 import 'package:bnan_app/features/parent_home/data/repo/parent_home_repo.dart';
 import 'package:bnan_app/features/parent_home/presentation/manager/get_parent_children/get_parent_children_cubit.dart';
+import 'package:bnan_app/features/parent_home/presentation/manager/parent_gulf_schedule_cubit.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/parent_schedule_view.dart';
+import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_schedule/parent_gulf_schedule_body.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_schedule_model.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedules_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/repo/table_management_repo.dart';
@@ -72,13 +72,12 @@ void main() {
     expect(egyptianRepo.studentIds, ['egypt-id']);
     expect(gulfRepo.studentIds, ['gulf-id']);
     expect(find.byType(NetworkAttachmentPreview), findsNothing);
-    expect(find.byType(LessonsManagementBody), findsOneWidget);
+    expect(find.byType(ParentGulfScheduleBody), findsOneWidget);
     expect(find.byType(AddNewTopicButton), findsNothing);
     final gulfCubit = tester
-        .element(find.byType(LessonsManagementBody))
-        .read<GulfScheduleCubit>();
-    expect(gulfCubit.canManage, isFalse);
-    expect(await gulfCubit.saveEntry(day: 'sunday', startTime: '09:00'), false);
+        .element(find.byType(ParentGulfScheduleBody))
+        .read<ParentGulfScheduleCubit>();
+    expect(gulfCubit.studentId, 'gulf-id');
     expect(gulfRepo.lastOperation, isNull);
 
     await _selectChild(tester, 'Egyptian Child');
@@ -226,11 +225,11 @@ void main() {
     await tester.pump();
 
     await _selectChild(tester, 'Gulf Child');
-    expect(find.byType(LessonsManagementBody), findsOneWidget);
+    expect(find.byType(ParentGulfScheduleBody), findsOneWidget);
     lateResult.complete(Right(_egyptianSuccess()));
     await tester.pumpAndSettle();
 
-    expect(find.byType(LessonsManagementBody), findsOneWidget);
+    expect(find.byType(ParentGulfScheduleBody), findsOneWidget);
     expect(find.byType(NetworkAttachmentPreview), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -256,7 +255,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(NetworkAttachmentPreview), findsOneWidget);
-    expect(find.byType(LessonsManagementBody), findsNothing);
+    expect(find.byType(ParentGulfScheduleBody), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }
