@@ -130,9 +130,6 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       unawaited(_connectivity.checkConnection(showChecking: false));
-      if (getIt.isRegistered<LocalPushNotifications>()) {
-        unawaited(getIt<LocalPushNotifications>().stopChatRing());
-      }
     }
   }
 

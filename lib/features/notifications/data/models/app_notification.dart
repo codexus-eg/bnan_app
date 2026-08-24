@@ -24,6 +24,15 @@ class AppNotification {
   final bool isRead;
   final DateTime? readAt, createdAt;
 
+  bool get isStudentCallAlert =>
+      key.trim().toUpperCase() == 'STUDENT_CALL_ALERT';
+  String get callAttemptId => _string(
+    data['callId'] ??
+        data['requestId'] ??
+        navigation.params['callId'] ??
+        navigation.params['requestId'],
+  );
+
   AppNotification copyWith({bool? isRead, DateTime? readAt}) => AppNotification(
     id: id,
     type: type,
@@ -42,6 +51,9 @@ class AppNotification {
   factory AppNotification.fromJson(Map<String, dynamic> json) {
     final resource = _map(json['resource']);
     final data = _map(json['data']);
+    for (final key in const ['callId', 'requestId']) {
+      if (json[key] != null) data.putIfAbsent(key, () => json[key]);
+    }
     final navigation = _map(json['navigation']);
     navigation['screen'] ??= json['screen'];
     navigation['target'] ??= json['target'];

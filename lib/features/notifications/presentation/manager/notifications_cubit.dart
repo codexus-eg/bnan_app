@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/data/repos/notifications_repo.dart';
@@ -26,6 +27,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   void ingestSocketNotification(Map<String, dynamic> json) {
     final payload = Map<String, dynamic>.from(json);
     if (_key(payload) == 'STUDENT_CALL_ALERT') {
+      if (SessionManager.instance.role != UserRole.student) return;
       payload['_title'] ??= S.current.studentCallAlertTitle;
       payload['_body'] ??= S.current.studentCallAlertBody;
       payload['screen'] = 'student_home';
@@ -147,8 +149,11 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       item.id.isEmpty ? '${item.key}|${item.createdAt}' : item.id;
 
   bool ingest(AppNotification value, {bool emitIncoming = true}) {
-    if (!_recent.claim(value.id)) return false;
-    if (value.id.isNotEmpty && state.items.any((item) => item.id == value.id)) {
+    final dedupId = value.isStudentCallAlert ? value.callAttemptId : value.id;
+    if (!_recent.claim(dedupId)) return false;
+    if (!value.isStudentCallAlert &&
+        value.id.isNotEmpty &&
+        state.items.any((item) => item.id == value.id)) {
       return false;
     }
     final items = [value, ...state.items.where((item) => item.id != value.id)];

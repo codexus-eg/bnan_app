@@ -18,22 +18,29 @@ class PushTokenRegistrar {
   static const _registeredTokenKey = 'registered_push_token';
   static const _registeredOwnerKey = 'registered_push_owner';
   static const _registeredVersionKey = 'registered_push_version';
+  Future<void> _operations = Future.value();
+  bool _registrationEnabled = false;
 
   Future<void> registerCurrent() async {
     if (SessionManager.instance.accessToken?.isNotEmpty != true) return;
+    _registrationEnabled = true;
     try {
       await _requestPermissionOnce();
       final token = await _messaging.getToken();
       if (token?.isNotEmpty == true) {
-        await register(token!);
+        await _enqueue(() => _register(token!));
       }
     } catch (error) {
       _debug('Push token registration failed', error);
     }
   }
 
-  Future<void> register(String token) async {
-    final owner = SessionManager.instance.userId?.trim() ?? '';
+  Future<void> register(String token) => _enqueue(() => _register(token));
+
+  Future<void> _register(String token) async {
+    if (!_registrationEnabled) return;
+    final session = SessionManager.instance;
+    final owner = '${session.userId?.trim() ?? ''}|${session.userRole ?? ''}';
     if (SessionManager.instance.accessToken?.isEmpty != false) return;
     final package = await PackageInfo.fromPlatform();
     final registeredToken = _cached(_registeredTokenKey);
@@ -65,6 +72,11 @@ class PushTokenRegistrar {
   }
 
   Future<void> deleteCurrent() async {
+    _registrationEnabled = false;
+    await _enqueue(_deleteCurrent);
+  }
+
+  Future<void> _deleteCurrent() async {
     var failed = false;
     final tokens = <String>{_cached(_registeredTokenKey)};
     try {
@@ -85,6 +97,12 @@ class PushTokenRegistrar {
     await CacheHelper.removeData(key: _registeredTokenKey);
     await CacheHelper.removeData(key: _registeredOwnerKey);
     await CacheHelper.removeData(key: _registeredVersionKey);
+  }
+
+  Future<void> _enqueue(Future<void> Function() action) {
+    final next = _operations.then((_) => action(), onError: (_) => action());
+    _operations = next.catchError((_) {});
+    return next;
   }
 
   String _cached(String key) =>

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/features/push_notifications/presentation/student_call_alert_lifecycle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -59,7 +60,7 @@ void main() {
   test('Android call alert uses the new insistent 15-second ring', () async {
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
     await local.showNotification(
-      _notification('android-ring', 'STUDENT_CALL_ALERT'),
+      _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-1'),
       appState: 'background',
     );
 
@@ -68,15 +69,25 @@ void main() {
     expect(details['sound'], 'chat_ring');
     expect(details['timeoutAfter'], 15000);
     expect(details['additionalFlags'], [4]);
+    final actions = List<Map>.from(details['actions'] as List);
+    expect(actions.single['id'], 'student_call_reject');
+    expect(actions.single['title'], isNot(contains('Accept')));
+    await local.rejectStudentCall();
   });
 
-  test('same STUDENT_CALL_ALERT notificationId rings once', () async {
+  test('same callId rings once even when notificationId changes', () async {
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
-    final alert = _notification('duplicate-ring', 'STUDENT_CALL_ALERT');
-    await local.showNotification(alert, appState: 'background');
-    await local.showNotification(alert, appState: 'background');
+    await local.showNotification(
+      _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-1'),
+      appState: 'background',
+    );
+    await local.showNotification(
+      _notification('notification-2', 'STUDENT_CALL_ALERT', callId: 'call-1'),
+      appState: 'background',
+    );
 
     expect(pluginCalls.where(_isShow), hasLength(1));
+    await local.rejectStudentCall();
   });
 
   test('iOS notification and foreground ring use chat_ring', () async {
@@ -84,11 +95,12 @@ void main() {
     IOSFlutterLocalNotificationsPlugin.registerWith();
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
     await local.showNotification(
-      _notification('ios-background-ring', 'STUDENT_CALL_ALERT'),
+      _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-1'),
       appState: 'background',
     );
+    await local.rejectStudentCall();
     await local.showNotification(
-      _notification('ios-foreground-ring', 'STUDENT_CALL_ALERT'),
+      _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-2'),
       appState: 'foreground',
     );
 
@@ -96,17 +108,61 @@ void main() {
     expect(_shownDetails(shows.first)['sound'], 'chat_ring.wav');
     expect(_shownDetails(shows.last)['presentSound'], isFalse);
     expect(soundCalls.map((call) => call.method), contains('playChatRing'));
+    await local.rejectStudentCall();
   });
 
-  test('opening a call alert stops its current ring', () async {
+  test('opening a call alert is not an implicit accept or reject', () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
     IOSFlutterLocalNotificationsPlugin.registerWith();
     launchPayload = jsonEncode({'key': 'STUDENT_CALL_ALERT'});
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
 
     expect(await local.initialPayload(), launchPayload);
+    expect(pluginCalls.map((call) => call.method), isNot(contains('cancel')));
+    expect(
+      soundCalls.map((call) => call.method),
+      isNot(contains('stopChatRing')),
+    );
+  });
+
+  test('reject stops ring and allows a new call immediately', () async {
+    final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
+    await local.showNotification(
+      _notification(
+        'same-notification',
+        'STUDENT_CALL_ALERT',
+        callId: 'call-1',
+      ),
+    );
+    await local.rejectStudentCall();
+    await local.showNotification(
+      _notification(
+        'same-notification',
+        'STUDENT_CALL_ALERT',
+        callId: 'call-2',
+      ),
+    );
+
+    expect(local.studentCallStatus, StudentCallAlertStatus.ringing);
+    expect(pluginCalls.where(_isShow), hasLength(2));
     expect(pluginCalls.map((call) => call.method), contains('cancel'));
-    expect(soundCalls.map((call) => call.method), contains('stopChatRing'));
+    await local.rejectStudentCall();
+  });
+
+  test('timeout produces noAnswer and cancels ring', () async {
+    final local = LocalPushNotifications(
+      FlutterLocalNotificationsPlugin(),
+      studentCalls: StudentCallAlertLifecycle(
+        duration: const Duration(milliseconds: 1),
+      ),
+    );
+    await local.showNotification(
+      _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-1'),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    expect(local.studentCallStatus, StudentCallAlertStatus.noAnswer);
+    expect(pluginCalls.map((call) => call.method), contains('cancel'));
   });
 
   test('NEW_MESSAGE and CHAT_NUDGE keep their own sound paths', () async {
@@ -146,10 +202,11 @@ void main() {
   });
 }
 
-AppNotification _notification(String id, String key) =>
+AppNotification _notification(String id, String key, {String? callId}) =>
     AppNotification.fromJson({
       'notificationId': id,
       'key': key,
+      if (callId != null) 'callId': callId,
       '_title': 'Title',
       '_body': 'Body',
     });

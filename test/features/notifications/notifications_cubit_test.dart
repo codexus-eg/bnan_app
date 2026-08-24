@@ -29,6 +29,32 @@ void main() {
   });
 
   test(
+    'student calls deduplicate by callId instead of notificationId',
+    () async {
+      final cubit = NotificationsCubit(
+        _Repo(),
+        SocketService(),
+        RecentNotificationIds(),
+      );
+      final first = AppNotification.fromJson({
+        'notificationId': 'shared-notification',
+        'key': 'STUDENT_CALL_ALERT',
+        'callId': 'call-1',
+      });
+      final second = AppNotification.fromJson({
+        'notificationId': 'shared-notification',
+        'key': 'STUDENT_CALL_ALERT',
+        'callId': 'call-2',
+      });
+
+      expect(cubit.ingest(first), isTrue);
+      expect(cubit.ingest(first), isFalse);
+      expect(cubit.ingest(second), isTrue);
+      await cubit.close();
+    },
+  );
+
+  test(
     'loads pages once, appends unique items, and refresh resets to page 1',
     () async {
       final repo = _Repo()

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -21,13 +19,12 @@ class StudentCallAlertAction extends StatefulWidget {
 }
 
 class _StudentCallAlertActionState extends State<StudentCallAlertAction> {
-  Timer? _timer;
-  bool _loading = false, _coolingDown = false;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) => IconButton(
     tooltip: S.of(context).callStudentAlert,
-    onPressed: _loading || _coolingDown ? null : _call,
+    onPressed: _loading ? null : _call,
     icon: _loading
         ? SizedBox.square(
             dimension: 20,
@@ -46,39 +43,14 @@ class _StudentCallAlertActionState extends State<StudentCallAlertAction> {
     if (!mounted) return;
     result.fold(
       (failure) {
-        final cooldown =
-            failure.statusCode == 429 &&
-            failure.code?.toUpperCase() == 'CALL_ALERT_COOLDOWN_ACTIVE';
-        if (cooldown) _startCooldown();
-        if (!cooldown) setState(() => _loading = false);
-        showCustomSnackBar(
-          context,
-          cooldown ? S.of(context).studentCallAlertCooldown : failure.message,
-          false,
-        );
+        setState(() => _loading = false);
+        showCustomSnackBar(context, failure.message, false);
       },
       (_) {
         debugPrint('[ChatRing] ring request sent');
-        _startCooldown();
+        setState(() => _loading = false);
         showCustomSnackBar(context, S.of(context).studentCallAlertSent, true);
       },
     );
-  }
-
-  void _startCooldown() {
-    _timer?.cancel();
-    setState(() {
-      _loading = false;
-      _coolingDown = true;
-    });
-    _timer = Timer(const Duration(seconds: 60), () {
-      if (mounted) setState(() => _coolingDown = false);
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 }

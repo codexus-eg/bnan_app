@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
@@ -79,6 +80,10 @@ class PushNotificationService {
   }
 
   Future<void> _handleForeground(RemoteMessage message) async {
+    if (_isStudentCall(message.data) &&
+        SessionManager.instance.role != UserRole.student) {
+      return;
+    }
     _logChatRingReceived(message, 'foreground');
     final notification = _notification(message);
     final intent = _intent(message);
@@ -118,6 +123,9 @@ class PushNotificationService {
     AppNotification? notification,
     ChatPushIntent? intent,
   ) {
+    if (notification?.isStudentCallAlert == true) {
+      return notification!.callAttemptId;
+    }
     for (final id in [
       message.messageId,
       notification?.id,
@@ -128,6 +136,9 @@ class PushNotificationService {
     }
     return '';
   }
+
+  bool _isStudentCall(Map<String, dynamic> data) =>
+      data['key']?.toString().trim().toUpperCase() == 'STUDENT_CALL_ALERT';
 
   void _handleOpened(RemoteMessage? message, {required String appState}) {
     if (message != null) {

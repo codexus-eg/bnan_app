@@ -1,4 +1,6 @@
 import 'package:bnan_app/firebase_options.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,6 +35,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final data = <String, dynamic>{...message.data};
   final isChatRing =
       data['key']?.toString().trim().toUpperCase() == 'STUDENT_CALL_ALERT';
+  if (isChatRing &&
+      UserRole.fromValue(await SessionManager.instance.getUserRole()) !=
+          UserRole.student) {
+    return;
+  }
   if (isChatRing) {
     debugPrint('[ChatRing] push received');
     debugPrint('[ChatRing] platform=${defaultTargetPlatform.name}');

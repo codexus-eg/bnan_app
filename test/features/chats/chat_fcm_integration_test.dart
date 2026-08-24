@@ -14,7 +14,10 @@ import 'package:bnan_app/features/push_notifications/data/repo/device_token_repo
 import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_notification_service.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
+import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -93,6 +96,71 @@ void main() {
       'delete:shared-fcm',
       'register:shared-fcm',
     ]);
+  });
+
+  test('token refresh cannot re-register after logout starts', () async {
+    await _login(userId: 'student-1');
+    final messaging = _Messaging('shared-fcm');
+    final repo = _TokenRepo();
+    final registrar = PushTokenRegistrar(
+      messaging,
+      repo,
+      InstallationIdStore(),
+    );
+    await registrar.registerCurrent();
+
+    final logout = registrar.deleteCurrent();
+    await registrar.register('refreshed-after-logout');
+    await logout;
+
+    expect(repo.registered.map((item) => item.token), ['shared-fcm']);
+    expect(repo.deleted, ['shared-fcm']);
+  });
+
+  test('role switch without user ids detaches the old token owner', () async {
+    await _login(userId: '', userRole: 'student');
+    final messaging = _Messaging('shared-fcm');
+    final repo = _TokenRepo();
+    final registrar = PushTokenRegistrar(
+      messaging,
+      repo,
+      InstallationIdStore(),
+    );
+    SessionManager.instance.addBeforeClearListener(registrar.deleteCurrent);
+    try {
+      await registrar.registerCurrent();
+      await _login(userId: '', userRole: 'supervisor');
+      await registrar.registerCurrent();
+    } finally {
+      SessionManager.instance.removeBeforeClearListener(
+        registrar.deleteCurrent,
+      );
+    }
+
+    expect(repo.operations, [
+      'register:shared-fcm',
+      'delete:shared-fcm',
+      'register:shared-fcm',
+    ]);
+  });
+
+  test('supervisor session suppresses stale student call push', () async {
+    await _login(userRole: 'supervisor');
+    final local = _LocalNotifications();
+    final harness = await _service(localNotifications: local);
+    harness.foreground.add(
+      RemoteMessage(
+        data: const {
+          'key': 'STUDENT_CALL_ALERT',
+          'callId': 'call-1',
+          'notificationId': 'notification-1',
+        },
+      ),
+    );
+    await _flush();
+
+    expect(local.shown, isEmpty);
+    await harness.dispose();
   });
 
   test('payload prefers resourceId and safely falls back to params', () {
@@ -174,7 +242,10 @@ void main() {
   });
 }
 
-Future<_Harness> _service({RemoteMessage? initial}) async {
+Future<_Harness> _service({
+  RemoteMessage? initial,
+  LocalPushNotifications? localNotifications,
+}) async {
   final foreground = StreamController<RemoteMessage>.broadcast();
   final opened = StreamController<RemoteMessage>.broadcast();
   final refresh = StreamController<String>.broadcast();
@@ -191,6 +262,7 @@ Future<_Harness> _service({RemoteMessage? initial}) async {
     chat: chat,
     foregroundMessages: foreground.stream,
     openedMessages: opened.stream,
+    localNotifications: localNotifications,
   );
   await service.initialize();
   return _Harness(service, registrar, chat, foreground, opened, refresh);
@@ -222,11 +294,12 @@ ChatMessageModel _socketMessage(String id, String roomId) => ChatMessageModel(
   deletedForEveryone: false,
 );
 
-Future<void> _login({String userId = 'user-1'}) =>
+Future<void> _login({String userId = 'user-1', String? userRole}) =>
     SessionManager.instance.saveSession(
       accessToken: 'access',
       refreshToken: 'refresh-token-must-not-be-sent',
       userId: userId,
+      userRole: userRole,
     );
 
 Future<void> _flush() => Future<void>.delayed(Duration.zero);
@@ -274,6 +347,23 @@ class _Registrar implements PushTokenRegistrar {
   Future<void> register(String token) async => refreshed.add(token);
   @override
   Future<void> deleteCurrent() async => deletes++;
+}
+
+class _LocalNotifications extends Fake implements LocalPushNotifications {
+  final shown = <AppNotification>[];
+
+  @override
+  Future<void> initialize(ValueChanged<String> onPayload) async {}
+
+  @override
+  Future<String?> initialPayload() async => null;
+
+  @override
+  Future<void> showNotification(
+    AppNotification notification, {
+    bool playNudgeLocally = true,
+    String? appState,
+  }) async => shown.add(notification);
 }
 
 class _Socket extends SocketService {}
