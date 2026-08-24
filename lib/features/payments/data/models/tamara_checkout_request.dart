@@ -9,7 +9,7 @@ class TamaraCheckoutRequest {
     required this.curriculumId,
     required this.packageId,
     required this.address,
-    this.purchaseItems = const [],
+    this.items = const [],
     this.discountCode,
     this.locale = 'ar_SA',
   });
@@ -20,7 +20,7 @@ class TamaraCheckoutRequest {
   final String curriculumId;
   final String packageId;
   final PaymentAddress address;
-  final List<RegistrationItem> purchaseItems;
+  final List<RegistrationItem> items;
   final String? discountCode;
   final String locale;
 
@@ -28,9 +28,9 @@ class TamaraCheckoutRequest {
     'parent': {'email': parentEmail.trim(), 'password': parentPassword},
     'student': student.toJson(),
     'curriculum': curriculumId,
-    if (purchaseItems.isEmpty) 'packageId': packageId,
-    if (purchaseItems.isNotEmpty)
-      'items': purchaseItems.map((item) => item.toJson()).toList(),
+    if (items.isEmpty) 'packageId': packageId,
+    if (items.isNotEmpty)
+      'items': items.map((item) => item.toJson()).toList(growable: false),
     if (discountCode?.trim().isNotEmpty == true)
       'discountCode': discountCode!.trim(),
     'paymentAddress': address.toJson(),

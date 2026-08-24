@@ -14,10 +14,17 @@ abstract final class GulfRegistrationDiagnostics {
     'endpoint=$endpoint; statusCode=${statusCode ?? 'not_exposed'}; succeeded',
   );
 
-  static void checkoutPayload(Map<String, dynamic> payload) => _log(
-    'checkout payload keys=${payload.keys.toList()}; '
-    'items=${payload['items']}',
-  );
+  static void checkoutPayload(Map<String, dynamic> payload) {
+    final safePayload = Map<String, dynamic>.from(payload);
+    for (final key in const ['parent', 'student']) {
+      final value = safePayload[key];
+      if (value is Map) {
+        safePayload[key] = Map<String, dynamic>.from(value)
+          ..update('password', (_) => '[redacted]', ifAbsent: () => '');
+      }
+    }
+    _log('checkout payload=${_safe(safePayload.toString())}');
+  }
 
   static void failed(String endpoint, Object error, {int? statusCode}) {
     lastEndpoint = endpoint;

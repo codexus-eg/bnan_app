@@ -228,7 +228,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       ),
       curriculumId: curriculumId,
       packageId: packageId,
-      purchaseItems: isGulf
+      items: isGulf && isSingleSubjectPackage
           ? selectedSubjects
                 .map(
                   (subjectId) => RegistrationItem(
