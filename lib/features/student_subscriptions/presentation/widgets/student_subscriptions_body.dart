@@ -23,9 +23,12 @@ class StudentSubscriptionsBody extends StatelessWidget {
       );
     }
     if (state is StudentSubscriptionsSuccess) {
+      final cubit = context.read<StudentSubscriptionsCubit>();
       return StudentSubscriptionsList(
         student: state.student,
-        onRefresh: context.read<StudentSubscriptionsCubit>().load,
+        onRefresh: cubit.load,
+        isLocallyPending: cubit.isRenewalPending,
+        onRenewalPending: cubit.markRenewalPending,
       );
     }
     return const AppSkeletonizer(

@@ -39,13 +39,20 @@ class ParentSubscriptionRenewalCubit
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
+  String? _reconcilingPaymentId;
+  Future<void>? _reconcileFlight;
   final Set<String> _completedPaymentIds = {};
 
   Future<void> restore() async {
     if (isClosed) return;
     final draft = store?.read();
-    if (draft == null ||
-        draft.ownerUserId != (SessionManager.instance.userId ?? '') ||
+    if (draft == null) return;
+    if (draft.subscriptionId.isEmpty ||
+        draft.subscriptionId != state.args.subscription.id) {
+      await store?.clear();
+      return;
+    }
+    if (draft.ownerUserId != (SessionManager.instance.userId ?? '') ||
         draft.studentId != state.args.studentId ||
         draft.isParent != state.args.isParent ||
         draft.registrationMode != state.args.registrationMode ||
@@ -82,10 +89,29 @@ class ParentSubscriptionRenewalCubit
       value,
       registrationMode: state.args.registrationMode,
       curriculumId: state.args.curriculumId,
+      currentAccessScope: state.args.subscription.accessScope,
+      currentPackageType: state.args.subscription.packageType,
     )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
     emit(state.copyWith(package: value, subjectId: null, errorMessage: null));
+  }
+
+  void selectAutomaticMonthlyPackage(List<PackageModel> packages) {
+    if (!state.isEgyptianMonthly || state.package != null) return;
+    for (final package in packages) {
+      if (RenewalPackagePolicy.isVisible(
+        package,
+        registrationMode: state.args.registrationMode,
+        curriculumId: state.args.curriculumId,
+        currentAccessScope: state.args.subscription.accessScope,
+        currentPackageType: state.args.subscription.packageType,
+      )) {
+        selectPackage(package);
+        return;
+      }
+    }
+    _error('PACKAGE_NOT_FOUND');
   }
 
   void selectSubject(String id) {
@@ -118,13 +144,18 @@ class ParentSubscriptionRenewalCubit
   }
 
   Future<void> submit() async {
-    if (_submitting) return;
+    if (_submitting ||
+        !state.isGulf && state.phase != ParentRenewalPhase.editing) {
+      return;
+    }
     if (!state.hasSupportedRegistrationMode ||
         state.package == null ||
         !RenewalPackagePolicy.isVisible(
           state.package!,
           registrationMode: state.args.registrationMode,
           curriculumId: state.args.curriculumId,
+          currentAccessScope: state.args.subscription.accessScope,
+          currentPackageType: state.args.subscription.packageType,
         )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
@@ -182,14 +213,28 @@ class ParentSubscriptionRenewalCubit
     }
   }
 
-  Future<void> reconcilePayment() async {
-    if (isClosed || state.phase == ParentRenewalPhase.completed) return;
+  Future<void> reconcilePayment() {
+    if (isClosed || state.phase == ParentRenewalPhase.completed) {
+      return Future.value();
+    }
     final id = state.paymentId;
-    if (id == null || id.isEmpty) return;
-    if (state.isGulf) {
+    if (id == null || id.isEmpty) return Future.value();
+    if (!state.isGulf) return checkPaymentStatus();
+    if (_reconcilingPaymentId == id && _reconcileFlight != null) {
+      return _reconcileFlight!;
+    }
+    _reconcilingPaymentId = id;
+    return _reconcileFlight = _runGulfReconcile(id);
+  }
+
+  Future<void> _runGulfReconcile(String id) async {
+    try {
       await _pollGulf(id, reconcile: true);
-    } else {
-      await checkPaymentStatus();
+    } finally {
+      if (_reconcilingPaymentId == id) {
+        _reconcilingPaymentId = null;
+        _reconcileFlight = null;
+      }
     }
   }
 
@@ -234,6 +279,10 @@ class ParentSubscriptionRenewalCubit
     if (packageId == null || packageId.isEmpty) {
       return _error('PACKAGE_NOT_FOUND');
     }
+    final subscriptionId = state.args.subscription.id.trim();
+    if (state.isEgyptianPrivate && subscriptionId.isEmpty) {
+      return emit(state.copyWith(errorMessage: S.current.invalidData));
+    }
     emit(
       state.copyWith(
         phase: ParentRenewalPhase.submitting,
@@ -245,13 +294,32 @@ class ParentSubscriptionRenewalCubit
     final result = await repo.renewEgyptian(
       EgyptianRenewalRequest(
         packageId: packageId,
-        subjectId: state.isSingleSubject ? state.subjectId : null,
+        studentId: state.args.isParent ? state.args.studentId : null,
+        subscriptionId: state.isEgyptianPrivate ? subscriptionId : null,
+        subjectId: !state.isEgyptianPrivate && state.isSingleSubject
+            ? state.subjectId
+            : null,
       ),
     );
     if (isClosed) return;
     await result.fold<Future<void>>(
       (failure) async {
         if (isClosed) return;
+        final code = (failure.code ?? '').trim().toUpperCase();
+        if (failure.statusCode == 409 &&
+            code == 'RENEWAL_ALREADY_IN_PROGRESS') {
+          emit(
+            state.copyWith(
+              phase: ParentRenewalPhase.pending,
+              paymentId: null,
+              checkoutUrl: null,
+              status: RenewalPaymentStatus.pending,
+              shouldOpenCheckout: false,
+              errorMessage: null,
+            ),
+          );
+          return;
+        }
         emit(
           state.copyWith(
             phase: ParentRenewalPhase.editing,
@@ -270,7 +338,9 @@ class ParentSubscriptionRenewalCubit
           state.copyWith(
             phase: ParentRenewalPhase.pending,
             paymentId: response.paymentId,
+            checkoutUrl: null,
             status: response.status,
+            shouldOpenCheckout: false,
             errorMessage: null,
           ),
         );
@@ -279,6 +349,10 @@ class ParentSubscriptionRenewalCubit
   }
 
   Future<void> _submitGulf() async {
+    final subscriptionId = state.args.subscription.id.trim();
+    if (subscriptionId.isEmpty) {
+      return emit(state.copyWith(errorMessage: S.current.invalidData));
+    }
     emit(
       state.copyWith(
         phase: ParentRenewalPhase.submitting,
@@ -290,10 +364,8 @@ class ParentSubscriptionRenewalCubit
       ),
     );
     final request = GulfRenewalRequest(
-      studentId: state.args.isParent ? state.args.studentId : null,
+      subscriptionId: subscriptionId,
       packageId: state.package!.id!,
-      subjectId: state.isSingleSubject ? state.subjectId : null,
-      discountCode: state.discountCode,
       paymentAddress: const ParentPaymentAddress(
         city: TamaraDefaultAddress.city,
         region: TamaraDefaultAddress.region,
@@ -324,7 +396,23 @@ class ParentSubscriptionRenewalCubit
           await _handle(response);
           return;
         }
-        if (response.paymentId.isEmpty || response.checkoutUrl == null) {
+        if (response.checkoutUrl?.trim().isNotEmpty != true) {
+          await store?.clear();
+          if (isClosed) return;
+          emit(
+            state.copyWith(
+              phase: ParentRenewalPhase.failure,
+              paymentId: null,
+              checkoutUrl: null,
+              status: null,
+              paymentSummary: response.paymentSummary,
+              shouldOpenCheckout: false,
+              errorMessage: S.current.renewalFailed,
+            ),
+          );
+          return;
+        }
+        if (response.paymentId.isEmpty) {
           emit(
             state.copyWith(
               phase: ParentRenewalPhase.failure,
@@ -338,6 +426,7 @@ class ParentSubscriptionRenewalCubit
             paymentId: response.paymentId,
             checkoutUrl: response.checkoutUrl ?? '',
             studentId: state.args.studentId,
+            subscriptionId: state.args.subscription.id,
             ownerUserId: SessionManager.instance.userId ?? '',
             idempotencyKey: key,
             payloadFingerprint: _attempt.fingerprintFor(request.toJson()),
@@ -425,6 +514,9 @@ class ParentSubscriptionRenewalCubit
       if (id == null || !_completedPaymentIds.add(id)) return;
       await store?.clear();
       if (isClosed) return;
+      final refresh = state.args.onCompleted;
+      if (refresh != null) await refresh();
+      if (isClosed) return;
       emit(
         state.copyWith(
           phase: ParentRenewalPhase.completed,
@@ -433,7 +525,6 @@ class ParentSubscriptionRenewalCubit
           errorMessage: null,
         ),
       );
-      await state.args.onCompleted?.call();
     } else if (response.status.isTerminal) {
       _attempt.startNew();
       await store?.clear();
@@ -463,6 +554,7 @@ class ParentSubscriptionRenewalCubit
       return 'PACKAGE_NOT_FOUND';
     }
     if (state.currentStep == 2 &&
+        !state.isGulf &&
         state.isSingleSubject &&
         state.subjectId == null) {
       return 'SINGLE_SUBJECT_SUBSCRIPTION_SUBJECT_REQUIRED';
@@ -476,6 +568,7 @@ class ParentSubscriptionRenewalCubit
       errorMessage: _mapped(code),
     ),
   );
+
   String _mapped(String code) {
     final value = code.toUpperCase();
     if (value.contains('SUBSCRIPTION_STILL_ACTIVE')) {

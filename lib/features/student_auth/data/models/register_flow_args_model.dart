@@ -7,6 +7,7 @@ class RegisterFlowArgsModel {
   final String packageCurrency;
   final String? registrationMode;
   final String accessScope;
+  final String packageType;
 
   const RegisterFlowArgsModel({
     required this.curriculumId,
@@ -17,8 +18,15 @@ class RegisterFlowArgsModel {
     required this.packageCurrency,
     this.registrationMode,
     this.accessScope = 'all_subjects',
+    this.packageType = '',
   });
 
-  bool get isGulf => registrationMode == 'gulf';
-  bool get isSingleSubject => accessScope == 'single_subject';
+  bool get isGulf => _value(registrationMode) == 'gulf';
+  bool get isSingleSubject => _value(accessScope) == 'single_subject';
+  bool get isEgyptianPrivate =>
+      _value(registrationMode) == 'egyptian' &&
+      isSingleSubject &&
+      _value(packageType) == 'hours';
+
+  static String _value(String? value) => value?.trim().toLowerCase() ?? '';
 }

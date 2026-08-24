@@ -11,6 +11,29 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
     : super(const GetParentSubscriptionsInitial());
   final ParentSubscriptionsRepo repo;
   bool _loading = false;
+  final Set<String> _locallyPendingRenewals = {};
+
+  bool isRenewalPending(String studentId, String subscriptionId) =>
+      _locallyPendingRenewals.contains('$studentId:$subscriptionId');
+
+  void markRenewalPending(String studentId, String subscriptionId) {
+    final current = state;
+    if (current is! GetParentSubscriptionsSuccess ||
+        !current.children.any(
+          (child) =>
+              child.studentId == studentId &&
+              child.subscriptions.any((item) => item.id == subscriptionId),
+        ) ||
+        !_locallyPendingRenewals.add('$studentId:$subscriptionId')) {
+      return;
+    }
+    emit(
+      GetParentSubscriptionsSuccess(
+        current.children,
+        selectedChildId: current.selectedChildId,
+      ),
+    );
+  }
 
   Future<void> load() async {
     if (_loading || isClosed) return;
@@ -40,6 +63,15 @@ class GetParentSubscriptionsCubit extends Cubit<GetParentSubscriptionsState> {
 
   void _emitSuccess(ParentSubscriptionsResponse response, String? previous) {
     if (isClosed) return;
+    for (final child in response.children) {
+      for (final subscription in child.subscriptions) {
+        if (subscription.hasPendingRenewal) {
+          _locallyPendingRenewals.remove(
+            '${child.studentId}:${subscription.id}',
+          );
+        }
+      }
+    }
     final firstSubscribed = response.children
         .where((child) => child.subscriptions.isNotEmpty)
         .firstOrNull;

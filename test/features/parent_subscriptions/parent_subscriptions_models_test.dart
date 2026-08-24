@@ -34,18 +34,17 @@ void main() {
     ]);
   });
 
-  test('legacy subscription is used when subscriptions is null', () {
+  test('legacy singular subscription is never used', () {
     final response = ParentSubscriptionsResponse.fromJson({
       'data': [
         {
           'student': {'id': 'student-1', 'fullName': 'Child'},
           'subscription': {'id': 'legacy'},
-          'subscriptions': null,
         },
       ],
     });
 
-    expect(response.children.single.subscriptions.single.id, 'legacy');
+    expect(response.children.single.subscriptions, isEmpty);
   });
 
   test('available subscriptions list does not fall back to legacy data', () {
@@ -54,6 +53,20 @@ void main() {
         {
           'student': {'id': 'student-1'},
           'subscriptions': <Object>[],
+          'subscription': {'id': 'stale-legacy'},
+        },
+      ],
+    });
+
+    expect(response.children.single.subscriptions, isEmpty);
+  });
+
+  test('subscriptions null is authoritative and does not use legacy', () {
+    final response = ParentSubscriptionsResponse.fromJson({
+      'data': [
+        {
+          'student': {'id': 'student-1'},
+          'subscriptions': null,
           'subscription': {'id': 'stale-legacy'},
         },
       ],
@@ -140,7 +153,7 @@ void main() {
     }
   });
 
-  test('canRenew uses backend value only with a safe false default', () {
+  test('renewal flags use backend values only with safe false defaults', () {
     final response = ParentSubscriptionsResponse.fromJson({
       'data': [
         {
@@ -152,6 +165,7 @@ void main() {
               'remainingHours': 4,
               'status': 'active',
               'canRenew': true,
+              'hasPendingRenewal': false,
             },
             {
               'id': 'denied',
@@ -159,6 +173,7 @@ void main() {
               'endDate': '2026-01-01T00:00:00.000Z',
               'status': 'expired',
               'canRenew': false,
+              'hasPendingRenewal': true,
             },
             {'id': 'missing', 'status': 'expired'},
           ],
@@ -168,8 +183,11 @@ void main() {
 
     final subscriptions = response.children.single.subscriptions;
     expect(subscriptions.first.canRenew, isTrue);
+    expect(subscriptions.first.hasPendingRenewal, isFalse);
     expect(subscriptions[1].canRenew, isFalse);
+    expect(subscriptions[1].hasPendingRenewal, isTrue);
     expect(subscriptions.last.canRenew, isFalse);
+    expect(subscriptions.last.hasPendingRenewal, isFalse);
   });
 
   test('server allowance does not expose renewal while still active', () {

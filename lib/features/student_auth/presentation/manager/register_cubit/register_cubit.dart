@@ -4,6 +4,8 @@ import 'package:bnan_app/features/student_auth/data/models/register_flow_args_mo
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_parent_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_student_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/registration_item.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
@@ -29,6 +31,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   String packageCurrency = '';
   String? registrationMode;
   bool isSingleSubjectPackage = false;
+  bool isEgyptianPrivate = false;
   String? selectedCurriculumName;
 
   final parentFormKey = GlobalKey<FormState>();
@@ -54,6 +57,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     packageCurrency = args.packageCurrency;
     registrationMode = args.registrationMode;
     isSingleSubjectPackage = args.isSingleSubject;
+    isEgyptianPrivate = args.isEgyptianPrivate;
   }
 
   bool get isGulf => registrationMode == 'gulf';
@@ -69,7 +73,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   void toggleSubject(String subjectId) {
-    if (isSingleSubjectPackage) {
+    if (isSingleSubjectPackage && !isEgyptianPrivate && !isGulf) {
       selectedSubjectIds = selectedSubjectIds.contains(subjectId)
           ? []
           : [subjectId];
@@ -119,17 +123,22 @@ class RegisterCubit extends Cubit<RegisterState> {
     final validForm = studentFormKey.currentState?.validate() ?? false;
     final validSubjects = !requiresSubjectSelection
         ? true
-        : isSingleSubjectPackage
+        : isSingleSubjectPackage && !isEgyptianPrivate && !isGulf
         ? selectedSubjectIds.length == 1
         : selectedSubjectIds.isNotEmpty;
     return validForm && selectedGradeId != null && validSubjects;
   }
 
   RegisterRequestModel? buildRegisterRequest() {
-    final subjectCount = selectedSubjectIds.length;
+    final selectedSubjects = selectedSubjectIds
+        .map((id) => id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList(growable: false);
+    final subjectCount = selectedSubjects.length;
     final validSubjects = !requiresSubjectSelection
         ? true
-        : isSingleSubjectPackage
+        : isSingleSubjectPackage && !isEgyptianPrivate && !isGulf
         ? subjectCount == 1
         : subjectCount > 0;
     if (selectedGradeId == null || !validSubjects) return null;
@@ -143,10 +152,20 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: studentEmailController.text.trim(),
         password: studentPasswordController.text,
         grade: selectedGradeId!,
-        subjects: List.unmodifiable(selectedSubjectIds),
+        subjects: selectedSubjects,
       ),
       curriculum: curriculumId,
-      packageId: packageId,
+      packageId: isEgyptianPrivate ? null : packageId,
+      items: isEgyptianPrivate
+          ? selectedSubjects
+                .map(
+                  (subjectId) => RegistrationItem(
+                    subjectId: subjectId,
+                    packageId: packageId,
+                  ),
+                )
+                .toList(growable: false)
+          : const [],
     );
   }
 
@@ -163,24 +182,36 @@ class RegisterCubit extends Cubit<RegisterState> {
         ),
       );
       if (isClosed) return;
-      result.fold(
-        (failure) => emit(
+      result.fold((failure) {
+        GulfRegistrationDiagnostics.uiFailure(
+          endpoint:
+              GulfRegistrationDiagnostics.lastEndpoint ??
+              'parent-authentication',
+          cubit: 'RegisterCubit',
+          state: 'RegisterFailure',
+          message: failure.message,
+        );
+        emit(
           RegisterFailure(
             errorMessage: failure.message,
             currentStep: state.currentStep,
           ),
-        ),
-        (_) => nextStep(),
-      );
+        );
+      }, (_) => nextStep());
     } finally {
       _authenticating = false;
     }
   }
 
   TamaraCheckoutRequest? buildTamaraRequest({bool validateForm = true}) {
+    final selectedSubjects = selectedSubjectIds
+        .map((id) => id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList(growable: false);
     if ((validateForm && !(studentFormKey.currentState?.validate() ?? false)) ||
         selectedGradeId == null ||
-        selectedSubjectIds.isEmpty ||
+        selectedSubjects.isEmpty ||
         curriculumId.isEmpty ||
         packageId.isEmpty) {
       return null;
@@ -193,7 +224,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: studentEmailController.text.trim(),
         password: studentPasswordController.text,
         grade: selectedGradeId!,
-        subjects: List.unmodifiable(selectedSubjectIds),
+        subjects: List.unmodifiable(selectedSubjects),
       ),
       curriculumId: curriculumId,
       packageId: packageId,

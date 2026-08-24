@@ -79,13 +79,24 @@ class ParentSubscriptionsBody extends StatelessWidget {
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: child.subscriptions.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (_, index) => ParentSubscriptionCard(
-                        child: child,
-                        subscription: child.subscriptions[index],
-                        onRenewed: context
-                            .read<GetParentSubscriptionsCubit>()
-                            .load,
-                      ),
+                      itemBuilder: (_, index) {
+                        final cubit = context
+                            .read<GetParentSubscriptionsCubit>();
+                        final subscription = child.subscriptions[index];
+                        return ParentSubscriptionCard(
+                          child: child,
+                          subscription: subscription,
+                          locallyPending: cubit.isRenewalPending(
+                            child.studentId,
+                            subscription.id,
+                          ),
+                          onRenewalPending: () => cubit.markRenewalPending(
+                            child.studentId,
+                            subscription.id,
+                          ),
+                          onRenewed: cubit.load,
+                        );
+                      },
                     ),
                   ),
           ),

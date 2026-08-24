@@ -3,6 +3,7 @@ class RenewalPaymentDraft {
     required this.paymentId,
     required this.checkoutUrl,
     required this.studentId,
+    required this.subscriptionId,
     required this.ownerUserId,
     required this.idempotencyKey,
     required this.payloadFingerprint,
@@ -10,7 +11,7 @@ class RenewalPaymentDraft {
     required this.createdAt,
     required this.registrationMode,
   });
-  final String paymentId, checkoutUrl, studentId, ownerUserId;
+  final String paymentId, checkoutUrl, studentId, subscriptionId, ownerUserId;
   final String idempotencyKey, payloadFingerprint, createdAt;
   final String registrationMode;
   final bool isParent;
@@ -19,6 +20,7 @@ class RenewalPaymentDraft {
     'paymentId': paymentId,
     'checkoutUrl': checkoutUrl,
     'studentId': studentId,
+    'subscriptionId': subscriptionId,
     'ownerUserId': ownerUserId,
     'idempotencyKey': idempotencyKey,
     'payloadFingerprint': payloadFingerprint,
@@ -32,6 +34,7 @@ class RenewalPaymentDraft {
         paymentId: _text(json['paymentId']),
         checkoutUrl: _text(json['checkoutUrl']),
         studentId: _text(json['studentId']),
+        subscriptionId: _text(json['subscriptionId']),
         ownerUserId: _text(json['ownerUserId']),
         idempotencyKey: _text(json['idempotencyKey']),
         payloadFingerprint: _text(json['payloadFingerprint']),

@@ -10,6 +10,14 @@ class StudentSubscriptionsRepoImpl implements StudentSubscriptionsRepo {
   final ApiConsumer api;
 
   @override
+  getHomeSubscriptions() => repoGuard(() async {
+    final home = await api.get(EndPoints.studentHome, isProtected: true);
+    return ParentChildSubscriptionsModel.fromStudentHome(
+      Map<String, dynamic>.from(home as Map),
+    );
+  });
+
+  @override
   getSubscriptions() => repoGuard(() async {
     final responses = await Future.wait<dynamic>([
       api.get(EndPoints.studentHome, isProtected: true),

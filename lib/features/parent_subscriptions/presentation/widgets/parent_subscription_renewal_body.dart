@@ -19,6 +19,9 @@ class ParentSubscriptionRenewalBody extends StatelessWidget {
         ParentSubscriptionRenewalState
       >(
         builder: (context, state) {
+          if (state.isGulf && state.phase == ParentRenewalPhase.completed) {
+            return const SizedBox.shrink();
+          }
           if (state.isGulf &&
               state.phase != ParentRenewalPhase.editing &&
               state.phase != ParentRenewalPhase.submitting) {
@@ -28,10 +31,6 @@ class ParentSubscriptionRenewalBody extends StatelessWidget {
               ? [
                   S.of(context).renewalCurrentSubscription,
                   S.of(context).parentPackageStep,
-                  S.of(context).parentSubjectsStep,
-                  S.of(context).optionalDiscountCode,
-                  S.of(context).parentReviewStep,
-                  S.of(context).parentPaymentStep,
                 ]
               : [
                   S.of(context).renewalCurrentSubscription,

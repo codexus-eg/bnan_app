@@ -4,6 +4,7 @@ import 'package:bnan_app/core/network/repo_guard.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:dio/dio.dart';
 
 class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
@@ -12,8 +13,8 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
   final Dio dio;
 
   @override
-  checkout({required request, required idempotencyKey}) {
-    return repoGuard(() async {
+  checkout({required request, required idempotencyKey}) async {
+    final result = await repoGuard(() async {
       final response = await _post(
         EndPoints.tamaraCheckout,
         data: request.toJson(),
@@ -21,6 +22,12 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
       );
       return TamaraCheckoutResponse.fromJson(asMap(response));
     });
+    result.fold(
+      (failure) =>
+          GulfRegistrationDiagnostics.failed(EndPoints.tamaraCheckout, failure),
+      (_) {},
+    );
+    return result;
   }
 
   @override
@@ -37,14 +44,26 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
   @override
   status(String paymentId) {
     return repoGuard(() async {
+      final endpoint = EndPoints.tamaraStatus(paymentId);
+      GulfRegistrationDiagnostics.started(endpoint);
       try {
         final response = await dio.get(
-          EndPoints.tamaraStatus(paymentId),
+          endpoint,
           options: Options(extra: {'isProtected': true}),
+        );
+        GulfRegistrationDiagnostics.succeeded(
+          endpoint,
+          statusCode: response.statusCode,
         );
         return TamaraStatusResponse.fromJson(asMap(response.data));
       } on DioException catch (error) {
-        throw AppException.fromDio(error);
+        final exception = AppException.fromDio(error);
+        GulfRegistrationDiagnostics.failed(
+          endpoint,
+          exception,
+          statusCode: error.response?.statusCode,
+        );
+        throw exception;
       }
     });
   }
@@ -55,6 +74,7 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
     Map<String, dynamic>? headers,
     bool isProtected = false,
   }) async {
+    GulfRegistrationDiagnostics.started(path);
     try {
       final response = await dio.post(
         path,
@@ -67,9 +87,19 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
           },
         ),
       );
+      GulfRegistrationDiagnostics.succeeded(
+        path,
+        statusCode: response.statusCode,
+      );
       return response.data;
     } on DioException catch (error) {
-      throw AppException.fromDio(error);
+      final exception = AppException.fromDio(error);
+      GulfRegistrationDiagnostics.failed(
+        path,
+        exception,
+        statusCode: error.response?.statusCode,
+      );
+      throw exception;
     }
   }
 }

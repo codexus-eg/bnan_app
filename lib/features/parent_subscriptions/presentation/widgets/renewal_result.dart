@@ -26,7 +26,7 @@ class _RenewalResultState extends State<RenewalResult> {
     final state = widget.state;
     final completed = state.phase == ParentRenewalPhase.completed;
     final failed = state.phase == ParentRenewalPhase.failure;
-    final pending = state.phase == ParentRenewalPhase.pending;
+    final pending = !state.isGulf && state.phase == ParentRenewalPhase.pending;
     final unknown = state.phase == ParentRenewalPhase.paymentStatusUnknown;
     final message = completed
         ? S.of(context).renewalCompleted

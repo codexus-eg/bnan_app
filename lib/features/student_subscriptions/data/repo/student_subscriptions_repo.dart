@@ -4,4 +4,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class StudentSubscriptionsRepo {
   Future<Either<Failure, ParentChildSubscriptionsModel>> getSubscriptions();
+  Future<Either<Failure, ParentChildSubscriptionsModel>> getHomeSubscriptions();
 }

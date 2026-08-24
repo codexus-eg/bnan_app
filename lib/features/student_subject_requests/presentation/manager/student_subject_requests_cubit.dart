@@ -10,9 +10,16 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
   StudentSubjectRequestsCubit(this._repo)
     : super(const StudentSubjectRequestsState());
   final StudentSubjectRequestsRepo _repo;
+  String? _gulfCurriculumId;
+  String? get gulfCurriculumId => _gulfCurriculumId;
 
-  Future<void> load({bool refresh = false}) async {
+  Future<void> load({bool refresh = false, String? gulfCurriculumId}) async {
     if (isClosed) return;
+    final id = gulfCurriculumId?.trim();
+    if (id?.isNotEmpty == true) _gulfCurriculumId = id;
+    final gulfPackages = _gulfCurriculumId == null
+        ? null
+        : _repo.getPackages(_gulfCurriculumId!);
     emit(
       state.copyWith(
         phase: state.availability == null
@@ -36,9 +43,14 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
         );
       },
       (availability) async {
-        final packagesResult = await _repo.getPackages(
-          availability.curriculum.id,
-        );
+        if (availability.registrationMode == RegistrationMode.gulf &&
+            _gulfCurriculumId == null) {
+          final id = availability.curriculum.id.trim();
+          if (id.isNotEmpty) _gulfCurriculumId = id;
+        }
+        final packagesResult =
+            await (gulfPackages ??
+                _repo.getPackages(availability.curriculum.id));
         if (isClosed) return;
         packagesResult.fold(
           (failure) {
@@ -89,7 +101,7 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
   ) {
     final accessScope = registrationMode == RegistrationMode.egyptian
         ? PackageAccessScope.singleSubject
-        : PackageAccessScope.allSubjects;
+        : PackageAccessScope.singleSubject;
     return packages
         .where(
           (item) =>
@@ -119,6 +131,19 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
     if (isClosed) return;
     if (!state.packages.any((item) => item.id == id)) return;
     emit(state.copyWith(selectedPackageId: id, clearMessage: true));
+  }
+
+  bool get hasValidSelectedGulfPackage {
+    final curriculumId = _gulfCurriculumId;
+    if (curriculumId == null || curriculumId.isEmpty) return false;
+    final package = state.packages
+        .where((item) => item.id == state.selectedPackageId)
+        .firstOrNull;
+    if (package == null) return false;
+    final packageCurriculum = package.curriculum?.trim();
+    return packageCurriculum == null ||
+        packageCurriculum.isEmpty ||
+        packageCurriculum == curriculumId;
   }
 
   void updateNotes(String value) {

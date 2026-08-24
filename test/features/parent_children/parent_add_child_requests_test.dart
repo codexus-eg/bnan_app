@@ -55,9 +55,14 @@ void main() {
     expect(json.containsKey('parentEmail'), isFalse);
     expect(json.containsKey('parentPassword'), isFalse);
     expect(json.containsKey('password'), isFalse);
+    expect((json['student'] as Map<String, dynamic>)['subjects'], [
+      'subject-1',
+      'subject-2',
+      'subject-3',
+    ]);
   });
 
-  test('Gulf package policy hides single-subject and inactive packages', () {
+  test('Gulf package policy supports private and legacy packages', () {
     const single = PackageModel(
       accessScope: PackageAccessScope.singleSubject,
       isActive: true,
@@ -69,7 +74,7 @@ void main() {
     const inactive = PackageModel(isActive: false);
     expect(
       ParentPackagePolicy.isVisible(single, registrationMode: 'gulf'),
-      isFalse,
+      isTrue,
     );
     expect(
       ParentPackagePolicy.isVisible(single, registrationMode: 'egyptian'),
@@ -181,5 +186,5 @@ const _student = ParentChildStudentRequest(
   email: 'student@example.com',
   password: 'Password1',
   gradeId: 'grade-1',
-  subjectIds: ['subject-1'],
+  subjectIds: ['subject-1', 'subject-2', 'subject-3'],
 );

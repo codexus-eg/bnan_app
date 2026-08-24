@@ -21,6 +21,24 @@ void main() {
     expect(repo.calls, 1);
     await cubit.close();
   });
+
+  test('local pending marks only the renewed subscription', () async {
+    final cubit = StudentSubscriptionsCubit(_StaticRepo());
+    await cubit.load();
+
+    cubit.markRenewalPending('subscription-1');
+
+    expect(cubit.isRenewalPending('subscription-1'), isTrue);
+    expect(cubit.isRenewalPending('subscription-2'), isFalse);
+    await cubit.close();
+  });
+}
+
+class _StaticRepo implements StudentSubscriptionsRepo {
+  @override
+  getSubscriptions() async => const Right(_student);
+  @override
+  getHomeSubscriptions() => getSubscriptions();
 }
 
 class _PendingRepo implements StudentSubscriptionsRepo {
@@ -32,10 +50,27 @@ class _PendingRepo implements StudentSubscriptionsRepo {
     calls++;
     return completer.future;
   }
+
+  @override
+  Future<Either<Failure, ParentChildSubscriptionsModel>>
+  getHomeSubscriptions() => getSubscriptions();
 }
 
 const _student = ParentChildSubscriptionsModel(
   studentId: 'student-1',
   studentName: 'Student',
-  subscriptions: [],
+  subscriptions: [
+    ParentChildSubscriptionModel(
+      id: 'subscription-1',
+      packageId: 'package-1',
+      packageName: 'One',
+      curriculumId: 'curriculum',
+    ),
+    ParentChildSubscriptionModel(
+      id: 'subscription-2',
+      packageId: 'package-2',
+      packageName: 'Two',
+      curriculumId: 'curriculum',
+    ),
+  ],
 );

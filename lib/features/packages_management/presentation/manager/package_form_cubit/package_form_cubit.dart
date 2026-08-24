@@ -24,7 +24,9 @@ class PackageFormCubit extends Cubit<PackageFormState> {
             : isEgyptian
             ? 'monthly'
             : _valueOrDefault(package?.type, 'hours'),
-        accessScope: package?.accessScope ?? PackageAccessScope.allSubjects,
+        accessScope: isGulf
+            ? PackageAccessScope.singleSubject
+            : package?.accessScope ?? PackageAccessScope.allSubjects,
         registrationMode: registrationMode,
         currency: _valueOrDefault(package?.currency, 'SAR'),
         isPopular: package?.isPopular ?? false,
@@ -34,10 +36,13 @@ class PackageFormCubit extends Cubit<PackageFormState> {
 
   void setCurriculum(String? id, String? registrationMode) {
     final isEgyptian = registrationMode?.trim().toLowerCase() == 'egyptian';
-    final canKeepScope = isEgyptian;
     final isGulf = registrationMode?.trim().toLowerCase() == 'gulf';
-    final accessScope = canKeepScope
-        ? state.accessScope
+    final accessScope = isGulf
+        ? PackageAccessScope.singleSubject
+        : isEgyptian
+        ? state.isGulf
+              ? PackageAccessScope.allSubjects
+              : state.accessScope
         : PackageAccessScope.allSubjects;
     emit(
       PackageFormState(
@@ -65,6 +70,7 @@ class PackageFormCubit extends Cubit<PackageFormState> {
   }
 
   void setAccessScope(String scope) {
+    if (state.isGulf) return;
     if (scope == PackageAccessScope.singleSubject &&
         !state.canSelectSingleSubject) {
       return;

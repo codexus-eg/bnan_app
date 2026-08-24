@@ -24,6 +24,8 @@ class RenewalPackageStep extends StatelessWidget {
         item,
         registrationMode: state.args.registrationMode,
         curriculumId: state.args.curriculumId,
+        currentAccessScope: state.args.subscription.accessScope,
+        currentPackageType: state.args.subscription.packageType,
       ),
       bottomWidget: (_, item) {
         final selected = state.package?.id == item.id;

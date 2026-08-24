@@ -10,6 +10,19 @@ void main() {
     expect(package.accessScope, PackageAccessScope.allSubjects);
   });
 
+  test(
+    'registration package parses packageType alias and normalizes scope',
+    () {
+      final package = PackageModel.fromJson({
+        'packageType': ' HOURS ',
+        'accessScope': ' SINGLE_SUBJECT ',
+      });
+
+      expect(package.type, 'hours');
+      expect(package.accessScope, PackageAccessScope.singleSubject);
+    },
+  );
+
   test('create payload includes the selected access scope', () {
     const request = AddPackageRequestModel(
       name: 'Single subject',

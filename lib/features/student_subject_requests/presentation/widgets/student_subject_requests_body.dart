@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/constants/tamara_default_address.dart';
 import 'package:bnan_app/core/enums/registration_mode.dart';
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
@@ -145,10 +146,16 @@ class _StudentSubjectRequestsBodyState
       context.read<StudentSubjectRequestsCubit>().submitEgyptian();
       return;
     }
+    final cubit = context.read<StudentSubjectRequestsCubit>();
+    if (!cubit.hasValidSelectedGulfPackage) {
+      showCustomSnackBar(context, S.of(context).invalidPackage, false);
+      return;
+    }
     context.read<SubjectRequestPaymentCubit>().checkout(
       GulfSubjectRequestPayload(
         subjectId: state.selectedSubjectId!,
         packageId: state.selectedPackageId!,
+        curriculumId: cubit.gulfCurriculumId!,
         notes: state.notes,
         discountCode: discountCode,
         paymentAddress: const PaymentAddress(

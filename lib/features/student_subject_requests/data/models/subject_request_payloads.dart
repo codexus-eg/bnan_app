@@ -22,6 +22,7 @@ class GulfSubjectRequestPayload {
   const GulfSubjectRequestPayload({
     required this.subjectId,
     required this.packageId,
+    required this.curriculumId,
     required this.paymentAddress,
     this.notes,
     this.discountCode,
@@ -29,6 +30,7 @@ class GulfSubjectRequestPayload {
 
   final String subjectId;
   final String packageId;
+  final String curriculumId;
   final PaymentAddress paymentAddress;
   final String? notes;
   final String? discountCode;
@@ -36,6 +38,7 @@ class GulfSubjectRequestPayload {
   Map<String, dynamic> toJson() => {
     'subjectId': subjectId,
     'packageId': packageId,
+    'curriculumId': curriculumId,
     if (_optional(notes) case final value?) 'notes': value,
     if (_optional(discountCode) case final value?) 'discountCode': value,
     'paymentAddress': paymentAddress.toJson(),

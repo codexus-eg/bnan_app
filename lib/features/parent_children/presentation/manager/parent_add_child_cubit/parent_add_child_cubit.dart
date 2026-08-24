@@ -24,6 +24,8 @@ import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:bnan_app/core/network/end_points.dart';
+import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -121,7 +123,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
 
   void toggleSubject(String id) {
     final selected = [...state.selectedSubjectIds];
-    if (state.isSingleSubject) {
+    if (state.isSingleSubject && !state.isEgyptianPrivate && !state.isGulf) {
       emit(state.copyWith(selectedSubjectIds: [id], errorMessage: null));
       return;
     }
@@ -361,6 +363,12 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     if (isClosed) return;
     await result.fold(
       (failure) async {
+        GulfRegistrationDiagnostics.uiFailure(
+          endpoint: EndPoints.parentChildGulfCheckout,
+          cubit: 'ParentAddChildCubit',
+          state: 'ParentAddChildPhase.failure',
+          message: failure.message,
+        );
         _log(
           'checkout failure; responseReceived=${failure.responseReceived}, '
           'statusCode=${failure.statusCode}, code=${failure.code}',

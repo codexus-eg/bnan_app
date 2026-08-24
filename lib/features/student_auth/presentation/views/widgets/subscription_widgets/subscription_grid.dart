@@ -179,6 +179,7 @@ class PackagesGrid extends StatelessWidget {
       curriculumId: curriculumId,
       curriculumName: curriculumName,
       registrationMode: registrationMode,
+      packageType: index < packages.length ? packages[index].type ?? '' : '',
       isSelected: plan.id == selectedPackageId,
       bottomWidget: index < packages.length
           ? bottomWidget?.call(plan, packages[index])

@@ -82,12 +82,14 @@ class ParentSubscriptionsRepoImpl implements ParentSubscriptionsRepo {
   gulfStatus(String id) => repoGuard(
     () async => RenewalStatusResponse.fromJson(
       _map(await _get(EndPoints.gulfRenewalStatus(id))),
+      successIsCompleted: true,
     ),
   );
   @override
   gulfReconcile(String id) => repoGuard(
     () async => RenewalStatusResponse.fromJson(
       _map(await _post(EndPoints.gulfRenewalReconcile(id))),
+      successIsCompleted: true,
     ),
   );
 
@@ -126,10 +128,7 @@ class ParentSubscriptionsRepoImpl implements ParentSubscriptionsRepo {
       children.fold(0, (count, child) {
         if (child is! Map) return count;
         final subscriptions = child['subscriptions'];
-        if (subscriptions is List && subscriptions.isNotEmpty) {
-          return count + subscriptions.length;
-        }
-        return count + (child['subscription'] is Map ? 1 : 0);
+        return count + (subscriptions is List ? subscriptions.length : 0);
       });
 
   void _log(String message) {

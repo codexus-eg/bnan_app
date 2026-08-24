@@ -5,6 +5,8 @@ import 'package:bnan_app/features/parent_children/data/models/parent_flow_result
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/parent_subscription_renewal_body.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_state.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,10 @@ class ParentSubscriptionRenewalView extends StatefulWidget {
 
 class _State extends State<ParentSubscriptionRenewalView>
     with WidgetsBindingObserver {
+  bool _tamaraOpen = false;
+  bool _tamaraReturned = false;
+  bool _successNavigationExecuted = false;
+
   @override
   void initState() {
     super.initState();
@@ -32,38 +38,65 @@ class _State extends State<ParentSubscriptionRenewalView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && mounted) {
+    if (state == AppLifecycleState.resumed &&
+        mounted &&
+        _tamaraReturned &&
+        !_tamaraOpen) {
       context.read<ParentSubscriptionRenewalCubit>().reconcilePayment();
     }
   }
 
   @override
   Widget build(BuildContext context) =>
-      BlocListener<
-        ParentSubscriptionRenewalCubit,
-        ParentSubscriptionRenewalState
-      >(
-        listenWhen: (before, after) {
-          if (after.isGulf) {
-            return !before.shouldOpenCheckout && after.shouldOpenCheckout;
+      BlocListener<GetPackagesCubit, GetPackagesState>(
+        listener: (context, state) {
+          if (state is GetPackagesSuccess) {
+            context
+                .read<ParentSubscriptionRenewalCubit>()
+                .selectAutomaticMonthlyPackage(state.packages);
           }
-          return before.phase == ParentRenewalPhase.submitting &&
-              (after.phase == ParentRenewalPhase.pending ||
-                  after.phase == ParentRenewalPhase.editing &&
-                      after.errorMessage != null);
         },
-        listener: _onState,
-        child: Scaffold(
-          appBar: CustomAppbar(headerText: S.of(context).renewSubscription),
-          body: const ParentSubscriptionRenewalBody(),
-        ),
+        child:
+            BlocListener<
+              ParentSubscriptionRenewalCubit,
+              ParentSubscriptionRenewalState
+            >(
+              listenWhen: _shouldListen,
+              listener: _onState,
+              child: Scaffold(
+                appBar: CustomAppbar(
+                  headerText: S.of(context).renewSubscription,
+                ),
+                body: const ParentSubscriptionRenewalBody(),
+              ),
+            ),
       );
+
+  bool _shouldListen(
+    ParentSubscriptionRenewalState before,
+    ParentSubscriptionRenewalState after,
+  ) {
+    if (after.isGulf) {
+      return !before.shouldOpenCheckout && after.shouldOpenCheckout ||
+          before.phase != ParentRenewalPhase.completed &&
+              after.phase == ParentRenewalPhase.completed;
+    }
+    return before.phase == ParentRenewalPhase.submitting &&
+        (after.phase == ParentRenewalPhase.pending ||
+            after.phase == ParentRenewalPhase.editing &&
+                after.errorMessage != null);
+  }
 
   Future<void> _onState(
     BuildContext context,
     ParentSubscriptionRenewalState state,
   ) async {
-    if (state.isGulf) return _open(context, state);
+    if (state.isGulf) {
+      if (state.phase == ParentRenewalPhase.completed) {
+        return _finishGulf(context);
+      }
+      return _open(context, state);
+    }
     if (state.phase == ParentRenewalPhase.pending) {
       MyNavigator.pop(context, ParentFlowResult.pendingReview);
       return;
@@ -78,18 +111,17 @@ class _State extends State<ParentSubscriptionRenewalView>
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
-    final result = url == null
-        ? const TamaraCheckoutLaunchResult(opened: false)
-        : await TamaraCheckoutLauncher.open(
-            context,
-            url,
-            completionStream: cubit.stream.map(
-              (value) => value.phase == ParentRenewalPhase.completed,
-            ),
-            isCompleted: () =>
-                cubit.state.phase == ParentRenewalPhase.completed,
-            onOpened: cubit.reconcilePayment,
-          );
+    _tamaraReturned = false;
+    _tamaraOpen = true;
+    late final TamaraCheckoutLaunchResult result;
+    try {
+      result = url == null
+          ? const TamaraCheckoutLaunchResult(opened: false)
+          : await TamaraCheckoutLauncher.open(context, url);
+    } finally {
+      _tamaraOpen = false;
+      _tamaraReturned = true;
+    }
     if (!context.mounted || cubit.isClosed) return;
     if (!result.opened) {
       cubit.checkoutOpenFailed();
@@ -101,5 +133,11 @@ class _State extends State<ParentSubscriptionRenewalView>
       return;
     }
     await cubit.reconcilePayment();
+  }
+
+  void _finishGulf(BuildContext context) {
+    if (_successNavigationExecuted || !context.mounted) return;
+    _successNavigationExecuted = true;
+    MyNavigator.pop(context, ParentFlowResult.completed);
   }
 }
