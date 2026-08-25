@@ -471,10 +471,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Current Earnings"),
         "curricula": MessageLookupByLibrary.simpleMessage("Curricula"),
         "curriculum": MessageLookupByLibrary.simpleMessage("Curriculum"),
-        "curriculumDescription":
-            MessageLookupByLibrary.simpleMessage("Curriculum Description"),
         "curriculumDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Curriculum deleted successfully"),
+        "curriculumDescription":
+            MessageLookupByLibrary.simpleMessage("Curriculum Description"),
         "curriculumIcon":
             MessageLookupByLibrary.simpleMessage("Curriculum Image"),
         "curriculumName":
@@ -513,6 +513,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete assignment"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this assignment?"),
+        "deleteCurriculum":
+            MessageLookupByLibrary.simpleMessage("Delete Curriculum"),
+        "deleteCurriculumConfirmation": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this curriculum?"),
         "deleteDiscountCode":
             MessageLookupByLibrary.simpleMessage("Delete discount code"),
         "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage(
@@ -585,10 +589,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "editClass": MessageLookupByLibrary.simpleMessage("Edit Class"),
         "editCurriculum":
             MessageLookupByLibrary.simpleMessage("Edit Curriculum"),
-        "deleteCurriculum":
-            MessageLookupByLibrary.simpleMessage("Delete Curriculum"),
-        "deleteCurriculumConfirmation": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to delete this curriculum?"),
         "editData": MessageLookupByLibrary.simpleMessage("Edit Data"),
         "editDiscountCode":
             MessageLookupByLibrary.simpleMessage("Edit Discount Code"),
@@ -1796,10 +1796,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "sessions": MessageLookupByLibrary.simpleMessage("Sessions"),
         "sessionsThisMonth":
             MessageLookupByLibrary.simpleMessage("Sessions This Month"),
-        "shortVideoLinkOptional":
-            MessageLookupByLibrary.simpleMessage("Short video link (optional)"),
         "shortVideoLink":
             MessageLookupByLibrary.simpleMessage("Short video link"),
+        "shortVideoLinkOptional":
+            MessageLookupByLibrary.simpleMessage("Short video link (optional)"),
         "singleSubject": MessageLookupByLibrary.simpleMessage("Single Subject"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("Social Studies"),

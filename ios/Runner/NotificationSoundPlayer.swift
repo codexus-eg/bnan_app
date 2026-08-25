@@ -76,7 +76,7 @@ final class NotificationSoundPlayer {
       player.play()
       let stop = DispatchWorkItem { [weak self] in self?.stopChatRing() }
       chatRingStop = stop
-      DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: stop)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 60, execute: stop)
     } catch {
       stopChatRing()
     }

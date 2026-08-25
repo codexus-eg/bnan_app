@@ -19,11 +19,14 @@ class PushTokenRegistrar {
   static const _registeredOwnerKey = 'registered_push_owner';
   static const _registeredVersionKey = 'registered_push_version';
   Future<void> _operations = Future.value();
+  Future<void>? _unregisterOperation;
   bool _registrationEnabled = false;
 
   Future<void> registerCurrent() async {
     if (SessionManager.instance.accessToken?.isNotEmpty != true) return;
+    debugPrint('[FCM] login registration start');
     _registrationEnabled = true;
+    _unregisterOperation = null;
     try {
       await _requestPermissionOnce();
       final token = await _messaging.getToken();
@@ -69,31 +72,51 @@ class PushTokenRegistrar {
       key: _registeredVersionKey,
       value: package.version,
     );
+    debugPrint('[FCM] token registered');
   }
 
-  Future<void> deleteCurrent() async {
+  Future<void> deleteCurrent() {
     _registrationEnabled = false;
-    await _enqueue(_deleteCurrent);
+    return _unregisterOperation ??= _enqueue(_deleteCurrentBestEffort);
+  }
+
+  Future<void> _deleteCurrentBestEffort() async {
+    debugPrint('[FCM] unregister start');
+    try {
+      await _deleteCurrent();
+    } catch (error) {
+      _debug('FCM unregister failed', error);
+    }
   }
 
   Future<void> _deleteCurrent() async {
-    var failed = false;
+    var backendFailed = false;
     final tokens = <String>{_cached(_registeredTokenKey)};
     try {
       tokens.add((await _messaging.getToken())?.trim() ?? '');
     } catch (error) {
-      failed = true;
+      backendFailed = true;
       _debug('Push token lookup failed', error);
     }
     for (final token in tokens.where((value) => value.isNotEmpty)) {
       try {
         await _repo.delete(token: token);
       } catch (error) {
-        failed = true;
+        backendFailed = true;
         _debug('Push token deletion failed', error);
       }
     }
-    if (failed) return;
+    debugPrint(
+      backendFailed
+          ? '[FCM] backend unregister failed'
+          : '[FCM] backend unregister success',
+    );
+    try {
+      await _messaging.deleteToken();
+      debugPrint('[FCM] firebase token deleted');
+    } catch (error) {
+      _debug('Push token invalidation failed', error);
+    }
     await CacheHelper.removeData(key: _registeredTokenKey);
     await CacheHelper.removeData(key: _registeredOwnerKey);
     await CacheHelper.removeData(key: _registeredVersionKey);

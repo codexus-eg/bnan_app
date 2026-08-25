@@ -17,11 +17,13 @@ void main() {
   const soundChannel = MethodChannel('bnan/notification_sound');
   late List<MethodCall> pluginCalls;
   late List<MethodCall> soundCalls;
+  late List<String> timeline;
   String? launchPayload;
 
   setUp(() {
     pluginCalls = [];
     soundCalls = [];
+    timeline = [];
     launchPayload = null;
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     AndroidFlutterLocalNotificationsPlugin.registerWith();
@@ -29,6 +31,7 @@ void main() {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
     messenger.setMockMethodCallHandler(pluginChannel, (call) async {
       pluginCalls.add(call);
+      timeline.add('plugin:${call.method}');
       if (call.method == 'initialize') return true;
       if (call.method == 'getNotificationAppLaunchDetails') {
         return <String, dynamic>{
@@ -45,6 +48,7 @@ void main() {
     });
     messenger.setMockMethodCallHandler(soundChannel, (call) async {
       soundCalls.add(call);
+      timeline.add('sound:${call.method}');
       return null;
     });
   });
@@ -57,25 +61,21 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  test('Android call alert uses the new insistent 15-second ring', () async {
+  test('Android call alert delegates sound to the native service', () async {
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
     await local.showNotification(
       _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-1'),
       appState: 'background',
     );
 
-    final details = _shownDetails(pluginCalls.singleWhere(_isShow));
-    expect(details['channelId'], 'bnan_chat_ring_v3');
-    expect(details['sound'], 'chat_ring');
-    expect(details['timeoutAfter'], 15000);
-    expect(details['additionalFlags'], [4]);
-    final actions = List<Map>.from(details['actions'] as List);
-    expect(actions.single['id'], 'student_call_reject');
-    expect(actions.single['title'], isNot(contains('Accept')));
+    expect(pluginCalls.where(_isShow), isEmpty);
+    expect(soundCalls, isEmpty);
     await local.rejectStudentCall();
   });
 
   test('same callId rings once even when notificationId changes', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    IOSFlutterLocalNotificationsPlugin.registerWith();
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
     await local.showNotification(
       _notification('notification-1', 'STUDENT_CALL_ALERT', callId: 'call-1'),
@@ -126,6 +126,8 @@ void main() {
   });
 
   test('reject stops ring and allows a new call immediately', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    IOSFlutterLocalNotificationsPlugin.registerWith();
     final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
     await local.showNotification(
       _notification(
@@ -146,10 +148,33 @@ void main() {
     expect(local.studentCallStatus, StudentCallAlertStatus.ringing);
     expect(pluginCalls.where(_isShow), hasLength(2));
     expect(pluginCalls.map((call) => call.method), contains('cancel'));
+    expect(
+      timeline.indexOf('sound:stopChatRing'),
+      lessThan(timeline.indexOf('plugin:cancel')),
+    );
     await local.rejectStudentCall();
   });
 
+  test('reject prevents the same callId from ringing again', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    IOSFlutterLocalNotificationsPlugin.registerWith();
+    final local = LocalPushNotifications(FlutterLocalNotificationsPlugin());
+    final call = _notification(
+      'same-notification',
+      'STUDENT_CALL_ALERT',
+      callId: 'call-1',
+    );
+    await local.showNotification(call);
+    await local.rejectStudentCall();
+    await local.showNotification(call);
+
+    expect(pluginCalls.where(_isShow), hasLength(1));
+    expect(local.studentCallStatus, StudentCallAlertStatus.rejected);
+  });
+
   test('timeout produces noAnswer and cancels ring', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    IOSFlutterLocalNotificationsPlugin.registerWith();
     final local = LocalPushNotifications(
       FlutterLocalNotificationsPlugin(),
       studentCalls: StudentCallAlertLifecycle(
@@ -181,16 +206,63 @@ void main() {
     );
   });
 
-  test('native iOS ring loops chat_ring and stops after 15 seconds', () {
+  test('native iOS ring loops chat_ring and stops after 60 seconds', () {
     final swift = File(
       'ios/Runner/NotificationSoundPlayer.swift',
     ).readAsStringSync();
     expect(swift, contains('forResource: "chat_ring"'));
     expect(swift, contains('player.numberOfLoops = -1'));
-    expect(swift, contains('deadline: .now() + 15'));
+    expect(swift, contains('deadline: .now() + 60'));
     expect(swift, contains('chatRingStop?.cancel()'));
     expect(swift, contains('chatRingPlayer?.stop()'));
     expect(swift, contains('forResource: "nudge_alert"'));
+  });
+
+  test('native Android ring is touch-independent and stops after 60 seconds', () {
+    final kotlin = File(
+      'android/app/src/main/kotlin/com/bnanacademy/app/StudentCallRingPlayer.kt',
+    ).readAsStringSync();
+    expect(kotlin, contains('isLooping = true'));
+    expect(kotlin, contains('handler.postDelayed(stopTask, 60_000)'));
+    expect(kotlin, contains('if (isPlaying) stop()'));
+    expect(kotlin, contains('release()'));
+    final service = File(
+      'android/app/src/main/kotlin/com/bnanacademy/app/StudentCallAlertService.kt',
+    ).readAsStringSync();
+    expect(service, contains('setSound(null, null)'));
+    expect(service, isNot(contains('FLAG_INSISTENT')));
+    expect(service, contains('setContentIntent(open)'));
+    expect(service, contains('finishCall(rejected = false)'));
+    expect(service, contains('finishCall(rejected = true)'));
+  });
+
+  test('Android terminated flow is owned by a foreground service', () {
+    final manifest = File(
+      'android/app/src/main/AndroidManifest.xml',
+    ).readAsStringSync();
+    final receiver = File(
+      'android/app/src/main/kotlin/com/bnanacademy/app/StudentCallFcmReceiver.kt',
+    ).readAsStringSync();
+    final service = File(
+      'android/app/src/main/kotlin/com/bnanacademy/app/StudentCallAlertService.kt',
+    ).readAsStringSync();
+
+    expect(manifest, contains('android.permission.FOREGROUND_SERVICE'));
+    expect(manifest, contains('FOREGROUND_SERVICE_MEDIA_PLAYBACK'));
+    expect(manifest, contains('.StudentCallFcmReceiver'));
+    expect(manifest, contains('.StudentCallAlertService'));
+    expect(receiver, contains('FlutterFirebaseMessagingReceiver'));
+    expect(receiver, contains('super.onReceive(context, intent)'));
+    expect(manifest, contains('tools:node="remove"'));
+    expect(receiver, contains('ContextCompat.startForegroundService'));
+    expect(receiver, isNot(contains('NEW_MESSAGE')));
+    expect(receiver, isNot(contains('CHAT_NUDGE')));
+    expect(service, contains('startForeground('));
+    expect(service, contains('setOngoing(true)'));
+    expect(service, contains('ACTION_REJECT'));
+    expect(service, contains('handler.postDelayed(timeout'));
+    expect(service, contains('finishCall(rejected = false)'));
+    expect(service, contains('finishCall(rejected = true)'));
   });
 
   test('Android and iOS package the identical chat_ring.wav', () {

@@ -60,12 +60,12 @@ class StudentHomePage extends StatelessWidget {
                 isLoading: loading,
                 child: Column(
                   children: [
-                    const StudentHomeSubscriptionSection(),
-                    const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: HomeStatsSection(states: _stats(context, data)),
                     ),
+                    const SizedBox(height: 16),
+                    const StudentHomeSubscriptionSection(),
                   ],
                 ),
               ),

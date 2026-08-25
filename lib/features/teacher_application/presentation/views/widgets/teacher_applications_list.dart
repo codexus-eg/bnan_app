@@ -15,15 +15,19 @@ class TeacherApplicationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reversedTeachers = teachers.reversed.toList();
+
     return AppSkeletonizer(
       isLoading: isLoading,
       child: ListView.separated(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 24),
         itemBuilder: (context, index) {
-          return TeacherApplicationCard(teacher: teachers[index]);
+          return TeacherApplicationCard(
+            teacher: reversedTeachers[index],
+          );
         },
         separatorBuilder: (_, _) => const SizedBox(height: 16),
-        itemCount: teachers.length,
+        itemCount: reversedTeachers.length,
       ),
     );
   }

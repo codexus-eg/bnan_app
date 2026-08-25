@@ -68,6 +68,7 @@ void main() {
       );
       expect(repo.registered.last.appVersion, '1.0.0');
       expect(repo.deleted, ['fcm-1', 'fcm-2']);
+      expect(messaging.deleteCalls, 1);
     },
   );
 
@@ -86,6 +87,7 @@ void main() {
     SessionManager.instance.addBeforeClearListener(unregisterOldToken);
     try {
       await _login(userId: 'supervisor-1');
+      messaging.token = 'supervisor-fcm';
       await registrar.registerCurrent();
     } finally {
       SessionManager.instance.removeBeforeClearListener(unregisterOldToken);
@@ -94,8 +96,9 @@ void main() {
     expect(repo.operations, [
       'register:shared-fcm',
       'delete:shared-fcm',
-      'register:shared-fcm',
+      'register:supervisor-fcm',
     ]);
+    expect(messaging.deleteCalls, 1);
   });
 
   test('token refresh cannot re-register after logout starts', () async {
@@ -115,6 +118,65 @@ void main() {
 
     expect(repo.registered.map((item) => item.token), ['shared-fcm']);
     expect(repo.deleted, ['shared-fcm']);
+  });
+
+  test(
+    'failed backend detach still invalidates the device FCM token',
+    () async {
+      await _login(userId: 'student-1');
+      final messaging = _Messaging('stale-fcm');
+      final repo = _TokenRepo()..failDeletes = true;
+      final registrar = PushTokenRegistrar(
+        messaging,
+        repo,
+        InstallationIdStore(),
+      );
+      await registrar.registerCurrent();
+
+      await registrar.deleteCurrent();
+
+      expect(messaging.deleteCalls, 1);
+      expect(CacheHelper.getData(key: 'registered_push_token'), isNull);
+      expect(CacheHelper.getData(key: 'registered_push_owner'), isNull);
+    },
+  );
+
+  test('concurrent logout coalesces device unregister', () async {
+    await _login(userId: 'student-1');
+    final messaging = _Messaging('student-fcm');
+    final repo = _TokenRepo();
+    final registrar = PushTokenRegistrar(
+      messaging,
+      repo,
+      InstallationIdStore(),
+    );
+    await registrar.registerCurrent();
+
+    await Future.wait([registrar.deleteCurrent(), registrar.deleteCurrent()]);
+
+    expect(repo.deleted, ['student-fcm']);
+    expect(messaging.deleteCalls, 1);
+  });
+
+  test('firebase delete failure still registers on next login', () async {
+    await _login(userId: 'student-1');
+    final messaging = _Messaging('student-fcm')..failDelete = true;
+    final repo = _TokenRepo();
+    final registrar = PushTokenRegistrar(
+      messaging,
+      repo,
+      InstallationIdStore(),
+    );
+    await registrar.registerCurrent();
+    await registrar.deleteCurrent();
+
+    messaging.failDelete = false;
+    await registrar.registerCurrent();
+
+    expect(repo.registered.map((value) => value.token), [
+      'student-fcm',
+      'student-fcm',
+    ]);
   });
 
   test('role switch without user ids detaches the old token owner', () async {
@@ -308,11 +370,19 @@ class _Messaging implements PushMessaging {
   _Messaging(this.token, {this.initial, Stream<String>? refresh})
     : _refresh = refresh ?? const Stream.empty();
   String token;
+  int deleteCalls = 0;
+  bool failDelete = false;
   final RemoteMessage? initial;
   final Stream<String> _refresh;
 
   @override
   Future<String?> getToken() async => token;
+  @override
+  Future<void> deleteToken() async {
+    deleteCalls++;
+    if (failDelete) throw StateError('firebase delete failed');
+  }
+
   @override
   Future<RemoteMessage?> getInitialMessage() async => initial;
   @override
@@ -325,6 +395,7 @@ class _TokenRepo implements DeviceTokenRepo {
   final registered = <DeviceTokenPayload>[];
   final deleted = <String>[];
   final operations = <String>[];
+  bool failDeletes = false;
   @override
   Future<void> register(DeviceTokenPayload payload) async {
     registered.add(payload);
@@ -335,6 +406,7 @@ class _TokenRepo implements DeviceTokenRepo {
   Future<void> delete({required String token}) async {
     deleted.add(token);
     operations.add('delete:$token');
+    if (failDeletes) throw StateError('delete failed');
   }
 }
 

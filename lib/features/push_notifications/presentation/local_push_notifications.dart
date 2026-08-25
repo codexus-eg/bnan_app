@@ -16,8 +16,7 @@ class LocalPushNotifications {
   final FlutterLocalNotificationsPlugin _plugin;
   final StudentCallAlertLifecycle _studentCalls;
   static const _chatRingNotificationId = 1128352844;
-  static const _chatRingDurationMs = 15000;
-  static const _androidFlagInsistent = 4;
+  static const _chatRingDurationMs = 60000;
   static const _rejectAction = 'student_call_reject';
   static const _rejectLabel = 'Reject';
   static const _callCategory = 'student_call_alert';
@@ -65,16 +64,6 @@ class LocalPushNotifications {
     ]),
     audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
   );
-  static final _chatRingChannel = AndroidNotificationChannel(
-    'bnan_chat_ring_v3',
-    'Chat call alerts',
-    description: 'Incoming chat call alerts',
-    importance: Importance.max,
-    sound: const RawResourceAndroidNotificationSound('chat_ring'),
-    enableVibration: true,
-    vibrationPattern: _nudgeAlertChannel.vibrationPattern,
-    audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
-  );
   StudentCallAlertStatus? get studentCallStatus => _studentCalls.status;
 
   Future<void> initialize(ValueChanged<String> onPayload) async {
@@ -89,7 +78,14 @@ class LocalPushNotifications {
             DarwinNotificationCategory(
               _callCategory,
               actions: [
-                DarwinNotificationAction.plain(_rejectAction, _rejectLabel),
+                DarwinNotificationAction.plain(
+                  _rejectAction,
+                  _rejectLabel,
+                  options: {
+                    DarwinNotificationActionOption.foreground,
+                    DarwinNotificationActionOption.destructive,
+                  },
+                ),
               ],
             ),
           ],
@@ -97,13 +93,15 @@ class LocalPushNotifications {
       ),
       onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload;
-        if (payload?.isNotEmpty != true) return;
-        if (response.actionId == _rejectAction &&
-            _isChatRingPayload(payload!)) {
+        if (payload == null || payload.isEmpty) return;
+        if (response.actionId == _rejectAction && _isChatRingPayload(payload)) {
           await rejectStudentCall();
           return;
         }
-        onPayload(payload!);
+        if (_isChatRingPayload(payload)) {
+          await _resumeStudentCall(payload);
+        }
+        onPayload(payload);
       },
       onDidReceiveBackgroundNotificationResponse:
           studentCallNotificationResponseBackground,
@@ -115,7 +113,6 @@ class LocalPushNotifications {
     await android?.createNotificationChannel(_channel);
     await android?.createNotificationChannel(_nudgeChannel);
     await android?.createNotificationChannel(_nudgeAlertChannel);
-    await android?.createNotificationChannel(_chatRingChannel);
   }
 
   Future<String?> initialPayload() async {
@@ -163,6 +160,14 @@ class LocalPushNotifications {
     final key = notification.key.trim().toUpperCase();
     final isNudge = key == 'CHAT_NUDGE';
     final isChatRing = key == 'STUDENT_CALL_ALERT';
+    final useNativeAndroidRing =
+        isChatRing && defaultTargetPlatform == TargetPlatform.android;
+    if (useNativeAndroidRing) {
+      debugPrint(
+        '[ChatRing] Android notification/ring owned by native service',
+      );
+      return;
+    }
     if (isChatRing &&
         !_studentCalls.start(notification.callAttemptId, _timeoutStudentCall)) {
       return;
@@ -197,8 +202,11 @@ class LocalPushNotifications {
           icon: 'ic_notification',
           importance: isChatRing ? Importance.max : Importance.high,
           priority: isChatRing ? Priority.max : Priority.high,
-          playSound: isChatRing || !isNudge || useNudgeChannel,
-          sound: isChatRing
+          playSound:
+              isChatRing && !isForegroundChatRing && !useNativeAndroidRing ||
+              !isNudge && !isChatRing ||
+              useNudgeChannel,
+          sound: isChatRing && !useNativeAndroidRing
               ? const RawResourceAndroidNotificationSound('chat_ring')
               : useNudgeChannel
               ? const RawResourceAndroidNotificationSound('nudge_alert')
@@ -211,12 +219,17 @@ class LocalPushNotifications {
               ? AudioAttributesUsage.notificationRingtone
               : AudioAttributesUsage.notification,
           timeoutAfter: isChatRing ? _chatRingDurationMs : null,
-          additionalFlags: isChatRing
-              ? Int32List.fromList(const [_androidFlagInsistent])
-              : null,
+          additionalFlags: null,
           autoCancel: !isChatRing,
           actions: isChatRing
-              ? [AndroidNotificationAction(_rejectAction, _rejectLabel)]
+              ? [
+                  AndroidNotificationAction(
+                    _rejectAction,
+                    _rejectLabel,
+                    showsUserInterface: true,
+                    cancelNotification: true,
+                  ),
+                ]
               : null,
         ),
         iOS: DarwinNotificationDetails(
@@ -240,7 +253,7 @@ class LocalPushNotifications {
       await _soundChannel.invokeMethod<void>('playNudgeNotificationSequence');
     }
     if (isChatRing) {
-      if (isForegroundChatRing && defaultTargetPlatform == TargetPlatform.iOS) {
+      if (isForegroundChatRing && _canPlayNativeChatRing) {
         await _soundChannel.invokeMethod<void>('playChatRing');
       }
       debugPrint('[ChatRing] platform=${defaultTargetPlatform.name}');
@@ -250,10 +263,16 @@ class LocalPushNotifications {
   }
 
   Future<void> stopChatRing() async {
-    await _plugin.cancel(id: _chatRingNotificationId);
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      await _soundChannel.invokeMethod<void>('stopChatRing');
+    if (_canStopNativeChatRing) {
+      try {
+        await _soundChannel.invokeMethod<void>('stopChatRing');
+      } catch (error) {
+        if (kDebugMode) {
+          debugPrint('Chat ring stop failed: ${error.runtimeType}');
+        }
+      }
     }
+    await _plugin.cancel(id: _chatRingNotificationId);
   }
 
   Future<void> rejectStudentCall() async {
@@ -262,6 +281,28 @@ class LocalPushNotifications {
   }
 
   Future<void> _timeoutStudentCall() => stopChatRing();
+
+  bool get _canPlayNativeChatRing =>
+      defaultTargetPlatform == TargetPlatform.iOS;
+
+  bool get _canStopNativeChatRing =>
+      defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS;
+
+  Future<void> _resumeStudentCall(String payload) async {
+    final value = jsonDecode(payload);
+    if (value is! Map) return;
+    final notification = AppNotification.fromJson(
+      Map<String, dynamic>.from(value),
+    );
+    if (_studentCalls.status != StudentCallAlertStatus.ringing &&
+        !_studentCalls.start(notification.callAttemptId, _timeoutStudentCall)) {
+      return;
+    }
+    if (_canPlayNativeChatRing) {
+      await _soundChannel.invokeMethod<void>('playChatRing');
+    }
+  }
 
   bool _isChatRingPayload(String payload) {
     try {

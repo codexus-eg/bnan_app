@@ -18,11 +18,23 @@ class NotificationSoundPlayer(
     private val channel = MethodChannel(messenger, "bnan/notification_sound")
     private var ringtone: Ringtone? = null
     private var sequencePlayer: MediaPlayer? = null
+    private val chatRingPlayer = StudentCallRingPlayer(context.applicationContext)
 
     fun register() {
         channel.setMethodCallHandler { call, result ->
             if (call.method == "playNudgeNotificationSequence") {
                 playNudgeAlert()
+                result.success(null)
+                return@setMethodCallHandler
+            }
+            if (call.method == "playChatRing") {
+                chatRingPlayer.play()
+                result.success(null)
+                return@setMethodCallHandler
+            }
+            if (call.method == "stopChatRing") {
+                chatRingPlayer.stop()
+                StudentCallAlertService.stop(context)
                 result.success(null)
                 return@setMethodCallHandler
             }

@@ -452,10 +452,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الأرباح الحالية"),
         "curricula": MessageLookupByLibrary.simpleMessage("المناهج"),
         "curriculum": MessageLookupByLibrary.simpleMessage("المنهج"),
-        "curriculumDescription":
-            MessageLookupByLibrary.simpleMessage("وصف المنهج"),
         "curriculumDeletedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حذف المنهج بنجاح"),
+        "curriculumDescription":
+            MessageLookupByLibrary.simpleMessage("وصف المنهج"),
         "curriculumIcon": MessageLookupByLibrary.simpleMessage("صورة المنهج"),
         "curriculumName": MessageLookupByLibrary.simpleMessage("اسم المنهج"),
         "curriculumRequired":
@@ -492,6 +492,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteAssignment": MessageLookupByLibrary.simpleMessage("حذف الواجب"),
         "deleteAssignmentConfirmation": MessageLookupByLibrary.simpleMessage(
             "هل أنت متأكد من حذف هذا الواجب؟"),
+        "deleteCurriculum": MessageLookupByLibrary.simpleMessage("حذف المنهج"),
+        "deleteCurriculumConfirmation": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حذف هذا المنهج؟"),
         "deleteDiscountCode":
             MessageLookupByLibrary.simpleMessage("حذف كود الخصم"),
         "deleteDiscountCodeConfirmation": MessageLookupByLibrary.simpleMessage(
@@ -560,9 +563,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
         "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
         "editCurriculum": MessageLookupByLibrary.simpleMessage("تعديل المنهج"),
-        "deleteCurriculum": MessageLookupByLibrary.simpleMessage("حذف المنهج"),
-        "deleteCurriculumConfirmation":
-            MessageLookupByLibrary.simpleMessage("هل أنت متأكد من حذف هذا المنهج؟"),
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
         "editDiscountCode":
             MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
@@ -1736,10 +1736,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "sessions": MessageLookupByLibrary.simpleMessage("حصة"),
         "sessionsThisMonth":
             MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
-        "shortVideoLinkOptional":
-            MessageLookupByLibrary.simpleMessage("رابط فيديو قصير (اختياري)"),
         "shortVideoLink":
             MessageLookupByLibrary.simpleMessage("رابط فيديو قصير"),
+        "shortVideoLinkOptional":
+            MessageLookupByLibrary.simpleMessage("رابط فيديو قصير (اختياري)"),
         "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
         "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),

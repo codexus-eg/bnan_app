@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 abstract interface class PushMessaging {
   Future<String?> getToken();
+  Future<void> deleteToken();
   Future<RemoteMessage?> getInitialMessage();
   Stream<String> get tokenRefresh;
   Future<void> requestPermission();
@@ -14,6 +15,9 @@ class FirebasePushMessaging implements PushMessaging {
 
   @override
   Future<String?> getToken() => _messaging.getToken();
+
+  @override
+  Future<void> deleteToken() => _messaging.deleteToken();
 
   @override
   Future<RemoteMessage?> getInitialMessage() => _messaging.getInitialMessage();
