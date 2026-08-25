@@ -25,6 +25,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     IdempotencyKeyGenerator? keyGenerator,
     this.pollInterval = const Duration(seconds: 3),
     this.maxPollAttempts = 20,
+    this.checkoutReturnTimeout = const Duration(seconds: 10),
   }) : keyGenerator = keyGenerator ?? IdempotencyKeyGenerator(),
        super(const TamaraPaymentInitial()) {
     SessionManager.instance.addSessionChangeListener(_onSessionChanged);
@@ -36,6 +37,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   final IdempotencyKeyGenerator keyGenerator;
   final Duration pollInterval;
   final int maxPollAttempts;
+  final Duration checkoutReturnTimeout;
 
   Timer? _timer;
   PaymentDraft? _draft;
@@ -45,6 +47,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   bool _reconciledThisForeground = false;
   bool _reconcileInFlight = false;
   bool _accountVerificationAttemptActive = false;
+  bool _browserReturnPending = false;
+  Future<void>? _closedCheckFlight;
   final Set<String> _handledReturns = {};
   PaymentAmountSummary? _paymentSummary;
   int _pollAttempts = 0;
@@ -176,6 +180,11 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   }
 
   Future<void> onForeground() async {
+    if (_browserReturnPending) {
+      _browserReturnPending = false;
+      await verifyCheckoutClosedOnce();
+      return;
+    }
     final draft = _draft ?? await _readOwnedDraft();
     _draft = draft;
     if (draft?.lastKnownStatus == PaymentStatus.completed) {
@@ -203,6 +212,11 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     }
     final key = '${draft.paymentId}:${paymentReturn.outcome.name}';
     if (!_handledReturns.add(key)) return;
+    if (paymentReturn.outcome != TamaraReturnOutcome.success) {
+      await verifyCheckoutClosedOnce();
+      return;
+    }
+    _checkoutLaunchClaimed = true;
     await _reconcileAndCheckStatus();
   }
 
@@ -218,6 +232,100 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconciledThisForeground = false;
     if (!isClosed) emit(const TamaraPaymentVerificationPending());
     await _reconcileAndCheckStatus();
+  }
+
+  Future<void> verifyCheckoutClosedOnce() {
+    final current = _closedCheckFlight;
+    if (current != null) return current;
+    late final Future<void> flight;
+    flight = _runClosedCheckoutCheck().whenComplete(() {
+      if (identical(_closedCheckFlight, flight)) _closedCheckFlight = null;
+    });
+    _closedCheckFlight = flight;
+    return flight;
+  }
+
+  Future<void> _runClosedCheckoutCheck() async {
+    final draft = _draft ?? await _readOwnedDraft();
+    _draft = draft;
+    if (draft == null ||
+        draft.paymentId.isEmpty ||
+        draft.lastKnownStatus != PaymentStatus.pending ||
+        _reconcileInFlight) {
+      return;
+    }
+    final paymentId = draft.paymentId;
+    final generation = _attemptGeneration;
+    _stopPolling();
+    _checkoutLaunchClaimed = false;
+    _reconciledThisForeground = true;
+    _reconcileInFlight = true;
+    await _saveCheckoutClosed(draft);
+    if (!isClosed) {
+      emit(
+        TamaraPaymentPending(
+          checkoutUrl: _draft?.checkoutUrl,
+          shouldOpenCheckout: false,
+        ),
+      );
+    }
+    try {
+      final response = await _closedCheckoutStatus(
+        paymentId,
+      ).timeout(checkoutReturnTimeout);
+      if (isClosed ||
+          generation != _attemptGeneration ||
+          _draft?.paymentId != paymentId ||
+          response == null) {
+        return;
+      }
+      await _handleStatus(response);
+    } on TimeoutException {
+      // A closed checkout remains retryable when verification times out.
+    } catch (_) {
+      // Returning from Tamara must never leave the registration blocked.
+    } finally {
+      _reconcileInFlight = false;
+      if (!isClosed &&
+          generation == _attemptGeneration &&
+          _draft?.paymentId == paymentId &&
+          _draft?.lastKnownStatus == PaymentStatus.pending) {
+        emit(
+          TamaraPaymentPending(
+            checkoutUrl: _draft?.checkoutUrl,
+            shouldOpenCheckout: false,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<TamaraStatusResponse?> _closedCheckoutStatus(String paymentId) async {
+    TamaraStatusResponse? response;
+    (await repo.reconcile(paymentId)).fold((_) {}, (value) => response = value);
+    if (response?.status.isTerminal != true) {
+      (await repo.status(paymentId)).fold((_) {}, (value) => response = value);
+    }
+    return response;
+  }
+
+  Future<void> _saveCheckoutClosed(PaymentDraft draft) async {
+    _draft = PaymentDraft(
+      paymentId: draft.paymentId,
+      checkoutUrl: draft.checkoutUrl,
+      checkoutOpenedAt: null,
+      idempotencyKey: draft.idempotencyKey,
+      packageId: draft.packageId,
+      curriculumId: draft.curriculumId,
+      gradeId: draft.gradeId,
+      subjectIds: draft.subjectIds,
+      studentEmail: draft.studentEmail,
+      paymentStartedAt: draft.paymentStartedAt,
+      lastKnownStatus: draft.lastKnownStatus,
+      payloadFingerprint: draft.payloadFingerprint,
+      ownerUserId: draft.ownerUserId,
+    );
+    await store.save(_draft!);
   }
 
   Future<void> _reconcileAndCheckStatus() async {
@@ -249,6 +357,9 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   }
 
   void onBackground() {
+    _browserReturnPending =
+        _draft?.lastKnownStatus == PaymentStatus.pending &&
+        _draft?.checkoutOpenedAt != null;
     _timer?.cancel();
     _timer = null;
     _checkoutLaunchClaimed = false;
@@ -341,12 +452,27 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       if (_pollAttempts >= maxPollAttempts) {
         _stopPolling();
         _checkoutLaunchClaimed = false;
-        if (!isClosed) emit(const TamaraPaymentVerificationPending());
+        final draft = _draft;
+        if (draft != null && !isClosed) {
+          unawaited(_settlePendingCheckout(draft));
+        }
         return;
       }
       _pollAttempts++;
       checkStatus();
     });
+  }
+
+  Future<void> _settlePendingCheckout(PaymentDraft draft) async {
+    await _saveCheckoutClosed(draft);
+    if (!isClosed && _draft?.lastKnownStatus == PaymentStatus.pending) {
+      emit(
+        TamaraPaymentPending(
+          checkoutUrl: _draft?.checkoutUrl,
+          shouldOpenCheckout: false,
+        ),
+      );
+    }
   }
 
   bool claimCheckoutLaunch(String url) {
@@ -393,7 +519,12 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconciledThisForeground = false;
     _checkoutLaunchClaimed = false;
     if (!isClosed && _draft?.lastKnownStatus == PaymentStatus.pending) {
-      emit(const TamaraPaymentVerificationPending());
+      emit(
+        TamaraPaymentPending(
+          checkoutUrl: _draft?.checkoutUrl,
+          shouldOpenCheckout: false,
+        ),
+      );
     }
   }
 
@@ -481,6 +612,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconciledThisForeground = false;
     _reconcileInFlight = false;
     _accountVerificationAttemptActive = false;
+    _browserReturnPending = false;
+    _closedCheckFlight = null;
     _handledReturns.clear();
     await store.clear();
     if (!isClosed) emit(const TamaraPaymentInitial());

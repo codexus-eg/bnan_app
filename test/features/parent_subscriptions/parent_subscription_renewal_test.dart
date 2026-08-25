@@ -3,6 +3,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/dio_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
+import 'package:bnan_app/core/shared_widget/custom_back_icon.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_payment_address.dart';
 import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
@@ -379,6 +380,65 @@ void main() {
     await cubit.close();
   });
 
+  testWidgets(
+    'second back after Tamara return exits immediately without payment work',
+    (tester) async {
+      final repo = _Repo();
+      final store = _MemoryRenewalStore();
+      final cubit = _ready(repo, mode: 'gulf', store: store);
+      await tester.runAsync(cubit.submit);
+      cubit.checkoutOpened();
+      await tester.runAsync(cubit.checkoutClosed);
+      final renewCalls = repo.renewCalls;
+      final reconcileCalls = repo.gulfReconcileCalls;
+      final statusCalls = repo.gulfStatusCalls;
+      final router = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (context, _) => Scaffold(
+              body: TextButton(
+                onPressed: () => context.push('/renewal'),
+                child: const Text('Previous screen'),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/renewal',
+            builder: (_, __) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: cubit),
+                BlocProvider(
+                  create: (_) => GetPackagesCubit(_UnusedPackagesRepo()),
+                ),
+              ],
+              child: const ParentSubscriptionRenewalView(),
+            ),
+          ),
+        ],
+      );
+      await tester.pumpWidget(_app(router));
+      await tester.tap(find.text('Previous screen'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      final backIcon = tester.widget<CustomBackIcon>(
+        find.byType(CustomBackIcon),
+      );
+      backIcon.onTap!();
+      backIcon.onTap!();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('Previous screen'), findsOneWidget);
+      expect(cubit.state.isBusy, isFalse);
+      expect(repo.renewCalls, renewCalls);
+      expect(repo.gulfReconcileCalls, reconcileCalls);
+      expect(repo.gulfStatusCalls, statusCalls);
+      expect(store.draft, isNotNull);
+      await cubit.close();
+    },
+  );
+
   test('Gulf renewal without checkout fails without pending review', () async {
     final repo = _Repo()..gulfCheckoutUrl = null;
     final store = _MemoryRenewalStore();
@@ -675,6 +735,97 @@ void main() {
     await cubit.close();
   });
 
+  test('Tamara back ends loading without reporting payment success', () async {
+    final repo = _Repo();
+    final cubit = _ready(repo, mode: 'gulf');
+    await cubit.submit();
+    cubit.checkoutOpened();
+
+    await cubit.checkoutClosed();
+
+    expect(cubit.state.phase, ParentRenewalPhase.paymentStatusUnknown);
+    expect(cubit.state.isBusy, isFalse);
+    expect(repo.renewCalls, 1);
+    expect(repo.gulfReconcileCalls, 1);
+    expect(repo.gulfStatusCalls, 0);
+    await cubit.close();
+  });
+
+  test('Tamara back keeps the same checkout retryable', () async {
+    final repo = _Repo();
+    final cubit = _ready(repo, mode: 'gulf');
+    await cubit.submit();
+    cubit.checkoutOpened();
+    await cubit.checkoutClosed();
+
+    cubit.reopenCheckout();
+
+    expect(cubit.state.shouldOpenCheckout, isTrue);
+    expect(repo.renewCalls, 1);
+    await cubit.close();
+  });
+
+  test('duplicate Tamara close events share one reconcile', () async {
+    final repo = _Repo(statusDelay: const Duration(milliseconds: 20));
+    final cubit = _ready(
+      repo,
+      mode: 'gulf',
+      checkoutCloseTimeout: const Duration(milliseconds: 100),
+    );
+    await cubit.submit();
+    cubit.checkoutOpened();
+
+    await Future.wait([cubit.checkoutClosed(), cubit.checkoutClosed()]);
+
+    expect(repo.gulfReconcileCalls, 1);
+    expect(repo.maxActiveChecks, 1);
+    await cubit.close();
+  });
+
+  test('Tamara close preserves an authoritative completed result', () async {
+    var refreshes = 0;
+    final repo = _Repo()..terminalStatuses.add(RenewalPaymentStatus.completed);
+    final cubit = _ready(
+      repo,
+      mode: 'gulf',
+      onCompleted: () async => refreshes++,
+    );
+    await cubit.submit();
+    cubit.checkoutOpened();
+
+    await cubit.checkoutClosed();
+
+    expect(cubit.state.phase, ParentRenewalPhase.completed);
+    expect(refreshes, 1);
+    expect(repo.gulfReconcileCalls, 1);
+    await cubit.close();
+  });
+
+  test('Tamara close failure and timeout never leave loading active', () async {
+    final failureRepo = _Repo()
+      ..reconcileFailure = Failure(message: 'reconcile failed');
+    final failureCubit = _ready(failureRepo, mode: 'gulf');
+    await failureCubit.submit();
+    failureCubit.checkoutOpened();
+    await failureCubit.checkoutClosed();
+    expect(failureCubit.state.phase, ParentRenewalPhase.paymentStatusUnknown);
+    expect(failureCubit.state.isBusy, isFalse);
+    await failureCubit.close();
+
+    final timeoutRepo = _Repo(statusDelay: const Duration(milliseconds: 30));
+    final timeoutCubit = _ready(
+      timeoutRepo,
+      mode: 'gulf',
+      checkoutCloseTimeout: const Duration(milliseconds: 1),
+    );
+    await timeoutCubit.submit();
+    timeoutCubit.checkoutOpened();
+    await timeoutCubit.checkoutClosed();
+    expect(timeoutCubit.state.phase, ParentRenewalPhase.paymentStatusUnknown);
+    expect(timeoutCubit.state.isBusy, isFalse);
+    await timeoutCubit.close();
+  });
+
   test('matching subscriptionId restores Gulf renewal', () async {
     await SessionManager.instance.saveSession(
       accessToken: 'token',
@@ -890,6 +1041,7 @@ ParentSubscriptionRenewalCubit _cubit(
   String studentId = 'child-1',
   Future<void> Function()? onCompleted,
   ParentChildSubscriptionModel subscription = _subscription,
+  Duration checkoutCloseTimeout = const Duration(milliseconds: 50),
 }) => ParentSubscriptionRenewalCubit(
   repo: repo,
   keyGenerator: _Keys(),
@@ -907,6 +1059,7 @@ ParentSubscriptionRenewalCubit _cubit(
   ),
   pollInterval: Duration.zero,
   maxPollAttempts: 2,
+  checkoutCloseTimeout: checkoutCloseTimeout,
 );
 ParentSubscriptionRenewalCubit _ready(
   _Repo repo, {
@@ -914,6 +1067,7 @@ ParentSubscriptionRenewalCubit _ready(
   RenewalPaymentStore? store,
   bool isParent = true,
   Future<void> Function()? onCompleted,
+  Duration checkoutCloseTimeout = const Duration(milliseconds: 50),
 }) {
   final cubit =
       _cubit(
@@ -922,6 +1076,7 @@ ParentSubscriptionRenewalCubit _ready(
           store: store,
           isParent: isParent,
           onCompleted: onCompleted,
+          checkoutCloseTimeout: checkoutCloseTimeout,
         )
         ..nextStep()
         ..selectPackage(mode == 'egyptian' ? _monthlyAllPackage : _allPackage)
@@ -987,6 +1142,7 @@ class _Repo implements ParentSubscriptionsRepo {
   RenewalPaymentStatus egyptianStatusValue = RenewalPaymentStatus.pending;
   final List<Failure> checkoutFailures = [];
   final List<Failure> egyptianFailures = [];
+  Failure? reconcileFailure;
   final List<String> keys = [];
   String? failureCode;
   String? gulfCheckoutUrl = 'https://checkout.example.com';
@@ -994,6 +1150,7 @@ class _Repo implements ParentSubscriptionsRepo {
   GulfRenewalRequest? lastGulfRequest;
   int renewCalls = 0, egyptianRenewCalls = 0, refreshCalls = 0;
   int egyptianStatusCalls = 0;
+  int gulfReconcileCalls = 0, gulfStatusCalls = 0;
   int activeChecks = 0, maxActiveChecks = 0;
   @override
   getSubscriptions() async {
@@ -1022,10 +1179,12 @@ class _Repo implements ParentSubscriptionsRepo {
 
   @override
   gulfReconcile(String id) async {
+    gulfReconcileCalls++;
     activeChecks++;
     if (activeChecks > maxActiveChecks) maxActiveChecks = activeChecks;
     await Future<void>.delayed(statusDelay);
     activeChecks--;
+    if (reconcileFailure != null) return Left(reconcileFailure!);
     return Right(
       RenewalStatusResponse(
         paymentId: id,
@@ -1037,9 +1196,16 @@ class _Repo implements ParentSubscriptionsRepo {
   }
 
   @override
-  gulfStatus(String id) async => Right(
-    RenewalStatusResponse(paymentId: id, status: RenewalPaymentStatus.pending),
-  );
+  gulfStatus(String id) async {
+    gulfStatusCalls++;
+    return Right(
+      RenewalStatusResponse(
+        paymentId: id,
+        status: RenewalPaymentStatus.pending,
+      ),
+    );
+  }
+
   @override
   renewEgyptian(EgyptianRenewalRequest request) async {
     lastEgyptianRequest = request;

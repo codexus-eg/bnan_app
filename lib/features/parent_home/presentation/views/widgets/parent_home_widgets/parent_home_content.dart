@@ -2,7 +2,6 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/parent_home/presentation/manager/get_parent_children/get_parent_children_cubit.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_children/parent_children_body.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_home_widgets/parent_home_page.dart';
-import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscriptions_view.dart';
 import 'package:bnan_app/features/shared_profile/presentation/views/bodies/parent_profile_body.dart';
@@ -32,10 +31,7 @@ class ParentHomeContent extends StatelessWidget {
         create: (_) => getIt<GetParentChildrenCubit>()..getParentChildren(),
         child: const ParentChildrenBody(),
       ),
-      BlocProvider(
-        create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
-        child: const GroupsView(showBackButton: false),
-      ),
+      const GroupsView(showBackButton: false),
       const ParentSubscriptionsView(),
       const ParentProfileBody(),
     ];

@@ -17,7 +17,7 @@ abstract class AdminPackageCardMapper {
     );
     final oldPrice = package.oldPrice ?? 0;
     final price = package.price ?? 0;
-    final currency = package.currency?.trim().toUpperCase() ?? '';
+    final currency = package.currency?.trim() ?? '';
     return PackageCardModel(
       id: base.id,
       title: base.title,
@@ -37,11 +37,10 @@ abstract class AdminPackageCardMapper {
   }
 
   static String _money(BuildContext context, num value, String currency) {
-    if (currency.isEmpty) return NumberFormat.decimalPattern().format(value);
-    return NumberFormat.simpleCurrency(
-      locale: Localizations.localeOf(context).toLanguageTag(),
-      name: currency,
-      decimalDigits: value % 1 == 0 ? 0 : 2,
-    ).format(value);
+    final formatter = NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toLanguageTag(),
+    )..maximumFractionDigits = value % 1 == 0 ? 0 : 2;
+    final amount = formatter.format(value);
+    return currency.isEmpty ? amount : '$amount $currency';
   }
 }

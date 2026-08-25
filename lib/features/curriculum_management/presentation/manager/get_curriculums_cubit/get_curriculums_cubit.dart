@@ -22,4 +22,16 @@ class GetCurriculumsCubit extends Cubit<GetCurriculumsState> {
       (response) => emit(GetCurriculumsSuccess(response.data)),
     );
   }
+
+  void removeCurriculum(String curriculumId) {
+    final current = state;
+    if (isClosed || current is! GetCurriculumsSuccess) return;
+    emit(
+      GetCurriculumsSuccess(
+        current.curriculums
+            .where((curriculum) => curriculum.id != curriculumId)
+            .toList(growable: false),
+      ),
+    );
+  }
 }

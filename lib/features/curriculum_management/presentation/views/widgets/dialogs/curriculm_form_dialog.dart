@@ -13,6 +13,7 @@ import 'package:bnan_app/features/curriculum_management/data/models/curriculum_m
 import 'package:bnan_app/features/curriculum_management/data/models/update_curriculum_request_model.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_state.dart';
+import 'package:bnan_app/features/curriculum_management/presentation/views/widgets/curriculm_image_picker_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,10 @@ class _CurriculumFormDialogState extends State<CurriculumFormDialog> {
       text: widget.curriculum?.description ?? '',
     );
 
-    selectedRegistrationMode = widget.curriculum?.registrationMode;
+    final mode = widget.curriculum?.registrationMode;
+    selectedRegistrationMode = const ['gulf', 'egyptian'].contains(mode)
+        ? mode
+        : null;
   }
 
   @override
@@ -104,34 +108,29 @@ class _CurriculumFormDialogState extends State<CurriculumFormDialog> {
                   label: s.curriculumDescription,
                   controller: descriptionController,
                 ),
-                if (!widget.isEdit) ...[
-                  const SizedBox(height: 16),
-                  CustomDropdown(
-                    label: s.registrationMode,
-                    hint: s.chooseCurriculumType,
-                    value: selectedRegistrationMode,
-                    items: const ['gulf', 'egyptian'],
-                    itemsLabels: {
-                      'gulf': s.gulfCurriculum,
-                      'egyptian': s.egyptianCurriculum,
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        selectedRegistrationMode = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    readOnly: true,
-                    hintText: selectedIcon == null
-                        ? s.chooseFile
-                        : selectedIcon!.path.split(Platform.pathSeparator).last,
-                    label: s.chooseCurriculumIcon,
-                    backgroundColor: Colors.transparent,
-                    onTap: isLoading ? null : _pickIcon,
-                  ),
-                ],
+                const SizedBox(height: 16),
+                CustomDropdown(
+                  label: s.registrationMode,
+                  hint: s.chooseCurriculumType,
+                  value: selectedRegistrationMode,
+                  items: const ['gulf', 'egyptian'],
+                  itemsLabels: {
+                    'gulf': s.gulfCurriculum,
+                    'egyptian': s.egyptianCurriculum,
+                  },
+                  onChanged: isLoading
+                      ? null
+                      : (value) =>
+                            setState(() => selectedRegistrationMode = value),
+                ),
+                const SizedBox(height: 16),
+                CurriculumImagePickerField(
+                  label: s.chooseCurriculumIcon,
+                  hint: s.chooseFile,
+                  file: selectedIcon,
+                  currentImageUrl: widget.curriculum?.icon,
+                  onTap: isLoading ? null : _pickIcon,
+                ),
                 const SizedBox(height: 24),
                 if (errorMessage != null) ...[
                   Text(
@@ -206,7 +205,9 @@ class _CurriculumFormDialogState extends State<CurriculumFormDialog> {
     final name = nameController.text.trim();
     final description = descriptionController.text.trim();
 
-    if (name.isEmpty || description.isEmpty) {
+    if (name.isEmpty ||
+        description.isEmpty ||
+        selectedRegistrationMode == null) {
       setState(() {
         errorMessage = S.of(context).fillAllRequiredFields;
       });
@@ -216,6 +217,8 @@ class _CurriculumFormDialogState extends State<CurriculumFormDialog> {
     final request = UpdateCurriculumRequestModel(
       name: name,
       description: description,
+      registrationMode: selectedRegistrationMode!,
+      icon: selectedIcon,
     );
 
     context.read<CurriculumActionsCubit>().updateCurriculum(

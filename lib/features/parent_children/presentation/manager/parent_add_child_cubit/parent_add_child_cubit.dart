@@ -37,6 +37,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     this.store,
     this.pollInterval = const Duration(seconds: 3),
     this.maxPollAttempts = 20,
+    this.checkoutReturnTimeout = const Duration(seconds: 10),
   }) : _attempt = ParentPaymentAttempt(keyGenerator),
        super(const ParentAddChildState());
 
@@ -45,6 +46,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   final PaymentDraftStore? store;
   final Duration pollInterval;
   final int maxPollAttempts;
+  final Duration checkoutReturnTimeout;
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
@@ -251,17 +253,22 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     ),
   );
 
-  void checkoutClosed() {
+  Future<void> checkoutClosed() async {
     if (state.phase != ParentAddChildPhase.processingPayment) return;
-    _attempt.startNew();
     emit(
       state.copyWith(
-        phase: ParentAddChildPhase.failure,
-        paymentStatus: PaymentStatus.cancelled,
+        phase: ParentAddChildPhase.paymentStatusUnknown,
         shouldOpenCheckout: false,
-        errorMessage: S.current.parentPaymentFailed,
+        errorMessage: null,
       ),
     );
+    try {
+      await checkPaymentStatus().timeout(checkoutReturnTimeout);
+    } on TimeoutException {
+      // The existing checkout remains available after a slow status check.
+    } catch (_) {
+      // Closing Tamara must not leave the add-child flow processing.
+    }
   }
 
   void reopenCheckout() {
@@ -271,6 +278,15 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   }
 
   Future<void> reconcilePayment() => checkPaymentStatus();
+
+  Future<void> verifyPaymentSuccess() async {
+    final id = state.paymentId;
+    if (id == null || id.isEmpty) return;
+    if (state.phase == ParentAddChildPhase.paymentStatusUnknown) {
+      emit(state.copyWith(phase: ParentAddChildPhase.processingPayment));
+    }
+    await _poll(id);
+  }
 
   Future<void> checkPaymentStatus() async {
     final id = state.paymentId;
@@ -412,7 +428,6 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
         );
         _log('state emitted: processingPayment; checkout launch requested');
         _log('checkout opening');
-        await _poll(checkout.paymentId);
       },
     );
   }

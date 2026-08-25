@@ -6,6 +6,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
@@ -26,6 +27,8 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     with WidgetsBindingObserver {
   bool _paymentRestoreChecked = false;
   bool _returningHome = false;
+  bool _tamaraOpen = false;
+  bool _externalReturnPending = false;
 
   @override
   void initState() {
@@ -41,8 +44,11 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      context.read<SubjectRequestPaymentCubit>().tamaraReturned();
+    if (state == AppLifecycleState.resumed &&
+        _externalReturnPending &&
+        !_tamaraOpen) {
+      _externalReturnPending = false;
+      context.read<SubjectRequestPaymentCubit>().checkoutClosed();
     }
   }
 
@@ -102,23 +108,36 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
       final url = state.payment?.checkoutUrl;
       if (url == null) return;
       final cubit = context.read<SubjectRequestPaymentCubit>();
-      final result = await TamaraCheckoutLauncher.open(
-        context,
-        url,
-        completionStream: cubit.stream.map(
-          (value) => value.phase == SubjectRequestPaymentPhase.completed,
-        ),
-        isCompleted: () =>
-            cubit.state.phase == SubjectRequestPaymentPhase.completed,
-        onOpened: cubit.tamaraReturned,
-      );
+      _tamaraOpen = true;
+      late final TamaraCheckoutLaunchResult result;
+      try {
+        result = await TamaraCheckoutLauncher.open(
+          context,
+          url,
+          completionStream: cubit.stream.map(
+            (value) => value.phase == SubjectRequestPaymentPhase.completed,
+          ),
+          isCompleted: () =>
+              cubit.state.phase == SubjectRequestPaymentPhase.completed,
+        );
+      } finally {
+        _tamaraOpen = false;
+      }
       if (!context.mounted) return;
-      if (result.opened) {
-        await context.read<SubjectRequestPaymentCubit>().tamaraReturned();
-      } else {
+      if (!result.opened) {
         context.read<SubjectRequestPaymentCubit>().checkoutLaunchFailed(
           S.of(context).errorUnknown,
         );
+        return;
+      }
+      if (result.outcome == null) {
+        _externalReturnPending = true;
+        return;
+      }
+      if (result.outcome == TamaraSdkOutcome.success) {
+        await cubit.tamaraReturned();
+      } else {
+        await cubit.checkoutClosed();
       }
     } else if (state.phase == SubjectRequestPaymentPhase.completed) {
       await context.read<StudentSubjectRequestsCubit>().paymentCompleted();

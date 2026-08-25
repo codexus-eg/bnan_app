@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/currency_formatter.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_type.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -43,9 +44,11 @@ class SubscriptionPlanModel {
       lessons: isHours
           ? S.of(context).weeklyLessons(hoursCount.toString())
           : S.of(context).oneMonth,
-      oldPrice: S.of(context).oldPrice(oldPrice.toInt().toString()),
-      price: S.of(context).currentPrice(price.toInt().toString()),
-      save: S.of(context).saveAmount(saveAmount.toInt().toString()),
+      oldPrice: CurrencyFormatter.amount(context, oldPrice, package.currency),
+      price: CurrencyFormatter.amount(context, price, package.currency),
+      save:
+          '${S.of(context).save} '
+          '${CurrencyFormatter.amount(context, saveAmount, package.currency)}',
       isPopular: package.isPopular ?? false,
     );
   }

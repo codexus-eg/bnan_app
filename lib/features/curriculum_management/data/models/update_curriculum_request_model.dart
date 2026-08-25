@@ -1,13 +1,24 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 class UpdateCurriculumRequestModel {
-  const UpdateCurriculumRequestModel({this.name, this.description});
+  const UpdateCurriculumRequestModel({
+    required this.name,
+    required this.description,
+    required this.registrationMode,
+    this.icon,
+  });
 
-  final String? name;
-  final String? description;
+  final String name;
+  final String description;
+  final String registrationMode;
+  final File? icon;
 
-  Map<String, dynamic> toJson() {
-    return {
-      if (name != null) 'name': name!.trim(),
-      if (description != null) 'description': description!.trim(),
-    };
-  }
+  Future<FormData> toFormData() async => FormData.fromMap({
+    'name': name.trim(),
+    'description': description.trim(),
+    'registrationMode': registrationMode.trim(),
+    if (icon != null) 'icon': await MultipartFile.fromFile(icon!.path),
+  });
 }

@@ -32,6 +32,7 @@ class ParentBottomNavBar extends StatelessWidget {
       BottomNavItemModel(
         icon: ImageManager.parentChatConversationCircleIcon,
         title: s.parentMessages,
+        tracksUnreadMessages: true,
       ),
       BottomNavItemModel(
         icon: ImageManager.subscription,

@@ -265,7 +265,8 @@ void main() {
     await cubit.handleReturn(link);
     expect(repo.reconcileCalls, 1);
     expect(repo.statusCalls, 1);
-    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
+    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.isAwaitingVerification, isFalse);
     await cubit.close();
   });
 
@@ -430,7 +431,8 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 8));
     expect(repo.statusCalls, callsAtLimit);
     expect(cubit.draft?.lastKnownStatus, PaymentStatus.pending);
-    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
+    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.isAwaitingVerification, isFalse);
     await cubit.close();
   });
 
@@ -514,24 +516,114 @@ void main() {
     },
   );
 
-  test('closing pending checkout stops polling and allows retry', () async {
+  test(
+    'leaving a pending checkout stops polling without verification',
+    () async {
+      final repo = _PaymentRepo();
+      final auth = _AuthRepo();
+      final cubit = _cubit(
+        repo,
+        store,
+        auth: auth,
+        pollInterval: const Duration(milliseconds: 2),
+      );
+      await cubit.checkout(_request);
+      await _markBrowserOpened(cubit);
+      await cubit.onForeground();
+      await cubit.abandonCheckout();
+      final callsAtClose = repo.statusCalls;
+      await Future<void>.delayed(const Duration(milliseconds: 12));
+      expect(repo.statusCalls, callsAtClose);
+      expect(auth.loginCalls, 0);
+      expect(
+        cubit.state,
+        isA<TamaraPaymentPending>().having(
+          (state) => state.shouldOpenCheckout,
+          'shouldOpenCheckout',
+          isFalse,
+        ),
+      );
+      await cubit.close();
+    },
+  );
+
+  test('Tamara cancel ends loading and reopens the saved checkout', () async {
     final repo = _PaymentRepo();
-    final auth = _AuthRepo();
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    await _markBrowserOpened(cubit);
+
+    await cubit.verifyCheckoutClosedOnce();
+
+    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.isAwaitingVerification, isFalse);
+    expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    await cubit.checkout(_request);
+    expect(repo.keys, hasLength(1));
+    expect(
+      cubit.state,
+      isA<TamaraPaymentPending>().having(
+        (state) => state.shouldOpenCheckout,
+        'shouldOpenCheckout',
+        isTrue,
+      ),
+    );
+    await cubit.close();
+  });
+
+  test('duplicate Tamara close callbacks share one status check', () async {
+    final repo = _PaymentRepo()..statusCompleter = Completer();
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    await _markBrowserOpened(cubit);
+
+    final first = cubit.verifyCheckoutClosedOnce();
+    final second = cubit.verifyCheckoutClosedOnce();
+    await Future<void>.delayed(Duration.zero);
+    expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    repo.statusCompleter!.complete(Right(_status(PaymentStatus.pending)));
+    await Future.wait([first, second]);
+    expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    await cubit.close();
+  });
+
+  test('Tamara cancel still accepts authoritative completion', () async {
+    final repo = _PaymentRepo()
+      ..statusResponse = _status(PaymentStatus.completed);
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+    await _markBrowserOpened(cubit);
+
+    await cubit.verifyCheckoutClosedOnce();
+
+    expect(
+      cubit.state,
+      isA<TamaraPaymentResult>().having(
+        (state) => state.status,
+        'status',
+        PaymentStatus.completed,
+      ),
+    );
+    await cubit.close();
+  });
+
+  test('Tamara return timeout leaves a retryable stable state', () async {
+    final repo = _PaymentRepo()..statusCompleter = Completer();
     final cubit = _cubit(
       repo,
       store,
-      auth: auth,
-      pollInterval: const Duration(milliseconds: 2),
+      checkoutReturnTimeout: const Duration(milliseconds: 1),
     );
     await cubit.checkout(_request);
     await _markBrowserOpened(cubit);
-    await cubit.onForeground();
-    await cubit.abandonCheckout();
-    final callsAtClose = repo.statusCalls;
-    await Future<void>.delayed(const Duration(milliseconds: 12));
-    expect(repo.statusCalls, callsAtClose);
-    expect(auth.loginCalls, 0);
-    expect(cubit.state, isA<TamaraPaymentVerificationPending>());
+
+    await cubit.verifyCheckoutClosedOnce();
+
+    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.isAwaitingVerification, isFalse);
     await cubit.close();
   });
 
@@ -575,6 +667,7 @@ TamaraPaymentCubit _cubit(
   _AuthRepo? auth,
   Duration pollInterval = const Duration(days: 1),
   int maxPollAttempts = 20,
+  Duration checkoutReturnTimeout = const Duration(seconds: 1),
 }) {
   return TamaraPaymentCubit(
     repo: repo,
@@ -583,6 +676,7 @@ TamaraPaymentCubit _cubit(
     keyGenerator: _Keys(),
     pollInterval: pollInterval,
     maxPollAttempts: maxPollAttempts,
+    checkoutReturnTimeout: checkoutReturnTimeout,
   );
 }
 

@@ -21,6 +21,9 @@ class ParentAddChildView extends StatefulWidget {
 
 class _ParentAddChildViewState extends State<ParentAddChildView>
     with WidgetsBindingObserver {
+  bool _tamaraOpen = false;
+  bool _externalReturnPending = false;
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +38,12 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && mounted) {
-      context.read<ParentAddChildCubit>().reconcilePayment();
+    if (state == AppLifecycleState.resumed &&
+        mounted &&
+        _externalReturnPending &&
+        !_tamaraOpen) {
+      _externalReturnPending = false;
+      context.read<ParentAddChildCubit>().checkoutClosed();
     }
   }
 
@@ -83,14 +90,20 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       return;
     }
     final cubit = context.read<ParentAddChildCubit>();
-    final result = await TamaraCheckoutLauncher.open(
-      context,
-      url,
-      completionStream: cubit.stream.map(
-        (value) => value.phase == ParentAddChildPhase.completed,
-      ),
-      isCompleted: () => cubit.state.phase == ParentAddChildPhase.completed,
-    );
+    _tamaraOpen = true;
+    late final TamaraCheckoutLaunchResult result;
+    try {
+      result = await TamaraCheckoutLauncher.open(
+        context,
+        url,
+        completionStream: cubit.stream.map(
+          (value) => value.phase == ParentAddChildPhase.completed,
+        ),
+        isCompleted: () => cubit.state.phase == ParentAddChildPhase.completed,
+      );
+    } finally {
+      _tamaraOpen = false;
+    }
     if (!context.mounted) return;
     if (!result.opened) {
       context.read<ParentAddChildCubit>().checkoutOpenFailed();
@@ -101,12 +114,17 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       );
       return;
     }
+    if (result.outcome == null) {
+      _externalReturnPending = true;
+      return;
+    }
     if (result.outcome == TamaraSdkOutcome.cancel ||
         result.outcome == TamaraSdkOutcome.failure) {
-      cubit.checkoutClosed();
+      await cubit.checkoutClosed();
+      if (!context.mounted) return;
       showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);
       return;
     }
-    await context.read<ParentAddChildCubit>().reconcilePayment();
+    await context.read<ParentAddChildCubit>().verifyPaymentSuccess();
   }
 }

@@ -35,6 +35,7 @@ class TeacherBottomNavBar extends StatelessWidget {
       BottomNavItemModel(
         icon: ImageManager.chatIcon,
         title: s.messages,
+        tracksUnreadMessages: true,
       ),
       BottomNavItemModel(
         icon: ImageManager.certificateBadgeIcon,

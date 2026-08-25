@@ -465,6 +465,22 @@ void main() {
         await cubit.close();
       },
     );
+
+    test('Tamara cancel checks once and keeps checkout retryable', () async {
+      final repo = FakeRepo()..checkoutResults.add(Right(_payment()));
+      final cubit = _paymentCubit(repo);
+      await cubit.checkout(_gulfPayload());
+
+      await cubit.checkoutClosed();
+
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.failure);
+      expect(repo.reconcileCalls, 1);
+      expect(repo.statusCalls, 1);
+      await cubit.checkout(_gulfPayload());
+      expect(repo.checkoutKeys, ['key-1']);
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.openingTamara);
+      await cubit.close();
+    });
   });
 }
 
@@ -526,6 +542,7 @@ class MemoryPaymentStore extends SubjectRequestPaymentStore {
 
 class FakeRepo implements StudentSubjectRequestsRepo {
   int availableCalls = 0, requestCalls = 0, statusCalls = 0;
+  int reconcileCalls = 0;
   final checkoutKeys = <String>[];
   final checkoutResults = <Either<Failure, SubjectRequestPayment>>[];
   final statusResults = <Either<Failure, SubjectRequestPayment>>[];
@@ -587,10 +604,12 @@ class FakeRepo implements StudentSubjectRequestsRepo {
   }
 
   @override
-  Future<Either<Failure, SubjectRequestPayment>> reconcile(String id) async =>
-      reconcileResults.isEmpty
-      ? Right(_payment())
-      : reconcileResults.removeAt(0);
+  Future<Either<Failure, SubjectRequestPayment>> reconcile(String id) async {
+    reconcileCalls++;
+    return reconcileResults.isEmpty
+        ? Right(_payment())
+        : reconcileResults.removeAt(0);
+  }
 }
 
 class PendingAvailabilityRepo implements StudentSubjectRequestsRepo {

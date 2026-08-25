@@ -11,12 +11,10 @@ import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubi
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
-  GetChatRoomsCubit(
-    this.chatRepo, [
-    this.notifications,
-    this.roomsCache,
-  ]) : super(GetChatRoomsInitial()) {
+  GetChatRoomsCubit(this.chatRepo, [this.notifications, this.roomsCache])
+    : super(GetChatRoomsInitial()) {
     _notificationSubscription = notifications?.roomEvents.listen(_updateRoom);
+    _roomReadSubscription = roomsCache?.roomReadEvents.listen(markRoomRead);
   }
 
   final ChatRepo chatRepo;
@@ -24,11 +22,15 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   final ChatRoomsCache? roomsCache;
   final Set<String> _processedMessageIds = {};
   StreamSubscription<ChatNotificationEvent>? _notificationSubscription;
+  StreamSubscription<String>? _roomReadSubscription;
   Timer? _searchDebounce;
   String _adminSearch = '';
   String _roomSearch = '';
   List<ChatRoomSummaryModel> _allRooms = const [];
   int _requestId = 0;
+
+  int get totalUnreadCount =>
+      _allRooms.fold(0, (total, room) => total + room.unreadCount);
 
   Future<void> getChatRooms() async {
     if (isClosed) return;
@@ -115,7 +117,8 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
 
     final currentUserId = SessionManager.instance.userId?.trim() ?? '';
     final isMine = event.senderId.isNotEmpty && event.senderId == currentUserId;
-    final isCurrentRoom = notifications?.currentRoomId == roomId ||
+    final isCurrentRoom =
+        notifications?.currentRoomId == roomId ||
         notifications?.currentRoomId == _allRooms[index].id;
 
     final messageId = event.messageId.trim();
@@ -144,6 +147,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   Future<void> close() async {
     _searchDebounce?.cancel();
     await _notificationSubscription?.cancel();
+    await _roomReadSubscription?.cancel();
     return super.close();
   }
 }

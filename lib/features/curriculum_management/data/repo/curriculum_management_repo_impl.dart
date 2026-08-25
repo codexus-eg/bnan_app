@@ -46,11 +46,23 @@ class CurriculumManagementRepoImpl implements CurriculumManagementRepo {
     return repoGuard(() async {
       final response = await apiConsumer.patch(
         EndPoints.updateCurriculum(curriculumId),
-        data: request.toJson(),
+        data: await request.toFormData(),
+        isFormData: true,
         isProtected: true,
       );
 
       return _curriculumFromResponse(response);
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteCurriculum(String curriculumId) {
+    return repoGuard(() async {
+      await apiConsumer.delete(
+        EndPoints.updateCurriculum(curriculumId),
+        isProtected: true,
+      );
+      return unit;
     });
   }
 

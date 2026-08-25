@@ -454,6 +454,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "curriculum": MessageLookupByLibrary.simpleMessage("المنهج"),
         "curriculumDescription":
             MessageLookupByLibrary.simpleMessage("وصف المنهج"),
+        "curriculumDeletedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("تم حذف المنهج بنجاح"),
         "curriculumIcon": MessageLookupByLibrary.simpleMessage("صورة المنهج"),
         "curriculumName": MessageLookupByLibrary.simpleMessage("اسم المنهج"),
         "curriculumRequired":
@@ -558,6 +560,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعديل الشهادة"),
         "editClass": MessageLookupByLibrary.simpleMessage("تعديل الفصل"),
         "editCurriculum": MessageLookupByLibrary.simpleMessage("تعديل المنهج"),
+        "deleteCurriculum": MessageLookupByLibrary.simpleMessage("حذف المنهج"),
+        "deleteCurriculumConfirmation":
+            MessageLookupByLibrary.simpleMessage("هل أنت متأكد من حذف هذا المنهج؟"),
         "editData": MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
         "editDiscountCode":
             MessageLookupByLibrary.simpleMessage("تعديل كود الخصم"),
@@ -1733,6 +1738,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("حصة هذا الشهر"),
         "shortVideoLinkOptional":
             MessageLookupByLibrary.simpleMessage("رابط فيديو قصير (اختياري)"),
+        "shortVideoLink":
+            MessageLookupByLibrary.simpleMessage("رابط فيديو قصير"),
         "singleSubject": MessageLookupByLibrary.simpleMessage("مادة واحدة"),
         "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),

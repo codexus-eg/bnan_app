@@ -258,6 +258,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               BlocProvider(
                 create: (_) => getIt<StudentSubscriptionsCubit>()..loadHome(),
               ),
+              BlocProvider(
+                create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+              ),
             ],
             child: const HomeStudentView(),
           ),
@@ -542,6 +545,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                 create: (_) =>
                     getIt<DashboardCubit>(param1: DashboardRole.teacher),
               ),
+              BlocProvider(
+                create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+              ),
             ],
             child: BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
               buildWhen: (_, current) => current is TeacherProfileSuccess,
@@ -563,9 +569,16 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               Routes.splash;
         },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) =>
-                getIt<DashboardCubit>(param1: DashboardRole.admin)..load(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<DashboardCubit>(param1: DashboardRole.admin)..load(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+              ),
+            ],
             child: const AdminHomeView(),
           ),
           key: state.pageKey,
@@ -702,10 +715,17 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               state.uri.queryParameters['route'] ??
               state.extra as String?;
           return buildTransitionPages(
-            child: BlocProvider(
-              create: (_) =>
-                  getIt<DashboardCubit>(param1: DashboardRole.supervisor)
-                    ..load(),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) =>
+                      getIt<DashboardCubit>(param1: DashboardRole.supervisor)
+                        ..load(),
+                ),
+                BlocProvider(
+                  create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+                ),
+              ],
               child: SupervisorHomeView(initialRoute: tabRoute),
             ),
             key: state.pageKey,
@@ -722,6 +742,9 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
                     getIt<DashboardCubit>(param1: DashboardRole.parent)..load(),
               ),
               BlocProvider(create: (_) => getIt<StudentProfileCubit>()),
+              BlocProvider(
+                create: (_) => getIt<GetChatRoomsCubit>()..getChatRooms(),
+              ),
             ],
             child: const ParentHomeView(),
           ),

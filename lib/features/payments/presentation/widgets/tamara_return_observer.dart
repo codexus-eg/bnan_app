@@ -26,8 +26,18 @@ class _TamaraReturnObserverState extends State<TamaraReturnObserver>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _subscription = AppLinks().uriLinkStream.listen(widget.cubit.handleReturn);
-    unawaited(widget.cubit.onForeground());
+    final links = AppLinks();
+    _subscription = links.uriLinkStream.listen(widget.cubit.handleReturn);
+    unawaited(_handleInitialLink(links));
+  }
+
+  Future<void> _handleInitialLink(AppLinks links) async {
+    final initial = await links.getInitialLink();
+    if (initial != null) {
+      await widget.cubit.handleReturn(initial);
+      return;
+    }
+    await widget.cubit.onForeground();
   }
 
   @override

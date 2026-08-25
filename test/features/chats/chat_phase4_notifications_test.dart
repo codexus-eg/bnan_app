@@ -145,6 +145,7 @@ void main() {
     expect(rooms.map((room) => room.id), ['room-2', 'room-1']);
     expect(rooms.first.lastMessage, 'latest');
     expect(rooms.first.lastMessageAt, isNotNull);
+    expect(rooms.first.unreadCount, 1);
     await cubit.close();
     await coordinator.dispose();
   });

@@ -13,7 +13,7 @@ class TeacherEvaluationTextFields extends StatelessWidget {
     return Column(
       children: [
         CustomTextField(
-          label: S.of(context).shortVideoLinkOptional,
+          label: S.of(context).shortVideoLink,
           isRequired: true,
           controller: cubit.shortVideoLinkController,
           keyboardType: TextInputType.url,

@@ -3,6 +3,7 @@ import 'package:bnan_app/features/packages_management/data/models/package_model.
 import 'package:bnan_app/features/packages_management/presentation/manager/package_form_cubit/package_form_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/mappers/admin_package_card_mapper.dart';
 import 'package:bnan_app/features/packages_management/presentation/widgets/package_type_selector.dart';
+import 'package:bnan_app/features/student_auth/data/models/package_card_model.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -139,8 +140,10 @@ void main() {
     expect(monthly.width, closeTo(hours.width, 0.1));
   });
 
-  testWidgets('Admin package card uses the package currency', (tester) async {
-    late String price;
+  testWidgets('Admin package card displays ISO currency codes', (tester) async {
+    late String egpPrice;
+    late String sarPrice;
+    late PackageCardModel sharedPackage;
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('en'),
@@ -153,10 +156,22 @@ void main() {
         supportedLocales: S.delegate.supportedLocales,
         home: Builder(
           builder: (context) {
-            price = AdminPackageCardMapper.fromPackage(
+            egpPrice = AdminPackageCardMapper.fromPackage(
               context,
               const PackageModel(price: 120, oldPrice: 200, currency: 'EGP'),
             ).priceText;
+            sarPrice = AdminPackageCardMapper.fromPackage(
+              context,
+              const PackageModel(price: 100, oldPrice: 150, currency: 'SAR'),
+            ).priceText;
+            sharedPackage = PackageCardModel.fromPackage(
+              context: context,
+              package: const PackageModel(
+                price: 200,
+                oldPrice: 250,
+                currency: 'EGP',
+              ),
+            );
             return const SizedBox();
           },
         ),
@@ -164,7 +179,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(price, contains('E£'));
-    expect(price, isNot(contains('SAR')));
+    expect(egpPrice, '120 EGP');
+    expect(sarPrice, '100 SAR');
+    expect(sharedPackage.priceText, '200 EGP');
+    expect(sharedPackage.oldPriceText, '250 EGP');
+    expect(sharedPackage.saveText, contains('50 EGP'));
   });
 }

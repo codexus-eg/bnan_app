@@ -31,3 +31,17 @@ class UpdateCurriculumFailure extends CurriculumActionsState {
 
   final String message;
 }
+
+class DeleteCurriculumLoading extends CurriculumActionsState {}
+
+class DeleteCurriculumSuccess extends CurriculumActionsState {
+  DeleteCurriculumSuccess(this.curriculumId);
+
+  final String curriculumId;
+}
+
+class DeleteCurriculumFailure extends CurriculumActionsState {
+  DeleteCurriculumFailure(this.message);
+
+  final String message;
+}

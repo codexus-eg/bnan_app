@@ -1,7 +1,10 @@
 import 'package:bnan_app/core/cache/cache_helper.dart';
+import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
+import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
@@ -9,6 +12,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/get_curricul
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/student_registration_view.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/tamara_verification_loading.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,6 +109,50 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(StudentRegistrationView), findsNothing);
   });
+
+  testWidgets('back from step four after Tamara cancel skips verification', (
+    tester,
+  ) async {
+    const store = PaymentDraftStore();
+    await store.clear();
+    await store.save(
+      PaymentDraft(
+        paymentId: 'payment-1',
+        checkoutUrl: 'https://checkout.example.com',
+        idempotencyKey: 'key-1',
+        packageId: 'package',
+        curriculumId: 'curriculum',
+        gradeId: 'grade',
+        subjectIds: const ['subject'],
+        studentEmail: 'student@example.com',
+        paymentStartedAt: DateTime(2026),
+        lastKnownStatus: PaymentStatus.pending,
+      ),
+    );
+    final auth = _UnusedAuthRepo();
+    final register = _register(auth, steps: 3);
+    final payment = TamaraPaymentCubit(
+      repo: _UnusedPaymentRepo(),
+      authRepo: auth,
+      store: store,
+    );
+    await payment.restore();
+    await payment.abandonCheckout();
+
+    await tester.pumpWidget(_localizedApp(_providers(auth, register, payment)));
+    expect(find.byType(TamaraVerificationLoading), findsNothing);
+    final firstBack = tester.binding.handlePopRoute();
+    final secondBack = tester.binding.handlePopRoute();
+    await Future.wait([firstBack, secondBack]);
+    await tester.pump();
+
+    expect(register.state.currentStep, 3);
+    expect(find.byType(TamaraVerificationLoading), findsNothing);
+    expect(payment.state, isA<TamaraPaymentPending>());
+    expect(store.read(), isNotNull);
+    await payment.close();
+    await store.clear();
+  });
 }
 
 RegisterCubit _register(AuthRepo auth, {required int steps}) {
@@ -129,18 +177,24 @@ RegisterCubit _register(AuthRepo auth, {required int steps}) {
 Widget _app(AuthRepo auth, RegisterCubit register) =>
     _localizedApp(_providers(auth, register));
 
-Widget _providers(AuthRepo auth, RegisterCubit register) => MultiBlocProvider(
+Widget _providers(
+  AuthRepo auth,
+  RegisterCubit register, [
+  TamaraPaymentCubit? payment,
+]) => MultiBlocProvider(
   providers: [
     BlocProvider.value(value: register),
     BlocProvider(create: (_) => GetGradesCubit(auth)),
     BlocProvider(create: (_) => GetCurriculmSubjectsCubit(auth)),
-    BlocProvider(
-      create: (_) => TamaraPaymentCubit(
-        repo: _UnusedPaymentRepo(),
-        authRepo: auth,
-        store: const PaymentDraftStore(),
-      ),
-    ),
+    payment == null
+        ? BlocProvider(
+            create: (_) => TamaraPaymentCubit(
+              repo: _UnusedPaymentRepo(),
+              authRepo: auth,
+              store: const PaymentDraftStore(),
+            ),
+          )
+        : BlocProvider.value(value: payment),
   ],
   child: const StudentRegistrationView(),
 );

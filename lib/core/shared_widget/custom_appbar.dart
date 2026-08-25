@@ -8,17 +8,19 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.headerText,
     this.iconNeeded = true,
+    this.onBackTap,
   });
 
   final String headerText;
   final bool iconNeeded;
+  final VoidCallback? onBackTap;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      
-      leading: iconNeeded ? const CustomBackIcon() : null,
+
+      leading: iconNeeded ? CustomBackIcon(onTap: onBackTap) : null,
       title: Text(
         headerText,
         style: StylesManager.styleBold18(context).copyWith(

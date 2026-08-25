@@ -4540,6 +4540,16 @@ class S {
     );
   }
 
+  /// `Short video link`
+  String get shortVideoLink {
+    return Intl.message(
+      'Short video link',
+      name: 'shortVideoLink',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Why do you want to join Banan Academy?`
   String get whyJoinBananAcademy {
     return Intl.message(
@@ -7675,6 +7685,36 @@ class S {
     return Intl.message(
       'Edit Curriculum',
       name: 'editCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Curriculum`
+  String get deleteCurriculum {
+    return Intl.message(
+      'Delete Curriculum',
+      name: 'deleteCurriculum',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this curriculum?`
+  String get deleteCurriculumConfirmation {
+    return Intl.message(
+      'Are you sure you want to delete this curriculum?',
+      name: 'deleteCurriculumConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curriculum deleted successfully`
+  String get curriculumDeletedSuccessfully {
+    return Intl.message(
+      'Curriculum deleted successfully',
+      name: 'curriculumDeletedSuccessfully',
       desc: '',
       args: [],
     );

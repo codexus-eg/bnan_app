@@ -300,6 +300,7 @@ void main() {
     final repo = _Repo()..statuses.add(_status(PaymentStatus.completed));
     final cubit = _readyGulf(repo);
     await cubit.submit();
+    await cubit.verifyPaymentSuccess();
 
     expect(cubit.state.phase, ParentAddChildPhase.completed);
     expect(SessionManager.instance.accessToken, 'parent-token');
@@ -323,8 +324,10 @@ void main() {
         ]);
       final cubit = _readyGulf(repo);
       await cubit.submit();
+      await cubit.verifyPaymentSuccess();
       expect(cubit.state.phase, ParentAddChildPhase.failure);
       await cubit.retryPayment();
+      await cubit.verifyPaymentSuccess();
       expect(cubit.state.phase, ParentAddChildPhase.completed);
       expect(repo.keys, ['key-1', 'key-2']);
       await cubit.close();
@@ -448,6 +451,7 @@ void main() {
       final repo = _Repo();
       final cubit = _readyGulf(repo);
       await cubit.submit();
+      await cubit.verifyPaymentSuccess();
       expect(cubit.state.phase, ParentAddChildPhase.paymentStatusUnknown);
       repo.statuses.add(_status(PaymentStatus.completed));
       await cubit.checkPaymentStatus();
@@ -460,10 +464,28 @@ void main() {
     final repo = _Repo();
     final cubit = _readyGulf(repo);
     await cubit.submit();
+    await cubit.verifyPaymentSuccess();
     expect(cubit.state.phase, ParentAddChildPhase.paymentStatusUnknown);
     cubit.reopenCheckout();
     expect(cubit.state.shouldOpenCheckout, isTrue);
     expect(cubit.state.checkoutUrl, 'https://checkout.example.com');
+    expect(repo.checkoutCalls, 1);
+    await cubit.close();
+  });
+
+  test('Tamara back checks once and keeps checkout retryable', () async {
+    final repo = _Repo();
+    final cubit = _readyGulf(repo);
+    await cubit.submit();
+
+    await cubit.checkoutClosed();
+
+    expect(cubit.state.phase, ParentAddChildPhase.paymentStatusUnknown);
+    expect(cubit.state.isBusy, isFalse);
+    expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    cubit.reopenCheckout();
+    expect(cubit.state.shouldOpenCheckout, isTrue);
     expect(repo.checkoutCalls, 1);
     await cubit.close();
   });
@@ -559,6 +581,7 @@ class _Repo implements ParentAddChildRepo {
   final List<String> keys = [];
   int checkoutCalls = 0;
   int egyptianCalls = 0;
+  int reconcileCalls = 0, statusCalls = 0;
   ParentAddChildEgyptianRequest? lastEgyptianRequest;
   ParentAddChildGulfRequest? lastGulfRequest;
 
@@ -593,12 +616,18 @@ class _Repo implements ParentAddChildRepo {
   }
 
   @override
-  reconcile(String paymentId) async => Right(
-    statuses.isEmpty ? _status(PaymentStatus.pending) : statuses.removeAt(0),
-  );
+  reconcile(String paymentId) async {
+    reconcileCalls++;
+    return Right(
+      statuses.isEmpty ? _status(PaymentStatus.pending) : statuses.removeAt(0),
+    );
+  }
 
   @override
-  status(String paymentId) async => Right(_status(PaymentStatus.pending));
+  status(String paymentId) async {
+    statusCalls++;
+    return Right(_status(PaymentStatus.pending));
+  }
 }
 
 class _LookupRepo implements AcademicLookupsRepo {

@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_app_drawer/drawer_item_model.dart';
 import 'package:bnan_app/core/shared_widget/custom_bottom_nav_bar/bottom_nav_item_model.dart';
+import 'package:bnan_app/features/chats/presentation/navigation/chat_role_navigation.dart';
 
 class SupervisorNavigationItem {
   const SupervisorNavigationItem({
@@ -21,6 +22,10 @@ class SupervisorNavigationItem {
   }
 
   BottomNavItemModel toBottomItem() {
-    return BottomNavItemModel(title: title, icon: icon);
+    return BottomNavItemModel(
+      title: title,
+      icon: icon,
+      tracksUnreadMessages: route == ChatRoleNavigation.messagesRoute,
+    );
   }
 }

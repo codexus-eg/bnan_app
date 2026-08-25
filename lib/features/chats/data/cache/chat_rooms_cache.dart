@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 
@@ -7,6 +9,9 @@ class ChatRoomsCache {
   final SessionManager _session;
   List<ChatRoomSummaryModel> _rooms = const [];
   String? _ownerId;
+  final _roomReadEvents = StreamController<String>.broadcast(sync: true);
+
+  Stream<String> get roomReadEvents => _roomReadEvents.stream;
 
   ChatRoomSummaryModel? find(String targetId) {
     _clearForAnotherUser();
@@ -28,10 +33,12 @@ class ChatRoomsCache {
     final id = roomId.trim();
     if (id.isEmpty) return;
     final index = _rooms.indexWhere((r) => r.id.trim() == id);
-    if (index == -1) return;
-    final updated = List.of(_rooms);
-    updated[index] = updated[index].copyWith(unreadCount: 0);
-    _rooms = List.unmodifiable(updated);
+    if (index != -1 && _rooms[index].unreadCount > 0) {
+      final updated = List.of(_rooms);
+      updated[index] = updated[index].copyWith(unreadCount: 0);
+      _rooms = List.unmodifiable(updated);
+    }
+    _roomReadEvents.add(id);
   }
 
   void _clearForAnotherUser() {

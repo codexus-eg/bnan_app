@@ -2,7 +2,6 @@ import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
 import 'package:bnan_app/features/attendance/presentation/views/attendance_view.dart';
-import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_certificates_tab.dart';
 import 'package:bnan_app/features/supervisor_home/presentation/views/widgets/supervisor_tab_refresh.dart';
@@ -25,13 +24,10 @@ Widget buildSupervisorBottomTab(
       child: const WeeklyEvaluationsView(showBackButton: false),
     ),
   ),
-  Routes.groups => BlocProvider(
-    create: (_) => getIt<GetChatRoomsCubit>(),
-    child: SupervisorTabRefresh(
-      key: refreshKey,
-      route: route,
-      child: const GroupsView(showBackButton: false),
-    ),
+  Routes.groups => SupervisorTabRefresh(
+    key: refreshKey,
+    route: route,
+    child: const GroupsView(showBackButton: false),
   ),
   Routes.certificatesManagement => SupervisorCertificatesTab(
     refreshKey: refreshKey,

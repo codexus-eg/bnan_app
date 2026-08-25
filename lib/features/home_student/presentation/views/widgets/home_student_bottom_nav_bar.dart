@@ -30,7 +30,11 @@ class HomeStudentBottomNavBar extends StatelessWidget {
       BottomNavItemModel(icon: ImageManager.homeIcon, title: s.home),
       BottomNavItemModel(icon: ImageManager.tableIcon, title: s.schedule),
       BottomNavItemModel(icon: ImageManager.fileIcon, title: s.assignments),
-      BottomNavItemModel(icon: ImageManager.chatIcon, title: s.messages),
+      BottomNavItemModel(
+        icon: ImageManager.chatIcon,
+        title: s.messages,
+        tracksUnreadMessages: true,
+      ),
       BottomNavItemModel(
         icon: ImageManager.userProfileIcon,
         title: s.myAccount,

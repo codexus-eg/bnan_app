@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/shared_widget/unread_badge_dot.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,13 @@ class CustomBottomNavItem extends StatelessWidget {
     required this.title,
     required this.isSelected,
     required this.onTap,
+    this.showUnreadDot = false,
   });
 
   final String imagePath;
   final String title;
   final bool isSelected;
+  final bool showUnreadDot;
   final VoidCallback onTap;
 
   @override
@@ -26,12 +29,15 @@ class CustomBottomNavItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(
-            imagePath,
-            height: 24,
-            width: 24,
-            fit: BoxFit.contain,
-            colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          UnreadBadgeDot(
+            show: showUnreadDot,
+            child: SvgPicture.asset(
+              imagePath,
+              height: 24,
+              width: 24,
+              fit: BoxFit.contain,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+            ),
           ),
           const SizedBox(height: 8),
           Text(

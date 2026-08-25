@@ -53,6 +53,10 @@ Widget _app(CurriculumActionsCubit cubit) => BlocProvider.value(
 
 class _Repo implements CurriculumManagementRepo {
   @override
+  Future<Either<Failure, Unit>> deleteCurriculum(String curriculumId) =>
+      throw UnimplementedError();
+
+  @override
   Future<Either<Failure, CurriculumModel>> createCurriculum(
     CreateCurriculumRequestModel request,
   ) => throw UnimplementedError();

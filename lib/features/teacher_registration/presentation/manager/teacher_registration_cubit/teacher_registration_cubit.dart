@@ -54,7 +54,7 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
   final specializationController = TextEditingController();
   final universityController = TextEditingController();
   final graduationYearController = TextEditingController();
- 
+
   bool get isSubmitDisabled {
     return state.currentStep == lastStep && !declarationAccepted;
   }
@@ -84,6 +84,9 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
       return S.current.pleaseAnswerAllQuestions;
     }
 
+    final videoError = validateIntroVideoUrl();
+    if (videoError != null) return videoError;
+
     if (whyJoinBananController.text.trim().isEmpty) {
       return S.current.fieldIsRequired(S.current.whyJoinBananAcademy);
     }
@@ -93,6 +96,20 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
     }
 
     return null;
+  }
+
+  String? validateIntroVideoUrl() {
+    final value = shortVideoLinkController.text.trim();
+    if (value.isEmpty) {
+      return S.current.fieldIsRequired(S.current.shortVideoLink);
+    }
+
+    final uri = Uri.tryParse(value);
+    final isWebUrl =
+        uri != null &&
+        (uri.scheme == 'http' || uri.scheme == 'https') &&
+        uri.host.isNotEmpty;
+    return isWebUrl ? null : S.current.invalidLink;
   }
 
   void changeCanProvideTrialLesson(bool value) {
@@ -304,6 +321,17 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
   }
 
   Future<void> registerTeacher() async {
+    final videoError = validateIntroVideoUrl();
+    if (videoError != null) {
+      emit(
+        TeacherRegistrationFailureState(
+          currentStep: state.currentStep,
+          errorMessage: videoError,
+        ),
+      );
+      return;
+    }
+
     emit(TeacherRegistrationLoadingState(currentStep: state.currentStep));
 
     final request = TeacherRegisterRequestModel(

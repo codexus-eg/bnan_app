@@ -29,6 +29,7 @@ class ParentSubscriptionRenewalCubit
     this.store,
     this.pollInterval = const Duration(seconds: 3),
     this.maxPollAttempts = 20,
+    this.checkoutCloseTimeout = const Duration(seconds: 10),
   }) : _attempt = ParentPaymentAttempt(keyGenerator),
        super(ParentSubscriptionRenewalState(args: args));
   final ParentSubscriptionsRepo repo;
@@ -36,6 +37,7 @@ class ParentSubscriptionRenewalCubit
   final ParentPaymentAttempt _attempt;
   final Duration pollInterval;
   final int maxPollAttempts;
+  final Duration checkoutCloseTimeout;
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
@@ -225,6 +227,51 @@ class ParentSubscriptionRenewalCubit
     }
     _reconcilingPaymentId = id;
     return _reconcileFlight = _runGulfReconcile(id);
+  }
+
+  Future<void> checkoutClosed() {
+    if (isClosed || state.phase == ParentRenewalPhase.completed) {
+      return Future.value();
+    }
+    final id = state.paymentId;
+    if (id == null || id.isEmpty || !state.isGulf) return Future.value();
+    if (_reconcilingPaymentId == id && _reconcileFlight != null) {
+      return _reconcileFlight!;
+    }
+    _reconcilingPaymentId = id;
+    return _reconcileFlight = _runCheckoutClosedCheck(id);
+  }
+
+  Future<void> _runCheckoutClosedCheck(String id) async {
+    emit(
+      state.copyWith(
+        phase: ParentRenewalPhase.paymentStatusUnknown,
+        shouldOpenCheckout: false,
+        errorMessage: null,
+      ),
+    );
+    try {
+      RenewalStatusResponse? response;
+      final result = await repo.gulfReconcile(id).timeout(checkoutCloseTimeout);
+      result.fold((_) {}, (value) => response = value);
+      if (!isClosed && state.paymentId == id && response != null) {
+        await _handle(response!);
+      }
+    } on TimeoutException {
+      // The stable unknown state keeps the existing checkout retryable.
+    } catch (_) {
+      // Repository errors must not leave the renewal screen processing.
+    } finally {
+      if (_reconcilingPaymentId == id) {
+        _reconcilingPaymentId = null;
+        _reconcileFlight = null;
+      }
+      if (!isClosed &&
+          state.paymentId == id &&
+          state.phase == ParentRenewalPhase.processing) {
+        emit(state.copyWith(phase: ParentRenewalPhase.paymentStatusUnknown));
+      }
+    }
   }
 
   Future<void> _runGulfReconcile(String id) async {

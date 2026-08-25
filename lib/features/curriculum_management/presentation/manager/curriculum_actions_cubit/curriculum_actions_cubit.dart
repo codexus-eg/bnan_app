@@ -41,4 +41,19 @@ class CurriculumActionsCubit extends Cubit<CurriculumActionsState> {
       (curriculum) => emit(UpdateCurriculumSuccess(curriculum)),
     );
   }
+
+  Future<void> deleteCurriculum(String curriculumId) async {
+    if (isClosed || state is DeleteCurriculumLoading) return;
+    emit(DeleteCurriculumLoading());
+
+    final result = await curriculumManagementRepo.deleteCurriculum(
+      curriculumId,
+    );
+    if (isClosed) return;
+
+    result.fold(
+      (failure) => emit(DeleteCurriculumFailure(failure.message)),
+      (_) => emit(DeleteCurriculumSuccess(curriculumId)),
+    );
+  }
 }

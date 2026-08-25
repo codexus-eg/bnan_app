@@ -5,6 +5,7 @@ import 'package:bnan_app/features/curriculum_management/presentation/manager/cur
 import 'package:bnan_app/features/curriculum_management/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/views/widgets/add_curriculms_data_title.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/views/widgets/dialogs/curriculm_form_dialog.dart';
+import 'package:bnan_app/features/curriculum_management/presentation/views/widgets/dialogs/delete_curriculum_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,15 +29,21 @@ class CurriculumTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 4),
-        AddCurriculmsDataTitle(
-          title: curriculum.name,
-          subtitle: S.of(context).gradesCount(curriculum.gradesCount ?? 0),
+        Expanded(
+          child: AddCurriculmsDataTitle(
+            title: curriculum.name,
+            subtitle: S.of(context).gradesCount(curriculum.gradesCount ?? 0),
+          ),
         ),
-        Spacer(),
         IconButton(
           onPressed: () => _showEditCurriculumDialog(context),
           icon: SvgPicture.asset(ImageManager.edit, height: 20, width: 20),
           color: ColorManager.greyA8AF,
+        ),
+        IconButton(
+          onPressed: () => _showDeleteCurriculumDialog(context),
+          icon: SvgPicture.asset(ImageManager.trash, height: 20, width: 20),
+          color: ColorManager.redBA,
         ),
       ],
     );
@@ -56,5 +63,18 @@ class CurriculumTitle extends StatelessWidget {
     if (result == true && context.mounted) {
       context.read<GetCurriculumsCubit>().getCurriculums();
     }
+  }
+
+  Future<void> _showDeleteCurriculumDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: context.read<CurriculumActionsCubit>()),
+          BlocProvider.value(value: context.read<GetCurriculumsCubit>()),
+        ],
+        child: DeleteCurriculumDialog(curriculumId: curriculum.id),
+      ),
+    );
   }
 }

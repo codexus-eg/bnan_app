@@ -16,4 +16,6 @@ abstract class CurriculumManagementRepo {
     required String curriculumId,
     required UpdateCurriculumRequestModel request,
   });
+
+  Future<Either<Failure, Unit>> deleteCurriculum(String curriculumId);
 }

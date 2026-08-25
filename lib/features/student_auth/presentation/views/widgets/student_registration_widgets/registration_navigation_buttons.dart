@@ -9,6 +9,7 @@ import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_c
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
 
@@ -137,10 +138,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
             (cubit.state as TamaraPaymentResult).status ==
                 PaymentStatus.completed,
         onPaymentSuccess: cubit.verifyProviderSuccess,
-        onOpened: () async {
-          await cubit.completeCheckoutLaunch(opened: true);
-          await cubit.onForeground();
-        },
+        onOpened: () => cubit.completeCheckoutLaunch(opened: true),
       );
       if (!context.mounted) return;
       if (!result.opened) {
@@ -154,7 +152,12 @@ class RegistrationNavigationButtons extends StatelessWidget {
         }
         return;
       }
-      await cubit.verifyCheckoutClosed();
+      if (result.outcome == null) return;
+      if (result.outcome == TamaraSdkOutcome.success) {
+        await cubit.verifyCheckoutClosed();
+      } else {
+        await cubit.verifyCheckoutClosedOnce();
+      }
       return;
     }
     if (state is TamaraPaymentVerificationPending) {
