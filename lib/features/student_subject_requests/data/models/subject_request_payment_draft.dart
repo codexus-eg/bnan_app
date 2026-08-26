@@ -10,6 +10,7 @@ class SubjectRequestPaymentDraft {
     required this.ownerUserId,
     this.provider = GulfPaymentProvider.tamara,
     this.checkoutUrl,
+    this.createdAt = '',
   });
 
   static const operationType = 'subject_request';
@@ -21,9 +22,12 @@ class SubjectRequestPaymentDraft {
   final String ownerUserId;
   final GulfPaymentProvider provider;
   final String? checkoutUrl;
+  final String createdAt;
 
   Map<String, dynamic> toJson() => {
     'operationType': operationType,
+    'purpose': 'subjectPurchase',
+    'createdAt': createdAt,
     'paymentId': paymentId,
     'idempotencyKey': idempotencyKey,
     'subjectId': subjectId,
@@ -44,5 +48,6 @@ class SubjectRequestPaymentDraft {
         ownerUserId: (json['ownerUserId'] ?? '').toString(),
         provider: GulfPaymentProvider.fromApiValue(json['provider']),
         checkoutUrl: json['checkoutUrl']?.toString(),
+        createdAt: (json['createdAt'] ?? '').toString(),
       );
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bnan_app/features/payments/data/checkout_payload_fingerprint.dart';
+import 'package:bnan_app/features/payments/data/gulf_payment_polling_policy.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
@@ -24,8 +25,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     required this.authRepo,
     required this.store,
     IdempotencyKeyGenerator? keyGenerator,
-    this.pollInterval = const Duration(seconds: 3),
-    this.maxPollAttempts = 20,
+    this.pollInterval,
+    this.maxPollAttempts,
     this.checkoutReturnTimeout = const Duration(seconds: 10),
   }) : keyGenerator = keyGenerator ?? IdempotencyKeyGenerator(),
        super(const TamaraPaymentInitial()) {
@@ -36,8 +37,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   final AuthRepo authRepo;
   final PaymentDraftStore store;
   final IdempotencyKeyGenerator keyGenerator;
-  final Duration pollInterval;
-  final int maxPollAttempts;
+  final Duration? pollInterval;
+  final int? maxPollAttempts;
   final Duration checkoutReturnTimeout;
 
   Timer? _timer;
@@ -53,6 +54,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   final Set<String> _handledReturns = {};
   PaymentAmountSummary? _paymentSummary;
   int _pollAttempts = 0;
+  DateTime? _pollStartedAt;
   int _attemptGeneration = 0;
 
   PaymentDraft? get draft => _draft;
@@ -61,7 +63,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   bool get isAwaitingVerification =>
       _draft?.paymentId.isNotEmpty == true &&
       _draft?.checkoutOpenedAt != null &&
-      _draft?.lastKnownStatus == PaymentStatus.pending;
+      _draft?.lastKnownStatus.isProcessing == true;
 
   Future<void> restore() async {
     _accountVerificationAttemptActive = false;
@@ -72,9 +74,11 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       await store.clear();
       return;
     }
-    if (draft?.lastKnownStatus == PaymentStatus.pending &&
+    if (draft?.lastKnownStatus.isProcessing == true &&
         draft?.paymentId.isNotEmpty == true) {
       emit(const TamaraPaymentVerificationPending());
+      _reconciledThisForeground = false;
+      await _reconcileAndCheckStatus();
     }
   }
 
@@ -104,7 +108,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     }
     _accountVerificationAttemptActive = true;
     if (existing != null &&
-        existing.lastKnownStatus == PaymentStatus.pending &&
+        existing.lastKnownStatus.isProcessing &&
         existing.paymentId.isNotEmpty) {
       emit(
         TamaraPaymentPending(
@@ -199,8 +203,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     }
     if (draft == null ||
         draft.paymentId.isEmpty ||
-        draft.lastKnownStatus != PaymentStatus.pending ||
-        draft.checkoutOpenedAt == null) {
+        !draft.lastKnownStatus.isProcessing) {
       return;
     }
     await _reconcileAndCheckStatus();
@@ -213,7 +216,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _draft = draft;
     if (draft == null ||
         draft.paymentId.isEmpty ||
-        draft.lastKnownStatus != PaymentStatus.pending) {
+        !draft.lastKnownStatus.isProcessing) {
       return;
     }
     final key = '${draft.paymentId}:${paymentReturn.outcome.name}';
@@ -232,7 +235,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   }
 
   Future<void> verifyCheckoutClosed() async {
-    if (_draft?.lastKnownStatus != PaymentStatus.pending) return;
+    if (_draft?.lastKnownStatus.isProcessing != true) return;
     _stopPolling();
     _checkoutLaunchClaimed = true;
     _reconciledThisForeground = false;
@@ -256,7 +259,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _draft = draft;
     if (draft == null ||
         draft.paymentId.isEmpty ||
-        draft.lastKnownStatus != PaymentStatus.pending ||
+        !draft.lastKnownStatus.isProcessing ||
         _reconcileInFlight) {
       return;
     }
@@ -296,13 +299,14 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       if (!isClosed &&
           generation == _attemptGeneration &&
           _draft?.paymentId == paymentId &&
-          _draft?.lastKnownStatus == PaymentStatus.pending) {
+          _draft?.lastKnownStatus.isProcessing == true) {
         emit(
           TamaraPaymentPending(
             checkoutUrl: _draft?.checkoutUrl,
             shouldOpenCheckout: false,
           ),
         );
+        _startPolling();
       }
     }
   }
@@ -351,7 +355,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     final draft = _draft;
     if (draft == null ||
         draft.paymentId.isEmpty ||
-        draft.lastKnownStatus != PaymentStatus.pending ||
+        !draft.lastKnownStatus.isProcessing ||
         _reconciledThisForeground ||
         _reconcileInFlight) {
       return;
@@ -371,15 +375,12 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     await reconciled?.fold((_) async {}, _handleStatus);
     if (_draft?.lastKnownStatus.isTerminal == true) return;
     await checkStatus();
-    if (_checkoutLaunchClaimed &&
-        _draft?.lastKnownStatus == PaymentStatus.pending) {
-      _startPolling();
-    }
+    if (_draft?.lastKnownStatus.isProcessing == true) _startPolling();
   }
 
   void onBackground() {
     _browserReturnPending =
-        _draft?.lastKnownStatus == PaymentStatus.pending &&
+        _draft?.lastKnownStatus.isProcessing == true &&
         _draft?.checkoutOpenedAt != null;
     _timer?.cancel();
     _timer = null;
@@ -407,10 +408,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
         _draft?.paymentId != paymentId) {
       return false;
     }
-    await result.fold(
-      (failure) async => emit(TamaraPaymentFailure(failure.message)),
-      _handleStatus,
-    );
+    await result.fold((_) async {}, _handleStatus);
     return result.isRight();
   }
 
@@ -461,34 +459,50 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   }
 
   Future<void> retryAfterTerminal(TamaraCheckoutRequest request) async {
-    if (_draft?.lastKnownStatus.isTerminal != true) return;
+    if (!{
+      PaymentStatus.failed,
+      PaymentStatus.cancelled,
+      PaymentStatus.expired,
+    }.contains(_draft?.lastKnownStatus)) {
+      return;
+    }
     _draft = null;
     await checkout(request);
   }
 
   void _startPolling() {
-    if (_timer != null || _draft?.lastKnownStatus != PaymentStatus.pending) {
+    if (_timer != null || _draft?.lastKnownStatus.isProcessing != true) {
       return;
     }
     _pollAttempts = 0;
-    _timer = Timer.periodic(pollInterval, (_) {
-      if (_pollAttempts >= maxPollAttempts) {
-        _stopPolling();
-        _checkoutLaunchClaimed = false;
-        final draft = _draft;
-        if (draft != null && !isClosed) {
-          unawaited(_settlePendingCheckout(draft));
-        }
-        return;
-      }
+    _pollStartedAt = DateTime.now();
+    _scheduleNextPoll();
+  }
+
+  void _scheduleNextPoll() {
+    if (isClosed || _draft?.lastKnownStatus.isProcessing != true) return;
+    final attemptsExhausted =
+        maxPollAttempts != null && _pollAttempts >= maxPollAttempts!;
+    final elapsed = DateTime.now().difference(_pollStartedAt!);
+    final delay =
+        pollInterval ?? const GulfPaymentPollingPolicy().nextDelay(elapsed);
+    if (attemptsExhausted || delay == null) {
+      _checkoutLaunchClaimed = false;
+      final draft = _draft;
+      if (draft != null) unawaited(_settlePendingCheckout(draft));
+      return;
+    }
+    _timer = Timer(delay, () async {
+      _timer = null;
       _pollAttempts++;
-      checkStatus();
+      await checkStatus();
+      _scheduleNextPoll();
     });
   }
 
   Future<void> _settlePendingCheckout(PaymentDraft draft) async {
     await _saveCheckoutClosed(draft);
-    if (!isClosed && _draft?.lastKnownStatus == PaymentStatus.pending) {
+    if (!isClosed && _draft?.lastKnownStatus.isProcessing == true) {
       emit(
         TamaraPaymentPending(
           checkoutUrl: _draft?.checkoutUrl,
@@ -502,7 +516,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     final draft = _draft;
     if (_checkoutLaunchClaimed ||
         draft == null ||
-        draft.lastKnownStatus != PaymentStatus.pending ||
+        !draft.lastKnownStatus.isProcessing ||
         draft.checkoutUrl?.trim() != url.trim()) {
       return false;
     }
@@ -543,7 +557,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconcileInFlight = false;
     _reconciledThisForeground = false;
     _checkoutLaunchClaimed = false;
-    if (!isClosed && _draft?.lastKnownStatus == PaymentStatus.pending) {
+    if (!isClosed && _draft?.lastKnownStatus.isProcessing == true) {
       emit(
         TamaraPaymentPending(
           checkoutUrl: _draft?.checkoutUrl,
@@ -556,6 +570,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
   void _stopPolling() {
     _timer?.cancel();
     _timer = null;
+    _pollStartedAt = null;
   }
 
   Future<void> _completeRegistration() async {

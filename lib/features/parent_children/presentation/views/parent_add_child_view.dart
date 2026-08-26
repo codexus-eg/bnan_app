@@ -23,7 +23,6 @@ class ParentAddChildView extends StatefulWidget {
 class _ParentAddChildViewState extends State<ParentAddChildView>
     with WidgetsBindingObserver {
   bool _tamaraOpen = false;
-  bool _externalReturnPending = false;
 
   @override
   void initState() {
@@ -39,12 +38,8 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed &&
-        mounted &&
-        _externalReturnPending &&
-        !_tamaraOpen) {
-      _externalReturnPending = false;
-      context.read<ParentAddChildCubit>().checkoutClosed();
+    if (state == AppLifecycleState.resumed && mounted && !_tamaraOpen) {
+      context.read<ParentAddChildCubit>().verifyPaymentSuccess();
     }
   }
 
@@ -121,7 +116,6 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       return;
     }
     if (result.tamaraOutcome == null) {
-      _externalReturnPending = true;
       return;
     }
     if (result.tamaraOutcome == TamaraSdkOutcome.cancel ||

@@ -1,5 +1,7 @@
 enum PaymentStatus {
   pending,
+  authorized,
+  captured,
   completed,
   failed,
   cancelled,
@@ -16,6 +18,9 @@ enum PaymentStatus {
 
   bool get isTerminal => switch (this) {
     completed || failed || cancelled || expired || refunded => true,
-    pending || unknown => false,
+    pending || authorized || captured || unknown => false,
   };
+
+  bool get isProcessing =>
+      this == pending || this == authorized || this == captured;
 }

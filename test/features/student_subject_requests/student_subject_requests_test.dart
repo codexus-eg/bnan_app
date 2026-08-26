@@ -489,7 +489,7 @@ void main() {
       expect(repo.lastPayload?.provider, GulfPaymentProvider.paymob);
       expect(repo.lastPayload?.toJson(), isNot(contains('paymentAddress')));
       await cubit.paymobCheckoutClosed();
-      expect(cubit.state.phase, SubjectRequestPaymentPhase.idle);
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.verificationTimeout);
       expect(repo.reconcileCalls, 0);
       expect(repo.statusCalls, 1);
       await cubit.close();
@@ -555,7 +555,7 @@ void main() {
 
       await cubit.checkoutClosed();
 
-      expect(cubit.state.phase, SubjectRequestPaymentPhase.failure);
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.verificationTimeout);
       expect(repo.reconcileCalls, 1);
       expect(repo.statusCalls, 1);
       await cubit.checkout(_gulfPayload());

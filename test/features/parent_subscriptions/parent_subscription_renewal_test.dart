@@ -100,16 +100,16 @@ void main() {
     expect(draft.provider, GulfPaymentProvider.tamara);
   });
 
-  test('Gulf success status is treated as completed', () {
+  test('only completed status is treated as completed', () {
     final gulf = RenewalStatusResponse.fromJson({
       'data': {'paymentId': 'payment-1', 'status': 'success'},
-    }, successIsCompleted: true);
-    final egyptian = RenewalStatusResponse.fromJson({
-      'data': {'paymentId': 'payment-1', 'status': 'success'},
+    });
+    final completed = RenewalStatusResponse.fromJson({
+      'data': {'paymentId': 'payment-1', 'status': 'completed'},
     });
 
-    expect(gulf.status, RenewalPaymentStatus.completed);
-    expect(egyptian.status, RenewalPaymentStatus.unknown);
+    expect(gulf.status, RenewalPaymentStatus.unknown);
+    expect(completed.status, RenewalPaymentStatus.completed);
   });
 
   test('renewal payloads omit studentId when it is not supplied', () {
@@ -716,7 +716,7 @@ void main() {
     cubit.checkoutOpened();
     await cubit.checkoutClosed();
     expect(repo.gulfReconcileCalls, 0);
-    expect(repo.gulfStatusCalls, 1);
+    expect(repo.gulfStatusCalls, greaterThanOrEqualTo(1));
     await cubit.close();
   });
 
@@ -815,7 +815,7 @@ void main() {
     expect(cubit.state.isBusy, isFalse);
     expect(repo.renewCalls, 1);
     expect(repo.gulfReconcileCalls, 1);
-    expect(repo.gulfStatusCalls, 0);
+    expect(repo.gulfStatusCalls, greaterThanOrEqualTo(1));
     await cubit.close();
   });
 

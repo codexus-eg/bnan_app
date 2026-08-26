@@ -10,14 +10,21 @@ enum RenewalPaymentStatus {
   failed,
   cancelled,
   expired,
+  refunded,
   unknown;
 
   factory RenewalPaymentStatus.fromValue(dynamic value) => values.firstWhere(
     (item) => item.name == value?.toString().trim().toLowerCase(),
     orElse: () => unknown,
   );
-  bool get isTerminal =>
-      const {completed, rejected, failed, cancelled, expired}.contains(this);
+  bool get isTerminal => const {
+    completed,
+    rejected,
+    failed,
+    cancelled,
+    expired,
+    refunded,
+  }.contains(this);
 }
 
 class RenewalStatusResponse {
@@ -34,20 +41,13 @@ class RenewalStatusResponse {
   final PaymentAmountSummary? paymentSummary;
   final String? message;
 
-  factory RenewalStatusResponse.fromJson(
-    Map<String, dynamic> json, {
-    bool successIsCompleted = false,
-  }) {
+  factory RenewalStatusResponse.fromJson(Map<String, dynamic> json) {
     final raw = json['data'];
     final data = raw is Map ? Map<String, dynamic>.from(raw) : json;
     final summary = PaymentAmountSummary.fromJson(data);
     return RenewalStatusResponse(
       paymentId: data['paymentId']?.toString() ?? '',
-      status:
-          successIsCompleted &&
-              data['status']?.toString().trim().toLowerCase() == 'success'
-          ? RenewalPaymentStatus.completed
-          : RenewalPaymentStatus.fromValue(data['status']),
+      status: RenewalPaymentStatus.fromValue(data['status']),
       checkoutUrl: data['checkoutUrl']?.toString(),
       paymentSummary: summary.hasAmounts || summary.hasDiscount
           ? summary

@@ -36,8 +36,8 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     required this.repo,
     required IdempotencyKeyGenerator keyGenerator,
     this.store,
-    this.pollInterval = const Duration(seconds: 3),
-    this.maxPollAttempts = 20,
+    this.pollInterval,
+    this.maxPollAttempts,
     this.checkoutReturnTimeout = const Duration(seconds: 10),
     GulfPaymentProvider provider = GulfPaymentProvider.tamara,
   }) : _attempt = ParentPaymentAttempt(keyGenerator),
@@ -46,8 +46,8 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   final ParentAddChildRepo repo;
   final ParentPaymentAttempt _attempt;
   final PaymentDraftStore? store;
-  final Duration pollInterval;
-  final int maxPollAttempts;
+  final Duration? pollInterval;
+  final int? maxPollAttempts;
   final Duration checkoutReturnTimeout;
   bool _submitting = false;
   bool _checkingPayment = false;
@@ -77,7 +77,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       ),
     );
     _log('state transition: restored pending payment');
-    unawaited(checkPaymentStatus());
+    unawaited(verifyPaymentSuccess());
   }
 
   void updateAccount({String? fullName, String? email, String? password}) =>
@@ -272,7 +272,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       ),
     );
     try {
-      await checkPaymentStatus().timeout(checkoutReturnTimeout);
+      await verifyPaymentSuccess().timeout(checkoutReturnTimeout);
     } on TimeoutException {
       // The existing checkout remains available after a slow status check.
     } catch (_) {
@@ -507,6 +507,18 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       PaymentStatus.expired,
     }.contains(response.status)) {
       _attempt.startNew();
+      await store?.clear();
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          phase: ParentAddChildPhase.failure,
+          paymentStatus: response.status,
+          errorMessage: S.current.parentPaymentFailed,
+        ),
+      );
+      return;
+    }
+    if (response.status == PaymentStatus.refunded) {
       emit(
         state.copyWith(
           phase: ParentAddChildPhase.failure,
@@ -604,7 +616,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     if (!_owns(draft) ||
         draft!.curriculumId != curriculumId ||
         draft.paymentId.isEmpty ||
-        draft.lastKnownStatus != PaymentStatus.pending ||
+        !draft.lastKnownStatus.isProcessing ||
         draft.purpose != PaymentDraftPurpose.addChild) {
       return null;
     }

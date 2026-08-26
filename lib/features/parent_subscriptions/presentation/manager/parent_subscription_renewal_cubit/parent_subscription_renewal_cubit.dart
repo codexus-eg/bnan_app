@@ -28,8 +28,8 @@ class ParentSubscriptionRenewalCubit
     required IdempotencyKeyGenerator keyGenerator,
     required ParentSubscriptionRenewalArgs args,
     this.store,
-    this.pollInterval = const Duration(seconds: 3),
-    this.maxPollAttempts = 20,
+    this.pollInterval,
+    this.maxPollAttempts,
     this.checkoutCloseTimeout = const Duration(seconds: 10),
     GulfPaymentProvider provider = GulfPaymentProvider.tamara,
   }) : _attempt = ParentPaymentAttempt(keyGenerator),
@@ -39,8 +39,8 @@ class ParentSubscriptionRenewalCubit
   final ParentSubscriptionsRepo repo;
   final RenewalPaymentStore? store;
   final ParentPaymentAttempt _attempt;
-  final Duration pollInterval;
-  final int maxPollAttempts;
+  final Duration? pollInterval;
+  final int? maxPollAttempts;
   final Duration checkoutCloseTimeout;
   bool _submitting = false;
   bool _checkingPayment = false;
@@ -287,8 +287,10 @@ class ParentSubscriptionRenewalCubit
       }
       if (!isClosed &&
           state.paymentId == id &&
-          state.phase == ParentRenewalPhase.processing) {
+          state.phase != ParentRenewalPhase.completed &&
+          state.status?.isTerminal != true) {
         emit(state.copyWith(phase: ParentRenewalPhase.paymentStatusUnknown));
+        unawaited(_pollGulf(id));
       }
     }
   }
@@ -537,7 +539,11 @@ class ParentSubscriptionRenewalCubit
           : null,
       status: () => repo.gulfStatus(id),
       canContinue: () =>
-          !isClosed && state.phase == ParentRenewalPhase.processing,
+          !isClosed &&
+          {
+            ParentRenewalPhase.processing,
+            ParentRenewalPhase.paymentStatusUnknown,
+          }.contains(state.phase),
     );
   }
 
@@ -598,8 +604,10 @@ class ParentSubscriptionRenewalCubit
         ),
       );
     } else if (response.status.isTerminal) {
-      _attempt.startNew();
-      await store?.clear();
+      if (response.status != RenewalPaymentStatus.refunded) {
+        _attempt.startNew();
+        await store?.clear();
+      }
       if (isClosed) return;
       emit(
         state.copyWith(

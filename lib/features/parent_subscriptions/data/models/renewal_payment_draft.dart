@@ -21,6 +21,7 @@ class RenewalPaymentDraft {
   final GulfPaymentProvider provider;
 
   Map<String, dynamic> toJson() => {
+    'purpose': 'subscriptionRenewal',
     'paymentId': paymentId,
     'checkoutUrl': checkoutUrl,
     'studentId': studentId,

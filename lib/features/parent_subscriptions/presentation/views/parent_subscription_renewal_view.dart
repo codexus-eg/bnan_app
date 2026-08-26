@@ -25,7 +25,6 @@ class ParentSubscriptionRenewalView extends StatefulWidget {
 class _State extends State<ParentSubscriptionRenewalView>
     with WidgetsBindingObserver {
   bool _tamaraOpen = false;
-  bool _tamaraReturned = false;
   bool _successNavigationExecuted = false;
   bool _isLeaving = false;
 
@@ -47,11 +46,9 @@ class _State extends State<ParentSubscriptionRenewalView>
     if (!_isLeaving &&
         state == AppLifecycleState.resumed &&
         mounted &&
-        _tamaraReturned &&
         !_tamaraOpen) {
-      _tamaraReturned = false;
       unawaited(
-        context.read<ParentSubscriptionRenewalCubit>().checkoutClosed(),
+        context.read<ParentSubscriptionRenewalCubit>().reconcilePayment(),
       );
     }
   }
@@ -129,7 +126,6 @@ class _State extends State<ParentSubscriptionRenewalView>
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
-    _tamaraReturned = false;
     _tamaraOpen = true;
     late final PaymentCheckoutLaunchResult result;
     try {
@@ -148,7 +144,6 @@ class _State extends State<ParentSubscriptionRenewalView>
     }
     if (_isLeaving || !context.mounted || cubit.isClosed) return;
     if (!result.opened) {
-      _tamaraReturned = false;
       cubit.checkoutOpenFailed();
       showCustomSnackBar(
         context,
@@ -158,15 +153,12 @@ class _State extends State<ParentSubscriptionRenewalView>
       return;
     }
     if (state.selectedProvider == GulfPaymentProvider.paymob) {
-      _tamaraReturned = false;
       await cubit.checkoutClosed();
       return;
     }
     if (result.tamaraOutcome == null) {
-      _tamaraReturned = true;
       return;
     }
-    _tamaraReturned = false;
     if (result.tamaraOutcome == TamaraSdkOutcome.success) {
       await cubit.reconcilePayment();
       return;
@@ -188,6 +180,5 @@ class _State extends State<ParentSubscriptionRenewalView>
 
   void _markLeaving() {
     _isLeaving = true;
-    _tamaraReturned = false;
   }
 }

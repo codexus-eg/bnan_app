@@ -54,7 +54,9 @@ class PaymentDraft {
         .toList(),
     studentEmail: json['studentEmail']?.toString() ?? '',
     paymentStartedAt:
-        DateTime.tryParse(json['paymentStartedAt']?.toString() ?? '') ??
+        DateTime.tryParse(
+          (json['paymentStartedAt'] ?? json['createdAt'])?.toString() ?? '',
+        ) ??
         DateTime.fromMillisecondsSinceEpoch(0),
     lastKnownStatus: PaymentStatus.fromValue(json['lastKnownStatus']),
     provider: GulfPaymentProvider.fromApiValue(json['provider']),
@@ -74,6 +76,7 @@ class PaymentDraft {
     'subjectIds': subjectIds,
     'studentEmail': studentEmail,
     'paymentStartedAt': paymentStartedAt.toIso8601String(),
+    'createdAt': paymentStartedAt.toUtc().toIso8601String(),
     'lastKnownStatus': lastKnownStatus.name,
     'provider': provider.apiValue,
     'purpose': purpose.name,

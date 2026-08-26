@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/payments/data/checkout_payload_fingerprint.dart';
+import 'package:bnan_app/features/payments/data/gulf_payment_polling_policy.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
@@ -17,8 +16,8 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     required StudentSubjectRequestsRepo repo,
     required IdempotencyKeyGenerator keyGenerator,
     required SubjectRequestPaymentStore store,
-    this.pollInterval = const Duration(seconds: 4),
-    this.maxPollAttempts = 15,
+    this.pollInterval,
+    this.maxPollAttempts,
     this.checkoutReturnTimeout = const Duration(seconds: 10),
   }) : _repo = repo,
        _keys = keyGenerator,
@@ -28,8 +27,8 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   final StudentSubjectRequestsRepo _repo;
   final IdempotencyKeyGenerator _keys;
   final SubjectRequestPaymentStore _store;
-  final Duration pollInterval;
-  final int maxPollAttempts;
+  final Duration? pollInterval;
+  final int? maxPollAttempts;
   final Duration checkoutReturnTimeout;
   String? _key;
   String? _fingerprint;
@@ -100,6 +99,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       payloadFingerprint: fingerprint,
       ownerUserId: _ownerUserId,
       provider: payload.provider,
+      createdAt: DateTime.now().toUtc().toIso8601String(),
     );
     await _store.save(pendingDraft);
     if (isClosed) return;
@@ -133,6 +133,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
             ownerUserId: _ownerUserId,
             provider: payload.provider,
             checkoutUrl: payment.checkoutUrl,
+            createdAt: DateTime.now().toUtc().toIso8601String(),
           ),
         );
         if (isClosed) return;
@@ -167,29 +168,8 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   }
 
   Future<void> _runClosedCheck() async {
-    final paymentId = state.payment?.paymentId;
-    if (paymentId == null || paymentId.isEmpty) return;
-    _polling = false;
-    emit(
-      SubjectRequestPaymentState(
-        phase: SubjectRequestPaymentPhase.failure,
-        payment: state.payment,
-        selectedProvider: _provider,
-      ),
-    );
-    try {
-      await _check(
-        paymentId,
-        reconcile: _provider.supportsReconcile,
-      ).timeout(checkoutReturnTimeout);
-      if (state.phase == SubjectRequestPaymentPhase.failure) {
-        await _check(paymentId).timeout(checkoutReturnTimeout);
-      }
-    } on TimeoutException {
-      // The saved checkout remains available for another user attempt.
-    } catch (_) {
-      // A return failure must not leave the submit button loading.
-    }
+    if (state.payment?.paymentId.isNotEmpty != true) return;
+    await verify(reconcileFirst: true);
   }
 
   void checkoutLaunchFailed(String message) {
@@ -213,14 +193,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   Future<void> paymobCheckoutClosed() async {
     final paymentId = state.payment?.paymentId;
     if (paymentId == null || paymentId.isEmpty) return;
-    _polling = false;
-    emit(
-      SubjectRequestPaymentState(
-        payment: state.payment,
-        selectedProvider: _provider,
-      ),
-    );
-    await _check(paymentId);
+    await verify();
   }
 
   void completeHandling() {
@@ -244,11 +217,18 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       await _check(paymentId, reconcile: true);
     }
     var attempts = 0;
+    var elapsed = Duration.zero;
     while (!isClosed &&
         _polling &&
-        attempts < maxPollAttempts &&
+        (maxPollAttempts == null || attempts < maxPollAttempts!) &&
         state.phase == SubjectRequestPaymentPhase.verifying) {
-      if (attempts > 0) await Future<void>.delayed(pollInterval);
+      if (attempts > 0) {
+        final delay =
+            pollInterval ?? const GulfPaymentPollingPolicy().nextDelay(elapsed);
+        if (delay == null) break;
+        await Future<void>.delayed(delay);
+        elapsed += delay;
+      }
       if (isClosed || !_polling) break;
       await _check(paymentId);
       attempts++;

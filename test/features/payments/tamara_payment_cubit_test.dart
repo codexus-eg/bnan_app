@@ -270,13 +270,14 @@ void main() {
   }
 
   test(
-    'foreground does not reconcile before checkout URL was opened',
+    'foreground verifies a saved pending attempt before checkout opens',
     () async {
       final repo = _PaymentRepo();
       final cubit = _cubit(repo, store);
       await cubit.checkout(_request);
       await cubit.onForeground();
-      expect(repo.reconcileCalls, 0);
+      expect(repo.reconcileCalls, 1);
+      expect(repo.statusCalls, 1);
       await cubit.close();
     },
   );

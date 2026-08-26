@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/payments/data/gulf_payment_polling_policy.dart';
 import 'package:dartz/dartz.dart';
 
 typedef ParentPaymentRequest<T> = Future<Either<Failure, T>> Function();
@@ -13,11 +14,13 @@ class ParentPaymentPollResult<T> {
 
 class ParentPaymentPoller<T> {
   const ParentPaymentPoller({
-    this.interval = const Duration(seconds: 3),
-    this.maxAttempts = 20,
+    this.interval,
+    this.maxAttempts,
+    this.policy = const GulfPaymentPollingPolicy(),
   });
-  final Duration interval;
-  final int maxAttempts;
+  final Duration? interval;
+  final int? maxAttempts;
+  final GulfPaymentPollingPolicy policy;
 
   Future<ParentPaymentPollResult<T>> poll({
     ParentPaymentRequest<T>? reconcile,
@@ -25,13 +28,20 @@ class ParentPaymentPoller<T> {
     required bool Function(T value) isTerminal,
     required bool Function() canContinue,
   }) async {
-    for (var attempt = 0; attempt < maxAttempts; attempt++) {
+    var attempt = 0;
+    var elapsed = Duration.zero;
+    while (maxAttempts == null || attempt < maxAttempts!) {
       if (!canContinue()) {
         return const ParentPaymentPollResult(
           ParentPaymentPollOutcome.cancelled,
         );
       }
-      if (attempt > 0) await Future<void>.delayed(interval);
+      if (attempt > 0) {
+        final delay = interval ?? policy.nextDelay(elapsed);
+        if (delay == null) break;
+        await Future<void>.delayed(delay);
+        elapsed += delay;
+      }
       if (!canContinue()) {
         return const ParentPaymentPollResult(
           ParentPaymentPollOutcome.cancelled,
@@ -50,6 +60,7 @@ class ParentPaymentPoller<T> {
           response,
         );
       }
+      attempt++;
     }
     return const ParentPaymentPollResult(ParentPaymentPollOutcome.timedOut);
   }

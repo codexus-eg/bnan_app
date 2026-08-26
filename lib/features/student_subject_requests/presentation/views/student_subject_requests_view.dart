@@ -29,7 +29,6 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
   bool _paymentRestoreChecked = false;
   bool _returningHome = false;
   bool _tamaraOpen = false;
-  bool _externalReturnPending = false;
 
   @override
   void initState() {
@@ -45,11 +44,8 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed &&
-        _externalReturnPending &&
-        !_tamaraOpen) {
-      _externalReturnPending = false;
-      context.read<SubjectRequestPaymentCubit>().checkoutClosed();
+    if (state == AppLifecycleState.resumed && !_tamaraOpen) {
+      context.read<SubjectRequestPaymentCubit>().verify(reconcileFirst: true);
     }
   }
 
@@ -137,7 +133,6 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
         return;
       }
       if (result.tamaraOutcome == null) {
-        _externalReturnPending = true;
         return;
       }
       if (result.tamaraOutcome == TamaraSdkOutcome.success) {

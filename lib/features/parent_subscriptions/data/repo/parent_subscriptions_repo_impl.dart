@@ -82,14 +82,12 @@ class ParentSubscriptionsRepoImpl implements ParentSubscriptionsRepo {
   gulfStatus(String id) => repoGuard(
     () async => RenewalStatusResponse.fromJson(
       _map(await _get(EndPoints.gulfRenewalStatus(id))),
-      successIsCompleted: true,
     ),
   );
   @override
   gulfReconcile(String id) => repoGuard(
     () async => RenewalStatusResponse.fromJson(
       _map(await _post(EndPoints.gulfRenewalReconcile(id))),
-      successIsCompleted: true,
     ),
   );
 
