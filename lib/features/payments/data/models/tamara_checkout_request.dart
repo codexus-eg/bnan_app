@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_student_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/registration_item.dart';
 
@@ -9,6 +10,7 @@ class TamaraCheckoutRequest {
     required this.curriculumId,
     required this.packageId,
     required this.address,
+    this.provider = GulfPaymentProvider.tamara,
     this.items = const [],
     this.discountCode,
     this.locale = 'ar_SA',
@@ -20,11 +22,13 @@ class TamaraCheckoutRequest {
   final String curriculumId;
   final String packageId;
   final PaymentAddress address;
+  final GulfPaymentProvider provider;
   final List<RegistrationItem> items;
   final String? discountCode;
   final String locale;
 
   Map<String, dynamic> toJson() => {
+    'provider': provider.apiValue,
     'parent': {'email': parentEmail.trim(), 'password': parentPassword},
     'student': student.toJson(),
     'curriculum': curriculumId,
@@ -33,7 +37,8 @@ class TamaraCheckoutRequest {
       'items': items.map((item) => item.toJson()).toList(growable: false),
     if (discountCode?.trim().isNotEmpty == true)
       'discountCode': discountCode!.trim(),
-    'paymentAddress': address.toJson(),
+    if (provider == GulfPaymentProvider.tamara)
+      'paymentAddress': address.toJson(),
     'locale': locale,
   };
 }

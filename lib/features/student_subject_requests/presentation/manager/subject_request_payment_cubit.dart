@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/payments/data/checkout_payload_fingerprint.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payment.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payment_draft.dart';
@@ -34,6 +35,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   String? _fingerprint;
   bool _polling = false;
   Future<void>? _closedCheckFlight;
+  GulfPaymentProvider _provider = GulfPaymentProvider.tamara;
 
   Future<void> restore() async {
     final draft = _store.read();
@@ -44,6 +46,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     }
     _key = draft.idempotencyKey;
     _fingerprint = draft.payloadFingerprint;
+    _provider = draft.provider;
     if (draft.paymentId.isEmpty) return;
     emit(
       SubjectRequestPaymentState(
@@ -61,6 +64,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   Future<void> checkout(GulfSubjectRequestPayload payload) async {
     if (_isBusy) return;
     final fingerprint = checkoutMapFingerprint(payload.toJson());
+    _provider = payload.provider;
     final currentPayment = state.payment;
     if (currentPayment?.status.isProcessing == true) {
       if (_fingerprint == fingerprint) {
@@ -89,6 +93,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       packageId: payload.packageId,
       payloadFingerprint: fingerprint,
       ownerUserId: _ownerUserId,
+      provider: payload.provider,
     );
     await _store.save(pendingDraft);
     if (isClosed) return;
@@ -119,6 +124,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
             packageId: payload.packageId,
             payloadFingerprint: fingerprint,
             ownerUserId: _ownerUserId,
+            provider: payload.provider,
             checkoutUrl: payment.checkoutUrl,
           ),
         );
@@ -163,7 +169,10 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       ),
     );
     try {
-      await _check(paymentId, reconcile: true).timeout(checkoutReturnTimeout);
+      await _check(
+        paymentId,
+        reconcile: _provider.supportsReconcile,
+      ).timeout(checkoutReturnTimeout);
       if (state.phase == SubjectRequestPaymentPhase.failure) {
         await _check(paymentId).timeout(checkoutReturnTimeout);
       }
@@ -201,7 +210,9 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
         payment: state.payment,
       ),
     );
-    if (reconcileFirst) await _check(paymentId, reconcile: true);
+    if (reconcileFirst && _provider.supportsReconcile) {
+      await _check(paymentId, reconcile: true);
+    }
     var attempts = 0;
     while (!isClosed &&
         _polling &&

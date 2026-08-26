@@ -16,6 +16,7 @@ import 'package:bnan_app/features/parent_subscriptions/data/repo/parent_subscrip
 import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_payment_store.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,9 @@ class ParentSubscriptionRenewalCubit
     this.pollInterval = const Duration(seconds: 3),
     this.maxPollAttempts = 20,
     this.checkoutCloseTimeout = const Duration(seconds: 10),
-  }) : _attempt = ParentPaymentAttempt(keyGenerator),
+    GulfPaymentProvider provider = GulfPaymentProvider.tamara,
+  }) : _provider = provider,
+       _attempt = ParentPaymentAttempt(keyGenerator),
        super(ParentSubscriptionRenewalState(args: args));
   final ParentSubscriptionsRepo repo;
   final RenewalPaymentStore? store;
@@ -38,6 +41,7 @@ class ParentSubscriptionRenewalCubit
   final Duration pollInterval;
   final int maxPollAttempts;
   final Duration checkoutCloseTimeout;
+  GulfPaymentProvider _provider;
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
@@ -57,18 +61,19 @@ class ParentSubscriptionRenewalCubit
     if (draft.ownerUserId != (SessionManager.instance.userId ?? '') ||
         draft.studentId != state.args.studentId ||
         draft.isParent != state.args.isParent ||
-        draft.registrationMode != state.args.registrationMode ||
-        draft.paymentId.isEmpty) {
+        draft.registrationMode != state.args.registrationMode) {
       return;
     }
     if (!state.isGulf) {
       await store?.clear();
       return;
     }
+    _provider = draft.provider;
     _attempt.restore(
       fingerprint: draft.payloadFingerprint,
       key: draft.idempotencyKey,
     );
+    if (draft.paymentId.isEmpty) return;
     emit(
       state.copyWith(
         phase: state.isGulf
@@ -80,7 +85,7 @@ class ParentSubscriptionRenewalCubit
       ),
     );
     if (state.isGulf) {
-      await _pollGulf(draft.paymentId, reconcile: true);
+      await _pollGulf(draft.paymentId, reconcile: _provider.supportsReconcile);
     } else {
       await _pollEgyptian(draft.paymentId);
     }
@@ -252,7 +257,11 @@ class ParentSubscriptionRenewalCubit
     );
     try {
       RenewalStatusResponse? response;
-      final result = await repo.gulfReconcile(id).timeout(checkoutCloseTimeout);
+      final result =
+          await (_provider.supportsReconcile
+                  ? repo.gulfReconcile(id)
+                  : repo.gulfStatus(id))
+              .timeout(checkoutCloseTimeout);
       result.fold((_) {}, (value) => response = value);
       if (!isClosed && state.paymentId == id && response != null) {
         await _handle(response!);
@@ -276,7 +285,7 @@ class ParentSubscriptionRenewalCubit
 
   Future<void> _runGulfReconcile(String id) async {
     try {
-      await _pollGulf(id, reconcile: true);
+      await _pollGulf(id, reconcile: _provider.supportsReconcile);
     } finally {
       if (_reconcilingPaymentId == id) {
         _reconcilingPaymentId = null;
@@ -301,9 +310,11 @@ class ParentSubscriptionRenewalCubit
     try {
       RenewalStatusResponse? response;
       if (state.isGulf) {
-        (await repo.gulfReconcile(
-          id,
-        )).fold((_) {}, (value) => response = value);
+        if (_provider.supportsReconcile) {
+          (await repo.gulfReconcile(
+            id,
+          )).fold((_) {}, (value) => response = value);
+        }
         if (isClosed) return;
         if (response == null || !response!.status.isTerminal) {
           (await repo.gulfStatus(id)).fold((_) {}, (value) => response = value);
@@ -419,14 +430,22 @@ class ParentSubscriptionRenewalCubit
         line1: TamaraDefaultAddress.line1,
         line2: TamaraDefaultAddress.line2,
       ),
+      provider: _provider,
     );
     final key = _attempt.keyFor(request.toJson());
+    await store?.save(
+      _renewalDraft(request: request, key: key, paymentId: '', checkoutUrl: ''),
+    );
+    if (isClosed) return;
     final result = await repo.renewGulf(request: request, idempotencyKey: key);
     if (isClosed) return;
     await result.fold<Future<void>>(
       (failure) async {
         if (isClosed) return;
-        if (failure.responseReceived) _attempt.startNew();
+        if (failure.responseReceived) {
+          _attempt.startNew();
+          await store?.clear();
+        }
         emit(
           state.copyWith(
             phase: ParentRenewalPhase.failure,
@@ -469,17 +488,11 @@ class ParentSubscriptionRenewalCubit
           return;
         }
         await store?.save(
-          RenewalPaymentDraft(
+          _renewalDraft(
+            request: request,
+            key: key,
             paymentId: response.paymentId,
             checkoutUrl: response.checkoutUrl ?? '',
-            studentId: state.args.studentId,
-            subscriptionId: state.args.subscription.id,
-            ownerUserId: SessionManager.instance.userId ?? '',
-            idempotencyKey: key,
-            payloadFingerprint: _attempt.fingerprintFor(request.toJson()),
-            isParent: state.args.isParent,
-            createdAt: DateTime.now().toUtc().toIso8601String(),
-            registrationMode: state.args.registrationMode,
           ),
         );
         if (isClosed) return;
@@ -509,7 +522,9 @@ class ParentSubscriptionRenewalCubit
   Future<void> _pollGulf(String id, {bool reconcile = false}) async {
     await _poll(
       id,
-      reconcile: reconcile ? () => repo.gulfReconcile(id) : null,
+      reconcile: reconcile && _provider.supportsReconcile
+          ? () => repo.gulfReconcile(id)
+          : null,
       status: () => repo.gulfStatus(id),
       canContinue: () =>
           !isClosed && state.phase == ParentRenewalPhase.processing,
@@ -592,6 +607,25 @@ class ParentSubscriptionRenewalCubit
       );
     }
   }
+
+  RenewalPaymentDraft _renewalDraft({
+    required GulfRenewalRequest request,
+    required String key,
+    required String paymentId,
+    required String checkoutUrl,
+  }) => RenewalPaymentDraft(
+    paymentId: paymentId,
+    checkoutUrl: checkoutUrl,
+    studentId: state.args.studentId,
+    subscriptionId: state.args.subscription.id,
+    ownerUserId: SessionManager.instance.userId ?? '',
+    idempotencyKey: key,
+    payloadFingerprint: _attempt.fingerprintFor(request.toJson()),
+    isParent: state.args.isParent,
+    createdAt: DateTime.now().toUtc().toIso8601String(),
+    registrationMode: state.args.registrationMode,
+    provider: request.provider,
+  );
 
   String? _validation({bool payment = false}) {
     if (!state.hasSupportedRegistrationMode) {

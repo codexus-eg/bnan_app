@@ -6,6 +6,7 @@ import 'package:bnan_app/features/parent_children/data/models/parent_child_stude
 import 'package:bnan_app/features/parent_children/data/models/parent_payment_address.dart';
 import 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo_impl.dart';
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_package_policy.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/core/network/dio_consumer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,12 +47,14 @@ void main() {
     ).toJson();
 
     expect(json.keys, {
+      'provider',
       'student',
       'curriculum',
       'packageId',
       'paymentAddress',
       'locale',
     });
+    expect(json['provider'], 'tamara');
     expect(json.containsKey('parentEmail'), isFalse);
     expect(json.containsKey('parentPassword'), isFalse);
     expect(json.containsKey('password'), isFalse);
@@ -60,6 +63,22 @@ void main() {
       'subject-2',
       'subject-3',
     ]);
+  });
+
+  test('Paymob Gulf add-child payload omits paymentAddress', () {
+    final json = ParentAddChildGulfRequest(
+      student: _student,
+      curriculumId: 'curriculum-1',
+      packageId: 'package-1',
+      paymentAddress: const ParentPaymentAddress(
+        city: 'Riyadh',
+        region: 'Riyadh',
+        line1: 'Street 1',
+      ),
+      provider: GulfPaymentProvider.paymob,
+    ).toJson();
+    expect(json['provider'], 'paymob');
+    expect(json, isNot(contains('paymentAddress')));
   });
 
   test('Gulf package policy supports private and legacy packages', () {
@@ -178,6 +197,33 @@ void main() {
         );
 
     expect(result.isLeft(), isTrue);
+  });
+
+  test('Gulf status request includes the selected provider', () async {
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.com/api/v1'));
+    RequestOptions? captured;
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          captured = options;
+          handler.resolve(
+            Response(
+              requestOptions: options,
+              data: {
+                'data': {'paymentId': 'payment-1', 'status': 'pending'},
+              },
+            ),
+          );
+        },
+      ),
+    );
+
+    final result = await ParentAddChildRepoImpl(
+      DioConsumer(dio: dio),
+    ).status('payment-1', provider: GulfPaymentProvider.paymob);
+
+    expect(result.isRight(), isTrue);
+    expect(captured?.path, '/payment/paymob/payment-1/status');
   });
 }
 

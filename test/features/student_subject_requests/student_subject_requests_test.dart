@@ -7,6 +7,7 @@ import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_access_scope.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/student_subject_request.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_availability.dart';
@@ -79,10 +80,40 @@ void main() {
         ),
       ).toJson();
       expect(json['subjectId'], 's1');
+      expect(json['provider'], 'tamara');
+      expect(json, contains('paymentAddress'));
       expect(json['curriculumId'], 'c1');
       expect(json.containsKey('subjectIds'), isFalse);
       expect(json['locale'], 'ar_SA');
       expect(json['isMobile'], isTrue);
+    });
+
+    test('Paymob Gulf subject checkout omits paymentAddress', () {
+      final json = const GulfSubjectRequestPayload(
+        subjectId: 's1',
+        packageId: 'p1',
+        curriculumId: 'c1',
+        paymentAddress: PaymentAddress(
+          city: 'Riyadh',
+          region: 'Riyadh',
+          line1: 'Road',
+        ),
+        provider: GulfPaymentProvider.paymob,
+      ).toJson();
+      expect(json['provider'], 'paymob');
+      expect(json, isNot(contains('paymentAddress')));
+    });
+
+    test('legacy subject draft without provider defaults to Tamara', () {
+      final draft = SubjectRequestPaymentDraft.fromJson({
+        'paymentId': 'payment-1',
+        'idempotencyKey': 'key-1',
+        'subjectId': 'subject-1',
+        'packageId': 'package-1',
+        'payloadFingerprint': 'fingerprint-1',
+        'ownerUserId': 'student-1',
+      });
+      expect(draft.provider, GulfPaymentProvider.tamara);
     });
   });
 
@@ -430,6 +461,20 @@ void main() {
       await cubit.close();
     });
 
+    test('Paymob verification skips reconcile', () async {
+      final repo = FakeRepo()
+        ..checkoutResults.add(Right(_payment()))
+        ..statusResults.add(
+          Right(_payment('pay-1', SubjectRequestPaymentStatus.completed)),
+        );
+      final cubit = _paymentCubit(repo);
+      await cubit.checkout(_gulfPayload(provider: GulfPaymentProvider.paymob));
+      await cubit.tamaraReturned();
+      expect(repo.reconcileCalls, 0);
+      expect(repo.statusCalls, 1);
+      await cubit.close();
+    });
+
     test('polling timeout exposes manual verification', () async {
       final repo = FakeRepo()
         ..checkoutResults.add(Right(_payment()))
@@ -499,11 +544,13 @@ SubjectRequestPaymentCubit _paymentCubit(
 GulfSubjectRequestPayload _gulfPayload({
   String subjectId = 'enabled',
   String? notes,
+  GulfPaymentProvider provider = GulfPaymentProvider.tamara,
 }) => GulfSubjectRequestPayload(
   subjectId: subjectId,
   packageId: 'valid',
   curriculumId: 'c1',
   notes: notes,
+  provider: provider,
   paymentAddress: const PaymentAddress(
     city: 'Riyadh',
     region: 'Riyadh',

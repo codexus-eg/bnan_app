@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 
 class EgyptianSubjectRequestPayload {
   const EgyptianSubjectRequestPayload({
@@ -24,6 +25,7 @@ class GulfSubjectRequestPayload {
     required this.packageId,
     required this.curriculumId,
     required this.paymentAddress,
+    this.provider = GulfPaymentProvider.tamara,
     this.notes,
     this.discountCode,
   });
@@ -32,16 +34,19 @@ class GulfSubjectRequestPayload {
   final String packageId;
   final String curriculumId;
   final PaymentAddress paymentAddress;
+  final GulfPaymentProvider provider;
   final String? notes;
   final String? discountCode;
 
   Map<String, dynamic> toJson() => {
+    'provider': provider.apiValue,
     'subjectId': subjectId,
     'packageId': packageId,
     'curriculumId': curriculumId,
     if (_optional(notes) case final value?) 'notes': value,
     if (_optional(discountCode) case final value?) 'discountCode': value,
-    'paymentAddress': paymentAddress.toJson(),
+    if (provider == GulfPaymentProvider.tamara)
+      'paymentAddress': paymentAddress.toJson(),
     'locale': 'ar_SA',
     'isMobile': true,
   };

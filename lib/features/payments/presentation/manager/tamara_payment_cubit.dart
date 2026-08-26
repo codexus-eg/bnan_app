@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bnan_app/features/payments/data/checkout_payload_fingerprint.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
@@ -79,8 +80,9 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
   Future<void> checkout(TamaraCheckoutRequest request) async {
     if (_checkoutInFlight) return;
+    _checkoutInFlight = true;
     final fingerprint = checkoutPayloadFingerprint(request);
-    var existing = _draft ?? store.read();
+    var existing = _draft ?? await _readOwnedDraft();
     if (existing != null && !_belongsToCurrentUser(existing)) {
       await _resetAttempt();
       existing = null;
@@ -88,10 +90,12 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     if (existing?.lastKnownStatus == PaymentStatus.completed) {
       _accountVerificationAttemptActive = true;
       emit(const TamaraPaymentResult(status: PaymentStatus.completed));
+      _checkoutInFlight = false;
       return;
     }
     if (existing?.lastKnownStatus == PaymentStatus.refunded) {
       emit(const TamaraPaymentResult(status: PaymentStatus.refunded));
+      _checkoutInFlight = false;
       return;
     }
     if (existing != null && existing.payloadFingerprint != fingerprint) {
@@ -108,6 +112,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
           shouldOpenCheckout: existing.checkoutUrl != null,
         ),
       );
+      _checkoutInFlight = false;
       return;
     }
 
@@ -118,7 +123,6 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     final key = canRetrySameAttempt
         ? existing!.idempotencyKey
         : keyGenerator.create();
-    _checkoutInFlight = true;
     final generation = _attemptGeneration;
     _paymentSummary = null;
     emit(const TamaraPaymentLoading());
@@ -136,7 +140,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     await result.fold(
       (failure) async {
         GulfRegistrationDiagnostics.uiFailure(
-          endpoint: EndPoints.tamaraCheckout,
+          endpoint: EndPoints.paymentCheckout,
           cubit: 'TamaraPaymentCubit',
           state: 'TamaraPaymentFailure',
           message: failure.message,
@@ -164,6 +168,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
           lastKnownStatus: status == PaymentStatus.unknown
               ? PaymentStatus.pending
               : status,
+          provider: request.provider,
+          purpose: PaymentDraftPurpose.registration,
           payloadFingerprint: fingerprint,
           ownerUserId: checkoutDraft.ownerUserId,
         );
@@ -272,6 +278,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     try {
       final response = await _closedCheckoutStatus(
         paymentId,
+        draft.provider,
       ).timeout(checkoutReturnTimeout);
       if (isClosed ||
           generation != _attemptGeneration ||
@@ -300,11 +307,21 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     }
   }
 
-  Future<TamaraStatusResponse?> _closedCheckoutStatus(String paymentId) async {
+  Future<TamaraStatusResponse?> _closedCheckoutStatus(
+    String paymentId,
+    GulfPaymentProvider provider,
+  ) async {
     TamaraStatusResponse? response;
-    (await repo.reconcile(paymentId)).fold((_) {}, (value) => response = value);
+    if (provider.supportsReconcile) {
+      (await repo.reconcile(
+        paymentId,
+      )).fold((_) {}, (value) => response = value);
+    }
     if (response?.status.isTerminal != true) {
-      (await repo.status(paymentId)).fold((_) {}, (value) => response = value);
+      (await repo.status(
+        paymentId,
+        provider: provider,
+      )).fold((_) {}, (value) => response = value);
     }
     return response;
   }
@@ -322,6 +339,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       studentEmail: draft.studentEmail,
       paymentStartedAt: draft.paymentStartedAt,
       lastKnownStatus: draft.lastKnownStatus,
+      provider: draft.provider,
+      purpose: draft.purpose,
       payloadFingerprint: draft.payloadFingerprint,
       ownerUserId: draft.ownerUserId,
     );
@@ -341,13 +360,15 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     _reconcileInFlight = true;
     final paymentId = draft.paymentId;
     final generation = _attemptGeneration;
-    final reconciled = await repo.reconcile(paymentId);
+    final reconciled = draft.provider.supportsReconcile
+        ? await repo.reconcile(paymentId)
+        : null;
     if (generation != _attemptGeneration || _draft?.paymentId != paymentId) {
       return;
     }
     _reconcileInFlight = false;
     if (isClosed) return;
-    await reconciled.fold((_) async {}, _handleStatus);
+    await reconciled?.fold((_) async {}, _handleStatus);
     if (_draft?.lastKnownStatus.isTerminal == true) return;
     await checkStatus();
     if (_checkoutLaunchClaimed &&
@@ -379,7 +400,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     final paymentId = draft.paymentId;
     final generation = _attemptGeneration;
     _statusInFlight = true;
-    final result = await repo.status(paymentId);
+    final result = await repo.status(paymentId, provider: draft.provider);
     _statusInFlight = false;
     if (isClosed ||
         generation != _attemptGeneration ||
@@ -412,6 +433,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       paymentStartedAt: current.paymentStartedAt,
       checkoutOpenedAt: current.checkoutOpenedAt,
       lastKnownStatus: effectiveStatus,
+      provider: current.provider,
+      purpose: current.purpose,
       payloadFingerprint: current.payloadFingerprint,
       ownerUserId: current.ownerUserId,
     );
@@ -502,6 +525,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
         studentEmail: draft.studentEmail,
         paymentStartedAt: draft.paymentStartedAt,
         lastKnownStatus: draft.lastKnownStatus,
+        provider: draft.provider,
+        purpose: draft.purpose,
         payloadFingerprint: draft.payloadFingerprint,
         ownerUserId: draft.ownerUserId,
       );
@@ -552,6 +577,8 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       studentEmail: current.studentEmail,
       paymentStartedAt: current.paymentStartedAt,
       lastKnownStatus: PaymentStatus.completed,
+      provider: current.provider,
+      purpose: current.purpose,
       payloadFingerprint: '',
       ownerUserId: current.ownerUserId,
     );
@@ -573,13 +600,15 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       studentEmail: request.student.email,
       paymentStartedAt: DateTime.now(),
       lastKnownStatus: PaymentStatus.pending,
+      provider: request.provider,
+      purpose: PaymentDraftPurpose.registration,
       payloadFingerprint: fingerprint,
       ownerUserId: SessionManager.instance.userId?.trim() ?? '',
     );
   }
 
   Future<void> discardStaleAttempt() async {
-    final current = _draft ?? store.read();
+    final current = _draft ?? await _readOwnedDraft();
     if (current == null ||
         current.lastKnownStatus == PaymentStatus.completed ||
         current.lastKnownStatus == PaymentStatus.refunded) {
@@ -593,6 +622,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
 
   Future<PaymentDraft?> _readOwnedDraft() async {
     final saved = store.read();
+    if (saved?.purpose != PaymentDraftPurpose.registration) return null;
     if (saved == null || _belongsToCurrentUser(saved)) return saved;
     await store.clear();
     return null;

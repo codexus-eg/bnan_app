@@ -2,6 +2,7 @@ import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repo_guard.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
@@ -18,15 +19,17 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
       final payload = request.toJson();
       GulfRegistrationDiagnostics.checkoutPayload(payload);
       final response = await _post(
-        EndPoints.tamaraCheckout,
+        EndPoints.paymentCheckout,
         data: payload,
         headers: {'Idempotency-Key': idempotencyKey, 'lang': 'ar'},
       );
       return TamaraCheckoutResponse.fromJson(asMap(response));
     });
     result.fold(
-      (failure) =>
-          GulfRegistrationDiagnostics.failed(EndPoints.tamaraCheckout, failure),
+      (failure) => GulfRegistrationDiagnostics.failed(
+        EndPoints.paymentCheckout,
+        failure,
+      ),
       (_) {},
     );
     return result;
@@ -44,9 +47,12 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
   }
 
   @override
-  status(String paymentId) {
+  status(
+    String paymentId, {
+    GulfPaymentProvider provider = GulfPaymentProvider.tamara,
+  }) {
     return repoGuard(() async {
-      final endpoint = EndPoints.tamaraStatus(paymentId);
+      final endpoint = EndPoints.paymentStatus(provider, paymentId);
       GulfRegistrationDiagnostics.started(endpoint);
       try {
         final response = await dio.get(
@@ -85,7 +91,7 @@ class TamaraPaymentRepoImpl implements TamaraPaymentRepo {
           headers: headers,
           extra: {
             'isProtected': isProtected,
-            if (path == EndPoints.tamaraCheckout) 'sensitive': true,
+            if (path == EndPoints.paymentCheckout) 'sensitive': true,
           },
         ),
       );

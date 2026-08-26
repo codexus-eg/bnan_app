@@ -18,6 +18,7 @@ import 'package:bnan_app/features/parent_children/presentation/manager/parent_ad
 import 'package:bnan_app/features/parent_children/presentation/widgets/parent_grade_step.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
@@ -490,6 +491,36 @@ void main() {
     await cubit.close();
   });
 
+  test('Paymob status check does not call reconcile', () async {
+    final repo = _Repo();
+    final cubit = _readyGulf(repo, provider: GulfPaymentProvider.paymob);
+    await cubit.submit();
+    await cubit.checkoutClosed();
+    expect(repo.reconcileCalls, 0);
+    expect(repo.statusCalls, 1);
+    await cubit.close();
+  });
+
+  test('add-child restore ignores a registration draft', () async {
+    final store = _MemoryStore()
+      ..value = PaymentDraft(
+        paymentId: 'registration-payment',
+        idempotencyKey: 'saved-key',
+        packageId: 'package-1',
+        curriculumId: _gulf.id,
+        gradeId: 'grade-1',
+        subjectIds: const ['subject-1'],
+        studentEmail: 'student@example.com',
+        paymentStartedAt: DateTime(2026),
+        lastKnownStatus: PaymentStatus.pending,
+        purpose: PaymentDraftPurpose.registration,
+      );
+    final cubit = _cubit(_Repo(), curriculum: _gulf, store: store);
+    expect(cubit.state.paymentId, isNull);
+    expect(store.value?.purpose, PaymentDraftPurpose.registration);
+    await cubit.close();
+  });
+
   test('unknown registration mode cannot submit', () async {
     const unknown = AcademicCurriculumModel(id: 'x', name: 'Unknown');
     final cubit = _cubit(_Repo(), curriculum: unknown);
@@ -530,24 +561,28 @@ ParentAddChildCubit _cubit(
   AcademicCurriculumModel curriculum = _egypt,
   PaymentDraftStore? store,
   IdempotencyKeyGenerator? keyGenerator,
+  GulfPaymentProvider provider = GulfPaymentProvider.tamara,
 }) => ParentAddChildCubit(
   repo: repo,
   keyGenerator: keyGenerator ?? _Keys(),
   store: store,
   pollInterval: Duration.zero,
   maxPollAttempts: 2,
+  provider: provider,
 )..start(curriculum);
 
 ParentAddChildCubit _readyGulf(
   _Repo repo, {
   PaymentDraftStore? store,
   IdempotencyKeyGenerator? keyGenerator,
+  GulfPaymentProvider provider = GulfPaymentProvider.tamara,
 }) {
   final cubit = _cubit(
     repo,
     curriculum: _gulf,
     store: store,
     keyGenerator: keyGenerator,
+    provider: provider,
   )..selectPackage(_allPackage);
   expect(cubit.nextStep(), isTrue);
   cubit.selectGrade(_grade);
@@ -624,7 +659,10 @@ class _Repo implements ParentAddChildRepo {
   }
 
   @override
-  status(String paymentId) async {
+  status(
+    String paymentId, {
+    GulfPaymentProvider provider = GulfPaymentProvider.tamara,
+  }) async {
     statusCalls++;
     return Right(_status(PaymentStatus.pending));
   }

@@ -3,6 +3,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
@@ -107,6 +108,62 @@ void main() {
     expect(repo.keys, ['key-1']);
     await cubit.close();
   });
+
+  test('Paymob verification skips reconcile and uses status', () async {
+    final repo = _PaymentRepo();
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_requestWith(provider: GulfPaymentProvider.paymob));
+    await cubit.verifyProviderSuccess();
+    expect(repo.reconcileCalls, 0);
+    expect(repo.statusCalls, 1);
+    await cubit.close();
+  });
+
+  test('registration restore ignores an add-child draft', () async {
+    await store.save(
+      PaymentDraft(
+        paymentId: 'add-child-payment',
+        idempotencyKey: 'saved-key',
+        packageId: 'package-1',
+        curriculumId: 'curriculum-1',
+        gradeId: 'grade-1',
+        subjectIds: const ['subject-1'],
+        studentEmail: 'student@example.com',
+        paymentStartedAt: DateTime(2026),
+        lastKnownStatus: PaymentStatus.pending,
+        purpose: PaymentDraftPurpose.addChild,
+      ),
+    );
+    final cubit = _cubit(_PaymentRepo(), store);
+    await cubit.restore();
+    expect(cubit.draft, isNull);
+    expect(store.read()?.purpose, PaymentDraftPurpose.addChild);
+    await cubit.close();
+  });
+
+  test(
+    'discarding a registration attempt preserves an add-child draft',
+    () async {
+      await store.save(
+        PaymentDraft(
+          paymentId: 'add-child-payment',
+          idempotencyKey: 'saved-key',
+          packageId: 'package-1',
+          curriculumId: 'curriculum-1',
+          gradeId: 'grade-1',
+          subjectIds: const ['subject-1'],
+          studentEmail: 'student@example.com',
+          paymentStartedAt: DateTime(2026),
+          lastKnownStatus: PaymentStatus.pending,
+          purpose: PaymentDraftPurpose.addChild,
+        ),
+      );
+      final cubit = _cubit(_PaymentRepo(), store);
+      await cubit.discardStaleAttempt();
+      expect(store.read()?.purpose, PaymentDraftPurpose.addChild);
+      await cubit.close();
+    },
+  );
 
   test(
     'starting a registration flow discards an old pending payment',
@@ -717,7 +774,10 @@ class _PaymentRepo implements TamaraPaymentRepo {
   }
 
   @override
-  Future<Either<Failure, TamaraStatusResponse>> status(String paymentId) async {
+  Future<Either<Failure, TamaraStatusResponse>> status(
+    String paymentId, {
+    GulfPaymentProvider provider = GulfPaymentProvider.tamara,
+  }) async {
     statusCalls++;
     if (statusCompleter != null) return statusCompleter!.future;
     return Right(statusResponse);
@@ -787,6 +847,7 @@ TamaraCheckoutRequest _requestWith({
   List<String>? subjects,
   String? packageId,
   PaymentAddress? address,
+  GulfPaymentProvider? provider,
 }) {
   return TamaraCheckoutRequest(
     parentEmail: parentEmail ?? _request.parentEmail,
@@ -801,6 +862,7 @@ TamaraCheckoutRequest _requestWith({
     curriculumId: _request.curriculumId,
     packageId: packageId ?? _request.packageId,
     address: address ?? _request.address,
+    provider: provider ?? _request.provider,
     locale: _request.locale,
   );
 }

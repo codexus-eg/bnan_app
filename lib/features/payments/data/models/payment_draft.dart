@@ -1,4 +1,7 @@
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
+
+enum PaymentDraftPurpose { registration, addChild }
 
 class PaymentDraft {
   const PaymentDraft({
@@ -11,6 +14,8 @@ class PaymentDraft {
     required this.studentEmail,
     required this.paymentStartedAt,
     required this.lastKnownStatus,
+    this.provider = GulfPaymentProvider.tamara,
+    this.purpose = PaymentDraftPurpose.registration,
     this.ownerUserId = '',
     this.payloadFingerprint = '',
     this.checkoutUrl,
@@ -28,6 +33,8 @@ class PaymentDraft {
   final String studentEmail;
   final DateTime paymentStartedAt;
   final PaymentStatus lastKnownStatus;
+  final GulfPaymentProvider provider;
+  final PaymentDraftPurpose purpose;
   final String payloadFingerprint;
   final String ownerUserId;
 
@@ -50,6 +57,8 @@ class PaymentDraft {
         DateTime.tryParse(json['paymentStartedAt']?.toString() ?? '') ??
         DateTime.fromMillisecondsSinceEpoch(0),
     lastKnownStatus: PaymentStatus.fromValue(json['lastKnownStatus']),
+    provider: GulfPaymentProvider.fromApiValue(json['provider']),
+    purpose: _purpose(json),
     payloadFingerprint: json['payloadFingerprint']?.toString() ?? '',
     ownerUserId: json['ownerUserId']?.toString() ?? '',
   );
@@ -66,6 +75,8 @@ class PaymentDraft {
     'studentEmail': studentEmail,
     'paymentStartedAt': paymentStartedAt.toIso8601String(),
     'lastKnownStatus': lastKnownStatus.name,
+    'provider': provider.apiValue,
+    'purpose': purpose.name,
     'ownerUserId': ownerUserId,
     'payloadFingerprint': payloadFingerprint,
   };
@@ -73,5 +84,16 @@ class PaymentDraft {
   static String? _optionalText(dynamic value) {
     final text = value?.toString().trim();
     return text == null || text.isEmpty ? null : text;
+  }
+
+  static PaymentDraftPurpose _purpose(Map<String, dynamic> json) {
+    final value = json['purpose']?.toString().trim();
+    for (final purpose in PaymentDraftPurpose.values) {
+      if (purpose.name == value) return purpose;
+    }
+    final fingerprint = json['payloadFingerprint']?.toString() ?? '';
+    return fingerprint.startsWith('parent_add_child:')
+        ? PaymentDraftPurpose.addChild
+        : PaymentDraftPurpose.registration;
   }
 }

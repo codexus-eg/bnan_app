@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+
 abstract class EndPoints {
   static String get baseUrl => 'https://api.bnanacademysa.com/api/v1';
   static String get socketUrl => 'https://api.bnanacademysa.com';
@@ -100,7 +102,7 @@ abstract class EndPoints {
   static const String bulkAttendance = '$attendance/bulk';
   static const String gulfSchedules = '/gulfSchedules';
   static const String myGulfSchedule = '$gulfSchedules/mySchedule';
-  static const String tamaraCheckout = '/payment/tamara/checkout';
+  static const String paymentCheckout = '/payment/checkout';
   static const String studentSubjectRequests = '/gulf-student-subject-requests';
   static const String studentSubjectRequestAvailableSubjects =
       '$studentSubjectRequests/available-subjects';
@@ -280,9 +282,8 @@ abstract class EndPoints {
     return '/payment/tamara/$paymentId/reconcile';
   }
 
-  static String tamaraStatus(String paymentId) {
-    return '/payment/tamara/$paymentId/status';
-  }
+  static String paymentStatus(GulfPaymentProvider provider, String paymentId) =>
+      '/payment/${provider.apiValue}/$paymentId/status';
 
   static String studentSubjectRequestCheckoutStatus(String paymentId) =>
       '$studentSubjectRequestCheckout/$paymentId/status';

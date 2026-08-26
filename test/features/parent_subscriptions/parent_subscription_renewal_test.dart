@@ -22,6 +22,7 @@ import 'package:bnan_app/features/parent_subscriptions/presentation/manager/pare
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscription_renewal_view.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -65,6 +66,7 @@ void main() {
       paymentAddress: _defaultPaymentAddress,
     ).toJson();
     expect(json, {
+      'provider': 'tamara',
       'subscriptionId': 'math-sub',
       'packageId': 'package-1',
       'paymentAddress': _defaultPaymentAddress.toJson(),
@@ -79,6 +81,23 @@ void main() {
     ]) {
       expect(json.containsKey(key), isFalse);
     }
+  });
+
+  test('Paymob Gulf renewal payload omits paymentAddress', () {
+    final json = GulfRenewalRequest(
+      subscriptionId: 'math-sub',
+      packageId: 'package-1',
+      paymentAddress: _defaultPaymentAddress,
+      provider: GulfPaymentProvider.paymob,
+    ).toJson();
+    expect(json['provider'], 'paymob');
+    expect(json, isNot(contains('paymentAddress')));
+  });
+
+  test('legacy renewal draft without provider defaults to Tamara', () {
+    final json = _renewalDraft('subscription-1').toJson()..remove('provider');
+    final draft = RenewalPaymentDraft.fromJson(json);
+    expect(draft.provider, GulfPaymentProvider.tamara);
   });
 
   test('Gulf success status is treated as completed', () {
@@ -496,6 +515,7 @@ void main() {
 
         expect(repo.lastGulfRequest?.subscriptionId, 'sub');
         expect(repo.lastGulfRequest?.toJson(), {
+          'provider': 'tamara',
           'subscriptionId': 'sub',
           'packageId': 'package-1',
           'paymentAddress': _defaultPaymentAddress.toJson(),
@@ -630,6 +650,7 @@ void main() {
     await cubit.submit();
 
     expect(repo.lastGulfRequest?.toJson(), {
+      'provider': 'tamara',
       'subscriptionId': 'math-sub',
       'packageId': 'package-1',
       'paymentAddress': _defaultPaymentAddress.toJson(),
@@ -664,6 +685,38 @@ void main() {
     await cubit.submit();
     await cubit.retry();
     expect(repo.keys, ['key-1', 'key-1']);
+    await cubit.close();
+  });
+
+  test(
+    'uncertain renewal persists its idempotency key before response',
+    () async {
+      final store = _MemoryRenewalStore();
+      final repo = _Repo()
+        ..checkoutFailures.add(
+          Failure(message: 'timeout', responseReceived: false),
+        );
+      final cubit = _ready(repo, mode: 'gulf', store: store);
+      await cubit.submit();
+      expect(store.draft?.paymentId, isEmpty);
+      expect(store.draft?.idempotencyKey, 'key-1');
+      expect(store.draft?.provider, GulfPaymentProvider.tamara);
+      await cubit.close();
+    },
+  );
+
+  test('Paymob renewal status path skips reconcile', () async {
+    final repo = _Repo();
+    final cubit = _ready(
+      repo,
+      mode: 'gulf',
+      provider: GulfPaymentProvider.paymob,
+    );
+    await cubit.submit();
+    cubit.checkoutOpened();
+    await cubit.checkoutClosed();
+    expect(repo.gulfReconcileCalls, 0);
+    expect(repo.gulfStatusCalls, 1);
     await cubit.close();
   });
 
@@ -1042,6 +1095,7 @@ ParentSubscriptionRenewalCubit _cubit(
   Future<void> Function()? onCompleted,
   ParentChildSubscriptionModel subscription = _subscription,
   Duration checkoutCloseTimeout = const Duration(milliseconds: 50),
+  GulfPaymentProvider provider = GulfPaymentProvider.tamara,
 }) => ParentSubscriptionRenewalCubit(
   repo: repo,
   keyGenerator: _Keys(),
@@ -1060,6 +1114,7 @@ ParentSubscriptionRenewalCubit _cubit(
   pollInterval: Duration.zero,
   maxPollAttempts: 2,
   checkoutCloseTimeout: checkoutCloseTimeout,
+  provider: provider,
 );
 ParentSubscriptionRenewalCubit _ready(
   _Repo repo, {
@@ -1068,6 +1123,7 @@ ParentSubscriptionRenewalCubit _ready(
   bool isParent = true,
   Future<void> Function()? onCompleted,
   Duration checkoutCloseTimeout = const Duration(milliseconds: 50),
+  GulfPaymentProvider provider = GulfPaymentProvider.tamara,
 }) {
   final cubit =
       _cubit(
@@ -1077,6 +1133,7 @@ ParentSubscriptionRenewalCubit _ready(
           isParent: isParent,
           onCompleted: onCompleted,
           checkoutCloseTimeout: checkoutCloseTimeout,
+          provider: provider,
         )
         ..nextStep()
         ..selectPackage(mode == 'egyptian' ? _monthlyAllPackage : _allPackage)

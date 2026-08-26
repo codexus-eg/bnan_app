@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+
 class RenewalPaymentDraft {
   const RenewalPaymentDraft({
     required this.paymentId,
@@ -10,11 +12,13 @@ class RenewalPaymentDraft {
     required this.isParent,
     required this.createdAt,
     required this.registrationMode,
+    this.provider = GulfPaymentProvider.tamara,
   });
   final String paymentId, checkoutUrl, studentId, subscriptionId, ownerUserId;
   final String idempotencyKey, payloadFingerprint, createdAt;
   final String registrationMode;
   final bool isParent;
+  final GulfPaymentProvider provider;
 
   Map<String, dynamic> toJson() => {
     'paymentId': paymentId,
@@ -27,6 +31,7 @@ class RenewalPaymentDraft {
     'isParent': isParent,
     'createdAt': createdAt,
     'registrationMode': registrationMode,
+    'provider': provider.apiValue,
   };
 
   factory RenewalPaymentDraft.fromJson(Map<String, dynamic> json) =>
@@ -41,6 +46,7 @@ class RenewalPaymentDraft {
         isParent: json['isParent'] == true,
         createdAt: _text(json['createdAt']),
         registrationMode: _text(json['registrationMode']),
+        provider: GulfPaymentProvider.fromApiValue(json['provider']),
       );
 }
 

@@ -1,4 +1,6 @@
+import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
@@ -38,10 +40,38 @@ void main() {
 
   test('username value becomes student email without username or price', () {
     final json = _request.toJson();
+    expect(json['provider'], 'tamara');
+    expect(json['paymentAddress'], _request.address.toJson());
     expect((json['student'] as Map)['email'], 'student@example.com');
     expect((json['student'] as Map).containsKey('username'), isFalse);
     expect(json.containsKey('price'), isFalse);
     expect(json.containsKey('currency'), isFalse);
+  });
+
+  test('Paymob registration payload omits paymentAddress', () {
+    final json = TamaraCheckoutRequest(
+      parentEmail: _request.parentEmail,
+      parentPassword: _request.parentPassword,
+      student: _request.student,
+      curriculumId: _request.curriculumId,
+      packageId: _request.packageId,
+      address: _request.address,
+      provider: GulfPaymentProvider.paymob,
+    ).toJson();
+    expect(json['provider'], 'paymob');
+    expect(json, isNot(contains('paymentAddress')));
+  });
+
+  test('payment status endpoint includes provider', () {
+    expect(EndPoints.paymentCheckout, '/payment/checkout');
+    expect(
+      EndPoints.paymentStatus(GulfPaymentProvider.tamara, 'payment-1'),
+      '/payment/tamara/payment-1/status',
+    );
+    expect(
+      EndPoints.paymentStatus(GulfPaymentProvider.paymob, 'payment-1'),
+      '/payment/paymob/payment-1/status',
+    );
   });
 
   test('sends only a non-empty discount code and no calculated amounts', () {
@@ -126,6 +156,23 @@ void main() {
     ).toJson();
     expect(json.keys, isNot(contains('parentPassword')));
     expect(json.keys, isNot(contains('studentPassword')));
+  });
+
+  test('legacy drafts default to Tamara and infer their purpose', () {
+    final registration = PaymentDraft.fromJson({
+      'lastKnownStatus': 'pending',
+      'paymentStartedAt': DateTime(2026).toIso8601String(),
+      'payloadFingerprint': 'registration-fingerprint',
+    });
+    final addChild = PaymentDraft.fromJson({
+      'lastKnownStatus': 'pending',
+      'paymentStartedAt': DateTime(2026).toIso8601String(),
+      'payloadFingerprint': 'parent_add_child:fingerprint',
+    });
+    expect(registration.provider, GulfPaymentProvider.tamara);
+    expect(registration.purpose, PaymentDraftPurpose.registration);
+    expect(addChild.provider, GulfPaymentProvider.tamara);
+    expect(addChild.purpose, PaymentDraftPurpose.addChild);
   });
 }
 

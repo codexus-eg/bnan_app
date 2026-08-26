@@ -7,6 +7,7 @@ import 'package:bnan_app/features/parent_children/data/models/parent_add_child_g
 import 'package:bnan_app/features/parent_children/data/models/parent_add_child_submission.dart';
 import 'package:bnan_app/features/parent_children/data/repo/parent_add_child_repo.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
 import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diagnostics.dart';
 import 'package:dio/dio.dart';
@@ -75,10 +76,13 @@ class ParentAddChildRepoImpl implements ParentAddChildRepo {
   );
 
   @override
-  status(String paymentId) => repoGuard(() async {
+  status(
+    String paymentId, {
+    GulfPaymentProvider provider = GulfPaymentProvider.tamara,
+  }) => repoGuard(() async {
     try {
       final response = await dio.get(
-        EndPoints.tamaraStatus(paymentId),
+        EndPoints.paymentStatus(provider, paymentId),
         options: _options(),
       );
       return TamaraStatusResponse.fromJson(_map(response.data));

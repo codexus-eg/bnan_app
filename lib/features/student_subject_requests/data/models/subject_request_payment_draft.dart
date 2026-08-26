@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+
 class SubjectRequestPaymentDraft {
   const SubjectRequestPaymentDraft({
     required this.paymentId,
@@ -6,6 +8,7 @@ class SubjectRequestPaymentDraft {
     required this.packageId,
     required this.payloadFingerprint,
     required this.ownerUserId,
+    this.provider = GulfPaymentProvider.tamara,
     this.checkoutUrl,
   });
 
@@ -16,6 +19,7 @@ class SubjectRequestPaymentDraft {
   final String packageId;
   final String payloadFingerprint;
   final String ownerUserId;
+  final GulfPaymentProvider provider;
   final String? checkoutUrl;
 
   Map<String, dynamic> toJson() => {
@@ -26,6 +30,7 @@ class SubjectRequestPaymentDraft {
     'packageId': packageId,
     'payloadFingerprint': payloadFingerprint,
     'ownerUserId': ownerUserId,
+    'provider': provider.apiValue,
     'checkoutUrl': checkoutUrl,
   };
 
@@ -37,6 +42,7 @@ class SubjectRequestPaymentDraft {
         packageId: (json['packageId'] ?? '').toString(),
         payloadFingerprint: (json['payloadFingerprint'] ?? '').toString(),
         ownerUserId: (json['ownerUserId'] ?? '').toString(),
+        provider: GulfPaymentProvider.fromApiValue(json['provider']),
         checkoutUrl: json['checkoutUrl']?.toString(),
       );
 }
