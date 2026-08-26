@@ -68,6 +68,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   url_launcher: ^6.3.1
+  webview_flutter: ^4.13.1
   # Tamara Flutter SDK 1.0.17 patched for Kotlin 2.2 / Dagger metadata compatibility.
   # Replace with the official package when Tamara publishes an upstream fix.
   tamara_flutter_sdk:

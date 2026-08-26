@@ -5,7 +5,8 @@ import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_cubit.dart';
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_state.dart';
 import 'package:bnan_app/features/parent_children/presentation/widgets/parent_add_child_body.dart';
-import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/presentation/views/payment_checkout_launcher.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -80,7 +81,6 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
   ) async {
     final url = state.checkoutUrl;
     context.read<ParentAddChildCubit>().checkoutOpened();
-    if (!state.selectedProvider.usesTamaraCheckout) return;
     if (url == null) {
       context.read<ParentAddChildCubit>().checkoutOpenFailed();
       showCustomSnackBar(
@@ -92,11 +92,12 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
     }
     final cubit = context.read<ParentAddChildCubit>();
     _tamaraOpen = true;
-    late final TamaraCheckoutLaunchResult result;
+    late final PaymentCheckoutLaunchResult result;
     try {
-      result = await TamaraCheckoutLauncher.open(
-        context,
-        url,
+      result = await PaymentCheckoutLauncher.open(
+        context: context,
+        provider: state.selectedProvider,
+        checkoutUrl: url,
         completionStream: cubit.stream.map(
           (value) => value.phase == ParentAddChildPhase.completed,
         ),
@@ -115,12 +116,16 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       );
       return;
     }
-    if (result.outcome == null) {
+    if (state.selectedProvider == GulfPaymentProvider.paymob) {
+      await cubit.checkoutClosed();
+      return;
+    }
+    if (result.tamaraOutcome == null) {
       _externalReturnPending = true;
       return;
     }
-    if (result.outcome == TamaraSdkOutcome.cancel ||
-        result.outcome == TamaraSdkOutcome.failure) {
+    if (result.tamaraOutcome == TamaraSdkOutcome.cancel ||
+        result.tamaraOutcome == TamaraSdkOutcome.failure) {
       await cubit.checkoutClosed();
       if (!context.mounted) return;
       showCustomSnackBar(context, S.of(context).parentPaymentFailed, false);

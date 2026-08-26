@@ -476,7 +476,9 @@ void main() {
     });
 
     test('subject purchase defaults to Tamara and can select Paymob', () async {
-      final repo = FakeRepo()..checkoutResults.add(Right(_payment()));
+      final repo = FakeRepo()
+        ..checkoutResults.add(Right(_payment()))
+        ..statusResults.add(Right(_payment()));
       final cubit = _paymentCubit(repo);
       expect(cubit.state.selectedProvider, GulfPaymentProvider.tamara);
       cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
@@ -486,8 +488,10 @@ void main() {
       expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
       expect(repo.lastPayload?.provider, GulfPaymentProvider.paymob);
       expect(repo.lastPayload?.toJson(), isNot(contains('paymentAddress')));
-      cubit.checkoutLaunchDeferred();
-      expect(cubit.state.phase, SubjectRequestPaymentPhase.failure);
+      await cubit.paymobCheckoutClosed();
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.idle);
+      expect(repo.reconcileCalls, 0);
+      expect(repo.statusCalls, 1);
       await cubit.close();
     });
 

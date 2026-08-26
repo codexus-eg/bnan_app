@@ -9,7 +9,8 @@ import 'package:bnan_app/features/parent_subscriptions/presentation/manager/pare
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/parent_subscription_renewal_body.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_state.dart';
-import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/presentation/views/payment_checkout_launcher.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -127,15 +128,21 @@ class _State extends State<ParentSubscriptionRenewalView>
     if (_isLeaving) return;
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
-    if (!state.selectedProvider.usesTamaraCheckout) return;
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
     _tamaraReturned = false;
     _tamaraOpen = true;
-    late final TamaraCheckoutLaunchResult result;
+    late final PaymentCheckoutLaunchResult result;
     try {
       result = url == null
-          ? const TamaraCheckoutLaunchResult(opened: false)
-          : await TamaraCheckoutLauncher.open(context, url);
+          ? PaymentCheckoutLaunchResult(
+              provider: state.selectedProvider,
+              opened: false,
+            )
+          : await PaymentCheckoutLauncher.open(
+              context: context,
+              provider: state.selectedProvider,
+              checkoutUrl: url,
+            );
     } finally {
       _tamaraOpen = false;
     }
@@ -150,12 +157,17 @@ class _State extends State<ParentSubscriptionRenewalView>
       );
       return;
     }
-    if (result.outcome == null) {
+    if (state.selectedProvider == GulfPaymentProvider.paymob) {
+      _tamaraReturned = false;
+      await cubit.checkoutClosed();
+      return;
+    }
+    if (result.tamaraOutcome == null) {
       _tamaraReturned = true;
       return;
     }
     _tamaraReturned = false;
-    if (result.outcome == TamaraSdkOutcome.success) {
+    if (result.tamaraOutcome == TamaraSdkOutcome.success) {
       await cubit.reconcilePayment();
       return;
     }

@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
-import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/presentation/views/payment_checkout_launcher.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
@@ -121,11 +122,13 @@ class RegistrationNavigationButtons extends StatelessWidget {
         return;
       }
       final cubit = context.read<TamaraPaymentCubit>();
-      if (cubit.draft?.provider.usesTamaraCheckout != true) return;
+      final provider = cubit.draft?.provider;
+      if (provider == null) return;
       if (!cubit.claimCheckoutLaunch(url)) return;
-      final result = await TamaraCheckoutLauncher.open(
-        context,
-        url,
+      final result = await PaymentCheckoutLauncher.open(
+        context: context,
+        provider: provider,
+        checkoutUrl: url,
         completionStream: cubit.stream.map(
           (value) =>
               value is TamaraPaymentResult &&
@@ -150,8 +153,12 @@ class RegistrationNavigationButtons extends StatelessWidget {
         }
         return;
       }
-      if (result.outcome == null) return;
-      if (result.outcome == TamaraSdkOutcome.success) {
+      if (provider == GulfPaymentProvider.paymob) {
+        await cubit.verifyCheckoutClosedOnce();
+        return;
+      }
+      if (result.tamaraOutcome == null) return;
+      if (result.tamaraOutcome == TamaraSdkOutcome.success) {
         await cubit.verifyCheckoutClosed();
       } else {
         await cubit.verifyCheckoutClosedOnce();

@@ -210,15 +210,17 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     _emitSelection();
   }
 
-  void checkoutLaunchDeferred() {
-    if (state.phase != SubjectRequestPaymentPhase.openingTamara) return;
+  Future<void> paymobCheckoutClosed() async {
+    final paymentId = state.payment?.paymentId;
+    if (paymentId == null || paymentId.isEmpty) return;
+    _polling = false;
     emit(
       SubjectRequestPaymentState(
-        phase: SubjectRequestPaymentPhase.failure,
         payment: state.payment,
         selectedProvider: _provider,
       ),
     );
+    await _check(paymentId);
   }
 
   void completeHandling() {

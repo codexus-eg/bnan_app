@@ -5,7 +5,8 @@ import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/features/payments/presentation/views/tamara_checkout_launcher.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/presentation/views/payment_checkout_launcher.dart';
 import 'package:bnan_app/features/payments/presentation/views/tamara_sdk_checkout_view.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
@@ -105,19 +106,16 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     SubjectRequestPaymentState state,
   ) async {
     if (state.phase == SubjectRequestPaymentPhase.openingTamara) {
-      if (!state.selectedProvider.usesTamaraCheckout) {
-        context.read<SubjectRequestPaymentCubit>().checkoutLaunchDeferred();
-        return;
-      }
       final url = state.payment?.checkoutUrl;
       if (url == null) return;
       final cubit = context.read<SubjectRequestPaymentCubit>();
       _tamaraOpen = true;
-      late final TamaraCheckoutLaunchResult result;
+      late final PaymentCheckoutLaunchResult result;
       try {
-        result = await TamaraCheckoutLauncher.open(
-          context,
-          url,
+        result = await PaymentCheckoutLauncher.open(
+          context: context,
+          provider: state.selectedProvider,
+          checkoutUrl: url,
           completionStream: cubit.stream.map(
             (value) => value.phase == SubjectRequestPaymentPhase.completed,
           ),
@@ -134,11 +132,15 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
         );
         return;
       }
-      if (result.outcome == null) {
+      if (state.selectedProvider == GulfPaymentProvider.paymob) {
+        await cubit.paymobCheckoutClosed();
+        return;
+      }
+      if (result.tamaraOutcome == null) {
         _externalReturnPending = true;
         return;
       }
-      if (result.outcome == TamaraSdkOutcome.success) {
+      if (result.tamaraOutcome == TamaraSdkOutcome.success) {
         await cubit.tamaraReturned();
       } else {
         await cubit.checkoutClosed();
