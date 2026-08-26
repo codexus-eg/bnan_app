@@ -10,6 +10,7 @@ import 'package:bnan_app/features/parent_auth/data/models/parent_register_user_m
 import 'package:bnan_app/features/parent_auth/data/repo/parent_auth_repo.dart';
 import 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_cubit.dart';
 import 'package:bnan_app/features/parent_auth/presentation/views/parent_register_view.dart';
+import 'package:bnan_app/features/parent_auth/presentation/models/parent_registration_flow_args.dart';
 import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
@@ -100,6 +101,69 @@ void main() {
     expect(find.byKey(const Key('account-verification')), findsOneWidget);
     expect(find.text('parent@bnan.edu'), findsOneWidget);
     expect(repo.calls, 1);
+  });
+
+  testWidgets('student flow returns verified parent credentials', (
+    tester,
+  ) async {
+    final repo = _ImmediateRepo(const Right(_response));
+    ParentRegistrationResult? result;
+    final router = GoRouter(
+      initialLocation: '/student',
+      routes: [
+        GoRoute(
+          path: '/student',
+          builder: (context, _) => Scaffold(
+            body: TextButton(
+              onPressed: () async {
+                result = await context.push<ParentRegistrationResult>(
+                  '/parent',
+                );
+              },
+              child: const Text('open-parent'),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: '/parent',
+          builder: (_, _) => BlocProvider(
+            create: (_) => ParentRegisterCubit(repo),
+            child: const ParentRegisterView(
+              args: ParentRegistrationFlowArgs(
+                initialEmail: 'parent@bnan.edu',
+                initialPassword: '12345678',
+                returnToStudentRegistration: true,
+              ),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: Routes.forgetPassword,
+          builder: (context, state) {
+            final args = state.extra! as OtpFlowArgs;
+            return Scaffold(
+              body: TextButton(
+                key: const Key('verify-parent'),
+                onPressed: () => context.pop(true),
+                child: Text('${args.email}:${args.resumeStudentRegistration}'),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+    await tester.pumpWidget(_localizedRouterApp(router));
+    await tester.tap(find.text('open-parent'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).at(0), 'Parent Name');
+    await tester.enterText(find.byType(TextFormField).at(2), '206566456');
+    await _tapNext(tester);
+    await tester.pumpAndSettle();
+    expect(find.text('parent@bnan.edu:true'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('verify-parent')));
+    await tester.pumpAndSettle();
+    expect(result?.email, 'parent@bnan.edu');
+    expect(result?.password, '12345678');
   });
 }
 

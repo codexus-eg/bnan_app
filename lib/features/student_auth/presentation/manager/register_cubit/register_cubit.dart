@@ -191,16 +191,44 @@ class RegisterCubit extends Cubit<RegisterState> {
           state: 'RegisterFailure',
           message: failure.message,
         );
-        emit(
-          RegisterFailure(
-            errorMessage: failure.message,
-            currentStep: state.currentStep,
-          ),
-        );
-      }, (_) => nextStep());
+        if (_isUnverifiedParent(failure.code)) {
+          emit(ParentVerificationRequired(currentStep: state.currentStep));
+        } else if (_isMissingParent(failure.statusCode, failure.code)) {
+          emit(ParentRegistrationRequired(currentStep: state.currentStep));
+        } else {
+          emit(
+            RegisterFailure(
+              errorMessage: failure.message,
+              currentStep: state.currentStep,
+            ),
+          );
+        }
+      }, (_) => emit(const ParentAuthenticated()));
     } finally {
       _authenticating = false;
     }
+  }
+
+  void applyParentCredentials({
+    required String email,
+    required String password,
+  }) {
+    parentEmailController.text = email.trim();
+    parentPasswordController.text = password;
+  }
+
+  bool _isUnverifiedParent(String? code) =>
+      code?.trim().toUpperCase() == 'ACCOUNT_NOT_VERIFIED';
+
+  bool _isMissingParent(int? statusCode, String? code) {
+    const missingCodes = {
+      'USER_NOT_FOUND',
+      'ACCOUNT_NOT_FOUND',
+      'PARENT_NOT_FOUND',
+      'EMAIL_NOT_FOUND',
+    };
+    return statusCode == 404 ||
+        missingCodes.contains(code?.trim().toUpperCase());
   }
 
   TamaraCheckoutRequest? buildTamaraRequest({bool validateForm = true}) {

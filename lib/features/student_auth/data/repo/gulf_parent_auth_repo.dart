@@ -24,30 +24,23 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
     RegisterParentModel request,
   ) async {
     try {
-      try {
-        GulfRegistrationDiagnostics.started(EndPoints.login);
-        final response = await api.post(
-          EndPoints.login,
-          data: {'email': request.email, 'password': request.password},
-        );
-        GulfRegistrationDiagnostics.succeeded(EndPoints.login);
-        return _validateAndSave(AuthResponseModel.fromJson(response));
-      } on AppException catch (error) {
-        GulfRegistrationDiagnostics.failed(EndPoints.login, error);
-        GulfRegistrationDiagnostics.started(EndPoints.registerParent);
-        final response = await api.post(
-          EndPoints.registerParent,
-          data: request.toJson(),
-        );
-        GulfRegistrationDiagnostics.succeeded(EndPoints.registerParent);
-        return _validateAndSave(AuthResponseModel.fromJson(response));
-      }
-    } on AppException catch (error) {
-      GulfRegistrationDiagnostics.failed(
-        GulfRegistrationDiagnostics.lastEndpoint ?? EndPoints.registerParent,
-        error,
+      GulfRegistrationDiagnostics.started(EndPoints.login);
+      final response = await api.post(
+        EndPoints.login,
+        data: {'email': request.email, 'password': request.password},
       );
-      return Left(Failure(message: error.message));
+      GulfRegistrationDiagnostics.succeeded(EndPoints.login);
+      return _validateAndSave(AuthResponseModel.fromJson(response));
+    } on AppException catch (error) {
+      GulfRegistrationDiagnostics.failed(EndPoints.login, error);
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
     } catch (error) {
       GulfRegistrationDiagnostics.failed(
         GulfRegistrationDiagnostics.lastEndpoint ?? 'parent-authentication',
@@ -63,11 +56,15 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
     final role = response.user.role.trim().toLowerCase();
     final status = response.user.status.trim().toLowerCase();
     if (role != 'parent') {
-      return Left(Failure(message: 'Parent account is not active'));
+      return Left(Failure(message: 'Invalid parent account'));
     }
-    if (!response.hasToken) return Right(response);
-    if (status != 'active') {
-      return Left(Failure(message: 'Parent account is not active'));
+    if (!response.hasToken || status != 'active') {
+      return Left(
+        Failure(
+          message: 'Parent account is not active',
+          code: 'ACCOUNT_NOT_VERIFIED',
+        ),
+      );
     }
     await SessionManager.instance.saveSession(
       accessToken: response.token,

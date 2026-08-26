@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
+import 'package:bnan_app/features/parent_auth/presentation/models/parent_registration_flow_args.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_registration_body.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/registration_back_handler.dart';
@@ -33,9 +34,48 @@ class StudentRegistrationView extends StatelessWidget {
         }
       },
       child: BlocListener<RegisterCubit, RegisterState>(
-        listenWhen: (_, state) => state is RegisterSuccess,
-        listener: (context, state) {
-          if (context.read<RegisterCubit>().isGulf) return;
+        listener: (context, state) async {
+          final cubit = context.read<RegisterCubit>();
+          if (state is ParentRegistrationRequired) {
+            final result = await MyNavigator.goTo<ParentRegistrationResult>(
+              context,
+              Routes.parentRegistration,
+              extra: ParentRegistrationFlowArgs(
+                initialEmail: cubit.parentEmailController.text.trim(),
+                initialPassword: cubit.parentPasswordController.text,
+                returnToStudentRegistration: true,
+              ),
+            );
+            if (result != null && context.mounted) {
+              cubit.applyParentCredentials(
+                email: result.email,
+                password: result.password,
+              );
+              await cubit.authenticateParentAndContinue();
+            }
+            return;
+          }
+          if (state is ParentVerificationRequired) {
+            final verified = await MyNavigator.goTo<bool>(
+              context,
+              Routes.forgetPassword,
+              extra: OtpFlowArgs.accountVerification(
+                cubit.parentEmailController.text.trim(),
+                resumeStudentRegistration: true,
+              ),
+            );
+            if (verified == true && context.mounted) {
+              await cubit.authenticateParentAndContinue();
+            }
+            return;
+          }
+          if (state is ParentAuthenticated) {
+            if (cubit.isGulf) {
+              await context.read<TamaraPaymentCubit>().resumeAfterParentAuth();
+            }
+            return;
+          }
+          if (state is! RegisterSuccess || cubit.isGulf) return;
           MyNavigator.goToOffAll(
             context,
             Routes.forgetPassword,

@@ -41,8 +41,8 @@ class RegistrationNavigationButtons extends StatelessWidget {
             onPressed: () async {
               final cubit = RegisterCubit.get(context);
               if (!cubit.isGulf) {
-                if (step == 1 &&
-                    !(cubit.parentFormKey.currentState?.validate() ?? false)) {
+                if (step == 1) {
+                  await cubit.authenticateParentAndContinue();
                   return;
                 }
                 if (step == 3 && !cubit.validateStudent()) {
@@ -64,11 +64,6 @@ class RegistrationNavigationButtons extends StatelessWidget {
               if (step == 1) {
                 await context.read<TamaraPaymentCubit>().discardStaleAttempt();
                 await cubit.authenticateParentAndContinue();
-                if (context.mounted && cubit.state.currentStep == 2) {
-                  await context
-                      .read<TamaraPaymentCubit>()
-                      .resumeAfterParentAuth();
-                }
                 return;
               }
               if (step == 3 && cubit.buildTamaraRequest() == null) {

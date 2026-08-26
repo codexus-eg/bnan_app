@@ -56,6 +56,10 @@ class ForgetPasswordVerificationForm extends StatelessWidget {
                 S.of(context).accountVerifiedSuccessfully,
                 true,
               );
+              if (args.resumeStudentRegistration) {
+                MyNavigator.pop(context, true);
+                return;
+              }
               MyNavigator.goToOffAll(
                 context,
                 Routes.logIn,

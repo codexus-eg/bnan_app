@@ -19,10 +19,7 @@ final class RegisterLoading extends RegisterState {
 }
 
 final class RegisterSuccess extends RegisterState {
-  const RegisterSuccess({
-    required this.user,
-    required super.currentStep,
-  });
+  const RegisterSuccess({required this.user, required super.currentStep});
 
   final AuthUserModel user;
 }
@@ -34,4 +31,16 @@ final class RegisterFailure extends RegisterState {
   });
 
   final String errorMessage;
+}
+
+final class ParentRegistrationRequired extends RegisterState {
+  const ParentRegistrationRequired({required super.currentStep});
+}
+
+final class ParentVerificationRequired extends RegisterState {
+  const ParentVerificationRequired({required super.currentStep});
+}
+
+final class ParentAuthenticated extends RegisterState {
+  const ParentAuthenticated() : super(currentStep: 2);
 }

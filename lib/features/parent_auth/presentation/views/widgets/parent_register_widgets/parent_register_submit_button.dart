@@ -3,6 +3,7 @@ import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
+import 'package:bnan_app/features/parent_auth/presentation/models/parent_registration_flow_args.dart';
 import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
 import 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_cubit.dart';
 import 'package:bnan_app/features/parent_auth/presentation/manager/parent_register_cubit/parent_register_state.dart';
@@ -19,6 +20,7 @@ class ParentRegisterSubmitButton extends StatelessWidget {
     required this.phoneController,
     required this.whatsappController,
     required this.passwordController,
+    required this.flowArgs,
   });
 
   final GlobalKey<FormState> formKey;
@@ -27,11 +29,12 @@ class ParentRegisterSubmitButton extends StatelessWidget {
   final TextEditingController phoneController;
   final TextEditingController whatsappController;
   final TextEditingController passwordController;
+  final ParentRegistrationFlowArgs flowArgs;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ParentRegisterCubit, ParentRegisterState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is ParentRegisterFailure) {
           showCustomSnackBar(context, state.errorMessage, false);
         } else if (state is ParentRegisterSuccess) {
@@ -40,11 +43,32 @@ class ParentRegisterSubmitButton extends StatelessWidget {
             S.of(context).userCreatedSuccessfully,
             true,
           );
-          MyNavigator.goToOffAll(
+          final email = emailController.text.trim();
+          if (!flowArgs.returnToStudentRegistration) {
+            MyNavigator.goToOffAll(
+              context,
+              Routes.forgetPassword,
+              extra: OtpFlowArgs.accountVerification(email),
+            );
+            return;
+          }
+          final verified = await MyNavigator.goTo<bool>(
             context,
             Routes.forgetPassword,
-            extra: OtpFlowArgs.accountVerification(emailController.text.trim()),
+            extra: OtpFlowArgs.accountVerification(
+              email,
+              resumeStudentRegistration: true,
+            ),
           );
+          if (verified == true && context.mounted) {
+            MyNavigator.pop(
+              context,
+              ParentRegistrationResult(
+                email: email,
+                password: passwordController.text,
+              ),
+            );
+          }
         }
       },
       builder: (context, state) => CustomAppButton(

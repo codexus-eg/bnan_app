@@ -31,6 +31,7 @@ import 'package:bnan_app/features/ideal_teacher/presentation/policies/ideal_teac
 import 'package:bnan_app/features/ideal_supervisor/presentation/policies/ideal_supervisor_access_policy.dart';
 import 'package:bnan_app/features/student_auth/data/models/login_route_args.dart';
 import 'package:bnan_app/features/student_auth/data/models/otp_flow_args.dart';
+import 'package:bnan_app/features/parent_auth/presentation/models/parent_registration_flow_args.dart';
 import 'package:bnan_app/features/shared_profile/presentation/manager/teacher_profile_cubit/teacher_profile_state.dart';
 import 'package:bnan_app/features/saved_accounts/presentation/views/saved_accounts_view.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/policies/parent_renewal_route_policy.dart';
@@ -148,13 +149,18 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       ),
       GoRoute(
         path: Routes.parentRegistration,
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) => getIt<ParentRegisterCubit>(),
-            child: const ParentRegisterView(),
-          ),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final args = state.extra is ParentRegistrationFlowArgs
+              ? state.extra as ParentRegistrationFlowArgs
+              : const ParentRegistrationFlowArgs();
+          return buildTransitionPages(
+            child: BlocProvider(
+              create: (_) => getIt<ParentRegisterCubit>(),
+              child: ParentRegisterView(args: args),
+            ),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.subscription,

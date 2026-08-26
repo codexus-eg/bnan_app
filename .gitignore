@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+bnan_app_delivery/
+bnan_app_source.zip
+packages/tamara_flutter_sdk/android/.gradle/
