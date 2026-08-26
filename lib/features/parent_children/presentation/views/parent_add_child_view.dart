@@ -80,6 +80,7 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
   ) async {
     final url = state.checkoutUrl;
     context.read<ParentAddChildCubit>().checkoutOpened();
+    if (!state.selectedProvider.usesTamaraCheckout) return;
     if (url == null) {
       context.read<ParentAddChildCubit>().checkoutOpenFailed();
       showCustomSnackBar(

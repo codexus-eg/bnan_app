@@ -105,6 +105,10 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
     SubjectRequestPaymentState state,
   ) async {
     if (state.phase == SubjectRequestPaymentPhase.openingTamara) {
+      if (!state.selectedProvider.usesTamaraCheckout) {
+        context.read<SubjectRequestPaymentCubit>().checkoutLaunchDeferred();
+        return;
+      }
       final url = state.payment?.checkoutUrl;
       if (url == null) return;
       final cubit = context.read<SubjectRequestPaymentCubit>();

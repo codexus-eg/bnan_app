@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/constants/tamara_default_address.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
@@ -32,6 +33,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   String? registrationMode;
   bool isSingleSubjectPackage = false;
   bool isEgyptianPrivate = false;
+  GulfPaymentProvider selectedProvider = GulfPaymentProvider.tamara;
   String? selectedCurriculumName;
 
   final parentFormKey = GlobalKey<FormState>();
@@ -61,6 +63,17 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   bool get isGulf => registrationMode == 'gulf';
+
+  void selectPaymentProvider(GulfPaymentProvider provider) {
+    if (!isGulf || selectedProvider == provider) return;
+    selectedProvider = provider;
+    emit(RegisterStepChanged(currentStep: state.currentStep));
+  }
+
+  void restorePaymentProvider(GulfPaymentProvider? provider) {
+    if (provider != null) selectPaymentProvider(provider);
+  }
+
   bool get requiresSubjectSelection => isGulf || isSingleSubjectPackage;
   bool _authenticating = false;
   bool _submitting = false;
@@ -256,6 +269,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       ),
       curriculumId: curriculumId,
       packageId: packageId,
+      provider: selectedProvider,
       items: isGulf && isSingleSubjectPackage
           ? selectedSubjects
                 .map(

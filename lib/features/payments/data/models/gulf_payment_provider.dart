@@ -5,6 +5,7 @@ enum GulfPaymentProvider {
   String get apiValue => name;
 
   bool get supportsReconcile => this == tamara;
+  bool get usesTamaraCheckout => this == tamara;
 
   static GulfPaymentProvider fromApiValue(dynamic value) {
     final normalized = value?.toString().trim().toLowerCase();

@@ -1888,6 +1888,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
+        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
         "taughtOnlineBefore":
             MessageLookupByLibrary.simpleMessage("هل سبق لك التدريس أونلاين؟"),
         "taughtSubjects":

@@ -720,6 +720,21 @@ void main() {
     await cubit.close();
   });
 
+  test(
+    'renewal defaults to Tamara and selected Paymob reaches request',
+    () async {
+      final repo = _Repo();
+      final cubit = _ready(repo, mode: 'gulf');
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.tamara);
+      cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+      await cubit.submit();
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
+      expect(repo.lastGulfRequest?.provider, GulfPaymentProvider.paymob);
+      expect(repo.lastGulfRequest?.toJson(), isNot(contains('paymentAddress')));
+      await cubit.close();
+    },
+  );
+
   test('payload change after uncertainty creates a new key', () async {
     final repo = _Repo()
       ..checkoutFailures.add(
@@ -931,6 +946,20 @@ void main() {
     expect(cubit.state.phase, ParentRenewalPhase.editing);
     expect(store.draft, isNull);
     expect(repo.maxActiveChecks, 0);
+    await cubit.close();
+    await SessionManager.instance.clearSession();
+  });
+
+  test('renewal restore keeps the saved Paymob provider', () async {
+    await _saveParentSession();
+    final json = _renewalDraft(_subscription.id).toJson()
+      ..['provider'] = 'paymob'
+      ..['paymentId'] = '';
+    final store = _MemoryRenewalStore()
+      ..draft = RenewalPaymentDraft.fromJson(json);
+    final cubit = _cubit(_Repo(), mode: 'gulf', store: store);
+    await cubit.restore();
+    expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
     await cubit.close();
     await SessionManager.instance.clearSession();
   });

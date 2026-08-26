@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/cache/cache_helper.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
@@ -54,12 +55,41 @@ void main() {
     expect(find.text(S.current.city), findsNothing);
     expect(find.text('المنطقة'), findsNothing);
     expect(find.text('العنوان'), findsNothing);
-    expect(find.textContaining('ريال'), findsWidgets);
+    expect(find.textContaining('SAR'), findsWidgets);
     expect(find.text(S.current.creditCard), findsNothing);
     expect(find.text(S.current.applePay), findsNothing);
     expect(find.text(S.current.tabbyTamara), findsOneWidget);
+    expect(find.text(S.current.paymob), findsOneWidget);
     expect(find.text(S.current.payWithTamara), findsOneWidget);
+    await tester.tap(find.text(S.current.paymob));
+    await tester.pump();
+    expect(register.selectedProvider, GulfPaymentProvider.paymob);
+    expect(find.text(S.current.confirmRequest), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Egyptian registration does not show provider selection', (
+    tester,
+  ) async {
+    final auth = _UnusedAuthRepo();
+    final register = RegisterCubit(auth, _UnusedParentRepo())
+      ..setRegisterFlowArgs(
+        const RegisterFlowArgsModel(
+          curriculumId: 'curriculum',
+          curriculumName: 'Egyptian',
+          packageId: 'package',
+          packageName: 'Package',
+          packagePrice: '1000',
+          packageCurrency: 'EGP',
+          registrationMode: 'egyptian',
+        ),
+      )
+      ..nextStep()
+      ..nextStep()
+      ..nextStep();
+    await tester.pumpWidget(_app(auth, register));
+    expect(find.text(S.current.tabbyTamara), findsNothing);
+    expect(find.text(S.current.paymob), findsNothing);
   });
 
   testWidgets('student step shows the grade hint only once', (tester) async {

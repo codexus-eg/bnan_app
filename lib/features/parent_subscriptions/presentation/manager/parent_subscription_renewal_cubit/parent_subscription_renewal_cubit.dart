@@ -32,16 +32,16 @@ class ParentSubscriptionRenewalCubit
     this.maxPollAttempts = 20,
     this.checkoutCloseTimeout = const Duration(seconds: 10),
     GulfPaymentProvider provider = GulfPaymentProvider.tamara,
-  }) : _provider = provider,
-       _attempt = ParentPaymentAttempt(keyGenerator),
-       super(ParentSubscriptionRenewalState(args: args));
+  }) : _attempt = ParentPaymentAttempt(keyGenerator),
+       super(
+         ParentSubscriptionRenewalState(args: args, selectedProvider: provider),
+       );
   final ParentSubscriptionsRepo repo;
   final RenewalPaymentStore? store;
   final ParentPaymentAttempt _attempt;
   final Duration pollInterval;
   final int maxPollAttempts;
   final Duration checkoutCloseTimeout;
-  GulfPaymentProvider _provider;
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
@@ -68,11 +68,11 @@ class ParentSubscriptionRenewalCubit
       await store?.clear();
       return;
     }
-    _provider = draft.provider;
     _attempt.restore(
       fingerprint: draft.payloadFingerprint,
       key: draft.idempotencyKey,
     );
+    emit(state.copyWith(selectedProvider: draft.provider));
     if (draft.paymentId.isEmpty) return;
     emit(
       state.copyWith(
@@ -82,10 +82,14 @@ class ParentSubscriptionRenewalCubit
         paymentId: draft.paymentId,
         checkoutUrl: draft.checkoutUrl,
         status: RenewalPaymentStatus.pending,
+        selectedProvider: draft.provider,
       ),
     );
     if (state.isGulf) {
-      await _pollGulf(draft.paymentId, reconcile: _provider.supportsReconcile);
+      await _pollGulf(
+        draft.paymentId,
+        reconcile: state.selectedProvider.supportsReconcile,
+      );
     } else {
       await _pollEgyptian(draft.paymentId);
     }
@@ -130,6 +134,12 @@ class ParentSubscriptionRenewalCubit
 
   void updateDiscount(String value) =>
       emit(state.copyWith(discountCode: value, errorMessage: null));
+
+  void selectPaymentProvider(GulfPaymentProvider provider) {
+    if (!state.isGulf || state.selectedProvider == provider) return;
+    emit(state.copyWith(selectedProvider: provider, errorMessage: null));
+  }
+
   bool nextStep() {
     final error = _validation();
     if (error != null) {
@@ -258,7 +268,7 @@ class ParentSubscriptionRenewalCubit
     try {
       RenewalStatusResponse? response;
       final result =
-          await (_provider.supportsReconcile
+          await (state.selectedProvider.supportsReconcile
                   ? repo.gulfReconcile(id)
                   : repo.gulfStatus(id))
               .timeout(checkoutCloseTimeout);
@@ -285,7 +295,7 @@ class ParentSubscriptionRenewalCubit
 
   Future<void> _runGulfReconcile(String id) async {
     try {
-      await _pollGulf(id, reconcile: _provider.supportsReconcile);
+      await _pollGulf(id, reconcile: state.selectedProvider.supportsReconcile);
     } finally {
       if (_reconcilingPaymentId == id) {
         _reconcilingPaymentId = null;
@@ -310,7 +320,7 @@ class ParentSubscriptionRenewalCubit
     try {
       RenewalStatusResponse? response;
       if (state.isGulf) {
-        if (_provider.supportsReconcile) {
+        if (state.selectedProvider.supportsReconcile) {
           (await repo.gulfReconcile(
             id,
           )).fold((_) {}, (value) => response = value);
@@ -430,7 +440,7 @@ class ParentSubscriptionRenewalCubit
         line1: TamaraDefaultAddress.line1,
         line2: TamaraDefaultAddress.line2,
       ),
-      provider: _provider,
+      provider: state.selectedProvider,
     );
     final key = _attempt.keyFor(request.toJson());
     await store?.save(
@@ -522,7 +532,7 @@ class ParentSubscriptionRenewalCubit
   Future<void> _pollGulf(String id, {bool reconcile = false}) async {
     await _poll(
       id,
-      reconcile: reconcile && _provider.supportsReconcile
+      reconcile: reconcile && state.selectedProvider.supportsReconcile
           ? () => repo.gulfReconcile(id)
           : null,
       status: () => repo.gulfStatus(id),

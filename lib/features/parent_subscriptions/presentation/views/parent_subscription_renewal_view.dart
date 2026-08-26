@@ -127,6 +127,7 @@ class _State extends State<ParentSubscriptionRenewalView>
     if (_isLeaving) return;
     final url = state.checkoutUrl;
     context.read<ParentSubscriptionRenewalCubit>().checkoutOpened();
+    if (!state.selectedProvider.usesTamaraCheckout) return;
     final cubit = context.read<ParentSubscriptionRenewalCubit>();
     _tamaraReturned = false;
     _tamaraOpen = true;

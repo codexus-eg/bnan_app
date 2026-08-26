@@ -5,6 +5,7 @@ import 'package:bnan_app/features/parent_subscriptions/presentation/manager/pare
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_navigation.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_result.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_payment_step.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_step_content.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,16 @@ class ParentSubscriptionRenewalBody extends StatelessWidget {
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverToBoxAdapter(
-                    child: RenewalStepContent(step: state.currentStep),
+                    child: Column(
+                      children: [
+                        RenewalStepContent(step: state.currentStep),
+                        if (state.isGulf &&
+                            state.currentStep == state.lastStep) ...[
+                          const SizedBox(height: 16),
+                          const RenewalPaymentStep(),
+                        ],
+                      ],
+                    ),
                   ),
                 ),
                 if (state.errorMessage != null)

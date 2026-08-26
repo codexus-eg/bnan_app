@@ -11,7 +11,10 @@ class ParentPaymentStep extends StatelessWidget {
     final cubit = context.read<ParentAddChildCubit>();
     final state = context.watch<ParentAddChildCubit>().state;
     return state.isGulf
-        ? const ParentGulfPaymentFields()
+        ? ParentGulfPaymentFields(
+            selectedProvider: state.selectedProvider,
+            onChanged: cubit.selectPaymentProvider,
+          )
         : ParentEgyptianPaymentFields(
             receipt: state.receipt,
             onReceiptChanged: (v) => cubit.updateEgyptianPayment(receipt: v),

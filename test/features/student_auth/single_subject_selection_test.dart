@@ -8,6 +8,7 @@ import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:dartz/dartz.dart';
@@ -211,6 +212,33 @@ void main() {
       'email': 'p@e.com',
       'password': 'Password1',
     });
+  });
+
+  test('Gulf registration defaults to Tamara and can select Paymob', () {
+    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+      ..setRegisterFlowArgs(_args('gulf'))
+      ..setGrade(id: 'grade', name: 'Grade')
+      ..toggleSubject('math');
+    expect(cubit.selectedProvider, GulfPaymentProvider.tamara);
+    cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+    final json = cubit.buildTamaraRequest(validateForm: false)!.toJson();
+    expect(cubit.selectedProvider, GulfPaymentProvider.paymob);
+    expect(json['provider'], 'paymob');
+    expect(json, isNot(contains('paymentAddress')));
+  });
+
+  test('Egyptian registration ignores Gulf provider selection', () {
+    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+      ..setRegisterFlowArgs(_args('egyptian'));
+    cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+    expect(cubit.selectedProvider, GulfPaymentProvider.tamara);
+  });
+
+  test('Gulf registration restores the saved Paymob provider', () {
+    final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+      ..setRegisterFlowArgs(_args('gulf'))
+      ..restorePaymentProvider(GulfPaymentProvider.paymob);
+    expect(cubit.selectedProvider, GulfPaymentProvider.paymob);
   });
 }
 

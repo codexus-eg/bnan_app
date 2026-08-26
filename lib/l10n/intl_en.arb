@@ -168,6 +168,7 @@
     "applePay": "Apple Pay",
     "creditCard": "Credit Card",
     "tabbyTamara": "Split your bill with Tamara",
+    "paymob": "Paymob",
     "goToPayment": "Proceed to Payment",
     "payWithTamara": "Pay with Tamara",
     "@packageCalculation": {

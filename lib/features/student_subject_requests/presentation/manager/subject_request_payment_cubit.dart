@@ -47,7 +47,10 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     _key = draft.idempotencyKey;
     _fingerprint = draft.payloadFingerprint;
     _provider = draft.provider;
-    if (draft.paymentId.isEmpty) return;
+    if (draft.paymentId.isEmpty) {
+      _emitSelection();
+      return;
+    }
     emit(
       SubjectRequestPaymentState(
         phase: SubjectRequestPaymentPhase.verifying,
@@ -56,6 +59,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
           status: SubjectRequestPaymentStatus.pending,
           checkoutUrl: draft.checkoutUrl,
         ),
+        selectedProvider: _provider,
       ),
     );
     await verify(reconcileFirst: true);
@@ -72,6 +76,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.openingTamara,
             payment: currentPayment,
+            selectedProvider: _provider,
           ),
         );
       }
@@ -82,8 +87,9 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       _fingerprint = fingerprint;
     }
     emit(
-      const SubjectRequestPaymentState(
+      SubjectRequestPaymentState(
         phase: SubjectRequestPaymentPhase.creatingCheckout,
+        selectedProvider: _provider,
       ),
     );
     final pendingDraft = SubjectRequestPaymentDraft(
@@ -112,6 +118,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.failure,
             message: failure.message,
+            selectedProvider: _provider,
           ),
         );
       },
@@ -133,6 +140,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.openingTamara,
             payment: payment,
+            selectedProvider: _provider,
           ),
         );
       },
@@ -166,6 +174,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       SubjectRequestPaymentState(
         phase: SubjectRequestPaymentPhase.failure,
         payment: state.payment,
+        selectedProvider: _provider,
       ),
     );
     try {
@@ -190,13 +199,31 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
         phase: SubjectRequestPaymentPhase.failure,
         payment: state.payment,
         message: message,
+        selectedProvider: _provider,
+      ),
+    );
+  }
+
+  void selectPaymentProvider(GulfPaymentProvider provider) {
+    if (_isBusy || _provider == provider) return;
+    _provider = provider;
+    _emitSelection();
+  }
+
+  void checkoutLaunchDeferred() {
+    if (state.phase != SubjectRequestPaymentPhase.openingTamara) return;
+    emit(
+      SubjectRequestPaymentState(
+        phase: SubjectRequestPaymentPhase.failure,
+        payment: state.payment,
+        selectedProvider: _provider,
       ),
     );
   }
 
   void completeHandling() {
     if (state.phase == SubjectRequestPaymentPhase.completed) {
-      emit(const SubjectRequestPaymentState());
+      emit(SubjectRequestPaymentState(selectedProvider: _provider));
     }
   }
 
@@ -208,6 +235,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
       SubjectRequestPaymentState(
         phase: SubjectRequestPaymentPhase.verifying,
         payment: state.payment,
+        selectedProvider: _provider,
       ),
     );
     if (reconcileFirst && _provider.supportsReconcile) {
@@ -229,6 +257,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
         SubjectRequestPaymentState(
           phase: SubjectRequestPaymentPhase.verificationTimeout,
           payment: state.payment,
+          selectedProvider: _provider,
         ),
       );
     }
@@ -249,6 +278,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.completed,
             payment: payment,
+            selectedProvider: _provider,
           ),
         );
       } else if (payment.status.isTerminal) {
@@ -260,6 +290,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
           SubjectRequestPaymentState(
             phase: SubjectRequestPaymentPhase.terminalFailure,
             payment: payment,
+            selectedProvider: _provider,
           ),
         );
       }
@@ -270,6 +301,15 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     _key = null;
     _fingerprint = null;
   }
+
+  void _emitSelection() => emit(
+    SubjectRequestPaymentState(
+      phase: state.phase,
+      payment: state.payment,
+      message: state.message,
+      selectedProvider: _provider,
+    ),
+  );
 
   bool get _isBusy =>
       state.phase == SubjectRequestPaymentPhase.creatingCheckout ||

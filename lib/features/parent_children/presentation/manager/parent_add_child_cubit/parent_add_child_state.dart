@@ -4,6 +4,7 @@ import 'package:bnan_app/features/academic_lookups/data/models/academic_curricul
 import 'package:bnan_app/features/academic_lookups/data/models/academic_grade_model.dart';
 import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
 import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 
 enum ParentAddChildPhase {
@@ -41,6 +42,7 @@ class ParentAddChildState {
     this.paymentSummary,
     this.paymentStatus,
     this.shouldOpenCheckout = false,
+    this.selectedProvider = GulfPaymentProvider.tamara,
     this.errorMessage,
   });
 
@@ -58,6 +60,7 @@ class ParentAddChildState {
   final PaymentAmountSummary? paymentSummary;
   final PaymentStatus? paymentStatus;
   final bool shouldOpenCheckout;
+  final GulfPaymentProvider selectedProvider;
 
   bool get isGulf => _value(curriculum?.registrationMode) == 'gulf';
   bool get hasSupportedRegistrationMode =>
@@ -96,6 +99,7 @@ class ParentAddChildState {
     Object? paymentSummary = _unset,
     Object? paymentStatus = _unset,
     bool? shouldOpenCheckout,
+    GulfPaymentProvider? selectedProvider,
     Object? errorMessage = _unset,
   }) => ParentAddChildState(
     phase: phase ?? this.phase,
@@ -129,6 +133,7 @@ class ParentAddChildState {
         ? this.paymentStatus
         : paymentStatus as PaymentStatus?,
     shouldOpenCheckout: shouldOpenCheckout ?? this.shouldOpenCheckout,
+    selectedProvider: selectedProvider ?? this.selectedProvider,
     errorMessage: identical(errorMessage, _unset)
         ? this.errorMessage
         : errorMessage as String?,

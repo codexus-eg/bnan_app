@@ -501,6 +501,21 @@ void main() {
     await cubit.close();
   });
 
+  test(
+    'add-child defaults to Tamara and selected Paymob reaches request',
+    () async {
+      final repo = _Repo();
+      final cubit = _readyGulf(repo);
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.tamara);
+      cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+      await cubit.submit();
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
+      expect(repo.lastGulfRequest?.provider, GulfPaymentProvider.paymob);
+      expect(repo.lastGulfRequest?.toJson(), isNot(contains('paymentAddress')));
+      await cubit.close();
+    },
+  );
+
   test('add-child restore ignores a registration draft', () async {
     final store = _MemoryStore()
       ..value = PaymentDraft(
@@ -518,6 +533,27 @@ void main() {
     final cubit = _cubit(_Repo(), curriculum: _gulf, store: store);
     expect(cubit.state.paymentId, isNull);
     expect(store.value?.purpose, PaymentDraftPurpose.registration);
+    await cubit.close();
+  });
+
+  test('add-child restore keeps the saved Paymob provider', () async {
+    final store = _MemoryStore()
+      ..value = PaymentDraft(
+        paymentId: 'add-child-payment',
+        checkoutUrl: 'https://checkout.example.com',
+        idempotencyKey: 'saved-key',
+        packageId: 'package-1',
+        curriculumId: _gulf.id,
+        gradeId: 'grade-1',
+        subjectIds: const ['subject-1'],
+        studentEmail: 'student@example.com',
+        paymentStartedAt: DateTime(2026),
+        lastKnownStatus: PaymentStatus.pending,
+        provider: GulfPaymentProvider.paymob,
+        purpose: PaymentDraftPurpose.addChild,
+      );
+    final cubit = _cubit(_Repo(), curriculum: _gulf, store: store);
+    expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
     await cubit.close();
   });
 

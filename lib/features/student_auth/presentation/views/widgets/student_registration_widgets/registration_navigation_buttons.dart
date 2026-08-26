@@ -33,7 +33,9 @@ class RegistrationNavigationButtons extends StatelessWidget {
                       paymentState is TamaraPaymentVerificationPending
                 ? S.of(context).parentRetryPayment
                 : step == 4
-                ? S.of(context).payWithTamara
+                ? RegisterCubit.get(context).selectedProvider.usesTamaraCheckout
+                      ? S.of(context).payWithTamara
+                      : S.of(context).confirmRequest
                 : S.of(context).next,
             isLoading:
                 registerState is RegisterLoading ||
@@ -119,6 +121,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
         return;
       }
       final cubit = context.read<TamaraPaymentCubit>();
+      if (cubit.draft?.provider.usesTamaraCheckout != true) return;
       if (!cubit.claimCheckoutLaunch(url)) return;
       final result = await TamaraCheckoutLauncher.open(
         context,

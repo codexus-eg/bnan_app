@@ -40,9 +40,8 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     this.maxPollAttempts = 20,
     this.checkoutReturnTimeout = const Duration(seconds: 10),
     GulfPaymentProvider provider = GulfPaymentProvider.tamara,
-  }) : _provider = provider,
-       _attempt = ParentPaymentAttempt(keyGenerator),
-       super(const ParentAddChildState());
+  }) : _attempt = ParentPaymentAttempt(keyGenerator),
+       super(ParentAddChildState(selectedProvider: provider));
 
   final ParentAddChildRepo repo;
   final ParentPaymentAttempt _attempt;
@@ -50,7 +49,6 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   final Duration pollInterval;
   final int maxPollAttempts;
   final Duration checkoutReturnTimeout;
-  GulfPaymentProvider _provider;
   bool _submitting = false;
   bool _checkingPayment = false;
   String? _pollingPaymentId;
@@ -63,18 +61,19 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
         phase: ParentAddChildPhase.editing,
         parentHasChildren: hasChildren,
         curriculum: curriculum,
+        selectedProvider: state.selectedProvider,
       ),
     );
     if (curriculum == null) return;
     final draft = _resumableDraft(curriculum.id);
     if (draft == null) return;
-    _provider = draft.provider;
     emit(
       state.copyWith(
         phase: ParentAddChildPhase.paymentStatusUnknown,
         paymentId: draft.paymentId,
         checkoutUrl: draft.checkoutUrl,
         paymentStatus: draft.lastKnownStatus,
+        selectedProvider: draft.provider,
       ),
     );
     _log('state transition: restored pending payment');
@@ -151,6 +150,11 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
 
   void updateDiscount(String value) =>
       emit(state.copyWith(discountCode: value, errorMessage: null));
+
+  void selectPaymentProvider(GulfPaymentProvider provider) {
+    if (!state.isGulf || state.selectedProvider == provider) return;
+    emit(state.copyWith(selectedProvider: provider, errorMessage: null));
+  }
 
   void updateEgyptianPayment({
     String? method,
@@ -306,14 +310,14 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     }
     _checkingPayment = true;
     try {
-      final reconciled = _provider.supportsReconcile
+      final reconciled = state.selectedProvider.supportsReconcile
           ? await repo.reconcile(id)
           : null;
       if (isClosed) return;
       TamaraStatusResponse? response;
       reconciled?.fold((_) {}, (value) => response = value);
       if (response == null || !response!.status.isTerminal) {
-        final status = await repo.status(id, provider: _provider);
+        final status = await repo.status(id, provider: state.selectedProvider);
         if (isClosed) return;
         status.fold((_) {}, (value) => response = value);
       }
@@ -395,7 +399,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
         line1: TamaraDefaultAddress.line1,
         line2: TamaraDefaultAddress.line2,
       ),
-      provider: _provider,
+      provider: state.selectedProvider,
     );
     final key = await _beginAttempt(request);
     if (isClosed) return;
@@ -449,10 +453,11 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
             interval: pollInterval,
             maxAttempts: maxPollAttempts,
           ).poll(
-            reconcile: _provider.supportsReconcile
+            reconcile: state.selectedProvider.supportsReconcile
                 ? () => repo.reconcile(paymentId)
                 : null,
-            status: () => repo.status(paymentId, provider: _provider),
+            status: () =>
+                repo.status(paymentId, provider: state.selectedProvider),
             isTerminal: (value) => value.status.isTerminal,
             canContinue: () =>
                 !isClosed &&

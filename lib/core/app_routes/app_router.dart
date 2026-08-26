@@ -24,6 +24,7 @@ import 'package:bnan_app/features/chats/presentation/policies/classroom_document
 import 'package:bnan_app/features/chats/presentation/views/groups_view.dart';
 import 'package:bnan_app/features/curriculum_management/presentation/manager/curriculum_actions_cubit/curriculum_actions_cubit.dart';
 import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/plans/presentation/policies/plans_access_policy.dart';
 import 'package:bnan_app/features/plans/presentation/views/term_plans_view.dart';
 import 'package:bnan_app/features/ideal_student/presentation/policies/ideal_student_access_policy.dart';
@@ -205,8 +206,11 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (_) =>
-                      getIt<RegisterCubit>()..setRegisterFlowArgs(args),
+                  create: (_) => getIt<RegisterCubit>()
+                    ..setRegisterFlowArgs(args)
+                    ..restorePaymentProvider(
+                      getIt<TamaraPaymentCubit>().draft?.provider,
+                    ),
                 ),
                 BlocProvider(
                   create: (_) => getIt<GetGradesCubit>()

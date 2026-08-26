@@ -12,6 +12,11 @@ import 'package:bnan_app/features/student_auth/data/models/register_student_mode
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('only Tamara provider can launch Tamara checkout', () {
+    expect(GulfPaymentProvider.tamara.usesTamaraCheckout, isTrue);
+    expect(GulfPaymentProvider.paymob.usesTamaraCheckout, isFalse);
+  });
+
   test('parses only registered Tamara return URLs', () {
     for (final outcome in TamaraReturnOutcome.values) {
       final result = TamaraReturn.tryParse(

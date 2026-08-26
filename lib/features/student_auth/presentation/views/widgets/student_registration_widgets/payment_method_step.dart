@@ -45,7 +45,11 @@ class PaymentMethodStep extends StatelessWidget {
           ],
         ],
         const SizedBox(height: 16),
-        const PaymentMethodsOptions(),
+        if (cubit.isGulf)
+          PaymentMethodsOptions(
+            selectedProvider: cubit.selectedProvider,
+            onChanged: cubit.selectPaymentProvider,
+          ),
         if (paymentCubit.state is TamaraPaymentVerificationPending) ...[
           const SizedBox(height: 12),
           Text(

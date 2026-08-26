@@ -475,6 +475,39 @@ void main() {
       await cubit.close();
     });
 
+    test('subject purchase defaults to Tamara and can select Paymob', () async {
+      final repo = FakeRepo()..checkoutResults.add(Right(_payment()));
+      final cubit = _paymentCubit(repo);
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.tamara);
+      cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+      await cubit.checkout(
+        _gulfPayload(provider: cubit.state.selectedProvider),
+      );
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
+      expect(repo.lastPayload?.provider, GulfPaymentProvider.paymob);
+      expect(repo.lastPayload?.toJson(), isNot(contains('paymentAddress')));
+      cubit.checkoutLaunchDeferred();
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.failure);
+      await cubit.close();
+    });
+
+    test('subject purchase restore keeps Paymob provider', () async {
+      final store = MemoryPaymentStore()
+        ..draft = const SubjectRequestPaymentDraft(
+          paymentId: '',
+          idempotencyKey: 'key-1',
+          subjectId: 'subject-1',
+          packageId: 'package-1',
+          payloadFingerprint: 'fingerprint-1',
+          ownerUserId: '',
+          provider: GulfPaymentProvider.paymob,
+        );
+      final cubit = _paymentCubit(FakeRepo(), store: store);
+      await cubit.restore();
+      expect(cubit.state.selectedProvider, GulfPaymentProvider.paymob);
+      await cubit.close();
+    });
+
     test('polling timeout exposes manual verification', () async {
       final repo = FakeRepo()
         ..checkoutResults.add(Right(_payment()))
@@ -595,6 +628,7 @@ class FakeRepo implements StudentSubjectRequestsRepo {
   final statusResults = <Either<Failure, SubjectRequestPayment>>[];
   final reconcileResults = <Either<Failure, SubjectRequestPayment>>[];
   final packageCurriculumIds = <String>[];
+  GulfSubjectRequestPayload? lastPayload;
   Either<Failure, StudentSubjectRequest> submitResult = const Right(
     StudentSubjectRequest(id: 'r1', status: 'pending'),
   );
@@ -638,6 +672,7 @@ class FakeRepo implements StudentSubjectRequestsRepo {
     required GulfSubjectRequestPayload payload,
     required String idempotencyKey,
   }) async {
+    lastPayload = payload;
     checkoutKeys.add(idempotencyKey);
     return checkoutResults.removeAt(0);
   }

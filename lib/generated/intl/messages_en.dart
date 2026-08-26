@@ -1953,6 +1953,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "supportBadge": MessageLookupByLibrary.simpleMessage("Support"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("Split your bill with Tamara"),
+        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
         "taughtOnlineBefore": MessageLookupByLibrary.simpleMessage(
             "Have you taught online before?"),
         "taughtSubjects":

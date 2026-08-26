@@ -2,6 +2,7 @@ import 'package:bnan_app/features/packages_management/data/models/package_model.
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/renewal_status_response.dart';
 import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
+import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 
 enum ParentRenewalPhase {
   editing,
@@ -28,6 +29,7 @@ class ParentSubscriptionRenewalState {
     this.status,
     this.paymentSummary,
     this.shouldOpenCheckout = false,
+    this.selectedProvider = GulfPaymentProvider.tamara,
     this.errorMessage,
   });
   final ParentSubscriptionRenewalArgs args;
@@ -39,6 +41,7 @@ class ParentSubscriptionRenewalState {
   final RenewalPaymentStatus? status;
   final PaymentAmountSummary? paymentSummary;
   final bool shouldOpenCheckout;
+  final GulfPaymentProvider selectedProvider;
   bool get isGulf => args.registrationMode == 'gulf';
   bool get isEgyptianPrivate =>
       args.registrationMode == 'egyptian' &&
@@ -74,6 +77,7 @@ class ParentSubscriptionRenewalState {
     Object? status = _unset,
     Object? paymentSummary = _unset,
     bool? shouldOpenCheckout,
+    GulfPaymentProvider? selectedProvider,
     Object? errorMessage = _unset,
   }) => ParentSubscriptionRenewalState(
     args: args,
@@ -99,6 +103,7 @@ class ParentSubscriptionRenewalState {
         ? this.paymentSummary
         : paymentSummary as PaymentAmountSummary?,
     shouldOpenCheckout: shouldOpenCheckout ?? this.shouldOpenCheckout,
+    selectedProvider: selectedProvider ?? this.selectedProvider,
     errorMessage: identical(errorMessage, _unset)
         ? this.errorMessage
         : errorMessage as String?,

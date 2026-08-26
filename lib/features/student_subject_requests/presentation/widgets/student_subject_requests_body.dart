@@ -4,6 +4,7 @@ import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_methods_options.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
@@ -75,6 +76,15 @@ class _StudentSubjectRequestsBodyState
             CustomTextField(
               label: S.of(context).discountCode,
               onChanged: (value) => discountCode = value,
+            ),
+            const SizedBox(height: 16),
+            BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
+              builder: (context, payment) => PaymentMethodsOptions(
+                selectedProvider: payment.selectedProvider,
+                onChanged: context
+                    .read<SubjectRequestPaymentCubit>()
+                    .selectPaymentProvider,
+              ),
             ),
           ],
           const SizedBox(height: 20),
@@ -158,6 +168,10 @@ class _StudentSubjectRequestsBodyState
         curriculumId: cubit.gulfCurriculumId!,
         notes: state.notes,
         discountCode: discountCode,
+        provider: context
+            .read<SubjectRequestPaymentCubit>()
+            .state
+            .selectedProvider,
         paymentAddress: const PaymentAddress(
           city: TamaraDefaultAddress.city,
           region: TamaraDefaultAddress.region,
