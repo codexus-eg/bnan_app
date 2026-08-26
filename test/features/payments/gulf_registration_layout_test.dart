@@ -1,7 +1,9 @@
 import 'package:bnan_app/core/cache/cache_helper.dart';
+import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
@@ -15,6 +17,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/register_cub
 import 'package:bnan_app/features/student_auth/presentation/views/student_registration_view.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/tamara_verification_loading.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -252,6 +255,19 @@ class _UnusedParentRepo implements GulfParentAuthRepo {
 }
 
 class _UnusedPaymentRepo implements TamaraPaymentRepo {
+  @override
+  Future<Either<Failure, TamaraStatusResponse>> reconcile(String paymentId) =>
+      Future.value(Right(_pending(paymentId)));
+
+  @override
+  Future<Either<Failure, TamaraStatusResponse>> status(
+    String paymentId, {
+    GulfPaymentProvider provider = GulfPaymentProvider.tamara,
+  }) => Future.value(Right(_pending(paymentId)));
+
+  TamaraStatusResponse _pending(String id) =>
+      TamaraStatusResponse(paymentId: id, status: PaymentStatus.pending);
+
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
