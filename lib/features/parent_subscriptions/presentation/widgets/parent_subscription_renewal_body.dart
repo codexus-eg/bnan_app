@@ -6,6 +6,7 @@ import 'package:bnan_app/features/parent_subscriptions/presentation/manager/pare
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_navigation.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_result.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_payment_step.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_review_steps.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_step_content.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,12 @@ class ParentSubscriptionRenewalBody extends StatelessWidget {
                         RenewalStepContent(step: state.currentStep),
                         if (state.isGulf &&
                             state.currentStep == state.lastStep) ...[
+                          if (state.package != null) ...[
+                            const SizedBox(height: 16),
+                            const RenewalPriceStep(),
+                            const SizedBox(height: 16),
+                            const RenewalDiscountStep(),
+                          ],
                           const SizedBox(height: 16),
                           const RenewalPaymentStep(),
                         ],

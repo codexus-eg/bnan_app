@@ -65,6 +65,12 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
       _draft?.checkoutOpenedAt != null &&
       _draft?.lastKnownStatus.isProcessing == true;
 
+  void invalidateAmountSummary() {
+    if (_paymentSummary == null) return;
+    _paymentSummary = null;
+    if (!isClosed) emit(const TamaraPaymentInitial());
+  }
+
   Future<void> restore() async {
     _accountVerificationAttemptActive = false;
     _draft = await _readOwnedDraft();

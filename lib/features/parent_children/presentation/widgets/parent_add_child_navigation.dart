@@ -18,7 +18,7 @@ class ParentAddChildNavigation extends StatelessWidget {
         CustomAppButton(
           text: isLast
               ? state.isGulf
-                    ? S.of(context).parentSubmitPayment
+                    ? S.of(context).renewalConfirmPayment
                     : S.of(context).submitRegistrationRequest
               : S.of(context).next,
           isLoading: state.isBusy,

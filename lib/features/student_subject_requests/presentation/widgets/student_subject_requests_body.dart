@@ -5,6 +5,7 @@ import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_methods_options.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
@@ -48,7 +49,12 @@ class _StudentSubjectRequestsBodyState
           SubjectRequestSubjectsSection(
             subjects: availability.subjects,
             selectedId: state.selectedSubjectId,
-            onSelected: cubit.selectSubject,
+            onSelected: (id) {
+              context
+                  .read<SubjectRequestPaymentCubit>()
+                  .invalidateAmountSummary();
+              cubit.selectSubject(id);
+            },
           ),
           SubjectRequestPackageSelector(
             selectedName: _selectedPackageName(state),
@@ -75,7 +81,26 @@ class _StudentSubjectRequestsBodyState
             const SizedBox(height: 16),
             CustomTextField(
               label: S.of(context).discountCode,
-              onChanged: (value) => discountCode = value,
+              onChanged: (value) {
+                discountCode = value;
+                context
+                    .read<SubjectRequestPaymentCubit>()
+                    .invalidateAmountSummary();
+              },
+            ),
+            BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
+              buildWhen: (previous, current) =>
+                  previous.payment?.paymentSummary !=
+                  current.payment?.paymentSummary,
+              builder: (context, payment) {
+                final summary = payment.payment?.paymentSummary;
+                return summary?.hasDiscount == true
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: PaymentDiscountSummary(summary: summary!),
+                      )
+                    : const SizedBox.shrink();
+              },
             ),
             const SizedBox(height: 16),
             BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
@@ -120,7 +145,9 @@ class _StudentSubjectRequestsBodyState
           payment.phase == SubjectRequestPaymentPhase.verifying ||
           payment.phase == SubjectRequestPaymentPhase.completed;
       return CustomAppButton(
-        text: S.of(context).confirmRequest,
+        text: registrationMode == RegistrationMode.gulf
+            ? S.of(context).renewalConfirmPayment
+            : S.of(context).confirmRequest,
         isLoading: loading,
         onPressed: state.canSubmit
             ? () => _submit(state, registrationMode)
@@ -145,6 +172,7 @@ class _StudentSubjectRequestsBodyState
           state.availability?.registrationMode == RegistrationMode.egyptian,
     );
     if (!mounted || id == null) return;
+    context.read<SubjectRequestPaymentCubit>().invalidateAmountSummary();
     context.read<StudentSubjectRequestsCubit>().selectPackage(id);
   }
 

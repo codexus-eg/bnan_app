@@ -1336,6 +1336,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
         "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
             "Payment status is being verified. This may take some time."),
+        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("Account holder"),
         "payrollAccountNumber":
@@ -1953,7 +1954,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "supportBadge": MessageLookupByLibrary.simpleMessage("Support"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("Split your bill with Tamara"),
-        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
         "taughtOnlineBefore": MessageLookupByLibrary.simpleMessage(
             "Have you taught online before?"),
         "taughtSubjects":

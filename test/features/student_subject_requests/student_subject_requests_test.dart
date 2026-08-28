@@ -66,6 +66,8 @@ void main() {
       expect(payment.discountAmount, 50.5);
       expect(payment.finalAmount, 249.5);
       expect(payment.currency, 'SAR');
+      expect(payment.paymentSummary.hasDiscount, isTrue);
+      expect(payment.paymentSummary.canDisplay, isTrue);
     });
 
     test('Gulf checkout uses singular subjectId', () {
@@ -494,6 +496,34 @@ void main() {
       expect(repo.statusCalls, 1);
       await cubit.close();
     });
+
+    test(
+      'provider keeps amounts while selection invalidation clears them',
+      () async {
+        final repo = FakeRepo()
+          ..checkoutResults.add(
+            const Right(
+              SubjectRequestPayment(
+                paymentId: 'pay-1',
+                status: SubjectRequestPaymentStatus.pending,
+                checkoutUrl: 'https://checkout.example/pay-1',
+                originalAmount: 300,
+                discountAmount: 50,
+                finalAmount: 250,
+              ),
+            ),
+          );
+        final cubit = _paymentCubit(repo);
+        await cubit.checkout(_gulfPayload());
+        cubit.checkoutLaunchFailed('closed');
+
+        cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+        expect(cubit.state.payment?.paymentSummary.finalAmount, 250);
+        cubit.invalidateAmountSummary();
+        expect(cubit.state.payment, isNull);
+        await cubit.close();
+      },
+    );
 
     test('subject purchase restore keeps Paymob provider', () async {
       final store = MemoryPaymentStore()

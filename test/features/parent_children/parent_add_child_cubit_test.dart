@@ -19,6 +19,7 @@ import 'package:bnan_app/features/parent_children/presentation/widgets/parent_gr
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_response.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
@@ -516,6 +517,28 @@ void main() {
     },
   );
 
+  test(
+    'provider keeps discount while price input clears stale summary',
+    () async {
+      final repo = _Repo(
+        checkoutSummary: const PaymentAmountSummary(
+          originalAmount: 500,
+          discountAmount: 50,
+          finalAmount: 450,
+        ),
+      );
+      final cubit = _readyGulf(repo);
+      await cubit.submit();
+      expect(cubit.state.paymentSummary?.finalAmount, 450);
+
+      cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+      expect(cubit.state.paymentSummary?.finalAmount, 450);
+      cubit.updateDiscount('INVALID');
+      expect(cubit.state.paymentSummary, isNull);
+      await cubit.close();
+    },
+  );
+
   test('add-child restore ignores a registration draft', () async {
     final store = _MemoryStore()
       ..value = PaymentDraft(
@@ -645,8 +668,9 @@ class _Keys extends IdempotencyKeyGenerator {
 }
 
 class _Repo implements ParentAddChildRepo {
-  _Repo({this.checkoutDelay = Duration.zero});
+  _Repo({this.checkoutDelay = Duration.zero, this.checkoutSummary});
   final Duration checkoutDelay;
+  final PaymentAmountSummary? checkoutSummary;
   final List<TamaraStatusResponse> statuses = [];
   final List<Failure> checkoutFailures = [];
   final List<String> keys = [];
@@ -675,13 +699,14 @@ class _Repo implements ParentAddChildRepo {
     if (checkoutFailures.isNotEmpty) {
       return Left(checkoutFailures.removeAt(0));
     }
-    return const Right(
+    return Right(
       TamaraCheckoutResponse(
         paymentId: 'payment-1',
         checkoutUrl: 'https://checkout.example.com',
         orderId: 'order-1',
         status: 'pending',
         providerStatus: 'pending',
+        paymentSummary: checkoutSummary,
       ),
     );
   }

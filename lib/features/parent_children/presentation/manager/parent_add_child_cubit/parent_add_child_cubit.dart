@@ -98,6 +98,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
         grade: null,
         package: null,
         selectedSubjectIds: const [],
+        paymentSummary: null,
         errorMessage: null,
       ),
     );
@@ -107,6 +108,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     state.copyWith(
       grade: value,
       selectedSubjectIds: const [],
+      paymentSummary: null,
       errorMessage: null,
     ),
   );
@@ -118,7 +120,13 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
         .where((id) => id.isNotEmpty)
         .toSet()
         .toList(growable: false);
-    emit(state.copyWith(selectedSubjectIds: ids, errorMessage: null));
+    emit(
+      state.copyWith(
+        selectedSubjectIds: ids,
+        paymentSummary: null,
+        errorMessage: null,
+      ),
+    );
   }
 
   void selectPackage(PackageModel value) {
@@ -133,6 +141,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       state.copyWith(
         package: value,
         selectedSubjectIds: const [],
+        paymentSummary: null,
         errorMessage: null,
       ),
     );
@@ -141,15 +150,32 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
   void toggleSubject(String id) {
     final selected = [...state.selectedSubjectIds];
     if (state.isSingleSubject && !state.isEgyptianPrivate && !state.isGulf) {
-      emit(state.copyWith(selectedSubjectIds: [id], errorMessage: null));
+      emit(
+        state.copyWith(
+          selectedSubjectIds: [id],
+          paymentSummary: null,
+          errorMessage: null,
+        ),
+      );
       return;
     }
     selected.contains(id) ? selected.remove(id) : selected.add(id);
-    emit(state.copyWith(selectedSubjectIds: selected, errorMessage: null));
+    emit(
+      state.copyWith(
+        selectedSubjectIds: selected,
+        paymentSummary: null,
+        errorMessage: null,
+      ),
+    );
   }
 
-  void updateDiscount(String value) =>
-      emit(state.copyWith(discountCode: value, errorMessage: null));
+  void updateDiscount(String value) => emit(
+    state.copyWith(
+      discountCode: value,
+      paymentSummary: null,
+      errorMessage: null,
+    ),
+  );
 
   void selectPaymentProvider(GulfPaymentProvider provider) {
     if (!state.isGulf || state.selectedProvider == provider) return;
@@ -372,6 +398,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
         phase: ParentAddChildPhase.submitting,
         paymentId: null,
         checkoutUrl: null,
+        paymentSummary: null,
         paymentStatus: null,
         shouldOpenCheckout: false,
         errorMessage: null,

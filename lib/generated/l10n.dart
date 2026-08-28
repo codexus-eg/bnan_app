@@ -1382,7 +1382,12 @@ class S {
 
   /// `Paymob`
   String get paymob {
-    return Intl.message('Paymob', name: 'paymob', desc: '', args: []);
+    return Intl.message(
+      'Paymob',
+      name: 'paymob',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Proceed to Payment`

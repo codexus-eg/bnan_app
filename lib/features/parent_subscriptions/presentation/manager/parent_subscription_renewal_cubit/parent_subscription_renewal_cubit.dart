@@ -105,7 +105,14 @@ class ParentSubscriptionRenewalCubit
     )) {
       return _error('INVALID_PACKAGE_FOR_CURRICULUM');
     }
-    emit(state.copyWith(package: value, subjectId: null, errorMessage: null));
+    emit(
+      state.copyWith(
+        package: value,
+        subjectId: null,
+        paymentSummary: null,
+        errorMessage: null,
+      ),
+    );
   }
 
   void selectAutomaticMonthlyPackage(List<PackageModel> packages) {
@@ -129,11 +136,18 @@ class ParentSubscriptionRenewalCubit
     if (!state.args.subjects.any((item) => item.id == id)) {
       return _error('SUBJECT_NOT_ASSIGNED_TO_STUDENT');
     }
-    emit(state.copyWith(subjectId: id, errorMessage: null));
+    emit(
+      state.copyWith(subjectId: id, paymentSummary: null, errorMessage: null),
+    );
   }
 
-  void updateDiscount(String value) =>
-      emit(state.copyWith(discountCode: value, errorMessage: null));
+  void updateDiscount(String value) => emit(
+    state.copyWith(
+      discountCode: value,
+      paymentSummary: null,
+      errorMessage: null,
+    ),
+  );
 
   void selectPaymentProvider(GulfPaymentProvider provider) {
     if (!state.isGulf || state.selectedProvider == provider) return;
@@ -428,6 +442,7 @@ class ParentSubscriptionRenewalCubit
         phase: ParentRenewalPhase.submitting,
         paymentId: null,
         checkoutUrl: null,
+        paymentSummary: null,
         status: null,
         shouldOpenCheckout: false,
         errorMessage: null,

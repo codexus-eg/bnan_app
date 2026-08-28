@@ -6,6 +6,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/get_curricul
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_state.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
+import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/core/shared_widget/custom_option_tile.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,9 @@ class SubjectsList extends StatelessWidget {
                       isSelected: isSelected,
                       onTap: () {
                         if (isLoading) return;
+                        context
+                            .read<TamaraPaymentCubit>()
+                            .invalidateAmountSummary();
                         registerCubit.toggleSubject(subject.id);
                       },
                     );

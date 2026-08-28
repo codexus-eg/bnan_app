@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
+
 class SubjectRequestPayment {
   const SubjectRequestPayment({
     required this.paymentId,
@@ -24,6 +26,13 @@ class SubjectRequestPayment {
   final num? finalAmount;
   final String? currency;
   final Map<String, dynamic>? discount;
+
+  PaymentAmountSummary get paymentSummary => PaymentAmountSummary(
+    originalAmount: originalAmount,
+    discountAmount: discountAmount,
+    finalAmount: finalAmount,
+    currency: currency,
+  );
 
   factory SubjectRequestPayment.fromJson(Map<String, dynamic> json) {
     final raw = json['data'];

@@ -18,7 +18,7 @@ class RenewalNavigation extends StatelessWidget {
         CustomAppButton(
           text: state.currentStep == state.lastStep
               ? state.isGulf
-                    ? S.of(context).parentSubmitPayment
+                    ? S.of(context).renewalConfirmPayment
                     : S.of(context).renewalSubmitRequest
               : S.of(context).next,
           isLoading: state.isBusy,

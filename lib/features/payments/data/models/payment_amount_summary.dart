@@ -33,7 +33,8 @@ class PaymentAmountSummary {
     );
   }
 
-  bool get hasDiscount => discount != null;
+  bool get hasDiscount => discountAmount != null && discountAmount! > 0;
+  bool get canDisplay => finalAmount != null;
   bool get hasAmounts =>
       originalAmount != null || discountAmount != null || finalAmount != null;
 }

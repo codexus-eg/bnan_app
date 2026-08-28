@@ -144,7 +144,21 @@ void main() {
     final checkout = TamaraCheckoutResponse.fromJson(json);
     final status = TamaraStatusResponse.fromJson(json);
     expect(checkout.paymentSummary?.finalAmount, 375);
+    expect(checkout.paymentSummary?.hasDiscount, isTrue);
     expect(status.paymentSummary?.discount?.childrenCount, 3);
+  });
+
+  test('discount amount controls display even without discount metadata', () {
+    final discounted = TamaraCheckoutResponse.fromJson({
+      'data': {'originalAmount': 500, 'discountAmount': 50, 'finalAmount': 450},
+    });
+    final fullPrice = TamaraCheckoutResponse.fromJson({
+      'data': {'discountAmount': 0, 'finalAmount': 500},
+    });
+
+    expect(discounted.paymentSummary?.hasDiscount, isTrue);
+    expect(discounted.paymentSummary?.canDisplay, isTrue);
+    expect(fullPrice.paymentSummary?.hasDiscount, isFalse);
   });
 
   test('persisted draft contains no parent or student password', () {

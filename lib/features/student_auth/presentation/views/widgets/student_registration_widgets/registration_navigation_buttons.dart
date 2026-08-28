@@ -34,9 +34,7 @@ class RegistrationNavigationButtons extends StatelessWidget {
                       paymentState is TamaraPaymentVerificationPending
                 ? S.of(context).parentRetryPayment
                 : step == 4
-                ? RegisterCubit.get(context).selectedProvider.usesTamaraCheckout
-                      ? S.of(context).payWithTamara
-                      : S.of(context).confirmRequest
+                ? S.of(context).renewalConfirmPayment
                 : S.of(context).next,
             isLoading:
                 registerState is RegisterLoading ||

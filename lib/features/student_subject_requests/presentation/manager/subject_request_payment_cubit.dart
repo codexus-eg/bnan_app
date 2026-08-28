@@ -190,6 +190,11 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
     _emitSelection();
   }
 
+  void invalidateAmountSummary() {
+    if (_isBusy || state.payment?.paymentSummary.hasAmounts != true) return;
+    emit(SubjectRequestPaymentState(selectedProvider: _provider));
+  }
+
   Future<void> paymobCheckoutClosed() async {
     final paymentId = state.payment?.paymentId;
     if (paymentId == null || paymentId.isEmpty) return;

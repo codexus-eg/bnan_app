@@ -10,7 +10,7 @@ class PaymentDiscountSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!summary.hasDiscount) return const SizedBox.shrink();
+    if (!summary.canDisplay) return const SizedBox.shrink();
     final s = S.of(context);
     return Container(
       width: double.infinity,
@@ -22,16 +22,20 @@ class PaymentDiscountSummary extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _row(context, s.originalAmount, summary.originalAmount),
-          const SizedBox(height: 8),
-          _row(
-            context,
-            s.discountAmount,
-            summary.discountAmount,
-            discount: true,
-          ),
-          const Divider(),
-          _row(context, s.finalAmount, summary.finalAmount, strong: true),
+          if (summary.originalAmount != null) ...[
+            _row(context, s.originalAmount, summary.originalAmount!),
+            const SizedBox(height: 8),
+          ],
+          if (summary.hasDiscount) ...[
+            _row(
+              context,
+              s.discountAmount,
+              summary.discountAmount!,
+              discount: true,
+            ),
+            const Divider(),
+          ],
+          _row(context, s.finalAmount, summary.finalAmount!, strong: true),
         ],
       ),
     );
@@ -40,15 +44,15 @@ class PaymentDiscountSummary extends StatelessWidget {
   Widget _row(
     BuildContext context,
     String label,
-    num? value, {
+    num value, {
     bool discount = false,
     bool strong = false,
   }) {
     final style = strong
         ? StylesManager.styleBold16(context)
         : StylesManager.styleRegular14(context);
-    final amount = value == null ? '-' : _format(value);
-    final prefix = discount && value != null && !value.isNegative ? '-' : '';
+    final amount = _format(value);
+    final prefix = discount && !value.isNegative ? '-' : '';
     return Row(
       children: [
         Expanded(child: Text(label, style: style)),

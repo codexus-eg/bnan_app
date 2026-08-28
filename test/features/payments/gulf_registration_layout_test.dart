@@ -63,11 +63,13 @@ void main() {
     expect(find.text(S.current.applePay), findsNothing);
     expect(find.text(S.current.tabbyTamara), findsOneWidget);
     expect(find.text(S.current.paymob), findsOneWidget);
-    expect(find.text(S.current.payWithTamara), findsOneWidget);
+    expect(find.text(S.current.renewalConfirmPayment), findsOneWidget);
+    expect(find.text(S.current.payWithTamara), findsNothing);
     await tester.tap(find.text(S.current.paymob));
     await tester.pump();
     expect(register.selectedProvider, GulfPaymentProvider.paymob);
-    expect(find.text(S.current.confirmRequest), findsOneWidget);
+    expect(find.text(S.current.renewalConfirmPayment), findsOneWidget);
+    expect(find.text(S.current.confirmRequest), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

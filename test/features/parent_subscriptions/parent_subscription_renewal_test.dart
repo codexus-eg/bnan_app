@@ -21,6 +21,7 @@ import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_paymen
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/parent_subscriptions/presentation/views/parent_subscription_renewal_view.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/renewal_review_steps.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -457,6 +458,38 @@ void main() {
       await cubit.close();
     },
   );
+
+  testWidgets('Gulf renewal review exposes discount and fixed payment CTA', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final cubit = _ready(_Repo(), mode: 'gulf');
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (_, __) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: cubit),
+              BlocProvider(
+                create: (_) => GetPackagesCubit(_UnusedPackagesRepo()),
+              ),
+            ],
+            child: const ParentSubscriptionRenewalView(),
+          ),
+        ),
+      ],
+    );
+    await tester.pumpWidget(_app(router));
+    await tester.pump();
+
+    expect(find.byType(RenewalDiscountStep), findsOneWidget);
+    expect(find.text(S.current.renewalConfirmPayment), findsOneWidget);
+    expect(find.text(S.current.paymob), findsOneWidget);
+    await cubit.close();
+  });
 
   test('Gulf renewal without checkout fails without pending review', () async {
     final repo = _Repo()..gulfCheckoutUrl = null;

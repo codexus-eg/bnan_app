@@ -1287,6 +1287,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
         "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
             "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."),
+        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("اسم صاحب الحساب"),
         "payrollAccountNumber":
@@ -1888,7 +1889,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "supportBadge": MessageLookupByLibrary.simpleMessage("دعم"),
         "tabbyTamara":
             MessageLookupByLibrary.simpleMessage("قسم فاتورتك مع تمارا"),
-        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
         "taughtOnlineBefore":
             MessageLookupByLibrary.simpleMessage("هل سبق لك التدريس أونلاين؟"),
         "taughtSubjects":
