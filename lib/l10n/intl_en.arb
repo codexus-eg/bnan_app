@@ -10,7 +10,6 @@
     "errorValidation": "Please check the entered data and try again.",
     "errorUnauthorized": "Session expired.",
     "searchForStudent": "Search for a student",
-    
     "noStudentWithThisName": "No student found with this name",
     "studentAssignmentNotApproved": "This student cannot be assigned because the account has not been approved yet",
     "studentAssignmentNoClassrooms": "No classrooms are available for this student",
@@ -168,7 +167,7 @@
     "applePay": "Apple Pay",
     "creditCard": "Credit Card",
     "tabbyTamara": "Split your bill with Tamara",
-    "paymob": "Paymob",
+    "paymob": "Bank Card",
     "goToPayment": "Proceed to Payment",
     "payWithTamara": "Pay with Tamara",
     "@packageCalculation": {
@@ -1186,21 +1185,97 @@
     "discountPreviewFailed": "Unable to check the discount code",
     "bonusPoints": "Bonus Points",
     "invalidEvaluationBonus": "Bonus points must be from 0 to 5",
-    "name": "Name", "date": "Date", "back": "Back",
-    "teacherPayrolls": "Teacher Payrolls", "payrollUnprepared": "Unprepared", "payrollDraft": "Draft", "payrollPaid": "Paid", "payrollCancelled": "Cancelled",
-    "payrollFilters": "Payroll filters", "payrollFromDate": "From date", "payrollToDate": "To date", "payrollStatus": "Status", "payrollAllStatuses": "All statuses", "payrollAllTeachers": "All teachers", "payrollApplyFilters": "Apply filters", "payrollResetFilters": "Reset filters",
-    "payrollNoMatchingTeachers": "No teachers match the selected period or filters", "payrollGulfWork": "Gulf", "payrollEgyptianWork": "Egyptian", "payrollCurriculumsCount": "Curriculums",
-    "payrollExcludedSessions": "{count} session(s) were excluded because their duration data is incomplete", "@payrollExcludedSessions": {"placeholders": {"count": {}}},
-    "payrollCreate": "Create payroll", "payrollContinueDraft": "Continue draft", "payrollViewDetails": "View details", "payrollTeacherDetails": "Teacher and period", "payrollPeriod": "Period",
-    "payrollSystem": "System", "payrollGulf": "Gulf", "payrollEgyptian": "Egyptian", "payrollDuration": "Duration", "payrollDurationMinutes": "Duration in minutes", "payrollSessionsCount": "Sessions",
-    "payrollHourlyRate": "Hourly rate", "payrollSessionRate": "Session rate", "payrollAmount": "Amount", "payrollReviewSessions": "Review sessions", "payrollInvalidAmount": "Enter a valid non-negative amount",
-    "payrollAdjustments": "Bonus and deductions", "payrollBonus": "Bonus", "payrollDeduction": "Deduction", "payrollAdjustmentNote": "Adjustment reason", "payrollTotal": "Total", "payrollNetTotal": "Net total", "payrollNegativeTotal": "Payroll total cannot be negative", "payrollNoWork": "No eligible work exists for this teacher in the selected period", "payrollSaveDraft": "Save as draft",
-    "payrollPayoutDetails": "Payout details", "payrollNoPayoutProfile": "No payout details. Add them before recording payment.", "payrollAddPayoutProfile": "Add payout details", "payrollEditPayoutProfile": "Edit payout details", "payrollPayoutMethod": "Payout method",
-    "payrollInstapay": "InstaPay", "payrollWallet": "Electronic wallet", "payrollBankAccount": "Bank account", "payrollAccountHolder": "Account holder", "payrollInstapayAddress": "InstaPay address", "payrollWalletProvider": "Wallet provider", "payrollWalletPhone": "Wallet phone", "payrollBankName": "Bank name", "payrollAccountNumber": "Account number", "payrollIban": "IBAN", "payrollBankDestinationRequired": "Enter an account number or IBAN",
-    "payrollConfirmPayment": "Confirm payment", "payrollPaidAt": "Payment date", "payrollTransactionReference": "Transaction reference", "payrollTransferReceipt": "Transfer receipt", "payrollChooseReceipt": "Choose receipt image", "payrollRemoveReceipt": "Remove receipt", "payrollReceiptRequired": "Transfer receipt is required", "payrollReceiptTooLarge": "The receipt must not exceed 5 MB", "payrollReceiptInvalidType": "Use a PNG, JPG, JPEG, or WebP image", "payrollReceiptMissing": "The selected file is unavailable",
-    "payrollPaymentConfirmationTitle": "Confirm payroll payment?", "payrollPaymentConfirmationBody": "{total} {currency} will be recorded as paid. The payroll cannot be edited afterward.", "@payrollPaymentConfirmationBody": {"placeholders": {"total": {}, "currency": {}}},
-    "payrollPaymentDetails": "Payment details", "payrollSessionDetails": "Session details", "payrollWorkSummary": "Work summary", "payrollIncluded": "Included",
-    "payrollCurrentPeriod": "Current period", "payrollFilterAction": "Filter payrolls",
+    "name": "Name",
+    "date": "Date",
+    "back": "Back",
+    "teacherPayrolls": "Teacher Payrolls",
+    "payrollUnprepared": "Unprepared",
+    "payrollDraft": "Draft",
+    "payrollPaid": "Paid",
+    "payrollCancelled": "Cancelled",
+    "payrollFilters": "Payroll filters",
+    "payrollFromDate": "From date",
+    "payrollToDate": "To date",
+    "payrollStatus": "Status",
+    "payrollAllStatuses": "All statuses",
+    "payrollAllTeachers": "All teachers",
+    "payrollApplyFilters": "Apply filters",
+    "payrollResetFilters": "Reset filters",
+    "payrollNoMatchingTeachers": "No teachers match the selected period or filters",
+    "payrollGulfWork": "Gulf",
+    "payrollEgyptianWork": "Egyptian",
+    "payrollCurriculumsCount": "Curriculums",
+    "payrollExcludedSessions": "{count} session(s) were excluded because their duration data is incomplete",
+    "@payrollExcludedSessions": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "payrollCreate": "Create payroll",
+    "payrollContinueDraft": "Continue draft",
+    "payrollViewDetails": "View details",
+    "payrollTeacherDetails": "Teacher and period",
+    "payrollPeriod": "Period",
+    "payrollSystem": "System",
+    "payrollGulf": "Gulf",
+    "payrollEgyptian": "Egyptian",
+    "payrollDuration": "Duration",
+    "payrollDurationMinutes": "Duration in minutes",
+    "payrollSessionsCount": "Sessions",
+    "payrollHourlyRate": "Hourly rate",
+    "payrollSessionRate": "Session rate",
+    "payrollAmount": "Amount",
+    "payrollReviewSessions": "Review sessions",
+    "payrollInvalidAmount": "Enter a valid non-negative amount",
+    "payrollAdjustments": "Bonus and deductions",
+    "payrollBonus": "Bonus",
+    "payrollDeduction": "Deduction",
+    "payrollAdjustmentNote": "Adjustment reason",
+    "payrollTotal": "Total",
+    "payrollNetTotal": "Net total",
+    "payrollNegativeTotal": "Payroll total cannot be negative",
+    "payrollNoWork": "No eligible work exists for this teacher in the selected period",
+    "payrollSaveDraft": "Save as draft",
+    "payrollPayoutDetails": "Payout details",
+    "payrollNoPayoutProfile": "No payout details. Add them before recording payment.",
+    "payrollAddPayoutProfile": "Add payout details",
+    "payrollEditPayoutProfile": "Edit payout details",
+    "payrollPayoutMethod": "Payout method",
+    "payrollInstapay": "InstaPay",
+    "payrollWallet": "Electronic wallet",
+    "payrollBankAccount": "Bank account",
+    "payrollAccountHolder": "Account holder",
+    "payrollInstapayAddress": "InstaPay address",
+    "payrollWalletProvider": "Wallet provider",
+    "payrollWalletPhone": "Wallet phone",
+    "payrollBankName": "Bank name",
+    "payrollAccountNumber": "Account number",
+    "payrollIban": "IBAN",
+    "payrollBankDestinationRequired": "Enter an account number or IBAN",
+    "payrollConfirmPayment": "Confirm payment",
+    "payrollPaidAt": "Payment date",
+    "payrollTransactionReference": "Transaction reference",
+    "payrollTransferReceipt": "Transfer receipt",
+    "payrollChooseReceipt": "Choose receipt image",
+    "payrollRemoveReceipt": "Remove receipt",
+    "payrollReceiptRequired": "Transfer receipt is required",
+    "payrollReceiptTooLarge": "The receipt must not exceed 5 MB",
+    "payrollReceiptInvalidType": "Use a PNG, JPG, JPEG, or WebP image",
+    "payrollReceiptMissing": "The selected file is unavailable",
+    "payrollPaymentConfirmationTitle": "Confirm payroll payment?",
+    "payrollPaymentConfirmationBody": "{total} {currency} will be recorded as paid. The payroll cannot be edited afterward.",
+    "@payrollPaymentConfirmationBody": {
+        "placeholders": {
+            "total": {},
+            "currency": {}
+        }
+    },
+    "payrollPaymentDetails": "Payment details",
+    "payrollSessionDetails": "Session details",
+    "payrollWorkSummary": "Work summary",
+    "payrollIncluded": "Included",
+    "payrollCurrentPeriod": "Current period",
+    "payrollFilterAction": "Filter payrolls",
     "parentAddChild": "Add child",
     "parentAddChildTitle": "Add a new child",
     "parentChildAccountStep": "Child details",
@@ -1281,12 +1356,21 @@
     "teacherPayrollPreparingAmount": "Preparing",
     "teacherPayrollPaidAmount": "Paid",
     "teacherPayrollReportTitle": "Payroll {month} {year}",
-    "@teacherPayrollReportTitle": {"placeholders": {"month": {}, "year": {}}},
+    "@teacherPayrollReportTitle": {
+        "placeholders": {
+            "month": {},
+            "year": {}
+        }
+    },
     "subjectRequestChooseSubject": "Choose subject",
     "subjectRequestChoosePackage": "Choose package",
     "subjectRequestNoPackages": "No packages are currently available for a subject request",
     "subjectRequestNotesCounter": "{count} / 2000",
-    "@subjectRequestNotesCounter": {"placeholders": {"count": {}}},
+    "@subjectRequestNotesCounter": {
+        "placeholders": {
+            "count": {}
+        }
+    },
     "subjectRequestAdminReview": "Awaiting admin review",
     "subjectRequestSearchingTeacher": "Searching for a teacher",
     "subjectRequestAssigned": "Teacher assigned",
@@ -1314,7 +1398,11 @@
     "savingCertificate": "Saving certificate...",
     "tryAgain": "Try again",
     "savedInLocation": "Saved in: {location}",
-    "@savedInLocation": {"placeholders": {"location": {}}},
+    "@savedInLocation": {
+        "placeholders": {
+            "location": {}
+        }
+    },
     "openAction": "Open",
     "notificationSettings": "Notification settings",
     "markAllNotificationsRead": "Mark all as read",
@@ -1322,10 +1410,22 @@
     "notificationsEmptySubtitle": "We will let you know when there is an update",
     "notificationNow": "Now",
     "notificationMinutesAgo": "{count} minutes ago",
-    "@notificationMinutesAgo": {"placeholders": {"count": {"type": "int"}}},
+    "@notificationMinutesAgo": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "notificationHourAgo": "An hour ago",
     "notificationHoursAgo": "{count} hours ago",
-    "@notificationHoursAgo": {"placeholders": {"count": {"type": "int"}}},
+    "@notificationHoursAgo": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "notificationCategories": "Notification categories",
     "notificationChannels": "Notification channels",
     "notificationChat": "Chats",

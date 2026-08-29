@@ -1299,7 +1299,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
         "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
             "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."),
-        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
+        "paymob": MessageLookupByLibrary.simpleMessage("بطاقة بنكية"),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("اسم صاحب الحساب"),
         "payrollAccountNumber":

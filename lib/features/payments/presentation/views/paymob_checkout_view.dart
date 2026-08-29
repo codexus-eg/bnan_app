@@ -23,6 +23,7 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
   late final WebViewController _controller;
   bool _loading = true;
   bool _failed = false;
+  bool _closing = false;
 
   @override
   void initState() {
@@ -31,8 +32,7 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onNavigationRequest: (request) =>
-              PaymobNavigationPolicy.decide(request.url),
+          onNavigationRequest: _onNavigationRequest,
           onPageStarted: (_) => _update(loading: true, failed: false),
           onPageFinished: (_) => _update(loading: false, failed: false),
           onWebResourceError: (error) {
@@ -62,7 +62,21 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
     });
   }
 
-  void _close() => Navigator.pop(context, PaymobCheckoutOutcome.closed);
+  Future<NavigationDecision> _onNavigationRequest(
+    NavigationRequest request,
+  ) async {
+    if (PaymobNavigationPolicy.isSuccessReturnUrl(request.url)) {
+      _close();
+      return NavigationDecision.prevent;
+    }
+    return PaymobNavigationPolicy.decide(request.url);
+  }
+
+  void _close() {
+    if (_closing || !mounted) return;
+    _closing = true;
+    Navigator.pop(context, PaymobCheckoutOutcome.closed);
+  }
 
   @override
   Widget build(BuildContext context) => PopScope(

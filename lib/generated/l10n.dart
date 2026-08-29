@@ -1380,10 +1380,10 @@ class S {
     );
   }
 
-  /// `Paymob`
+  /// `Bank Card`
   String get paymob {
     return Intl.message(
-      'Paymob',
+      'Bank Card',
       name: 'paymob',
       desc: '',
       args: [],

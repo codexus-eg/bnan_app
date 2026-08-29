@@ -1,9 +1,18 @@
+import 'package:bnan_app/core/network/end_points.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 typedef ExternalSchemeOpener = Future<bool> Function(Uri uri);
 
 abstract final class PaymobNavigationPolicy {
+  static bool isSuccessReturnUrl(String url) {
+    final actual = Uri.tryParse(url);
+    final expected = Uri.parse('${EndPoints.baseUrl}/payment/paymob/success');
+    if (actual == null || !actual.hasAuthority) return false;
+    return actual.host.toLowerCase() == expected.host.toLowerCase() &&
+        _normalizedPath(actual) == _normalizedPath(expected);
+  }
+
   static Future<NavigationDecision> decide(
     String url, {
     ExternalSchemeOpener? openExternal,
@@ -23,4 +32,11 @@ abstract final class PaymobNavigationPolicy {
 
   static Future<bool> _openExternal(Uri uri) =>
       launchUrl(uri, mode: LaunchMode.externalApplication);
+
+  static String _normalizedPath(Uri uri) {
+    final path = uri.path;
+    return path.length > 1 && path.endsWith('/')
+        ? path.substring(0, path.length - 1)
+        : path;
+  }
 }

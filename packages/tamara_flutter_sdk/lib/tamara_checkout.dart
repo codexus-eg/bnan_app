@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'package:tamara_flutter_sdk/tamara_navigation_policy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -64,17 +65,17 @@ class _TamaraCheckoutState extends State<TamaraCheckout> {
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
             String url = request.url;
-            if (url.startsWith(widget.successUrl)) {
+            if (TamaraNavigationPolicy.matches(url, widget.successUrl)) {
               if (widget.onPaymentSuccess != null) {
                 widget.onPaymentSuccess!();
                 return NavigationDecision.prevent;
               }
-            } else if (url.startsWith(widget.failUrl)) {
+            } else if (TamaraNavigationPolicy.matches(url, widget.failUrl)) {
               if (widget.onPaymentFailed != null) {
                 widget.onPaymentFailed!();
                 return NavigationDecision.prevent;
               }
-            } else if (url.startsWith(widget.cancelUrl)) {
+            } else if (TamaraNavigationPolicy.matches(url, widget.cancelUrl)) {
               if (widget.onPaymentCanceled != null) {
                 widget.onPaymentCanceled!();
                 return NavigationDecision.prevent;

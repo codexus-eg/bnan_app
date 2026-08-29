@@ -1348,7 +1348,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
         "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
             "Payment status is being verified. This may take some time."),
-        "paymob": MessageLookupByLibrary.simpleMessage("Paymob"),
+        "paymob": MessageLookupByLibrary.simpleMessage("Bank Card"),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("Account holder"),
         "payrollAccountNumber":
