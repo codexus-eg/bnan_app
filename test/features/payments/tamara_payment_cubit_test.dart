@@ -253,6 +253,27 @@ void main() {
     await cubit.close();
   });
 
+  test('changing payment input clears the stale backend amount', () async {
+    final repo = _PaymentRepo()
+      ..checkoutResponse = TamaraCheckoutResponse.fromJson({
+        'data': {
+          'paymentId': 'payment-1',
+          'checkoutUrl': _checkoutUrl,
+          'status': 'pending',
+          'finalAmount': 375,
+          'currency': 'SAR',
+        },
+      });
+    final cubit = _cubit(repo, store);
+    await cubit.checkout(_request);
+
+    cubit.invalidateAmountSummary();
+
+    expect(cubit.paymentSummary, isNull);
+    expect(cubit.state, isA<TamaraPaymentInitial>());
+    await cubit.close();
+  });
+
   for (final status in [
     PaymentStatus.failed,
     PaymentStatus.cancelled,
@@ -325,6 +346,16 @@ void main() {
     expect(repo.statusCalls, 1);
     expect(cubit.state, isA<TamaraPaymentPending>());
     expect(cubit.isAwaitingVerification, isFalse);
+    await cubit.checkout(_requestWith(provider: GulfPaymentProvider.paymob));
+    expect(repo.keys, ['key-1']);
+    expect(
+      cubit.state,
+      isA<TamaraPaymentPending>().having(
+        (state) => state.shouldOpenCheckout,
+        'shouldOpenCheckout',
+        isTrue,
+      ),
+    );
     await cubit.close();
   });
 
@@ -607,7 +638,11 @@ void main() {
 
   test('Tamara cancel ends loading and reopens the saved checkout', () async {
     final repo = _PaymentRepo();
-    final cubit = _cubit(repo, store);
+    final cubit = _cubit(
+      repo,
+      store,
+      pollInterval: const Duration(milliseconds: 2),
+    );
     await cubit.checkout(_request);
     await _markBrowserOpened(cubit);
 
@@ -616,6 +651,8 @@ void main() {
     expect(cubit.state, isA<TamaraPaymentPending>());
     expect(cubit.isAwaitingVerification, isFalse);
     expect(repo.reconcileCalls, 1);
+    expect(repo.statusCalls, 1);
+    await Future<void>.delayed(const Duration(milliseconds: 12));
     expect(repo.statusCalls, 1);
     await cubit.checkout(_request);
     expect(repo.keys, hasLength(1));
@@ -666,6 +703,73 @@ void main() {
       ),
     );
     await cubit.close();
+  });
+
+  test('Paymob close checks status once without polling', () async {
+    final repo = _PaymentRepo();
+    final cubit = _cubit(
+      repo,
+      store,
+      pollInterval: const Duration(milliseconds: 2),
+    );
+    await cubit.checkout(_requestWith(provider: GulfPaymentProvider.paymob));
+    await _markBrowserOpened(cubit);
+
+    await cubit.verifyCheckoutClosedOnce();
+    await cubit.onForeground();
+    await Future<void>.delayed(const Duration(milliseconds: 12));
+
+    expect(repo.reconcileCalls, 0);
+    expect(repo.statusCalls, 1);
+    expect(cubit.state, isA<TamaraPaymentPending>());
+    expect(cubit.isAwaitingVerification, isFalse);
+    await cubit.close();
+  });
+
+  test('old poller cannot reschedule after checkout close', () async {
+    final repo = _PaymentRepo();
+    final cubit = _cubit(
+      repo,
+      store,
+      pollInterval: const Duration(milliseconds: 2),
+    );
+    await cubit.checkout(_requestWith(provider: GulfPaymentProvider.paymob));
+    await _markBrowserOpened(cubit);
+    await cubit.onForeground();
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+
+    await cubit.verifyCheckoutClosedOnce();
+    final callsAfterClose = repo.statusCalls;
+    await Future<void>.delayed(const Duration(milliseconds: 12));
+
+    expect(repo.statusCalls, callsAfterClose);
+    expect(cubit.isAwaitingVerification, isFalse);
+    await cubit.close();
+  });
+
+  test('explicitly closed Paymob draft does not poll after restart', () async {
+    final firstRepo = _PaymentRepo();
+    final first = _cubit(firstRepo, store);
+    await first.checkout(_requestWith(provider: GulfPaymentProvider.paymob));
+    await _markBrowserOpened(first);
+    await first.verifyCheckoutClosedOnce();
+    expect(firstRepo.statusCalls, 1);
+    expect(store.read()?.checkoutExplicitlyClosed, isTrue);
+    await first.close();
+
+    final restoredRepo = _PaymentRepo();
+    final restored = _cubit(
+      restoredRepo,
+      store,
+      pollInterval: const Duration(milliseconds: 2),
+    );
+    await restored.restore();
+    await restored.onForeground();
+    await Future<void>.delayed(const Duration(milliseconds: 12));
+
+    expect(restoredRepo.statusCalls, 0);
+    expect(restored.isAwaitingVerification, isFalse);
+    await restored.close();
   });
 
   test('Tamara return timeout leaves a retryable stable state', () async {

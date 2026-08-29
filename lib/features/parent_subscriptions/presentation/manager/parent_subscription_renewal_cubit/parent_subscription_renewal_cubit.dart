@@ -17,6 +17,8 @@ import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_paymen
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_state.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_requests.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -154,6 +156,19 @@ class ParentSubscriptionRenewalCubit
     emit(state.copyWith(selectedProvider: provider, errorMessage: null));
   }
 
+  DiscountPreviewRequest? buildDiscountPreviewRequest() {
+    final packageId = state.package?.id?.trim();
+    if (packageId == null || packageId.isEmpty) return null;
+    return DiscountPreviewRequests.renewal({
+      'studentId': state.args.studentId,
+      'subscriptionId': state.args.subscription.id,
+      'packageId': packageId,
+      if (state.subjectId?.trim().isNotEmpty == true)
+        'subjectId': state.subjectId!.trim(),
+      'discountCode': state.discountCode.trim(),
+    });
+  }
+
   bool nextStep() {
     final error = _validation();
     if (error != null) {
@@ -281,12 +296,16 @@ class ParentSubscriptionRenewalCubit
     );
     try {
       RenewalStatusResponse? response;
-      final result =
-          await (state.selectedProvider.supportsReconcile
-                  ? repo.gulfReconcile(id)
-                  : repo.gulfStatus(id))
-              .timeout(checkoutCloseTimeout);
-      result.fold((_) {}, (value) => response = value);
+      if (state.selectedProvider.supportsReconcile) {
+        final reconciled = await repo
+            .gulfReconcile(id)
+            .timeout(checkoutCloseTimeout);
+        reconciled.fold((_) {}, (value) => response = value);
+      }
+      if (response?.status.isTerminal != true) {
+        final status = await repo.gulfStatus(id).timeout(checkoutCloseTimeout);
+        status.fold((_) {}, (value) => response = value);
+      }
       if (!isClosed && state.paymentId == id && response != null) {
         await _handle(response!);
       }
@@ -304,7 +323,6 @@ class ParentSubscriptionRenewalCubit
           state.phase != ParentRenewalPhase.completed &&
           state.status?.isTerminal != true) {
         emit(state.copyWith(phase: ParentRenewalPhase.paymentStatusUnknown));
-        unawaited(_pollGulf(id));
       }
     }
   }
@@ -458,6 +476,7 @@ class ParentSubscriptionRenewalCubit
         line2: TamaraDefaultAddress.line2,
       ),
       provider: state.selectedProvider,
+      discountCode: state.discountCode,
     );
     final key = _attempt.keyFor(request.toJson());
     await store?.save(

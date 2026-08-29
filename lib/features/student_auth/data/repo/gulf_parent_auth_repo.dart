@@ -56,7 +56,9 @@ class GulfParentAuthRepoImpl implements GulfParentAuthRepo {
     final role = response.user.role.trim().toLowerCase();
     final status = response.user.status.trim().toLowerCase();
     if (role != 'parent') {
-      return Left(Failure(message: 'Invalid parent account'));
+      return Left(
+        Failure(message: 'Invalid parent account', code: 'INVALID_PARENT_ROLE'),
+      );
     }
     if (!response.hasToken || status != 'active') {
       return Left(

@@ -848,7 +848,7 @@ void main() {
     expect(cubit.state.isBusy, isFalse);
     expect(repo.renewCalls, 1);
     expect(repo.gulfReconcileCalls, 1);
-    expect(repo.gulfStatusCalls, greaterThanOrEqualTo(1));
+    expect(repo.gulfStatusCalls, 1);
     await cubit.close();
   });
 

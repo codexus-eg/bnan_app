@@ -157,6 +157,7 @@ class _State extends State<ParentSubscriptionRenewalView>
       return;
     }
     if (result.tamaraOutcome == null) {
+      await cubit.checkoutClosed();
       return;
     }
     if (result.tamaraOutcome == TamaraSdkOutcome.success) {

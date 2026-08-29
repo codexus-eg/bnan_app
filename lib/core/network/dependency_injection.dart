@@ -56,6 +56,9 @@ import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/parent_subscriptions/data/models/parent_subscription_renewal_args.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo_impl.dart';
+import 'package:bnan_app/features/payments/data/repo/discount_preview_repo.dart';
+import 'package:bnan_app/features/payments/data/repo/discount_preview_repo_impl.dart';
+import 'package:bnan_app/features/payments/presentation/manager/discount_preview_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_classroom_assignment/data/repo/student_classroom_assignment_repo.dart';
@@ -111,6 +114,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<TamaraPaymentRepo>(
     () => TamaraPaymentRepoImpl(getIt<Dio>()),
+  );
+  getIt.registerLazySingleton<DiscountPreviewRepo>(
+    () => DiscountPreviewRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<GulfParentAuthRepo>(
     () => GulfParentAuthRepoImpl(getIt<ApiConsumer>()),
@@ -298,7 +304,11 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<AuthRepo>()));
 
   getIt.registerFactory<RegisterCubit>(
-    () => RegisterCubit(getIt<AuthRepo>(), getIt<GulfParentAuthRepo>()),
+    () => RegisterCubit(
+      getIt<AuthRepo>(),
+      getIt<GulfParentAuthRepo>(),
+      getIt<ParentAuthRepo>(),
+    ),
   );
   getIt.registerLazySingleton<TamaraPaymentCubit>(
     () => TamaraPaymentCubit(
@@ -306,6 +316,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
       authRepo: getIt<AuthRepo>(),
       store: getIt<PaymentDraftStore>(),
     ),
+  );
+  getIt.registerFactory<DiscountPreviewCubit>(
+    () => DiscountPreviewCubit(getIt<DiscountPreviewRepo>()),
   );
 
   getIt.registerFactory<ParentRegisterCubit>(

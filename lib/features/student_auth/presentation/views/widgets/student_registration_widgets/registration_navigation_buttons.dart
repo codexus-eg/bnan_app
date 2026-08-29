@@ -155,7 +155,10 @@ class RegistrationNavigationButtons extends StatelessWidget {
         await cubit.verifyCheckoutClosedOnce();
         return;
       }
-      if (result.tamaraOutcome == null) return;
+      if (result.tamaraOutcome == null) {
+        await cubit.verifyCheckoutClosedOnce();
+        return;
+      }
       if (result.tamaraOutcome == TamaraSdkOutcome.success) {
         await cubit.verifyCheckoutClosed();
       } else {

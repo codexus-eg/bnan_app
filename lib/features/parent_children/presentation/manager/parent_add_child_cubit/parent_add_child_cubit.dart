@@ -17,6 +17,8 @@ import 'package:bnan_app/features/parent_children/presentation/manager/parent_ad
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_error_mapper.dart';
 import 'package:bnan_app/features/parent_children/presentation/policies/parent_package_policy.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_requests.dart';
 import 'package:bnan_app/features/payments/data/idempotency_key_generator.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
@@ -298,7 +300,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       ),
     );
     try {
-      await verifyPaymentSuccess().timeout(checkoutReturnTimeout);
+      await checkPaymentStatus().timeout(checkoutReturnTimeout);
     } on TimeoutException {
       // The existing checkout remains available after a slow status check.
     } catch (_) {
@@ -361,6 +363,10 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     subjectIds: state.selectedSubjectIds,
   );
 
+  DiscountPreviewRequest? buildDiscountPreviewRequest() => state.package == null
+      ? null
+      : DiscountPreviewRequests.addChild(_gulfRequest().toJson());
+
   Future<void> _submitEgyptian() async {
     emit(state.copyWith(phase: ParentAddChildPhase.submitting));
     _log('state emitted: submitting');
@@ -405,29 +411,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       ),
     );
     _log('state emitted: submitting');
-    final request = ParentAddChildGulfRequest(
-      student: _student(),
-      curriculumId: state.curriculum!.id,
-      packageId: state.package!.id!,
-      items: state.isSingleSubject
-          ? state.selectedSubjectIds
-                .map(
-                  (subjectId) => RegistrationItem(
-                    subjectId: subjectId,
-                    packageId: state.package!.id!,
-                  ),
-                )
-                .toList(growable: false)
-          : const [],
-      discountCode: state.discountCode,
-      paymentAddress: const ParentPaymentAddress(
-        city: TamaraDefaultAddress.city,
-        region: TamaraDefaultAddress.region,
-        line1: TamaraDefaultAddress.line1,
-        line2: TamaraDefaultAddress.line2,
-      ),
-      provider: state.selectedProvider,
-    );
+    final request = _gulfRequest();
     final key = await _beginAttempt(request);
     if (isClosed) return;
     _log('idempotency attempt prepared');
@@ -470,6 +454,30 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
       },
     );
   }
+
+  ParentAddChildGulfRequest _gulfRequest() => ParentAddChildGulfRequest(
+    student: _student(),
+    curriculumId: state.curriculum!.id,
+    packageId: state.package!.id!,
+    items: state.isSingleSubject
+        ? state.selectedSubjectIds
+              .map(
+                (subjectId) => RegistrationItem(
+                  subjectId: subjectId,
+                  packageId: state.package!.id!,
+                ),
+              )
+              .toList(growable: false)
+        : const [],
+    discountCode: state.discountCode,
+    paymentAddress: const ParentPaymentAddress(
+      city: TamaraDefaultAddress.city,
+      region: TamaraDefaultAddress.region,
+      line1: TamaraDefaultAddress.line1,
+      line2: TamaraDefaultAddress.line2,
+    ),
+    provider: state.selectedProvider,
+  );
 
   Future<void> _poll(String paymentId) async {
     if (_pollingPaymentId != null) return;

@@ -25,7 +25,14 @@ class ParentAuthRepoImpl implements ParentAuthRepo {
       final result = ParentRegisterResponseModel.fromJson(response);
       return Right(result);
     } on AppException catch (error) {
-      return Left(Failure(message: error.message));
+      return Left(
+        Failure(
+          message: error.message,
+          responseReceived: error.responseReceived,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
     } catch (_) {
       return Left(Failure(message: S.current.unexpectedError));
     }

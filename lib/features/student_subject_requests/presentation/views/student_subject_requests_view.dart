@@ -133,6 +133,7 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
         return;
       }
       if (result.tamaraOutcome == null) {
+        await cubit.checkoutClosed();
         return;
       }
       if (result.tamaraOutcome == TamaraSdkOutcome.success) {

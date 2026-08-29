@@ -3,9 +3,12 @@ import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_requests.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_methods_options.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_field.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_summary.dart';
 import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_payloads.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
@@ -79,8 +82,8 @@ class _StudentSubjectRequestsBodyState
           ),
           if (registrationMode == RegistrationMode.gulf) ...[
             const SizedBox(height: 16),
-            CustomTextField(
-              label: S.of(context).discountCode,
+            DiscountPreviewField(
+              request: () => _discountPreviewRequest(state),
               onChanged: (value) {
                 discountCode = value;
                 context
@@ -88,19 +91,8 @@ class _StudentSubjectRequestsBodyState
                     .invalidateAmountSummary();
               },
             ),
-            BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
-              buildWhen: (previous, current) =>
-                  previous.payment?.paymentSummary !=
-                  current.payment?.paymentSummary,
-              builder: (context, payment) {
-                final summary = payment.payment?.paymentSummary;
-                return summary?.hasDiscount == true
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: PaymentDiscountSummary(summary: summary!),
-                      )
-                    : const SizedBox.shrink();
-              },
+            DiscountPreviewSummary(
+              request: () => _discountPreviewRequest(state),
             ),
             const SizedBox(height: 16),
             BlocBuilder<SubjectRequestPaymentCubit, SubjectRequestPaymentState>(
@@ -161,6 +153,19 @@ class _StudentSubjectRequestsBodyState
       if (item.id == state.selectedPackageId) return item.name;
     }
     return null;
+  }
+
+  DiscountPreviewRequest? _discountPreviewRequest(
+    StudentSubjectRequestsState state,
+  ) {
+    final subjectId = state.selectedSubjectId;
+    final packageId = state.selectedPackageId;
+    if (subjectId == null || packageId == null) return null;
+    return DiscountPreviewRequests.subject({
+      'subjectId': subjectId,
+      'packageId': packageId,
+      'discountCode': discountCode.trim(),
+    });
   }
 
   Future<void> _selectPackage(StudentSubjectRequestsState state) async {

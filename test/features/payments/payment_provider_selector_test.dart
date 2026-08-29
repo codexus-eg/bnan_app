@@ -34,6 +34,12 @@ void main() {
     );
     expect(provider, GulfPaymentProvider.paymob);
     expect(semantics.properties.selected, isTrue);
+    expect(find.byIcon(Icons.check_circle), findsOneWidget);
+    expect(find.byIcon(Icons.radio_button_unchecked), findsOneWidget);
+
+    await tester.tap(find.text(S.current.tabbyTamara));
+    await tester.pump();
+    expect(provider, GulfPaymentProvider.tamara);
   });
 }
 

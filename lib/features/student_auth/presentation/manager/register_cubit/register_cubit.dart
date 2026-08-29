@@ -1,5 +1,10 @@
 import 'package:bnan_app/core/constants/tamara_default_address.dart';
+import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/parent_auth/data/models/parent_register_request_model.dart';
+import 'package:bnan_app/features/parent_auth/data/repo/parent_auth_repo.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_requests.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
@@ -10,15 +15,17 @@ import 'package:bnan_app/features/student_auth/data/debug/gulf_registration_diag
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  RegisterCubit(this.authRepo, this.gulfParentAuthRepo)
+  RegisterCubit(this.authRepo, this.gulfParentAuthRepo, [this.parentAuthRepo])
     : super(const RegisterInitial());
 
   final AuthRepo authRepo;
   final GulfParentAuthRepo gulfParentAuthRepo;
+  final ParentAuthRepo? parentAuthRepo;
 
   static RegisterCubit get(context) => BlocProvider.of(context);
 
@@ -39,8 +46,11 @@ class RegisterCubit extends Cubit<RegisterState> {
   final parentFormKey = GlobalKey<FormState>();
   final studentFormKey = GlobalKey<FormState>();
 
+  final parentNameController = TextEditingController();
   final parentEmailController = TextEditingController();
   final parentPasswordController = TextEditingController();
+  final parentPhoneController = TextEditingController();
+  final parentWhatsappController = TextEditingController();
   final studentPasswordController = TextEditingController();
   final studentNameController = TextEditingController();
   final studentEmailController = TextEditingController();
@@ -63,6 +73,23 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   bool get isGulf => registrationMode == 'gulf';
+  bool get isItemizedCheckout => isGulf && isSingleSubjectPackage;
+
+  int get checkoutItemCount => isItemizedCheckout
+      ? selectedSubjectIds
+            .map((id) => id.trim())
+            .where((id) => id.isNotEmpty)
+            .toSet()
+            .length
+      : 1;
+
+  num get checkoutOriginalAmount {
+    final unitPrice = num.tryParse(packagePrice.replaceAll(',', '')) ?? 0;
+    return unitPrice * checkoutItemCount;
+  }
+
+  String formatAmount(num value) =>
+      value % 1 == 0 ? value.toInt().toString() : value.toString();
 
   void selectPaymentProvider(GulfPaymentProvider provider) {
     if (!isGulf || selectedProvider == provider) return;
@@ -195,20 +222,32 @@ class RegisterCubit extends Cubit<RegisterState> {
         ),
       );
       if (isClosed) return;
-      result.fold((failure) {
-        GulfRegistrationDiagnostics.uiFailure(
-          endpoint:
-              GulfRegistrationDiagnostics.lastEndpoint ??
-              'parent-authentication',
-          cubit: 'RegisterCubit',
-          state: 'RegisterFailure',
-          message: failure.message,
-        );
-        if (_isUnverifiedParent(failure.code)) {
+      await result.fold((failure) async {
+        if (_isIncorrectLoginData(failure.code)) {
+          GulfRegistrationDiagnostics.flow('INCORRECT_LOGIN_DATA intercepted');
+          await _registerParentInsideFlow();
+        } else if (_isUnverifiedParent(failure.code)) {
+          GulfRegistrationDiagnostics.flow('verification required');
           emit(ParentVerificationRequired(currentStep: state.currentStep));
-        } else if (_isMissingParent(failure.statusCode, failure.code)) {
-          emit(ParentRegistrationRequired(currentStep: state.currentStep));
+        } else if (_isInvalidParentRole(failure.code)) {
+          emit(
+            RegisterFailure(
+              errorMessage:
+                  S.current.studentRegistrationEmailBelongsToAnotherAccount,
+              currentStep: state.currentStep,
+            ),
+          );
+        } else if (_shouldRegisterParent(failure)) {
+          await _registerParentInsideFlow();
         } else {
+          GulfRegistrationDiagnostics.uiFailure(
+            endpoint:
+                GulfRegistrationDiagnostics.lastEndpoint ??
+                'parent-authentication',
+            cubit: 'RegisterCubit',
+            state: 'RegisterFailure',
+            message: failure.message,
+          );
           emit(
             RegisterFailure(
               errorMessage: failure.message,
@@ -216,7 +255,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             ),
           );
         }
-      }, (_) => emit(const ParentAuthenticated()));
+      }, (_) async => emit(const ParentAuthenticated()));
     } finally {
       _authenticating = false;
     }
@@ -232,6 +271,103 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   bool _isUnverifiedParent(String? code) =>
       code?.trim().toUpperCase() == 'ACCOUNT_NOT_VERIFIED';
+
+  bool _isIncorrectLoginData(String? code) =>
+      code?.trim().toUpperCase() == 'INCORRECT_LOGIN_DATA';
+
+  bool _isInvalidParentRole(String? code) =>
+      code?.trim().toUpperCase() == 'INVALID_PARENT_ROLE';
+
+  bool _shouldRegisterParent(Failure failure) {
+    final code = failure.code?.trim().toUpperCase();
+    const credentialCodes = {
+      'INCORRECT_LOGIN_DATA',
+      'INVALID_CREDENTIALS',
+      'INVALID_LOGIN_DATA',
+      'WRONG_PASSWORD',
+      'UNAUTHORIZED',
+    };
+    final message = failure.message.toString().trim().toLowerCase();
+    const credentialMessages = {
+      'incorrect login',
+      'incorrect email',
+      'invalid credential',
+      'invalid login',
+      'wrong password',
+      'email or password',
+      'بيانات الدخول غير صحيحة',
+      'البريد الإلكتروني أو كلمة المرور',
+      'كلمة المرور غير صحيحة',
+    };
+    return _isMissingParent(failure.statusCode, code) ||
+        failure.statusCode == 401 ||
+        credentialCodes.contains(code) ||
+        credentialMessages.any(message.contains);
+  }
+
+  Future<void> _registerParentInsideFlow() async {
+    final repo = parentAuthRepo;
+    if (repo == null) {
+      emit(
+        RegisterFailure(
+          errorMessage: S.current.errorUnknown,
+          currentStep: state.currentStep,
+        ),
+      );
+      return;
+    }
+    GulfRegistrationDiagnostics.flow('auto parent registration started');
+    final result = await repo.registerParent(
+      ParentRegisterRequestModel(
+        fullName: parentNameController.text,
+        email: parentEmailController.text,
+        password: parentPasswordController.text,
+        phone: parentPhoneController.text,
+        whatsappNumber: parentWhatsappController.text,
+      ),
+    );
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        GulfRegistrationDiagnostics.flow(
+          '/auth/register-parent result: failure',
+        );
+        emit(
+          RegisterFailure(
+            errorMessage: _isEmailAlreadyUsed(failure)
+                ? S.current.studentRegistrationEmailAlreadyRegistered
+                : failure.message,
+            currentStep: state.currentStep,
+          ),
+        );
+      },
+      (_) {
+        GulfRegistrationDiagnostics.flow(
+          '/auth/register-parent result: success',
+        );
+        GulfRegistrationDiagnostics.flow('verification required');
+        emit(ParentVerificationRequired(currentStep: state.currentStep));
+      },
+    );
+  }
+
+  bool _isEmailAlreadyUsed(Failure failure) {
+    final code = failure.code?.trim().toUpperCase();
+    const duplicateCodes = {
+      'EMAIL_ALREADY_EXISTS',
+      'EMAIL_ALREADY_USED',
+      'USER_ALREADY_EXISTS',
+      'ACCOUNT_ALREADY_EXISTS',
+      'DUPLICATE_EMAIL',
+    };
+    final message = failure.message.toString().trim().toLowerCase();
+    return failure.statusCode == 409 ||
+        duplicateCodes.contains(code) ||
+        message.contains('already in use') ||
+        message.contains('already exists') ||
+        message.contains('مستخدم بالفعل') ||
+        message.contains('موجود بالفعل');
+  }
 
   bool _isMissingParent(int? statusCode, String? code) {
     const missingCodes = {
@@ -292,6 +428,13 @@ class RegisterCubit extends Cubit<RegisterState> {
     );
   }
 
+  DiscountPreviewRequest? buildDiscountPreviewRequest() {
+    final checkout = buildTamaraRequest(validateForm: false);
+    return checkout == null
+        ? null
+        : DiscountPreviewRequests.registration(checkout.toJson());
+  }
+
   void previousStep() {
     if (state.currentStep > firstStep) {
       emit(RegisterStepChanged(currentStep: state.currentStep - 1));
@@ -324,8 +467,11 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   @override
   Future<void> close() {
+    parentNameController.dispose();
     parentEmailController.dispose();
     parentPasswordController.dispose();
+    parentPhoneController.dispose();
+    parentWhatsappController.dispose();
     studentPasswordController.dispose();
     studentNameController.dispose();
     studentEmailController.dispose();

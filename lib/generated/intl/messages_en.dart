@@ -227,6 +227,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Apply as Teacher"),
         "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
             "Share your expertise and join our teaching team"),
+        "applyDiscountCode": MessageLookupByLibrary.simpleMessage("Apply"),
         "approveAccountActivation":
             MessageLookupByLibrary.simpleMessage("Approve account activation"),
         "approveRequest":
@@ -566,6 +567,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "End date cannot be before start date"),
         "discountPercentage":
             MessageLookupByLibrary.simpleMessage("Percentage"),
+        "discountPreviewChildrenMismatch": MessageLookupByLibrary.simpleMessage(
+            "This code does not match the number of children"),
+        "discountPreviewExpired": MessageLookupByLibrary.simpleMessage(
+            "This discount code has expired"),
+        "discountPreviewFailed": MessageLookupByLibrary.simpleMessage(
+            "Unable to check the discount code"),
+        "discountPreviewInvalidCode": MessageLookupByLibrary.simpleMessage(
+            "This discount code is invalid"),
+        "discountPreviewInvalidPurchase": MessageLookupByLibrary.simpleMessage(
+            "This discount is not available for this purchase"),
         "discountTitle": MessageLookupByLibrary.simpleMessage("Discount Title"),
         "discountTitleHint":
             MessageLookupByLibrary.simpleMessage("Example: Save 120 SAR"),
@@ -705,7 +716,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("File saved successfully"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "Please fill in all required fields."),
-        "finalAmount": MessageLookupByLibrary.simpleMessage("Total"),
+        "finalAmount":
+            MessageLookupByLibrary.simpleMessage("Total after discount"),
         "finalDelete": MessageLookupByLibrary.simpleMessage("Final Delete"),
         "finalDeleteDescription": MessageLookupByLibrary.simpleMessage(
             "This account will be permanently deleted from the system, including its login account and related profile data. This action cannot be undone."),
@@ -1857,6 +1869,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("القسم المصري"),
         "studentProfileGrade":
             MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
+        "studentRegistrationEmailAlreadyRegistered":
+            MessageLookupByLibrary.simpleMessage(
+                "This email address is already registered. Please check the password or use another email address."),
+        "studentRegistrationEmailBelongsToAnotherAccount":
+            MessageLookupByLibrary.simpleMessage(
+                "This email address is linked to another account. Please use an email address for the parent."),
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("Student Registration Form"),
         "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(

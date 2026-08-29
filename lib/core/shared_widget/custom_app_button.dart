@@ -6,7 +6,7 @@ class CustomAppButton extends StatelessWidget {
   const CustomAppButton({
     super.key,
     required this.text,
-     this.onPressed,
+    this.onPressed,
     this.isLoading = false,
     this.padding = 0,
     this.backgroundColor,
@@ -14,6 +14,7 @@ class CustomAppButton extends StatelessWidget {
     this.style,
     this.borderColor,
     this.height,
+    this.singleLine = false,
   });
 
   final String text;
@@ -25,6 +26,7 @@ class CustomAppButton extends StatelessWidget {
   final Color? textColor;
   final Color? borderColor;
   final double? height;
+  final bool singleLine;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,9 @@ class CustomAppButton extends StatelessWidget {
               )
             : Text(
                 text,
+                maxLines: singleLine ? 1 : null,
+                softWrap: !singleLine,
+                overflow: singleLine ? TextOverflow.ellipsis : null,
                 style:
                     style ??
                     StylesManager.styleBold16(

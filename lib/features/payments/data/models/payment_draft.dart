@@ -20,11 +20,13 @@ class PaymentDraft {
     this.payloadFingerprint = '',
     this.checkoutUrl,
     this.checkoutOpenedAt,
+    this.checkoutExplicitlyClosed = false,
   });
 
   final String paymentId;
   final String? checkoutUrl;
   final DateTime? checkoutOpenedAt;
+  final bool checkoutExplicitlyClosed;
   final String idempotencyKey;
   final String packageId;
   final String curriculumId;
@@ -44,6 +46,7 @@ class PaymentDraft {
     checkoutOpenedAt: DateTime.tryParse(
       _optionalText(json['checkoutOpenedAt']) ?? '',
     ),
+    checkoutExplicitlyClosed: json['checkoutExplicitlyClosed'] == true,
     idempotencyKey: json['idempotencyKey']?.toString() ?? '',
     packageId: json['packageId']?.toString() ?? '',
     curriculumId: json['curriculumId']?.toString() ?? '',
@@ -69,6 +72,7 @@ class PaymentDraft {
     'paymentId': paymentId,
     'checkoutUrl': checkoutUrl,
     'checkoutOpenedAt': checkoutOpenedAt?.toIso8601String(),
+    'checkoutExplicitlyClosed': checkoutExplicitlyClosed,
     'idempotencyKey': idempotencyKey,
     'packageId': packageId,
     'curriculumId': curriculumId,

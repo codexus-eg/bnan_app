@@ -1,6 +1,6 @@
 import 'package:bnan_app/features/parent_children/presentation/manager/parent_add_child_cubit/parent_add_child_cubit.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_field.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_summary.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
 import 'package:bnan_app/features/parent_children/presentation/widgets/parent_review_details.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +27,18 @@ class ParentPriceReviewStep extends StatelessWidget {
           currency: package.currency,
         ),
         const SizedBox(height: 16),
-        DiscountCodeField(
+        DiscountPreviewField(
+          initialValue: state.discountCode,
+          request: context
+              .read<ParentAddChildCubit>()
+              .buildDiscountPreviewRequest,
           onChanged: context.read<ParentAddChildCubit>().updateDiscount,
         ),
-        if (state.paymentSummary?.hasDiscount == true) ...[
-          const SizedBox(height: 16),
-          PaymentDiscountSummary(summary: state.paymentSummary!),
-        ],
+        DiscountPreviewSummary(
+          request: context
+              .read<ParentAddChildCubit>()
+              .buildDiscountPreviewRequest,
+        ),
       ],
     );
   }

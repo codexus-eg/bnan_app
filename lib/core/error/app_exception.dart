@@ -101,7 +101,13 @@ class AppException implements Exception {
 
   static String? _extractBackendCode(dynamic data) {
     if (data is! Map) return null;
-    return _findText(data, const {'code', 'errorCode', 'error_code'});
+    return _findText(data, const {
+      'code',
+      'errorCode',
+      'error_code',
+      'backendCode',
+      'backend_code',
+    });
   }
 
   static String? _findText(

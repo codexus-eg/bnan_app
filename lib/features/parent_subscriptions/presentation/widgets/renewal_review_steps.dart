@@ -1,6 +1,6 @@
 import 'package:bnan_app/features/parent_subscriptions/presentation/manager/parent_subscription_renewal_cubit/parent_subscription_renewal_cubit.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_field.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_summary.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +9,14 @@ import 'package:bnan_app/core/utils/styles_manager.dart';
 class RenewalDiscountStep extends StatelessWidget {
   const RenewalDiscountStep({super.key});
   @override
-  Widget build(BuildContext context) => DiscountCodeField(
+  Widget build(BuildContext context) => DiscountPreviewField(
+    initialValue: context
+        .read<ParentSubscriptionRenewalCubit>()
+        .state
+        .discountCode,
+    request: context
+        .read<ParentSubscriptionRenewalCubit>()
+        .buildDiscountPreviewRequest,
     onChanged: context.read<ParentSubscriptionRenewalCubit>().updateDiscount,
   );
 }
@@ -37,10 +44,11 @@ class RenewalPriceStep extends StatelessWidget {
           total: price,
           currency: package.currency,
         ),
-        if (state.paymentSummary?.hasDiscount == true) ...[
-          const SizedBox(height: 16),
-          PaymentDiscountSummary(summary: state.paymentSummary!),
-        ],
+        DiscountPreviewSummary(
+          request: context
+              .read<ParentSubscriptionRenewalCubit>()
+              .buildDiscountPreviewRequest,
+        ),
       ],
     );
   }

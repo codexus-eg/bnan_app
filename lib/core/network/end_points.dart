@@ -3,7 +3,7 @@ import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dar
 abstract class EndPoints {
   // static String get baseUrl => 'https://api.bnanacademysa.com/api/v1';
   // static String get socketUrl => 'https://api.bnanacademysa.com';
-    static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
+  static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
   static String get socketUrl => 'https://bnan.0xcode7.xyz';
   static const String register = '/auth/register';
   static const String login = '/auth/login';
@@ -103,6 +103,7 @@ abstract class EndPoints {
   static const String gulfSchedules = '/gulfSchedules';
   static const String myGulfSchedule = '$gulfSchedules/mySchedule';
   static const String paymentCheckout = '/payment/checkout';
+  static const String discountPreview = '/payment/discount/preview';
   static const String studentSubjectRequests = '/gulf-student-subject-requests';
   static const String studentSubjectRequestAvailableSubjects =
       '$studentSubjectRequests/available-subjects';

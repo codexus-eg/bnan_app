@@ -1,9 +1,10 @@
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_method_card.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_methods_options.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/discount_code_field.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/payment_discount_summary.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_field.dart';
+import 'package:bnan_app/features/payments/presentation/widgets/discount_preview_summary.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
+import 'package:bnan_app/features/payments/presentation/manager/discount_preview_cubit.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -16,9 +17,18 @@ class PaymentMethodStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = RegisterCubit.get(context);
+    final cubit = context.read<RegisterCubit>();
+    final selectedProvider = context.select(
+      (RegisterCubit value) => value.selectedProvider,
+    );
     final paymentCubit = context.watch<TamaraPaymentCubit>();
-    final paymentSummary = paymentCubit.paymentSummary;
+    final preview = context.watch<DiscountPreviewCubit>().state;
+    final previewRequest = cubit.buildDiscountPreviewRequest();
+    final previewOriginal =
+        previewRequest != null && preview.matches(previewRequest.fingerprint)
+        ? preview.summary?.originalAmount
+        : null;
+    final total = previewOriginal ?? cubit.checkoutOriginalAmount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -32,23 +42,33 @@ class PaymentMethodStep extends StatelessWidget {
         PaymentMethodCard(
           packageName: cubit.packageName,
           price: cubit.packagePrice,
-          studentsCount: '1',
-          total: cubit.packagePrice,
+          studentsCount: cubit.checkoutItemCount.toString(),
+          total: cubit.formatAmount(total),
           currency: cubit.packageCurrency,
+          quantityLabel: cubit.isItemizedCheckout
+              ? cubit.checkoutItemCount == 1
+                    ? S.of(context).subject
+                    : S.of(context).subjects
+              : null,
+          quantityFirst: cubit.isItemizedCheckout,
         ),
         if (cubit.isGulf) ...[
           const SizedBox(height: 16),
-          const DiscountCodeField(),
-          if (paymentSummary?.hasDiscount == true) ...[
-            const SizedBox(height: 16),
-            PaymentDiscountSummary(summary: paymentSummary!),
-          ],
+          DiscountPreviewField(
+            controller: cubit.discountCodeController,
+            request: cubit.buildDiscountPreviewRequest,
+            onChanged: (_) => paymentCubit.invalidateAmountSummary(),
+          ),
+          DiscountPreviewSummary(request: cubit.buildDiscountPreviewRequest),
         ],
         const SizedBox(height: 16),
         if (cubit.isGulf)
           PaymentMethodsOptions(
-            selectedProvider: cubit.selectedProvider,
-            onChanged: cubit.selectPaymentProvider,
+            selectedProvider: selectedProvider,
+            onChanged: (provider) {
+              if (provider == selectedProvider) return;
+              cubit.selectPaymentProvider(provider);
+            },
           ),
         if (paymentCubit.state is TamaraPaymentVerificationPending) ...[
           const SizedBox(height: 12),

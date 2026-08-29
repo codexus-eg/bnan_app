@@ -485,7 +485,7 @@ void main() {
     expect(cubit.state.phase, ParentAddChildPhase.paymentStatusUnknown);
     expect(cubit.state.isBusy, isFalse);
     expect(repo.reconcileCalls, 1);
-    expect(repo.statusCalls, 2);
+    expect(repo.statusCalls, 1);
     cubit.reopenCheckout();
     expect(cubit.state.shouldOpenCheckout, isTrue);
     expect(repo.checkoutCalls, 1);
@@ -498,7 +498,7 @@ void main() {
     await cubit.submit();
     await cubit.checkoutClosed();
     expect(repo.reconcileCalls, 0);
-    expect(repo.statusCalls, 2);
+    expect(repo.statusCalls, 1);
     await cubit.close();
   });
 

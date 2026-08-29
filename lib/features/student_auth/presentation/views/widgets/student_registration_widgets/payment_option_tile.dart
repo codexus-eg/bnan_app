@@ -51,6 +51,14 @@ class PaymentOptionTile extends StatelessWidget {
                   ).copyWith(color: ColorManager.mainColor15),
                 ),
               ),
+              const SizedBox(width: 8),
+              Icon(
+                isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+                color: isSelected
+                    ? ColorManager.mainColor15
+                    : ColorManager.greyA8AF,
+                size: 20,
+              ),
             ],
           ),
         ),

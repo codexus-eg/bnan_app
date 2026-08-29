@@ -585,12 +585,27 @@ void main() {
 
       await cubit.checkoutClosed();
 
-      expect(cubit.state.phase, SubjectRequestPaymentPhase.verificationTimeout);
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.idle);
       expect(repo.reconcileCalls, 1);
       expect(repo.statusCalls, 1);
       await cubit.checkout(_gulfPayload());
       expect(repo.checkoutKeys, ['key-1']);
       expect(cubit.state.phase, SubjectRequestPaymentPhase.openingTamara);
+      await cubit.close();
+    });
+
+    test('Tamara cancel allows switching to Paymob immediately', () async {
+      final repo = FakeRepo()
+        ..checkoutResults.addAll([Right(_payment()), Right(_payment())]);
+      final cubit = _paymentCubit(repo);
+      await cubit.checkout(_gulfPayload());
+      await cubit.checkoutClosed();
+
+      cubit.selectPaymentProvider(GulfPaymentProvider.paymob);
+      await cubit.checkout(_gulfPayload(provider: GulfPaymentProvider.paymob));
+
+      expect(repo.checkoutKeys, ['key-1', 'key-2']);
+      expect(repo.lastPayload?.provider, GulfPaymentProvider.paymob);
       await cubit.close();
     });
   });

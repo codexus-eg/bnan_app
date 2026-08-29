@@ -39,6 +39,21 @@ void main() {
     expect(find.text(S.current.discountAmount), findsNothing);
     expect(find.text('500 SAR'), findsNWidgets(2));
   });
+
+  testWidgets('shows a backend final amount without inventing a discount', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(const PaymentAmountSummary(finalAmount: 450, currency: 'SAR')),
+    );
+    expect(find.text(S.current.discountAmount), findsNothing);
+    expect(find.text('450 SAR'), findsOneWidget);
+  });
+
+  testWidgets('shows no amount when the backend returned none', (tester) async {
+    await tester.pumpWidget(_app(const PaymentAmountSummary()));
+    expect(find.text(S.current.finalAmount), findsNothing);
+  });
 }
 
 Widget _app(PaymentAmountSummary summary) => MaterialApp(

@@ -14,6 +14,8 @@ abstract final class GulfRegistrationDiagnostics {
     'endpoint=$endpoint; statusCode=${statusCode ?? 'not_exposed'}; succeeded',
   );
 
+  static void flow(String message) => _log(message);
+
   static void checkoutPayload(Map<String, dynamic> payload) {
     final safePayload = Map<String, dynamic>.from(payload);
     for (final key in const ['parent', 'student']) {
@@ -24,6 +26,19 @@ abstract final class GulfRegistrationDiagnostics {
       }
     }
     _log('checkout payload=${_safe(safePayload.toString())}');
+  }
+
+  static void discountPreviewPayload(Map<String, dynamic> payload) {
+    final safePayload = Map<String, dynamic>.from(payload);
+    for (final key in const ['parent', 'student']) {
+      final value = safePayload[key];
+      if (value is Map) {
+        safePayload[key] = Map<String, dynamic>.from(value)
+          ..remove('password')
+          ..remove('token');
+      }
+    }
+    _log('discount preview payload=${_safe(safePayload.toString())}');
   }
 
   static void failed(String endpoint, Object error, {int? statusCode}) {

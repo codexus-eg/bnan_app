@@ -6,10 +6,10 @@ import 'package:bnan_app/features/student_auth/presentation/manager/get_curricul
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
+import 'package:bnan_app/features/payments/presentation/manager/discount_preview_cubit.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_password_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_dropdown.dart';
-import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_info_step_widgets/student_notes_widget.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/student_info_step_widgets/subjects_list.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +88,7 @@ class StudentInfoStep extends StatelessWidget {
                         context
                             .read<TamaraPaymentCubit>()
                             .invalidateAmountSummary();
+                        context.read<DiscountPreviewCubit>().invalidate();
                         registerCubit.setGrade(
                           id: selectedGrade.id,
                           name: selectedGrade.name,

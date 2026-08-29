@@ -1,10 +1,9 @@
+import 'package:bnan_app/features/parent_auth/presentation/views/widgets/parent_register_widgets/parent_register_contact_fields.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
+import 'package:bnan_app/core/shared_widget/custom_password_field.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
-import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
-import 'package:bnan_app/core/shared_widget/custom_password_field.dart';
 import 'package:bnan_app/generated/l10n.dart';
-import 'package:bnan_app/core/helper/validator_form_field.dart';
 import 'package:flutter/material.dart';
 
 class ParentInfoStep extends StatelessWidget {
@@ -19,19 +18,11 @@ class ParentInfoStep extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Text(
-          //   S.of(context).parentInfo,
-          //   style: StylesManager.styleBold16(context).copyWith(
-          //     color: ColorManager.mainColor15,
-          //   ),
-          // ),
-          // const SizedBox(height: 16),
-          CustomTextField(
-            controller: cubit.parentEmailController,
-            label: S.of(context).email,
-            isRequired: true,
-            keyboardType: TextInputType.emailAddress,
-            validator: MyValidator.validateEmail,
+          ParentRegisterContactFields(
+            nameController: cubit.parentNameController,
+            emailController: cubit.parentEmailController,
+            phoneController: cubit.parentPhoneController,
+            whatsappController: cubit.parentWhatsappController,
           ),
           const SizedBox(height: 16),
           CustomPasswordField(

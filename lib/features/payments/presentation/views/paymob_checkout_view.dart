@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/payments/presentation/views/paymob_navigation_policy.dart';
@@ -72,10 +71,10 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
       if (!didPop) _close();
     },
     child: Scaffold(
-      appBar: CustomAppbar(
-        headerText: S.of(context).paymentMethod,
-        onBackTap: _close,
-      ),
+      // appBar: CustomAppbar(
+      //   headerText: S.of(context).paymentMethod,
+      //   onBackTap: _close,
+      // ),
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),

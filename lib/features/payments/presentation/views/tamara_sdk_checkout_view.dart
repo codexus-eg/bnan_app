@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:bnan_app/core/network/end_points.dart';
-import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_return.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:tamara_flutter_sdk/tamara_checkout.dart';
 
@@ -53,7 +51,7 @@ class _TamaraSdkCheckoutViewState extends State<TamaraSdkCheckoutView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: CustomAppbar(headerText: S.of(context).tabbyTamara),
+    // appBar: CustomAppbar(headerText: S.of(context).tabbyTamara),
     body: SafeArea(
       child: SizedBox.expand(
         child: TamaraCheckout(

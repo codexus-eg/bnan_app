@@ -10020,11 +10020,71 @@ class S {
     );
   }
 
-  /// `Total`
+  /// `Total after discount`
   String get finalAmount {
     return Intl.message(
-      'Total',
+      'Total after discount',
       name: 'finalAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply`
+  String get applyDiscountCode {
+    return Intl.message(
+      'Apply',
+      name: 'applyDiscountCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This discount code is invalid`
+  String get discountPreviewInvalidCode {
+    return Intl.message(
+      'This discount code is invalid',
+      name: 'discountPreviewInvalidCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This discount code has expired`
+  String get discountPreviewExpired {
+    return Intl.message(
+      'This discount code has expired',
+      name: 'discountPreviewExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This code does not match the number of children`
+  String get discountPreviewChildrenMismatch {
+    return Intl.message(
+      'This code does not match the number of children',
+      name: 'discountPreviewChildrenMismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This discount is not available for this purchase`
+  String get discountPreviewInvalidPurchase {
+    return Intl.message(
+      'This discount is not available for this purchase',
+      name: 'discountPreviewInvalidPurchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to check the discount code`
+  String get discountPreviewFailed {
+    return Intl.message(
+      'Unable to check the discount code',
+      name: 'discountPreviewFailed',
       desc: '',
       args: [],
     );
@@ -11095,6 +11155,26 @@ class S {
     return Intl.message(
       'This email is already in use',
       name: 'parentChildEmailUsed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This email address is linked to another account. Please use an email address for the parent.`
+  String get studentRegistrationEmailBelongsToAnotherAccount {
+    return Intl.message(
+      'This email address is linked to another account. Please use an email address for the parent.',
+      name: 'studentRegistrationEmailBelongsToAnotherAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This email address is already registered. Please check the password or use another email address.`
+  String get studentRegistrationEmailAlreadyRegistered {
+    return Intl.message(
+      'This email address is already registered. Please check the password or use another email address.',
+      name: 'studentRegistrationEmailAlreadyRegistered',
       desc: '',
       args: [],
     );

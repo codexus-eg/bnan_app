@@ -222,6 +222,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "applyAsTeacher": MessageLookupByLibrary.simpleMessage("التقديم كمعلم"),
         "applyAsTeacherSubtitle": MessageLookupByLibrary.simpleMessage(
             "شارك خبراتك وانضم إلى فريقنا التعليمي"),
+        "applyDiscountCode": MessageLookupByLibrary.simpleMessage("تطبيق"),
         "approveAccountActivation":
             MessageLookupByLibrary.simpleMessage("موافقة تفعيل الحساب"),
         "approveRequest":
@@ -542,6 +543,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية"),
         "discountPercentage":
             MessageLookupByLibrary.simpleMessage("النسبة المئوية"),
+        "discountPreviewChildrenMismatch": MessageLookupByLibrary.simpleMessage(
+            "كود الخصم لا يناسب عدد الأبناء"),
+        "discountPreviewExpired":
+            MessageLookupByLibrary.simpleMessage("انتهت صلاحية كود الخصم"),
+        "discountPreviewFailed":
+            MessageLookupByLibrary.simpleMessage("تعذر التحقق من كود الخصم"),
+        "discountPreviewInvalidCode":
+            MessageLookupByLibrary.simpleMessage("كود الخصم غير صحيح"),
+        "discountPreviewInvalidPurchase": MessageLookupByLibrary.simpleMessage(
+            "كود الخصم غير متاح لهذه العملية"),
         "discountTitle": MessageLookupByLibrary.simpleMessage("عنوان الخصم"),
         "discountTitleHint":
             MessageLookupByLibrary.simpleMessage("مثال: وفر 120 ر.س"),
@@ -676,7 +687,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم حفظ الملف بنجاح"),
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "يرجى ملء جميع الحقول المطلوبة."),
-        "finalAmount": MessageLookupByLibrary.simpleMessage("الإجمالي"),
+        "finalAmount":
+            MessageLookupByLibrary.simpleMessage("الإجمالي بعد الخصم"),
         "finalDelete": MessageLookupByLibrary.simpleMessage("حذف نهائي"),
         "finalDeleteDescription": MessageLookupByLibrary.simpleMessage(
             "سيتم حذف هذا الحساب نهائيًا من النظام، بما في ذلك حساب الدخول وملف البيانات المرتبط به. لا يمكن التراجع عن هذا الإجراء."),
@@ -1115,7 +1127,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "optional": MessageLookupByLibrary.simpleMessage("اختياري"),
         "optionalDiscountCode":
             MessageLookupByLibrary.simpleMessage("كود الخصم (اختياري)"),
-        "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأساسي"),
+        "originalAmount": MessageLookupByLibrary.simpleMessage("السعر الأصلي"),
         "other": MessageLookupByLibrary.simpleMessage("أخرى"),
         "package4Hours": MessageLookupByLibrary.simpleMessage("باقة 4 ساعات"),
         "packageAccessScope":
@@ -1794,6 +1806,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("القسم المصري"),
         "studentProfileGrade":
             MessageLookupByLibrary.simpleMessage("الصف الثاني الإعدادي"),
+        "studentRegistrationEmailAlreadyRegistered":
+            MessageLookupByLibrary.simpleMessage(
+                "هذا البريد الإلكتروني مسجل بالفعل. برجاء التأكد من كلمة المرور أو استخدام بريد آخر."),
+        "studentRegistrationEmailBelongsToAnotherAccount":
+            MessageLookupByLibrary.simpleMessage(
+                "هذا البريد الإلكتروني مرتبط بحساب آخر. برجاء استخدام بريد إلكتروني خاص بولي الأمر."),
         "studentRegistrationForm":
             MessageLookupByLibrary.simpleMessage("نموذج تسجيل الطالب"),
         "studentRequestAccepted": MessageLookupByLibrary.simpleMessage(

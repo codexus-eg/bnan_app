@@ -3,11 +3,15 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/features/payments/data/models/payment_draft.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
+import 'package:bnan_app/features/payments/data/models/payment_amount_summary.dart';
+import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
+import 'package:bnan_app/features/payments/presentation/manager/discount_preview_cubit.dart';
+import 'package:bnan_app/features/payments/data/repo/discount_preview_repo.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
@@ -63,11 +67,12 @@ void main() {
     expect(find.text(S.current.applePay), findsNothing);
     expect(find.text(S.current.tabbyTamara), findsOneWidget);
     expect(find.text(S.current.paymob), findsOneWidget);
-    expect(find.text(S.current.renewalConfirmPayment), findsOneWidget);
     expect(find.text(S.current.payWithTamara), findsNothing);
     await tester.tap(find.text(S.current.paymob));
     await tester.pump();
     expect(register.selectedProvider, GulfPaymentProvider.paymob);
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -400));
+    await tester.pump();
     expect(find.text(S.current.renewalConfirmPayment), findsOneWidget);
     expect(find.text(S.current.confirmRequest), findsNothing);
     expect(tester.takeException(), isNull);
@@ -95,6 +100,34 @@ void main() {
     await tester.pumpWidget(_app(auth, register));
     expect(find.text(S.current.tabbyTamara), findsNothing);
     expect(find.text(S.current.paymob), findsNothing);
+  });
+
+  testWidgets('itemized Gulf registration shows three package items total', (
+    tester,
+  ) async {
+    final auth = _UnusedAuthRepo();
+    final register = RegisterCubit(auth, _UnusedParentRepo())
+      ..setRegisterFlowArgs(
+        const RegisterFlowArgsModel(
+          curriculumId: 'curriculum',
+          curriculumName: 'Gulf',
+          packageId: 'package',
+          packageName: 'Package',
+          packagePrice: '100',
+          packageCurrency: 'SAR',
+          registrationMode: 'gulf',
+          accessScope: 'single_subject',
+        ),
+      )
+      ..selectedSubjectIds = ['subject-1', 'subject-2', 'subject-3']
+      ..nextStep()
+      ..nextStep()
+      ..nextStep();
+
+    await tester.pumpWidget(_app(auth, register));
+
+    expect(find.textContaining('300 SAR'), findsOneWidget);
+    expect(register.checkoutOriginalAmount, 300);
   });
 
   testWidgets('student step shows the grade hint only once', (tester) async {
@@ -221,6 +254,7 @@ Widget _providers(
     BlocProvider.value(value: register),
     BlocProvider(create: (_) => GetGradesCubit(auth)),
     BlocProvider(create: (_) => GetCurriculmSubjectsCubit(auth)),
+    BlocProvider(create: (_) => DiscountPreviewCubit(_UnusedPreviewRepo())),
     payment == null
         ? BlocProvider(
             create: (_) => TamaraPaymentCubit(
@@ -272,4 +306,20 @@ class _UnusedPaymentRepo implements TamaraPaymentRepo {
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _UnusedPreviewRepo implements DiscountPreviewRepo {
+  @override
+  Future<Either<Failure, PaymentAmountSummary>> preview(
+    DiscountPreviewRequest request,
+  ) => Future.value(
+    const Right(
+      PaymentAmountSummary(
+        originalAmount: 300,
+        discountAmount: 60,
+        finalAmount: 240,
+        currency: 'SAR',
+      ),
+    ),
+  );
 }

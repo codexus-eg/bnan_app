@@ -78,8 +78,10 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
             selectedProvider: _provider,
           ),
         );
+        return;
       }
-      return;
+      _resetAttempt();
+      await _store.clear();
     }
     if (_key == null || _fingerprint != fingerprint) {
       _key = _keys.create();
@@ -168,8 +170,25 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   }
 
   Future<void> _runClosedCheck() async {
-    if (state.payment?.paymentId.isNotEmpty != true) return;
-    await verify(reconcileFirst: true);
+    final payment = state.payment;
+    final paymentId = payment?.paymentId;
+    if (paymentId == null || paymentId.isEmpty) return;
+    _polling = false;
+    emit(
+      SubjectRequestPaymentState(payment: payment, selectedProvider: _provider),
+    );
+    if (_provider.supportsReconcile) {
+      await _check(paymentId, reconcile: true);
+    }
+    if (isClosed || state.payment?.status.isTerminal == true) return;
+    await _check(paymentId);
+    if (isClosed || state.payment?.status.isTerminal == true) return;
+    emit(
+      SubjectRequestPaymentState(
+        payment: state.payment,
+        selectedProvider: _provider,
+      ),
+    );
   }
 
   void checkoutLaunchFailed(String message) {
@@ -196,9 +215,7 @@ class SubjectRequestPaymentCubit extends Cubit<SubjectRequestPaymentState> {
   }
 
   Future<void> paymobCheckoutClosed() async {
-    final paymentId = state.payment?.paymentId;
-    if (paymentId == null || paymentId.isEmpty) return;
-    await verify();
+    await checkoutClosed();
   }
 
   void completeHandling() {

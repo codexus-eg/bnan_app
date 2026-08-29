@@ -116,6 +116,7 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       return;
     }
     if (result.tamaraOutcome == null) {
+      await cubit.checkoutClosed();
       return;
     }
     if (result.tamaraOutcome == TamaraSdkOutcome.cancel ||

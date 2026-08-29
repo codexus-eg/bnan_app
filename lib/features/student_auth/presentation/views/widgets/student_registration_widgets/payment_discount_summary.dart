@@ -5,8 +5,13 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PaymentDiscountSummary extends StatelessWidget {
-  const PaymentDiscountSummary({super.key, required this.summary});
+  const PaymentDiscountSummary({
+    super.key,
+    required this.summary,
+    this.highlightFinalAmount = false,
+  });
   final PaymentAmountSummary summary;
+  final bool highlightFinalAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +36,11 @@ class PaymentDiscountSummary extends StatelessWidget {
               context,
               s.discountAmount,
               summary.discountAmount!,
-              discount: true,
+              suffix: summary.discount?.percentage == null
+                  ? null
+                  : '(${_format(summary.discount!.percentage!)}%)',
             ),
-            const Divider(),
+            Divider(height: highlightFinalAmount ? 24 : null),
           ],
           _row(context, s.finalAmount, summary.finalAmount!, strong: true),
         ],
@@ -45,18 +52,26 @@ class PaymentDiscountSummary extends StatelessWidget {
     BuildContext context,
     String label,
     num value, {
-    bool discount = false,
     bool strong = false,
+    String? suffix,
   }) {
     final style = strong
-        ? StylesManager.styleBold16(context)
+        ? highlightFinalAmount
+              ? StylesManager.styleBold16(
+                  context,
+                ).copyWith(fontSize: 18, color: ColorManager.mainColor15)
+              : StylesManager.styleBold16(context)
         : StylesManager.styleRegular14(context);
     final amount = _format(value);
-    final prefix = discount && !value.isNegative ? '-' : '';
     return Row(
       children: [
         Expanded(child: Text(label, style: style)),
-        Text('$prefix$amount ${summary.currency ?? ''}', style: style),
+        Text(
+          '$amount ${summary.currency ?? ''}${suffix == null ? '' : ' $suffix'}',
+          style: style,
+          textDirection: highlightFinalAmount ? TextDirection.ltr : null,
+          maxLines: highlightFinalAmount ? 1 : null,
+        ),
       ],
     );
   }
