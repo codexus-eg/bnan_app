@@ -47,6 +47,18 @@ class TeacherPayrollRepoImpl implements TeacherPayrollRepo {
     return PayoutProfileModel.fromJson(root['data']);
   });
   @override
+  saveMyPayoutProfile(PayoutProfileRequest request) => repoGuard(
+    () async => PayoutProfileModel.fromJson(
+      payrollData(
+        await api.put(
+          EndPoints.teacherMyPayoutProfile,
+          data: request.toJson(),
+          isProtected: true,
+        ),
+      ),
+    ),
+  );
+  @override
   getPreviewList({
     required String from,
     required String to,

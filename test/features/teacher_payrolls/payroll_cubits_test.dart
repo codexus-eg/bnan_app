@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/payout_method.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_payment_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
@@ -6,15 +8,21 @@ import 'package:bnan_app/features/teacher_payrolls/presentation/manager/details/
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/details/teacher_payroll_details_state.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payment/payroll_payment_cubit.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payment/payroll_payment_state.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payout/teacher_payout_profile_cubit.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payout/teacher_payout_profile_state.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payroll_details/teacher_payroll_report_cubit.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payroll_details/teacher_payroll_report_state.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_cubit.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_payrolls/teacher_my_payrolls_state.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'fake_teacher_payroll_repo.dart';
 
 void main() {
+  setUpAll(() => S.load(const Locale('en')));
+
   test('payment success emits paid payroll', () async {
     final cubit = PayrollPaymentCubit(FakeTeacherPayrollRepo());
     await cubit.pay(
@@ -100,5 +108,27 @@ void main() {
     final cubit = TeacherMyPayrollsCubit(repo);
     await cubit.load();
     expect(cubit.state, isA<TeacherMyPayrollsFailure>());
+  });
+  test('my payout profile exposes empty API state', () async {
+    final cubit = TeacherPayoutProfileCubit(FakeTeacherPayrollRepo());
+    await cubit.loadMine();
+    expect(cubit.state, isA<TeacherPayoutProfileEmpty>());
+  });
+  test('my payout profile maps backend error codes', () async {
+    final repo = FakeTeacherPayrollRepo()
+      ..myPayoutSave = Left(
+        Failure(message: 'raw', code: 'PAYOUT_BANK_DATA_REQUIRED'),
+      );
+    final cubit = TeacherPayoutProfileCubit(repo);
+    await cubit.saveMine(
+      const PayoutProfileRequest(
+        method: PayoutMethod.bankAccount,
+        accountHolderName: 'A',
+        bankName: 'CIB',
+        accountNumber: '1',
+      ),
+    );
+    final state = cubit.state as TeacherPayoutProfileFailure;
+    expect(state.message, S.current.payoutBankRequired);
   });
 }

@@ -16,6 +16,9 @@ abstract class TeacherPayrollRepo {
   });
   Future<Either<Failure, TeacherPayrollModel>> getMyPayroll(String payrollId);
   Future<Either<Failure, PayoutProfileModel?>> getMyPayoutProfile();
+  Future<Either<Failure, PayoutProfileModel>> saveMyPayoutProfile(
+    PayoutProfileRequest request,
+  );
   Future<Either<Failure, List<PayrollListItemModel>>> getPreviewList({
     required String from,
     required String to,

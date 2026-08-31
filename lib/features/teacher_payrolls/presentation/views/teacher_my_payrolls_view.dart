@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_appbar.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
@@ -82,7 +84,10 @@ class _TeacherMyPayrollsBodyState extends State<TeacherMyPayrollsBody> {
                         child: TeacherPayrollCard(payroll: e),
                       ),
                     ),
-                  TeacherPayoutProfileCard(profile: ready.profile),
+                  TeacherPayoutProfileCard(
+                    profile: ready.profile,
+                    onOpen: _openPayoutProfile,
+                  ),
                   const SizedBox(height: 24),
                 ],
               ),
@@ -116,6 +121,15 @@ class _TeacherMyPayrollsBodyState extends State<TeacherMyPayrollsBody> {
                   },
           ),
       ],
+    );
+  }
+
+  Future<void> _openPayoutProfile() async {
+    await MyNavigator.goTo(context, Routes.teacherMyPayoutProfile);
+    if (!mounted) return;
+    await context.read<TeacherMyPayrollsCubit>().load(
+      status: status,
+      refresh: true,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/helper/app_logout.dart';
-import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
@@ -56,11 +55,7 @@ class StudentProfileBody extends StatelessWidget {
                       StudentProfileCubit.get(context).getLoggedUser();
                     },
                     onLogout: () async {
-                      await StudentProfileCubit.get(context).logout();
-                      final destination =
-                          await AppLogout.destinationAfterLogout();
-                      if (!context.mounted) return;
-                      MyNavigator.goToOffAll(context, destination);
+                      await AppLogout.perform(context);
                     },
                   ),
                 );

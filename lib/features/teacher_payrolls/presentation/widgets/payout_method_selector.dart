@@ -1,5 +1,6 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/payout_method.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -9,15 +10,15 @@ class PayoutMethodSelector extends StatelessWidget {
     required this.value,
     required this.onChanged,
   });
-  final String value;
-  final ValueChanged<String> onChanged;
+  final PayoutMethod value;
+  final ValueChanged<PayoutMethod> onChanged;
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final options = {
-      'instapay': s.payrollInstapay,
-      'wallet': s.payrollWallet,
-      'bank_account': s.payrollBankAccount,
+    final options = <PayoutMethod, String>{
+      PayoutMethod.instapay: s.payrollInstapay,
+      PayoutMethod.wallet: s.payrollWallet,
+      PayoutMethod.bankAccount: s.payrollBankAccount,
     };
     return Column(
       children: options.entries

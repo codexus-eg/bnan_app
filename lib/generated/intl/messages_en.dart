@@ -1349,6 +1349,41 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
             "Payment status is being verified. This may take some time."),
         "paymob": MessageLookupByLibrary.simpleMessage("Bank Card"),
+        "payoutBankRequired": MessageLookupByLibrary.simpleMessage(
+            "The bank name and account number or IBAN are required"),
+        "payoutEtisalatCash":
+            MessageLookupByLibrary.simpleMessage("Etisalat Cash"),
+        "payoutForbidden": MessageLookupByLibrary.simpleMessage(
+            "You are not allowed to perform this action"),
+        "payoutHolderRequired": MessageLookupByLibrary.simpleMessage(
+            "The account holder name is required"),
+        "payoutInstapayAddressLabel": MessageLookupByLibrary.simpleMessage(
+            "Phone number or InstaPay address"),
+        "payoutInstapayRequired": MessageLookupByLibrary.simpleMessage(
+            "The phone number or InstaPay address is required"),
+        "payoutInvalidMethod": MessageLookupByLibrary.simpleMessage(
+            "The payout method is invalid"),
+        "payoutNetworkError": MessageLookupByLibrary.simpleMessage(
+            "Could not connect to the server. Check your internet connection"),
+        "payoutOrangeCash": MessageLookupByLibrary.simpleMessage("Orange Cash"),
+        "payoutOtherProvider": MessageLookupByLibrary.simpleMessage("Other"),
+        "payoutProfileAdd":
+            MessageLookupByLibrary.simpleMessage("Add transfer details"),
+        "payoutProfileEdit":
+            MessageLookupByLibrary.simpleMessage("Edit details"),
+        "payoutProfileEmpty": MessageLookupByLibrary.simpleMessage(
+            "Payout details have not been added yet"),
+        "payoutProfileSaved": MessageLookupByLibrary.simpleMessage(
+            "Payout details saved successfully"),
+        "payoutUnauthorized": MessageLookupByLibrary.simpleMessage(
+            "Your session expired. Sign in again"),
+        "payoutVodafoneCash":
+            MessageLookupByLibrary.simpleMessage("Vodafone Cash"),
+        "payoutWalletPhoneInvalid": MessageLookupByLibrary.simpleMessage(
+            "The wallet phone must be 11 digits and start with 010, 011, 012, or 015"),
+        "payoutWalletRequired": MessageLookupByLibrary.simpleMessage(
+            "The provider and wallet phone are required"),
+        "payoutWePay": MessageLookupByLibrary.simpleMessage("WE Pay"),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("Account holder"),
         "payrollAccountNumber":

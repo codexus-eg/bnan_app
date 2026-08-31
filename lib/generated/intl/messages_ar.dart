@@ -1300,6 +1300,41 @@ class MessageLookup extends MessageLookupByLibrary {
         "paymentVerificationPending": MessageLookupByLibrary.simpleMessage(
             "جاري التحقق من حالة الدفع، قد يستغرق ذلك بعض الوقت."),
         "paymob": MessageLookupByLibrary.simpleMessage("بطاقة بنكية"),
+        "payoutBankRequired": MessageLookupByLibrary.simpleMessage(
+            "اسم البنك ورقم الحساب أو IBAN مطلوب"),
+        "payoutEtisalatCash":
+            MessageLookupByLibrary.simpleMessage("اتصالات كاش"),
+        "payoutForbidden": MessageLookupByLibrary.simpleMessage(
+            "غير مسموح لك بتنفيذ هذا الإجراء"),
+        "payoutHolderRequired":
+            MessageLookupByLibrary.simpleMessage("اسم صاحب الحساب مطلوب"),
+        "payoutInstapayAddressLabel": MessageLookupByLibrary.simpleMessage(
+            "رقم الهاتف أو عنوان InstaPay"),
+        "payoutInstapayRequired": MessageLookupByLibrary.simpleMessage(
+            "رقم الهاتف أو عنوان InstaPay مطلوب"),
+        "payoutInvalidMethod": MessageLookupByLibrary.simpleMessage(
+            "وسيلة استلام الراتب غير صحيحة"),
+        "payoutNetworkError": MessageLookupByLibrary.simpleMessage(
+            "تعذر الاتصال بالخادم، تحقق من الإنترنت"),
+        "payoutOrangeCash": MessageLookupByLibrary.simpleMessage("أورنج كاش"),
+        "payoutOtherProvider": MessageLookupByLibrary.simpleMessage("أخرى"),
+        "payoutProfileAdd":
+            MessageLookupByLibrary.simpleMessage("إضافة بيانات التحويل"),
+        "payoutProfileEdit":
+            MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
+        "payoutProfileEmpty": MessageLookupByLibrary.simpleMessage(
+            "لم تتم إضافة بيانات استلام الراتب بعد"),
+        "payoutProfileSaved": MessageLookupByLibrary.simpleMessage(
+            "تم حفظ بيانات استلام الراتب بنجاح"),
+        "payoutUnauthorized": MessageLookupByLibrary.simpleMessage(
+            "انتهت الجلسة، سجل الدخول مرة أخرى"),
+        "payoutVodafoneCash":
+            MessageLookupByLibrary.simpleMessage("فودافون كاش"),
+        "payoutWalletPhoneInvalid": MessageLookupByLibrary.simpleMessage(
+            "رقم المحفظة يجب أن يكون 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015"),
+        "payoutWalletRequired": MessageLookupByLibrary.simpleMessage(
+            "مقدم الخدمة ورقم المحفظة مطلوبان"),
+        "payoutWePay": MessageLookupByLibrary.simpleMessage("WE Pay"),
         "payrollAccountHolder":
             MessageLookupByLibrary.simpleMessage("اسم صاحب الحساب"),
         "payrollAccountNumber":

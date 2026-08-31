@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/network/api_consumer.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/payout_method.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -56,12 +57,33 @@ void main() {
     await repo.updatePayoutProfile(
       't1',
       const PayoutProfileRequest(
-        method: 'instapay',
+        method: PayoutMethod.instapay,
         accountHolderName: 'Ahmed',
         instapayAddress: 'a@instapay',
       ),
     );
     expect(api.path, '/admin/payrolls/teachers/t1/payout-profile');
+    expect(api.data, {
+      'method': 'instapay',
+      'accountHolderName': 'Ahmed',
+      'instapayAddress': 'a@instapay',
+    });
+  });
+  test('saves my payout profile without a teacher id', () async {
+    final api = _Api(
+      response: {
+        'data': {'method': 'instapay', 'instapayAddress': 'a@instapay'},
+      },
+    );
+    await TeacherPayrollRepoImpl(api).saveMyPayoutProfile(
+      const PayoutProfileRequest(
+        method: PayoutMethod.instapay,
+        accountHolderName: 'Ahmed',
+        instapayAddress: 'a@instapay',
+      ),
+    );
+    expect(api.path, '/teachers/me/payout-profile');
+    expect(api.protected, isTrue);
     expect(api.data, {
       'method': 'instapay',
       'accountHolderName': 'Ahmed',
@@ -125,7 +147,11 @@ class _Api implements ApiConsumer {
     Map<String, dynamic>? queryParameter,
     bool isFormData = false,
     bool isProtected = false,
-  }) async => _record(path, data, queryParameter);
+  }) async {
+    protected = isProtected;
+    return _record(path, data, queryParameter);
+  }
+
   @override
   Future patch(
     String path, {

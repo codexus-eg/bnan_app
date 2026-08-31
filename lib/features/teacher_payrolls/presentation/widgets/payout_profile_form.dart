@@ -1,27 +1,35 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/custom_dropdown_form_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/payout_method.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payout/teacher_payout_profile_cubit.dart';
 import 'package:bnan_app/features/teacher_payrolls/presentation/manager/payout/teacher_payout_profile_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'payout_method_selector.dart';
 
 class PayoutProfileForm extends StatefulWidget {
-  const PayoutProfileForm({super.key, required this.teacherId, this.initial});
-  final String teacherId;
+  const PayoutProfileForm({
+    super.key,
+    this.teacherId,
+    this.initial,
+    this.selfService = false,
+    this.popOnSuccess = true,
+  }) : assert(selfService || teacherId != null);
+  final String? teacherId;
   final PayoutProfileModel? initial;
+  final bool selfService, popOnSuccess;
   @override
   State<PayoutProfileForm> createState() => _PayoutProfileFormState();
 }
 
 class _PayoutProfileFormState extends State<PayoutProfileForm> {
   final key = GlobalKey<FormState>();
-  late String method = widget.initial?.method.isNotEmpty == true
-      ? widget.initial!.method
-      : 'instapay';
+  late PayoutMethod method = PayoutMethod.fromApi(widget.initial?.method ?? '');
   late final holder = TextEditingController(
         text: widget.initial?.accountHolderName,
       ),
@@ -36,7 +44,7 @@ class _PayoutProfileFormState extends State<PayoutProfileForm> {
     final s = S.of(context);
     return BlocListener<TeacherPayoutProfileCubit, TeacherPayoutProfileState>(
       listener: (context, state) {
-        if (state is TeacherPayoutProfileSuccess) {
+        if (state is TeacherPayoutProfileSuccess && widget.popOnSuccess) {
           Navigator.pop(context, state.profile);
         }
       },
@@ -91,18 +99,33 @@ class _PayoutProfileFormState extends State<PayoutProfileForm> {
   }
 
   List<Widget> _methodFields(S s) => switch (method) {
-    'instapay' => [
+    PayoutMethod.instapay => [
       CustomTextField(
-        label: s.payrollInstapayAddress,
+        label: s.payoutInstapayAddressLabel,
         controller: insta,
         isRequired: true,
         validator: _required,
       ),
     ],
-    'wallet' => [
-      CustomTextField(
+    PayoutMethod.wallet => [
+      CustomDropdownFormField(
         label: s.payrollWalletProvider,
-        controller: provider,
+        value: provider.text.isEmpty ? null : provider.text,
+        items: const [
+          'vodafone_cash',
+          'orange_cash',
+          'etisalat_cash',
+          'we_pay',
+          'other',
+        ],
+        itemsLabels: {
+          'vodafone_cash': s.payoutVodafoneCash,
+          'orange_cash': s.payoutOrangeCash,
+          'etisalat_cash': s.payoutEtisalatCash,
+          'we_pay': s.payoutWePay,
+          'other': s.payoutOtherProvider,
+        },
+        onChanged: (value) => setState(() => provider.text = value ?? ''),
         isRequired: true,
         validator: _required,
       ),
@@ -111,7 +134,15 @@ class _PayoutProfileFormState extends State<PayoutProfileForm> {
         label: s.payrollWalletPhone,
         controller: phone,
         isRequired: true,
-        validator: _required,
+        keyboardType: TextInputType.phone,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(11),
+        ],
+        validator: (value) =>
+            RegExp(r'^01[0125]\d{8}$').hasMatch(value?.trim() ?? '')
+            ? null
+            : s.payoutWalletPhoneInvalid,
       ),
     ],
     _ => [
@@ -138,18 +169,35 @@ class _PayoutProfileFormState extends State<PayoutProfileForm> {
       v == null || v.trim().isEmpty ? S.current.fieldRequired : null;
   void _save() {
     if (key.currentState?.validate() != true) return;
-    context.read<TeacherPayoutProfileCubit>().save(
-      widget.teacherId,
-      PayoutProfileRequest(
-        method: method,
-        accountHolderName: holder.text,
-        instapayAddress: insta.text,
-        walletProvider: provider.text,
-        walletPhone: phone.text,
-        bankName: bank.text,
-        accountNumber: account.text,
-        iban: iban.text,
-      ),
+    final request = PayoutProfileRequest(
+      method: method,
+      accountHolderName: holder.text,
+      instapayAddress: insta.text,
+      walletProvider: provider.text,
+      walletPhone: phone.text,
+      bankName: bank.text,
+      accountNumber: account.text,
+      iban: iban.text,
     );
+    final cubit = context.read<TeacherPayoutProfileCubit>();
+    widget.selfService
+        ? cubit.saveMine(request)
+        : cubit.save(widget.teacherId!, request);
+  }
+
+  @override
+  void dispose() {
+    for (final controller in [
+      holder,
+      insta,
+      provider,
+      phone,
+      bank,
+      account,
+      iban,
+    ]) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 }

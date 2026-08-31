@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/helper/app_logout.dart';
-import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
@@ -57,9 +56,6 @@ class ParentProfileBody extends StatelessWidget {
   }
 
   Future<void> _logout(BuildContext context) async {
-    await SessionManager.instance.clearSession();
-    final destination = await AppLogout.destinationAfterLogout();
-    if (!context.mounted) return;
-    MyNavigator.goToOffAll(context, destination);
+    await AppLogout.perform(context);
   }
 }

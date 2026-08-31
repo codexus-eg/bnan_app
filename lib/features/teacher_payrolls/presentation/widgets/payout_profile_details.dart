@@ -1,4 +1,5 @@
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/presentation/utils/payout_masker.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'payroll_info_row.dart';
@@ -28,7 +29,7 @@ class PayoutProfileDetails extends StatelessWidget {
           ),
           PayrollInfoRow(
             label: s.payrollWalletPhone,
-            value: profile.walletPhone,
+            value: PayoutMasker.walletPhone(profile.walletPhone),
           ),
         ],
         if (profile.method == 'bank_account') ...[
@@ -36,10 +37,13 @@ class PayoutProfileDetails extends StatelessWidget {
           if (profile.accountNumber.isNotEmpty)
             PayrollInfoRow(
               label: s.payrollAccountNumber,
-              value: profile.accountNumber,
+              value: PayoutMasker.accountNumber(profile.accountNumber),
             ),
           if (profile.iban.isNotEmpty)
-            PayrollInfoRow(label: s.payrollIban, value: profile.iban),
+            PayrollInfoRow(
+              label: s.payrollIban,
+              value: PayoutMasker.iban(profile.iban),
+            ),
         ],
       ],
     );

@@ -16,6 +16,7 @@ class FakeTeacherPayrollRepo implements TeacherPayrollRepo {
     TeacherMyPayrollsModel(summary: [], payrolls: []),
   );
   Either<Failure, PayoutProfileModel?> myPayoutProfile = const Right(null);
+  Either<Failure, PayoutProfileModel>? myPayoutSave;
   int myPayrollListLoads = 0;
 
   @override
@@ -28,6 +29,9 @@ class FakeTeacherPayrollRepo implements TeacherPayrollRepo {
   getMyPayroll(String id) async => payroll;
   @override
   getMyPayoutProfile() async => myPayoutProfile;
+  @override
+  saveMyPayoutProfile(PayoutProfileRequest request) async =>
+      myPayoutSave ?? Right(PayoutProfileModel.fromJson(request.toJson()));
   Either<Failure, TeacherPayrollModel> payment = Right(
     TeacherPayrollModel.fromResponse({
       'data': {'id': 'p1', 'status': 'paid'},

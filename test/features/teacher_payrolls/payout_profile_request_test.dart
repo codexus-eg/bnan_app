@@ -1,15 +1,16 @@
+import 'package:bnan_app/features/teacher_payrolls/data/models/payout_method.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('changing method clears method-specific fields', () {
     const request = PayoutProfileRequest(
-      method: 'wallet',
+      method: PayoutMethod.wallet,
       accountHolderName: 'Ahmed',
       walletProvider: 'cash',
       walletPhone: '010',
     );
-    final changed = request.withMethod('bank_account');
+    final changed = request.withMethod(PayoutMethod.bankAccount);
     expect(changed.walletProvider, isEmpty);
     expect(changed.walletPhone, isEmpty);
   });
@@ -17,7 +18,7 @@ void main() {
   test('bank requires account number or iban', () {
     expect(
       const PayoutProfileRequest(
-        method: 'bank_account',
+        method: PayoutMethod.bankAccount,
         accountHolderName: 'A',
         bankName: 'CIB',
       ).isValid,
@@ -25,7 +26,7 @@ void main() {
     );
     expect(
       const PayoutProfileRequest(
-        method: 'bank_account',
+        method: PayoutMethod.bankAccount,
         accountHolderName: 'A',
         bankName: 'CIB',
         accountNumber: '12',
@@ -34,12 +35,24 @@ void main() {
     );
     expect(
       const PayoutProfileRequest(
-        method: 'bank_account',
+        method: PayoutMethod.bankAccount,
         accountHolderName: 'A',
         bankName: 'CIB',
-        iban: 'eg12',
+        iban: 'eg 12',
       ).toJson()['iban'],
       'EG12',
+    );
+  });
+
+  test('wallet validates provider and Egyptian wallet phone', () {
+    expect(
+      const PayoutProfileRequest(
+        method: PayoutMethod.wallet,
+        accountHolderName: 'A',
+        walletProvider: 'vodafone_cash',
+        walletPhone: '01012345678',
+      ).isValid,
+      isTrue,
     );
   });
 }

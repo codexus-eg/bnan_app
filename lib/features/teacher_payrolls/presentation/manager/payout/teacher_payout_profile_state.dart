@@ -8,6 +8,14 @@ class TeacherPayoutProfileInitial extends TeacherPayoutProfileState {
   const TeacherPayoutProfileInitial();
 }
 
+class TeacherPayoutProfileLoading extends TeacherPayoutProfileState {
+  const TeacherPayoutProfileLoading();
+}
+
+class TeacherPayoutProfileEmpty extends TeacherPayoutProfileState {
+  const TeacherPayoutProfileEmpty();
+}
+
 class TeacherPayoutProfileSaving extends TeacherPayoutProfileState {
   const TeacherPayoutProfileSaving();
 }

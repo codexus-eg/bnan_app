@@ -62,6 +62,7 @@ export 'package:bnan_app/features/add_classroom_subject/presentation/views/add_c
 export 'package:bnan_app/features/discount_codes/presentation/views/discount_codes_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payrolls_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_my_payrolls_view.dart';
+export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payout_profile_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/teacher_payroll_details_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/payroll_payment_view.dart';
 export 'package:bnan_app/features/teacher_payrolls/presentation/views/payroll_sessions_view.dart';

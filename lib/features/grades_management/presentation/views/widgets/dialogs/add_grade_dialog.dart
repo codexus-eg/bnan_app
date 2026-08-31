@@ -5,7 +5,7 @@ import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
-import 'package:bnan_app/features/academic_lookups/data/models/academic_lookup_selection.dart';
+import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/widgets/academic_lookup_dropdowns.dart';
 import 'package:bnan_app/features/grades_management/data/models/create_grade_request_model.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
@@ -25,7 +25,6 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
   final formKey = GlobalKey<FormState>();
   final gradeNameController = TextEditingController();
 
-  AcademicLookupSelection selection = const AcademicLookupSelection();
   String? validationMessage;
 
   @override
@@ -41,6 +40,7 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
     return BlocConsumer<GradeActionsCubit, GradeActionsState>(
       listener: (context, state) {
         if (state is CreateGradeSuccess) {
+          context.read<AcademicLookupsCubit>().selectCurriculum(null);
           Navigator.pop(context, true);
         }
 
@@ -66,7 +66,6 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
                     showSubject: false,
                     onSelectionChanged: (value) {
                       setState(() {
-                        selection = value;
                         validationMessage = null;
                       });
                     },
@@ -110,7 +109,11 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
   void _submit() {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
-    final curriculumId = selection.curriculumId;
+    final curriculumId = context
+        .read<AcademicLookupsCubit>()
+        .state
+        .selectedCurriculum
+        ?.id;
 
     if (curriculumId == null) {
       setState(() => validationMessage = S.current.fillAllRequiredFields);
@@ -118,11 +121,11 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
     }
 
     context.read<GradeActionsCubit>().createGrade(
-          CreateGradeRequestModel(
-            name: gradeNameController.text.trim(),
-            curriculumId: curriculumId,
-          ),
-        );
+      CreateGradeRequestModel(
+        name: gradeNameController.text.trim(),
+        curriculumId: curriculumId,
+      ),
+    );
   }
 
   TextStyle getStyle(BuildContext context) {

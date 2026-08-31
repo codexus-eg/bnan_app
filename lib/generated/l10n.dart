@@ -12909,6 +12909,196 @@ class S {
       args: [],
     );
   }
+
+  /// `Payout details have not been added yet`
+  String get payoutProfileEmpty {
+    return Intl.message(
+      'Payout details have not been added yet',
+      name: 'payoutProfileEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add transfer details`
+  String get payoutProfileAdd {
+    return Intl.message(
+      'Add transfer details',
+      name: 'payoutProfileAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit details`
+  String get payoutProfileEdit {
+    return Intl.message(
+      'Edit details',
+      name: 'payoutProfileEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payout details saved successfully`
+  String get payoutProfileSaved {
+    return Intl.message(
+      'Payout details saved successfully',
+      name: 'payoutProfileSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The wallet phone must be 11 digits and start with 010, 011, 012, or 015`
+  String get payoutWalletPhoneInvalid {
+    return Intl.message(
+      'The wallet phone must be 11 digits and start with 010, 011, 012, or 015',
+      name: 'payoutWalletPhoneInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vodafone Cash`
+  String get payoutVodafoneCash {
+    return Intl.message(
+      'Vodafone Cash',
+      name: 'payoutVodafoneCash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Orange Cash`
+  String get payoutOrangeCash {
+    return Intl.message(
+      'Orange Cash',
+      name: 'payoutOrangeCash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Etisalat Cash`
+  String get payoutEtisalatCash {
+    return Intl.message(
+      'Etisalat Cash',
+      name: 'payoutEtisalatCash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WE Pay`
+  String get payoutWePay {
+    return Intl.message(
+      'WE Pay',
+      name: 'payoutWePay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other`
+  String get payoutOtherProvider {
+    return Intl.message(
+      'Other',
+      name: 'payoutOtherProvider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not connect to the server. Check your internet connection`
+  String get payoutNetworkError {
+    return Intl.message(
+      'Could not connect to the server. Check your internet connection',
+      name: 'payoutNetworkError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your session expired. Sign in again`
+  String get payoutUnauthorized {
+    return Intl.message(
+      'Your session expired. Sign in again',
+      name: 'payoutUnauthorized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are not allowed to perform this action`
+  String get payoutForbidden {
+    return Intl.message(
+      'You are not allowed to perform this action',
+      name: 'payoutForbidden',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The payout method is invalid`
+  String get payoutInvalidMethod {
+    return Intl.message(
+      'The payout method is invalid',
+      name: 'payoutInvalidMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The account holder name is required`
+  String get payoutHolderRequired {
+    return Intl.message(
+      'The account holder name is required',
+      name: 'payoutHolderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The provider and wallet phone are required`
+  String get payoutWalletRequired {
+    return Intl.message(
+      'The provider and wallet phone are required',
+      name: 'payoutWalletRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The bank name and account number or IBAN are required`
+  String get payoutBankRequired {
+    return Intl.message(
+      'The bank name and account number or IBAN are required',
+      name: 'payoutBankRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The phone number or InstaPay address is required`
+  String get payoutInstapayRequired {
+    return Intl.message(
+      'The phone number or InstaPay address is required',
+      name: 'payoutInstapayRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone number or InstaPay address`
+  String get payoutInstapayAddressLabel {
+    return Intl.message(
+      'Phone number or InstaPay address',
+      name: 'payoutInstapayAddressLabel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

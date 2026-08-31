@@ -1,5 +1,4 @@
 import 'package:bnan_app/core/helper/app_logout.dart';
-import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/session/current_user_ui.dart';
 import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
@@ -58,9 +57,6 @@ class TeacherProfileLayout extends StatelessWidget {
   }
 
   Future<void> _logout(BuildContext context) async {
-    await SessionManager.instance.clearSession();
-    final destination = await AppLogout.destinationAfterLogout();
-    if (!context.mounted) return;
-    MyNavigator.goToOffAll(context, destination);
+    await AppLogout.perform(context);
   }
 }

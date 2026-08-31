@@ -725,6 +725,17 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         ),
       ),
       GoRoute(
+        path: Routes.teacherMyPayoutProfile,
+        redirect: _teacherOnly,
+        pageBuilder: (context, state) => buildTransitionPages(
+          key: state.pageKey,
+          child: BlocProvider(
+            create: (_) => getIt<TeacherPayoutProfileCubit>(),
+            child: const TeacherPayoutProfileView(),
+          ),
+        ),
+      ),
+      GoRoute(
         path: Routes.supervisorHome,
         pageBuilder: (context, state) {
           final tabRoute =
