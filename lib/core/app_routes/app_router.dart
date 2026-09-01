@@ -3,6 +3,8 @@ import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/session/saved_account_store.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
+import 'package:bnan_app/features/notifications/presentation/views/global_notification_details_view.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/chat_room_metadata/chat_room_metadata_cubit.dart';
@@ -295,6 +297,19 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         path: Routes.notificationSettings,
         pageBuilder: (context, state) => buildTransitionPages(
           child: const NotificationPreferencesView(),
+          key: state.pageKey,
+        ),
+      ),
+
+      GoRoute(
+        path: Routes.globalNotificationDetails,
+        pageBuilder: (context, state) => buildTransitionPages(
+          child: GlobalNotificationDetailsView(
+            broadcastId: state.pathParameters['broadcastId'] ?? '',
+            initialNotification: state.extra is AppNotification
+                ? state.extra as AppNotification
+                : null,
+          ),
           key: state.pageKey,
         ),
       ),

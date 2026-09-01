@@ -20,6 +20,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   final List<VoidCallback> _removeSocketListeners = [];
   bool _initialized = false;
   int _loadRevision = 0;
+  int _globalRevision = 0;
   Set<String> _refreshBaselineIds = {};
   static const _limit = 20;
   Stream<AppNotification> get incoming => _incoming.stream;
@@ -169,7 +170,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   Future<void> markRead(AppNotification value) async {
-    if (value.isRead) return;
+    if (value.isRead || value.id.isEmpty) return;
     emit(
       state.copyWith(
         items: state.items
@@ -183,6 +184,50 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       ),
     );
     await _repo.markRead(ids: [value.id]);
+  }
+
+  Future<void> loadGlobalDetails(
+    String broadcastId, {
+    AppNotification? initial,
+  }) async {
+    final id = broadcastId.trim();
+    final revision = ++_globalRevision;
+    if (id.isEmpty) {
+      emit(state.copyWith(globalStatus: GlobalNotificationStatus.failure));
+      return;
+    }
+    emit(
+      state.copyWith(
+        globalStatus: initial == null
+            ? GlobalNotificationStatus.loading
+            : GlobalNotificationStatus.success,
+        globalDetails: initial,
+        clearGlobalDetails: initial == null,
+        clearGlobalError: true,
+      ),
+    );
+    final result = await _repo.getGlobalNotificationDetails(id);
+    if (isClosed || revision != _globalRevision) return;
+    await result.fold(
+      (failure) async => emit(
+        state.copyWith(
+          globalStatus: initial == null
+              ? GlobalNotificationStatus.failure
+              : GlobalNotificationStatus.success,
+          globalError: failure.message,
+        ),
+      ),
+      (value) async {
+        emit(
+          state.copyWith(
+            globalStatus: GlobalNotificationStatus.success,
+            globalDetails: value,
+            clearGlobalError: true,
+          ),
+        );
+        await markRead(value);
+      },
+    );
   }
 
   Future<void> markAllRead() async {
@@ -224,6 +269,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   Future<void> _sessionChanged(String? previous, String? next) async {
     _loadRevision++;
+    _globalRevision++;
     _refreshBaselineIds = {};
     for (final remove in _removeSocketListeners) {
       remove();
@@ -237,6 +283,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   @override
   Future<void> close() async {
     _loadRevision++;
+    _globalRevision++;
     for (final remove in _removeSocketListeners) {
       remove();
     }

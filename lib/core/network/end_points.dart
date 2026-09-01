@@ -25,6 +25,8 @@ abstract class EndPoints {
   static String rejectEgyptianSubscriptionRenewal(String paymentId) =>
       '$adminEgyptianSubscriptionRenewals/$paymentId/reject';
   static const String notificationsRead = '/notifications/read';
+  static String globalNotification(String broadcastId) =>
+      '$notifications/global/$broadcastId';
   static const String notificationPreferences = '/notification-preferences/me';
   static const String dashboard = '/dashboard';
   static const String registerTeacher = '/auth/register-teacher';

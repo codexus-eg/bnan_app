@@ -111,6 +111,27 @@ void main() {
       await cubit.close();
     },
   );
+
+  test('global details marks the individual notification id read', () async {
+    final repo = _Repo()
+      ..globalDetails = AppNotification.fromJson({
+        'id': 'individual-id',
+        'key': 'GLOBAL_NOTIFICATION',
+        'data': {'broadcastId': 'broadcast-id'},
+      });
+    final cubit = NotificationsCubit(
+      repo,
+      SocketService(),
+      RecentNotificationIds(),
+    );
+
+    await cubit.loadGlobalDetails('broadcast-id');
+
+    expect(repo.requestedBroadcastId, 'broadcast-id');
+    expect(repo.readIds, ['individual-id']);
+    expect(cubit.state.globalDetails?.id, 'individual-id');
+    await cubit.close();
+  });
 }
 
 NotificationsPage _page(int page, int totalPages, List<String> ids) =>
@@ -127,6 +148,17 @@ class _Repo implements NotificationsRepo {
   Map<int, NotificationsPage> pages = {};
   final List<int> requestedPages = [];
   Completer<Either<Failure, NotificationsPage>>? pending;
+  AppNotification? globalDetails;
+  String? requestedBroadcastId;
+
+  @override
+  Future<Either<Failure, AppNotification>> getGlobalNotificationDetails(
+    String broadcastId,
+  ) async {
+    requestedBroadcastId = broadcastId;
+    return Right(globalDetails!);
+  }
+
   @override
   Future<Either<Failure, void>> markRead({
     List<String> ids = const [],

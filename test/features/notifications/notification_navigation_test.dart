@@ -32,6 +32,32 @@ void main() {
     expect(service.resolve(_value('future_screen')), Routes.home);
   });
 
+  test('global key routes by broadcastId without notificationId', () async {
+    final service = NotificationNavigationService(SessionManager.instance);
+    final notification = AppNotification.fromJson({
+      'key': 'GLOBAL_NOTIFICATION',
+      'broadcastId': 'broadcast/1',
+      'type': 'announcement',
+    });
+
+    final destination = await service.resolveDestination(notification);
+
+    expect(destination.path, '/global_notification_details/broadcast%2F1');
+    expect(destination.extra, same(notification));
+  });
+
+  test('announcement type alone keeps existing fallback flow', () async {
+    await _saveRole(UserRole.student);
+    final service = NotificationNavigationService(SessionManager.instance);
+    final notification = AppNotification.fromJson({
+      'key': 'PLATFORM_ANNOUNCEMENT',
+      'type': 'announcement',
+    });
+
+    expect(await service.resolveDestination(notification), isNotNull);
+    expect(service.resolve(notification), Routes.home);
+  });
+
   for (final entry in const {
     UserRole.student: (screen: 'teacher_approval', home: Routes.home),
     UserRole.parent: (screen: 'performance', home: Routes.parentHome),

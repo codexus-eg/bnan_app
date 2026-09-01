@@ -14,6 +14,8 @@ abstract class Routes {
   static const String home = '/home';
   static const String notification = '/notification';
   static const String notificationSettings = '/notification/settings';
+  static const String globalNotificationDetails =
+      '/global_notification_details/:broadcastId';
   static const String chat = '/chat/:roomId';
   static const String legacyChat = '/chat';
   static const String classroomDocuments = '/classroomDocuments';
@@ -91,6 +93,11 @@ abstract class Routes {
   static String get directLogIn => '$logIn?direct=true';
   static String chatPath(String roomId) =>
       chat.replaceFirst(':roomId', Uri.encodeComponent(roomId));
+  static String globalNotificationDetailsPath(String broadcastId) =>
+      globalNotificationDetails.replaceFirst(
+        ':broadcastId',
+        Uri.encodeComponent(broadcastId),
+      );
   static String parentSubscriptionRenewalPath(String studentId) =>
       parentSubscriptionRenewal.replaceFirst(':studentId', studentId);
   static String teacherPayrollDetailsPath(String payrollId) =>

@@ -715,6 +715,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا يمكن اختيار تاريخ مستقبلي"),
         "generalTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("شهادة شكر وتقدير"),
+        "globalNotificationDetails":
+            MessageLookupByLibrary.simpleMessage("تفاصيل الإشعار"),
+        "globalNotificationTryAgain": MessageLookupByLibrary.simpleMessage(
+            "قد يكون الإشعار منتهيًا، حاول مرة أخرى."),
+        "globalNotificationUnavailable":
+            MessageLookupByLibrary.simpleMessage("الإشعار غير متاح"),
         "goToPayment": MessageLookupByLibrary.simpleMessage("الإنتقال للدفع"),
         "good": MessageLookupByLibrary.simpleMessage("جيد"),
         "grade": MessageLookupByLibrary.simpleMessage("الصف"),

@@ -14,11 +14,13 @@ class AppNotification {
     required this.createdAt,
     this.resourceId,
     this.resourceModel,
+    this.image,
+    this.broadcastId,
     this.readAt,
   });
 
   final String id, type, key, title, body;
-  final String? resourceId, resourceModel;
+  final String? resourceId, resourceModel, image, broadcastId;
   final NotificationNavigation navigation;
   final Map<String, dynamic> data;
   final bool isRead;
@@ -43,6 +45,8 @@ class AppNotification {
     data: data,
     resourceId: resourceId,
     resourceModel: resourceModel,
+    image: image,
+    broadcastId: broadcastId,
     createdAt: createdAt,
     isRead: isRead ?? this.isRead,
     readAt: readAt ?? this.readAt,
@@ -59,6 +63,13 @@ class AppNotification {
     navigation['target'] ??= json['target'];
     navigation['params'] ??= json['params'];
     final params = NotificationNavigation.decodeParams(navigation['params']);
+    final resourceModel = _nullable(resource['model'] ?? json['resourceModel']);
+    final broadcastId = _nullable(
+      data['broadcastId'] ??
+          json['broadcastId'] ??
+          params['broadcastId'] ??
+          (resourceModel == 'GlobalNotification' ? resource['id'] : null),
+    );
     final sources = [json, data];
     for (final source in sources) {
       for (final key in const [
@@ -78,10 +89,12 @@ class AppNotification {
       id: _string(json['id'] ?? json['notificationId']),
       type: _string(json['type'] ?? json['notificationType']),
       key: _string(json['key']),
-      title: _localizedString(json['title'] ?? json['_title']),
-      body: _localizedString(json['body'] ?? json['_body']),
+      title: _localizedString(json['title'] ?? json['_title'] ?? data['title']),
+      body: _localizedString(json['body'] ?? json['_body'] ?? data['content']),
       resourceId: _nullable(resource['id'] ?? json['resourceId']),
-      resourceModel: _nullable(resource['model'] ?? json['resourceModel']),
+      resourceModel: resourceModel,
+      image: _nullable(json['image'] ?? data['image']),
+      broadcastId: broadcastId,
       navigation: NotificationNavigation.fromJson(navigation),
       data: data,
       isRead:
@@ -100,6 +113,8 @@ class AppNotification {
     '_body': body,
     'resourceId': resourceId,
     'resourceModel': resourceModel,
+    'image': image,
+    'broadcastId': broadcastId,
     'screen': navigation.screen,
     'target': navigation.target,
     'params': navigation.params,

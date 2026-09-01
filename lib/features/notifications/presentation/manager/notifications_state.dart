@@ -2,6 +2,8 @@ import 'package:bnan_app/features/notifications/data/models/app_notification.dar
 
 enum NotificationsStatus { initial, loading, success, failure }
 
+enum GlobalNotificationStatus { initial, loading, success, failure }
+
 class NotificationsState {
   const NotificationsState({
     this.status = NotificationsStatus.initial,
@@ -13,12 +15,18 @@ class NotificationsState {
     this.loadingMore = false,
     this.refreshing = false,
     this.error,
+    this.globalStatus = GlobalNotificationStatus.initial,
+    this.globalDetails,
+    this.globalError,
   });
   final NotificationsStatus status;
   final List<AppNotification> items;
   final int unreadCount, page, totalPages;
   final bool hasNext, loadingMore, refreshing;
   final String? error;
+  final GlobalNotificationStatus globalStatus;
+  final AppNotification? globalDetails;
+  final String? globalError;
 
   NotificationsState copyWith({
     NotificationsStatus? status,
@@ -31,6 +39,11 @@ class NotificationsState {
     bool? refreshing,
     String? error,
     bool clearError = false,
+    GlobalNotificationStatus? globalStatus,
+    AppNotification? globalDetails,
+    String? globalError,
+    bool clearGlobalError = false,
+    bool clearGlobalDetails = false,
   }) => NotificationsState(
     status: status ?? this.status,
     items: items ?? this.items,
@@ -41,5 +54,10 @@ class NotificationsState {
     loadingMore: loadingMore ?? this.loadingMore,
     refreshing: refreshing ?? this.refreshing,
     error: clearError ? null : error ?? this.error,
+    globalStatus: globalStatus ?? this.globalStatus,
+    globalDetails: clearGlobalDetails
+        ? null
+        : globalDetails ?? this.globalDetails,
+    globalError: clearGlobalError ? null : globalError ?? this.globalError,
   );
 }

@@ -39,6 +39,17 @@ class NotificationNavigationService {
     final key = notification.key.trim().toUpperCase();
     final role = _session.role;
 
+    if (key == 'GLOBAL_NOTIFICATION') {
+      final broadcastId = notification.broadcastId;
+      if (broadcastId == null || broadcastId.isEmpty) {
+        return NotificationDestination(_fallback());
+      }
+      return NotificationDestination(
+        Routes.globalNotificationDetailsPath(broadcastId),
+        extra: notification,
+      );
+    }
+
     if (role == UserRole.student && key == 'STUDENT_CALL_ALERT') {
       return const NotificationDestination(Routes.home);
     }

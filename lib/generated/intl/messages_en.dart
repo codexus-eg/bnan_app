@@ -743,6 +743,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "Future dates are not allowed"),
         "generalTeacherCertificate":
             MessageLookupByLibrary.simpleMessage("Certificate of Appreciation"),
+        "globalNotificationDetails":
+            MessageLookupByLibrary.simpleMessage("Notification details"),
+        "globalNotificationTryAgain": MessageLookupByLibrary.simpleMessage(
+            "It may have expired. Please try again."),
+        "globalNotificationUnavailable":
+            MessageLookupByLibrary.simpleMessage("Notification unavailable"),
         "goToPayment":
             MessageLookupByLibrary.simpleMessage("Proceed to Payment"),
         "good": MessageLookupByLibrary.simpleMessage("Good"),

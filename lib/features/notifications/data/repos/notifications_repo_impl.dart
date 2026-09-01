@@ -3,6 +3,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/features/notifications/data/models/notification_preferences.dart';
+import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/data/models/notifications_page.dart';
 import 'package:bnan_app/features/notifications/data/repos/notifications_repo.dart';
 import 'package:dartz/dartz.dart';
@@ -34,6 +35,23 @@ class NotificationsRepoImpl implements NotificationsRepo {
       EndPoints.notificationsRead,
       data: all ? {'all': true} : {'notificationIds': ids},
       isProtected: true,
+    );
+  });
+
+  @override
+  Future<Either<Failure, AppNotification>> getGlobalNotificationDetails(
+    String broadcastId,
+  ) => _guard(() async {
+    final response = await _api.get(
+      EndPoints.globalNotification(broadcastId),
+      isProtected: true,
+    );
+    final root = response is Map
+        ? Map<String, dynamic>.from(response)
+        : <String, dynamic>{};
+    final data = root['data'];
+    return AppNotification.fromJson(
+      data is Map ? Map<String, dynamic>.from(data) : root,
     );
   });
 

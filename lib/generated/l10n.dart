@@ -2060,6 +2060,36 @@ class S {
     );
   }
 
+  /// `Notification details`
+  String get globalNotificationDetails {
+    return Intl.message(
+      'Notification details',
+      name: 'globalNotificationDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification unavailable`
+  String get globalNotificationUnavailable {
+    return Intl.message(
+      'Notification unavailable',
+      name: 'globalNotificationUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `It may have expired. Please try again.`
+  String get globalNotificationTryAgain {
+    return Intl.message(
+      'It may have expired. Please try again.',
+      name: 'globalNotificationTryAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Package Details`
   String get packageDetails {
     return Intl.message(

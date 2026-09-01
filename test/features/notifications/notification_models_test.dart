@@ -65,6 +65,34 @@ void main() {
     expect(value.navigation.params['roomName'], 'Mathematics');
   });
 
+  test('global notification parses optional fields defensively', () {
+    final direct = AppNotification.fromJson({
+      'key': 'GLOBAL_NOTIFICATION',
+      'broadcastId': 'broadcast-direct',
+      'params': '{bad json',
+    });
+    final nested = AppNotification.fromJson({
+      'data': {
+        'broadcastId': 'broadcast-data',
+        'image': 'https://example.com/image.jpg',
+        'content': 'Content',
+      },
+    });
+    final params = AppNotification.fromJson({
+      'params': '{"broadcastId":"broadcast-params"}',
+    });
+    final resource = AppNotification.fromJson({
+      'resource': {'id': 'broadcast-resource', 'model': 'GlobalNotification'},
+    });
+
+    expect(direct.broadcastId, 'broadcast-direct');
+    expect(nested.broadcastId, 'broadcast-data');
+    expect(nested.image, 'https://example.com/image.jpg');
+    expect(nested.body, 'Content');
+    expect(params.broadcastId, 'broadcast-params');
+    expect(resource.broadcastId, 'broadcast-resource');
+  });
+
   test('legacy chat push intent preserves chatName alias', () {
     final value = ChatPushIntent.tryParse({
       'key': 'NEW_MESSAGE',
