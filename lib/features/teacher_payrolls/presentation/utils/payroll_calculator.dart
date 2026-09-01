@@ -2,9 +2,7 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_work_item
 
 abstract final class PayrollCalculator {
   static double item(PayrollWorkItemModel work, double rate) =>
-      work.system == 'gulf'
-      ? work.minutes * rate / 60
-      : work.sessionsCount * rate;
+      work.minutes * rate / 60;
   static double total(
     Iterable<PayrollWorkItemModel> work,
     Map<String, double> rates,
@@ -14,7 +12,7 @@ abstract final class PayrollCalculator {
       work.fold<double>(
         0,
         (sum, item) =>
-            sum + PayrollCalculator.item(item, rates[item.curriculumId] ?? 0),
+            sum + PayrollCalculator.item(item, rates[item.gradeId] ?? 0),
       ) +
       bonus -
       deduction;

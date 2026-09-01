@@ -121,7 +121,7 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
                 teacherId: p.teacher.id,
                 from: p.period.from,
                 to: p.period.to,
-                controller: rates[w.curriculumId]!,
+                controller: rates[w.gradeId]!,
                 currency: currency,
                 readOnly: readOnly,
                 onChanged: (_) => setState(() {}),
@@ -171,7 +171,7 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
             CustomAppButton(
               text: S.of(context).payrollSaveDraft,
               isLoading: state.saving,
-              onPressed: () => _save(p),
+              onPressed: _hasValidRates ? () => _save(p) : null,
             ),
           if (p.status == 'draft') ...[
             const SizedBox(height: 8),
@@ -201,8 +201,8 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
     adjustment.text = p.adjustmentNote;
     notes.text = p.notes;
     for (final item in p.workItems) {
-      rates[item.curriculumId] = TextEditingController(
-        text: item.rate == 0 ? '' : '${item.rate}',
+      rates[item.gradeId] = TextEditingController(
+        text: item.hasRate ? '${item.rate}' : '',
       );
     }
   }
@@ -212,8 +212,8 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
     final mapped = p.workItems
         .map(
           (w) => PayrollRateRequest(
-            w.curriculumId,
-            double.parse(rates[w.curriculumId]!.text),
+            w.gradeId,
+            double.parse(rates[w.gradeId]!.text),
           ),
         )
         .toList();
@@ -221,7 +221,7 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
         d = double.tryParse(deduction.text) ?? 0;
     if (PayrollCalculator.total(
           p.workItems,
-          {for (final r in mapped) r.curriculumId: r.rate},
+          {for (final r in mapped) r.gradeId: r.rate},
           b,
           d,
         ) <
@@ -244,4 +244,11 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
       ),
     );
   }
+
+  bool get _hasValidRates =>
+      rates.isNotEmpty &&
+      rates.values.every((controller) {
+        final rate = double.tryParse(controller.text.trim());
+        return rate != null && rate >= 0;
+      });
 }

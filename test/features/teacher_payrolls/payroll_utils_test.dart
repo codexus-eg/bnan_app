@@ -8,28 +8,42 @@ void main() {
   const gulf = PayrollWorkItemModel(
     curriculumId: 'g',
     curriculumName: '',
+    gradeId: 'grade-4',
+    gradeName: 'Grade 4',
     system: 'gulf',
-    minutes: 90,
+    rateType: 'hour',
+    minutes: 120,
     displayDuration: '',
     sessionsCount: 0,
     rate: 0,
     amount: 0,
+    hasRate: false,
   );
   const egyptian = PayrollWorkItemModel(
     curriculumId: 'e',
     curriculumName: '',
+    gradeId: 'grade-6',
+    gradeName: 'Grade 6',
     system: 'egyptian',
-    minutes: 0,
+    rateType: 'hour',
+    minutes: 90,
     displayDuration: '',
     sessionsCount: 3,
     rate: 0,
     amount: 0,
+    hasRate: false,
   );
-  test('calculates gulf, egyptian, bonus and deduction decimals', () {
-    expect(PayrollCalculator.item(gulf, 100.5), 150.75);
+  test('calculates every curriculum by grade hourly rate', () {
+    expect(PayrollCalculator.item(gulf, 120), 240);
+    expect(PayrollCalculator.item(egyptian, 150), 225);
     expect(
-      PayrollCalculator.total([gulf, egyptian], {'g': 100.5, 'e': 20}, 10, 5),
-      215.75,
+      PayrollCalculator.total(
+        [gulf, egyptian],
+        {'grade-4': 120, 'grade-6': 150},
+        50,
+        20,
+      ),
+      495,
     );
   });
   test('rejects missing, unsupported and oversized receipts', () async {

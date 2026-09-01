@@ -34,27 +34,21 @@ class PayrollWorkItemCard extends StatelessWidget {
     final rate = double.tryParse(controller.text) ?? item.rate;
     final amount = readOnly ? item.amount : PayrollCalculator.item(item, rate);
     return PayrollSection(
-      title: item.curriculumName,
+      title: '${item.curriculumName} - ${item.gradeName}',
       child: Column(
         children: [
           PayrollInfoRow(
             label: s.payrollSystem,
             value: item.system == 'gulf' ? s.payrollGulf : s.payrollEgyptian,
           ),
-          if (item.system == 'gulf')
-            PayrollInfoRow(
-              label: s.payrollDuration,
-              value: item.displayDuration,
-            ),
+          PayrollInfoRow(label: s.payrollDuration, value: item.displayDuration),
           PayrollInfoRow(
             label: s.payrollSessionsCount,
             value: '${item.sessionsCount}',
           ),
           if (!readOnly)
             CustomTextField(
-              label: item.system == 'gulf'
-                  ? s.payrollHourlyRate
-                  : s.payrollSessionRate,
+              label: s.payrollHourlyRate,
               controller: controller,
               onChanged: onChanged,
               isRequired: true,

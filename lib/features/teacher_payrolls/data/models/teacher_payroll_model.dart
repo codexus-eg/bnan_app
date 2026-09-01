@@ -41,6 +41,13 @@ class TeacherPayrollModel {
     final summary = payrollMap(json['summary']);
     final profile = json['payoutProfile'];
     final payment = json['payment'];
+    final warnings = payrollList(json['warnings']);
+    final summaryExcluded = payrollInt(summary['excludedSessionsCount']);
+    final warningExcluded = warnings
+        .whereType<Map>()
+        .where((w) => w['code'] == 'PAYROLL_SESSIONS_EXCLUDED')
+        .map((w) => payrollInt(w['count']))
+        .fold<int>(0, (max, count) => count > max ? count : max);
     return TeacherPayrollModel(
       id: payrollString(json['_id'] ?? json['id'] ?? json['payrollId']),
       status: payrollString(
@@ -62,11 +69,14 @@ class TeacherPayrollModel {
       adjustmentNote: payrollString(json['adjustmentNote']),
       notes: payrollString(json['notes']),
       excludedSessions: payrollInt(
-        json['excludedSessionsCount'] ?? summary['excludedSessionsCount'],
+        json['excludedSessionsCount'] ??
+            (summaryExcluded > 0 ? summaryExcluded : warningExcluded),
       ),
-      warnings: payrollList(
-        json['warnings'],
-      ).map(payrollString).where((e) => e.isNotEmpty).toList(),
+      warnings: warnings
+          .whereType<String>()
+          .map(payrollString)
+          .where((e) => e.isNotEmpty)
+          .toList(),
       totals: PayrollTotalsModel.fromJson(json['totals']),
       payoutProfile: profile is Map
           ? PayoutProfileModel.fromJson(profile)

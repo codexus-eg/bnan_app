@@ -1,10 +1,10 @@
 import 'payroll_period_model.dart';
 
 class PayrollRateRequest {
-  const PayrollRateRequest(this.curriculumId, this.rate);
-  final String curriculumId;
+  const PayrollRateRequest(this.gradeId, this.rate);
+  final String gradeId;
   final double rate;
-  Map<String, dynamic> toJson() => {'curriculumId': curriculumId, 'rate': rate};
+  Map<String, dynamic> toJson() => {'gradeId': gradeId, 'rate': rate};
 }
 
 class SavePayrollRequest {
