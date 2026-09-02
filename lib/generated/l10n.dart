@@ -13129,6 +13129,236 @@ class S {
       args: [],
     );
   }
+
+  /// `Date of birth`
+  String get dateOfBirth {
+    return Intl.message(
+      'Date of birth',
+      name: 'dateOfBirth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bachelor's student`
+  String get bachelorStudent {
+    return Intl.message(
+      'Bachelor\'s student',
+      name: 'bachelorStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bachelor's degree`
+  String get bachelor {
+    return Intl.message(
+      'Bachelor\'s degree',
+      name: 'bachelor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Master's student`
+  String get masterStudent {
+    return Intl.message(
+      'Master\'s student',
+      name: 'masterStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Master's degree`
+  String get master {
+    return Intl.message(
+      'Master\'s degree',
+      name: 'master',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PhD student`
+  String get phdStudent {
+    return Intl.message(
+      'PhD student',
+      name: 'phdStudent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PhD`
+  String get phd {
+    return Intl.message(
+      'PhD',
+      name: 'phd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Additional curriculums`
+  String get additionalCurriculums {
+    return Intl.message(
+      'Additional curriculums',
+      name: 'additionalCurriculums',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose at least one additional curriculum`
+  String get additionalCurriculumsRequired {
+    return Intl.message(
+      'Choose at least one additional curriculum',
+      name: 'additionalCurriculumsRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stable internet proof`
+  String get stableInternetProof {
+    return Intl.message(
+      'Stable internet proof',
+      name: 'stableInternetProof',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Replace internet proof image`
+  String get replaceStableInternetProof {
+    return Intl.message(
+      'Replace internet proof image',
+      name: 'replaceStableInternetProof',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload stable internet proof`
+  String get stableInternetProofRequired {
+    return Intl.message(
+      'Upload stable internet proof',
+      name: 'stableInternetProofRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The image must not exceed 5 MB`
+  String get stableInternetProofTooLarge {
+    return Intl.message(
+      'The image must not exceed 5 MB',
+      name: 'stableInternetProofTooLarge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experience certificate`
+  String get experienceCertificates {
+    return Intl.message(
+      'Experience certificate',
+      name: 'experienceCertificates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experience certificates (optional, up to 10)`
+  String get experienceCertificatesOptional {
+    return Intl.message(
+      'Experience certificates (optional, up to 10)',
+      name: 'experienceCertificatesOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only the first 10 files were selected`
+  String get experienceCertificatesLimit {
+    return Intl.message(
+      'Only the first 10 files were selected',
+      name: 'experienceCertificatesLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I agree to `
+  String get termsAgreementPrefix {
+    return Intl.message(
+      'I agree to ',
+      name: 'termsAgreementPrefix',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `teacher registration and work terms and conditions`
+  String get teacherTermsAndConditions {
+    return Intl.message(
+      'teacher registration and work terms and conditions',
+      name: 'teacherTermsAndConditions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teacher documents`
+  String get teacherDocuments {
+    return Intl.message(
+      'Teacher documents',
+      name: 'teacherDocuments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to open the file`
+  String get failedToOpenFile {
+    return Intl.message(
+      'Unable to open the file',
+      name: 'failedToOpenFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms accepted`
+  String get termsAccepted {
+    return Intl.message(
+      'Terms accepted',
+      name: 'termsAccepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accepted at`
+  String get termsAcceptedAt {
+    return Intl.message(
+      'Accepted at',
+      name: 'termsAcceptedAt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms version`
+  String get termsVersion {
+    return Intl.message(
+      'Terms version',
+      name: 'termsVersion',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

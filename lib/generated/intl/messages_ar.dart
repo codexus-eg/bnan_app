@@ -172,6 +172,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "addSubjectToClassroom":
             MessageLookupByLibrary.simpleMessage("إضافة مادة لفصل"),
         "addUser": MessageLookupByLibrary.simpleMessage("إضافة مستخدم"),
+        "additionalCurriculums":
+            MessageLookupByLibrary.simpleMessage("المناهج الإضافية"),
+        "additionalCurriculumsRequired": MessageLookupByLibrary.simpleMessage(
+            "اختر منهجًا إضافيًا واحدًا على الأقل"),
         "admin": MessageLookupByLibrary.simpleMessage("أدمن"),
         "adminNotes":
             MessageLookupByLibrary.simpleMessage("ملاحظات الإدارة (اختياري)"),
@@ -271,6 +275,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "available": MessageLookupByLibrary.simpleMessage("المتاحة"),
         "availableDay": MessageLookupByLibrary.simpleMessage("اليوم المتاح"),
         "averagePercent": m3,
+        "bachelor": MessageLookupByLibrary.simpleMessage("بكالوريوس"),
+        "bachelorStudent":
+            MessageLookupByLibrary.simpleMessage("طالب بكالوريوس"),
         "back": MessageLookupByLibrary.simpleMessage("رجوع"),
         "backToLogin":
             MessageLookupByLibrary.simpleMessage("العودة لتسجيل الدخول"),
@@ -480,6 +487,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "كلمة المرور للدخول على الداشبورد"),
         "date": MessageLookupByLibrary.simpleMessage("التاريخ"),
         "dateFormatHint": MessageLookupByLibrary.simpleMessage("mm/dd/yy"),
+        "dateOfBirth": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
         "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("مدة محددة"),
         "day": MessageLookupByLibrary.simpleMessage("يوم"),
         "days": MessageLookupByLibrary.simpleMessage("أيام"),
@@ -668,6 +676,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "expected": MessageLookupByLibrary.simpleMessage("المتوقع"),
         "expenses": MessageLookupByLibrary.simpleMessage("المصاريف"),
         "experience": MessageLookupByLibrary.simpleMessage("الخبرة"),
+        "experienceCertificates":
+            MessageLookupByLibrary.simpleMessage("شهادة خبرة"),
+        "experienceCertificatesLimit":
+            MessageLookupByLibrary.simpleMessage("تم اختيار أول 10 ملفات فقط"),
+        "experienceCertificatesOptional": MessageLookupByLibrary.simpleMessage(
+            "شهادات الخبرة (اختياري، بحد أقصى 10)"),
         "expiredSubscriptions":
             MessageLookupByLibrary.simpleMessage("اشتراكات منتهية"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
@@ -676,6 +690,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تعذر تحميل بيانات الحضور"),
         "failedToOpenCv":
             MessageLookupByLibrary.simpleMessage("تعذر فتح السيرة الذاتية"),
+        "failedToOpenFile":
+            MessageLookupByLibrary.simpleMessage("تعذر فتح الملف"),
         "fieldIsRequired": m11,
         "fieldRequired":
             MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
@@ -873,6 +889,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "markAllNotificationsRead":
             MessageLookupByLibrary.simpleMessage("تحديد الكل كمقروء"),
         "markAsRead": MessageLookupByLibrary.simpleMessage("تمييز كمقروءة"),
+        "master": MessageLookupByLibrary.simpleMessage("ماجستير"),
+        "masterStudent": MessageLookupByLibrary.simpleMessage("طالب ماجستير"),
         "materialsManagement":
             MessageLookupByLibrary.simpleMessage("إدارة المواد"),
         "math": MessageLookupByLibrary.simpleMessage("الرياضيات"),
@@ -1482,6 +1500,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "permanentlyDeleteFromSystem":
             MessageLookupByLibrary.simpleMessage("حذف نهائي من النظام"),
         "personalProfile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
+        "phd": MessageLookupByLibrary.simpleMessage("دكتوراه"),
+        "phdStudent": MessageLookupByLibrary.simpleMessage("طالب دكتوراه"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "physics": MessageLookupByLibrary.simpleMessage("الفيزياء"),
         "planFile": MessageLookupByLibrary.simpleMessage("ملف الخطة"),
@@ -1622,6 +1642,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الساعات المستخدمة"),
         "renewalViewReceipt":
             MessageLookupByLibrary.simpleMessage("عرض الإيصال"),
+        "replaceStableInternetProof":
+            MessageLookupByLibrary.simpleMessage("استبدال صورة إثبات الإنترنت"),
         "reports": MessageLookupByLibrary.simpleMessage("التقارير"),
         "requestAccepted":
             MessageLookupByLibrary.simpleMessage("تم قبول طلبك!"),
@@ -1798,6 +1820,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "skip": MessageLookupByLibrary.simpleMessage("تخطي"),
         "socialStudies": MessageLookupByLibrary.simpleMessage("الاجتماعيات"),
         "specialization": MessageLookupByLibrary.simpleMessage("التخصص"),
+        "stableInternetProof":
+            MessageLookupByLibrary.simpleMessage("إثبات استقرار الإنترنت"),
+        "stableInternetProofRequired": MessageLookupByLibrary.simpleMessage(
+            "برجاء رفع إثبات استقرار الإنترنت"),
+        "stableInternetProofTooLarge": MessageLookupByLibrary.simpleMessage(
+            "يجب ألا يزيد حجم الصورة عن 5 ميجابايت"),
         "start": MessageLookupByLibrary.simpleMessage("ابدأ"),
         "startDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
         "startLessonViaZoom":
@@ -1972,6 +2000,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("شهادات المعلمين"),
         "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
             "أقر بصحة جميع البيانات المذكورة أعلاه، وأتعهد بالالتزام بقواعد وسياسات أكاديمية بنان"),
+        "teacherDocuments":
+            MessageLookupByLibrary.simpleMessage("مستندات المعلم"),
         "teacherMyEarnings": MessageLookupByLibrary.simpleMessage("مستحقاتي"),
         "teacherNotAssignedToSessionSubject":
             MessageLookupByLibrary.simpleMessage(
@@ -2052,6 +2082,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تفاصيل التدريس"),
         "teacherStepTechnicalSkills":
             MessageLookupByLibrary.simpleMessage("المهارات التقنية"),
+        "teacherTermsAndConditions": MessageLookupByLibrary.simpleMessage(
+            "شروط وأحكام تسجيل وعمل المعلمين"),
         "teacherUnassignedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم إلغاء توظيف المعلم بنجاح"),
         "teacherWithdrawalRequestType":
@@ -2064,6 +2096,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "termPlan": MessageLookupByLibrary.simpleMessage("خطة الترم"),
         "termPlanUploadedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم رفع خطة الترم بنجاح"),
+        "termsAccepted":
+            MessageLookupByLibrary.simpleMessage("الموافقة على الشروط"),
+        "termsAcceptedAt":
+            MessageLookupByLibrary.simpleMessage("تاريخ الموافقة"),
+        "termsAgreementPrefix":
+            MessageLookupByLibrary.simpleMessage("أوافق على "),
+        "termsVersion": MessageLookupByLibrary.simpleMessage("نسخة الشروط"),
         "theRequiredLesson":
             MessageLookupByLibrary.simpleMessage("الدرس المطلوب"),
         "theSupervisor": MessageLookupByLibrary.simpleMessage("المشرف"),

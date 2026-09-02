@@ -6,12 +6,11 @@ import 'package:bnan_app/features/teacher_application/presentation/views/widgets
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/qualification_details_section.dart';
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/technical_skills_details_section.dart';
 import 'package:flutter/material.dart';
+import 'package:bnan_app/features/teacher_application/presentation/views/widgets/teacher_documents_details_section.dart';
+import 'package:bnan_app/features/teacher_application/presentation/views/widgets/teacher_terms_details_section.dart';
 
 class TeacherApplicationDetailsContent extends StatelessWidget {
-  const TeacherApplicationDetailsContent({
-    super.key,
-    required this.teacher,
-  });
+  const TeacherApplicationDetailsContent({super.key, required this.teacher});
 
   final TeacherRequestModel teacher;
 
@@ -24,6 +23,8 @@ class TeacherApplicationDetailsContent extends StatelessWidget {
       BnanTeachingDetailsSection(teacher: teacher),
       TechnicalSkillsDetailsSection(teacher: teacher),
       EvaluationDetailsSection(teacher: teacher),
+      TeacherDocumentsDetailsSection(teacher: teacher),
+      TeacherTermsDetailsSection(teacher: teacher),
     ];
 
     return Column(

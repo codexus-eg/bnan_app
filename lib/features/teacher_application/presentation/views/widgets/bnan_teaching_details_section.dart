@@ -24,6 +24,10 @@ class BnanTeachingDetailsSection extends StatelessWidget {
           s.curriculum,
           teacher.curriculums.map((e) => e.name).join('، '),
         ),
+        DetailsFieldData(
+          s.additionalCurriculums,
+          teacher.additionalCurriculums.map((e) => e.name).join(', '),
+        ),
         DetailsFieldData(s.desiredSubjects, '-'),
         DetailsFieldData(s.availability, _yesNo(s, teacher.isAvailable)),
         DetailsFieldData(s.teachableGrades, '-'),

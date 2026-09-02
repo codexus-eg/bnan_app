@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bnan_app/features/teacher_registration/data/models/select_grade_subjects.dart';
@@ -5,6 +6,9 @@ import 'package:bnan_app/features/teacher_registration/data/models/teacher_regis
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
 import 'package:bnan_app/features/teacher_registration/presentation/manager/teacher_registration_cubit/teacher_registration_state.dart';
 import 'package:bnan_app/generated/l10n.dart';
+import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/teacher_registration/data/models/teacher_terms_model.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +23,8 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
   static const int firstStep = 1;
   static const int lastStep = 8;
   String? graduationGrade;
+  String? degree;
+  DateTime? dateOfBirth;
   int? selectedGraduationYear;
   bool? hasTeachingExperience;
   bool? taughtOnlineBefore;
@@ -34,6 +40,9 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
   File? cvFile;
   File? certificateFile;
   File? nationalIdFile;
+  File? stableInternetProofFile;
+  final List<File> experienceCertificateFiles = [];
+  final List<String> additionalCurriculumIds = [];
 
   bool declarationAccepted = false;
   final List<SelectedGradeSubjects> selectedGradesSubjects = [];
@@ -50,10 +59,9 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
   final nationalityController = TextEditingController();
   final countryController = TextEditingController();
   final cityController = TextEditingController();
-  final qualificationController = TextEditingController();
   final specializationController = TextEditingController();
-  final universityController = TextEditingController();
   final graduationYearController = TextEditingController();
+  final dateOfBirthController = TextEditingController();
 
   bool get isSubmitDisabled {
     return state.currentStep == lastStep && !declarationAccepted;
@@ -74,9 +82,40 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
     emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
   }
 
+  void changeStableInternetProof(File file) {
+    stableInternetProofFile = file;
+    emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
+  }
+
+  void changeExperienceCertificates(List<File> files) {
+    experienceCertificateFiles
+      ..clear()
+      ..addAll(files.take(10));
+    emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
+  }
+
+  void changeDegree(String? value) {
+    degree = value;
+    emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
+  }
+
+  void changeDateOfBirth(DateTime value) {
+    dateOfBirth = value;
+    dateOfBirthController.text = _formatDate(value);
+    emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
+  }
+
   void changeDeclarationAccepted(bool value) {
     declarationAccepted = value;
     emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
+  }
+
+  Future<Either<Failure, TeacherTermsModel>> getTeacherTerms() {
+    final repo = teacherRegistrationRepo;
+    if (repo is TeacherTermsRepo) {
+      return (repo as TeacherTermsRepo).getTeacherTerms();
+    }
+    return Future.value(Left(Failure(message: S.current.unexpectedError)));
   }
 
   String? validateEvaluationStep() {
@@ -122,6 +161,15 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
     selectedCurriculumName = name;
     selectedGradesSubjects.clear();
     activeGradeId = null;
+    additionalCurriculumIds.remove(id);
+    emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
+  }
+
+  void toggleAdditionalCurriculum(String id) {
+    if (id == selectedCurriculumId) return;
+    additionalCurriculumIds.contains(id)
+        ? additionalCurriculumIds.remove(id)
+        : additionalCurriculumIds.add(id);
     emit(TeacherRegistrationDataChanged(currentStep: state.currentStep));
   }
 
@@ -206,6 +254,9 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
   String? validateTeachingCurriculumStep() {
     if (selectedCurriculumId == null) {
       return S.current.pleaseChooseTeachingCurriculum;
+    }
+    if (additionalCurriculumIds.isEmpty) {
+      return S.current.additionalCurriculumsRequired;
     }
     return null;
   }
@@ -309,6 +360,10 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
       return S.current.uploadNationalIdFile;
     }
 
+    if (stableInternetProofFile == null) {
+      return S.current.stableInternetProofRequired;
+    }
+
     if (!declarationAccepted) {
       return S.current.teacherDeclarationAgreement;
     }
@@ -335,37 +390,42 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
     emit(TeacherRegistrationLoadingState(currentStep: state.currentStep));
 
     final request = TeacherRegisterRequestModel(
-      fullName: fullNameController.text.trim(),
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-      nationality: nationalityController.text.trim(),
-      country: countryController.text.trim(),
-      city: cityController.text.trim(),
-      degree: qualificationController.text.trim(),
-      specialization: specializationController.text.trim(),
-      institutionName: universityController.text.trim(),
-      graduationYear: selectedGraduationYear ?? 0,
-      graduationGrade: graduationGrade ?? '',
-      phone: phoneController.text.trim(),
-      whatsapp: whatsappController.text.trim(),
-      hasTeachingExperience: hasTeachingExperience ?? false,
-      hasOnlineTeachingExperience: taughtOnlineBefore ?? false,
-      availableHoursPerWeek: 7,
-      computerSkillLevel: computerUsageLevel ?? '',
-      hasLaptop: hasLaptopOrComputer ?? false,
-      hasStableInternet: hasStableInternet ?? false,
-      hasMicrophone: hasClearMic ?? false,
-      hasGoodCamera: hasGoodCamera ?? false,
-      introVideoUrl: shortVideoLinkController.text.trim(),
-      canProvideDemoSession: canProvideTrialLesson ?? false,
-      joiningReason: whyJoinBananController.text.trim(),
-      weakStudentHandling: howHandleWeakStudentController.text.trim(),
-      termsAccepted: declarationAccepted,
+      fields: {
+        'fullName': fullNameController.text.trim(),
+        'email': emailController.text.trim(),
+        'password': passwordController.text.trim(),
+        'nationality': nationalityController.text.trim(),
+        'country': countryController.text.trim(),
+        'city': cityController.text.trim(),
+        'degree': degree,
+        'dateOfBirth': _formatDate(dateOfBirth ?? DateTime.now()),
+        'specialization': specializationController.text.trim(),
+        'graduationYear': selectedGraduationYear,
+        'graduationGrade': graduationGrade,
+        'phone': phoneController.text.trim(),
+        'whatsapp': whatsappController.text.trim(),
+        'hasTeachingExperience': hasTeachingExperience.toString(),
+        'hasOnlineTeachingExperience': taughtOnlineBefore.toString(),
+        'availableHoursPerWeek': 7,
+        'computerSkillLevel': computerUsageLevel,
+        'hasLaptop': hasLaptopOrComputer.toString(),
+        'hasStableInternet': hasStableInternet.toString(),
+        'hasMicrophone': hasClearMic.toString(),
+        'hasGoodCamera': hasGoodCamera.toString(),
+        'introVideoUrl': shortVideoLinkController.text.trim(),
+        'canProvideDemoSession': canProvideTrialLesson.toString(),
+        'joiningReason': whyJoinBananController.text.trim(),
+        'weakStudentHandling': howHandleWeakStudentController.text.trim(),
+        'termsAccepted': declarationAccepted.toString(),
+        'teacherAssignments': jsonEncode(selectedGradesSubjectsJson),
+      },
       curriculum: selectedCurriculumId!,
-      teacherAssignments: selectedGradesSubjectsJson,
+      additionalCurriculums: additionalCurriculumIds,
       cv: cvFile!,
       certificate: certificateFile!,
       identityDocument: nationalIdFile!,
+      stableInternetProof: stableInternetProofFile ?? nationalIdFile!,
+      experienceCertificates: experienceCertificateFiles,
     );
 
     final result = await teacherRegistrationRepo.registerTeacher(
@@ -403,13 +463,18 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
     nationalityController.dispose();
     countryController.dispose();
     cityController.dispose();
-    qualificationController.dispose();
     specializationController.dispose();
-    universityController.dispose();
     shortVideoLinkController.dispose();
     whyJoinBananController.dispose();
     howHandleWeakStudentController.dispose();
     graduationYearController.dispose();
+    dateOfBirthController.dispose();
     return super.close();
+  }
+
+  String _formatDate(DateTime date) {
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
   }
 }

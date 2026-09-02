@@ -3,6 +3,7 @@ import 'package:bnan_app/features/teacher_application/data/models/teacher_reques
 import 'package:bnan_app/features/teacher_application/presentation/views/widgets/details_section.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:bnan_app/core/helper/app_pickers.dart';
 
 class PersonalDetailsSection extends StatelessWidget {
   const PersonalDetailsSection({super.key, required this.teacher});
@@ -19,6 +20,10 @@ class PersonalDetailsSection extends StatelessWidget {
         DetailsFieldData(s.whatsappNumber, teacher.whatsapp),
         DetailsFieldData(s.country, teacher.country),
         DetailsFieldData(s.nationality, teacher.nationality),
+        DetailsFieldData(
+          s.dateOfBirth,
+          AppPickers.formatDateOnly(teacher.dateOfBirth),
+        ),
       ],
     );
   }

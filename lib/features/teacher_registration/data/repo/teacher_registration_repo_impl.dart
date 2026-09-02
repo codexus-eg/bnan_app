@@ -4,14 +4,28 @@ import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/features/student_auth/data/models/auth_response_model.dart';
 import 'package:bnan_app/features/teacher_registration/data/models/teacher_register_request_model.dart';
+import 'package:bnan_app/features/teacher_registration/data/models/teacher_terms_model.dart';
 import 'package:bnan_app/features/teacher_registration/data/repo/teacher_registration_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 
-class TeacherRegistrationRepoImpl implements TeacherRegistrationRepo {
+class TeacherRegistrationRepoImpl
+    implements TeacherRegistrationRepo, TeacherTermsRepo {
   const TeacherRegistrationRepoImpl({required this.apiConsumer});
 
   final ApiConsumer apiConsumer;
+
+  @override
+  Future<Either<Failure, TeacherTermsModel>> getTeacherTerms() async {
+    try {
+      final response = await apiConsumer.get(EndPoints.teacherTerms);
+      return Right(TeacherTermsModel.fromJson(response));
+    } on AppException catch (error) {
+      return Left(Failure(message: error.message));
+    } catch (_) {
+      return Left(Failure(message: S.current.unexpectedError));
+    }
+  }
 
   @override
   Future<Either<Failure, AuthResponseModel>> registerTeacher({

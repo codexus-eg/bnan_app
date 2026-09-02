@@ -27,10 +27,7 @@ class TeacherDetailsResponseModel {
   final bool success;
   final TeacherRequestModel data;
 
-  TeacherDetailsResponseModel({
-    required this.success,
-    required this.data,
-  });
+  TeacherDetailsResponseModel({required this.success, required this.data});
 
   factory TeacherDetailsResponseModel.fromJson(Map<String, dynamic> json) {
     return TeacherDetailsResponseModel(
@@ -39,6 +36,7 @@ class TeacherDetailsResponseModel {
     );
   }
 }
+
 class TeacherRequestModel {
   final String id;
   final TeacherUserModel user;
@@ -48,13 +46,14 @@ class TeacherRequestModel {
   final String country;
   final String city;
   final String degree;
+  final String dateOfBirth;
   final String specialization;
-  final String institutionName;
   final int graduationYear;
   final String graduationGrade;
   final bool hasTeachingExperience;
   final bool hasOnlineTeachingExperience;
   final List<TeacherCurriculumModel> curriculums;
+  final List<TeacherCurriculumModel> additionalCurriculums;
   final int availableHoursPerWeek;
   final String computerSkillLevel;
   final bool hasLaptop;
@@ -68,7 +67,11 @@ class TeacherRequestModel {
   final String cv;
   final String certificate;
   final String identityDocument;
+  final String stableInternetProof;
+  final List<String> experienceCertificates;
   final bool termsAccepted;
+  final String termsAcceptedAt;
+  final int termsVersion;
   final int pricePerSession;
   final int excellencePoints;
   final int totalSessions;
@@ -86,13 +89,14 @@ class TeacherRequestModel {
     required this.country,
     required this.city,
     required this.degree,
+    required this.dateOfBirth,
     required this.specialization,
-    required this.institutionName,
     required this.graduationYear,
     required this.graduationGrade,
     required this.hasTeachingExperience,
     required this.hasOnlineTeachingExperience,
     required this.curriculums,
+    required this.additionalCurriculums,
     required this.availableHoursPerWeek,
     required this.computerSkillLevel,
     required this.hasLaptop,
@@ -106,7 +110,11 @@ class TeacherRequestModel {
     required this.cv,
     required this.certificate,
     required this.identityDocument,
+    required this.stableInternetProof,
+    required this.experienceCertificates,
     required this.termsAccepted,
+    required this.termsAcceptedAt,
+    required this.termsVersion,
     required this.pricePerSession,
     required this.excellencePoints,
     required this.totalSessions,
@@ -126,14 +134,16 @@ class TeacherRequestModel {
       country: json['country'] ?? '',
       city: json['city'] ?? '',
       degree: json['degree'] ?? '',
+      dateOfBirth: json['dateOfBirth'] ?? '',
       specialization: json['specialization'] ?? '',
-      institutionName: json['institutionName'] ?? '',
       graduationYear: json['graduationYear'] ?? 0,
       graduationGrade: json['graduationGrade'] ?? '',
       hasTeachingExperience: json['hasTeachingExperience'] ?? false,
-      hasOnlineTeachingExperience:
-          json['hasOnlineTeachingExperience'] ?? false,
+      hasOnlineTeachingExperience: json['hasOnlineTeachingExperience'] ?? false,
       curriculums: (json['curriculums'] as List? ?? [])
+          .map((e) => TeacherCurriculumModel.fromJson(e))
+          .toList(),
+      additionalCurriculums: (json['additionalCurriculums'] as List? ?? [])
           .map((e) => TeacherCurriculumModel.fromJson(e))
           .toList(),
       availableHoursPerWeek: json['availableHoursPerWeek'] ?? 0,
@@ -149,7 +159,13 @@ class TeacherRequestModel {
       cv: json['cv'] ?? '',
       certificate: json['certificate'] ?? '',
       identityDocument: json['identityDocument'] ?? '',
+      stableInternetProof: json['stableInternetProof'] ?? '',
+      experienceCertificates: (json['experienceCertificates'] as List? ?? [])
+          .map((item) => item.toString())
+          .toList(),
       termsAccepted: json['termsAccepted'] ?? false,
+      termsAcceptedAt: json['termsAcceptedAt'] ?? '',
+      termsVersion: json['termsVersion'] ?? 0,
       pricePerSession: json['pricePerSession'] ?? 0,
       excellencePoints: json['excellencePoints'] ?? 0,
       totalSessions: json['totalSessions'] ?? 0,

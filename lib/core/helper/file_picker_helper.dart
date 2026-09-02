@@ -26,6 +26,19 @@ class FilePickerHelper {
     return file;
   }
 
+  static Future<List<File>> pickFiles({List<String>? allowedExtensions}) async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: allowedExtensions == null ? FileType.any : FileType.custom,
+      allowedExtensions: allowedExtensions,
+    );
+    return result?.files
+            .where((item) => item.path != null)
+            .map((item) => File(item.path!))
+            .toList() ??
+        [];
+  }
+
   static void _log(String message) {
     if (kDebugMode) debugPrint('[FilePickerHelper] $message');
   }

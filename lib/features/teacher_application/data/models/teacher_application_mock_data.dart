@@ -1,7 +1,7 @@
 import 'package:bnan_app/features/teacher_application/data/models/teacher_request_model.dart';
 import 'package:bnan_app/features/teacher_application/data/models/teacher_user_model.dart';
 
-final List<TeacherRequestModel> teacherApplicationsMockData = [
+final teacherApplicationsMockData = [
   TeacherRequestModel(
     id: '1',
     user: TeacherUserModel(
@@ -15,14 +15,15 @@ final List<TeacherRequestModel> teacherApplicationsMockData = [
     nationality: 'سعودية',
     country: 'السعودية',
     city: 'الرياض',
-    degree: 'بكالوريوس',
+    degree: 'bachelor',
+    dateOfBirth: '1995-04-10',
     specialization: 'لغة عربية',
-    institutionName: 'شمس',
     graduationYear: 2015,
-    graduationGrade: 'very good',
+    graduationGrade: 'very-good',
     hasTeachingExperience: true,
     hasOnlineTeachingExperience: true,
     curriculums: const [],
+    additionalCurriculums: const [],
     availableHoursPerWeek: 20,
     computerSkillLevel: 'good',
     hasLaptop: true,
@@ -36,7 +37,11 @@ final List<TeacherRequestModel> teacherApplicationsMockData = [
     cv: '',
     certificate: '',
     identityDocument: '',
+    stableInternetProof: '',
+    experienceCertificates: const [],
     termsAccepted: true,
+    termsAcceptedAt: '',
+    termsVersion: 1,
     pricePerSession: 0,
     excellencePoints: 0,
     totalSessions: 0,

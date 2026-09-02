@@ -176,6 +176,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "addSubjectToClassroom":
             MessageLookupByLibrary.simpleMessage("Add Subject to Classroom"),
         "addUser": MessageLookupByLibrary.simpleMessage("Add User"),
+        "additionalCurriculums":
+            MessageLookupByLibrary.simpleMessage("Additional curriculums"),
+        "additionalCurriculumsRequired": MessageLookupByLibrary.simpleMessage(
+            "Choose at least one additional curriculum"),
         "admin": MessageLookupByLibrary.simpleMessage("Admin"),
         "adminNotes":
             MessageLookupByLibrary.simpleMessage("Admin notes (optional)"),
@@ -282,6 +286,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "available": MessageLookupByLibrary.simpleMessage("Available"),
         "availableDay": MessageLookupByLibrary.simpleMessage("Available day"),
         "averagePercent": m3,
+        "bachelor": MessageLookupByLibrary.simpleMessage("Bachelor\'s degree"),
+        "bachelorStudent":
+            MessageLookupByLibrary.simpleMessage("Bachelor\'s student"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "backToLogin": MessageLookupByLibrary.simpleMessage("Back to login"),
         "bankTransfer": MessageLookupByLibrary.simpleMessage("Bank transfer"),
@@ -500,6 +507,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Dashboard Password"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "dateFormatHint": MessageLookupByLibrary.simpleMessage("mm/dd/yy"),
+        "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
         "dateRangeDiscount": MessageLookupByLibrary.simpleMessage("Date range"),
         "day": MessageLookupByLibrary.simpleMessage("Day"),
         "days": MessageLookupByLibrary.simpleMessage("Days"),
@@ -697,6 +705,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "expected": MessageLookupByLibrary.simpleMessage("Expected"),
         "expenses": MessageLookupByLibrary.simpleMessage("Expenses"),
         "experience": MessageLookupByLibrary.simpleMessage("Experience"),
+        "experienceCertificates":
+            MessageLookupByLibrary.simpleMessage("Experience certificate"),
+        "experienceCertificatesLimit": MessageLookupByLibrary.simpleMessage(
+            "Only the first 10 files were selected"),
+        "experienceCertificatesOptional": MessageLookupByLibrary.simpleMessage(
+            "Experience certificates (optional, up to 10)"),
         "expiredSubscriptions":
             MessageLookupByLibrary.simpleMessage("Expired Subscriptions"),
         "expiryDate": MessageLookupByLibrary.simpleMessage("Expiry date"),
@@ -705,6 +719,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Failed to load attendance data"),
         "failedToOpenCv":
             MessageLookupByLibrary.simpleMessage("Unable to open the CV"),
+        "failedToOpenFile":
+            MessageLookupByLibrary.simpleMessage("Unable to open the file"),
         "fieldIsRequired": m11,
         "fieldRequired":
             MessageLookupByLibrary.simpleMessage("This field is required"),
@@ -905,6 +921,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "markAllNotificationsRead":
             MessageLookupByLibrary.simpleMessage("Mark all as read"),
         "markAsRead": MessageLookupByLibrary.simpleMessage("Mark as read"),
+        "master": MessageLookupByLibrary.simpleMessage("Master\'s degree"),
+        "masterStudent":
+            MessageLookupByLibrary.simpleMessage("Master\'s student"),
         "materialsManagement":
             MessageLookupByLibrary.simpleMessage("Materials Management"),
         "math": MessageLookupByLibrary.simpleMessage("Math"),
@@ -1535,6 +1554,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Permanently delete from system"),
         "personalProfile":
             MessageLookupByLibrary.simpleMessage("Personal Profile"),
+        "phd": MessageLookupByLibrary.simpleMessage("PhD"),
+        "phdStudent": MessageLookupByLibrary.simpleMessage("PhD student"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone number"),
         "physics": MessageLookupByLibrary.simpleMessage("Physics"),
         "planFile": MessageLookupByLibrary.simpleMessage("Plan file"),
@@ -1677,6 +1698,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "renewalUsedHours": MessageLookupByLibrary.simpleMessage("Used hours"),
         "renewalViewReceipt":
             MessageLookupByLibrary.simpleMessage("View receipt"),
+        "replaceStableInternetProof": MessageLookupByLibrary.simpleMessage(
+            "Replace internet proof image"),
         "reports": MessageLookupByLibrary.simpleMessage("Reports"),
         "requestAccepted": MessageLookupByLibrary.simpleMessage(
             "Your request has been accepted!"),
@@ -1859,6 +1882,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "socialStudies": MessageLookupByLibrary.simpleMessage("Social Studies"),
         "specialization":
             MessageLookupByLibrary.simpleMessage("Specialization"),
+        "stableInternetProof":
+            MessageLookupByLibrary.simpleMessage("Stable internet proof"),
+        "stableInternetProofRequired": MessageLookupByLibrary.simpleMessage(
+            "Upload stable internet proof"),
+        "stableInternetProofTooLarge": MessageLookupByLibrary.simpleMessage(
+            "The image must not exceed 5 MB"),
         "start": MessageLookupByLibrary.simpleMessage("Start"),
         "startDate": MessageLookupByLibrary.simpleMessage("Start date"),
         "startLessonViaZoom":
@@ -2038,6 +2067,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Teacher Certificates"),
         "teacherDeclarationAgreement": MessageLookupByLibrary.simpleMessage(
             "I confirm that all the information mentioned above is correct, and I agree to follow Banan Academy rules and policies"),
+        "teacherDocuments":
+            MessageLookupByLibrary.simpleMessage("Teacher documents"),
         "teacherMyEarnings":
             MessageLookupByLibrary.simpleMessage("My Earnings"),
         "teacherNotAssignedToSessionSubject":
@@ -2117,6 +2148,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Teaching Details"),
         "teacherStepTechnicalSkills":
             MessageLookupByLibrary.simpleMessage("Technical Skills"),
+        "teacherTermsAndConditions": MessageLookupByLibrary.simpleMessage(
+            "teacher registration and work terms and conditions"),
         "teacherUnassignedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Teacher assignment removed successfully"),
         "teacherWithdrawalRequestType":
@@ -2129,6 +2162,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "termPlan": MessageLookupByLibrary.simpleMessage("Term Plan"),
         "termPlanUploadedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Term plan uploaded successfully"),
+        "termsAccepted": MessageLookupByLibrary.simpleMessage("Terms accepted"),
+        "termsAcceptedAt": MessageLookupByLibrary.simpleMessage("Accepted at"),
+        "termsAgreementPrefix":
+            MessageLookupByLibrary.simpleMessage("I agree to "),
+        "termsVersion": MessageLookupByLibrary.simpleMessage("Terms version"),
         "theRequiredLesson":
             MessageLookupByLibrary.simpleMessage("The required lesson"),
         "theSupervisor": MessageLookupByLibrary.simpleMessage("The SuperVisor"),

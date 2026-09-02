@@ -30,6 +30,8 @@ abstract class EndPoints {
   static const String notificationPreferences = '/notification-preferences/me';
   static const String dashboard = '/dashboard';
   static const String registerTeacher = '/auth/register-teacher';
+  static const String teacherTerms =
+      '/content/legal-pages/teacher-terms-and-conditions';
   static const String registerParent = '/auth/register-parent';
   static const String getLoggedUser = '/users/me';
   static const String updateLoggedUserName = '/users/me/name';

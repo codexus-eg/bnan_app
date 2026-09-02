@@ -13,11 +13,13 @@ class TeacherUploadFileCard extends StatelessWidget {
     required this.title,
     required this.file,
     required this.onTap,
+    this.isRequired = true,
   });
 
   final String title;
   final File? file;
   final VoidCallback onTap;
+  final bool isRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class TeacherUploadFileCard extends StatelessWidget {
         child: Container(
           width: double.infinity,
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 12,vertical:18 ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +55,7 @@ class TeacherUploadFileCard extends StatelessWidget {
               TeacherQuestionTitle(
                 question: fileName ?? title,
                 mainAxisAlignment: MainAxisAlignment.center,
-                isRequired: true,
+                isRequired: isRequired,
                 style: StylesManager.styleMedium14(
                   context,
                 ).copyWith(color: ColorManager.greyA8AF),
