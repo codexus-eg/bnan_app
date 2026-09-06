@@ -131,9 +131,7 @@ class ChatRepoImpl implements ChatRepo {
   }
 
   @override
-  Future<Either<Failure, void>> markRoomAsRead({
-    required String roomId,
-  }) async {
+  Future<Either<Failure, void>> markRoomAsRead({required String roomId}) async {
     try {
       await apiConsumer.patch(
         EndPoints.markRoomAsRead(roomId),

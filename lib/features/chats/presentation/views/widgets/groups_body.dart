@@ -47,9 +47,7 @@ class GroupsBody extends StatelessWidget {
               onChanged: context.read<GetChatRoomsCubit>().searchRooms,
             ),
           ),
-        Expanded(
-          child: _rooms(context, isAdmin),
-        ),
+        Expanded(child: _rooms(context, isAdmin)),
       ],
     );
   }
@@ -58,9 +56,7 @@ class GroupsBody extends StatelessWidget {
     return BlocBuilder<GetChatRoomsCubit, GetChatRoomsState>(
       builder: (context, state) {
         if (state is GetChatRoomsFailure) {
-          return Center(
-            child: Text(state.errorMessage),
-          );
+          return Center(child: Text(state.errorMessage));
         }
 
         if (state is GetChatRoomsSuccess && state.rooms.isEmpty) {
@@ -105,9 +101,7 @@ class GroupsBody extends StatelessWidget {
 
                     if (!context.mounted) return;
 
-                    await context
-                        .read<GetChatRoomsCubit>()
-                        .getChatRooms();
+                    await context.read<GetChatRoomsCubit>().getChatRooms();
                   },
                   child: CustomChatCard(
                     title: room.displayName,

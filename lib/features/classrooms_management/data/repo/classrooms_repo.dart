@@ -5,7 +5,11 @@ import 'package:bnan_app/features/classrooms_management/data/models/classrooms_r
 import 'package:dartz/dartz.dart';
 
 abstract class ClassroomsRepo {
-  Future<Either<Failure, ClassroomsResponseModel>> getClassrooms();
+  Future<Either<Failure, ClassroomsResponseModel>> getClassrooms({
+    int? page,
+    int? limit,
+    String? curriculum,
+  });
 
   Future<Either<Failure, ClassroomDetailsResponseModel>> getClassroomDetails(
     String classroomId,

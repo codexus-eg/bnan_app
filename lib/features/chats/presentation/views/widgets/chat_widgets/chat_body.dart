@@ -58,72 +58,88 @@ class _ChatBodyState extends State<ChatBody> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop && selectedMessageIds.isNotEmpty) _clearSelection();
       },
-      child: Column(
-        children: [
-          ChatHeader(
-            chatTitle: resolveChatTitle(context, widget.classroomName),
-            roomId: widget.roomId,
-            roomType: widget.roomType,
-            classroomId: widget.classroomId,
-            accessScope: widget.accessScope,
-            classroomSubjectId: widget.classroomSubjectId,
-            canRequestTeacherWithdrawal: widget.canRequestTeacherWithdrawal,
-            classroomSubjectAmbiguous: widget.classroomSubjectAmbiguous,
-            currentUserRole: widget.currentUserRole,
-            studentId: widget.studentId,
-            onMessageTarget: (id) =>
-                messagesKey.currentState?.scrollToMessage(id),
-            selectedCount: selectedMessageIds.length,
-            isDeleting: isDeleting,
-            onCancelSelection: _clearSelection,
-            onDeleteSelection: _deleteSelection,
-          ),
-          Expanded(
-            child: BlocConsumer<GetRoomMessagesCubit, GetRoomMessagesState>(
-              listener: _pruneSelection,
-              builder: (context, state) {
-                if (state is GetRoomMessagesFailure) {
-                  return Center(child: Text(state.errorMessage));
-                }
+      child: BlocConsumer<GetRoomMessagesCubit, GetRoomMessagesState>(
+        listener: _pruneSelection,
+        builder: (context, state) {
+          final cubit = context.read<GetRoomMessagesCubit>();
+          final searchState = state is GetRoomMessagesSuccess
+              ? state.search
+              : null;
 
-                if (state is GetRoomMessagesSuccess && state.messages.isEmpty) {
-                  return const NoDataWidget();
-                }
+          return Column(
+            children: [
+              ChatHeader(
+                chatTitle: resolveChatTitle(context, widget.classroomName),
+                roomId: widget.roomId,
+                roomType: widget.roomType,
+                classroomId: widget.classroomId,
+                accessScope: widget.accessScope,
+                classroomSubjectId: widget.classroomSubjectId,
+                canRequestTeacherWithdrawal: widget.canRequestTeacherWithdrawal,
+                classroomSubjectAmbiguous: widget.classroomSubjectAmbiguous,
+                currentUserRole: widget.currentUserRole,
+                studentId: widget.studentId,
+                onMessageTarget: (id) =>
+                    messagesKey.currentState?.scrollToMessage(id),
+                onSearch: cubit.openSearch,
+                searchState: searchState,
+                onSearchQueryChanged: cubit.updateSearchQuery,
+                onNextSearch: cubit.nextSearchResult,
+                onPreviousSearch: cubit.previousSearchResult,
+                onCloseSearch: cubit.closeSearch,
+                selectedCount: selectedMessageIds.length,
+                isDeleting: isDeleting,
+                onCancelSelection: _clearSelection,
+                onDeleteSelection: _deleteSelection,
+              ),
+              Expanded(child: _buildMessagesView(context, state, searchState)),
+              SafeArea(top: false, child: ChatInputBar(roomId: widget.roomId)),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
-                final isLoading =
-                    state is GetRoomMessagesInitial ||
-                    state is GetRoomMessagesLoading;
+  Widget _buildMessagesView(
+    BuildContext context,
+    GetRoomMessagesState state,
+    dynamic searchState,
+  ) {
+    if (state is GetRoomMessagesFailure) {
+      return Center(child: Text(state.errorMessage));
+    }
 
-                final List<ChatMessageModel> messages =
-                    state is GetRoomMessagesSuccess
-                    ? state.messages
-                    : ChatMessageModel.placeholders;
+    if (state is GetRoomMessagesSuccess && state.messages.isEmpty) {
+      return const NoDataWidget();
+    }
 
-                return AppSkeletonizer(
-                  isLoading: isLoading,
-                  child: ChatMessagesList(
-                    key: messagesKey,
-                    messages: messages,
-                    currentUserId: SessionManager.instance.userId ?? '',
-                    isLoading: isLoading,
-                    targetMessageId: widget.targetMessageId,
-                    firstUnreadMessageId: state is GetRoomMessagesSuccess
-                        ? state.firstUnreadMessageId
-                        : null,
-                    onInitialPositioned: context
-                        .read<GetRoomMessagesCubit>()
-                        .markCurrentRoomRead,
-                    selectedMessageIds: selectedMessageIds,
-                    selectionMode: selectedMessageIds.isNotEmpty,
-                    canSelect: _canDelete,
-                    onToggleSelection: _toggleSelection,
-                  ),
-                );
-              },
-            ),
-          ),
-          SafeArea(top: false, child: ChatInputBar(roomId: widget.roomId)),
-        ],
+    final isLoading =
+        state is GetRoomMessagesInitial || state is GetRoomMessagesLoading;
+
+    final List<ChatMessageModel> messages = state is GetRoomMessagesSuccess
+        ? state.messages
+        : ChatMessageModel.placeholders;
+
+    return AppSkeletonizer(
+      isLoading: isLoading,
+      child: ChatMessagesList(
+        key: messagesKey,
+        messages: messages,
+        currentUserId: SessionManager.instance.userId ?? '',
+        isLoading: isLoading,
+        search: searchState,
+        targetMessageId: widget.targetMessageId,
+        firstUnreadMessageId: state is GetRoomMessagesSuccess
+            ? state.firstUnreadMessageId
+            : null,
+        onInitialPositioned: context
+            .read<GetRoomMessagesCubit>()
+            .markCurrentRoomRead,
+        selectedMessageIds: selectedMessageIds,
+        selectionMode: selectedMessageIds.isNotEmpty,
+        canSelect: _canDelete,
+        onToggleSelection: _toggleSelection,
       ),
     );
   }
@@ -173,7 +189,9 @@ class _ChatBodyState extends State<ChatBody> {
   }
 
   void _pruneSelection(BuildContext context, GetRoomMessagesState state) {
-    if (state is! GetRoomMessagesSuccess || selectedMessageIds.isEmpty) return;
+    if (state is! GetRoomMessagesSuccess || selectedMessageIds.isEmpty) {
+      return;
+    }
     final selectable = state.messages
         .where(_canDelete)
         .map((message) => message.id.trim())

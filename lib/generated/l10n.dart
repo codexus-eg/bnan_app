@@ -13359,6 +13359,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Search messages`
+  String get chatSearchHint {
+    return Intl.message(
+      'Search messages',
+      name: 'chatSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No matching messages`
+  String get chatSearchNoResults {
+    return Intl.message(
+      'No matching messages',
+      name: 'chatSearchNoResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search unavailable. Please try again.`
+  String get chatSearchFailed {
+    return Intl.message(
+      'Search unavailable. Please try again.',
+      name: 'chatSearchFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This message is no longer available.`
+  String get chatSearchMessageMissing {
+    return Intl.message(
+      'This message is no longer available.',
+      name: 'chatSearchMessageMissing',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -377,6 +377,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Excellent. Don’t forget to review chapter three before the lesson."),
         "chatMsg4":
             MessageLookupByLibrary.simpleMessage("Okay, I’ll start now"),
+        "chatSearchFailed": MessageLookupByLibrary.simpleMessage(
+            "Search unavailable. Please try again."),
+        "chatSearchHint":
+            MessageLookupByLibrary.simpleMessage("Search messages"),
+        "chatSearchMessageMissing": MessageLookupByLibrary.simpleMessage(
+            "This message is no longer available."),
+        "chatSearchNoResults":
+            MessageLookupByLibrary.simpleMessage("No matching messages"),
         "chatTitleFallback":
             MessageLookupByLibrary.simpleMessage("Conversation"),
         "checkYourEmailPrefix":

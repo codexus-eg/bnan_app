@@ -118,6 +118,57 @@ void main() {
       await expectLater(load, completes);
     },
   );
+  testWidgets(
+    'curriculum dropdown filters classrooms by curriculum ID and resets on all',
+    (tester) async {
+      final class1 = ClassroomModel(
+        id: '1',
+        name: 'Class Egyptian',
+        curriculum: const ClassroomLookupModel(id: 'c-egypt', name: 'Egyptian'),
+        grade: const ClassroomLookupModel(id: 'g1', name: 'Grade 1'),
+        teachers: const [],
+        isActive: true,
+        approvedStudentsCount: 1,
+        assignedTeachersCount: 0,
+      );
+      final class2 = ClassroomModel(
+        id: '2',
+        name: 'Class Saudi',
+        curriculum: const ClassroomLookupModel(id: 'c-saudi', name: 'Saudi'),
+        grade: const ClassroomLookupModel(id: 'g2', name: 'Grade 2'),
+        teachers: const [],
+        isActive: true,
+        approvedStudentsCount: 1,
+        assignedTeachersCount: 0,
+      );
+
+      await _pumpClassrooms(tester, [class1, class2]);
+
+      // Both classrooms rendered initially
+      expect(find.text('Class Egyptian'), findsOneWidget);
+      expect(find.text('Class Saudi'), findsOneWidget);
+
+      // Tap Dropdown and select Egyptian
+      await tester.tap(find.byType(DropdownButton<String>));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Egyptian').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Class Egyptian'), findsOneWidget);
+      expect(find.text('Class Saudi'), findsNothing);
+
+      // Select All Curriculums
+      await tester.tap(find.byType(DropdownButton<String>));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(S.current.allCurriculms).last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Class Egyptian'), findsOneWidget);
+      expect(find.text('Class Saudi'), findsOneWidget);
+    },
+  );
 }
 
 Future<void> _pumpClassrooms(
@@ -204,7 +255,11 @@ class _FakeClassroomsRepo implements ClassroomsRepo {
   }
 
   @override
-  Future<Either<Failure, ClassroomsResponseModel>> getClassrooms() =>
+  Future<Either<Failure, ClassroomsResponseModel>> getClassrooms({
+    int? page,
+    int? limit,
+    String? curriculum,
+  }) =>
       pendingGet?.future ?? Future.value(Right(response!));
   @override
   Future<Either<Failure, ClassroomDetailsResponseModel>> getClassroomDetails(

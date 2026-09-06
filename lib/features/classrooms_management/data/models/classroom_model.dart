@@ -89,10 +89,7 @@ class ClassroomModel {
 }
 
 class ClassroomSupervisorModel {
-  const ClassroomSupervisorModel({
-    required this.id,
-    required this.name,
-  });
+  const ClassroomSupervisorModel({required this.id, required this.name});
 
   final String id;
   final String name;
@@ -100,10 +97,10 @@ class ClassroomSupervisorModel {
   factory ClassroomSupervisorModel.fromJson(Map<String, dynamic> json) {
     final id = json['id']?.toString() ?? json['_id']?.toString() ?? '';
     final userMap = json['user'] is Map ? json['user'] as Map : null;
-    final userFullName = userMap?['fullName']?.toString() ??
-        userMap?['name']?.toString() ??
-        '';
-    final name = json['name']?.toString() ??
+    final userFullName =
+        userMap?['fullName']?.toString() ?? userMap?['name']?.toString() ?? '';
+    final name =
+        json['name']?.toString() ??
         json['fullName']?.toString() ??
         userFullName;
     return ClassroomSupervisorModel(id: id, name: name);

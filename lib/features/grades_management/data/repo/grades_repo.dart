@@ -4,7 +4,10 @@ import 'package:bnan_app/features/grades_management/data/models/grades_response_
 import 'package:dartz/dartz.dart';
 
 abstract class GradesRepo {
-  Future<Either<Failure, GradesResponseModel>> getGrades();
+  Future<Either<Failure, GradesResponseModel>> getGrades({
+    int? page,
+    int? limit,
+  });
 
   Future<Either<Failure, void>> createGrade(CreateGradeRequestModel model);
 

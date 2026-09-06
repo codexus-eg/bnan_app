@@ -10,10 +10,11 @@ class DetailsRowSection extends StatelessWidget {
     super.key,
     required this.iconPath,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     this.onTap,
   });
-  final String iconPath, title, subtitle;
+  final String iconPath, title;
+  final String? subtitle;
   final Function()? onTap;
 
   @override
@@ -47,8 +48,10 @@ class DetailsRowSection extends StatelessWidget {
               ).copyWith(color: ColorManager.mainColor14),
             ),
           ),
-          const SizedBox(width: 5),
-          Customship(subtitle),
+          if (subtitle != null && subtitle!.isNotEmpty) ...[
+            const SizedBox(width: 5),
+            Customship(subtitle!),
+          ],
           const SizedBox(width: 26),
           InkWell(
             onTap: onTap,

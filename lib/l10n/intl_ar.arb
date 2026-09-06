@@ -1450,5 +1450,9 @@
     "failedToOpenFile": "تعذر فتح الملف",
     "termsAccepted": "الموافقة على الشروط",
     "termsAcceptedAt": "تاريخ الموافقة",
-    "termsVersion": "نسخة الشروط"
+    "termsVersion": "نسخة الشروط",
+    "chatSearchHint": "البحث في الرسائل",
+    "chatSearchNoResults": "لا توجد رسائل مطابقة",
+    "chatSearchFailed": "البحث غير متاح. حاول مرة أخرى.",
+    "chatSearchMessageMissing": "هذه الرسالة لم تعد متاحة."
 }

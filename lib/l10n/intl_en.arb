@@ -1551,5 +1551,9 @@
     "failedToOpenFile": "Unable to open the file",
     "termsAccepted": "Terms accepted",
     "termsAcceptedAt": "Accepted at",
-    "termsVersion": "Terms version"
+    "termsVersion": "Terms version",
+    "chatSearchHint": "Search messages",
+    "chatSearchNoResults": "No matching messages",
+    "chatSearchFailed": "Search unavailable. Please try again.",
+    "chatSearchMessageMissing": "This message is no longer available."
 }

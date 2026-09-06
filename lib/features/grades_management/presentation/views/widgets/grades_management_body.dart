@@ -1,14 +1,14 @@
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
-import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
-import 'package:bnan_app/core/shared_widget/details_row_section.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/grades_management/data/models/grade_model.dart';
 import 'package:bnan_app/features/grades_management/data/models/grades_mock_data.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_actions_cubit/grade_actions_cubit.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_cubit.dart';
 import 'package:bnan_app/features/grades_management/presentation/manager/get_grades_management_cubit/get_grades_management_state.dart';
+import 'package:bnan_app/features/grades_management/presentation/views/widgets/curriculum_grades_card.dart';
 import 'package:bnan_app/features/grades_management/presentation/views/widgets/dialogs/add_grade_dialog.dart';
 import 'package:bnan_app/features/grades_management/presentation/views/widgets/dialogs/delete_grade_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -36,8 +36,8 @@ class GradesManagementBody extends StatelessWidget {
               bottom: 8,
             ),
           ),
-          Flexible(
-            fit: FlexFit.loose,
+          const SizedBox(height: 16),
+          Expanded(
             child:
                 BlocBuilder<GetGradesmanagementCubit, GetGradesManagementState>(
                   builder: (context, state) {
@@ -45,8 +45,8 @@ class GradesManagementBody extends StatelessWidget {
                         state is GetGradesInitial || state is GetGradesLoading;
 
                     final grades = state is GetGradesSuccess
-                        ? state.grades.data.reversed.toList()
-                        : mockGrades.reversed.toList();
+                        ? state.grades.data
+                        : mockGrades;
 
                     if (state is GetGradesFailure) {
                       return const NoDataWidget();
@@ -56,32 +56,24 @@ class GradesManagementBody extends StatelessWidget {
                       return const NoDataWidget();
                     }
 
+                    final groups = _groupGrades(grades, context);
+
                     return AppSkeletonizer(
                       isLoading: isLoading,
-                      child: CustomDetailsWidgetBackground(
-                        margin: const EdgeInsetsDirectional.symmetric(
-                          vertical: 16,
-                        ),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          itemCount: grades.length,
-                          itemBuilder: (context, index) {
-                            final grade = grades[index];
-
-                            return DetailsRowSection(
-                              iconPath: ImageManager.teacherCurriculm,
-                              title: grade.name,
-                              subtitle: grade.curriculum?.name ?? '',
-                              onTap: isLoading || state is! GetGradesSuccess
-                                  ? null
-                                  : () => _showDeleteGradeDialog(
-                                      context,
-                                      grade.id,
-                                    ),
-                            );
-                          },
-                        ),
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: groups.length,
+                        itemBuilder: (context, index) {
+                          final group = groups[index];
+                          return CurriculumGradesCard(
+                            curriculumName: group.name,
+                            grades: group.grades,
+                            isInteractive:
+                                !isLoading && state is GetGradesSuccess,
+                            onDeleteGrade: (gradeId) =>
+                                _showDeleteGradeDialog(context, gradeId),
+                          );
+                        },
                       ),
                     );
                   },
@@ -90,6 +82,32 @@ class GradesManagementBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<_CurriculumGroup> _groupGrades(
+    List<GradeModel> grades,
+    BuildContext context,
+  ) {
+    final map = <String, _CurriculumGroup>{};
+
+    for (final grade in grades) {
+      final curr = grade.curriculum;
+      final key = curr != null && curr.id.trim().isNotEmpty
+          ? curr.id.trim()
+          : (curr != null && curr.name.trim().isNotEmpty
+              ? curr.name.trim()
+              : 'unassigned');
+      final name = curr != null && curr.name.trim().isNotEmpty
+          ? curr.name.trim()
+          : S.of(context).curriculums;
+
+      if (!map.containsKey(key)) {
+        map[key] = _CurriculumGroup(key: key, name: name, grades: []);
+      }
+      map[key]!.grades.add(grade);
+    }
+
+    return map.values.toList();
   }
 
   Future<void> _showAddGradeDialog(BuildContext context) async {
@@ -130,4 +148,16 @@ class GradesManagementBody extends StatelessWidget {
       context.read<GetGradesmanagementCubit>().getGrades();
     }
   }
+}
+
+class _CurriculumGroup {
+  final String key;
+  final String name;
+  final List<GradeModel> grades;
+
+  _CurriculumGroup({
+    required this.key,
+    required this.name,
+    required this.grades,
+  });
 }

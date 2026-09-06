@@ -364,6 +364,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "chatMsg3": MessageLookupByLibrary.simpleMessage(
             "ممتاز، لا تنسى مراجعة الفصل الثالث قبل الحصة."),
         "chatMsg4": MessageLookupByLibrary.simpleMessage("تمام، سأبدأ الآن"),
+        "chatSearchFailed": MessageLookupByLibrary.simpleMessage(
+            "البحث غير متاح. حاول مرة أخرى."),
+        "chatSearchHint":
+            MessageLookupByLibrary.simpleMessage("البحث في الرسائل"),
+        "chatSearchMessageMissing":
+            MessageLookupByLibrary.simpleMessage("هذه الرسالة لم تعد متاحة."),
+        "chatSearchNoResults":
+            MessageLookupByLibrary.simpleMessage("لا توجد رسائل مطابقة"),
         "chatTitleFallback": MessageLookupByLibrary.simpleMessage("المحادثة"),
         "checkYourEmailPrefix":
             MessageLookupByLibrary.simpleMessage("تحقق من بريدك الإلكتروني "),

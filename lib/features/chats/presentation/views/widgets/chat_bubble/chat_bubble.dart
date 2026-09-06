@@ -1,3 +1,4 @@
+import 'chat_search_text.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
@@ -13,12 +14,14 @@ class ChatBubble extends StatelessWidget {
     required this.currentUserId,
     this.highlighted = false,
     this.selected = false,
+    this.searchQuery = '',
   });
 
   final ChatMessageModel message;
   final String currentUserId;
   final bool highlighted;
   final bool selected;
+  final String searchQuery;
 
   bool get isMe {
     return message.isMine(currentUserId);
@@ -94,10 +97,9 @@ class ChatBubble extends StatelessWidget {
   }
 
   Widget _buildMessageText(BuildContext context) {
-    return Text(
-      message.text,
-      softWrap: true,
-      overflow: TextOverflow.visible,
+    return ChatSearchText(
+      text: message.text,
+      query: searchQuery,
       style: StylesManager.styleRegular14(
         context,
       ).copyWith(color: isMe ? ColorManager.white : ColorManager.black),

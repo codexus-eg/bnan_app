@@ -37,8 +37,7 @@ class AddClassroomSupervisorDropdown extends StatelessWidget {
       },
       isRequired: true,
       backgroundColor: ColorManager.white,
-      validator: (val) =>
-          val?.isNotEmpty == true ? null : s.supervisorRequired,
+      validator: (val) => val?.isNotEmpty == true ? null : s.supervisorRequired,
       onChanged: onChanged,
     );
   }

@@ -43,11 +43,31 @@ class ClassroomsPaginationModel {
   final int lastPage;
 
   factory ClassroomsPaginationModel.fromJson(Map<String, dynamic> json) {
+    final curPage =
+        int.tryParse(json['currentPage']?.toString() ?? '') ??
+        int.tryParse(json['page']?.toString() ?? '') ??
+        1;
+    final limit =
+        int.tryParse(json['perPage']?.toString() ?? '') ??
+        int.tryParse(json['limit']?.toString() ?? '') ??
+        20;
+    final totalCount =
+        int.tryParse(json['total']?.toString() ?? '') ??
+        int.tryParse(json['totalCount']?.toString() ?? '') ??
+        int.tryParse(json['totalResults']?.toString() ?? '') ??
+        0;
+    final totalPages =
+        int.tryParse(json['lastPage']?.toString() ?? '') ??
+        int.tryParse(json['numberOfPages']?.toString() ?? '') ??
+        int.tryParse(json['totalPages']?.toString() ?? '') ??
+        int.tryParse(json['pages']?.toString() ?? '') ??
+        1;
+
     return ClassroomsPaginationModel(
-      currentPage: int.tryParse(json['currentPage']?.toString() ?? '') ?? 0,
-      perPage: int.tryParse(json['perPage']?.toString() ?? '') ?? 0,
-      total: int.tryParse(json['total']?.toString() ?? '') ?? 0,
-      lastPage: int.tryParse(json['lastPage']?.toString() ?? '') ?? 0,
+      currentPage: curPage,
+      perPage: limit,
+      total: totalCount,
+      lastPage: totalPages,
     );
   }
 }

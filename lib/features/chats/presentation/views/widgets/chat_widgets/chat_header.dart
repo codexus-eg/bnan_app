@@ -2,6 +2,8 @@ import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/chat_search_state.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_documents_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/models/classroom_members_route_args.dart';
 import 'package:bnan_app/features/chats/presentation/policies/classroom_documents_access.dart';
@@ -27,11 +29,18 @@ class ChatHeader extends StatelessWidget {
     this.currentUserRole,
     this.studentId,
     this.onMessageTarget,
+    this.onSearch,
+    this.searchState,
+    this.onSearchQueryChanged,
+    this.onNextSearch,
+    this.onPreviousSearch,
+    this.onCloseSearch,
     this.selectedCount = 0,
     this.isDeleting = false,
     this.onCancelSelection,
     this.onDeleteSelection,
   });
+
   final String chatTitle;
   final String roomId;
   final String? roomType;
@@ -43,6 +52,12 @@ class ChatHeader extends StatelessWidget {
   final String? currentUserRole;
   final String? studentId;
   final ValueChanged<String>? onMessageTarget;
+  final VoidCallback? onSearch;
+  final ChatSearchState? searchState;
+  final ValueChanged<String>? onSearchQueryChanged;
+  final VoidCallback? onNextSearch;
+  final VoidCallback? onPreviousSearch;
+  final VoidCallback? onCloseSearch;
   final int selectedCount;
   final bool isDeleting;
   final VoidCallback? onCancelSelection;
@@ -50,14 +65,11 @@ class ChatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSearching = searchState?.isSearching == true;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsetsDirectional.only(
-        top: 19,
-        // start: 16,
-        end: 16,
-        bottom: 19,
-      ),
+      padding: const EdgeInsetsDirectional.only(top: 19, end: 16, bottom: 19),
       decoration: const BoxDecoration(
         color: ColorManager.mainColor14,
         borderRadius: BorderRadiusDirectional.only(
@@ -67,49 +79,141 @@ class ChatHeader extends StatelessWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: selectedCount > 0
-                  ? onCancelSelection
-                  : () => MyNavigator.pop(context),
-              icon: Icon(
-                selectedCount > 0 ? Icons.close : _backIcon(context),
-                color: ColorManager.white,
-              ),
-            ),
-            Expanded(
-              child: selectedCount > 0
-                  ? Text(
-                      '$selectedCount ${S.of(context).selectedMessagesLabel}',
-                      style: const TextStyle(color: ColorManager.white),
-                    )
-                  : LayoutBuilder(
-                      builder: (context, constraints) =>
-                          _responsiveContent(context, constraints),
-                    ),
-            ),
-            if (selectedCount > 0)
-              IconButton(
-                onPressed: isDeleting ? null : onDeleteSelection,
-                icon: isDeleting
-                    ? const SizedBox.square(
-                        dimension: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: ColorManager.white,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.delete_outline,
-                        color: ColorManager.white,
-                      ),
-              ),
-          ],
-        ),
+        child: selectedCount > 0
+            ? _buildSelectionContent(context)
+            : isSearching
+            ? _buildSearchContent(context)
+            : _buildStandardContent(context),
       ),
     );
   }
+
+  Widget _buildSelectionContent(BuildContext context) => Row(
+    children: [
+      IconButton(
+        onPressed: onCancelSelection,
+        icon: const Icon(Icons.close, color: ColorManager.white),
+      ),
+      Expanded(
+        child: Text(
+          '$selectedCount ${S.of(context).selectedMessagesLabel}',
+          style: const TextStyle(color: ColorManager.white),
+        ),
+      ),
+      IconButton(
+        onPressed: isDeleting ? null : onDeleteSelection,
+        icon: isDeleting
+            ? const SizedBox.square(
+                dimension: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: ColorManager.white,
+                ),
+              )
+            : const Icon(Icons.delete_outline, color: ColorManager.white),
+      ),
+    ],
+  );
+
+  Widget _buildSearchContent(BuildContext context) {
+    final search = searchState ?? const ChatSearchState();
+    final count = search.resultMessageIds.length;
+    final index = search.currentIndex;
+    final counterText = search.searchQuery.isEmpty
+        ? ''
+        : count > 0
+        ? '${index + 1} / $count'
+        : S.of(context).chatSearchNoResults;
+
+    return Row(
+      children: [
+        IconButton(
+          tooltip: S.of(context).close,
+          onPressed: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            onCloseSearch?.call();
+          },
+          icon: const Icon(Icons.close, color: ColorManager.white),
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 38,
+            child: TextField(
+              autofocus: true,
+              style: StylesManager.styleRegular14(
+                context,
+              ).copyWith(color: ColorManager.black),
+              decoration: InputDecoration(
+                hintText: S.of(context).chatSearchHint,
+                hintStyle: StylesManager.styleLight12(
+                  context,
+                ).copyWith(color: ColorManager.grey7A7C),
+                filled: true,
+                fillColor: ColorManager.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: onSearchQueryChanged,
+            ),
+          ),
+        ),
+        if (counterText.isNotEmpty) ...[
+          const SizedBox(width: 8),
+          Text(
+            counterText,
+            style: StylesManager.styleRegular12(
+              context,
+            ).copyWith(color: ColorManager.white),
+          ),
+        ],
+        if (count > 0) ...[
+          IconButton(
+            tooltip: S.of(context).previous,
+            iconSize: 20,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+            onPressed: onPreviousSearch,
+            icon: const Icon(
+              Icons.keyboard_arrow_up,
+              color: ColorManager.white,
+            ),
+          ),
+          IconButton(
+            tooltip: S.of(context).next,
+            iconSize: 20,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+            onPressed: onNextSearch,
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: ColorManager.white,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildStandardContent(BuildContext context) => Row(
+    children: [
+      IconButton(
+        onPressed: () => MyNavigator.pop(context),
+        icon: Icon(_backIcon(context), color: ColorManager.white),
+      ),
+      Expanded(
+        child: LayoutBuilder(
+          builder: (context, constraints) =>
+              _responsiveContent(context, constraints),
+        ),
+      ),
+    ],
+  );
 
   Widget _responsiveContent(BuildContext context, BoxConstraints constraints) {
     final actions = _actions(context);
@@ -135,6 +239,13 @@ class ChatHeader extends StatelessWidget {
   }
 
   List<Widget> _actions(BuildContext context) => [
+    if (onSearch != null)
+      IconButton(
+        key: const Key('chatSearchButton'),
+        tooltip: S.of(context).chatSearchHint,
+        onPressed: onSearch,
+        icon: const Icon(Icons.search, color: ColorManager.white),
+      ),
     if (_sessionRole == UserRole.supervisor &&
         roomType == 'supervisor_student' &&
         studentId?.trim().isNotEmpty == true)

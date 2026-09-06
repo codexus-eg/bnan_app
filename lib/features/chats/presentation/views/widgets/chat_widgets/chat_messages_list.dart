@@ -1,3 +1,4 @@
+import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/chat_search_state.dart';
 import 'dart:async';
 
 import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
@@ -15,6 +16,7 @@ class ChatMessagesList extends StatefulWidget {
     required this.currentUserId,
     this.isLoading = false,
     this.targetMessageId,
+    this.search,
     this.firstUnreadMessageId,
     this.onInitialPositioned,
     this.selectedMessageIds = const {},
@@ -27,6 +29,7 @@ class ChatMessagesList extends StatefulWidget {
   final String currentUserId;
   final bool isLoading;
   final String? targetMessageId;
+  final ChatSearchState? search;
   final String? firstUnreadMessageId;
   final VoidCallback? onInitialPositioned;
   final Set<String> selectedMessageIds;
@@ -67,6 +70,17 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   void didUpdateWidget(covariant ChatMessagesList oldWidget) {
     super.didUpdateWidget(oldWidget);
     final messages = _displayMessages(widget.messages);
+    final search = widget.search;
+    if (search?.targetMessageId != null &&
+        (search!.targetMessageId != oldWidget.search?.targetMessageId ||
+            search.currentIndex != oldWidget.search?.currentIndex)) {
+      final target = search.targetMessageId!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.search?.targetMessageId == target) {
+          scrollToMessage(target, transientHighlight: false);
+        }
+      });
+    }
     if (oldWidget.isLoading && !widget.isLoading) {
       final target = _resolveInitialTarget(messages);
       if (target != null) {
@@ -82,6 +96,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
       }
       return;
     }
+    if (search?.isSearching == true) return;
     _scroll.update(
       wasLoading: oldWidget.isLoading,
       isLoading: widget.isLoading,
@@ -91,7 +106,8 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   }
 
   String? _resolveInitialTarget(List<ChatMessageModel> messages) {
-    final target = widget.targetMessageId?.trim();
+    final target = (widget.search?.targetMessageId ?? widget.targetMessageId)
+        ?.trim();
     if (target != null && target.isNotEmpty) {
       if (messages.any((m) => m.id.trim() == target)) {
         return target;
@@ -141,8 +157,11 @@ class ChatMessagesListState extends State<ChatMessagesList> {
                   key: _targetKey(messages[index].id),
                   message: messages[index],
                   currentUserId: widget.currentUserId,
+                  searchQuery: widget.search?.searchQuery ?? '',
                   highlighted:
-                      messages[index].id.trim() == highlightedMessageId,
+                      messages[index].id.trim() == highlightedMessageId ||
+                      messages[index].id.trim() ==
+                          widget.search?.targetMessageId,
                   selected: widget.selectedMessageIds.contains(
                     messages[index].id.trim(),
                   ),
@@ -168,7 +187,10 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     });
   }
 
-  Future<void> scrollToMessage(String messageId) async {
+  Future<void> scrollToMessage(
+    String messageId, {
+    bool transientHighlight = true,
+  }) async {
     final targetId = messageId.trim();
     if (targetId.isEmpty) return;
     final messages = _displayMessages(widget.messages);
@@ -177,9 +199,12 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     );
     if (index < 0) return;
     highlightTimer?.cancel();
-    setState(() => highlightedMessageId = targetId);
+    setState(() => highlightedMessageId = transientHighlight ? targetId : null);
     await WidgetsBinding.instance.endOfFrame;
-    if (!mounted) return;
+    if (!mounted ||
+        (!transientHighlight && widget.search?.targetMessageId != targetId)) {
+      return;
+    }
     final target = messageKeys[targetId]?.currentContext;
     if (target != null && target.mounted) {
       await Scrollable.ensureVisible(
@@ -187,6 +212,9 @@ class ChatMessagesListState extends State<ChatMessagesList> {
         duration: const Duration(milliseconds: 280),
         alignment: .5,
       );
+    }
+    if (!transientHighlight) {
+      return;
     }
     highlightTimer = Timer(const Duration(seconds: 2), () {
       if (mounted) setState(() => highlightedMessageId = null);
