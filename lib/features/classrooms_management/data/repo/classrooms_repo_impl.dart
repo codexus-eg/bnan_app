@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/error/app_exception.dart';
 import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
@@ -7,6 +8,7 @@ import 'package:bnan_app/features/classrooms_management/data/models/classroom_mo
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_request_model.dart';
 import 'package:bnan_app/features/classrooms_management/data/models/classrooms_response_model.dart';
 import 'package:bnan_app/features/classrooms_management/data/repo/classrooms_repo.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 
 class ClassroomsRepoImpl implements ClassroomsRepo {
@@ -131,5 +133,47 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
         isProtected: true,
       );
     });
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteClassroom(
+    String classroomId, {
+    String? reason,
+  }) async {
+    try {
+      final response = await apiConsumer.delete(
+        EndPoints.deleteClassroom(classroomId),
+        data: reason != null && reason.trim().isNotEmpty
+            ? {'reason': reason.trim()}
+            : null,
+        isProtected: true,
+      );
+      if (response is Map && response['alreadyArchived'] == true) {
+        return const Right(null);
+      }
+      return const Right(null);
+    } on AppException catch (error) {
+      if (error.code == 'CLASSROOM_HAS_ACTIVE_SESSION' ||
+          (error.statusCode == 409 &&
+              (error.code == 'CLASSROOM_HAS_ACTIVE_SESSION' ||
+                  error.message.contains('CLASSROOM_HAS_ACTIVE_SESSION')))) {
+        return Left(
+          Failure(
+            message: S.current.classroomHasActiveSession,
+            statusCode: 409,
+            code: 'CLASSROOM_HAS_ACTIVE_SESSION',
+          ),
+        );
+      }
+      return Left(
+        Failure(
+          message: error.message,
+          statusCode: error.statusCode,
+          code: error.code,
+        ),
+      );
+    } catch (error) {
+      return Left(Failure(message: error.toString()));
+    }
   }
 }

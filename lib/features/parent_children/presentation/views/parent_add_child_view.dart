@@ -23,6 +23,7 @@ class ParentAddChildView extends StatefulWidget {
 class _ParentAddChildViewState extends State<ParentAddChildView>
     with WidgetsBindingObserver {
   bool _tamaraOpen = false;
+  bool _returnedFromCheckout = false;
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ParentAddChildCubit, ParentAddChildState>(
+    return BlocConsumer<ParentAddChildCubit, ParentAddChildState>(
       listenWhen: (before, after) =>
           (!before.shouldOpenCheckout && after.shouldOpenCheckout) ||
           (before.phase != after.phase &&
@@ -63,10 +64,26 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
         }
         _openCheckout(context, state);
       },
-      child: Scaffold(
-        appBar: CustomAppbar(headerText: S.of(context).parentAddChildTitle),
-        body: const ParentAddChildBody(),
-      ),
+      builder: (context, state) {
+        final handleBack = _returnedFromCheckout && state.currentStep > 0;
+        return PopScope(
+          canPop: !handleBack,
+          onPopInvokedWithResult: (didPop, _) {
+            if (!didPop && handleBack) {
+              context.read<ParentAddChildCubit>().previousStep();
+            }
+          },
+          child: Scaffold(
+            appBar: CustomAppbar(
+              headerText: S.of(context).parentAddChildTitle,
+              onBackTap: handleBack
+                  ? context.read<ParentAddChildCubit>().previousStep
+                  : null,
+            ),
+            body: ParentAddChildBody(keepPaymentStep: _returnedFromCheckout),
+          ),
+        );
+      },
     );
   }
 
@@ -86,6 +103,7 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
       return;
     }
     final cubit = context.read<ParentAddChildCubit>();
+    setState(() => _returnedFromCheckout = false);
     _tamaraOpen = true;
     late final PaymentCheckoutLaunchResult result;
     try {
@@ -110,6 +128,9 @@ class _ParentAddChildViewState extends State<ParentAddChildView>
         false,
       );
       return;
+    }
+    if (result.tamaraOutcome != TamaraSdkOutcome.success) {
+      setState(() => _returnedFromCheckout = true);
     }
     if (state.selectedProvider == GulfPaymentProvider.paymob) {
       await cubit.checkoutClosed();

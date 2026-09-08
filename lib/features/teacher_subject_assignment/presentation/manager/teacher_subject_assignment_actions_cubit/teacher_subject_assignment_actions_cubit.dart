@@ -45,7 +45,6 @@ class TeacherSubjectAssignmentActionsCubit
     required String gradeId,
     required String classroomId,
     required String subjectId,
-    required num pricePerSession,
   }) async {
     if (isClosed || state is AssignTeacherLoading) return;
     emit(const AssignTeacherLoading());
@@ -56,7 +55,6 @@ class TeacherSubjectAssignmentActionsCubit
         gradeId: gradeId,
         classroomId: classroomId,
         subjectId: subjectId,
-        pricePerSession: pricePerSession,
       ),
     );
     if (isClosed) return;

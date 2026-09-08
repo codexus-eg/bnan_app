@@ -14,7 +14,6 @@ void main() {
     gradeId: 'grade-1',
     classroomId: 'classroom-1',
     subjectId: 'subject-1',
-    pricePerSession: 300,
   );
 
   test('assign uses one protected PUT with the exact contract', () async {

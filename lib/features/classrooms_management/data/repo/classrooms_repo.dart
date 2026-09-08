@@ -21,4 +21,9 @@ abstract class ClassroomsRepo {
     String classroomId,
     ClassroomRequestModel model,
   );
+
+  Future<Either<Failure, void>> deleteClassroom(
+    String classroomId, {
+    String? reason,
+  });
 }

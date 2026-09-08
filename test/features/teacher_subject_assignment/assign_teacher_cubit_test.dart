@@ -28,7 +28,6 @@ void main() {
       gradeId: 'grade-1',
       classroomId: 'classroom-1',
       subjectId: 'subject-1',
-      pricePerSession: 300,
     );
     await states;
 
@@ -38,7 +37,6 @@ void main() {
       'grade': 'grade-1',
       'classroom': 'classroom-1',
       'subject': 'subject-1',
-      'pricePerSession': 300,
     });
   });
 
@@ -52,7 +50,6 @@ void main() {
       gradeId: 'g',
       classroomId: 'r',
       subjectId: 's',
-      pricePerSession: 300,
     );
     expect(cubit.state, isA<AssignTeacherFailure>());
     expect((cubit.state as AssignTeacherFailure).errorMessage, backendMessage);

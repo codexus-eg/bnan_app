@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/app_pickers.dart';
 import 'package:bnan_app/core/helper/clipboard_helper.dart';
 import 'package:bnan_app/core/shared_widget/custom_details_widget_background.dart';
 import 'package:bnan_app/core/utils/assets.dart';
@@ -40,7 +41,7 @@ class DialogDetailsBody extends StatelessWidget {
               user.phone,
               ImageManager.usersManagementPhoneIcon,
             ),
-          ..._extraRows(s),
+          ..._extraRows(context, s),
           if (user.roles.isNotEmpty) RoleRowSection(s: s, user: user),
         ],
       ),
@@ -60,14 +61,17 @@ class DialogDetailsBody extends StatelessWidget {
     icon: icon,
   );
 
-  List<Widget> _extraRows(S s) {
+  List<Widget> _extraRows(BuildContext context, S s) {
+    final rawDate = user.registrationDate.isNotEmpty
+        ? user.registrationDate
+        : user.createdAt;
+    final formattedDate = AppPickers.formatDateTime(rawDate, context: context);
     final values = <({String label, String value})>[
       (label: s.status, value: user.status),
       (label: s.registrationMode, value: user.registrationMode),
-      (label: s.registrationDate, value: user.registrationDate),
+      (label: s.registrationDate, value: formattedDate),
       (label: s.curriculums, value: user.curriculum.join(', ')),
-      (label: s.grade, value: user.grade.join(', ')),
-      (label: s.classes, value: user.classes),
+      (label: s.classes, value: user.grade.join(', ')),
       (label: s.parent, value: user.parentName),
     ];
     return values

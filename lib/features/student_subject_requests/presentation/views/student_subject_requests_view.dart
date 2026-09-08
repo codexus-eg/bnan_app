@@ -17,8 +17,22 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+typedef SubjectRequestCheckoutLauncher =
+    Future<PaymentCheckoutLaunchResult> Function({
+      required BuildContext context,
+      required GulfPaymentProvider provider,
+      required String checkoutUrl,
+      Stream<bool>? completionStream,
+      bool Function()? isCompleted,
+    });
+
 class StudentSubjectRequestsView extends StatefulWidget {
-  const StudentSubjectRequestsView({super.key});
+  const StudentSubjectRequestsView({
+    super.key,
+    this.checkoutLauncher = PaymentCheckoutLauncher.open,
+  });
+
+  final SubjectRequestCheckoutLauncher checkoutLauncher;
   @override
   State<StudentSubjectRequestsView> createState() =>
       _StudentSubjectRequestsViewState();
@@ -108,7 +122,7 @@ class _StudentSubjectRequestsViewState extends State<StudentSubjectRequestsView>
       _tamaraOpen = true;
       late final PaymentCheckoutLaunchResult result;
       try {
-        result = await PaymentCheckoutLauncher.open(
+        result = await widget.checkoutLauncher(
           context: context,
           provider: state.selectedProvider,
           checkoutUrl: url,

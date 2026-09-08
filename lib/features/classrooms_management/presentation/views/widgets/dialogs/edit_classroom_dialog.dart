@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
@@ -8,6 +10,7 @@ import 'package:bnan_app/features/classrooms_management/data/models/classroom_mo
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_request_model.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_state.dart';
+import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/delete_classroom_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,8 +101,20 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
                   CustomAppButton(
                     text: s.save,
                     isLoading: state is UpdateClassroomLoading,
-                    onPressed: submit,
+                    onPressed: state is DeleteClassroomLoading ? null : submit,
                   ),
+                  if (_isAdmin) ...[
+                    const SizedBox(height: 12),
+                    CustomAppButton(
+                      text: s.deleteClassroom,
+                      backgroundColor: ColorManager.redBA,
+                      isLoading: state is DeleteClassroomLoading,
+                      onPressed: state is UpdateClassroomLoading ||
+                              state is DeleteClassroomLoading
+                          ? null
+                          : _confirmDelete,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -112,12 +127,36 @@ class EditClassroomDialogState extends State<EditClassroomDialog> {
   void submit() {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
+    final trimmedMeetingLink = meetingLinkController.text.trim();
     context.read<ClassroomActionsCubit>().updateClassroom(
       widget.classroomItem.id,
       ClassroomRequestModel(
         name: classNameController.text.trim(),
-        meetingLink: meetingLinkController.text.trim(),
+        meetingLink: trimmedMeetingLink.isEmpty ? null : trimmedMeetingLink,
       ),
     );
+  }
+
+  Future<void> _confirmDelete() async {
+    final actionsCubit = context.read<ClassroomActionsCubit>();
+    final deleted = await showDialog<bool>(
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: actionsCubit,
+        child: DeleteClassroomDialog(
+          classroomId: widget.classroomItem.id,
+          classroomName: widget.classroomItem.name,
+        ),
+      ),
+    );
+
+    if (deleted == true && mounted) {
+      Navigator.pop(context, true);
+    }
+  }
+
+  bool get _isAdmin {
+    final role = SessionManager.instance.role;
+    return role == UserRole.admin || SessionManager.instance.userRole == 'admin';
   }
 }

@@ -34,4 +34,22 @@ class ClassroomActionsCubit extends Cubit<ClassroomActionsState> {
       (_) => emit(UpdateClassroomSuccess()),
     );
   }
+
+  Future<void> deleteClassroom(
+    String classroomId, {
+    String? reason,
+  }) async {
+    if (isClosed || state is DeleteClassroomLoading) return;
+    emit(DeleteClassroomLoading());
+
+    final result = await classroomsRepo.deleteClassroom(
+      classroomId,
+      reason: reason,
+    );
+    if (isClosed) return;
+    result.fold(
+      (failure) => emit(DeleteClassroomFailure(failure.message)),
+      (_) => emit(DeleteClassroomSuccess()),
+    );
+  }
 }

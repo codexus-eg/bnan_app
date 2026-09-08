@@ -33,8 +33,6 @@ void main() {
     lookups.selectSubject(null);
     lookups.selectSubject(_subject);
     await tester.pump();
-    await tester.enterText(find.byType(TextFormField), '300');
-    await tester.pump();
 
     await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
@@ -43,7 +41,6 @@ void main() {
     expect(find.text(_internalId), findsNothing);
     expect(find.byType(AssignSubjectDialog), findsOneWidget);
     expect(find.byType(SnackBar), findsNothing);
-    expect(find.text('300'), findsOneWidget);
     final errorText = tester.widget<Text>(find.text(_backendMessage));
     expect(errorText.softWrap, isTrue);
     expect(errorText.maxLines, isNull);

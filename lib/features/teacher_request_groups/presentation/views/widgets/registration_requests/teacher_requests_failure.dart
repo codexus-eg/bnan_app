@@ -11,22 +11,33 @@ class TeacherRequestsFailureView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsetsDirectional.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            NoDataWidget(title: message),
-            const SizedBox(height: 12),
-            CustomAppButton(
-              text: S.of(context).retry,
-              onPressed: context
-                  .read<TeacherRegistrationRequestsCubit>()
-                  .refresh,
+    return RefreshIndicator(
+      onRefresh: context.read<TeacherRegistrationRequestsCubit>().refresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.6,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    NoDataWidget(title: message),
+                    const SizedBox(height: 12),
+                    CustomAppButton(
+                      text: S.of(context).retry,
+                      onPressed: context
+                          .read<TeacherRegistrationRequestsCubit>()
+                          .refresh,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -13,7 +13,10 @@ class MetaSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final date = AppPickers.formatDateOnly(user.registrationDate);
+    final rawDate = user.registrationDate.isNotEmpty
+        ? user.registrationDate
+        : user.createdAt;
+    final date = AppPickers.formatDateTime(rawDate, context: context);
     final items = <UserRelationshipItem>[
       (label: s.email, value: user.email),
       (label: s.status, value: user.status),

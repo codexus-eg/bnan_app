@@ -145,6 +145,29 @@ class AppPickers {
     return DateFormat('dd/MM/yyyy','en').format(parsedDate);
   }
 
+  static String formatDateTime(
+    String date, {
+    BuildContext? context,
+    String? locale,
+  }) {
+    final trimmed = date.trim();
+    if (trimmed.isEmpty || trimmed == '-') return '';
+    final parsedDate = DateTime.tryParse(trimmed) ??
+        DateTime.tryParse(trimmed.replaceAll('/', '-'));
+    if (parsedDate == null) return date;
+
+    final localDate = parsedDate.toLocal();
+    final effectiveLocale = locale ??
+        (context != null
+            ? Localizations.localeOf(context).languageCode
+            : (Intl.defaultLocale ?? 'ar'));
+
+    final dateFormatted = DateFormat('dd/MM/yyyy', 'en').format(localDate);
+    final timeFormatted =
+        DateFormat('hh:mm a', effectiveLocale).format(localDate);
+    return '$dateFormatted • $timeFormatted';
+  }
+
   static TimePickerThemeData _timePickerTheme() {
     return TimePickerThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

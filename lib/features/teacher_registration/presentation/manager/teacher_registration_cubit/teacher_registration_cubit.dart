@@ -255,9 +255,6 @@ class TeacherRegistrationCubit extends Cubit<TeacherRegistrationState> {
     if (selectedCurriculumId == null) {
       return S.current.pleaseChooseTeachingCurriculum;
     }
-    if (additionalCurriculumIds.isEmpty) {
-      return S.current.additionalCurriculumsRequired;
-    }
     return null;
   }
 

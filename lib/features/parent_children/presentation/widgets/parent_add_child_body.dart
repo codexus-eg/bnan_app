@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ParentAddChildBody extends StatelessWidget {
-  const ParentAddChildBody({super.key});
+  const ParentAddChildBody({super.key, this.keepPaymentStep = false});
+
+  final bool keepPaymentStep;
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +21,22 @@ class ParentAddChildBody extends StatelessWidget {
       top: false,
       child: BlocBuilder<ParentAddChildCubit, ParentAddChildState>(
         builder: (context, state) {
+          final showPaymentStep =
+              keepPaymentStep &&
+              state.paymentId != null &&
+              {
+                ParentAddChildPhase.processingPayment,
+                ParentAddChildPhase.paymentStatusUnknown,
+                ParentAddChildPhase.failure,
+              }.contains(state.phase);
           if ({
-            ParentAddChildPhase.pendingReview,
-            ParentAddChildPhase.processingPayment,
-            ParentAddChildPhase.paymentStatusUnknown,
-            ParentAddChildPhase.completed,
-            ParentAddChildPhase.failure,
-          }.contains(state.phase)) {
+                ParentAddChildPhase.pendingReview,
+                ParentAddChildPhase.processingPayment,
+                ParentAddChildPhase.paymentStatusUnknown,
+                ParentAddChildPhase.completed,
+                ParentAddChildPhase.failure,
+              }.contains(state.phase) &&
+              !showPaymentStep) {
             return ParentAddChildResult(state: state);
           }
           final headers = _headers(context);

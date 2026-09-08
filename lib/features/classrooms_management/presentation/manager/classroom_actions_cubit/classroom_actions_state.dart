@@ -21,3 +21,13 @@ final class UpdateClassroomFailure extends ClassroomActionsState {
 
   UpdateClassroomFailure(this.message);
 }
+
+final class DeleteClassroomLoading extends ClassroomActionsState {}
+
+final class DeleteClassroomSuccess extends ClassroomActionsState {}
+
+final class DeleteClassroomFailure extends ClassroomActionsState {
+  final String message;
+
+  DeleteClassroomFailure(this.message);
+}

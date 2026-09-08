@@ -19,7 +19,8 @@ class ClassroomRequestModel {
       if (curriculumId != null) 'curriculum': curriculumId,
       if (gradeId != null) 'grade': gradeId,
       if (supervisorId != null) 'supervisorId': supervisorId,
-      if (meetingLink != null) 'meetingLink': meetingLink,
+      if (meetingLink != null && meetingLink!.trim().isNotEmpty)
+        'meetingLink': meetingLink!.trim(),
     };
   }
 }

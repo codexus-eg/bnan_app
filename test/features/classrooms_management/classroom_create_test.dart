@@ -64,14 +64,21 @@ void main() {
     );
   });
 
-  test('meeting link is optional on create and can be cleared on update', () {
+  test('meeting link is optional and omitted when empty', () {
     expect(
       const ClassroomRequestModel(name: 'A').toJson(),
       isNot(contains('meetingLink')),
     );
     expect(
       const ClassroomRequestModel(name: 'A', meetingLink: '').toJson(),
-      containsPair('meetingLink', ''),
+      isNot(contains('meetingLink')),
+    );
+    expect(
+      const ClassroomRequestModel(
+        name: 'A',
+        meetingLink: 'https://meet.example/room',
+      ).toJson(),
+      containsPair('meetingLink', 'https://meet.example/room'),
     );
   });
 
@@ -270,4 +277,9 @@ class _FakeClassroomsRepo implements ClassroomsRepo {
     String classroomId,
     ClassroomRequestModel model,
   ) => throw UnimplementedError();
+  @override
+  Future<Either<Failure, void>> deleteClassroom(
+    String classroomId, {
+    String? reason,
+  }) => throw UnimplementedError();
 }

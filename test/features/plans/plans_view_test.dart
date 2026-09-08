@@ -830,7 +830,11 @@ class _AssignmentsRepo implements AssignmentsRepo {
 
 class _ClassroomsRepo implements ClassroomsRepo {
   @override
-  Future<Either<Failure, ClassroomsResponseModel>> getClassrooms() async =>
+  Future<Either<Failure, ClassroomsResponseModel>> getClassrooms({
+    String? curriculum,
+    int? limit,
+    int? page,
+  }) async =>
       Right(
         ClassroomsResponseModel(
           success: true,

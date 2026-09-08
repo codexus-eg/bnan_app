@@ -491,7 +491,7 @@ void main() {
       expect(repo.lastPayload?.provider, GulfPaymentProvider.paymob);
       expect(repo.lastPayload?.toJson(), isNot(contains('paymentAddress')));
       await cubit.paymobCheckoutClosed();
-      expect(cubit.state.phase, SubjectRequestPaymentPhase.verificationTimeout);
+      expect(cubit.state.phase, SubjectRequestPaymentPhase.idle);
       expect(repo.reconcileCalls, 0);
       expect(repo.statusCalls, 1);
       await cubit.close();

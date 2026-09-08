@@ -1,9 +1,6 @@
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
-import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_app_dialog.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
-import 'package:bnan_app/core/utils/color_manager.dart';
-import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/data/models/academic_lookup_selection.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_state.dart';
@@ -30,15 +27,8 @@ class AssignSubjectDialog extends StatefulWidget {
 
 class AssignSubjectDialogState extends State<AssignSubjectDialog> {
   final formKey = GlobalKey<FormState>();
-  final priceController = TextEditingController();
   AcademicLookupSelection selection = const AcademicLookupSelection();
   String? validationMessage;
-
-  @override
-  void dispose() {
-    priceController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +70,6 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
                       });
                     },
                   ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    label: s.hourlyRate,
-                    controller: priceController,
-                    labelColor: ColorManager.mainColor14,
-                    keyboardType: TextInputType.number,
-                    hintStyle: getStyle(context),
-                    onChanged: (_) => setState(() => validationMessage = null),
-                    validator: validatePrice,
-                  ),
                   if (validationMessage != null) ...[
                     const SizedBox(height: 16),
                     TeacherAssignmentDialogError(message: validationMessage!),
@@ -110,8 +90,7 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
                             lookupState.grades.isEmpty ||
                                 lookupState.classrooms.isEmpty ||
                                 lookupState.isLoadingSubjects ||
-                                !hasCurrentSubject ||
-                                !hasValidPrice
+                                !hasCurrentSubject
                             ? null
                             : submit,
                       );
@@ -142,7 +121,6 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
       return;
     }
 
-    final price = num.parse(priceController.text.trim());
     setState(() => validationMessage = null);
     context.read<TeacherSubjectAssignmentActionsCubit>().assignTeacher(
       teacherId: widget.teacherId,
@@ -150,27 +128,6 @@ class AssignSubjectDialogState extends State<AssignSubjectDialog> {
       gradeId: selection.gradeId!,
       classroomId: selection.classroomId!,
       subjectId: lookupState.selectedSubject!.subjectId,
-      pricePerSession: price,
     );
-  }
-
-  bool get hasValidPrice {
-    final price = num.tryParse(priceController.text.trim());
-    return price != null && price > 0;
-  }
-
-  String? validatePrice(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return S.current.hourlyRateRequired;
-    }
-    final price = num.tryParse(value.trim());
-    if (price == null || price <= 0) return S.current.hourlyRateMustBeNumber;
-    return null;
-  }
-
-  TextStyle getStyle(context) {
-    return StylesManager.styleRegular16(
-      context,
-    ).copyWith(color: ColorManager.greyA8AF);
   }
 }
