@@ -7,6 +7,7 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_repo.dart';
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/data/models/assignment_row_item.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignment_actions_cubit/teacher_subject_assignment_actions_cubit.dart';
 import 'package:bnan_app/features/teacher_subject_assignment/presentation/manager/teacher_subject_assignments_cubit/teacher_subject_assignments_cubit.dart';
@@ -80,6 +81,9 @@ class TeacherAssignmentCard extends StatelessWidget {
     );
     if (removed != true) return;
     await assignmentsCubit.getTeacherTeachingAssignments();
+    if (getIt.isRegistered<ChatNotificationCoordinator>()) {
+      getIt<ChatNotificationCoordinator>().handleRoomCreated({});
+    }
     if (!context.mounted) return;
     showCustomSnackBar(
       context,
@@ -114,6 +118,9 @@ class TeacherAssignmentCard extends StatelessWidget {
 
     if (result != null) {
       await assignmentsCubit.getTeacherTeachingAssignments();
+      if (getIt.isRegistered<ChatNotificationCoordinator>()) {
+        getIt<ChatNotificationCoordinator>().handleRoomCreated({});
+      }
       if (!context.mounted) return;
       showCustomSnackBar(
         context,

@@ -99,8 +99,32 @@ class ChatNotificationCoordinator {
   void handleNotification(Map<String, dynamic> payload) {
     _notificationHandler?.call(payload);
     final notification = ChatNotificationModel.fromJson(payload);
-    if (!notification.isChatMessage) return;
-    _handle(ChatNotificationEvent.fromNotification(notification));
+    if (notification.isChatMessage) {
+      _handle(ChatNotificationEvent.fromNotification(notification));
+    } else if (notification.isRoomOrClassroomUpdate) {
+      handleRoomCreated(payload);
+    }
+  }
+
+  void handleRoomCreated(Map<String, dynamic> payload) {
+    final roomId = (payload['roomId'] ??
+            payload['id'] ??
+            payload['_id'] ??
+            payload['chatRoomId'] ??
+            payload['classroomId'])
+        ?.toString()
+        .trim() ??
+        '';
+    _roomEvents.add(
+      ChatNotificationEvent(
+        messageId: 'room_event_${DateTime.now().microsecondsSinceEpoch}',
+        roomId: roomId,
+        senderId: '',
+        senderName: '',
+        message: '',
+        createdAt: DateTime.now(),
+      ),
+    );
   }
 
   ChatForegroundNotificationResult handlePush({

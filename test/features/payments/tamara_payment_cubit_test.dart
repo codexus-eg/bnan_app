@@ -347,7 +347,7 @@ void main() {
     expect(cubit.state, isA<TamaraPaymentPending>());
     expect(cubit.isAwaitingVerification, isFalse);
     await cubit.checkout(_requestWith(provider: GulfPaymentProvider.paymob));
-    expect(repo.keys, ['key-1']);
+    expect(repo.keys, ['key-1', 'key-2']);
     expect(
       cubit.state,
       isA<TamaraPaymentPending>().having(

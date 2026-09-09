@@ -75,6 +75,10 @@ class AppNotification {
       for (final key in const [
         'roomId',
         'classroomId',
+        'classroomSubjectId',
+        'subjectId',
+        'requestId',
+        'teacherId',
         'roomName',
         'chatName',
         'name',

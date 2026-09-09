@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:tamara_flutter_sdk/tamara_navigation_policy.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,13 +23,28 @@ class TamaraCheckout extends StatefulWidget {
   final void Function()? onPaymentFailed;
   final void Function()? onPaymentCanceled;
   @override
-  _TamaraCheckoutState createState() => _TamaraCheckoutState();
+  State<TamaraCheckout> createState() => _TamaraCheckoutState();
 }
 
 class _TamaraCheckoutState extends State<TamaraCheckout> {
   late PlatformWebViewControllerCreationParams _params;
   WebViewController? _controller;
   WebViewPermissionRequest? requestPermission;
+  bool _handled = false;
+
+  void _checkUrl(String url) {
+    if (_handled) return;
+    if (TamaraNavigationPolicy.matches(url, widget.successUrl)) {
+      _handled = true;
+      widget.onPaymentSuccess?.call();
+    } else if (TamaraNavigationPolicy.matches(url, widget.failUrl)) {
+      _handled = true;
+      widget.onPaymentFailed?.call();
+    } else if (TamaraNavigationPolicy.matches(url, widget.cancelUrl)) {
+      _handled = true;
+      widget.onPaymentCanceled?.call();
+    }
+  }
 
   @override
   void initState() {
@@ -60,26 +74,29 @@ class _TamaraCheckoutState extends State<TamaraCheckout> {
             // ignore: avoid_print
             print('WebView is loading (progress : $progress%)');
           },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
+          onPageStarted: (String url) => _checkUrl(url),
+          onPageFinished: (String url) => _checkUrl(url),
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
             String url = request.url;
             if (TamaraNavigationPolicy.matches(url, widget.successUrl)) {
-              if (widget.onPaymentSuccess != null) {
-                widget.onPaymentSuccess!();
-                return NavigationDecision.prevent;
+              if (!_handled) {
+                _handled = true;
+                widget.onPaymentSuccess?.call();
               }
+              return NavigationDecision.prevent;
             } else if (TamaraNavigationPolicy.matches(url, widget.failUrl)) {
-              if (widget.onPaymentFailed != null) {
-                widget.onPaymentFailed!();
-                return NavigationDecision.prevent;
+              if (!_handled) {
+                _handled = true;
+                widget.onPaymentFailed?.call();
               }
+              return NavigationDecision.prevent;
             } else if (TamaraNavigationPolicy.matches(url, widget.cancelUrl)) {
-              if (widget.onPaymentCanceled != null) {
-                widget.onPaymentCanceled!();
-                return NavigationDecision.prevent;
+              if (!_handled) {
+                _handled = true;
+                widget.onPaymentCanceled?.call();
               }
+              return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
           },

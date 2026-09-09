@@ -40,9 +40,28 @@ void main() {
 
   test('provider backend return URLs are intercepted by host and path', () {
     final baseUrl = EndPoints.baseUrl;
+    final socketUrl = EndPoints.socketUrl;
     expect(
       PaymobNavigationPolicy.isSuccessReturnUrl(
         '$baseUrl/payment/paymob/success?paymentStatus=approved',
+      ),
+      isTrue,
+    );
+    expect(
+      PaymobNavigationPolicy.isSuccessReturnUrl(
+        '$socketUrl/payment/paymob/success',
+      ),
+      isTrue,
+    );
+    expect(
+      PaymobNavigationPolicy.isSuccessReturnUrl(
+        '$baseUrl/payment/paymob/callback',
+      ),
+      isTrue,
+    );
+    expect(
+      PaymobNavigationPolicy.isSuccessReturnUrl(
+        '$baseUrl/payment/callback',
       ),
       isTrue,
     );
@@ -54,8 +73,22 @@ void main() {
       isTrue,
     );
     expect(
+      TamaraNavigationPolicy.matches(
+        '$socketUrl/payment/tamara/success',
+        '$baseUrl/payment/tamara/success',
+      ),
+      isTrue,
+    );
+    expect(
       PaymobNavigationPolicy.isSuccessReturnUrl(
         'https://example.com/api/v1/payment/paymob/success',
+      ),
+      isFalse,
+    );
+    expect(
+      TamaraNavigationPolicy.matches(
+        'https://example.com/api/v1/payment/tamara/success',
+        '$baseUrl/payment/tamara/success',
       ),
       isFalse,
     );

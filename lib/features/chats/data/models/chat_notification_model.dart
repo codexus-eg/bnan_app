@@ -75,6 +75,16 @@ class ChatNotificationModel {
       key.trim().toUpperCase() == 'NEW_MESSAGE' ||
       notificationType.trim().toLowerCase() == 'chat';
 
+  bool get isRoomOrClassroomUpdate =>
+      key.trim().toUpperCase().contains('ACCEPTED') ||
+      key.trim().toUpperCase().contains('CLASSROOM') ||
+      key.trim().toUpperCase().contains('REQUEST') ||
+      key.trim().toUpperCase().contains('ROOM') ||
+      key.trim().toUpperCase().contains('TEACHER') ||
+      key.trim().toUpperCase().contains('ASSIGN') ||
+      notificationType.trim().toLowerCase().contains('classroom') ||
+      data.roomId.isNotEmpty;
+
   static Map<String, dynamic> _params(dynamic value) {
     try {
       final decoded = value is String ? jsonDecode(value) : value;

@@ -11,9 +11,18 @@ import 'package:webview_flutter/webview_flutter.dart';
 enum PaymobCheckoutOutcome { closed }
 
 class PaymobCheckoutView extends StatefulWidget {
-  const PaymobCheckoutView({super.key, required this.checkoutUrl});
+  const PaymobCheckoutView({
+    super.key,
+    required this.checkoutUrl,
+    this.completionStream,
+    this.isCompleted,
+    this.onPaymentSuccess,
+  });
 
   final String checkoutUrl;
+  final Stream<bool>? completionStream;
+  final bool Function()? isCompleted;
+  final Future<void> Function()? onPaymentSuccess;
 
   @override
   State<PaymobCheckoutView> createState() => _PaymobCheckoutViewState();
@@ -21,6 +30,7 @@ class PaymobCheckoutView extends StatefulWidget {
 
 class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
   late final WebViewController _controller;
+  StreamSubscription<bool>? _completionSubscription;
   bool _loading = true;
   bool _failed = false;
   bool _closing = false;
@@ -28,13 +38,27 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
   @override
   void initState() {
     super.initState();
+    _completionSubscription = widget.completionStream?.listen((completed) {
+      if (completed) _handleSuccessAndClose();
+    });
+    if (widget.isCompleted?.call() == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _handleSuccessAndClose();
+      });
+    }
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: _onNavigationRequest,
-          onPageStarted: (_) => _update(loading: true, failed: false),
-          onPageFinished: (_) => _update(loading: false, failed: false),
+          onPageStarted: (url) {
+            _checkSuccessUrl(url);
+            _update(loading: true, failed: false);
+          },
+          onPageFinished: (url) {
+            _checkSuccessUrl(url);
+            _update(loading: false, failed: false);
+          },
           onWebResourceError: (error) {
             if (error.isForMainFrame != false) {
               _update(loading: false, failed: true);
@@ -43,6 +67,12 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
         ),
       );
     unawaited(_load());
+  }
+
+  @override
+  void dispose() {
+    _completionSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -55,18 +85,32 @@ class _PaymobCheckoutViewState extends State<PaymobCheckoutView> {
   }
 
   void _update({required bool loading, required bool failed}) {
-    if (!mounted) return;
+    if (_closing || !mounted) return;
     setState(() {
       _loading = loading;
       _failed = failed;
     });
   }
 
+  void _checkSuccessUrl(String url) {
+    if (PaymobNavigationPolicy.isSuccessReturnUrl(url)) {
+      _handleSuccessAndClose();
+    }
+  }
+
+  void _handleSuccessAndClose() {
+    if (_closing || !mounted) return;
+    _closing = true;
+    final callback = widget.onPaymentSuccess;
+    if (callback != null) unawaited(callback());
+    Navigator.pop(context, PaymobCheckoutOutcome.closed);
+  }
+
   Future<NavigationDecision> _onNavigationRequest(
     NavigationRequest request,
   ) async {
     if (PaymobNavigationPolicy.isSuccessReturnUrl(request.url)) {
-      _close();
+      _handleSuccessAndClose();
       return NavigationDecision.prevent;
     }
     return PaymobNavigationPolicy.decide(request.url);

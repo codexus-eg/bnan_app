@@ -9,8 +9,17 @@ abstract final class PaymobNavigationPolicy {
     final actual = Uri.tryParse(url);
     final expected = Uri.parse('${EndPoints.baseUrl}/payment/paymob/success');
     if (actual == null || !actual.hasAuthority) return false;
-    return actual.host.toLowerCase() == expected.host.toLowerCase() &&
-        _normalizedPath(actual) == _normalizedPath(expected);
+    if (actual.host.toLowerCase() != expected.host.toLowerCase()) return false;
+
+    final path = _normalizedPath(actual);
+    final expectedPath = _normalizedPath(expected);
+    return path == expectedPath ||
+        path == '/payment/paymob/success' ||
+        path == '/api/v1/payment/paymob/success' ||
+        path == '/payment/paymob/callback' ||
+        path == '/api/v1/payment/paymob/callback' ||
+        path == '/payment/callback' ||
+        path == '/api/v1/payment/callback';
   }
 
   static Future<NavigationDecision> decide(

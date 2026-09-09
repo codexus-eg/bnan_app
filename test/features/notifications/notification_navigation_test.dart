@@ -58,6 +58,56 @@ void main() {
     expect(service.resolve(notification), Routes.home);
   });
 
+  test('CLASSROOM_CHANGE_REQUESTED resolves to registrationRequests with query params for Admin', () async {
+    await _saveRole(UserRole.admin);
+    final service = NotificationNavigationService(SessionManager.instance);
+    final notification = AppNotification.fromJson({
+      'id': 'notif-change-req',
+      'key': 'CLASSROOM_CHANGE_REQUESTED',
+      'data': {
+        'requestId': 'req-123',
+        'classroomId': 'cls-456',
+      },
+    });
+
+    final route = service.resolve(notification);
+    expect(route, contains(Routes.registrationRequests));
+    expect(route, contains('requestId=req-123'));
+    expect(route, contains('classroomId=cls-456'));
+  });
+
+  test('CLASSROOM_TEACHER_CHANGED resolves to classroom_details for student, teacher, admin', () async {
+    final notification = AppNotification.fromJson({
+      'id': 'notif-teacher-chg',
+      'key': 'CLASSROOM_TEACHER_CHANGED',
+      'data': {
+        'classroomId': 'cls-10',
+        'classroomSubjectId': 'cs-20',
+        'subjectId': 'sub-30',
+      },
+    });
+
+    await _saveRole(UserRole.student);
+    final studentService = NotificationNavigationService(SessionManager.instance);
+    final studentRoute = studentService.resolve(notification);
+    expect(studentRoute, contains(Routes.studentSubjects));
+    expect(studentRoute, contains('classroomId=cls-10'));
+    expect(studentRoute, contains('classroomSubjectId=cs-20'));
+    expect(studentRoute, contains('subjectId=sub-30'));
+
+    await _saveRole(UserRole.teacher);
+    final teacherService = NotificationNavigationService(SessionManager.instance);
+    final teacherRoute = teacherService.resolve(notification);
+    expect(teacherRoute, contains(Routes.teacherSections));
+    expect(teacherRoute, contains('classroomId=cls-10'));
+
+    await _saveRole(UserRole.admin);
+    final adminService = NotificationNavigationService(SessionManager.instance);
+    final adminRoute = adminService.resolve(notification);
+    expect(adminRoute, contains(Routes.classRoomManagement));
+    expect(adminRoute, contains('classroomId=cls-10'));
+  });
+
   for (final entry in const {
     UserRole.student: (screen: 'teacher_approval', home: Routes.home),
     UserRole.parent: (screen: 'performance', home: Routes.parentHome),

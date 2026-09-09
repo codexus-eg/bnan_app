@@ -14,6 +14,12 @@ extension TeacherRequestsAcceptFlow on TeacherRegistrationRequestsCubit {
       _lastClassroomId = accepted.classroomId;
       _lastChatRoomId = accepted.chatRoomId;
       _remove(requestId);
+      if (getIt.isRegistered<ChatNotificationCoordinator>()) {
+        getIt<ChatNotificationCoordinator>().handleRoomCreated({
+          'roomId': accepted.chatRoomId,
+          'classroomId': accepted.classroomId,
+        });
+      }
       _emitState(TeacherRequestAccepted(requests, _pagination, accepted));
     });
   }

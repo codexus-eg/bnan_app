@@ -103,6 +103,9 @@ class NotificationNavigationService {
       'student_evaluations' => Routes.weeklyEvaluations,
       'performance' => Routes.teacherPerformance,
       'registration_requests' => Routes.registrationRequests,
+      'classroom_change_requests' =>
+          _classroomChangeRequests(params, resourceId),
+      'classroom_details' => _classroomDetails(params, resourceId),
       'teacher_approval' => Routes.teacherApplication,
       'teacher_home' => Routes.teacherHome,
       'supervisor_classrooms' => Routes.supervisorClassRoomAssignment,
@@ -239,6 +242,49 @@ class NotificationNavigationService {
         : Uri(path: route, queryParameters: query).toString();
   }
 
+  String? _classroomChangeRequests(
+    Map<String, dynamic> params,
+    String? resourceId,
+  ) {
+    final requestId = _text(params['requestId'] ?? resourceId);
+    final classroomId = _text(params['classroomId']);
+    final query = <String, String>{
+      if (requestId != null) 'requestId': requestId,
+      if (classroomId != null) 'classroomId': classroomId,
+    };
+    return query.isEmpty
+        ? Routes.registrationRequests
+        : Uri(
+            path: Routes.registrationRequests,
+            queryParameters: query,
+          ).toString();
+  }
+
+  String? _classroomDetails(
+    Map<String, dynamic> params,
+    String? resourceId,
+  ) {
+    final classroomId = _text(params['classroomId'] ?? resourceId);
+    final classroomSubjectId = _text(params['classroomSubjectId']);
+    final subjectId = _text(params['subjectId']);
+    final query = <String, String>{
+      if (classroomId != null) 'classroomId': classroomId,
+      if (classroomSubjectId != null) 'classroomSubjectId': classroomSubjectId,
+      if (subjectId != null) 'subjectId': subjectId,
+    };
+    final baseRoute = switch (_session.role) {
+      UserRole.student || UserRole.parent => Routes.studentSubjects,
+      UserRole.teacher => Routes.teacherSections,
+      UserRole.supervisor => Routes.supervisorClassRoomAssignment,
+      UserRole.admin => Routes.classRoomManagement,
+      _ => null,
+    };
+    if (baseRoute == null) return null;
+    return query.isEmpty
+        ? baseRoute
+        : Uri(path: baseRoute, queryParameters: query).toString();
+  }
+
   String? _certificates() => switch (_session.role) {
     UserRole.parent || UserRole.student => Routes.parentCertificates,
     UserRole.supervisor => Routes.certificatesManagement,
@@ -260,6 +306,7 @@ const _allowedScreens = <UserRole, Set<String>>{
     'subscription',
     'certificates',
     'student_evaluations',
+    'classroom_details',
   },
   UserRole.parent: {
     'chat_room',
@@ -268,6 +315,7 @@ const _allowedScreens = <UserRole, Set<String>>{
     'certificates',
     'parent_child_certificates',
     'student_evaluations',
+    'classroom_details',
   },
   UserRole.teacher: {
     'chat_room',
@@ -275,6 +323,7 @@ const _allowedScreens = <UserRole, Set<String>>{
     'performance',
     'teacher_home',
     'attendance',
+    'classroom_details',
   },
   UserRole.supervisor: {
     'chat_room',
@@ -282,11 +331,14 @@ const _allowedScreens = <UserRole, Set<String>>{
     'certificates',
     'supervisor_classrooms',
     'attendance',
+    'classroom_details',
   },
   UserRole.admin: {
     'chat_room',
     'schedule',
     'registration_requests',
+    'classroom_change_requests',
+    'classroom_details',
     'teacher_approval',
     'students',
   },
@@ -297,6 +349,8 @@ const _eventScreens = <String, String>{
   'CLASS_CANCELLED': 'schedule',
   'CLASS_RESCHEDULED': 'schedule',
   'CLASS_REMINDER': 'schedule',
+  'CLASSROOM_CHANGE_REQUESTED': 'classroom_change_requests',
+  'CLASSROOM_TEACHER_CHANGED': 'classroom_details',
   'HOMEWORK_CREATED': 'assignment_details',
   'HOMEWORK_GRADED': 'assignment_details',
   'EVALUATION_CREATED': 'student_evaluations',

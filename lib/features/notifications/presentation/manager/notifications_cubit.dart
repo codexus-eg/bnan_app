@@ -58,7 +58,12 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       if (_removeSocketListeners.isEmpty) {
         void handleNudge(Map<String, dynamic> json) =>
             ingestSocketNotification(json);
-        _removeSocketListeners.addAll([_socket.listenToChatNudge(handleNudge)]);
+        void handleNotification(Map<String, dynamic> json) =>
+            ingestSocketNotification(json);
+        _removeSocketListeners.addAll([
+          _socket.listenToChatNudge(handleNudge),
+          _socket.listenToNotification(handleNotification),
+        ]);
       }
       await load(refresh: true);
     } catch (error) {

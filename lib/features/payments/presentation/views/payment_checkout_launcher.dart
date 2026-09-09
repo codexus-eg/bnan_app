@@ -62,7 +62,12 @@ abstract final class PaymentCheckoutLauncher {
         MaterialPageRoute(
           builder:
               paymobPageBuilder ??
-              (_) => PaymobCheckoutView(checkoutUrl: checkoutUrl),
+              (_) => PaymobCheckoutView(
+                checkoutUrl: checkoutUrl,
+                completionStream: completionStream,
+                isCompleted: isCompleted,
+                onPaymentSuccess: onPaymentSuccess,
+              ),
         ),
       );
       if (onOpened != null) unawaited(_notifyOpened(onOpened));

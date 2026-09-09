@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/teacher_request_groups/data/models/registration_request_model.dart';
 import 'package:bnan_app/features/teacher_request_groups/data/models/teacher_requests_pagination_model.dart';
 import 'package:bnan_app/features/teacher_request_groups/data/repo/teacher_registration_requests_repo.dart';

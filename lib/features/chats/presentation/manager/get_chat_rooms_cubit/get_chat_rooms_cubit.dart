@@ -13,8 +13,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   GetChatRoomsCubit(this.chatRepo, [this.notifications, this.roomsCache])
     : super(GetChatRoomsInitial()) {
+    if (roomsCache != null && roomsCache!.rooms.isNotEmpty) {
+      _allRooms = roomsCache!.rooms;
+      emit(GetChatRoomsSuccess(rooms: _visibleRooms));
+    }
     _notificationSubscription = notifications?.roomEvents.listen(_updateRoom);
     _roomReadSubscription = roomsCache?.roomReadEvents.listen(markRoomRead);
+    _roomsUpdateSubscription =
+        roomsCache?.roomsUpdateEvents.listen(_onRoomsCacheUpdated);
   }
 
   final ChatRepo chatRepo;
@@ -23,6 +29,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   final Set<String> _processedMessageIds = {};
   StreamSubscription<ChatNotificationEvent>? _notificationSubscription;
   StreamSubscription<String>? _roomReadSubscription;
+  StreamSubscription<List<ChatRoomSummaryModel>>? _roomsUpdateSubscription;
   Timer? _searchDebounce;
   String _adminSearch = '';
   String _roomSearch = '';
@@ -32,10 +39,18 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   int get totalUnreadCount =>
       _allRooms.fold(0, (total, room) => total + room.unreadCount);
 
+  void _onRoomsCacheUpdated(List<ChatRoomSummaryModel> cached) {
+    if (isClosed || identical(_allRooms, cached)) return;
+    _allRooms = cached;
+    emit(GetChatRoomsSuccess(rooms: _visibleRooms));
+  }
+
   Future<void> getChatRooms() async {
     if (isClosed) return;
     final requestId = ++_requestId;
-    emit(GetChatRoomsLoading());
+    if (_allRooms.isEmpty) {
+      emit(GetChatRoomsLoading());
+    }
 
     final result = SessionManager.instance.role == UserRole.admin
         ? await chatRepo.getAdminChatRooms(search: _adminSearch)
@@ -44,7 +59,9 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
 
     result.fold(
       (failure) {
-        emit(GetChatRoomsFailure(errorMessage: failure.message));
+        if (_allRooms.isEmpty) {
+          emit(GetChatRoomsFailure(errorMessage: failure.message));
+        }
       },
       (response) {
         _allRooms = response.rooms;
@@ -108,12 +125,18 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   void _updateRoom(ChatNotificationEvent event) {
     if (isClosed) return;
     final roomId = event.roomId.trim();
-    if (roomId.isEmpty) return;
+    if (roomId.isEmpty || event.message.isEmpty) {
+      unawaited(getChatRooms());
+      return;
+    }
 
     final index = _allRooms.indexWhere(
       (room) => room.id.trim() == roomId || room.classroomId?.trim() == roomId,
     );
-    if (index == -1) return;
+    if (index == -1) {
+      unawaited(getChatRooms());
+      return;
+    }
 
     final currentUserId = SessionManager.instance.userId?.trim() ?? '';
     final isMine = event.senderId.isNotEmpty && event.senderId == currentUserId;
@@ -148,6 +171,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
     _searchDebounce?.cancel();
     await _notificationSubscription?.cancel();
     await _roomReadSubscription?.cancel();
+    await _roomsUpdateSubscription?.cancel();
     return super.close();
   }
 }

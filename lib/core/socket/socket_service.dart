@@ -85,6 +85,7 @@ class SocketService {
       debugPrint(
         'currentUserId: ${SessionManager.instance.userId?.trim() ?? ''}',
       );
+      _joinUserRooms();
       final completer = _connectionCompleter;
       if (completer != null && !completer.isCompleted) {
         completer.complete();
@@ -105,7 +106,21 @@ class SocketService {
 
     _socket?.onReconnect((attempt) {
       debugPrint('Socket reconnected after attempt: $attempt');
+      _joinUserRooms();
     });
+  }
+
+  void _joinUserRooms() {
+    final userId = SessionManager.instance.userId?.trim();
+    if (userId != null && userId.isNotEmpty) {
+      joinRoom('user_$userId');
+      joinRoom(userId);
+      final role = SessionManager.instance.userRole?.trim();
+      if (role != null && role.isNotEmpty) {
+        joinRoom('role_$role');
+        joinRoom(role);
+      }
+    }
   }
 
   void joinRoom(String roomId) {
@@ -142,9 +157,7 @@ class SocketService {
     return _listen('newMessage', (data) {
       try {
         final json = Map<String, dynamic>.from(data);
-
         final message = ChatMessageModel.fromJson(json);
-
         onNewMessage(message);
       } catch (error) {
         debugPrint('New message parsing error: $error');
@@ -158,9 +171,7 @@ class SocketService {
     return _listen('messageEdited', (data) {
       try {
         final json = Map<String, dynamic>.from(data);
-
         final message = ChatMessageModel.fromJson(json);
-
         onMessageEdited(message);
       } catch (error) {
         debugPrint('Edited message parsing error: $error');
@@ -174,11 +185,9 @@ class SocketService {
     return _listen('messageDeleted', (data) {
       try {
         final json = Map<String, dynamic>.from(data);
-
-        final messageId = json['messageId']?.toString();
-
+        final messageId =
+            (json['messageId'] ?? json['id'] ?? json['_id'])?.toString();
         if (messageId == null || messageId.isEmpty) return;
-
         onMessageDeleted(messageId);
       } catch (error) {
         debugPrint('Deleted message parsing error: $error');
@@ -190,13 +199,11 @@ class SocketService {
     void Function(Map<String, dynamic> notification) onNotification,
   ) {
     debugPrint('NOTIFICATION LISTENER REGISTERED');
-    debugPrint('eventName: notification');
     return _listen('notification', (data) {
       debugPrint('NOTIFICATION RECEIVED');
       debugPrint('payload: $data');
       try {
         final notification = Map<String, dynamic>.from(data);
-
         onNotification(notification);
       } catch (error) {
         debugPrint('Notification parsing error: $error');

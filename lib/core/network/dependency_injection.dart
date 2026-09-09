@@ -369,7 +369,10 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => GetCertificatesCubit(getIt<StudentCertificatesRepo>()),
   );
   getIt.registerFactory<GetMySubjectsCubit>(
-    () => GetMySubjectsCubit(getIt<StudentSubjectsRepo>()),
+    () => GetMySubjectsCubit(
+      getIt<StudentSubjectsRepo>(),
+      getIt<SocketService>(),
+    ),
   );
   getIt.registerFactory<GetMyEnrollmentsCubit>(
     () => GetMyEnrollmentsCubit(getIt<StudentGroupsRepo>()),
@@ -411,7 +414,10 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => AdminSubjectRequestActionsCubit(getIt<AdminSubjectRequestsRepo>()),
   );
   getIt.registerFactory<AdminChangeRequestsCubit>(
-    () => AdminChangeRequestsCubit(getIt<ClassroomChangeRequestsRepo>()),
+    () => AdminChangeRequestsCubit(
+      getIt<ClassroomChangeRequestsRepo>(),
+      getIt<SocketService>(),
+    ),
   );
   getIt.registerFactory<AdminChangeRequestActionsCubit>(
     () => AdminChangeRequestActionsCubit(getIt<ClassroomChangeRequestsRepo>()),
@@ -510,7 +516,10 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => GetSubjectDetailsCubit(getIt<AssignmentsRepo>()),
   );
   getIt.registerFactory<TeacherSubjectAssignmentsCubit>(
-    () => TeacherSubjectAssignmentsCubit(getIt<TeacherSubjectAssignmentRepo>()),
+    () => TeacherSubjectAssignmentsCubit(
+      getIt<TeacherSubjectAssignmentRepo>(),
+      getIt<SocketService>(),
+    ),
   );
   getIt.registerFactory<TeacherSubjectAssignmentActionsCubit>(
     () => TeacherSubjectAssignmentActionsCubit(
@@ -518,13 +527,19 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     ),
   );
   getIt.registerFactory<ClassroomsCubit>(
-    () => ClassroomsCubit(getIt<ClassroomsRepo>()),
+    () => ClassroomsCubit(
+      getIt<ClassroomsRepo>(),
+      getIt<SocketService>(),
+    ),
   );
   getIt.registerFactory<ClassroomActionsCubit>(
     () => ClassroomActionsCubit(getIt<ClassroomsRepo>()),
   );
   getIt.registerFactory<ClassroomDetailsCubit>(
-    () => ClassroomDetailsCubit(getIt<ClassroomsRepo>()),
+    () => ClassroomDetailsCubit(
+      getIt<ClassroomsRepo>(),
+      getIt<SocketService>(),
+    ),
   );
   getIt.registerFactory<GetSubjectsCubit>(
     () => GetSubjectsCubit(getIt<SubjectsRepo>()),
