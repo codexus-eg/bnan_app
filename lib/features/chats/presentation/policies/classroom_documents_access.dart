@@ -18,7 +18,11 @@ class ClassroomDocumentsAccess {
     required String? classroomId,
     required String? role,
   }) {
-    return roomType == 'classroom' &&
+    final normalized = roomType?.trim().toLowerCase();
+    final isClassroom = normalized == 'classroom' ||
+        (classroomId?.trim().isNotEmpty == true &&
+            (normalized == null || normalized.isEmpty));
+    return isClassroom &&
         classroomId?.trim().isNotEmpty == true &&
         UserRole.fromValue(role) != null;
   }

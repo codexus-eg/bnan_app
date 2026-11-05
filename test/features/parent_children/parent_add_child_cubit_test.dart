@@ -230,10 +230,47 @@ void main() {
     ['subject-1', 'subject-2'],
     ['subject-1', 'subject-2', 'subject-3'],
   ]) {
-    test('Parent Gulf private accepts ${subjects.length} subjects', () async {
+    test(
+      'Parent Gulf single_subject enforces single selection for ${subjects.length} toggles',
+      () async {
+        final repo = _Repo()..statuses.add(_status(PaymentStatus.completed));
+        final cubit = _cubit(repo, curriculum: _gulf)
+          ..selectPackage(_singlePackage);
+        expect(cubit.nextStep(), isTrue);
+        cubit.selectGrade(_grade);
+        expect(cubit.nextStep(), isTrue);
+        cubit.updateAccount(
+          fullName: 'Student Name',
+          email: 'student@example.com',
+          password: 'Password1',
+        );
+        expect(cubit.nextStep(), isTrue);
+        for (final subject in subjects) {
+          cubit.toggleSubject(subject);
+        }
+
+        final valid = cubit.nextStep();
+        expect(valid, subjects.isNotEmpty);
+        if (subjects.isNotEmpty) {
+          expect(cubit.nextStep(), isTrue);
+          await cubit.submit();
+          expect(repo.lastGulfRequest?.student.subjectIds, [subjects.last]);
+        }
+        await cubit.close();
+      },
+    );
+  }
+
+  for (final subjects in const <List<String>>[
+    [],
+    ['subject-1'],
+    ['subject-1', 'subject-2'],
+    ['subject-1', 'subject-2', 'subject-3'],
+  ]) {
+    test('Parent Gulf shared accepts ${subjects.length} subjects', () async {
       final repo = _Repo()..statuses.add(_status(PaymentStatus.completed));
       final cubit = _cubit(repo, curriculum: _gulf)
-        ..selectPackage(_singlePackage);
+        ..selectPackage(_sharedPackage);
       expect(cubit.nextStep(), isTrue);
       cubit.selectGrade(_grade);
       expect(cubit.nextStep(), isTrue);
@@ -253,12 +290,15 @@ void main() {
         expect(cubit.nextStep(), isTrue);
         await cubit.submit();
         expect(repo.lastGulfRequest?.student.subjectIds, subjects);
+        final json = repo.lastGulfRequest!.toJson();
+        expect(json.containsKey('items'), isFalse);
+        expect(json['packageId'], 'shared');
       }
       await cubit.close();
     });
   }
 
-  test('Gulf private checkout maps selected subjects to final items', () async {
+  test('Gulf private checkout maps selected subject to final items', () async {
     final repo = _Repo()..statuses.add(_status(PaymentStatus.completed));
     final cubit = _cubit(repo, curriculum: _gulf)
       ..selectPackage(_singlePackage);
@@ -272,7 +312,6 @@ void main() {
     );
     expect(cubit.nextStep(), isTrue);
     cubit.toggleSubject('subject-1');
-    cubit.toggleSubject('subject-2');
     expect(cubit.nextStep(), isTrue);
     expect(cubit.nextStep(), isTrue);
 
@@ -282,11 +321,9 @@ void main() {
     expect(json.containsKey('packageId'), isFalse);
     expect(json['items'], [
       {'subjectId': 'subject-1', 'packageId': 'single'},
-      {'subjectId': 'subject-2', 'packageId': 'single'},
     ]);
     expect((json['student'] as Map<String, dynamic>)['subjects'], [
       'subject-1',
-      'subject-2',
     ]);
     await cubit.close();
   });
@@ -612,6 +649,13 @@ final _singlePackage = PackageModel.fromJson({
   'name': 'Single',
   'packageType': 'hours',
   'accessScope': PackageAccessScope.singleSubject,
+  'isActive': true,
+});
+final _sharedPackage = PackageModel.fromJson({
+  'id': 'shared',
+  'name': 'Shared',
+  'packageType': 'hours',
+  'accessScope': PackageAccessScope.sharedSubjects,
   'isActive': true,
 });
 

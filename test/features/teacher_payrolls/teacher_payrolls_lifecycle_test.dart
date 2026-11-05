@@ -113,6 +113,7 @@ class _ControlledRepo extends FakeTeacherPayrollRepo {
     required String from,
     required String to,
     String? teacherId,
+    String? curriculumId,
   }) {
     return requests[listPreviewLoads++].future;
   }

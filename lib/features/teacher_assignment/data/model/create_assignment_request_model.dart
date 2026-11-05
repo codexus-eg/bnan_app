@@ -6,6 +6,7 @@ class CreateAssignmentRequestModel {
   final String dueDate;
   final String classroom;
   final String subject;
+  final num totalPoints;
   final File? attachment;
 
   const CreateAssignmentRequestModel({
@@ -14,16 +15,18 @@ class CreateAssignmentRequestModel {
     required this.dueDate,
     required this.classroom,
     required this.subject,
+    required this.totalPoints,
     this.attachment,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'classroom': classroom,
-      'title': title,
-      'description': description,
-      'dueDate': dueDate,
       'subject': subject,
+      'title': title,
+      if (description.isNotEmpty) 'description': description,
+      'dueDate': dueDate,
+      'totalPoints': totalPoints,
       if (attachment != null) 'attachment': attachment,
     };
   }

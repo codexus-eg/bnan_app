@@ -7,6 +7,7 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_mo
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/existing_statement_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_my_payrolls_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/repo/teacher_payroll_repo.dart';
 import 'package:dartz/dartz.dart';
@@ -90,7 +91,15 @@ class FakeTeacherPayrollRepo implements TeacherPayrollRepo {
     required String from,
     required String to,
     String? teacherId,
+    String? curriculumId,
   }) async => const Right(<PayrollListItemModel>[]);
+  @override
+  getStatementPreview({
+    required String curriculumId,
+    required String from,
+    required String to,
+  }) async =>
+      const Right(<PayrollListItemModel>[]);
   @override
   getTeachers() async => const Right(<PayrollTeacherModel>[]);
   @override
@@ -110,4 +119,27 @@ class FakeTeacherPayrollRepo implements TeacherPayrollRepo {
   @override
   updatePayoutProfile(String id, PayoutProfileRequest request) async =>
       Right(PayoutProfileModel.fromJson(request.toJson()));
+
+  Either<Failure, TeacherPayrollModel>? sendResult;
+  @override
+  sendStatement(String statementId) async => sendResult ?? payroll;
+
+  Either<Failure, Unit>? deleteResult;
+  int deleteStatementLoads = 0;
+  @override
+  deleteStatement(String statementId) async {
+    deleteStatementLoads++;
+    return deleteResult ?? const Right(unit);
+  }
+
+  Either<Failure, List<ExistingStatementModel>> statementsResult =
+      const Right([]);
+  @override
+  getStatements({String? teacherId, String? curriculumId}) async =>
+      statementsResult;
+
+  Either<Failure, List<int>> receiptBytesResult = const Right([1, 2, 3]);
+  @override
+  getReceiptBytes({required String statementId, bool isTeacher = false}) async =>
+      receiptBytesResult;
 }

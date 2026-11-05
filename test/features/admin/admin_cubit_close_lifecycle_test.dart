@@ -63,7 +63,10 @@ class _TeacherAssignmentsRepo implements TeacherSubjectAssignmentRepo {
 
   @override
   Future<Either<Failure, TeachingAssignmentsResponseModel>>
-  getTeacherTeachingAssignments() => pending.future;
+  getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+  }) => pending.future;
 
   void complete() => pending.complete(Left(_failure));
 

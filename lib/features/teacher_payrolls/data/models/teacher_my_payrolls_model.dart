@@ -37,7 +37,7 @@ class TeacherMyPayrollsModel {
         json['summary'],
       ).map(TeacherPayrollCurrencySummaryModel.fromJson).toList(),
       payrolls: payrollList(
-        json['payrolls'],
+        json['payrolls'] ?? json['data'],
       ).map(TeacherPayrollModel.fromResponse).toList(),
     );
   }

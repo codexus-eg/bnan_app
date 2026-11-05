@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
+import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
 import 'package:bnan_app/core/shared_widget/dialogs/custom_dialog_header.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
@@ -31,8 +32,23 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
   String? classroomId;
   String? selectedStudentId;
   String? formError;
+  late final TextEditingController signerNameController;
 
   List<CertificateSubjectRequestModel> subjectRequests = [];
+
+  @override
+  void initState() {
+    super.initState();
+    signerNameController = TextEditingController(
+      text: SessionManager.instance.userName?.trim() ?? '',
+    );
+  }
+
+  @override
+  void dispose() {
+    signerNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +91,16 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
         CertificateStudentDropdown(
           classroomId: classroomId,
           onStudentSelected: _onStudentSelected,
+        ),
+        const SizedBox(height: 16),
+        CustomTextField(
+          controller: signerNameController,
+          label: S.of(context).signerName,
+          hintText: S.of(context).signerName,
+          isRequired: true,
+          onChanged: (_) {
+            if (formError != null) setState(() => formError = null);
+          },
         ),
         const SizedBox(height: 16),
         Text(
@@ -160,6 +186,7 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
   void _save() {
     final selectedClassroomId = classroomId?.trim();
     final studentId = selectedStudentId?.trim();
+    final signer = signerNameController.text.trim();
 
     if (selectedClassroomId == null || selectedClassroomId.isEmpty) {
       _setError(S.of(context).classroomRequired);
@@ -171,16 +198,38 @@ class _CertificateCreateFormState extends State<CertificateCreateForm> {
       return;
     }
 
+    if (signer.isEmpty) {
+      _setError(S.of(context).signerNameRequired);
+      return;
+    }
+
     if (subjectRequests.isEmpty) {
       _setError(S.of(context).pleaseEnterSubjectsGrades);
       return;
     }
 
+    final seenSubjects = <String>{};
+    for (final s in subjectRequests) {
+      if (!seenSubjects.add(s.subjectId.trim())) {
+        _setError(S.of(context).duplicateSubjectsNotAllowed);
+        return;
+      }
+      if (s.maxScore <= 0) {
+        _setError(S.of(context).maxScoreMustBeGreaterThanZero);
+        return;
+      }
+      if (s.score < 0 || s.score > s.maxScore) {
+        _setError(S.of(context).scoreMustBeBetweenZeroAndMaxScore);
+        return;
+      }
+    }
+
     context.read<CreateMonthlyCertificateCubit>().createMonthlyCertificate(
       request: CreateMonthlyCertificateRequestModel(
         studentId: studentId,
+        classroomId: selectedClassroomId,
         subjects: subjectRequests,
-        signerName: SessionManager.instance.userName?.trim() ?? '',
+        signerName: signer,
       ),
     );
   }

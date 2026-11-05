@@ -10,6 +10,8 @@ class AdminDashboardStatisticsModel {
     this.activeSubscriptions = 0,
     this.expiredSubscriptions = 0,
     this.pendingReceipts = 0,
+    this.totalPaidEgp = 0,
+    this.totalPaidSar = 0,
     this.todayTimezone = '',
     this.studentsBySection = const AdminStudentsBySectionModel(),
   });
@@ -21,6 +23,8 @@ class AdminDashboardStatisticsModel {
   final int activeSubscriptions;
   final int expiredSubscriptions;
   final int pendingReceipts;
+  final double totalPaidEgp;
+  final double totalPaidSar;
   final String todayTimezone;
   final AdminStudentsBySectionModel studentsBySection;
 
@@ -41,6 +45,8 @@ class AdminDashboardStatisticsModel {
       activeSubscriptions: adminInt(json['activeSubscriptions']),
       expiredSubscriptions: adminInt(json['expiredSubscriptions']),
       pendingReceipts: adminInt(json['pendingReceipts']),
+      totalPaidEgp: adminDouble(json['totalPaidEgp']),
+      totalPaidSar: adminDouble(json['totalPaidSar']),
       todayTimezone: adminString(json['todayTimezone']),
       studentsBySection: AdminStudentsBySectionModel.fromJson(
         json['studentsBySection'],

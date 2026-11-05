@@ -36,12 +36,34 @@ class PayrollReceiptField extends StatelessWidget {
           const SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.file(
-              File(path!),
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.contain,
-            ),
+            child: path!.toLowerCase().endsWith('.pdf')
+                ? Container(
+                    height: 120,
+                    width: double.infinity,
+                    color: Colors.grey.shade100,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.picture_as_pdf,
+                          size: 44,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          path!.split(RegExp(r'[/\\]')).last,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  )
+                : Image.file(
+                    File(path!),
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  ),
           ),
           const SizedBox(height: 8),
           CustomAppButton(
@@ -57,7 +79,7 @@ class PayrollReceiptField extends StatelessWidget {
 
   Future<void> _pick(BuildContext context) async {
     final file = await FilePickerHelper.pickFile(
-      allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
+      allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp', 'pdf'],
     );
     if (file == null) return;
     final code = await PayrollFileValidator.validate(file.path);

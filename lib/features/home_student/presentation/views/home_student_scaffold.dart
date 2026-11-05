@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:bnan_app/core/helper/app_logout.dart';
 import 'package:bnan_app/core/helper/drawer_navigation_guard.dart';
 import 'package:bnan_app/core/helper/my_navigator.dart';
@@ -66,6 +68,11 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
     if (index == 0) {
       context.read<DashboardCubit>().refresh();
       context.read<StudentSubscriptionsCubit>().loadHome();
+    }
+    if (index == 1 && getIt.isRegistered<ScheduleSyncCoordinator>()) {
+      getIt<ScheduleSyncCoordinator>().triggerSync(
+        reason: 'student_schedule_tab_switched',
+      );
     }
     if (index == 4) StudentProfileCubit.get(context).getLoggedUser();
   }
@@ -135,6 +142,9 @@ class _HomeStudentScaffoldState extends State<HomeStudentScaffold> {
       await MyNavigator.goTo(context, Routes.weeklyEvaluations);
     } else if (index == subscriptionsDrawerIndex) {
       await MyNavigator.goTo(context, Routes.studentSubscriptions);
+      if (mounted) {
+        context.read<StudentSubscriptionsCubit>().loadHome();
+      }
     }
   }
 

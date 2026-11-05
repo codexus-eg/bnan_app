@@ -8,6 +8,7 @@ import 'package:bnan_app/features/notifications/domain/notification_navigation_s
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
 import 'package:bnan_app/features/notifications/presentation/widgets/notification_icon.dart';
 import 'package:bnan_app/features/notifications/presentation/widgets/notification_time.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,12 +20,22 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
     onTap: () async {
       unawaited(context.read<NotificationsCubit>().markRead(notification));
+      if (getIt.isRegistered<ScheduleSyncCoordinator>() &&
+          getIt<ScheduleSyncCoordinator>().isScheduleNotification(notification)) {
+        getIt<ScheduleSyncCoordinator>().handleNotification(notification);
+      }
       final destination = await getIt<NotificationNavigationService>()
           .resolveDestination(notification);
       if (!context.mounted || destination.path == '/notification') return;
       final router = GoRouter.of(context);
       if (router.routeInformationProvider.value.uri.path ==
           Uri.parse(destination.path).path) {
+        if (getIt.isRegistered<ScheduleSyncCoordinator>() &&
+            getIt<ScheduleSyncCoordinator>().isScheduleNotification(notification)) {
+          getIt<ScheduleSyncCoordinator>().triggerSync(
+            reason: 'card_tap_same_screen',
+          );
+        }
         return;
       }
       if (NotificationNavigationService.isHomeDestination(destination.path)) {

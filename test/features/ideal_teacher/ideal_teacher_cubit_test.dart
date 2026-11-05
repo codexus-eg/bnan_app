@@ -65,6 +65,111 @@ void main() {
     expect(cubit.state.selectedTeacherIds, {'t1'});
     expect(cubit.state.message, 'duplicate');
   });
+
+  test('issuance tracking increments issuanceEventId once and selection does not re-emit it', () async {
+    final repo = _Repo();
+    final cubit = SupervisorIdealTeacherCubit(repo);
+
+    expect(cubit.state.issuanceEventId, 0);
+    expect(cubit.state.issuanceSuccess, isNull);
+
+    // 1. Success scenario
+    cubit.selectTeacher('t1');
+    await cubit.submitIdealTeachers(signerName: 'Signer');
+
+    expect(cubit.state.issuanceEventId, 1);
+    expect(cubit.state.issuanceSuccess, isTrue);
+    expect(cubit.state.status, SupervisorIdealTeacherStatus.success);
+    expect(cubit.state.selectedTeacherIds, isEmpty);
+
+    // 2. Toggle same teacher afterward
+    cubit.toggleTeacher('t1');
+    expect(cubit.state.issuanceEventId, 1);
+    expect(cubit.state.status, SupervisorIdealTeacherStatus.loaded);
+    expect(cubit.state.message, isEmpty);
+
+    // 3. Select different teacher afterward
+    cubit.selectTeacher('t2');
+    expect(cubit.state.issuanceEventId, 1);
+    expect(cubit.state.status, SupervisorIdealTeacherStatus.loaded);
+
+    // 4. Clear selection
+    cubit.clearSelection();
+    expect(cubit.state.issuanceEventId, 1);
+    expect(cubit.state.selectedTeacherIds, isEmpty);
+
+    // 5. Search query change
+    cubit.setSearchQuery('ahmed');
+    expect(cubit.state.issuanceEventId, 1);
+    expect(cubit.state.status, SupervisorIdealTeacherStatus.loaded);
+
+    // 6. Failed issuance
+    final failRepo = _Repo(
+      submitResult: Future.value(Left(Failure(message: 'duplicate_cert'))),
+    );
+    final failCubit = SupervisorIdealTeacherCubit(failRepo);
+    failCubit.selectTeacher('t1');
+    await failCubit.submitIdealTeachers();
+
+    expect(failCubit.state.issuanceEventId, 1);
+    expect(failCubit.state.issuanceSuccess, isFalse);
+    expect(failCubit.state.issuanceMessage, 'duplicate_cert');
+    expect(failCubit.state.status, SupervisorIdealTeacherStatus.failure);
+
+    // Toggle teacher after failure
+    failCubit.toggleTeacher('t1');
+    expect(failCubit.state.issuanceEventId, 1);
+    expect(failCubit.state.status, SupervisorIdealTeacherStatus.loaded);
+    expect(failCubit.state.message, isEmpty);
+
+    // 7. Genuinely new issuance increments issuanceEventId
+    failCubit.selectTeacher('t2');
+    await failCubit.submitIdealTeachers();
+    expect(failCubit.state.issuanceEventId, 2);
+  });
+
+  test('search filtering is case-insensitive, trims whitespace, and preserves selection', () async {
+    final cubit = SupervisorIdealTeacherCubit(
+      _Repo(teachers: const [
+        SupervisorTeacherModel(
+          id: 't1',
+          name: 'Ahmed Mohamed',
+          avatar: '',
+          subjects: [],
+          classrooms: [],
+        ),
+        SupervisorTeacherModel(
+          id: 't2',
+          name: 'Sara Ali',
+          avatar: '',
+          subjects: [],
+          classrooms: [],
+        ),
+      ]),
+    );
+    await cubit.loadTeachers();
+    cubit.selectTeacher('t1');
+
+    cubit.setSearchQuery('  ahmed ');
+    expect(cubit.state.filteredTeachers.length, 1);
+    expect(cubit.state.filteredTeachers.first.id, 't1');
+    expect(cubit.state.selectedTeacherIds, {'t1'});
+
+    cubit.setSearchQuery('sara');
+    expect(cubit.state.filteredTeachers.length, 1);
+    expect(cubit.state.filteredTeachers.first.id, 't2');
+    expect(cubit.state.selectedTeacherIds, {'t1'}); // preserved!
+
+    cubit.setSearchQuery('');
+    expect(cubit.state.filteredTeachers.length, 2);
+  });
+
+  test('setActiveTab switches active tab', () {
+    final cubit = SupervisorIdealTeacherCubit(_Repo());
+    expect(cubit.state.activeTab, IdealTeacherTab.idealTeacher);
+    cubit.setActiveTab(IdealTeacherTab.classroomPoints);
+    expect(cubit.state.activeTab, IdealTeacherTab.classroomPoints);
+  });
 }
 
 const _teacher = SupervisorTeacherModel(
@@ -75,7 +180,7 @@ const _teacher = SupervisorTeacherModel(
   classrooms: [],
 );
 
-class _Repo implements SupervisorIdealTeacherRepo {
+class _Repo extends SupervisorIdealTeacherRepo {
   _Repo({this.teachers = const [], this.failLoad = false, this.submitResult});
   final List<SupervisorTeacherModel> teachers;
   final bool failLoad;

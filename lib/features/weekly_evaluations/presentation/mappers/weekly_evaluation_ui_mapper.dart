@@ -24,7 +24,12 @@ WeeklyEvaluationUiModel mapWeeklyEvaluationToUi(
         id: subject.id,
         subjectName: subject.name,
         attendance: isEvaluated
-            ? evaluationValueLabel(context, value!.attendance)
+            ? formatAttendanceWithCount(
+                context: context,
+                attendanceStatus: value!.attendance,
+                attended: value.attendanceAttended,
+                total: value.attendanceTotal,
+              )
             : '-',
         participation: isEvaluated
             ? evaluationValueLabel(context, value!.participation)

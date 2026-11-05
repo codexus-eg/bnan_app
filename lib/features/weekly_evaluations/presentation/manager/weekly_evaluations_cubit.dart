@@ -30,6 +30,8 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
   int _formRequestId = 0;
   String? _classroomsSignature;
   bool _isSaving = false;
+  bool _isPublishing = false;
+  bool get isPublishing => _isPublishing;
 
   bool get canManage => role == 'teacher' || role == 'supervisor';
   bool get isTeacher => role == 'teacher';
@@ -125,6 +127,35 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
       return saved;
     } finally {
       _isSaving = false;
+    }
+  }
+
+  Future<bool> publishWeeklyEvaluations() async {
+    final classroom = selectedClassroom;
+    final week = selectedWeek;
+    if (_isPublishing || isClosed || classroom == null || week == null) {
+      return false;
+    }
+    _isPublishing = true;
+    emit(EvaluationsPublishing());
+    try {
+      final result = await repo.publishWeeklyEvaluations(
+        classroomId: classroom.id,
+        week: week,
+      );
+      if (isClosed) return false;
+      var published = false;
+      result.fold(
+        (failure) => emit(EvaluationsPublishFailure(failure.message)),
+        (_) {
+          published = true;
+          emit(EvaluationsPublished());
+        },
+      );
+      if (published) await _loadEvaluations(++_requestId, keepData: true);
+      return published;
+    } finally {
+      _isPublishing = false;
     }
   }
 
@@ -292,9 +323,7 @@ class WeeklyEvaluationsCubit extends Cubit<WeeklyEvaluationsState> {
       request.classroom.trim().isNotEmpty &&
       request.subject.trim().isNotEmpty &&
       request.week > 0 &&
-      request.attendance.trim().isNotEmpty &&
       request.participation.trim().isNotEmpty &&
-      request.homework.trim().isNotEmpty &&
       request.behavior.trim().isNotEmpty &&
       request.bonus >= 0 &&
       request.bonus <= 5;

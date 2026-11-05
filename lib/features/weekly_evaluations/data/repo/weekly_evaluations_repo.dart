@@ -26,4 +26,8 @@ abstract class WeeklyEvaluationsRepo {
     required String studentId,
   });
   Future<Either<Failure, Unit>> upsert(UpsertEvaluationRequestModel request);
+  Future<Either<Failure, Unit>> publishWeeklyEvaluations({
+    required String classroomId,
+    required int week,
+  });
 }

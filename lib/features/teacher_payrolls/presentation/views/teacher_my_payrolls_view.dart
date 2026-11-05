@@ -105,7 +105,8 @@ class _TeacherMyPayrollsBodyState extends State<TeacherMyPayrollsBody> {
       children: [
         for (final option in <(String?, String)>[
           (null, s.teacherPayrollAll),
-          ('draft', s.teacherPayrollUnderReview),
+          ('sent', s.payrollSent),
+          ('payment_pending', s.payrollPaymentPending),
           ('paid', s.payrollPaid),
         ])
           ChoiceChip(

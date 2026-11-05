@@ -41,7 +41,12 @@ WeeklyEvaluationSubjectUiModel _row(
   id: id,
   subjectName: name,
   attendance: evaluated
-      ? readOnlyEvaluationValueLabel(context, evaluation?.attendance)
+      ? formatReadOnlyAttendance(
+          context: context,
+          attendanceStatus: evaluation?.attendance,
+          attended: evaluation?.attendanceAttended,
+          total: evaluation?.attendanceTotal,
+        )
       : '-',
   participation: evaluated
       ? readOnlyEvaluationValueLabel(context, evaluation?.participation)

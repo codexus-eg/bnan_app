@@ -41,46 +41,56 @@ class RegistrationNavigationButtons extends StatelessWidget {
                 paymentState is TamaraPaymentLoading,
             onPressed: () async {
               final cubit = RegisterCubit.get(context);
-              if (!cubit.isGulf) {
-                if (step == 1) {
-                  await cubit.authenticateParentAndContinue();
-                  return;
+              if (step == 1) {
+                if (cubit.isGulf) {
+                  await context
+                      .read<TamaraPaymentCubit>()
+                      .discardStaleAttempt();
                 }
-                if (step == 3 && !cubit.validateStudent()) {
+                await cubit.authenticateParentAndContinue();
+                return;
+              }
+              if (step == 2) {
+                if (!cubit.validateStudentInfo()) {
                   showCustomSnackBar(
                     context,
                     S.of(context).errorValidation,
                     false,
                   );
-                  return;
-                }
-                if (step == 4) {
-                  final request = cubit.buildRegisterRequest();
-                  if (request != null) await cubit.register(request: request);
                   return;
                 }
                 cubit.nextStep();
                 return;
               }
-              if (step == 1) {
-                await context.read<TamaraPaymentCubit>().discardStaleAttempt();
-                await cubit.authenticateParentAndContinue();
-                return;
-              }
-              if (step == 3 && cubit.buildTamaraRequest() == null) {
-                if (context.mounted) {
+              if (step == 3) {
+                final isValid = cubit.isGulf
+                    ? cubit.validateAcademicSelection() &&
+                        cubit.buildTamaraRequest(validateForm: false) != null
+                    : cubit.validateAcademicSelection();
+                if (!isValid) {
                   showCustomSnackBar(
                     context,
-                    S.of(context).errorValidation,
+                    S.of(context).pleaseSelectAcademicDetails,
                     false,
                   );
+                  return;
                 }
+                cubit.nextStep();
                 return;
               }
               if (step == 4) {
-                final request = cubit.buildTamaraRequest(validateForm: false);
-                if (request != null) {
-                  await context.read<TamaraPaymentCubit>().checkout(request);
+                if (cubit.isGulf) {
+                  final request = cubit.buildTamaraRequest(
+                    validateForm: false,
+                  );
+                  if (request != null) {
+                    await context.read<TamaraPaymentCubit>().checkout(request);
+                  }
+                } else {
+                  final request = cubit.buildRegisterRequest();
+                  if (request != null) {
+                    await cubit.register(request: request);
+                  }
                 }
                 return;
               }

@@ -13,6 +13,9 @@ import 'package:bnan_app/features/dashboard/data/models/teacher_dashboard_model.
 import 'package:bnan_app/features/dashboard/data/repo/dashboard_repo.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
 import 'package:bnan_app/features/shared_profile/data/models/teacher_profile_response_model.dart';
+import 'package:bnan_app/features/teacher_home/data/models/teacher_session_statistics_model.dart';
+import 'package:bnan_app/features/teacher_home/data/repo/teacher_session_statistics_repo.dart';
+import 'package:bnan_app/features/teacher_home/presentation/manager/teacher_session_statistics_cubit.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/teacher_home_view.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_drawer_items.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -139,7 +142,7 @@ void main() {
       teacherDrawerItems(context).map((item) => item.title),
       contains(s.weeklyIdealStudent),
     );
-    expect(adminDrawerItems(context), hasLength(20));
+    expect(adminDrawerItems(context), hasLength(22));
     expect(
       adminDrawerItems(context).where((item) => item.title == s.discountCodes),
       hasLength(1),
@@ -189,6 +192,9 @@ Widget _app() {
       BlocProvider(create: (_) => LanguageCubit()),
       BlocProvider(
         create: (_) => DashboardCubit(_DashboardRepo(), DashboardRole.teacher),
+      ),
+      BlocProvider(
+        create: (_) => TeacherSessionStatisticsCubit(_TestTeacherSessionStatsRepo()),
       ),
     ],
     child: MaterialApp.router(
@@ -243,6 +249,19 @@ class _DashboardRepo implements DashboardRepo {
       classrooms: 0,
       students: 0,
       subjects: 0,
+    ),
+  );
+}
+
+class _TestTeacherSessionStatsRepo implements TeacherSessionStatisticsRepo {
+  @override
+  Future<Either<Failure, TeacherSessionStatisticsModel>> getSessionStatistics({
+    String? from,
+    String? to,
+  }) async => const Right(
+    TeacherSessionStatisticsModel(
+      totalSessions: 0,
+      totalHours: 0,
     ),
   );
 }

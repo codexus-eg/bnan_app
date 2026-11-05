@@ -151,7 +151,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
 
   void toggleSubject(String id) {
     final selected = [...state.selectedSubjectIds];
-    if (state.isSingleSubject && !state.isEgyptianPrivate && !state.isGulf) {
+    if (state.isSingleSubject && !state.isEgyptianPrivate) {
       emit(
         state.copyWith(
           selectedSubjectIds: [id],
@@ -459,7 +459,7 @@ class ParentAddChildCubit extends Cubit<ParentAddChildState> {
     student: _student(),
     curriculumId: state.curriculum!.id,
     packageId: state.package!.id!,
-    items: state.isSingleSubject
+    items: state.isSingleSubject && !state.isSharedSubjects
         ? state.selectedSubjectIds
               .map(
                 (subjectId) => RegistrationItem(

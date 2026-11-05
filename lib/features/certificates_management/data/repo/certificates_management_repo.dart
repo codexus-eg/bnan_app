@@ -8,6 +8,7 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/teacher_certificate_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/teacher_certificates_response_model.dart';
 import 'package:dartz/dartz.dart';
 
@@ -46,13 +47,31 @@ abstract class CertificatesManagementRepo {
   });
 
   Future<Either<Failure, TeacherCertificatesResponseModel>>
-  getTeacherCertificates({required int page, int limit = 20});
+  getTeacherCertificates({
+    required int page,
+    int limit = 20,
+    String? status,
+    String? teacherId,
+    String? certificateType,
+  });
+
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getAdminCertificates({
+    String certificateType = 'general_teacher',
+    String? status,
+    int page = 1,
+    int limit = 20,
+  });
 
   Future<Either<Failure, TeacherCertificatesResponseModel>>
   getMyTeacherCertificates();
 
-  Future<Either<Failure, void>> issueGeneralTeacherCertificate({
+  Future<Either<Failure, TeacherCertificateModel>> createTeacherCertificateDraft({
     required String teacherId,
-    required String signerName,
+    required String recipientName,
+  });
+
+  Future<Either<Failure, TeacherCertificateModel>> issueGeneralTeacherCertificate({
+    required String certificateId,
   });
 }

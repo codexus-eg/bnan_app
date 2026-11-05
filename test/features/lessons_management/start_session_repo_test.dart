@@ -45,6 +45,49 @@ void main() {
       );
     },
   );
+
+  test('Gulf start request payload must NOT include lessonId', () async {
+    final api = _RecordingApi(_response());
+    final result = await StartSessionRepoImpl(api).startSession(
+      classroomId: 'gulf-class-1',
+      subjectId: 'sub-gulf',
+      classroomSubjectId: 'cs-gulf',
+      lessonId: 'gulf-entry-id',
+      occurrenceDate: '2026-10-24',
+      system: 'gulf',
+    );
+    expect(result.isRight(), isTrue);
+    expect(api.path, EndPoints.startClassroomSession('gulf-class-1'));
+    expect(api.data, {
+      'subjectId': 'sub-gulf',
+      'classroomSubjectId': 'cs-gulf',
+      'occurrenceDate': '2026-10-24',
+    });
+    final map = api.data as Map<String, dynamic>;
+    expect(map.containsKey('lessonId'), isFalse);
+  });
+
+  test('Egyptian start request payload MUST include lessonId', () async {
+    final api = _RecordingApi(_response());
+    final result = await StartSessionRepoImpl(api).startSession(
+      classroomId: 'egypt-class-1',
+      subjectId: 'sub-egypt',
+      classroomSubjectId: 'cs-egypt',
+      lessonId: 'egypt-lesson-id-456',
+      occurrenceDate: '2026-10-24',
+      system: 'egyptian',
+    );
+    expect(result.isRight(), isTrue);
+    expect(api.path, EndPoints.startClassroomSession('egypt-class-1'));
+    expect(api.data, {
+      'subjectId': 'sub-egypt',
+      'classroomSubjectId': 'cs-egypt',
+      'lessonId': 'egypt-lesson-id-456',
+      'occurrenceDate': '2026-10-24',
+    });
+    final map = api.data as Map<String, dynamic>;
+    expect(map['lessonId'], 'egypt-lesson-id-456');
+  });
 }
 
 Map<String, dynamic> _response() => {

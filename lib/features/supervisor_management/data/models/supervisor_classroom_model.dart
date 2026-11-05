@@ -14,12 +14,16 @@ class SupervisorClassroomModel {
   final SupervisorClassroomLookupModel curriculum;
 
   factory SupervisorClassroomModel.fromJson(Map<String, dynamic> json) {
+    final nestedClassroom = json['classroom'];
+    final map = nestedClassroom is Map
+        ? Map<String, dynamic>.from(nestedClassroom)
+        : json;
     return SupervisorClassroomModel(
-      id: (json['id'] ?? json['_id'])?.toString() ?? '',
-      name: json['name']?.toString() ?? '',
-      grade: SupervisorClassroomLookupModel.fromJson(_map(json['grade'])),
+      id: (map['id'] ?? map['_id'])?.toString() ?? '',
+      name: map['name']?.toString() ?? '',
+      grade: SupervisorClassroomLookupModel.fromJson(_map(map['grade'])),
       curriculum: SupervisorClassroomLookupModel.fromJson(
-        _map(json['curriculum']),
+        _map(map['curriculum']),
       ),
     );
   }

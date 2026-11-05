@@ -659,6 +659,11 @@ class _FakeRepo implements ChatRepo {
   }
 
   @override
+  Future<Either<Failure, void>> markRoomAsRead({required String roomId}) async {
+    return const Right(null);
+  }
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
@@ -690,6 +695,11 @@ class _DynamicRoomsRepo implements ChatRepo {
   @override
   Future<Either<Failure, ChatMessagesResponseModel>> getRoomMessages({required String roomId}) async {
     return const Right(ChatMessagesResponseModel(success: true, results: 0, messages: []));
+  }
+
+  @override
+  Future<Either<Failure, void>> markRoomAsRead({required String roomId}) async {
+    return const Right(null);
   }
 
   @override
@@ -754,6 +764,7 @@ class _DynamicClassroomsRepo implements ClassroomsRepo {
     int? page,
     int? limit,
     String? curriculum,
+    String? keyword,
   }) async {
     getClassroomsCallCount++;
     return Right(

@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_documents_tab.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/documents/classroom_documents_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ class ClassroomDocumentsView extends StatelessWidget {
     required this.currentUserRole,
     this.classroomId,
     this.classroomName,
+    this.initialTab = ClassroomDocumentsTab.recordings,
   });
 
   final String roomId;
@@ -18,6 +20,7 @@ class ClassroomDocumentsView extends StatelessWidget {
   final String? currentUserRole;
   final String? classroomId;
   final String? classroomName;
+  final ClassroomDocumentsTab initialTab;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,7 @@ class ClassroomDocumentsView extends StatelessWidget {
           currentUserRole: currentUserRole,
           classroomId: classroomId,
           classroomName: classroomName,
+          initialTab: initialTab,
         ),
       ),
     );

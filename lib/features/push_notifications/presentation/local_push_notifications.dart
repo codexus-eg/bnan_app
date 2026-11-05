@@ -69,7 +69,7 @@ class LocalPushNotifications {
   Future<void> initialize(ValueChanged<String> onPayload) async {
     await _plugin.initialize(
       settings: InitializationSettings(
-        android: AndroidInitializationSettings('ic_notification'),
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
@@ -139,6 +139,8 @@ class LocalPushNotifications {
           channelDescription: 'Bnan Academy notifications',
           importance: Importance.high,
           priority: Priority.high,
+          icon: '@mipmap/ic_launcher',
+          largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
           playSound: true,
           enableVibration: true,
         ),
@@ -199,7 +201,8 @@ class LocalPushNotifications {
               ? 'Bnan nudge notifications'
               : 'Bnan notifications',
           channelDescription: 'Bnan Academy notifications',
-          icon: 'ic_notification',
+          icon: '@mipmap/ic_launcher',
+          largeIcon: const DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
           importance: isChatRing ? Importance.max : Importance.high,
           priority: isChatRing ? Priority.max : Priority.high,
           playSound:

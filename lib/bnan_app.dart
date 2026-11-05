@@ -13,6 +13,7 @@ import 'package:bnan_app/core/shared_widget/global_connectivity_overlay.dart';
 import 'package:bnan_app/features/payments/data/models/payment_status.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_event.dart';
+import 'package:bnan_app/features/chats/presentation/manager/get_chat_rooms_cubit/get_chat_rooms_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
 import 'package:bnan_app/features/payments/presentation/widgets/tamara_return_observer.dart';
@@ -22,6 +23,7 @@ import 'package:bnan_app/features/push_notifications/presentation/local_push_not
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/domain/notification_navigation_service.dart';
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -130,8 +132,25 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       unawaited(_connectivity.checkConnection(showChecking: false));
+      final path = _router.routeInformationProvider.value.uri.path;
+      if (_isSchedulePath(path) &&
+          getIt.isRegistered<ScheduleSyncCoordinator>()) {
+        getIt<ScheduleSyncCoordinator>().triggerSync(reason: 'lifecycle_resumed');
+      }
+      if (getIt.isRegistered<GetChatRoomsCubit>()) {
+        final chatRoomsCubit = getIt<GetChatRoomsCubit>();
+        if (!chatRoomsCubit.isClosed) {
+          unawaited(chatRoomsCubit.getChatRooms());
+        }
+      }
     }
   }
+
+  bool _isSchedulePath(String path) =>
+      path == Routes.gulfStudentScheduleReadOnly ||
+      path == Routes.egyptianSchedulesReadOnly ||
+      path == Routes.parentSchedule ||
+      path == Routes.lessonsManagement;
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +276,20 @@ class _BnanAppState extends State<BnanApp> with WidgetsBindingObserver {
     final targetPath = Uri.parse(destination.path).path;
     final currentPath = _router.routeInformationProvider.value.uri.path;
 
-    if (currentPath == targetPath) return;
+    final isSchedule = getIt.isRegistered<ScheduleSyncCoordinator>() &&
+        getIt<ScheduleSyncCoordinator>().isScheduleNotification(notification);
+    if (isSchedule) {
+      getIt<ScheduleSyncCoordinator>().handleNotification(notification);
+    }
+
+    if (currentPath == targetPath) {
+      if (isSchedule) {
+        getIt<ScheduleSyncCoordinator>().triggerSync(
+          reason: 'notification_opened_same_screen',
+        );
+      }
+      return;
+    }
 
     if (_homePaths.contains(targetPath)) {
       _router.go(destination.path, extra: destination.extra);

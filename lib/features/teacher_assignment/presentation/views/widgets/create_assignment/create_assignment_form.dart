@@ -64,7 +64,9 @@ class CreateAssignmentForm extends StatelessWidget {
                   CustomAppButton(
                     text: S.of(context).createAssignment,
                     isLoading: state is CreateAssignmentLoading,
-                    onPressed: cubit.createAssignment,
+                    onPressed: state is CreateAssignmentLoading
+                        ? null
+                        : cubit.createAssignment,
                   ),
                 ],
               ),

@@ -9,9 +9,30 @@ class StudentSubscriptionsRepoImpl implements StudentSubscriptionsRepo {
   const StudentSubscriptionsRepoImpl(this.api);
   final ApiConsumer api;
 
+  Future<dynamic> _fetchHomeOrFallback() async {
+    try {
+      return await api.get(EndPoints.studentHome, isProtected: true);
+    } catch (_) {
+      try {
+        final subResponse = await api.get(
+          EndPoints.studentSubscription,
+          isProtected: true,
+        );
+        if (subResponse is Map && subResponse['data'] is Map) {
+          final data = Map<String, dynamic>.from(subResponse['data'] as Map);
+          if (data['subscriptions'] is List &&
+              (data['subscriptions'] as List).isNotEmpty) {
+            return subResponse;
+          }
+        }
+      } catch (_) {}
+      return await api.get(EndPoints.dashboard, isProtected: true);
+    }
+  }
+
   @override
   getHomeSubscriptions() => repoGuard(() async {
-    final home = await api.get(EndPoints.studentHome, isProtected: true);
+    final home = await _fetchHomeOrFallback();
     return ParentChildSubscriptionsModel.fromStudentHome(
       Map<String, dynamic>.from(home as Map),
     );
@@ -20,7 +41,7 @@ class StudentSubscriptionsRepoImpl implements StudentSubscriptionsRepo {
   @override
   getSubscriptions() => repoGuard(() async {
     final responses = await Future.wait<dynamic>([
-      api.get(EndPoints.studentHome, isProtected: true),
+      _fetchHomeOrFallback(),
       api.get(EndPoints.mySubjects, isProtected: true),
     ], eagerError: true);
     final home = responses[0];
@@ -35,5 +56,17 @@ class StudentSubscriptionsRepoImpl implements StudentSubscriptionsRepo {
       Map<String, dynamic>.from(home as Map),
       subjects: subjects,
     );
+  });
+
+  @override
+  getStudentSubscription() => repoGuard(() async {
+    final response = await api.get(
+      EndPoints.studentSubscription,
+      isProtected: true,
+    );
+    final data = response is Map && response['data'] is Map
+        ? Map<String, dynamic>.from(response['data'] as Map)
+        : <String, dynamic>{};
+    return ParentChildSubscriptionModel.fromJson(data);
   });
 }

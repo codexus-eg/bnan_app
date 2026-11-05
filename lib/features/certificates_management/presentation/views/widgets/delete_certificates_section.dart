@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:bnan_app/features/certificates_management/presentation/views/dialogs/certificate_delete_confirm_dialog.dart';
+
 class DeleteCertificatesSection extends StatelessWidget {
   const DeleteCertificatesSection({super.key, required this.certificateId});
 
@@ -40,11 +42,7 @@ class DeleteCertificatesSection extends StatelessWidget {
         return InkWell(
           onTap: isLoading
               ? null
-              : () {
-                  DeleteMonthlyCertificateCubit.get(
-                    context,
-                  ).deleteMonthlyCertificate(certificateId: certificateId);
-                },
+              : () => _confirm(context),
           child: isLoading
               ? const SizedBox(
                   width: 18,
@@ -54,6 +52,18 @@ class DeleteCertificatesSection extends StatelessWidget {
               : SvgPicture.asset(ImageManager.trash),
         );
       },
+    );
+  }
+
+  void _confirm(BuildContext context) {
+    final cubit = DeleteMonthlyCertificateCubit.get(context);
+    showDialog(
+      context: context,
+      builder: (_) => CertificateDeleteConfirmDialog(
+        onConfirm: () => cubit.deleteMonthlyCertificate(
+          certificateId: certificateId,
+        ),
+      ),
     );
   }
 }

@@ -173,7 +173,9 @@ class ChatNotificationCoordinator {
       if (notificationId.isNotEmpty) notificationId,
       if (id.isNotEmpty) id,
     };
-    if (keys.isEmpty) return ChatForegroundNotificationResult.ignored;
+    if (keys.isEmpty || !event.isDisplayable) {
+      return ChatForegroundNotificationResult.ignored;
+    }
 
     if (updateRoom && event.roomId.isNotEmpty && _roomUpdateIds.add(id)) {
       _roomEvents.add(event);

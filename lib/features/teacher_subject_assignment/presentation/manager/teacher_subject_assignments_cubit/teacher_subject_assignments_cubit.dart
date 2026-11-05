@@ -16,6 +16,7 @@ class TeacherSubjectAssignmentsCubit
   final TeacherSubjectAssignmentRepo repo;
   final SocketService? _socket;
   VoidCallback? _socketDisposer;
+  int _requestVersion = 0;
 
   void _initSocket() {
     final socket = _socket;
@@ -35,12 +36,20 @@ class TeacherSubjectAssignmentsCubit
     });
   }
 
-  Future<void> getTeacherTeachingAssignments({bool silent = false}) async {
+  Future<void> getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+    bool silent = false,
+  }) async {
     if (isClosed) return;
+    final version = ++_requestVersion;
     if (!silent) emit(const GetTeachingAssignmentsLoading());
 
-    final result = await repo.getTeacherTeachingAssignments();
-    if (isClosed) return;
+    final result = await repo.getTeacherTeachingAssignments(
+      keyword: keyword,
+      subject: subject,
+    );
+    if (isClosed || version != _requestVersion) return;
     result.fold(
       (failure) {
         if (isClosed) return;

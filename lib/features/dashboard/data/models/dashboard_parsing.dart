@@ -17,6 +17,12 @@ double? dashboardNullableDouble(Object? value) {
   return double.tryParse(value.toString());
 }
 
+int? dashboardNullableInt(Object? value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  return int.tryParse(value.toString());
+}
+
 String dashboardString(Object? value) => value?.toString().trim() ?? '';
 
 bool dashboardBool(Object? value) {

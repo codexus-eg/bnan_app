@@ -62,6 +62,15 @@ class _LessonFormState extends State<LessonForm> {
   String? localError;
 
   @override
+  void didUpdateWidget(covariant LessonForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.classroom.subjectName != oldWidget.classroom.subjectName &&
+        subject.text != widget.classroom.subjectName) {
+      subject.text = widget.classroom.subjectName;
+    }
+  }
+
+  @override
   void dispose() {
     classroom.dispose();
     subject.dispose();
@@ -201,6 +210,11 @@ class _LessonFormState extends State<LessonForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<GulfScheduleCubit, GulfScheduleState>(
       builder: (context, state) {
+        final currentSubjectName =
+            state.selectedClassroom?.subject?.name ?? widget.classroom.subjectName;
+        if (subject.text.isEmpty && currentSubjectName.isNotEmpty) {
+          subject.text = currentSubjectName;
+        }
         final error = _issueMessage(context, state);
 
         return Column(

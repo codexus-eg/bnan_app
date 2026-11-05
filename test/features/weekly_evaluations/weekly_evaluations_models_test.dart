@@ -74,7 +74,7 @@ void main() {
     expect(json, isNot(contains('evaluationId')));
   });
 
-  test('upsert preserves exact backend evaluation values', () {
+  test('upsert preserves exact backend evaluation values and omits automated scores', () {
     const request = UpsertEvaluationRequestModel(
       student: 's',
       classroom: 'c',
@@ -86,10 +86,10 @@ void main() {
       behavior: 'acceptable',
     );
 
-    expect(request.toJson(), containsPair('attendance', 'excused'));
     expect(request.toJson(), containsPair('participation', 'very_good'));
-    expect(request.toJson(), containsPair('homework', '-'));
     expect(request.toJson(), containsPair('behavior', 'acceptable'));
+    expect(request.toJson(), isNot(contains('attendance')));
+    expect(request.toJson(), isNot(contains('homework')));
   });
 
   test('bonus uses correct key and never sends legacy names', () {
@@ -185,5 +185,36 @@ void main() {
     expect(subject.evaluation?.attendance, isEmpty);
     expect(subject.evaluation?.participation, isEmpty);
     expect(subject.evaluation?.notes, isEmpty);
+  });
+
+  test('evaluation parses attendanceAttended and attendanceTotal counts', () {
+    final response = WeeklyEvaluationsResponseModel.fromJson({
+      'success': true,
+      'data': {
+        'week': 10,
+        'weekStart': '2026-08-29T00:00:00.000Z',
+        'evaluation': {
+          '_id': 'eval_1',
+          'student': 'student_1',
+          'classroom': 'class_1',
+          'subject': 'sub_1',
+          'attendance': 'present',
+          'attendanceAttended': 3,
+          'attendanceTotal': 3,
+          'participation': 'good',
+          'homework': 'very_good',
+          'behavior': 'excellent',
+        },
+      },
+    });
+
+    final student = response.data.students.single;
+    final subject = student.subjects.single;
+    expect(response.data.week, 10);
+    expect(student.id, 'student_1');
+    expect(subject.id, 'sub_1');
+    expect(subject.evaluation?.attendance, 'present');
+    expect(subject.evaluation?.attendanceAttended, 3);
+    expect(subject.evaluation?.attendanceTotal, 3);
   });
 }

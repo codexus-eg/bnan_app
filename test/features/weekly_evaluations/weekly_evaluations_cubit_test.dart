@@ -295,6 +295,37 @@ void main() {
     expect(cubit.selectedClassroom?.id, 'new');
     expect(repo.weeklyCalls, [('new', 2)]);
   });
+
+  test('publishWeeklyEvaluations publishes for current classroom and week', () async {
+    final repo = _FakeRepo();
+    final cubit = _cubit(repo);
+    await cubit.initialize('teacher');
+    await cubit.setClassrooms(const [
+      PlanClassroomOption(id: 'c1', name: 'Class 1'),
+    ]);
+
+    expect(cubit.selectedWeek, 2);
+    final published = await cubit.publishWeeklyEvaluations();
+
+    expect(published, isTrue);
+    expect(repo.published, [('c1', 2)]);
+    expect(cubit.state, isA<EvaluationsLoaded>());
+  });
+
+  test('publishWeeklyEvaluations emits failure on repository error', () async {
+    final repo = _FakeRepo();
+    repo.publishFailure = Failure(message: 'Publish failed');
+    final cubit = _cubit(repo);
+    await cubit.initialize('teacher');
+    await cubit.setClassrooms(const [
+      PlanClassroomOption(id: 'c1', name: 'Class 1'),
+    ]);
+
+    final published = await cubit.publishWeeklyEvaluations();
+
+    expect(published, isFalse);
+    expect(cubit.state, isA<EvaluationsPublishFailure>());
+  });
 }
 
 WeeklyEvaluationsCubit _cubit(_FakeRepo repo) =>
@@ -344,6 +375,9 @@ class _FakeRepo implements WeeklyEvaluationsRepo {
   final weeklyCalls = <(String, int)>[];
   final myCalls = <(int, String?)>[];
   final saved = <UpsertEvaluationRequestModel>[];
+  final published = <(String, int)>[];
+  Failure? publishFailure;
+  Completer<Either<Failure, Unit>>? publishCompleter;
 
   @override
   Future<Either<Failure, ElapsedEvaluationWeeksModel>> getElapsedWeeks(
@@ -398,6 +432,17 @@ class _FakeRepo implements WeeklyEvaluationsRepo {
     saved.add(request);
     if (saveCompleter != null) return saveCompleter!.future;
     if (saveFailure != null) return Left(saveFailure!);
+    return const Right(unit);
+  }
+
+  @override
+  Future<Either<Failure, Unit>> publishWeeklyEvaluations({
+    required String classroomId,
+    required int week,
+  }) async {
+    published.add((classroomId, week));
+    if (publishCompleter != null) return publishCompleter!.future;
+    if (publishFailure != null) return Left(publishFailure!);
     return const Right(unit);
   }
 }

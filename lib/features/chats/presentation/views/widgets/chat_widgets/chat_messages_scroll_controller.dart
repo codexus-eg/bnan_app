@@ -38,7 +38,11 @@ class _ChatMessagesScrollController {
 
   void _positionInitially(List<ChatMessageModel> messages) {
     _initialPositioned = true;
-    if (messages.isNotEmpty) _scheduleScroll(animated: false);
+    if (messages.isNotEmpty) {
+      _scheduleScroll(animated: false);
+    } else {
+      onInitialPositioned?.call();
+    }
   }
 
   bool _hasNewLastMessage(

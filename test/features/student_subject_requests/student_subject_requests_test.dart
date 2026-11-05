@@ -51,6 +51,33 @@ void main() {
       expect(json.containsKey('notes'), isFalse);
     });
 
+    test('Egyptian submit includes notes when provided', () {
+      final json = const EgyptianSubjectRequestPayload(
+        subjectId: 's1',
+        packageId: 'p1',
+        notes: 'أريد معلمة مصرية',
+      ).toJson();
+      expect(json['notes'], 'أريد معلمة مصرية');
+    });
+
+    test('Gulf create payload includes notes and omits empty notes', () {
+      final withNotes = const GulfSubjectRequestCreatePayload(
+        subjectIds: ['s1'],
+        addToSharedSubscription: true,
+        packageId: 'pkg-1',
+        notes: 'ملاحظة خاصة',
+      ).toJson();
+      expect(withNotes['notes'], 'ملاحظة خاصة');
+      expect(withNotes['packageId'], 'pkg-1');
+
+      final emptyNotes = const GulfSubjectRequestCreatePayload(
+        subjectIds: ['s1'],
+        addToSharedSubscription: true,
+        notes: '   ',
+      ).toJson();
+      expect(emptyNotes.containsKey('notes'), isFalse);
+    });
+
     test('checkout response safely parses numeric amount variants', () {
       final payment = SubjectRequestPayment.fromJson({
         'data': {
@@ -608,6 +635,47 @@ void main() {
       expect(repo.lastPayload?.provider, GulfPaymentProvider.paymob);
       await cubit.close();
     });
+
+    test('Gulf add to shared subscription payload serializes correctly', () {
+      final json = const GulfSubjectRequestCreatePayload(
+        subjectIds: ['s1'],
+        addToSharedSubscription: true,
+      ).toJson();
+      expect(json['subjectIds'], ['s1']);
+      expect(json['addToSharedSubscription'], isTrue);
+    });
+
+    test('addToSharedSubscription submits request and reloads', () async {
+      final repo = FakeRepo();
+      final cubit = StudentSubjectRequestsCubit(repo);
+      cubit.updateNotes('ملاحظات خاصة بالمادة');
+      await cubit.addToSharedSubscription('s1');
+      expect(repo.lastGulfRequestPayload?.subjectIds, ['s1']);
+      expect(repo.lastGulfRequestPayload?.addToSharedSubscription, isTrue);
+      expect(repo.lastGulfRequestPayload?.notes, 'ملاحظات خاصة بالمادة');
+      expect(cubit.state.message, 'subject_request_submitted');
+      expect(cubit.state.notes, isEmpty);
+      await cubit.close();
+    });
+
+    test('submitEgyptian passes notes and resets on success but preserves on failure', () async {
+      final repo = FakeRepo();
+      final cubit = StudentSubjectRequestsCubit(repo);
+      await cubit.load();
+      cubit.selectSubject('enabled');
+      cubit.selectPackage('valid');
+      cubit.updateNotes('ملاحظة للمادة');
+      expect(cubit.state.notes, 'ملاحظة للمادة');
+
+      repo.submitResult = Left(Failure(message: 'error'));
+      await cubit.submitEgyptian();
+      expect(cubit.state.notes, 'ملاحظة للمادة');
+
+      repo.submitResult = const Right(StudentSubjectRequest(id: 'r1', status: 'pending'));
+      await cubit.submitEgyptian();
+      expect(cubit.state.notes, isEmpty);
+      await cubit.close();
+    });
   });
 }
 
@@ -678,6 +746,8 @@ class FakeRepo implements StudentSubjectRequestsRepo {
   final reconcileResults = <Either<Failure, SubjectRequestPayment>>[];
   final packageCurriculumIds = <String>[];
   GulfSubjectRequestPayload? lastPayload;
+  GulfSubjectRequestCreatePayload? lastGulfRequestPayload;
+  Either<Failure, dynamic> submitGulfResult = const Right(null);
   Either<Failure, StudentSubjectRequest> submitResult = const Right(
     StudentSubjectRequest(id: 'r1', status: 'pending'),
   );
@@ -715,6 +785,14 @@ class FakeRepo implements StudentSubjectRequestsRepo {
   Future<Either<Failure, StudentSubjectRequest>> submitEgyptian(
     EgyptianSubjectRequestPayload payload,
   ) async => submitResult;
+
+  @override
+  Future<Either<Failure, dynamic>> submitGulfSubjectRequest(
+    GulfSubjectRequestCreatePayload payload,
+  ) async {
+    lastGulfRequestPayload = payload;
+    return submitGulfResult;
+  }
 
   @override
   Future<Either<Failure, SubjectRequestPayment>> checkout({

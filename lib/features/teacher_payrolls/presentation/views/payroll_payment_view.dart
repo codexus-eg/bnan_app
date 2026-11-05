@@ -68,7 +68,7 @@ class _PayrollPaymentViewState extends State<PayrollPaymentView> {
                 );
               }
               final p = state.payroll;
-              if (p.status != 'draft') {
+              if (p.status == 'paid') {
                 return ListView(
                   padding: const EdgeInsets.all(16),
                   children: [

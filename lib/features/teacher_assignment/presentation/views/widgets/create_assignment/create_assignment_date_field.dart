@@ -27,11 +27,12 @@ class CreateAssignmentDateField extends StatelessWidget {
 
     if (date == null) return;
 
-    cubit.changeDueDate(date.toIso8601String());
+    final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
+    cubit.changeDueDate(endOfDay.toUtc().toIso8601String());
   }
 
   String _formatDate(String value) {
-    final date = DateTime.tryParse(value);
+    final date = DateTime.tryParse(value)?.toLocal();
     if (date == null) return value;
     return '${date.month}/${date.day}/${date.year}';
   }

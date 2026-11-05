@@ -18,6 +18,7 @@ class ParentChildSubscriptionModel {
     this.accessScope = PackageAccessScope.allSubjects,
     this.packageType = '',
     this.subject,
+    this.coveredSubjects = const [],
     this.purchasedHours = 0,
     this.remainingHours = 0,
     this.usedHoursValue,
@@ -43,6 +44,7 @@ class ParentChildSubscriptionModel {
   final String accessScope, packageType, status, computedStatus;
   final bool? isActive;
   final ParentSubscriptionSubjectModel? subject;
+  final List<ParentSubscriptionSubjectModel> coveredSubjects;
   final num purchasedHours, remainingHours;
   final num? usedHoursValue, price;
   final String? currency;
@@ -59,6 +61,8 @@ class ParentChildSubscriptionModel {
   bool get isHoursPlan =>
       hasRemainingHours || packageType == 'hours' || planKind == 'gulf';
   bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
+  bool get isSharedSubjects => accessScope == PackageAccessScope.sharedSubjects;
+  bool get isAllSubjects => accessScope == PackageAccessScope.allSubjects;
   String get effectiveStatus =>
       computedStatus.isEmpty ? status : computedStatus;
   factory ParentChildSubscriptionModel.fromJson(
@@ -71,6 +75,24 @@ class ParentChildSubscriptionModel {
     final summary = _map(json['summary']);
     final remaining = _map(json['remaining']);
     final summarySubject = _map(summary['subject']);
+    final rawCoveredSubjects =
+        json['coveredSubjects'] ?? json['subjects'] ?? package['subjects'];
+    final coveredSubjects = <ParentSubscriptionSubjectModel>[];
+    if (rawCoveredSubjects is List) {
+      coveredSubjects.addAll(
+        rawCoveredSubjects.whereType<Map>().map(
+          (item) => ParentSubscriptionSubjectModel.fromJson(
+            Map<String, dynamic>.from(item),
+          ),
+        ),
+      );
+    } else if (subject.isNotEmpty || summarySubject.isNotEmpty) {
+      coveredSubjects.add(
+        ParentSubscriptionSubjectModel.fromJson(
+          subject.isEmpty ? summarySubject : subject,
+        ),
+      );
+    }
     final rawRemainingHours =
         json['remainingHours'] ?? summary['remainingHours'];
     final rawPurchasedHours =
@@ -102,10 +124,11 @@ class ParentChildSubscriptionModel {
         json['packageType'] ?? package['type'] ?? summary['packageType'],
       ),
       subject: subject.isEmpty && summarySubject.isEmpty
-          ? null
+          ? (coveredSubjects.isNotEmpty ? coveredSubjects.first : null)
           : ParentSubscriptionSubjectModel.fromJson(
               subject.isEmpty ? summarySubject : subject,
             ),
+      coveredSubjects: List.unmodifiable(coveredSubjects),
       purchasedHours: _number(rawPurchasedHours),
       hasPurchasedHours: rawPurchasedHours != null,
       remainingHours: _number(rawRemainingHours),
@@ -181,6 +204,11 @@ class ParentChildSubscriptionsModel {
       );
     }
     for (final subscription in subscriptions) {
+      for (final s in subscription.coveredSubjects) {
+        if (!subjects.any((item) => item.id == s.id)) {
+          subjects.add(s);
+        }
+      }
       final subject = subscription.subject;
       if (subject != null && !subjects.any((item) => item.id == subject.id)) {
         subjects.add(subject);

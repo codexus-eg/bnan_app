@@ -37,6 +37,7 @@ class ClassroomsCubit extends Cubit<ClassroomsState> {
     int? page,
     int? limit,
     String? curriculum,
+    String? keyword,
     bool silent = false,
   }) async {
     if (isClosed) return;
@@ -47,6 +48,7 @@ class ClassroomsCubit extends Cubit<ClassroomsState> {
       page: page,
       limit: limit,
       curriculum: curriculum,
+      keyword: keyword,
     );
     if (isClosed || version != _requestVersion) return;
     result.fold(

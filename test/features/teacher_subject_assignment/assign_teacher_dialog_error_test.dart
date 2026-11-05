@@ -123,6 +123,13 @@ class _LookupsRepo implements AcademicLookupsRepo {
   }) async => const Right(unit);
 
   @override
+  Future<Either<Failure, Unit>> addSubjectToClassroom({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) async => const Right(unit);
+
+  @override
   Future<Either<Failure, List<AcademicCurriculumModel>>>
   getCurriculums() async => const Right([_curriculum]);
   @override
@@ -140,6 +147,10 @@ class _LookupsRepo implements AcademicLookupsRepo {
     required String gradeId,
     String? classroomId,
   }) async => const Right([_subject]);
+  @override
+  Future<Either<Failure, List<AcademicSubjectModel>>> getEligibleSubjects(
+    String classroomId,
+  ) async => const Right([_subject]);
 }
 
 const _curriculum = AcademicCurriculumModel(id: 'c', name: 'Curriculum');

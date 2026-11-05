@@ -30,8 +30,11 @@ class TeachingAssignmentItem {
   });
 
   factory TeachingAssignmentItem.fromJson(Map<String, dynamic> json) {
+    final teacherJson = json['teacher'] is Map<String, dynamic>
+        ? _asMap(json['teacher'])
+        : json;
     return TeachingAssignmentItem(
-      teacher: TeacherInfo.fromJson(_asMap(json['teacher'])),
+      teacher: TeacherInfo.fromJson(teacherJson),
       curriculums: _asList(
         json['curriculums'],
       ).map((item) => TeachingCurriculumModel.fromJson(item)).toList(),
@@ -81,11 +84,26 @@ class TeacherInfo {
   });
 
   factory TeacherInfo.fromJson(Map<String, dynamic> json) {
+    final userMap = _asMap(json['user']);
+
+    final name = _asString(
+      userMap['fullName'] ??
+          userMap['name'] ??
+          json['fullName'] ??
+          json['name'],
+    );
+
+    final email = _asString(
+      userMap['email'] ?? json['email'],
+    );
+
     return TeacherInfo(
-      id: _asString(json['_id'] ?? json['id']),
-      name: _asString(json['name']),
-      email: _asString(json['email']),
-      status: _asString(json['status']),
+      id: _asString(
+        json['_id'] ?? json['id'] ?? userMap['_id'] ?? userMap['id'],
+      ),
+      name: name,
+      email: email,
+      status: _asString(json['status'] ?? userMap['status']),
     );
   }
 

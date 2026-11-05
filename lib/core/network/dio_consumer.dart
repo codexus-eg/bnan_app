@@ -181,6 +181,27 @@ class DioConsumer extends ApiConsumer {
     }
   }
 
+  Future<List<int>> getBytes(
+    String path, {
+    Map<String, dynamic>? queryParameter,
+    bool isProtected = false,
+  }) async {
+    try {
+      final response = await dio.get<List<int>>(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          extra: {'isProtected': isProtected},
+          responseType: ResponseType.bytes,
+        ),
+      );
+
+      return response.data ?? const <int>[];
+    } on DioException catch (error) {
+      _handleDioException(error);
+    }
+  }
+
   Options _options(bool isProtected) {
     return Options(extra: {'isProtected': isProtected});
   }

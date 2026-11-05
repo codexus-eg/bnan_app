@@ -6,6 +6,7 @@ class WeeklyEvaluationsAccessPolicy {
     required this.isStudent,
     required this.isParent,
     required this.isReadOnly,
+    this.canSendAll = false,
   });
 
   final bool canAdd;
@@ -14,6 +15,7 @@ class WeeklyEvaluationsAccessPolicy {
   final bool isStudent;
   final bool isParent;
   final bool isReadOnly;
+  final bool canSendAll;
 
   factory WeeklyEvaluationsAccessPolicy.fromRole(String? role) {
     final normalizedRole = role?.trim().toLowerCase();
@@ -26,6 +28,7 @@ class WeeklyEvaluationsAccessPolicy {
       canAdd: canManage,
       canEdit: canManage,
       canFilterByClassroom: canManage,
+      canSendAll: isSupervisor,
       isStudent: isStudent,
       isParent: isParent,
       isReadOnly: !canManage,

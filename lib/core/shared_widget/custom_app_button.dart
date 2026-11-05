@@ -61,9 +61,10 @@ class CustomAppButton extends StatelessWidget {
                 overflow: singleLine ? TextOverflow.ellipsis : null,
                 style:
                     style ??
-                    StylesManager.styleBold16(
+                    StylesManager.styleButton(
                       context,
-                    ).copyWith(color: textColor),
+                      color: textColor,
+                    ),
               ),
       ),
     );

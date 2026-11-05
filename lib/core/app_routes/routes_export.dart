@@ -22,6 +22,7 @@ export 'package:bnan_app/features/home_student/presentation/views/home_student_v
 export 'package:bnan_app/features/notifications/presentation/views/notifications_view.dart';
 export 'package:bnan_app/features/notifications/presentation/views/notification_preferences_view.dart';
 export 'package:bnan_app/features/lessons_management/presentation/views/lessons_management_view.dart';
+export 'package:bnan_app/features/lessons_management/presentation/models/lessons_management_args.dart';
 
 export 'package:bnan_app/features/chats/presentation/views/chat_view.dart';
 

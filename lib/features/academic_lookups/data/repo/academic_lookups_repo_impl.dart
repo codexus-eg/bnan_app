@@ -98,6 +98,45 @@ class AcademicLookupsRepoImpl implements AcademicLookupsRepo {
     return unit;
   });
 
+  @override
+  Future<Either<Failure, Unit>> addSubjectToClassroom({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) => _guard(() async {
+    await apiConsumer.post(
+      EndPoints.classroomSubjectsDetails(classroomId),
+      data: {
+        'subject': subjectId,
+        if (teacherId != null && teacherId.isNotEmpty) 'teacher': teacherId,
+      },
+      isProtected: true,
+    );
+    return unit;
+  });
+
+  @override
+  Future<Either<Failure, List<AcademicSubjectModel>>> getEligibleSubjects(
+    String classroomId,
+  ) => _guard(() async {
+    final response = await apiConsumer.get(
+      EndPoints.classroomSubjectsDetails(classroomId),
+      isProtected: true,
+    );
+    final data = _asMap(response)['data'];
+    if (data is! Map) return [];
+    final eligible = data['eligibleSubjects'];
+    if (eligible is List) {
+      return eligible
+          .whereType<Map<String, dynamic>>()
+          .where((item) => item['isAssigned'] != true)
+          .map(AcademicSubjectModel.fromJson)
+          .where((item) => item.id.isNotEmpty)
+          .toList();
+    }
+    return [];
+  });
+
   Future<List<AcademicSubjectModel>> _getCurriculumSubjects(
     String curriculumId,
     String gradeId,

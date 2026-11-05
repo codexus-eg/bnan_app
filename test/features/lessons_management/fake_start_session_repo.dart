@@ -7,6 +7,14 @@ import 'package:dartz/dartz.dart';
 
 class FakeStartSessionRepo implements StartSessionRepo {
   final calls = <({String classroomId, String subjectId})>[];
+  final recordedStarts = <({
+    String classroomId,
+    String subjectId,
+    String? classroomSubjectId,
+    String? lessonId,
+    String? occurrenceDate,
+    String? system,
+  })>[];
   final pending = <String, Completer<Either<Failure, StartSessionData>>>{};
   Failure? failure;
   bool defer = false;
@@ -15,8 +23,20 @@ class FakeStartSessionRepo implements StartSessionRepo {
   Future<Either<Failure, StartSessionData>> startSession({
     required String classroomId,
     required String subjectId,
+    String? classroomSubjectId,
+    String? lessonId,
+    String? occurrenceDate,
+    String? system,
   }) async {
     calls.add((classroomId: classroomId, subjectId: subjectId));
+    recordedStarts.add((
+      classroomId: classroomId,
+      subjectId: subjectId,
+      classroomSubjectId: classroomSubjectId,
+      lessonId: lessonId,
+      occurrenceDate: occurrenceDate,
+      system: system,
+    ));
     if (defer) {
       final completer = Completer<Either<Failure, StartSessionData>>();
       pending[classroomId] = completer;
@@ -34,7 +54,14 @@ class FakeStartSessionRepo implements StartSessionRepo {
   @override
   Future<Either<Failure, String>> joinActiveSession({
     required String classroomId,
+    String? weeklySlotKey,
   }) async => Right('https://zoom.us/j/$classroomId');
+
+  @override
+  Future<Either<Failure, String>> getTeacherEntry({
+    required String classroomId,
+    required String sessionId,
+  }) async => Right('https://zoom.us/s/$sessionId');
 
   @override
   Future<Either<Failure, void>> endSession({required String sessionId}) async =>
@@ -49,4 +76,5 @@ StartSessionData startedSessionData(String classroomId) => StartSessionData(
     startAt: DateTime.utc(2026, 8, 4, 12),
   ),
   meetingLink: 'https://zoom.us/j/$classroomId',
+  teacherStartUrl: 'https://zoom.us/s/$classroomId',
 );

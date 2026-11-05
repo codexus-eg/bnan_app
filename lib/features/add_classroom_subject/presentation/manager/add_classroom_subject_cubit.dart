@@ -154,33 +154,39 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
     final gradeId = state.selectedGrade?.id;
     if (curriculumId == null || gradeId == null) return;
     emit(state.copyWith(loadingClassroomSubjects: true));
-    final result = await repo.getSubjects(
-      curriculumId: curriculumId,
-      gradeId: gradeId,
-      classroomId: classroomId,
-    );
-    if (isClosed || state.selectedClassroom?.id != classroomId) return;
-    result.fold(
-      (failure) => emit(
-        state.copyWith(
-          loadingClassroomSubjects: false,
-          lookupError: failure.message,
-        ),
+    final results = await Future.wait([
+      repo.getSubjects(
+        curriculumId: curriculumId,
+        gradeId: gradeId,
+        classroomId: classroomId,
       ),
-      (items) {
-        if (isClosed) return;
-        final assignedIds = items.map((item) => item.id).toSet();
-        final selected = assignedIds.contains(state.selectedSubject?.id)
-            ? null
-            : state.selectedSubject;
-        emit(
-          state.copyWith(
-            classroomSubjects: items,
-            selectedSubject: selected,
-            loadingClassroomSubjects: false,
-          ),
-        );
-      },
+      repo.getEligibleSubjects(classroomId),
+    ]);
+    if (isClosed || state.selectedClassroom?.id != classroomId) return;
+
+    final subjectsResult = results[0];
+    final eligibleResult = results[1];
+
+    final items = subjectsResult.fold(
+      (_) => <AcademicSubjectModel>[],
+      (data) => data,
+    );
+    final eligible = eligibleResult.fold(
+      (_) => <AcademicSubjectModel>[],
+      (data) => data,
+    );
+
+    final assignedIds = items.map((item) => item.id).toSet();
+    final selected = assignedIds.contains(state.selectedSubject?.id)
+        ? null
+        : state.selectedSubject;
+    emit(
+      state.copyWith(
+        classroomSubjects: items,
+        eligibleSubjects: eligible,
+        selectedSubject: selected,
+        loadingClassroomSubjects: false,
+      ),
     );
   }
 
@@ -190,7 +196,7 @@ class AddClassroomSubjectCubit extends Cubit<AddClassroomSubjectState> {
     final subject = state.selectedSubject;
     if (!state.canSubmit || classroom == null || subject == null) return;
     emit(state.copyWith(submitting: true, submitted: false, submitError: null));
-    final result = await repo.addClassroomSubject(
+    final result = await repo.addSubjectToClassroom(
       classroomId: classroom.id,
       subjectId: subject.id,
     );

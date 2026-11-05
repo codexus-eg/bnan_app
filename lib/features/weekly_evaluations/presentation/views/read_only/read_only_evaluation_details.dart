@@ -14,7 +14,12 @@ class ReadOnlyEvaluationDetails extends StatelessWidget {
     final rows = [
       (
         s.attendance,
-        readOnlyEvaluationValueLabel(context, evaluation.attendance),
+        formatReadOnlyAttendance(
+          context: context,
+          attendanceStatus: evaluation.attendance,
+          attended: evaluation.attendanceAttended,
+          total: evaluation.attendanceTotal,
+        ),
       ),
       (
         s.participation,

@@ -26,6 +26,15 @@ final class EvaluationSaveFailure extends WeeklyEvaluationsState {
   final String message;
 }
 
+final class EvaluationsPublishing extends WeeklyEvaluationsState {}
+
+final class EvaluationsPublished extends WeeklyEvaluationsState {}
+
+final class EvaluationsPublishFailure extends WeeklyEvaluationsState {
+  const EvaluationsPublishFailure(this.message);
+  final String message;
+}
+
 final class ParentChildrenLoading extends WeeklyEvaluationsState {}
 
 final class EvaluationStudentsLoading extends WeeklyEvaluationsState {}

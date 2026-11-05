@@ -29,8 +29,8 @@ void main() {
     await repo.getMyGulfSchedule(studentId: 'child-2');
 
     expect(api.queries, [
-      {'studentId': 'child-1'},
-      {'studentId': 'child-2'},
+      {'registrationMode': 'gulf', 'studentId': 'child-1'},
+      {'registrationMode': 'gulf', 'studentId': 'child-2'},
     ]);
   });
 }

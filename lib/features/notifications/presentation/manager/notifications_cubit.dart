@@ -6,6 +6,8 @@ import 'package:bnan_app/features/notifications/data/models/app_notification.dar
 import 'package:bnan_app/features/notifications/data/repos/notifications_repo.dart';
 import 'package:bnan_app/features/notifications/domain/recent_notification_ids.dart';
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_state.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -161,6 +163,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         value.id.isNotEmpty &&
         state.items.any((item) => item.id == value.id)) {
       return false;
+    }
+    if (getIt.isRegistered<ScheduleSyncCoordinator>() &&
+        getIt<ScheduleSyncCoordinator>().isScheduleNotification(value)) {
+      getIt<ScheduleSyncCoordinator>().handleNotification(value);
     }
     final items = [value, ...state.items.where((item) => item.id != value.id)];
     emit(

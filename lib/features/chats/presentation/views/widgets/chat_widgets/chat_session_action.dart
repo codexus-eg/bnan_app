@@ -5,10 +5,12 @@ import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/helper/file_url_launcher.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/teacher_session_subject_picker.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
 import 'package:bnan_app/features/lessons_management/presentation/utils/student_join_session_error.dart';
+import 'package:bnan_app/features/lessons_management/presentation/utils/zoom_session_error_handler.dart';
 import 'package:bnan_app/features/teacher_assignment/data/model/teacher_assigned_subject_model.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_cubit.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_assigned_subjects/get_teacher_assigned_subjects_state.dart';
@@ -36,8 +38,10 @@ class ChatSessionAction extends StatefulWidget {
 class _ChatSessionActionState extends State<ChatSessionAction>
     with WidgetsBindingObserver {
   bool initialized = false;
+  bool _isStarting = false;
   Timer? endStatusTimer;
   Timer? _schedulePollTimer;
+  Timer? _transitionPollTimer;
 
   @override
   void initState() {
@@ -50,6 +54,7 @@ class _ChatSessionActionState extends State<ChatSessionAction>
     WidgetsBinding.instance.removeObserver(this);
     endStatusTimer?.cancel();
     _schedulePollTimer?.cancel();
+    _stopTransitionPolling();
     super.dispose();
   }
 
@@ -60,13 +65,53 @@ class _ChatSessionActionState extends State<ChatSessionAction>
     }
   }
 
+  @override
+  void didUpdateWidget(ChatSessionAction oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.classroomId != widget.classroomId ||
+        oldWidget.roomId != widget.roomId ||
+        oldWidget.role != widget.role) {
+      _stopTransitionPolling();
+      _refresh();
+    }
+  }
+
   void _refresh() {
     if (!mounted) return;
     final cubit = context.read<StartSessionCubit>();
     unawaited(cubit.loadActive(widget.classroomId));
-    if (widget.role == UserRole.teacher) {
-      unawaited(cubit.loadScheduledLessons());
-    }
+    unawaited(cubit.loadScheduledLessons());
+  }
+
+  void _startTransitionPolling() {
+    if (_transitionPollTimer != null && _transitionPollTimer!.isActive) return;
+    _transitionPollTimer?.cancel();
+    _transitionPollTimer = Timer.periodic(
+      const Duration(seconds: 5),
+      (_) async {
+        if (!mounted) {
+          _stopTransitionPolling();
+          return;
+        }
+        final cubit = context.read<StartSessionCubit>();
+        await cubit.loadActive(widget.classroomId);
+        if (!mounted) return;
+        final status = cubit.state
+            .active(widget.classroomId)
+            ?.session
+            .status
+            .trim()
+            .toLowerCase();
+        if (status != 'starting' && status != 'awaiting_zoom_end') {
+          _stopTransitionPolling();
+        }
+      },
+    );
+  }
+
+  void _stopTransitionPolling() {
+    _transitionPollTimer?.cancel();
+    _transitionPollTimer = null;
   }
 
   @override
@@ -79,32 +124,52 @@ class _ChatSessionActionState extends State<ChatSessionAction>
 
     _refresh();
 
-    if (widget.role == UserRole.teacher) {
-      _schedulePollTimer?.cancel();
-      _schedulePollTimer = Timer.periodic(
-        const Duration(seconds: 30),
-        (_) => _refresh(),
-      );
+    _schedulePollTimer?.cancel();
+    _schedulePollTimer = Timer.periodic(
+      const Duration(seconds: 15),
+      (_) => _refresh(),
+    );
+
+    final initialStatus = context
+        .read<StartSessionCubit>()
+        .state
+        .active(widget.classroomId)
+        ?.session
+        .status
+        .trim()
+        .toLowerCase();
+    if (initialStatus == 'starting' || initialStatus == 'awaiting_zoom_end') {
+      _startTransitionPolling();
     }
   }
 
   @override
   Widget build(
     BuildContext context,
-  ) => BlocBuilder<StartSessionCubit, StartSessionState>(
+  ) => BlocConsumer<StartSessionCubit, StartSessionState>(
+    listener: (context, state) {
+      final active = state.active(widget.classroomId);
+      final status = active?.session.status.trim().toLowerCase();
+      if (status == 'starting' || status == 'awaiting_zoom_end') {
+        _startTransitionPolling();
+      } else {
+        _stopTransitionPolling();
+      }
+    },
     builder: (context, state) {
       final id = widget.classroomId;
       final currentRoom = widget.roomId.trim();
       final active = state.active(id);
       final sessionRoom = active?.session.chatRoomId.trim() ?? '';
       final isSameChat = sessionRoom.isEmpty || sessionRoom == currentRoom;
-      final canEnterActive =
-          active != null &&
-          const {
-            'starting',
-            'live',
-          }.contains(active.session.status.trim().toLowerCase()) &&
-          isSameChat;
+      final isSessionLive =
+          active != null && active.session.isLiveOrStarting && isSameChat;
+      final isSessionScheduledDue = (active != null &&
+              active.session.isScheduled &&
+              (active.session.isStartAvailable || active.session.isDueNow) &&
+              isSameChat) ||
+          state.isScheduled(roomId: currentRoom, classroomId: id);
+      final canEnterActive = isSessionLive;
 
       debugPrint(
         '[DEBUG ChatSessionAction] build -> '
@@ -114,8 +179,14 @@ class _ChatSessionActionState extends State<ChatSessionAction>
         'isChecking: ${state.isChecking(id)}, '
         'isLoading: ${state.isLoading(id)}, '
         'scheduledChatRoomIds: ${state.scheduledChatRoomIds}, '
-        'isScheduledChat: ${state.isScheduledChat(currentRoom)}, '
-        'activeSession: ${active?.session.id}, '
+        'scheduledClassroomIds: ${state.scheduledClassroomIds}, '
+        'isScheduled: ${state.isScheduled(roomId: currentRoom, classroomId: id)}, '
+        'isSessionLive: $isSessionLive, '
+        'isSessionScheduledDue: $isSessionScheduledDue, '
+        'activeSessionId: ${active?.session.id}, '
+        'activeStatus: ${active?.session.status}, '
+        'canStart: ${active?.session.canStart}, '
+        'startStatus: ${active?.session.startStatus}, '
         'activeChatRoomId: ${active?.session.chatRoomId}',
       );
 
@@ -132,21 +203,26 @@ class _ChatSessionActionState extends State<ChatSessionAction>
         );
       }
 
-      if (widget.role == UserRole.teacher) {
-        if (active == null) {
+      if (widget.role == UserRole.teacher || widget.role == UserRole.admin) {
+        if (!isSessionLive) {
+          if (active?.session.isAwaitingZoomEnd == true) {
+            return _button(S.of(context).sessionEnding, null);
+          }
           // قبل بدء الحصة: يظهر الزر فقط إذا كان هذا الشات هو شات الحصة المجدولة
-          if (!state.isScheduledChat(currentRoom)) {
+          if (!isSessionScheduledDue) {
             return const SizedBox.shrink();
           }
-          return _button(S.of(context).startSession, _start);
+          return _button(
+            S.of(context).startSession,
+            _isStarting ? null : _start,
+          );
         }
         // بعد بدء الحصة: يظهر فقط إذا تطابق chatRoomId في الـ activeSession
-        final sessionRoom = active.session.chatRoomId.trim();
         if (sessionRoom.isNotEmpty && sessionRoom != currentRoom) {
           return const SizedBox.shrink();
         }
 
-        if (active.session.status == 'awaiting_zoom_end') {
+        if (active.session.isAwaitingZoomEnd) {
           return _button(S.of(context).sessionEnding, null);
         }
 
@@ -155,9 +231,7 @@ class _ChatSessionActionState extends State<ChatSessionAction>
           children: [
             _button(
               S.of(context).joinSession,
-              active.meetingLink.isNotEmpty
-                  ? () => _open(active.meetingLink)
-                  : _join,
+              () => _reenterTeacher(active.session.id),
             ),
             IconButton(
               tooltip: S.of(context).endSession,
@@ -178,7 +252,6 @@ class _ChatSessionActionState extends State<ChatSessionAction>
           'activeSessionId: ${active?.session.id}, '
           'activeSessionStatus: ${active?.session.status}, '
           'activeChatRoomId: $sessionRoom, '
-          'meetingLink: ${active?.meetingLink}, '
           'isSameChat: $isSameChat, '
           'canEnterActive: $canEnterActive',
         );
@@ -186,23 +259,24 @@ class _ChatSessionActionState extends State<ChatSessionAction>
         if (canEnterActive) {
           return _button(
             S.of(context).joinSession,
-            active.meetingLink.isNotEmpty
-                ? () => _joinSupervisor(active.meetingLink)
-                : () async {
-                    final cubit = context.read<StartSessionCubit>();
-                    final link = await cubit.join(widget.classroomId);
-                    if (link != null && link.isNotEmpty) {
-                      await _joinSupervisor(link);
-                    } else if (mounted) {
-                      _showSessionError(cubit.state);
-                    }
-                  },
+            () async {
+              final cubit = context.read<StartSessionCubit>();
+              final link = await cubit.join(
+                widget.classroomId,
+                weeklySlotKey: active.session.weeklySlotKey,
+              );
+              if (link != null && link.isNotEmpty) {
+                await _joinSupervisor(link);
+              } else if (mounted) {
+                _showSessionError(cubit.state);
+              }
+            },
           );
         }
         return const SizedBox.shrink();
       }
 
-      // student / admin:
+      // student:
       if (active != null) {
         final sessionRoom = active.session.chatRoomId.trim();
         if (sessionRoom.isNotEmpty && sessionRoom != currentRoom) {
@@ -210,17 +284,20 @@ class _ChatSessionActionState extends State<ChatSessionAction>
         }
       }
 
-      if (widget.role == UserRole.student && canEnterActive) {
-        return _button(S.of(context).joinSession, _join);
-      }
-
-      if (widget.role == UserRole.admin && canEnterActive) {
-        return _button(
-          S.of(context).joinSession,
-          active.meetingLink.isNotEmpty
-              ? () => _open(active.meetingLink)
-              : _join,
-        );
+      if (widget.role == UserRole.student) {
+        if (active?.session.isAwaitingZoomEnd == true) {
+          return _button(S.of(context).sessionEnding, null);
+        }
+        if (active?.session.isStarting == true) {
+          return _button(S.of(context).sessionStarting, null);
+        }
+        if (active?.session.studentCanJoin == true) {
+          return _button(
+            S.of(context).joinSession,
+            () => _join(weeklySlotKey: active?.session.weeklySlotKey),
+          );
+        }
+        return const SizedBox.shrink();
       }
 
       return const SizedBox.shrink();
@@ -238,63 +315,133 @@ class _ChatSessionActionState extends State<ChatSessionAction>
   );
 
   Future<void> _start() async {
-    final subjectsCubit = context.read<GetTeacherAssignedSubjectsCubit>();
+    if (_isStarting) return;
+    _isStarting = true;
+    try {
+      final cubit = context.read<StartSessionCubit>();
+      final subjectsCubit = context.read<GetTeacherAssignedSubjectsCubit>();
 
-    await subjectsCubit.getTeacherAssignedSubjects(
-      classroomId: widget.classroomId,
-    );
-
-    if (!mounted) return;
-
-    final state = subjectsCubit.state;
-
-    if (state is GetTeacherAssignedSubjectsFailure) {
-      return showCustomSnackBar(context, state.errorMessage, false);
-    }
-
-    final List<TeacherAssignedSubjectModel> subjects =
-        state is GetTeacherAssignedSubjectsSuccess
-        ? state.response.data.subjects
-        : const [];
-
-    if (subjects.isEmpty) {
-      return showCustomSnackBar(
-        context,
-        S.of(context).sessionSubjectUnavailable,
-        false,
+      await subjectsCubit.getTeacherAssignedSubjects(
+        classroomId: widget.classroomId,
       );
+
+      if (!mounted) return;
+
+      final state = subjectsCubit.state;
+
+      if (state is GetTeacherAssignedSubjectsFailure) {
+        return showCustomSnackBar(context, state.errorMessage, false);
+      }
+
+      final List<TeacherAssignedSubjectModel> subjects =
+          state is GetTeacherAssignedSubjectsSuccess
+          ? state.response.data.subjects
+          : const [];
+
+      String? subjectId;
+      if (subjects.isEmpty) {
+        final fallbackSubject = cubit.state
+            .active(widget.classroomId)
+            ?.session
+            .subjectId
+            .trim();
+        if (fallbackSubject != null && fallbackSubject.isNotEmpty) {
+          subjectId = fallbackSubject;
+        } else {
+          return showCustomSnackBar(
+            context,
+            S.of(context).sessionSubjectUnavailable,
+            false,
+          );
+        }
+      } else {
+        subjectId = subjects.length == 1
+            ? subjects.single.id
+            : await showTeacherSessionSubjectPicker(context, subjects);
+      }
+
+      if (!mounted || subjectId == null) return;
+      final targetSubjectId = subjectId;
+
+      final selectedSubject = subjects.length == 1
+          ? subjects.single
+          : subjects.firstWhere(
+              (s) => s.id == targetSubjectId,
+              orElse: () => TeacherAssignedSubjectModel(
+                classroomSubjectId: '',
+                id: targetSubjectId,
+                name: '',
+              ),
+            );
+      final dueLesson = cubit.state.dueLesson(
+        classroomId: widget.classroomId,
+        roomId: widget.roomId,
+      );
+      final activeSession = cubit.state.active(widget.classroomId)?.session;
+      final occurrenceDate = dueLesson?.occurrenceDate ??
+          activeSession?.resolvedOccurrenceDate ??
+          ScheduleTimeUtils.formatIsoDate(DateTime.now());
+      // Backend contract: Only Egyptian start requests use actual Egyptian lesson.id.
+      // Gulf start requests must NOT include lessonId. Never substitute a session ID (activeSession.id) or Gulf schedule entry ID.
+      final lessonId = dueLesson?.isEgyptian == true
+          ? dueLesson?.lessonId?.trim()
+          : null;
+      final effectiveClassroomSubjectId =
+          selectedSubject.classroomSubjectId.isNotEmpty
+              ? selectedSubject.classroomSubjectId
+              : (dueLesson?.classroomSubjectId ??
+                  (activeSession?.classroomSubjectId ?? ''));
+
+      final succeeded = await cubit.start(
+        classroomId: widget.classroomId,
+        subjectId: targetSubjectId,
+        classroomSubjectId: effectiveClassroomSubjectId.isNotEmpty
+            ? effectiveClassroomSubjectId
+            : null,
+        lessonId: lessonId,
+        occurrenceDate: occurrenceDate,
+        system: dueLesson?.system,
+      );
+
+      if (!mounted) return;
+
+      if (!succeeded) {
+        return _showSessionError(cubit.state);
+      }
+
+      final startUrl =
+          cubit.state.active(widget.classroomId)?.teacherStartUrl ?? '';
+      if (startUrl.isEmpty) {
+        showCustomSnackBar(
+          context,
+          zoomSessionErrorMessage(
+            context,
+            cubit.state.copyWith(eventCode: 'TEACHER_START_URL_UNAVAILABLE'),
+          ),
+          false,
+        );
+        return;
+      }
+
+      await _open(startUrl);
+
+      await cubit.loadActive(widget.classroomId);
+    } finally {
+      if (mounted) {
+        setState(() => _isStarting = false);
+      } else {
+        _isStarting = false;
+      }
     }
-
-    final subjectId = subjects.length == 1
-        ? subjects.single.id
-        : await showTeacherSessionSubjectPicker(context, subjects);
-
-    if (!mounted || subjectId == null) return;
-
-    final cubit = context.read<StartSessionCubit>();
-
-    final succeeded = await cubit.start(
-      classroomId: widget.classroomId,
-      subjectId: subjectId,
-    );
-
-    if (!mounted) return;
-
-    if (!succeeded) {
-      return _showSessionError(cubit.state);
-    }
-
-    final link = cubit.state.active(widget.classroomId)?.meetingLink ?? '';
-
-    await _open(link);
-
-    await cubit.loadActive(widget.classroomId);
   }
 
-  Future<void> _join() async {
+  Future<void> _join({String? weeklySlotKey}) async {
     final cubit = context.read<StartSessionCubit>();
 
-    final link = await cubit.join(widget.classroomId);
+    final link = await cubit.join(
+      widget.classroomId,
+      weeklySlotKey: weeklySlotKey,
+    );
 
     if (!mounted) return;
 
@@ -303,6 +450,19 @@ class _ChatSessionActionState extends State<ChatSessionAction>
     }
 
     await _open(link);
+  }
+
+  Future<void> _reenterTeacher(String sessionId) async {
+    final cubit = context.read<StartSessionCubit>();
+    final url = await cubit.getTeacherEntry(
+      classroomId: widget.classroomId,
+      sessionId: sessionId,
+    );
+    if (!mounted) return;
+    if (url == null || url.isEmpty) {
+      return _showSessionError(cubit.state);
+    }
+    await _open(url);
   }
 
   Future<void> _joinSupervisor(String link) async {
@@ -362,20 +522,25 @@ class _ChatSessionActionState extends State<ChatSessionAction>
   }
 
   void _showSessionError(StartSessionState state) {
-    final code = state.eventCode ?? state.eventError;
     final studentJoinError = widget.role == UserRole.student
         ? studentJoinSessionErrorMessage(context, state)
         : null;
 
     final message =
-        studentJoinError ??
-        switch (code) {
-          'CLASSROOM_SESSION_ALREADY_ACTIVE' =>
-            S.of(context).classroomSessionAlreadyActive,
-          'SESSION_NOT_ACTIVE' => S.of(context).noActiveSessionNow,
-          _ => state.eventError ?? S.of(context).unexpectedError,
-        };
+        studentJoinError ?? zoomSessionErrorMessage(context, state);
 
     showCustomSnackBar(context, message, false);
+
+    final code =
+        (state.eventCode ?? state.eventError ?? '').trim().toUpperCase();
+    final shouldRefresh = code == 'CLASSROOM_SESSION_ALREADY_ACTIVE' ||
+        code == 'SESSION_NOT_ACTIVE' ||
+        code == 'WEEKLY_ZOOM_SLOT_SESSION_NOT_ACTIVE' ||
+        code == 'SCHEDULE_OCCURRENCE_NOT_FOUND' ||
+        code.startsWith('WEEKLY_ZOOM_ASSIGNMENT_') ||
+        state.eventStatusCode == 404;
+    if (shouldRefresh && mounted) {
+      context.read<StartSessionCubit>().loadActive(widget.classroomId);
+    }
   }
 }

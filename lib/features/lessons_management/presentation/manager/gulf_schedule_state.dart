@@ -13,6 +13,7 @@ class GulfScheduleState {
     this.selectedClassroomId,
     this.selectedDay = 'saturday',
     this.isSaving = false,
+    this.isRefreshing = false,
     this.loadError,
     this.actionError,
     this.actionIssue,
@@ -24,7 +25,7 @@ class GulfScheduleState {
   final List<GulfClassroom> classrooms;
   final String? selectedClassroomId, loadError, actionError;
   final String selectedDay;
-  final bool isSaving;
+  final bool isSaving, isRefreshing;
   final GulfScheduleIssue? actionIssue;
   final GulfScheduleAction? actionSuccess;
   final int eventId;
@@ -42,6 +43,7 @@ class GulfScheduleState {
     Object? classroomId = _unset,
     String? selectedDay,
     bool? isSaving,
+    bool? isRefreshing,
     Object? loadError = _unset,
     Object? actionError = _unset,
     Object? actionIssue = _unset,
@@ -55,6 +57,7 @@ class GulfScheduleState {
         : classroomId as String?,
     selectedDay: selectedDay ?? this.selectedDay,
     isSaving: isSaving ?? this.isSaving,
+    isRefreshing: isRefreshing ?? this.isRefreshing,
     loadError: loadError == _unset ? this.loadError : loadError as String?,
     actionError: actionError == _unset
         ? this.actionError

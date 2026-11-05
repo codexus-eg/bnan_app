@@ -2,7 +2,7 @@ name: bnan_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.9.0
@@ -88,8 +88,6 @@ dependencies:
   package_info_plus: ^9.0.1
   uuid: ^4.6.0
 
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -106,7 +104,6 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -124,9 +121,6 @@ flutter:
     - assets/images/admin/
     - assets/images/user-management/
     - assets/images/shared/
-
-
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -153,6 +147,42 @@ flutter:
         - asset: assets/fonts/tajawal/Tajawal-ExtraBold.ttf
           weight: 800
         - asset: assets/fonts/tajawal/Tajawal-Black.ttf
+          weight: 900
+    - family: thmanyahSans
+      fonts:
+        - asset: assets/fonts/thamaniah/thmanyahsans-Light.otf
+          weight: 300
+        - asset: assets/fonts/thamaniah/thmanyahsans-Regular.otf
+          weight: 400
+        - asset: assets/fonts/thamaniah/thmanyahsans-Medium.otf
+          weight: 500
+        - asset: assets/fonts/thamaniah/thmanyahsans-Bold.otf
+          weight: 700
+        - asset: assets/fonts/thamaniah/thmanyahsans-Black.otf
+          weight: 900
+    - family: thmanyahSerifDisplay
+      fonts:
+        - asset: assets/fonts/thamaniah/thmanyahserifdisplay-Light.otf
+          weight: 300
+        - asset: assets/fonts/thamaniah/thmanyahserifdisplay-Regular.otf
+          weight: 400
+        - asset: assets/fonts/thamaniah/thmanyahserifdisplay-Medium.otf
+          weight: 500
+        - asset: assets/fonts/thamaniah/thmanyahserifdisplay-Bold.otf
+          weight: 700
+        - asset: assets/fonts/thamaniah/thmanyahserifdisplay-Black.otf
+          weight: 900
+    - family: thmanyahSerifText
+      fonts:
+        - asset: assets/fonts/thamaniah/thmanyahseriftext-Light.otf
+          weight: 300
+        - asset: assets/fonts/thamaniah/thmanyahseriftext-Regular.otf
+          weight: 400
+        - asset: assets/fonts/thamaniah/thmanyahseriftext-Medium.otf
+          weight: 500
+        - asset: assets/fonts/thamaniah/thmanyahseriftext-Bold.otf
+          weight: 700
+        - asset: assets/fonts/thamaniah/thmanyahseriftext-Black.otf
           weight: 900
   #
   # For details regarding fonts from package dependencies,

@@ -22,6 +22,9 @@ class DigitalScheduleContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.days.isEmpty || data.times.isEmpty) {
+      if (loading) {
+        return const Center(child: CircularProgressIndicator());
+      }
       return NoDataWidget(title: emptyMessage);
     }
     return AppSkeletonizer(

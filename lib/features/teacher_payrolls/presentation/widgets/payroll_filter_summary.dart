@@ -13,9 +13,10 @@ class PayrollFilterSummary extends StatelessWidget {
     required this.status,
     required this.teacher,
     required this.onTap,
+    this.curriculum = '',
   });
   final DateTime from, to;
-  final String status, teacher;
+  final String status, teacher, curriculum;
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => CustomDetailsWidgetBackground(
@@ -44,7 +45,9 @@ class PayrollFilterSummary extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          '$status • $teacher',
+          curriculum.isNotEmpty
+              ? '$curriculum • $status • $teacher'
+              : '$status • $teacher',
           style: StylesManager.styleRegular12(context),
         ),
       ],

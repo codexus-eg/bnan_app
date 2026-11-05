@@ -64,6 +64,13 @@ class _DelayedSubjectsRepo implements AcademicLookupsRepo {
   }) async => const Right(unit);
 
   @override
+  Future<Either<Failure, Unit>> addSubjectToClassroom({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) async => const Right(unit);
+
+  @override
   Future<Either<Failure, List<AcademicGradeModel>>> getGrades({
     String? curriculumId,
   }) async => const Right([_grade]);
@@ -87,4 +94,9 @@ class _DelayedSubjectsRepo implements AcademicLookupsRepo {
   @override
   Future<Either<Failure, List<AcademicCurriculumModel>>>
   getCurriculums() async => const Right([_curriculum]);
+
+  @override
+  Future<Either<Failure, List<AcademicSubjectModel>>> getEligibleSubjects(
+    String classroomId,
+  ) async => const Right([]);
 }

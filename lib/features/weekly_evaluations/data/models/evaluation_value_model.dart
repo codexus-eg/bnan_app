@@ -4,6 +4,8 @@ class EvaluationValueModel {
   const EvaluationValueModel({
     this.id = '',
     this.attendance = '',
+    this.attendanceAttended,
+    this.attendanceTotal,
     this.participation = '',
     this.homework = '',
     this.behavior = '',
@@ -16,6 +18,7 @@ class EvaluationValueModel {
   });
 
   final String id, attendance, participation, homework, behavior, notes;
+  final int? attendanceAttended, attendanceTotal;
   final int bonus;
   final String createdByRole, updatedByRole, createdAt, updatedAt;
 
@@ -24,6 +27,12 @@ class EvaluationValueModel {
     return EvaluationValueModel(
       id: EvaluationJsonParser.id(json),
       attendance: read('attendance'),
+      attendanceAttended: EvaluationJsonParser.nullableInteger(
+        json['attendanceAttended'],
+      ),
+      attendanceTotal: EvaluationJsonParser.nullableInteger(
+        json['attendanceTotal'],
+      ),
       participation: read('participation'),
       homework: read('homework'),
       behavior: read('behavior'),

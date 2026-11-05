@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
@@ -26,9 +28,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TablesManagementBody extends StatefulWidget {
-  const TablesManagementBody({super.key, this.useSupervisorClassrooms = false});
+  const TablesManagementBody({
+    super.key,
+    this.useSupervisorClassrooms = false,
+    this.initialClassId,
+  });
 
   final bool useSupervisorClassrooms;
+  final String? initialClassId;
 
   @override
   State<TablesManagementBody> createState() => _TablesManagementBodyState();
@@ -36,6 +43,12 @@ class TablesManagementBody extends StatefulWidget {
 
 class _TablesManagementBodyState extends State<TablesManagementBody> {
   String? classroomId;
+
+  @override
+  void initState() {
+    super.initState();
+    classroomId = widget.initialClassId;
+  }
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -66,7 +79,10 @@ class _TablesManagementBodyState extends State<TablesManagementBody> {
             (item) =>
                 item.isActive &&
                 item.id.isNotEmpty &&
-                item.curriculum.registrationMode?.toLowerCase() == 'egyptian',
+                (item.id == widget.initialClassId ||
+                    item.isShared ||
+                    item.curriculum.registrationMode?.toLowerCase() ==
+                        'egyptian'),
           )
           .map(_classroomUi)
           .toList(growable: false),
@@ -91,7 +107,9 @@ class _TablesManagementBodyState extends State<TablesManagementBody> {
           .where(
             (item) =>
                 item.id.isNotEmpty &&
-                item.curriculum.registrationMode?.toLowerCase() == 'egyptian',
+                (item.id == widget.initialClassId ||
+                    item.curriculum.registrationMode?.toLowerCase() ==
+                        'egyptian'),
           )
           .map(_supervisorClassroomUi)
           .toList(growable: false),
@@ -189,11 +207,14 @@ class _EgyptianScheduleContent extends StatelessWidget {
   Widget _content(BuildContext context, EgyptianScheduleState state) {
     final cubit = context.read<EgyptianScheduleManagementCubit>();
     final addAvailability = egyptianLessonAddAvailability(state);
+    final isTeacher = SessionManager.instance.role == UserRole.teacher;
     final header = LessonsManagementHeader(
       classrooms: classrooms,
       selectedClassroomId: classroomId,
       onClassroomChanged: onClassroomChanged,
-      onAddTap: addAvailability == EgyptianLessonAddAvailability.disabled
+      showAddButton: !isTeacher,
+      onAddTap: isTeacher ||
+              addAvailability == EgyptianLessonAddAvailability.disabled
           ? null
           : () => _handleAdd(context, cubit, state),
     );
@@ -243,12 +264,14 @@ class _EgyptianScheduleContent extends StatelessWidget {
               ? NoDataWidget(title: S.of(context).noLessonsForSelectedDay)
               : LessonsList(
                   lessons: lessonModels,
-                  onTap: (lesson) {
-                    final index = lessonModels.indexOf(lesson);
-                    if (index >= 0) {
-                      _openDialog(context, lesson: lessons[index]);
-                    }
-                  },
+                  onTap: isTeacher
+                      ? null
+                      : (lesson) {
+                          final index = lessonModels.indexOf(lesson);
+                          if (index >= 0) {
+                            _openDialog(context, lesson: lessons[index]);
+                          }
+                        },
                 ),
         ),
       ],

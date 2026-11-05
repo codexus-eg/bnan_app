@@ -53,6 +53,11 @@ class StudentSubjectRequestsRepoImpl implements StudentSubjectRequestsRepo {
   );
 
   @override
+  submitGulfSubjectRequest(GulfSubjectRequestCreatePayload payload) => repoGuard(
+    () async => _post(EndPoints.studentSubjectRequests, data: payload.toJson()),
+  );
+
+  @override
   checkout({
     required GulfSubjectRequestPayload payload,
     required String idempotencyKey,

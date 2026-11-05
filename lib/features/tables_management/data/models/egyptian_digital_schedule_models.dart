@@ -54,6 +54,7 @@ class EgyptianDigitalLesson {
     this.teacherId,
     this.chatRoomId,
     this.activeSession,
+    this.scheduledAt,
   });
 
   final String id, date, startTime, classroomId, classroomName;
@@ -61,6 +62,7 @@ class EgyptianDigitalLesson {
   final String? endTime, classroomSubjectId, teacherName, teacherId;
   final String? chatRoomId;
   final EgyptianLessonActiveSession? activeSession;
+  final DateTime? scheduledAt;
 
   factory EgyptianDigitalLesson.fromJson(Map<String, dynamic> json) {
     final classroom = _map(json['classroom']);
@@ -78,7 +80,10 @@ class EgyptianDigitalLesson {
       date: _text(json['day'] ?? json['date']),
       startTime: _text(json['startTime']),
       endTime: _optional(json['endTime']),
-      classroomId: _id(classroom),
+      classroomId: _referenceId(
+            json['classroomId'] ?? json['classroom_id'] ?? json['classroom'],
+          ) ??
+          '',
       classroomName: _text(classroom['name']),
       subjectId: _id(subject),
       subjectName: _text(subject['name']),
@@ -98,24 +103,40 @@ class EgyptianDigitalLesson {
               Map<String, dynamic>.from(json['activeSession']),
             )
           : null,
+      scheduledAt: DateTime.tryParse(_text(json['scheduledAt'])),
     );
   }
 }
 
 class EgyptianLessonActiveSession {
-  const EgyptianLessonActiveSession({required this.status, this.canJoin});
+  const EgyptianLessonActiveSession({
+    this.id = '',
+    required this.status,
+    this.canJoin,
+    this.weeklySlotKey,
+    this.recordingUrl,
+    this.summaryUrl,
+  });
 
+  final String id;
   final String status;
   final bool? canJoin;
+  final String? weeklySlotKey;
+  final String? recordingUrl;
+  final String? summaryUrl;
 
   factory EgyptianLessonActiveSession.fromJson(Map<String, dynamic> json) =>
       EgyptianLessonActiveSession(
+        id: _id(json),
         status: _text(json['status']).toLowerCase(),
         canJoin: json['canJoin'] is bool ? json['canJoin'] as bool : null,
+        weeklySlotKey: _optional(json['weeklySlotKey']),
+        recordingUrl: _optional(json['recordingUrl']),
+        summaryUrl: _optional(json['summaryUrl']),
       );
 
-  bool get studentCanJoin =>
-      const {'starting', 'live'}.contains(status) && canJoin != false;
+  bool get studentCanJoin => status == 'live' && canJoin == true;
+  bool get isEnded => status == 'ended';
 }
 
 class EgyptianClassroomSubject {
@@ -169,16 +190,15 @@ class EgyptianLessonRequest {
   const EgyptianLessonRequest({
     required this.classroomSubjectId,
     required this.startTime,
-    this.endTime,
+    required this.endTime,
   });
 
-  final String classroomSubjectId, startTime;
-  final String? endTime;
+  final String classroomSubjectId, startTime, endTime;
 
   Map<String, dynamic> toJson() => {
     'classroomSubject': classroomSubjectId,
     'startTime': startTime,
-    if (endTime != null) 'endTime': endTime,
+    'endTime': endTime,
   };
 }
 

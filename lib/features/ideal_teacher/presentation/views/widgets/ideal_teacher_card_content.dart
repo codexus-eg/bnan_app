@@ -11,9 +11,11 @@ class IdealTeacherCardContent extends StatelessWidget {
     super.key,
     required this.teacher,
     required this.selected,
+    this.canSelect = true,
   });
   final SupervisorTeacherModel teacher;
   final bool selected;
+  final bool canSelect;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -37,8 +39,10 @@ class IdealTeacherCardContent extends StatelessWidget {
           ],
         ),
       ),
-      const SizedBox(width: 8),
-      SelectionCircle(isSelected: selected),
+      if (canSelect) ...[
+        const SizedBox(width: 8),
+        SelectionCircle(isSelected: selected),
+      ],
     ],
   );
 }

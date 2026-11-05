@@ -27,4 +27,14 @@ abstract class AcademicLookupsRepo {
     required String classroomId,
     required String subjectId,
   }) => throw UnimplementedError();
+
+  Future<Either<Failure, Unit>> addSubjectToClassroom({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) => throw UnimplementedError();
+
+  Future<Either<Failure, List<AcademicSubjectModel>>> getEligibleSubjects(
+    String classroomId,
+  ) => Future.value(const Right([]));
 }

@@ -20,6 +20,7 @@ class CustomDropdown extends StatelessWidget {
     this.fieldHeight = 40,
     this.useDefaultIcon = false,
     this.isDense = false,
+    this.enabled = true,
   });
 
   final String label;
@@ -29,7 +30,7 @@ class CustomDropdown extends StatelessWidget {
   final List<String>? items;
   final Map<String, String>? itemsLabels;
   final ValueChanged<String?>? onChanged;
-  final bool isRequired, showLabel, useDefaultIcon, isDense;
+  final bool isRequired, showLabel, useDefaultIcon, isDense, enabled;
   final double fieldHeight;
   final Color? backgroundColor, labelColor;
 
@@ -37,7 +38,7 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDisabled = items == null || items!.isEmpty;
+    final bool isDisabled = !enabled || items == null || items!.isEmpty;
     final List<String> dropdownItems = items ?? [];
 
     return Column(

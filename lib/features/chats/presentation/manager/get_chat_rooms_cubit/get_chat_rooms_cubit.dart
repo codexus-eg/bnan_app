@@ -21,6 +21,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
     _roomReadSubscription = roomsCache?.roomReadEvents.listen(markRoomRead);
     _roomsUpdateSubscription =
         roomsCache?.roomsUpdateEvents.listen(_onRoomsCacheUpdated);
+    SessionManager.instance.addSessionChangeListener(_onSessionChanged);
   }
 
   final ChatRepo chatRepo;
@@ -35,6 +36,18 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
   String _roomSearch = '';
   List<ChatRoomSummaryModel> _allRooms = const [];
   int _requestId = 0;
+
+  Future<void> _onSessionChanged(String? prev, String? next) async {
+    if (prev != next) {
+      _allRooms = const [];
+      _processedMessageIds.clear();
+      if (next?.trim().isNotEmpty == true) {
+        unawaited(getChatRooms());
+      } else {
+        emit(GetChatRoomsSuccess(rooms: const []));
+      }
+    }
+  }
 
   int get totalUnreadCount =>
       _allRooms.fold(0, (total, room) => total + room.unreadCount);
@@ -122,6 +135,21 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
     emit(GetChatRoomsSuccess(rooms: _visibleRooms));
   }
 
+  void revertRoomRead(String roomId, int previousUnreadCount) {
+    if (isClosed) return;
+    final id = roomId.trim();
+    if (id.isEmpty || previousUnreadCount <= 0) return;
+    final index = _allRooms.indexWhere(
+      (room) => room.id.trim() == id || room.classroomId?.trim() == id,
+    );
+    if (index == -1) return;
+    final rooms = List.of(_allRooms);
+    rooms[index] = rooms[index].copyWith(unreadCount: previousUnreadCount);
+    _allRooms = rooms;
+    roomsCache?.replace(rooms);
+    emit(GetChatRoomsSuccess(rooms: _visibleRooms));
+  }
+
   void _updateRoom(ChatNotificationEvent event) {
     if (isClosed) return;
     final roomId = event.roomId.trim();
@@ -151,7 +179,8 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
       _processedMessageIds.remove(_processedMessageIds.first);
     }
 
-    final shouldIncrement = !isMine && !isCurrentRoom && !isDuplicate;
+    final shouldIncrement =
+        event.isDisplayable && !isMine && !isCurrentRoom && !isDuplicate;
 
     final rooms = List.of(_allRooms);
     final prev = rooms.removeAt(index);
@@ -172,6 +201,7 @@ class GetChatRoomsCubit extends Cubit<GetChatRoomsState> {
     await _notificationSubscription?.cancel();
     await _roomReadSubscription?.cancel();
     await _roomsUpdateSubscription?.cancel();
+    SessionManager.instance.removeSessionChangeListener(_onSessionChanged);
     return super.close();
   }
 }

@@ -97,6 +97,7 @@ export 'package:bnan_app/features/tables_management/presentation/manager/get_egy
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_details_cubit/classroom_details_cubit.dart';
 export 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
+export 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_subjects_cubit/classroom_subjects_cubit.dart';
 export 'package:dio/dio.dart';
 export 'package:get_it/get_it.dart';
 export 'package:bnan_app/features/teacher_assignment/data/repo/assignments_repo.dart';
@@ -179,3 +180,4 @@ export 'package:bnan_app/features/lessons_management/presentation/manager/gulf_s
 export 'package:bnan_app/features/lessons_management/data/repo/start_session_repo.dart';
 export 'package:bnan_app/features/lessons_management/data/repo/start_session_repo_impl.dart';
 export 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
+export 'package:bnan_app/features/teacher_home/presentation/manager/teacher_session_statistics_cubit.dart';

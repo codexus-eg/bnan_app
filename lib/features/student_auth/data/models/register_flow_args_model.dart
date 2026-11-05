@@ -23,6 +23,8 @@ class RegisterFlowArgsModel {
 
   bool get isGulf => _value(registrationMode) == 'gulf';
   bool get isSingleSubject => _value(accessScope) == 'single_subject';
+  bool get isSharedSubjects => _value(accessScope) == 'shared_subjects';
+  bool get isAllSubjects => _value(accessScope) == 'all_subjects';
   bool get isEgyptianPrivate =>
       _value(registrationMode) == 'egyptian' &&
       isSingleSubject &&

@@ -155,4 +155,63 @@ class TeacherPayrollDetailsCubit extends Cubit<TeacherPayrollDetailsState> {
         : null;
     emit(TeacherPayrollDetailsReady(payroll, profile));
   }
+
+  Future<void> sendStatement() async {
+    if (isClosed) return;
+    final current = state;
+    if (_busy || current is! TeacherPayrollDetailsReady) return;
+    if (current.payroll.id.isEmpty) return;
+    _busy = true;
+    emit(
+      TeacherPayrollDetailsReady(
+        current.payroll,
+        current.profile,
+        saving: true,
+      ),
+    );
+    final result = await repo.sendStatement(current.payroll.id);
+    _busy = false;
+    if (isClosed) return;
+    result.fold(
+      (f) => emit(
+        TeacherPayrollDetailsReady(
+          current.payroll,
+          current.profile,
+          error: f.message,
+        ),
+      ),
+      (updated) => emit(TeacherPayrollDetailsReady(updated, current.profile)),
+    );
+  }
+
+  Future<bool> deleteStatement() async {
+    if (isClosed) return false;
+    final current = state;
+    if (_busy || current is! TeacherPayrollDetailsReady) return false;
+    if (current.payroll.id.isEmpty) return false;
+    _busy = true;
+    emit(
+      TeacherPayrollDetailsReady(
+        current.payroll,
+        current.profile,
+        saving: true,
+      ),
+    );
+    final result = await repo.deleteStatement(current.payroll.id);
+    _busy = false;
+    if (isClosed) return false;
+    return result.fold(
+      (f) {
+        emit(
+          TeacherPayrollDetailsReady(
+            current.payroll,
+            current.profile,
+            error: f.message,
+          ),
+        );
+        return false;
+      },
+      (_) => true,
+    );
+  }
 }

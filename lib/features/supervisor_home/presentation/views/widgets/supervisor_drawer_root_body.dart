@@ -19,8 +19,13 @@ Widget buildSupervisorDrawerRoot(String route) => switch (route) {
     ],
     child: const WeeklyIdealStudentView(showBackButton: false),
   ),
-  Routes.idealTeacher => BlocProvider(
-    create: (_) => getIt<SupervisorIdealTeacherCubit>(),
+  Routes.idealTeacher => MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (_) => getIt<SupervisorIdealTeacherCubit>()),
+      BlocProvider(
+        create: (_) => getIt<GetSupervisorClassroomsCubit>()..getMyClassrooms(),
+      ),
+    ],
     child: const IdealTeacherView(showBackButton: false),
   ),
   Routes.lessonsManagement => const LessonsManagementView(

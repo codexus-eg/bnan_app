@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'package:bnan_app/core/app_routes/routes.dart';
+import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
@@ -9,11 +12,14 @@ import 'package:bnan_app/features/academic_lookups/data/repo/academic_lookups_re
 import 'package:bnan_app/features/academic_lookups/presentation/manager/academic_lookups_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_model.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_actions_cubit/classroom_actions_cubit.dart';
+import 'package:bnan_app/features/classrooms_management/presentation/manager/classroom_subjects_cubit/classroom_subjects_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_cubit.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/manager/classrooms_cubit/classrooms_state.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/classrooms_management_card.dart';
+import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/classrooms_management_search.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/add_classroom_dialog.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/classroom_details_dialog.dart';
+import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/classroom_subjects_dialog.dart';
 import 'package:bnan_app/features/classrooms_management/presentation/views/widgets/dialogs/edit_classroom_dialog.dart';
 import 'package:bnan_app/features/supervisor_classroom_assignment/presentation/manager/get_supervisors/get_supervisors_cubit.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -29,7 +35,30 @@ class ClassroomsManagementBody extends StatefulWidget {
 }
 
 class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
+  final TextEditingController _searchController = TextEditingController();
+  final Map<String, String> _curriculumsCache = {};
   String? _selectedCurriculumId;
+  Timer? _debounceTimer;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _fetchClassrooms({bool silent = false}) {
+    context.read<ClassroomsCubit>().getClassrooms(
+          keyword: _searchController.text.trim(),
+          curriculum: _selectedCurriculumId,
+          silent: silent,
+        );
+  }
+
+  void _onSearchChanged(String _) {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 350), _fetchClassrooms);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,19 +74,18 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
             ? state.response.data
             : <ClassroomModel>[];
 
-        final curriculums = <String, String>{};
         for (final classroom in allClassrooms) {
           final id = classroom.curriculum.id.trim();
           final name = classroom.curriculum.name.trim();
           if (id.isNotEmpty) {
-            curriculums[id] = name.isNotEmpty ? name : id;
+            _curriculumsCache[id] = name.isNotEmpty ? name : id;
           }
         }
 
-        final items = <String>['all', ...curriculums.keys];
+        final items = <String>['all', ..._curriculumsCache.keys];
         final itemsLabels = <String, String>{
           'all': S.of(context).allCurriculms,
-          ...curriculums,
+          ..._curriculumsCache,
         };
 
         final displayedClassrooms = isLoading
@@ -76,17 +104,53 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: AddNewTopicButton(
-                      title: S.of(context).addNewChapter,
-                      path: ImageManager.plus,
-                      onTap: () => _showAddClassroomDialog(context),
-                      padding: const EdgeInsetsDirectional.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
+                  ClassroomsManagementSearch(
+                    controller: _searchController,
+                    onChanged: _onSearchChanged,
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    alignment: WrapAlignment.end,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      AddNewTopicButton(
+                        title: S.of(context).addTeacherToClassroom,
+                        path: ImageManager.plus,
+                        onTap: () async {
+                          await MyNavigator.goTo(
+                            context,
+                            Routes.teacherSubjectAssignmentView,
+                          );
+                          if (context.mounted) _fetchClassrooms();
+                        },
+                        padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                       ),
-                    ),
+                      AddNewTopicButton(
+                        title: S.of(context).addSubjectToClassroom,
+                        path: ImageManager.plus,
+                        onTap: () async {
+                          await MyNavigator.goTo(context, Routes.addClassroomSubject);
+                          if (context.mounted) _fetchClassrooms();
+                        },
+                        padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                      ),
+                      AddNewTopicButton(
+                        title: S.of(context).addNewChapter,
+                        path: ImageManager.plus,
+                        onTap: () => _showAddClassroomDialog(context),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   CustomDropdown(
@@ -102,6 +166,7 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
                             ? null
                             : selectedValue;
                       });
+                      _fetchClassrooms();
                     },
                   ),
                   const SizedBox(height: 12),
@@ -137,6 +202,10 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
                                 context,
                                 classroomItem,
                               ),
+                              onSubjects: () => _showClassroomSubjectsDialog(
+                                context,
+                                classroomItem,
+                              ),
                             );
                           },
                           separatorBuilder: (_, _) =>
@@ -154,7 +223,6 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
 
   Future<void> _showAddClassroomDialog(BuildContext context) async {
     final actionsCubit = context.read<ClassroomActionsCubit>();
-    final classroomsCubit = context.read<ClassroomsCubit>();
 
     final result = await showDialog<bool>(
       context: context,
@@ -177,7 +245,7 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
     );
 
     if (result == true && context.mounted) {
-      classroomsCubit.getClassrooms();
+      _fetchClassrooms();
     }
   }
 
@@ -186,7 +254,6 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
     ClassroomModel classroomItem,
   ) async {
     final actionsCubit = context.read<ClassroomActionsCubit>();
-    final classroomsCubit = context.read<ClassroomsCubit>();
 
     final result = await showDialog<bool>(
       context: context,
@@ -197,7 +264,21 @@ class _ClassroomsManagementBodyState extends State<ClassroomsManagementBody> {
     );
 
     if (result == true && context.mounted) {
-      classroomsCubit.getClassrooms();
+      _fetchClassrooms();
     }
+  }
+
+  Future<void> _showClassroomSubjectsDialog(
+    BuildContext context,
+    ClassroomModel classroomItem,
+  ) async {
+    await showDialog<void>(
+      context: context,
+      builder: (_) => BlocProvider(
+        create: (_) => getIt<ClassroomSubjectsCubit>()..loadSubjects(classroomItem.id),
+        child: ClassroomSubjectsDialog(classroomItem: classroomItem),
+      ),
+    );
+    if (context.mounted) _fetchClassrooms(silent: true);
   }
 }

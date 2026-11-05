@@ -4,6 +4,12 @@ abstract final class EvaluationJsonParser {
   static int integer(Object? value) =>
       value is num ? value.toInt() : num.tryParse(string(value))?.toInt() ?? 0;
 
+  static int? nullableInteger(Object? value) {
+    if (value == null) return null;
+    if (value is num) return value.toInt();
+    return num.tryParse(string(value))?.toInt();
+  }
+
   static bool boolean(Object? value) => value == true || value == 'true';
 
   static Map<String, dynamic> map(Object? value) =>

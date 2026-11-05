@@ -145,6 +145,28 @@ class _CertificateEditFormState extends State<CertificateEditForm> {
       return;
     }
 
+    final seenSubjects = <String>{};
+    for (final s in subjectRequests) {
+      if (!seenSubjects.add(s.subjectId.trim())) {
+        setState(() {
+          formError = S.of(context).duplicateSubjectsNotAllowed;
+        });
+        return;
+      }
+      if (s.maxScore <= 0) {
+        setState(() {
+          formError = S.of(context).maxScoreMustBeGreaterThanZero;
+        });
+        return;
+      }
+      if (s.score < 0 || s.score > s.maxScore) {
+        setState(() {
+          formError = S.of(context).scoreMustBeBetweenZeroAndMaxScore;
+        });
+        return;
+      }
+    }
+
     context.read<UpdateMonthlyCertificateCubit>().updateMonthlyCertificate(
       certificateId: widget.certificateId,
       request: UpdateMonthlyCertificateRequestModel(subjects: subjectRequests),

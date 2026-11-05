@@ -41,6 +41,8 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
 
     final result = await authRepo.verifyResetCode(resetCode: resetCode);
 
+    if (isClosed) return;
+
     result.fold(
       (failure) => emit(ResetPasswordFailure(errorMessage: failure.message)),
       (response) => emit(VerifyResetCodeSuccess(message: response.message)),
@@ -55,6 +57,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     }
     emit(ResetPasswordLoading());
     final result = await authRepo.verifyAccount(email: email, code: code);
+    if (isClosed) return;
     result.fold(
       (failure) => emit(ResetPasswordFailure(errorMessage: failure.message)),
       (response) => emit(VerifyAccountSuccess(message: response.message)),
@@ -75,6 +78,8 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
       email: email.trim(),
       newPassword: newPasswordController.text,
     );
+
+    if (isClosed) return;
 
     result.fold(
       (failure) => emit(ResetPasswordFailure(errorMessage: failure.message)),

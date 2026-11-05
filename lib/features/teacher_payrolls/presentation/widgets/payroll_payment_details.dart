@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/shared_widget/attachment_preview/network_attachment_preview.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/payroll_payment_model.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -7,11 +8,24 @@ import 'payroll_info_row.dart';
 import 'payroll_section.dart';
 
 class PayrollPaymentDetails extends StatelessWidget {
-  const PayrollPaymentDetails({super.key, required this.payment});
+  const PayrollPaymentDetails({
+    super.key,
+    required this.payment,
+    this.statementId = '',
+  });
   final PayrollPaymentModel payment;
+  final String statementId;
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final receiptSource = payment.hasReceipt
+        ? (payment.receiptUrl.isNotEmpty
+            ? payment.receiptUrl
+            : (statementId.isNotEmpty
+                ? EndPoints.adminPayrollStatementReceipt(statementId)
+                : ''))
+        : '';
     return PayrollSection(
       title: s.payrollPaymentDetails,
       child: Column(
@@ -24,9 +38,9 @@ class PayrollPaymentDetails extends StatelessWidget {
             ),
           if (payment.destinationSnapshot != null)
             PayoutProfileDetails(profile: payment.destinationSnapshot!),
-          if (payment.receiptUrl.isNotEmpty)
+          if (payment.hasReceipt && receiptSource.isNotEmpty)
             NetworkAttachmentPreview(
-              attachmentUrl: payment.receiptUrl,
+              attachmentUrl: receiptSource,
               title: s.payrollTransferReceipt,
             ),
         ],

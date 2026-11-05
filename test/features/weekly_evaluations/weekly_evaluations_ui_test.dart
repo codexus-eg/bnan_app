@@ -25,6 +25,7 @@ import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluation_filters.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_failure.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/views/widgets/weekly_evaluations_header_actions.dart';
+import 'package:bnan_app/features/weekly_evaluations/presentation/mappers/evaluation_value_ui_mapper.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -212,9 +213,12 @@ void main() {
     final participation = _dropdownByLabel(tester, 'Participation');
     final homework = _dropdownByLabel(tester, 'Homework');
     final behavior = _dropdownByLabel(tester, 'Behavior');
-    expect(attendance.value, 'present');
-    expect(attendance.items, ['present', 'absent', 'late', 'excused']);
-    expect(attendance.itemsLabels?['excused'], 'Excused');
+    expect(attendance.enabled, isFalse);
+    expect(attendance.hint, 'Calculated automatically');
+    expect(attendance.value, isNull);
+    expect(homework.enabled, isFalse);
+    expect(homework.hint, 'Calculated automatically');
+    expect(homework.value, isNull);
     expect(participation.value, 'excellent');
     expect(participation.items, [
       'excellent',
@@ -225,11 +229,8 @@ void main() {
       '-',
     ]);
     expect(participation.itemsLabels?['very_good'], 'Very Good');
-    expect(homework.items, participation.items);
     expect(behavior.items, participation.items);
-    expect(homework.value, 'excellent');
     expect(behavior.value, 'excellent');
-    expect(attendance.itemsLabels?['present'], 'Present');
     expect(participation.itemsLabels?['excellent'], 'Excellent');
     expect(
       find.byWidgetPredicate(
@@ -436,6 +437,81 @@ void main() {
     expect(repo.calls, 1);
     expect(repo.lastRequest?.week, 2);
     expect(find.byType(WeeklyEvaluationForm), findsNothing);
+  });
+
+  testWidgets('attendance formats status with count in Arabic and English', (
+    tester,
+  ) async {
+    late BuildContext arabicContext;
+    late BuildContext englishContext;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ar'),
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            arabicContext = context;
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+
+    expect(
+      formatAttendanceWithCount(
+        context: arabicContext,
+        attendanceStatus: 'present',
+        attended: 3,
+        total: 3,
+      ),
+      'حاضر (3/3)',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('en'),
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            englishContext = context;
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+
+    expect(
+      formatAttendanceWithCount(
+        context: englishContext,
+        attendanceStatus: 'present',
+        attended: 3,
+        total: 3,
+      ),
+      'Present (3/3)',
+    );
+
+    expect(
+      formatAttendanceWithCount(
+        context: englishContext,
+        attendanceStatus: 'present',
+        attended: null,
+        total: null,
+      ),
+      'Present',
+    );
   });
 }
 

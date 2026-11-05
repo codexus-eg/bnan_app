@@ -7,8 +7,9 @@ import 'package:bnan_app/features/classrooms_management/data/models/classroom_de
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_model.dart';
 import 'package:bnan_app/features/classrooms_management/data/models/classroom_request_model.dart';
 import 'package:bnan_app/features/classrooms_management/data/models/classrooms_response_model.dart';
+import 'package:bnan_app/features/classrooms_management/data/models/classroom_subjects_response_model.dart';
+import 'package:bnan_app/features/classrooms_management/data/repo/classroom_error_mapper.dart';
 import 'package:bnan_app/features/classrooms_management/data/repo/classrooms_repo.dart';
-import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 
 class ClassroomsRepoImpl implements ClassroomsRepo {
@@ -21,8 +22,12 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
     int? page,
     int? limit,
     String? curriculum,
+    String? keyword,
   }) {
     return repoGuard(() async {
+      final trimmedKeyword = keyword?.trim();
+      final hasKeyword = trimmedKeyword != null && trimmedKeyword.isNotEmpty;
+
       if (page != null) {
         final response = await apiConsumer.get(
           EndPoints.classrooms,
@@ -31,6 +36,7 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
             if (limit != null) 'limit': limit,
             if (curriculum != null && curriculum.isNotEmpty)
               'curriculum': curriculum,
+            if (hasKeyword) 'keyword': trimmedKeyword,
           },
           isProtected: true,
         );
@@ -44,6 +50,7 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
           'page': 1,
           if (curriculum != null && curriculum.isNotEmpty)
             'curriculum': curriculum,
+          if (hasKeyword) 'keyword': trimmedKeyword,
         },
         isProtected: true,
       );
@@ -69,6 +76,7 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
             'page': currentPage,
             if (curriculum != null && curriculum.isNotEmpty)
               'curriculum': curriculum,
+            if (hasKeyword) 'keyword': trimmedKeyword,
           },
           isProtected: true,
         );
@@ -111,14 +119,21 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
   }
 
   @override
-  Future<Either<Failure, void>> createClassroom(ClassroomRequestModel model) {
-    return repoGuard(() async {
+  Future<Either<Failure, void>> createClassroom(
+    ClassroomRequestModel model,
+  ) async {
+    try {
       await apiConsumer.post(
         EndPoints.createClassroom,
         data: model.toJson(),
         isProtected: true,
       );
-    });
+      return const Right(null);
+    } on AppException catch (error) {
+      return Left(mapClassroomFailure(error));
+    } catch (error) {
+      return Left(Failure(message: error.toString()));
+    }
   }
 
   @override
@@ -153,25 +168,66 @@ class ClassroomsRepoImpl implements ClassroomsRepo {
       }
       return const Right(null);
     } on AppException catch (error) {
-      if (error.code == 'CLASSROOM_HAS_ACTIVE_SESSION' ||
-          (error.statusCode == 409 &&
-              (error.code == 'CLASSROOM_HAS_ACTIVE_SESSION' ||
-                  error.message.contains('CLASSROOM_HAS_ACTIVE_SESSION')))) {
-        return Left(
-          Failure(
-            message: S.current.classroomHasActiveSession,
-            statusCode: 409,
-            code: 'CLASSROOM_HAS_ACTIVE_SESSION',
-          ),
-        );
-      }
-      return Left(
-        Failure(
-          message: error.message,
-          statusCode: error.statusCode,
-          code: error.code,
-        ),
+      return Left(mapClassroomFailure(error));
+    } catch (error) {
+      return Left(Failure(message: error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ClassroomSubjectsResponseModel>> getClassroomSubjects(
+    String classroomId,
+  ) async {
+    try {
+      final response = await apiConsumer.get(
+        EndPoints.classroomSubjectsDetails(classroomId),
+        isProtected: true,
       );
+      return Right(ClassroomSubjectsResponseModel.fromJson(asMap(response)));
+    } on AppException catch (error) {
+      return Left(mapClassroomFailure(error));
+    } catch (error) {
+      return Left(Failure(message: error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addClassroomSubject({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) async {
+    try {
+      await apiConsumer.post(
+        EndPoints.classroomSubjectsDetails(classroomId),
+        data: {
+          'subject': subjectId,
+          if (teacherId != null && teacherId.trim().isNotEmpty)
+            'teacher': teacherId.trim(),
+        },
+        isProtected: true,
+      );
+      return const Right(null);
+    } on AppException catch (error) {
+      return Left(mapClassroomFailure(error));
+    } catch (error) {
+      return Left(Failure(message: error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteClassroomSubject({
+    required String classroomId,
+    required String classroomSubjectId,
+  }) async {
+    try {
+      await apiConsumer.delete(
+        EndPoints.classroomSubjectDelete(classroomId, classroomSubjectId),
+        isProtected: true,
+      );
+      return const Right(null);
+    } on AppException catch (error) {
+      return Left(mapClassroomFailure(error));
     } catch (error) {
       return Left(Failure(message: error.toString()));
     }

@@ -4,9 +4,9 @@ class UpsertEvaluationRequestModel {
     required this.classroom,
     required this.subject,
     required this.week,
-    required this.attendance,
+    this.attendance,
     required this.participation,
-    required this.homework,
+    this.homework,
     required this.behavior,
     this.bonus = 0,
     this.notes = '',
@@ -15,16 +15,15 @@ class UpsertEvaluationRequestModel {
   final String student, classroom, subject;
   final int week;
   final int bonus;
-  final String attendance, participation, homework, behavior, notes;
+  final String? attendance, homework;
+  final String participation, behavior, notes;
 
   Map<String, dynamic> toJson() => {
     'student': student,
     'classroom': classroom,
     'subject': subject,
     'week': week,
-    'attendance': attendance,
     'participation': participation,
-    'homework': homework,
     'behavior': behavior,
     'bonus': bonus,
     'notes': notes,

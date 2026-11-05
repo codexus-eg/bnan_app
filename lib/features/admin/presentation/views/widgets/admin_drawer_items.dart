@@ -53,5 +53,13 @@ List<DrawerItemModel> adminDrawerItems(BuildContext context) {
       title: s.adminSubscriptionRenewals,
       icon: ImageManager.wallet,
     ),
+    DrawerItemModel(
+      title: s.teacherCertificates,
+      icon: ImageManager.certificateBadgeIcon,
+    ),
+    DrawerItemModel(
+      title: s.idealTeacher,
+      icon: ImageManager.crownSimple,
+    ),
   ];
 }

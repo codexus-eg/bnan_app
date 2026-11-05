@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
 import 'package:bnan_app/features/teacher_assignment/presentation/manager/get_teacher_classrooms/get_teacher_classrooms_cubit.dart';
 import 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_cubit.dart';
 import 'package:bnan_app/features/teacher_request_groups/presentation/manager/teacher_registration_requests_state.dart';
@@ -16,6 +18,7 @@ void handleTeacherRequestsAction(
   if (state is TeacherRequestAccepted) {
     Navigator.of(context).pop();
     showCustomSnackBar(context, s.teacherRequestAcceptedSuccess, true);
+    getIt<GulfScheduleRepo>().invalidateScheduleCache();
     unawaited(context.read<TeacherRegistrationRequestsCubit>().refresh());
     unawaited(context.read<GetTeacherClassroomsCubit>().getMyClassrooms());
   } else if (state is TeacherRequestAlreadyAssigned) {

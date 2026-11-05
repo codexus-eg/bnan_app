@@ -4,6 +4,7 @@ import 'package:bnan_app/core/error/failure.dart';
 import 'package:bnan_app/core/network/api_consumer.dart';
 import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/network/repo_guard.dart';
+import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_models.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedule_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/models/responses/egyptian_schedules_response_model.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
@@ -39,7 +40,9 @@ class TableManagementRepoImpl
     return repoGuard(() async {
       final response = await apiConsumer.get(
         EndPoints.myEgyptianSchedule,
-        queryParameter: id == null || id.isEmpty ? null : {'studentId': id},
+        queryParameter: {
+          if (id != null && id.isNotEmpty) 'studentId': id,
+        },
         isProtected: true,
       );
       return EgyptianSchedulesResponseModel.fromJson(asMap(response));
@@ -62,7 +65,9 @@ class TableManagementRepoImpl
   }) => repoGuard(() async {
     final response = await apiConsumer.get(
       EndPoints.myEgyptianSchedule,
-      queryParameter: {'studentId': studentId.trim()},
+      queryParameter: {
+        'studentId': studentId.trim(),
+      },
       isProtected: true,
     );
     return EgyptianScheduleWeek.fromResponse(response);
@@ -146,6 +151,31 @@ class TableManagementRepoImpl
   });
 
   @override
+  Future<Either<Failure, UnifiedScheduleMutationData>>
+  saveClassroomScheduleEntry({
+    required String classroomId,
+    required UnifiedScheduleEntryInput entry,
+  }) => repoGuard(() async {
+    final response = await apiConsumer.put(
+      EndPoints.classroomSchedule(classroomId.trim()),
+      data: entry.toJson(),
+      isProtected: true,
+    );
+    return UnifiedScheduleMutationResponse.fromJson(asMap(response)).data;
+  });
+
+  @override
+  Future<Either<Failure, void>> deleteClassroomScheduleEntry({
+    required String classroomId,
+    required String entryId,
+  }) => repoGuard(() async {
+    await apiConsumer.delete(
+      EndPoints.classroomScheduleEntry(classroomId.trim(), entryId.trim()),
+      isProtected: true,
+    );
+  });
+
+  @override
   Future<Either<Failure, void>> createEgyptianDay({
     required String classroomId,
     required EgyptianDayRequest request,
@@ -163,7 +193,7 @@ class TableManagementRepoImpl
     required EgyptianDayRequest request,
   }) => repoGuard(() async {
     await apiConsumer.put(
-      EndPoints.egyptianScheduleDay(classroomId.trim(), request.day),
+      EndPoints.egyptianScheduleDay(classroomId.trim(), request.day.toLowerCase()),
       data: request.replaceJson(),
       isProtected: true,
     );
@@ -175,7 +205,7 @@ class TableManagementRepoImpl
     required String day,
   }) => repoGuard(() async {
     await apiConsumer.delete(
-      EndPoints.egyptianScheduleDay(classroomId.trim(), day.trim()),
+      EndPoints.egyptianScheduleDay(classroomId.trim(), day.trim().toLowerCase()),
       isProtected: true,
     );
   });

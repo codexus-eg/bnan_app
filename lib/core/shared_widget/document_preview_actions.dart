@@ -16,11 +16,14 @@ class DocumentPreviewActions extends StatelessWidget {
           icon: Icons.close,
           onTap: () => Navigator.pop(context),
         ),
-        const SizedBox(width: 20),
-DownloadIconButton(
-  url: pdfUrl,
-  iconColor: Colors.white,
-),      ],
+        if (pdfUrl.trim().isNotEmpty) ...[
+          const SizedBox(width: 20),
+          DownloadIconButton(
+            url: pdfUrl,
+            iconColor: Colors.white,
+          ),
+        ],
+      ],
     );
   }
 }

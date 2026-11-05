@@ -29,15 +29,18 @@ class ChatRoomSummaryModel {
     this.unreadCount = 0,
   });
 
+  static int parseUnreadCount(Object? value) {
+    if (value is int) return value < 0 ? 0 : value;
+    if (value is num) return value < 0 ? 0 : value.toInt();
+    final parsed = int.tryParse(value?.toString() ?? '');
+    if (parsed != null) return parsed < 0 ? 0 : parsed;
+    return 0;
+  }
+
   factory ChatRoomSummaryModel.fromJson(Map<String, dynamic> json) {
     String? id(Object? value) {
       if (value is! String || value.trim().isEmpty) return null;
       return value.trim();
-    }
-
-    int parseUnreadCount(Object? value) {
-      if (value is int) return value;
-      return int.tryParse(value?.toString() ?? '') ?? 0;
     }
 
     String roleLabel(String role) {
@@ -64,6 +67,11 @@ class ChatRoomSummaryModel {
     final legacyId = classroom is Map
         ? id(classroom['id']) ?? id(classroom['_id'])
         : id(classroom);
+
+    final classroomObj = classroom is Map ? classroom : null;
+    final crSubId = id(json['classroomSubjectId']) ??
+        id(classroomObj?['classroomSubjectId']) ??
+        id(classroomObj?['classroomSubject']);
 
     final participants = (json['participants'] as List? ?? const [])
         .whereType<Map>();
@@ -137,7 +145,7 @@ class ChatRoomSummaryModel {
       subtitle: resolvedSubtitle,
       classroomId: directId ?? legacyId,
       accessScope: id(json['accessScope'])?.toLowerCase(),
-      classroomSubjectId: id(json['classroomSubjectId']),
+      classroomSubjectId: crSubId,
       canRequestTeacherWithdrawal: json['canRequestTeacherWithdrawal'] is bool
           ? json['canRequestTeacherWithdrawal'] as bool
           : null,
@@ -149,9 +157,9 @@ class ChatRoomSummaryModel {
           : null,
       lastMessage: json['lastMessage']?.toString(),
       lastMessageAt: DateTime.tryParse(json['lastMessageAt']?.toString() ?? ''),
-      unreadCount:
-          (json['unreadCount'] as num?)?.toInt() ??
-          parseUnreadCount(json['unreadMessagesCount'] ?? json['unread']),
+      unreadCount: parseUnreadCount(
+        json['unreadCount'] ?? json['unreadMessagesCount'] ?? json['unread'],
+      ),
     );
   }
 

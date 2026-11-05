@@ -5,30 +5,36 @@ import 'package:bnan_app/features/certificates_management/data/models/student_su
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('create route carries studentId and body has only strict fields', () {
+  test('create route carries studentId and body has confirmed backend fields', () {
     const request = CreateMonthlyCertificateRequestModel(
-      studentId: 'student-id',
+      studentId: 'student-profile-id',
+      classroomId: 'classroom-1',
       subjects: [
         CertificateSubjectRequestModel(
           subjectId: 'real-subject-id',
-          score: 15,
+          score: 18,
           maxScore: 20,
         ),
       ],
-      signerName: 'Supervisor Name',
+      signerName: 'Teacher Name',
     );
 
     expect(
-      EndPoints.createMonthlyStudentCertificate(request.studentId),
-      '/certificates/monthly/student/student-id',
+      EndPoints.studentMonthlyCertificates,
+      '/certificates/student-monthly',
     );
     expect(request.toJson(), {
+      'studentId': 'student-profile-id',
+      'classroomId': 'classroom-1',
+      'signerName': 'Teacher Name',
       'subjects': [
-        {'subjectId': 'real-subject-id', 'maxScore': 20, 'score': 15},
+        {'subjectId': 'real-subject-id', 'maxScore': 20, 'score': 18},
       ],
-      'signerName': 'Supervisor Name',
     });
-    expect(request.toJson().keys, unorderedEquals(['subjects', 'signerName']));
+    expect(
+      request.toJson().keys,
+      unorderedEquals(['studentId', 'classroomId', 'signerName', 'subjects']),
+    );
     expect(request.subjects.single.score, isA<num>());
     expect(request.subjects.single.maxScore, isA<num>());
   });

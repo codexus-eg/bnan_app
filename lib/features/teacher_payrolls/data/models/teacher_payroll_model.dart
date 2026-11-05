@@ -23,8 +23,11 @@ class TeacherPayrollModel {
     required this.totals,
     this.payoutProfile,
     this.payment,
+    this.sentAt,
+    this.curriculumId = '',
   });
-  final String id, status, currency, adjustmentNote, notes;
+  final String id, status, currency, adjustmentNote, notes, curriculumId;
+  final String? sentAt;
   final PayrollTeacherModel teacher;
   final PayrollPeriodModel period;
   final List<PayrollWorkItemModel> workItems;
@@ -34,6 +37,16 @@ class TeacherPayrollModel {
   final PayrollTotalsModel totals;
   final PayoutProfileModel? payoutProfile;
   final PayrollPaymentModel? payment;
+
+  bool get isDraftEditable =>
+      status == 'draft' &&
+      (sentAt == null || sentAt!.isEmpty) &&
+      payment == null;
+  bool get isPayable =>
+      (status == 'sent' || status == 'payment_pending') && payment == null;
+  bool get isDeletable =>
+      (status == 'draft' || (status == 'sent' && payment == null)) &&
+      status != 'paid';
 
   factory TeacherPayrollModel.fromResponse(Object? response) {
     final json = payrollData(response);
@@ -82,6 +95,14 @@ class TeacherPayrollModel {
           ? PayoutProfileModel.fromJson(profile)
           : null,
       payment: payment is Map ? PayrollPaymentModel.fromJson(payment) : null,
+      sentAt: json['sentAt'] != null ? payrollString(json['sentAt']) : null,
+      curriculumId: payrollString(
+        json['curriculumId'] is Map
+            ? json['curriculumId']['_id'] ?? json['curriculumId']['id']
+            : json['curriculumId'] ??
+                json['curriculum']?['_id'] ??
+                json['curriculum']?['id'],
+      ),
     );
   }
 }

@@ -1,9 +1,10 @@
-import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/schedule_time_utils.dart';
+import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_models.dart';
 import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/features/tables_management/data/repo/egyptian_digital_schedule_repo.dart';
 import 'package:bnan_app/features/lessons_management/presentation/models/lesson_days.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -96,12 +97,14 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
     required String endTime,
   }) async {
     if (state.status == EgyptianScheduleStatus.saving ||
+        SessionManager.instance.role == UserRole.teacher ||
         classroomSubjectId.isEmpty ||
         !ScheduleTimeUtils.isValid(startTime) ||
         !ScheduleTimeUtils.isValid(endTime) ||
         !ScheduleTimeUtils.isEndAfter(startTime, endTime)) {
       debugPrint(
         'EDIT BLOCKED: status=${state.status} '
+        'isTeacher=${SessionManager.instance.role == UserRole.teacher} '
         'classroomSubjectIdEmpty=${classroomSubjectId.isEmpty} '
         'validTimeRange='
         '${ScheduleTimeUtils.isEndAfter(startTime, endTime)}',
@@ -109,154 +112,111 @@ class EgyptianScheduleManagementCubit extends Cubit<EgyptianScheduleState> {
       return false;
     }
     final dayKey = state.selectedDay;
-    final day = _day(dayKey);
-    final updatedLesson = EgyptianLessonRequest(
+    emit(state.copyWith(
+      status: EgyptianScheduleStatus.saving,
+      actionError: null,
+    ));
+    final entryInput = UnifiedScheduleEntryInput(
+      day: dayKey,
       classroomSubjectId: classroomSubjectId,
       startTime: startTime,
       endTime: endTime,
     );
-    final lessons = <EgyptianLessonRequest>[];
-    var replaced = false;
-    for (final lesson in day?.lessons ?? const <EgyptianDigitalLesson>[]) {
-      if (!replaced &&
-          originalLessonId != null &&
-          lesson.id == originalLessonId) {
-        lessons.add(updatedLesson);
-        replaced = true;
-      } else {
-        lessons.add(_requestFromLesson(lesson));
-      }
-    }
-    if (originalLessonId != null && !replaced) {
-      debugPrint(
-        'EDIT BLOCKED: original lesson not found; day=$dayKey '
-        'lessonId=$originalLessonId availableDays='
-        '${state.days.map((item) => item.date).toList()}',
-      );
-      return false;
-    }
-    if (originalLessonId == null) lessons.add(updatedLesson);
-    if (lessons.any((item) => item.classroomSubjectId.isEmpty) ||
-        _hasDuplicateStartTime(lessons)) {
-      debugPrint(
-        'EDIT BLOCKED: invalid classroomSubjectId or duplicate startTime',
-      );
-      return false;
-    }
-    return _saveDay(dayKey, lessons, exists: day != null);
+    final result = await repo.saveClassroomScheduleEntry(
+      classroomId: classroomId,
+      entry: entryInput,
+    );
+    if (isClosed) return false;
+    return result.fold(
+      (failure) {
+        emit(state.copyWith(
+          status: EgyptianScheduleStatus.ready,
+          actionError: failure.message,
+        ));
+        return false;
+      },
+      (mutation) {
+        final subject = state.subjects.firstWhere(
+          (s) => s.classroomSubjectId == classroomSubjectId,
+          orElse: () => const EgyptianClassroomSubject(
+            classroomSubjectId: '',
+            subjectId: '',
+            subjectName: '',
+          ),
+        );
+        final newLesson = EgyptianDigitalLesson(
+          id: mutation.id.isNotEmpty ? mutation.id : (originalLessonId ?? ''),
+          date: dayKey,
+          startTime: startTime,
+          endTime: endTime,
+          classroomId: classroomId,
+          classroomName: '',
+          subjectId: subject.subjectId,
+          subjectName: subject.subjectName,
+          classroomSubjectId: classroomSubjectId,
+          teacherName: subject.teacherNames.join('، '),
+          chatRoomId: subject.chatRoomId,
+        );
+        final updatedDays = state.days.map((day) {
+          if (_dayName(day.date) != dayKey) return day;
+          final lessons = day.lessons
+              .where((l) => l.id != (originalLessonId ?? mutation.id))
+              .toList()
+            ..add(newLesson);
+          return EgyptianScheduleDay(date: day.date, lessons: lessons);
+        }).toList();
+        if (!updatedDays.any((d) => _dayName(d.date) == dayKey)) {
+          updatedDays.add(
+            EgyptianScheduleDay(date: dayKey, lessons: [newLesson]),
+          );
+        }
+        emit(state.copyWith(
+          status: EgyptianScheduleStatus.ready,
+          days: updatedDays,
+          actionError: null,
+        ));
+        return true;
+      },
+    );
   }
 
   Future<bool> deleteLesson(String lessonId) async {
-    if (state.status == EgyptianScheduleStatus.saving) {
-      debugPrint('DELETE BLOCKED: already saving');
-      return false;
-    }
-    final dayKey = state.selectedDay;
-    final day = _day(dayKey);
-    if (day == null) {
-      debugPrint(
-        'DELETE BLOCKED: day not found; day=$dayKey availableDays='
-        '${state.days.map((item) => item.date).toList()}',
-      );
-      return false;
-    }
-    final remaining = <EgyptianLessonRequest>[];
-    var removed = false;
-    for (final lesson in day.lessons) {
-      if (!removed && lesson.id == lessonId) {
-        removed = true;
-      } else {
-        remaining.add(_requestFromLesson(lesson));
-      }
-    }
-    if (!removed) {
-      debugPrint(
-        'DELETE BLOCKED: lesson not found; lessonId=$lessonId '
-        'availableIds=${day.lessons.map((item) => item.id).toList()}',
-      );
-      return false;
-    }
-    if (remaining.any((item) => item.classroomSubjectId.isEmpty)) {
-      debugPrint('DELETE BLOCKED: remaining classroomSubjectId is empty');
+    if (state.status == EgyptianScheduleStatus.saving ||
+        SessionManager.instance.role == UserRole.teacher) {
+      debugPrint('DELETE BLOCKED: already saving or teacher');
       return false;
     }
     emit(
       state.copyWith(status: EgyptianScheduleStatus.saving, actionError: null),
     );
-    final result = remaining.isEmpty
-        ? await repo.deleteEgyptianDay(classroomId: classroomId, day: dayKey)
-        : await repo.replaceEgyptianDay(
-            classroomId: classroomId,
-            request: EgyptianDayRequest(day: dayKey, lessons: remaining),
-          );
-    return _finish(result);
-  }
-
-  Future<bool> _saveDay(
-    String day,
-    List<EgyptianLessonRequest> lessons, {
-    required bool exists,
-  }) async {
-    emit(
-      state.copyWith(status: EgyptianScheduleStatus.saving, actionError: null),
+    final result = await repo.deleteClassroomScheduleEntry(
+      classroomId: classroomId,
+      entryId: lessonId,
     );
-    final request = EgyptianDayRequest(day: day, lessons: lessons);
-    final result = exists
-        ? await repo.replaceEgyptianDay(
-            classroomId: classroomId,
-            request: request,
-          )
-        : await repo.createEgyptianDay(
-            classroomId: classroomId,
-            request: request,
-          );
-    return _finish(result);
-  }
-
-  Future<bool> _finish(Either<Failure, void> result) async {
-    if (isClosed) {
-      debugPrint('SCHEDULE ACTION BLOCKED: cubit is closed');
-      return false;
-    }
-    final failure = result.fold<Failure?>((value) => value, (_) => null);
-    if (failure != null) {
-      debugPrint(
-        'SCHEDULE ACTION FAILED: code=${failure.code} '
-        'message=${failure.message}',
-      );
-      emit(
-        state.copyWith(
+    if (isClosed) return false;
+    return result.fold(
+      (failure) {
+        emit(state.copyWith(
           status: EgyptianScheduleStatus.ready,
           actionError: failure.message,
-        ),
-      );
-      return false;
-    }
-    emit(
-      state.copyWith(status: EgyptianScheduleStatus.ready, actionError: null),
-    );
-    return true;
-  }
-
-  EgyptianScheduleDay? _day(String dayName) {
-    for (final day in state.days) {
-      if (_dayName(day.date) == dayName) return day;
-    }
-    return null;
-  }
-
-  EgyptianLessonRequest _requestFromLesson(EgyptianDigitalLesson lesson) {
-    return EgyptianLessonRequest(
-      classroomSubjectId: lesson.classroomSubjectId ?? '',
-      startTime: lesson.startTime,
-      endTime: lesson.endTime,
+        ));
+        return false;
+      },
+      (_) {
+        final updatedDays = state.days.map((day) {
+          final lessons = day.lessons.where((l) => l.id != lessonId).toList();
+          return EgyptianScheduleDay(date: day.date, lessons: lessons);
+        }).toList();
+        emit(state.copyWith(
+          status: EgyptianScheduleStatus.ready,
+          days: updatedDays,
+          actionError: null,
+        ));
+        return true;
+      },
     );
   }
 
-  bool _hasDuplicateStartTime(List<EgyptianLessonRequest> lessons) {
-    final times = <String>{};
-    return lessons.any((lesson) => !times.add(lesson.startTime));
-  }
 
   Future<void> refreshSchedule() async {
     final result = await repo.getEgyptianClassroomWeek(classroomId);

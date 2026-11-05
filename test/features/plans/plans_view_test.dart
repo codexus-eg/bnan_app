@@ -834,6 +834,7 @@ class _ClassroomsRepo implements ClassroomsRepo {
     String? curriculum,
     int? limit,
     int? page,
+    String? keyword,
   }) async =>
       Right(
         ClassroomsResponseModel(

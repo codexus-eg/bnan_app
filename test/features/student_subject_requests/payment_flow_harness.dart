@@ -21,7 +21,8 @@ export 'package:flutter/material.dart';
 export 'package:flutter_test/flutter_test.dart';
 
 class PaymentFlowHarness extends PaymentFlowFixture {
-  PaymentFlowHarness({super.mode});
+  PaymentFlowHarness({super.mode, this.locale = const Locale('en')});
+  final Locale locale;
   late GoRouter router;
   int launches = 0;
   GulfPaymentProvider? launchedProvider;
@@ -59,7 +60,7 @@ class PaymentFlowHarness extends PaymentFlowFixture {
         ],
         child: MaterialApp.router(
           routerConfig: router,
-          locale: const Locale('en'),
+          locale: locale,
           supportedLocales: S.delegate.supportedLocales,
           localizationsDelegates: const [
             S.delegate,
@@ -81,7 +82,7 @@ class PaymentFlowHarness extends PaymentFlowFixture {
     final notes = find.byWidgetPredicate(
       (widget) =>
           widget is CustomTextField &&
-          widget.label == S.current.theRequiredLesson,
+          widget.label == S.current.subjectRequestNotesLabel,
     );
     await tester.enterText(
       find.descendant(of: notes, matching: find.byType(TextFormField)),

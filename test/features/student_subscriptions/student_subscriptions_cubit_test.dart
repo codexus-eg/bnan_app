@@ -39,6 +39,8 @@ class _StaticRepo implements StudentSubscriptionsRepo {
   getSubscriptions() async => const Right(_student);
   @override
   getHomeSubscriptions() => getSubscriptions();
+  @override
+  getStudentSubscription() async => Right(_student.subscriptions.first);
 }
 
 class _PendingRepo implements StudentSubscriptionsRepo {
@@ -54,6 +56,10 @@ class _PendingRepo implements StudentSubscriptionsRepo {
   @override
   Future<Either<Failure, ParentChildSubscriptionsModel>>
   getHomeSubscriptions() => getSubscriptions();
+
+  @override
+  Future<Either<Failure, ParentChildSubscriptionModel>>
+  getStudentSubscription() async => Right(_student.subscriptions.first);
 }
 
 const _student = ParentChildSubscriptionsModel(

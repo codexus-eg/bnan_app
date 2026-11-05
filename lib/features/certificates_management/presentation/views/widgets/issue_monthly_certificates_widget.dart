@@ -8,6 +8,8 @@ import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bnan_app/features/certificates_management/presentation/views/dialogs/certificate_issue_confirm_dialog.dart';
+
 class IssueMonthlyCertificatesWidget extends StatelessWidget {
   const IssueMonthlyCertificatesWidget({super.key});
 
@@ -44,15 +46,21 @@ class IssueMonthlyCertificatesWidget extends StatelessWidget {
                     : S.of(context).sendAll,
                 onTap: isLoading
                     ? null
-                    : () {
-                        IssueMonthlyCertificatesCubit.get(
-                          context,
-                        ).issueMonthlyCertificates();
-                      },
+                    : () => _confirm(context),
                 path: ImageManager.tablerSendIcon,
               );
             },
           ),
+    );
+  }
+
+  void _confirm(BuildContext context) {
+    final cubit = IssueMonthlyCertificatesCubit.get(context);
+    showDialog(
+      context: context,
+      builder: (_) => CertificateIssueConfirmDialog(
+        onConfirm: () => cubit.issueMonthlyCertificates(),
+      ),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 abstract class ThemeHelper {
   static ThemeData getTheme() {
     return ThemeData(
-      fontFamily: Constants.appFont,
+      fontFamily: Constants.thmanyahSerifText,
       scaffoldBackgroundColor: ColorManager.white,
       appBarTheme: const AppBarTheme(
         scrolledUnderElevation: 0,

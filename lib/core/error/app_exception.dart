@@ -53,13 +53,138 @@ class AppException implements Exception {
       code: backendCode,
     );
 
+    if (backendCode != null) {
+      final normalizedCode = backendCode.trim().toUpperCase();
+      if (normalizedCode == 'INVALID_ASSIGNMENT_TOTAL_POINTS') {
+        return confirmed(S.current.invalidAssignmentTotalPoints);
+      }
+      if (normalizedCode == 'INVALID_DUE_DATE') {
+        return confirmed(S.current.invalidDueDate);
+      }
+      if (normalizedCode == 'CLASSROOM_SUBJECT_NOT_FOUND') {
+        return confirmed(S.current.classroomSubjectNotFound);
+      }
+      if (normalizedCode == 'INVALID_SUBJECT_REQUEST_NOTES') {
+        try {
+          return confirmed(S.current.invalidSubjectRequestNotes);
+        } catch (_) {
+          return confirmed('ملاحظات المواد المحددة غير صحيحة');
+        }
+      }
+      if (normalizedCode == 'SUBJECT_REQUEST_NOTES_TOO_LONG') {
+        try {
+          return confirmed(S.current.subjectRequestNotesTooLong);
+        } catch (_) {
+          return confirmed('ملاحظات المادة يجب ألا تتجاوز 2000 حرف');
+        }
+      }
+      if (normalizedCode == 'CERTIFICATE_ACCESS_DENIED') {
+        return confirmed(S.current.certificateAccessDenied);
+      }
+      if (normalizedCode == 'CERTIFICATE_ALREADY_EXISTS') {
+        return confirmed(S.current.certificateAlreadyExists);
+      }
+      if (normalizedCode == 'INVALID_CERTIFICATE_SUBJECTS') {
+        return confirmed(S.current.invalidCertificateSubjects);
+      }
+      if (normalizedCode == 'NO_DRAFT_CERTIFICATES_TO_ISSUE') {
+        return confirmed(S.current.noDraftCertificatesToIssue);
+      }
+      if (normalizedCode == 'ONLY_DRAFT_CERTIFICATES_CAN_BE_UPDATED') {
+        return confirmed(S.current.onlyDraftCertificatesCanBeUpdated);
+      }
+      if (normalizedCode == 'STUDENT_NOT_ENROLLED_IN_CLASSROOM') {
+        return confirmed(S.current.studentNotEnrolledInClassroom);
+      }
+      if (normalizedCode == 'PAYROLL_PERIOD_REQUIRED') {
+        return confirmed(S.current.payrollPeriodRequired);
+      }
+      if (normalizedCode == 'INVALID_PAYROLL_PERIOD') {
+        return confirmed(S.current.invalidPayrollPeriod);
+      }
+      if (normalizedCode == 'INVALID_PAYROLL_STATEMENT_CURRENCY') {
+        return confirmed(S.current.invalidPayrollStatementCurrency);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_CURRENCY_MISMATCH') {
+        return confirmed(S.current.payrollStatementCurrencyMismatch);
+      }
+      if (normalizedCode == 'INVALID_PAYROLL_STATEMENT_RATE') {
+        return confirmed(S.current.invalidPayrollStatementRate);
+      }
+      if (normalizedCode == 'INVALID_PAYROLL_STATEMENT_AMOUNT') {
+        return confirmed(S.current.invalidPayrollStatementAmount);
+      }
+      if (normalizedCode == 'PAYROLL_TEACHER_NOT_IN_CURRICULUM') {
+        return confirmed(S.current.payrollTeacherNotInCurriculum);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_EXISTS') {
+        return confirmed(S.current.payrollStatementExists);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_PERIOD_OVERLAP') {
+        return confirmed(S.current.payrollStatementPeriodOverlap);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_NOT_EDITABLE') {
+        return confirmed(S.current.payrollStatementNotEditable);
+      }
+      if (normalizedCode == 'PAYOUT_PROFILE_REQUIRED') {
+        return confirmed(S.current.payoutProfileRequired);
+      }
+      if (normalizedCode == 'PAYROLL_RECEIPT_REQUIRED') {
+        return confirmed(S.current.payrollReceiptRequired);
+      }
+      if (normalizedCode == 'INVALID_PAYROLL_PAYMENT_DATE') {
+        return confirmed(S.current.invalidPayrollPaymentDate);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_NOT_PAYABLE') {
+        return confirmed(S.current.payrollStatementNotPayable);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_PAID') {
+        return confirmed(S.current.payrollStatementPaid);
+      }
+      if (normalizedCode == 'PAYROLL_STATEMENT_NOT_FOUND') {
+        return confirmed(S.current.payrollStatementNotFound);
+      }
+      if (normalizedCode == 'PAYROLL_RECEIPT_NOT_FOUND') {
+        return confirmed(S.current.payrollReceiptNotFound);
+      }
+      if (normalizedCode == 'PAYROLL_RECEIPT_FORBIDDEN') {
+        return confirmed(S.current.payrollReceiptForbidden);
+      }
+    }
+
     final validationMessage = _extractValidationMessage(data);
     if (validationMessage != null) {
+      final normalizedMsg = validationMessage.trim().toLowerCase();
+      if (normalizedMsg.contains('invalid assignment total points')) {
+        return confirmed(S.current.invalidAssignmentTotalPoints);
+      }
+      if (normalizedMsg.contains('invalid due date')) {
+        return confirmed(S.current.invalidDueDate);
+      }
+      if (normalizedMsg.contains('classroom subject not found')) {
+        return confirmed(S.current.classroomSubjectNotFound);
+      }
       return confirmed(_safeBackendMessage(validationMessage));
     }
 
     final backendMessage = _extractBackendMessage(data);
     if (backendMessage != null) {
+      final normalizedMsg = backendMessage.trim().toLowerCase();
+      if (normalizedMsg.contains('invalid assignment total points')) {
+        return confirmed(S.current.invalidAssignmentTotalPoints);
+      }
+      if (normalizedMsg.contains('invalid due date')) {
+        return confirmed(S.current.invalidDueDate);
+      }
+      if (normalizedMsg.contains('classroom subject not found')) {
+        return confirmed(S.current.classroomSubjectNotFound);
+      }
+      if (statusCode == 401 && normalizedMsg == 'unauthorized') {
+        return confirmed(S.current.errorUnauthorized);
+      }
+      if (statusCode == 403 && normalizedMsg == 'forbidden') {
+        return confirmed(S.current.errorForbidden);
+      }
       return confirmed(_safeBackendMessage(backendMessage));
     }
 

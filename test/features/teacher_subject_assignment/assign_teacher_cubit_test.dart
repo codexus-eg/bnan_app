@@ -129,7 +129,10 @@ class _Repo implements TeacherSubjectAssignmentRepo {
 
   @override
   Future<Either<Failure, TeachingAssignmentsResponseModel>>
-  getTeacherTeachingAssignments() async => throw UnimplementedError();
+  getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+  }) async => throw UnimplementedError();
   @override
   Future<Either<Failure, AssignCurriculumsResponseModel>>
   assignCurriculumsToTeacher({

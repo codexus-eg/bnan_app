@@ -14,7 +14,7 @@ List<HomeStateModel> adminDashboardStats(
   final s = S.of(context);
   HomeStateModel stat(
     String icon,
-    int value,
+    Object value,
     String title,
     Color color, [
     VoidCallback? onTap,
@@ -26,6 +26,13 @@ List<HomeStateModel> adminDashboardStats(
       iconColor: color,
       onTap: onTap,
     );
+  }
+
+  String formatRevenue(double amount) {
+    if (!amount.isFinite) return '0';
+    if (amount == amount.roundToDouble()) return amount.toInt().toString();
+    final fixed = amount.toStringAsFixed(2);
+    return fixed.replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
   }
 
   return [
@@ -72,6 +79,18 @@ List<HomeStateModel> adminDashboardStats(
       s.pendingReceipts,
       ColorManager.secondaryColor,
       onReceipts,
+    ),
+    stat(
+      ImageManager.wallet,
+      formatRevenue(data.totalPaidEgp),
+      s.revenueEgp,
+      ColorManager.green33B,
+    ),
+    stat(
+      ImageManager.wallet,
+      formatRevenue(data.totalPaidSar),
+      s.revenueSar,
+      ColorManager.green33B,
     ),
   ];
 }

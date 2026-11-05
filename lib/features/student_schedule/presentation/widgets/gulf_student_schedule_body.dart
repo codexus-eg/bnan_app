@@ -6,8 +6,12 @@ import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
 import 'package:bnan_app/features/lessons_management/presentation/utils/student_join_session_error.dart';
+import 'package:bnan_app/features/lessons_management/presentation/utils/zoom_session_error_handler.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
 import 'package:bnan_app/features/notifications/presentation/manager/notifications_cubit.dart';
+import 'package:bnan_app/features/lessons_management/domain/models/schedule_sync_event.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_notification_matcher.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/gulf_schedule_state.dart';
 import 'package:bnan_app/features/student_schedule/presentation/models/gulf_schedule_grid_adapter.dart';
@@ -29,6 +33,7 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
   late final GulfScheduleCubit _scheduleCubit;
   late final StartSessionCubit _sessionCubit;
   StreamSubscription<AppNotification>? _notificationSubscription;
+  StreamSubscription<ScheduleSyncEvent>? _syncSubscription;
 
   @override
   void initState() {
@@ -39,6 +44,14 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
         .read<NotificationsCubit>()
         .incoming
         .listen(_onNotification);
+    if (getIt.isRegistered<ScheduleSyncCoordinator>()) {
+      _syncSubscription =
+          getIt<ScheduleSyncCoordinator>().syncStream.listen((_) {
+        if (!_scheduleCubit.isClosed) {
+          unawaited(_scheduleCubit.refresh());
+        }
+      });
+    }
   }
 
   @override
@@ -62,6 +75,7 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
                 state.classrooms,
                 studentSchedule: true,
               ),
+              loading: state.isRefreshing,
               emptyMessage: S.of(context).noSchedule,
               loadingClassroomIds: sessionState.joiningClassroomIds,
               onAction: _join,
@@ -71,38 +85,54 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
       );
 
   void _onNotification(AppNotification notification) {
-    final keys = {
-      notification.key.trim().toUpperCase(),
-      notification.type.trim().toUpperCase(),
-    };
-    if (keys.any(const {'CLASS_STARTED', 'CLASS_ENDED'}.contains) &&
+    if (ScheduleNotificationMatcher.isMatch(notification) &&
         !_scheduleCubit.isClosed) {
       unawaited(_scheduleCubit.refresh());
     }
   }
 
+  String? _findWeeklySlotKey(String classroomId) {
+    for (final classroom in _scheduleCubit.state.classrooms) {
+      if (classroom.id == classroomId ||
+          classroom.entries.any((e) => e.classroomId == classroomId)) {
+        for (final entry in classroom.entries) {
+          final slot = entry.weeklySlotKey?.trim();
+          if (slot != null && slot.isNotEmpty) return slot;
+          final activeSlot = entry.activeSession?.weeklySlotKey.trim();
+          if (activeSlot != null && activeSlot.isNotEmpty) return activeSlot;
+        }
+      }
+    }
+    return null;
+  }
+
   Future<void> _join(String classroomId) async {
-    final link = await _sessionCubit.join(classroomId);
+    debugPrint(
+      '[DEBUG GulfStudentScheduleBody] _join called with classroomId: "$classroomId"',
+    );
+    final slotKey = _findWeeklySlotKey(classroomId);
+    final link = await _sessionCubit.join(classroomId, weeklySlotKey: slotKey);
     if (!mounted) return;
     if (link == null || link.isEmpty) {
       final joinError = studentJoinSessionErrorMessage(
         context,
         _sessionCubit.state,
       );
-      final inactive =
-          _sessionCubit.state.eventCode == 'SESSION_NOT_ACTIVE' ||
-          _sessionCubit.state.eventError == 'SESSION_NOT_ACTIVE' ||
+      final message =
+          joinError ?? zoomSessionErrorMessage(context, _sessionCubit.state);
+      showCustomSnackBar(context, message, false);
+      final code = (_sessionCubit.state.eventCode ??
+              _sessionCubit.state.eventError ??
+              '')
+          .trim()
+          .toUpperCase();
+      final shouldRefresh = code == 'SESSION_NOT_ACTIVE' ||
+          code == 'SCHEDULE_OCCURRENCE_NOT_FOUND' ||
+          code == 'WEEKLY_ZOOM_SLOT_SESSION_NOT_ACTIVE' ||
+          code == 'CLASSROOM_SESSION_ALREADY_ACTIVE' ||
+          code.startsWith('WEEKLY_ZOOM_ASSIGNMENT_') ||
           _sessionCubit.state.eventStatusCode == 404;
-      showCustomSnackBar(
-        context,
-        joinError ??
-            (inactive
-                ? S.of(context).noActiveSessionNow
-                : _sessionCubit.state.eventError ??
-                      S.of(context).unexpectedError),
-        false,
-      );
-      if (inactive && !_scheduleCubit.isClosed) {
+      if (shouldRefresh && !_scheduleCubit.isClosed) {
         await _scheduleCubit.refresh();
       }
       return;
@@ -121,6 +151,7 @@ class _GulfStudentScheduleBodyState extends State<GulfStudentScheduleBody> {
   @override
   void dispose() {
     unawaited(_notificationSubscription?.cancel());
+    unawaited(_syncSubscription?.cancel());
     unawaited(_sessionCubit.close());
     super.dispose();
   }

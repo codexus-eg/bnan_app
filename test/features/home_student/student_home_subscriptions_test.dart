@@ -152,6 +152,9 @@ class _SubscriptionsRepo implements StudentSubscriptionsRepo {
     fullCalls++;
     return Right(student);
   }
+
+  @override
+  getStudentSubscription() async => Right(student.subscriptions.first);
 }
 
 StudentDashboardModel _dashboard() => StudentDashboardModel(

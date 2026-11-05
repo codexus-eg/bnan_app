@@ -13,6 +13,9 @@ abstract class StudentSubjectRequestsRepo {
   Future<Either<Failure, StudentSubjectRequest>> submitEgyptian(
     EgyptianSubjectRequestPayload payload,
   );
+  Future<Either<Failure, dynamic>> submitGulfSubjectRequest(
+    GulfSubjectRequestCreatePayload payload,
+  );
   Future<Either<Failure, SubjectRequestPayment>> checkout({
     required GulfSubjectRequestPayload payload,
     required String idempotencyKey,

@@ -5,6 +5,8 @@ import 'package:bnan_app/features/parent_auth/data/repo/parent_auth_repo.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
 import 'package:bnan_app/features/payments/data/models/discount_preview_requests.dart';
+import 'package:bnan_app/features/packages_management/data/models/package_model.dart';
+import 'package:bnan_app/features/student_auth/data/models/curriculum_model.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/models/register_request_model.dart';
@@ -38,6 +40,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   String packagePrice = '';
   String packageCurrency = '';
   String? registrationMode;
+  String accessScope = 'all_subjects';
   bool isSingleSubjectPackage = false;
   bool isEgyptianPrivate = false;
   GulfPaymentProvider selectedProvider = GulfPaymentProvider.tamara;
@@ -60,6 +63,20 @@ class RegisterCubit extends Cubit<RegisterState> {
   String? selectedGradeName;
 
   List<String> selectedSubjectIds = [];
+  final Map<String, String> _subjectNotes = {};
+  Map<String, String> get subjectNotes => Map.unmodifiable(_subjectNotes);
+
+  void updateSubjectNote(String subjectId, String note) {
+    if (note.trim().isEmpty) {
+      _subjectNotes.remove(subjectId);
+    } else {
+      _subjectNotes[subjectId] = note;
+    }
+  }
+
+  void clearSubjectNotes() {
+    _subjectNotes.clear();
+  }
   void setRegisterFlowArgs(RegisterFlowArgsModel args) {
     curriculumId = args.curriculumId;
     curriculumName = args.curriculumName;
@@ -68,12 +85,16 @@ class RegisterCubit extends Cubit<RegisterState> {
     packagePrice = args.packagePrice;
     packageCurrency = args.packageCurrency;
     registrationMode = args.registrationMode;
+    accessScope = args.accessScope;
     isSingleSubjectPackage = args.isSingleSubject;
     isEgyptianPrivate = args.isEgyptianPrivate;
   }
 
   bool get isGulf => registrationMode == 'gulf';
-  bool get isItemizedCheckout => isGulf && isSingleSubjectPackage;
+  bool get isSingleSubject => accessScope == 'single_subject';
+  bool get isSharedSubjects => accessScope == 'shared_subjects';
+  bool get isAllSubjects => accessScope == 'all_subjects';
+  bool get isItemizedCheckout => isGulf && isSingleSubject && !isSharedSubjects;
 
   int get checkoutItemCount => isItemizedCheckout
       ? selectedSubjectIds
@@ -101,27 +122,31 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (provider != null) selectPaymentProvider(provider);
   }
 
-  bool get requiresSubjectSelection => isGulf || isSingleSubjectPackage;
+  bool get requiresSubjectSelection =>
+      isGulf || isSingleSubject || isSharedSubjects;
   bool _authenticating = false;
   bool _submitting = false;
   void setGrade({required String id, required String name}) {
     selectedGradeId = id;
     selectedGradeName = name;
     selectedSubjectIds.clear();
+    _subjectNotes.clear();
 
     emit(RegisterStepChanged(currentStep: state.currentStep));
   }
 
   void toggleSubject(String subjectId) {
-    if (isSingleSubjectPackage && !isEgyptianPrivate && !isGulf) {
+    if (isSingleSubject && !isEgyptianPrivate) {
       selectedSubjectIds = selectedSubjectIds.contains(subjectId)
           ? []
           : [subjectId];
+      _subjectNotes.removeWhere((id, _) => !selectedSubjectIds.contains(id));
       emit(RegisterStepChanged(currentStep: state.currentStep));
       return;
     }
     if (selectedSubjectIds.contains(subjectId)) {
       selectedSubjectIds.remove(subjectId);
+      _subjectNotes.remove(subjectId);
     } else {
       selectedSubjectIds.add(subjectId);
     }
@@ -136,6 +161,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         .where((id) => id.isNotEmpty)
         .toSet()
         .toList(growable: false);
+    _subjectNotes.removeWhere((id, _) => !selectedSubjectIds.contains(id));
     emit(RegisterStepChanged(currentStep: state.currentStep));
   }
 
@@ -153,20 +179,66 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(RegisterStepChanged(currentStep: state.currentStep));
   }
 
+  void selectCurriculum(CurriculumModel curriculum) {
+    if (curriculumId == curriculum.id) return;
+    curriculumId = curriculum.id;
+    curriculumName = curriculum.name;
+    selectedCurriculumName = curriculum.name;
+    registrationMode = curriculum.registrationMode;
+    selectedGradeId = null;
+    selectedGradeName = null;
+    packageId = '';
+    packageName = '';
+    packagePrice = '';
+    packageCurrency = '';
+    accessScope = 'all_subjects';
+    isSingleSubjectPackage = false;
+    isEgyptianPrivate = false;
+    selectedSubjectIds.clear();
+    _subjectNotes.clear();
+    emit(RegisterStepChanged(currentStep: state.currentStep));
+  }
+
+  void selectPackage(PackageModel package) {
+    packageId = package.id ?? '';
+    packageName = package.name ?? '';
+    packagePrice = (package.price ?? 0).toString();
+    packageCurrency = package.currency ?? (isGulf ? 'SAR' : 'EGP');
+    accessScope = package.accessScope;
+    isSingleSubjectPackage = package.isSingleSubject;
+    isEgyptianPrivate = !isGulf && package.isSingleSubject;
+    selectedSubjectIds.clear();
+    _subjectNotes.clear();
+    emit(RegisterStepChanged(currentStep: state.currentStep));
+  }
+
   void nextStep() {
     if (state.currentStep < lastStep) {
       emit(RegisterStepChanged(currentStep: state.currentStep + 1));
     }
   }
 
-  bool validateStudent() {
-    final validForm = studentFormKey.currentState?.validate() ?? false;
+  bool validateStudentInfo() {
+    return studentFormKey.currentState?.validate() ?? false;
+  }
+
+  bool validateAcademicSelection() {
     final validSubjects = !requiresSubjectSelection
         ? true
-        : isSingleSubjectPackage && !isEgyptianPrivate && !isGulf
+        : isSingleSubject && !isEgyptianPrivate
         ? selectedSubjectIds.length == 1
+        : isSharedSubjects
+        ? selectedSubjectIds.length >= 2
         : selectedSubjectIds.isNotEmpty;
-    return validForm && selectedGradeId != null && validSubjects;
+    return curriculumId.isNotEmpty &&
+        selectedGradeId != null &&
+        selectedGradeId!.isNotEmpty &&
+        packageId.isNotEmpty &&
+        validSubjects;
+  }
+
+  bool validateStudent() {
+    return validateStudentInfo() && validateAcademicSelection();
   }
 
   RegisterRequestModel? buildRegisterRequest() {
@@ -178,7 +250,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     final subjectCount = selectedSubjects.length;
     final validSubjects = !requiresSubjectSelection
         ? true
-        : isSingleSubjectPackage && !isEgyptianPrivate && !isGulf
+        : isSingleSubject && !isEgyptianPrivate
         ? subjectCount == 1
         : subjectCount > 0;
     if (selectedGradeId == null || !validSubjects) return null;
@@ -402,11 +474,12 @@ class RegisterCubit extends Cubit<RegisterState> {
         password: studentPasswordController.text,
         grade: selectedGradeId!,
         subjects: List.unmodifiable(selectedSubjects),
+        subjectNotes: isGulf ? Map.unmodifiable(_subjectNotes) : null,
       ),
       curriculumId: curriculumId,
       packageId: packageId,
       provider: selectedProvider,
-      items: isGulf && isSingleSubjectPackage
+      items: isGulf && isSingleSubject && !isSharedSubjects
           ? selectedSubjects
                 .map(
                   (subjectId) => RegistrationItem(

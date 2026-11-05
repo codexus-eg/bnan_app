@@ -12,6 +12,9 @@ import 'package:bnan_app/features/teacher_payrolls/presentation/manager/teacher_
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:bnan_app/features/teacher_home/data/models/teacher_session_statistics_model.dart';
+import 'package:bnan_app/features/teacher_home/data/repo/teacher_session_statistics_repo.dart';
+import 'package:bnan_app/features/teacher_home/presentation/manager/teacher_session_statistics_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -78,6 +81,9 @@ Widget _app() {
       BlocProvider(
         create: (_) => TeacherMyPayrollsCubit(FakeTeacherPayrollRepo()),
       ),
+      BlocProvider(
+        create: (_) => TeacherSessionStatisticsCubit(_TestStatsRepo()),
+      ),
     ],
     child: MaterialApp.router(
       routerConfig: router,
@@ -102,6 +108,19 @@ class _DashboardRepo implements DashboardRepo {
       classrooms: 0,
       students: 0,
       subjects: 0,
+    ),
+  );
+}
+
+class _TestStatsRepo implements TeacherSessionStatisticsRepo {
+  @override
+  Future<Either<Failure, TeacherSessionStatisticsModel>> getSessionStatistics({
+    String? from,
+    String? to,
+  }) async => const Right(
+    TeacherSessionStatisticsModel(
+      totalSessions: 0,
+      totalHours: 0,
     ),
   );
 }

@@ -13,6 +13,7 @@ import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teache
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_body.dart';
 import 'package:bnan_app/features/teacher_home/presentation/views/widgets/teacher_home_widgets/teacher_home_drawer.dart';
 import 'package:bnan_app/features/dashboard/presentation/manager/dashboard_cubit.dart';
+import 'package:bnan_app/features/teacher_home/presentation/manager/teacher_session_statistics_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,10 @@ class _TeacherHomeViewState extends State<TeacherHomeView> {
   }
 
   void _loadTab(int index) {
-    if (index == 0) context.read<DashboardCubit>().load();
+    if (index == 0) {
+      context.read<DashboardCubit>().load();
+      context.read<TeacherSessionStatisticsCubit>().load();
+    }
   }
 
   void _goHomeTab() => _changeIndex(0);

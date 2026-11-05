@@ -1,6 +1,7 @@
 import 'package:bnan_app/core/helper/my_navigator.dart';
 import 'package:bnan_app/core/app_routes/routes.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/chat_search_state.dart';
@@ -10,6 +11,7 @@ import 'package:bnan_app/features/chats/presentation/policies/classroom_document
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/user_info.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_session_action.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/student_call_alert_action.dart';
+import 'package:bnan_app/features/lessons_management/presentation/models/lessons_management_args.dart';
 import 'package:bnan_app/features/classroom_change_requests/presentation/policies/change_request_access_policy.dart';
 import 'package:bnan_app/features/classroom_change_requests/presentation/widgets/classroom_change_request_action.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -37,8 +39,10 @@ class ChatHeader extends StatelessWidget {
     this.onCloseSearch,
     this.selectedCount = 0,
     this.isDeleting = false,
+    this.canEditSelected = false,
     this.onCancelSelection,
     this.onDeleteSelection,
+    this.onEditSelection,
   });
 
   final String chatTitle;
@@ -60,8 +64,10 @@ class ChatHeader extends StatelessWidget {
   final VoidCallback? onCloseSearch;
   final int selectedCount;
   final bool isDeleting;
+  final bool canEditSelected;
   final VoidCallback? onCancelSelection;
   final VoidCallback? onDeleteSelection;
+  final VoidCallback? onEditSelection;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +106,11 @@ class ChatHeader extends StatelessWidget {
           style: const TextStyle(color: ColorManager.white),
         ),
       ),
+      if (canEditSelected && selectedCount == 1)
+        IconButton(
+          onPressed: isDeleting ? null : onEditSelection,
+          icon: const Icon(Icons.edit_outlined, color: ColorManager.white),
+        ),
       IconButton(
         onPressed: isDeleting ? null : onDeleteSelection,
         icon: isDeleting
@@ -217,7 +228,10 @@ class ChatHeader extends StatelessWidget {
 
   Widget _responsiveContent(BuildContext context, BoxConstraints constraints) {
     final actions = _actions(context);
-    final info = UserInfo(chatTitle: chatTitle);
+    final info = UserInfo(
+      chatTitle: chatTitle,
+      onViewSchedule: _canViewSchedule ? () => _openSchedule(context) : null,
+    );
     if (actions.isEmpty) return info;
     final actionsWidth = (constraints.maxWidth - 64).clamp(
       0.0,
@@ -335,4 +349,26 @@ class ChatHeader extends StatelessWidget {
     Routes.classroomMembers,
     extra: ClassroomMembersRouteArgs(classroomId: classroomId!.trim()),
   );
+
+  bool get _canViewSchedule {
+    if (classroomId?.trim().isNotEmpty != true) return false;
+    final role = _sessionRole;
+    return role == UserRole.teacher ||
+        role == UserRole.supervisor ||
+        role == UserRole.admin;
+  }
+
+  void _openSchedule(BuildContext context) {
+    final id = classroomId?.trim();
+    if (id == null || id.isEmpty) return;
+    final session = SessionManager.instance;
+    final route = (session.role == UserRole.admin || session.isEgyptianSupervisor)
+        ? Routes.tablesManagement
+        : Routes.lessonsManagement;
+    MyNavigator.goTo<void>(
+      context,
+      route,
+      extra: LessonsManagementArgs(initialClassId: id),
+    );
+  }
 }

@@ -172,9 +172,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                               : plan.price.toString(),
                           packageCurrency: plan.currency,
                           registrationMode: registrationMode,
-                          accessScope: plan.isSingleSubject
-                              ? 'single_subject'
-                              : 'all_subjects',
+                          accessScope: plan.accessScope,
                           packageType: packageType,
                         ),
                       );

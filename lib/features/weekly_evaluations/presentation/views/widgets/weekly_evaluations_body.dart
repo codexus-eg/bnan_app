@@ -49,12 +49,27 @@ class WeeklyEvaluationsBody extends StatelessWidget {
     String? sourceError,
     VoidCallback? sourceRetry,
   }) => BlocConsumer<WeeklyEvaluationsCubit, WeeklyEvaluationsState>(
-    listenWhen: (_, state) => state is EvaluationSaved,
-    listener: (context, _) => showCustomSnackBar(
-      context,
-      S.of(context).evaluationSavedSuccessfully,
-      true,
-    ),
+    listenWhen: (_, state) =>
+        state is EvaluationSaved ||
+        state is EvaluationsPublished ||
+        state is EvaluationsPublishFailure,
+    listener: (context, state) {
+      if (state is EvaluationSaved) {
+        showCustomSnackBar(
+          context,
+          S.of(context).evaluationSavedSuccessfully,
+          true,
+        );
+      } else if (state is EvaluationsPublished) {
+        showCustomSnackBar(
+          context,
+          S.of(context).evaluationsSentSuccessfully,
+          true,
+        );
+      } else if (state is EvaluationsPublishFailure) {
+        showCustomSnackBar(context, state.message, false);
+      }
+    },
     builder: (context, state) => _content(
       context,
       state,
@@ -88,6 +103,13 @@ class WeeklyEvaluationsBody extends StatelessWidget {
         children: [
           if (policy.canAdd) ...[
             WeeklyEvaluationsHeaderActions(
+              showSendAll: policy.canSendAll,
+              isSending: cubit.isPublishing || state is EvaluationsPublishing,
+              onSendAllPressed: !policy.canSendAll ||
+                      cubit.selectedClassroom == null ||
+                      cubit.selectedWeek == null
+                  ? null
+                  : cubit.publishWeeklyEvaluations,
               onAddPressed: students == null
                   ? null
                   : () => students.showAdd(

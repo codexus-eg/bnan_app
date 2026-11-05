@@ -12,10 +12,12 @@ class ClassroomDocumentsBody extends StatefulWidget {
     required this.currentUserRole,
     this.classroomId,
     this.classroomName,
+    this.initialTab = ClassroomDocumentsTab.recordings,
   });
   final String roomId;
   final String? roomType, currentUserRole, classroomId;
   final String? classroomName;
+  final ClassroomDocumentsTab initialTab;
 
   @override
   State<ClassroomDocumentsBody> createState() => _ClassroomDocumentsBodyState();
@@ -36,7 +38,9 @@ class _ClassroomDocumentsBodyState extends State<ClassroomDocumentsBody> {
     tabs = privileged
         ? ClassroomDocumentsTab.values
         : const [ClassroomDocumentsTab.messages];
-    selected = tabs.first;
+    selected = tabs.contains(widget.initialTab)
+        ? widget.initialTab
+        : tabs.first;
     loadDocumentsTab(
       context,
       selected,

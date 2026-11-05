@@ -105,6 +105,7 @@ class TamaraPaymentCubit extends Cubit<TamaraPaymentState> {
     if (_checkoutInFlight) return;
     _checkoutInFlight = true;
     _checkoutExplicitlyClosed = false;
+    _checkoutLaunchClaimed = false;
     final fingerprint = checkoutPayloadFingerprint(request);
     var existing = _draft ?? await _readOwnedDraft();
     if (existing != null && !_belongsToCurrentUser(existing)) {

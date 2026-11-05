@@ -59,9 +59,11 @@ class AppNotification {
       if (json[key] != null) data.putIfAbsent(key, () => json[key]);
     }
     final navigation = _map(json['navigation']);
-    navigation['screen'] ??= json['screen'];
-    navigation['target'] ??= json['target'];
-    navigation['params'] ??= json['params'];
+    navigation['screen'] ??=
+        json['screen'] ?? data['screen'] ?? json['target'] ?? data['target'];
+    navigation['target'] ??=
+        json['target'] ?? data['target'] ?? json['screen'] ?? data['screen'];
+    navigation['params'] ??= json['params'] ?? data['params'];
     final params = NotificationNavigation.decodeParams(navigation['params']);
     final resourceModel = _nullable(resource['model'] ?? json['resourceModel']);
     final broadcastId = _nullable(
@@ -74,11 +76,21 @@ class AppNotification {
     for (final source in sources) {
       for (final key in const [
         'roomId',
+        'chatRoomId',
+        'room_id',
+        'chat_room_id',
         'classroomId',
+        'classroom_id',
         'classroomSubjectId',
         'subjectId',
+        'sessionId',
+        'session_id',
         'requestId',
+        'subjectRequestId',
+        'subject_request_id',
         'teacherId',
+        'classroomName',
+        'subjectName',
         'roomName',
         'chatName',
         'name',
@@ -87,12 +99,32 @@ class AppNotification {
       ]) {
         if (source[key] != null) params.putIfAbsent(key, () => source[key]);
       }
+      final classroom = source['classroom'];
+      if (classroom is Map) {
+        if (classroom['id'] != null) {
+          params.putIfAbsent('classroomId', () => classroom['id']);
+        }
+        if (classroom['name'] != null) {
+          params.putIfAbsent('roomName', () => classroom['name']);
+        }
+      }
+      final room = source['room'] ?? source['chatRoom'];
+      if (room is Map) {
+        if (room['id'] != null) {
+          params.putIfAbsent('roomId', () => room['id']);
+        }
+        if (room['name'] != null) {
+          params.putIfAbsent('roomName', () => room['name']);
+        }
+      }
     }
     navigation['params'] = params;
     return AppNotification(
       id: _string(json['id'] ?? json['notificationId']),
       type: _string(json['type'] ?? json['notificationType']),
-      key: _string(json['key']),
+      key: _string(
+        json['key'] ?? data['key'] ?? json['type'] ?? data['type'],
+      ),
       title: _localizedString(json['title'] ?? json['_title'] ?? data['title']),
       body: _localizedString(json['body'] ?? json['_body'] ?? data['content']),
       resourceId: _nullable(resource['id'] ?? json['resourceId']),

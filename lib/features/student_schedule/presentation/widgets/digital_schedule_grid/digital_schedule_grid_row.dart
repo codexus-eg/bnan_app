@@ -28,8 +28,9 @@ class DigitalScheduleGridRow extends StatelessWidget {
         ScheduleCell(text: day, width: 64, height: height, isDark: true),
         ...cells.map((items) {
           final actionIds = items
-              .map((item) => item.actionClassroomId)
-              .whereType<String>()
+              .map((item) => item.actionClassroomId?.trim())
+              .where((id) => id != null && id.isNotEmpty)
+              .cast<String>()
               .toSet();
           final actionId = actionIds.length == 1 ? actionIds.single : null;
           return ScheduleCell(

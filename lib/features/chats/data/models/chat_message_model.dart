@@ -66,7 +66,7 @@ class ChatMessageModel {
       sender: senderJson is Map
           ? ChatSenderModel.fromJson(Map<String, dynamic>.from(senderJson))
           : const ChatSenderModel(id: '', fullName: '', role: ''),
-      text: json['text']?.toString() ?? '',
+      text: (json['text'] ?? json['content'])?.toString() ?? '',
       attachments: _parseAttachments(json),
       messageType: json['messageType']?.toString() ?? 'text',
       deletedForEveryone: json['deletedForEveryone'] == true,

@@ -19,6 +19,27 @@ class EgyptianSubjectRequestPayload {
   };
 }
 
+class GulfSubjectRequestCreatePayload {
+  const GulfSubjectRequestCreatePayload({
+    required this.subjectIds,
+    required this.addToSharedSubscription,
+    this.packageId,
+    this.notes,
+  });
+
+  final List<String> subjectIds;
+  final bool addToSharedSubscription;
+  final String? packageId;
+  final String? notes;
+
+  Map<String, dynamic> toJson() => {
+    'subjectIds': subjectIds,
+    'addToSharedSubscription': addToSharedSubscription,
+    if (packageId != null && packageId!.isNotEmpty) 'packageId': packageId,
+    if (_optional(notes) case final value?) 'notes': value,
+  };
+}
+
 class GulfSubjectRequestPayload {
   const GulfSubjectRequestPayload({
     required this.subjectId,

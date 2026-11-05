@@ -15,10 +15,25 @@ class StartSessionRepoImpl implements StartSessionRepo {
   Future<Either<Failure, StartSessionData>> startSession({
     required String classroomId,
     required String subjectId,
+    String? classroomSubjectId,
+    String? lessonId,
+    String? occurrenceDate,
+    String? system,
   }) => repoGuard(() async {
+    final isGulf = system?.trim().toLowerCase() == 'gulf';
+    final cleanLessonId = isGulf ? null : lessonId?.trim();
+    final body = <String, dynamic>{
+      'subjectId': subjectId.trim(),
+      if (classroomSubjectId != null && classroomSubjectId.trim().isNotEmpty)
+        'classroomSubjectId': classroomSubjectId.trim(),
+      if (cleanLessonId != null && cleanLessonId.isNotEmpty)
+        'lessonId': cleanLessonId,
+      if (occurrenceDate != null && occurrenceDate.trim().isNotEmpty)
+        'occurrenceDate': occurrenceDate.trim(),
+    };
     final response = await api.post(
       EndPoints.startClassroomSession(classroomId),
-      data: {'subjectId': subjectId},
+      data: body,
       isProtected: true,
     );
     return StartSessionResponse.fromJson(asMap(response)).data;
@@ -52,16 +67,68 @@ class StartSessionRepoImpl implements StartSessionRepo {
   @override
   Future<Either<Failure, String>> joinActiveSession({
     required String classroomId,
+    String? weeklySlotKey,
   }) => repoGuard(() async {
+    final slot = weeklySlotKey?.trim();
+    final path = (slot != null && slot.isNotEmpty)
+        ? EndPoints.weeklySlotEntry(classroomId, slot)
+        : EndPoints.joinActiveClassroomSession(classroomId);
     final response = asMap(
       await api.get(
-        EndPoints.joinActiveClassroomSession(classroomId),
+        path,
         isProtected: true,
       ),
     );
     final data = response['data'];
     final map = data is Map ? Map<String, dynamic>.from(data) : response;
-    return (map['meetingLink'] ?? '').toString().trim();
+    final sessionMap =
+        map['session'] is Map ? Map<String, dynamic>.from(map['session']) : const {};
+    final link = (map['meetingLink'] ??
+            map['link'] ??
+            map['joinUrl'] ??
+            map['meetingUrl'] ??
+            map['url'] ??
+            sessionMap['meetingLink'] ??
+            sessionMap['link'] ??
+            sessionMap['joinUrl'] ??
+            sessionMap['url'] ??
+            '')
+        .toString()
+        .trim();
+    if (link.isEmpty) {
+      throw const AppException(
+        'رابط الحصة غير متوفر حالياً',
+        code: 'LINK_UNAVAILABLE',
+      );
+    }
+    return link;
+  });
+
+  @override
+  Future<Either<Failure, String>> getTeacherEntry({
+    required String classroomId,
+    required String sessionId,
+  }) => repoGuard(() async {
+    final response = asMap(
+      await api.get(
+        EndPoints.teacherEntryClassroomSession(
+          classroomId.trim(),
+          sessionId.trim(),
+        ),
+        isProtected: true,
+      ),
+    );
+    final data = asMap(response['data']);
+    final url = (data['teacherStartUrl'] ?? response['teacherStartUrl'] ?? '')
+        .toString()
+        .trim();
+    if (url.isEmpty) {
+      throw const AppException(
+        'رابط بدء المعلم غير متوفر',
+        code: 'TEACHER_START_URL_UNAVAILABLE',
+      );
+    }
+    return url;
   });
 
   @override

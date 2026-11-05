@@ -8,9 +8,9 @@ class TeacherMyPayrollsCubit extends Cubit<TeacherMyPayrollsState> {
   final TeacherPayrollRepo repo;
   bool _busy = false;
   String? _status;
-
   Future<void> load({String? status, bool refresh = false}) async {
-    if (_busy || (status != null && status != 'draft' && status != 'paid')) {
+    const allowed = {'draft', 'sent', 'payment_pending', 'paid'};
+    if (_busy || (status != null && !allowed.contains(status))) {
       return;
     }
     _busy = true;

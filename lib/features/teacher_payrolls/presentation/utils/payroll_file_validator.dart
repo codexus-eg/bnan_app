@@ -1,8 +1,8 @@
 import 'dart:io';
 
 abstract final class PayrollFileValidator {
-  static const maxBytes = 5 * 1024 * 1024;
-  static const extensions = {'png', 'jpg', 'jpeg', 'webp'};
+  static const maxBytes = 20 * 1024 * 1024;
+  static const extensions = {'png', 'jpg', 'jpeg', 'webp', 'pdf'};
   static Future<String?> validate(String path) async {
     final file = File(path);
     if (!await file.exists()) return 'missing';
@@ -17,6 +17,13 @@ abstract final class PayrollFileValidator {
   }
 
   static bool _matchesSignature(String extension, List<int> bytes) {
+    if (extension == 'pdf') {
+      return bytes.length >= 4 &&
+          bytes[0] == 0x25 &&
+          bytes[1] == 0x50 &&
+          bytes[2] == 0x44 &&
+          bytes[3] == 0x46;
+    }
     if (extension == 'png') {
       return bytes.length >= 4 &&
           bytes[0] == 0x89 &&

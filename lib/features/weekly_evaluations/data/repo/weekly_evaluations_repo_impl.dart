@@ -109,4 +109,19 @@ class WeeklyEvaluationsRepoImpl implements WeeklyEvaluationsRepo {
         );
         return unit;
       });
+
+  @override
+  Future<Either<Failure, Unit>> publishWeeklyEvaluations({
+    required String classroomId,
+    required int week,
+  }) => repoGuard(() async {
+    await apiConsumer.post(
+      EndPoints.publishWeeklyEvaluations(
+        classroomId: classroomId,
+        week: week,
+      ),
+      isProtected: true,
+    );
+    return unit;
+  });
 }

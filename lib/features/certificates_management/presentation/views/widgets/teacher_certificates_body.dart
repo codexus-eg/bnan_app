@@ -15,10 +15,12 @@ class TeacherCertificatesBody extends StatelessWidget {
         listenWhen: (previous, current) => previous.eventId != current.eventId,
         listener: (context, state) =>
             showCustomSnackBar(context, state.eventMessage, state.eventSuccess),
-        builder: (_, state) => Column(
+        builder: (context, state) => Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const TeacherCertificateIssueAction(),
+            if (!context.read<TeacherCertificatesCubit>().isAdmin &&
+                !context.read<TeacherCertificatesCubit>().mine)
+              const TeacherCertificateIssueAction(),
             Expanded(child: TeacherCertificatesContent(state: state)),
           ],
         ),

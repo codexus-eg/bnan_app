@@ -136,11 +136,11 @@ class _PayoutProfileFormState extends State<PayoutProfileForm> {
         isRequired: true,
         keyboardType: TextInputType.phone,
         inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(11),
+          FilteringTextInputFormatter.allow(RegExp(r'[\d\+\s\-]')),
+          LengthLimitingTextInputFormatter(16),
         ],
         validator: (value) =>
-            RegExp(r'^01[0125]\d{8}$').hasMatch(value?.trim() ?? '')
+            PayoutProfileRequest.isValidWalletPhone(value ?? '')
             ? null
             : s.payoutWalletPhoneInvalid,
       ),

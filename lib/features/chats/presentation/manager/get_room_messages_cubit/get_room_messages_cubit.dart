@@ -9,6 +9,7 @@ import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/chat_search_state.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_state.dart';
 import 'package:bnan_app/features/chats/presentation/notifications/chat_notification_coordinator.dart';
+import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -186,6 +187,8 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
         }
 
         _emitMessages();
+
+        markCurrentRoomRead();
       },
     );
   }
@@ -236,7 +239,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
     }
 
     final messageIndex = _messages.indexWhere(
-      (message) => message.id == updatedMessage.id,
+      (message) => message.id.trim() == updatedMessage.id.trim(),
     );
 
     if (messageIndex == -1) {
@@ -251,6 +254,71 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   void _deleteMessage(String messageId) {
     _markMessagesDeleted({messageId});
     _emitMessages();
+  }
+
+  Future<String?> editMessage({
+    required String messageId,
+    required String text,
+  }) async {
+    final id = messageId.trim();
+    final trimmedText = text.trim();
+    if (id.isEmpty || trimmedText.isEmpty) {
+      try {
+        return S.current.fieldRequired;
+      } catch (_) {
+        return 'Field required';
+      }
+    }
+
+    final result = await chatRepo.editMessage(
+      messageId: id,
+      text: trimmedText,
+    );
+
+    if (isClosed) return null;
+
+    return result.fold((failure) => failure.message, (response) {
+      final updated = response.message;
+      if (updated.id.trim().isNotEmpty) {
+        _editMessage(updated);
+      } else {
+        final index = _messages.indexWhere((m) => m.id.trim() == id);
+        if (index != -1) {
+          final old = _messages[index];
+          _messages[index] = ChatMessageModel(
+            id: old.id,
+            roomId: old.roomId,
+            sender: old.sender,
+            text: trimmedText,
+            attachments: old.attachments,
+            messageType: old.messageType,
+            deletedForEveryone: old.deletedForEveryone,
+            createdAt: old.createdAt,
+            updatedAt: DateTime.now(),
+            editedAt: DateTime.now(),
+          );
+          _emitMessages();
+        }
+      }
+      return null;
+    });
+  }
+
+  Future<String?> deleteSingleMessage({
+    required String messageId,
+  }) async {
+    final id = messageId.trim();
+    if (id.isEmpty) return null;
+
+    final result = await chatRepo.deleteMessage(messageId: id);
+
+    if (isClosed) return null;
+
+    return result.fold((failure) => failure.message, (_) {
+      _markMessagesDeleted({id});
+      _emitMessages();
+      return null;
+    });
   }
 
   Future<String?> deleteMessages({
@@ -321,6 +389,7 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
       if (createdAt != null &&
           createdAt.isAfter(lastOpened) &&
           !message.deletedForEveryone &&
+          !message.isNonDisplayableSessionEvent &&
           !_arrivedDuringInitialLoadIds.contains(message.id.trim()) &&
           !message.isMine(currentUserId)) {
         return message.id;
@@ -331,16 +400,17 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   }
 
   Timer? _markReadDebounce;
+  bool _isMarkingRead = false;
 
   void markCurrentRoomRead() {
     final roomId = _currentRoomId;
 
     if (roomId == null || isClosed) return;
 
-    final latestMessageId = _messages.isEmpty ? null : _messages.last.id.trim();
+    final latestMessageId =
+        _messages.isEmpty ? '__empty__' : _messages.last.id.trim();
 
-    if (latestMessageId == null ||
-        latestMessageId.isEmpty ||
+    if (latestMessageId.isEmpty ||
         latestMessageId == _lastLocallyReadMessageId) {
       return;
     }
@@ -351,9 +421,28 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
   }
 
   Future<void> _sendMarkRoomAsRead(String roomId) async {
-    await chatRepo.markRoomAsRead(roomId: roomId);
-    await _saveLatestMessageTimestamp(roomId);
+    if (_isMarkingRead) return;
+    _isMarkingRead = true;
+
+    final previousUnread = roomsCache?.getUnreadCount(roomId) ?? 0;
     roomsCache?.markRoomRead(roomId);
+
+    final result = await chatRepo.markRoomAsRead(roomId: roomId);
+    _isMarkingRead = false;
+
+    if (isClosed) return;
+
+    await result.fold(
+      (failure) async {
+        _lastLocallyReadMessageId = null;
+        if (previousUnread > 0) {
+          roomsCache?.revertRoomRead(roomId, previousUnread);
+        }
+      },
+      (_) async {
+        await _saveLatestMessageTimestamp(roomId);
+      },
+    );
   }
 
   DateTime? _readLastOpened(String roomId) {
@@ -418,12 +507,19 @@ class GetRoomMessagesCubit extends Cubit<GetRoomMessagesState> {
         : messages.indexWhere((current) => current.id.trim() == id);
 
     if (index == -1) {
+      if (messages.isEmpty ||
+          message.createdAt == null ||
+          messages.last.createdAt == null ||
+          !message.createdAt!.isBefore(messages.last.createdAt!)) {
+        messages.add(message);
+        return;
+      }
       messages.add(message);
+      _sortByCreatedAt(messages);
     } else {
       messages[index] = message;
+      _sortByCreatedAt(messages);
     }
-
-    _sortByCreatedAt(messages);
   }
 
   void _sortByCreatedAt(List<ChatMessageModel> messages) {

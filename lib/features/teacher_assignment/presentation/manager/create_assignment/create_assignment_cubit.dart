@@ -17,7 +17,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final totalPointsController = TextEditingController(text: '10');
+  final totalPointsController = TextEditingController();
 
   String? selectedCurriculumId;
   String? selectedClassroomSubjectId;
@@ -74,15 +74,41 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
   }
 
   Future<void> createAssignment() async {
-    if (isClosed) return;
+    if (isClosed || state is CreateAssignmentLoading) return;
     clearError();
 
-    if (!formKey.currentState!.validate()) return;
+    if (formKey.currentState != null && !formKey.currentState!.validate()) {
+      return;
+    }
 
-    if (selectedClassroomId == null ||
-        selectedSubjectId == null ||
-        selectedDueDate == null) {
+    if (selectedClassroomId == null || selectedSubjectId == null) {
       validationMessage = S.current.fillAllRequiredFields;
+      emit(CreateAssignmentChangeValue());
+      return;
+    }
+
+    if (selectedDueDate == null || selectedDueDate!.trim().isEmpty) {
+      validationMessage = S.current.fillAllRequiredFields;
+      emit(CreateAssignmentChangeValue());
+      return;
+    }
+
+    final parsedDueDate = DateTime.tryParse(selectedDueDate!);
+    if (parsedDueDate == null || !parsedDueDate.isAfter(DateTime.now())) {
+      validationMessage = S.current.invalidDueDate;
+      emit(CreateAssignmentChangeValue());
+      return;
+    }
+
+    final pointsText = totalPointsController.text.trim();
+    if (pointsText.isEmpty) {
+      validationMessage = S.current.totalPointsRequired;
+      emit(CreateAssignmentChangeValue());
+      return;
+    }
+    final points = num.tryParse(pointsText);
+    if (points == null || points <= 0) {
+      validationMessage = S.current.invalidAssignmentTotalPoints;
       emit(CreateAssignmentChangeValue());
       return;
     }
@@ -95,6 +121,7 @@ class CreateAssignmentCubit extends Cubit<CreateAssignmentState> {
       dueDate: selectedDueDate!,
       classroom: selectedClassroomId!,
       subject: selectedSubjectId!,
+      totalPoints: points,
       attachment: attachmentFile,
     );
 

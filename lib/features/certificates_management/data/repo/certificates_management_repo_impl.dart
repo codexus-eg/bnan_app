@@ -12,6 +12,7 @@ import 'package:bnan_app/features/certificates_management/data/models/responses/
 import 'package:bnan_app/features/certificates_management/data/models/responses/monthly_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/responses/update_monthly_certificate_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/student_subjects_response_model.dart';
+import 'package:bnan_app/features/certificates_management/data/models/teacher_certificate_model.dart';
 import 'package:bnan_app/features/certificates_management/data/models/teacher_certificates_response_model.dart';
 import 'package:bnan_app/features/certificates_management/data/repo/certificates_management_repo.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -45,7 +46,7 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   }) {
     return repoGuard(() async {
       final response = await apiConsumer.get(
-        EndPoints.certificateById(certificateId),
+        EndPoints.monthlyCertificateById(certificateId),
         isProtected: true,
       );
 
@@ -59,9 +60,7 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
     required CreateMonthlyCertificateRequestModel request,
   }) {
     return repoGuard(() async {
-      final endpoint = EndPoints.createMonthlyStudentCertificate(
-        request.studentId,
-      );
+      final endpoint = EndPoints.studentMonthlyCertificates;
       final body = request.toJson();
       _logCreateRequest(endpoint, request, body);
       final response = await apiConsumer.post(
@@ -128,7 +127,7 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   }) {
     return repoGuard(() async {
       await apiConsumer.delete(
-        EndPoints.certificateById(certificateId),
+        EndPoints.monthlyCertificateById(certificateId),
         isProtected: true,
       );
     });
@@ -168,11 +167,47 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
 
   @override
   Future<Either<Failure, TeacherCertificatesResponseModel>>
-  getTeacherCertificates({required int page, int limit = 20}) {
+  getTeacherCertificates({
+    required int page,
+    int limit = 20,
+    String? status,
+    String? teacherId,
+    String? certificateType,
+  }) {
     return repoGuard(() async {
       final response = await apiConsumer.get(
         EndPoints.supervisorTeacherCertificates,
-        queryParameter: {'page': page, 'limit': limit},
+        queryParameter: {
+          'page': page,
+          'limit': limit,
+          if (status?.isNotEmpty == true) 'status': status,
+          if (teacherId?.isNotEmpty == true) 'teacherId': teacherId,
+          if (certificateType?.isNotEmpty == true)
+            'certificateType': certificateType,
+        },
+        isProtected: true,
+      );
+      return TeacherCertificatesResponseModel.fromJson(asMap(response));
+    });
+  }
+
+  @override
+  Future<Either<Failure, TeacherCertificatesResponseModel>>
+  getAdminCertificates({
+    String certificateType = 'general_teacher',
+    String? status,
+    int page = 1,
+    int limit = 20,
+  }) {
+    return repoGuard(() async {
+      final response = await apiConsumer.get(
+        EndPoints.adminCertificates,
+        queryParameter: {
+          'page': page,
+          'limit': limit,
+          'certificateType': certificateType,
+          if (status?.isNotEmpty == true) 'status': status,
+        },
         isProtected: true,
       );
       return TeacherCertificatesResponseModel.fromJson(asMap(response));
@@ -192,15 +227,39 @@ class CertificatesManagementRepoImpl implements CertificatesManagementRepo {
   }
 
   @override
-  Future<Either<Failure, void>> issueGeneralTeacherCertificate({
+  Future<Either<Failure, TeacherCertificateModel>> createTeacherCertificateDraft({
     required String teacherId,
-    required String signerName,
+    required String recipientName,
   }) {
     return repoGuard(() async {
-      await apiConsumer.post(
+      final response = await apiConsumer.post(
         EndPoints.supervisorTeacherCertificate(teacherId),
-        data: {'signerName': signerName.trim()},
+        data: {'recipientName': recipientName.trim()},
         isProtected: true,
+      );
+      final map = asMap(response);
+      final data = map['data'] is Map ? map['data'] as Map : map;
+      final cert = data['certificate'] is Map ? data['certificate'] as Map : data;
+      return TeacherCertificateModel.fromJson(
+        Map<String, dynamic>.from(cert),
+      );
+    });
+  }
+
+  @override
+  Future<Either<Failure, TeacherCertificateModel>> issueGeneralTeacherCertificate({
+    required String certificateId,
+  }) {
+    return repoGuard(() async {
+      final response = await apiConsumer.post(
+        EndPoints.issueGeneralTeacherCertificate(certificateId),
+        isProtected: true,
+      );
+      final map = asMap(response);
+      final data = map['data'] is Map ? map['data'] as Map : map;
+      final cert = data['certificate'] is Map ? data['certificate'] as Map : data;
+      return TeacherCertificateModel.fromJson(
+        Map<String, dynamic>.from(cert),
       );
     });
   }

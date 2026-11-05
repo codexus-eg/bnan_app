@@ -7,7 +7,7 @@ class SupervisorDashboardModel extends DashboardData {
     required super.generatedAt,
     required this.classrooms,
     required this.evaluations,
-    required this.idealTeacher,
+    this.idealTeacher,
     required this.notifications,
   }) : super(role: DashboardRole.supervisor);
 
@@ -20,14 +20,11 @@ class SupervisorDashboardModel extends DashboardData {
     DateTime? at,
   ) {
     final counts = dashboardMap(json['counts']);
-    final ideal = dashboardMap(json['idealTeacher']);
     return SupervisorDashboardModel(
       generatedAt: at,
       classrooms: dashboardInt(counts['classrooms']),
       evaluations: dashboardInt(counts['evaluations']),
-      idealTeacher: ideal.isEmpty
-          ? null
-          : DashboardIdealTeacher.fromJson(ideal),
+      idealTeacher: null,
       notifications: dashboardList(
         json['notifications'],
       ).map(DashboardNotification.fromJson).take(10).toList(),

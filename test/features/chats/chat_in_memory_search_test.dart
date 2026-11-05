@@ -159,6 +159,11 @@ class _FakeChatRepo implements ChatRepo {
   }
 
   @override
+  Future<Either<Failure, void>> markRoomAsRead({required String roomId}) async {
+    return const Right(null);
+  }
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 

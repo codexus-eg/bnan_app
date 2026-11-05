@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:bnan_app/core/error/failure.dart';
+import 'package:bnan_app/features/lessons_management/data/models/course_schedule_payloads.dart';
 import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_models.dart';
 import 'package:bnan_app/features/lessons_management/data/models/gulf_schedule_request.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
@@ -13,6 +13,9 @@ class FakeGulfScheduleRepo implements GulfScheduleRepo {
   List<GulfClassroom> classrooms;
   Failure? loadFailure, saveFailure;
   String? lastOperation, lastClassroomId, lastStudentId;
+  CourseScheduleResponse? courseScheduleResponse;
+  CourseScheduleUpdateRequest? lastCourseScheduleUpdate;
+  String? lastDeletedSlotId;
   GulfScheduleRequest? lastRequest;
   int loadCalls = 0;
   final studentIds = <String?>[];
@@ -60,6 +63,46 @@ class FakeGulfScheduleRepo implements GulfScheduleRepo {
   @override
   Future<Either<Failure, Unit>> deleteClassroomSchedule(String classroomId) =>
       _save('delete', classroomId, null);
+
+  @override
+  Future<Either<Failure, CourseScheduleResponse>> getCourseSchedule(
+    String classroomId,
+  ) async {
+    lastClassroomId = classroomId;
+    if (loadFailure != null) return Left(loadFailure!);
+    return Right(
+      courseScheduleResponse ??
+          const CourseScheduleResponse(
+            success: true,
+            timezone: 'Africa/Cairo',
+            slots: [],
+          ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updateCourseSchedule(
+    String classroomId,
+    CourseScheduleUpdateRequest request,
+  ) async {
+    lastOperation = 'put_course_schedule';
+    lastClassroomId = classroomId;
+    lastCourseScheduleUpdate = request;
+    if (saveFailure != null) return Left(saveFailure!);
+    return const Right(unit);
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteCourseScheduleSlot(
+    String classroomId,
+    String slotId,
+  ) async {
+    lastOperation = 'delete_course_slot';
+    lastClassroomId = classroomId;
+    lastDeletedSlotId = slotId;
+    if (saveFailure != null) return Left(saveFailure!);
+    return const Right(unit);
+  }
 
   Future<Either<Failure, Unit>> _save(
     String operation,

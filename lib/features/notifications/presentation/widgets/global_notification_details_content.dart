@@ -2,6 +2,7 @@ import 'package:bnan_app/core/shared_widget/attachment_preview/network_attachmen
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/notifications/data/models/app_notification.dart';
+import 'package:bnan_app/features/notifications/presentation/widgets/linkified_notification_text.dart';
 import 'package:bnan_app/features/notifications/presentation/widgets/notification_time.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,10 @@ class GlobalNotificationDetailsContent extends StatelessWidget {
       ),
       if (notification.body.isNotEmpty) ...[
         const SizedBox(height: 12),
-        Text(notification.body, style: StylesManager.styleRegular16(context)),
+        LinkifiedNotificationText(
+          text: notification.body,
+          style: StylesManager.styleRegular16(context),
+        ),
       ],
       const SizedBox(height: 12),
       NotificationTime(value: notification.createdAt),

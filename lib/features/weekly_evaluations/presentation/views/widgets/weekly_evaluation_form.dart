@@ -35,7 +35,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
   late final TextEditingController _bonusController;
   int? week;
   String? classroomId, studentId, subjectId;
-  String? attendance, participation, homework, behavior;
+  String? participation, behavior;
 
   @override
   void initState() {
@@ -45,9 +45,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
     final editor = widget.data.editor;
     week = editor?.week ?? widget.data.week;
     if (editor == null) {
-      attendance = 'present';
       participation = 'excellent';
-      homework = 'excellent';
       behavior = 'excellent';
       context.read<WeeklyEvaluationsCubit>().clearFormOptions();
     } else {
@@ -124,15 +122,10 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
               ],
               const SizedBox(height: 16),
               EvaluationScoreFields(
-                attendance: attendance,
                 participation: participation,
-                homework: homework,
                 behavior: behavior,
-                onAttendanceChanged: (value) =>
-                    setState(() => attendance = value),
                 onParticipationChanged: (value) =>
                     setState(() => participation = value),
-                onHomeworkChanged: (value) => setState(() => homework = value),
                 onBehaviorChanged: (value) => setState(() => behavior = value),
               ),
               const SizedBox(height: 16),
@@ -167,9 +160,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
       classroomId != null &&
       studentId != null &&
       subjectId != null &&
-      attendance != null &&
       participation != null &&
-      homework != null &&
       behavior != null &&
       week != null;
 
@@ -208,14 +199,8 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
 
   void _fillFrom(EvaluationSubjectModel subject) {
     final value = subject.evaluation;
-    attendance = value?.attendance.isNotEmpty == true
-        ? value!.attendance
-        : 'present';
     participation = value?.participation.isNotEmpty == true
         ? value!.participation
-        : 'excellent';
-    homework = value?.homework.isNotEmpty == true
-        ? value!.homework
         : 'excellent';
     behavior = value?.behavior.isNotEmpty == true
         ? value!.behavior
@@ -238,9 +223,7 @@ class _WeeklyEvaluationFormState extends State<WeeklyEvaluationForm> {
         classroom: classroomId!,
         subject: subject.id,
         week: widget.data.editor?.week ?? week!,
-        attendance: attendance!,
         participation: participation!,
-        homework: homework!,
         behavior: behavior!,
         bonus: int.tryParse(_bonusController.text.trim()) ?? 0,
         notes: _notesController.text.trim(),

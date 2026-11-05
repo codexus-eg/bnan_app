@@ -10,9 +10,15 @@ class ClassroomDetailsResponseModel {
   final ClassroomModel data;
 
   factory ClassroomDetailsResponseModel.fromJson(Map<String, dynamic> json) {
+    final rawData = json['data'];
+    final classroomJson = rawData is Map
+        ? (rawData['classroom'] is Map
+            ? Map<String, dynamic>.from(rawData['classroom'] as Map)
+            : Map<String, dynamic>.from(rawData))
+        : <String, dynamic>{};
     return ClassroomDetailsResponseModel(
-      success: json['success'] ?? false,
-      data: ClassroomModel.fromJson(json['data'] ?? {}),
+      success: json['success'] == true || json['status'] == 'success',
+      data: ClassroomModel.fromJson(classroomJson),
     );
   }
 }

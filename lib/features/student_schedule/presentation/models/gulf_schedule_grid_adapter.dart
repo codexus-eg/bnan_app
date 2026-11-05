@@ -26,9 +26,18 @@ DigitalScheduleGridData adaptGulfStudentSchedule(
             DigitalScheduleGridItem(
               classroom.subject?.name ?? '',
               classroom.name,
-              actionClassroomId: entry.activeSession?.canJoin == true
-                  ? entry.activeSession!.classroomId
-                  : null,
+              actionClassroomId: () {
+                final rawId = entry.activeSession?.classroomId.trim();
+                final effectiveId = (rawId != null && rawId.isNotEmpty)
+                    ? rawId
+                    : (entry.classroomId?.trim().isNotEmpty == true
+                        ? entry.classroomId!.trim()
+                        : classroom.id.trim());
+                return entry.activeSession?.studentCanJoin == true &&
+                        effectiveId.isNotEmpty
+                    ? effectiveId
+                    : null;
+              }(),
             ),
           );
     }

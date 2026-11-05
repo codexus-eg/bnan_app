@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/utils/schedule_time_utils.dart';
 import 'package:bnan_app/features/chats/data/models/chat_room_summary_model.dart';
 import 'package:bnan_app/features/chats/data/repo/chat_repo.dart';
@@ -30,8 +32,8 @@ class StartSessionCubit extends Cubit<StartSessionState> {
   /// حسب نافذة وقت بدء الحصة، واستخراج chatRoomId الخاص بكل حصة مستحقة.
   Future<void> loadScheduledLessons() async {
     final requestId = ++_scheduleRequestId;
-    final dueGulfLessons = <_DueGulfLesson>{};
-    final egyptianChatRoomIds = <String>{};
+    final dueLessons = <ScheduledLessonData>{};
+    final dueClassroomIds = <String>{};
     final roomsFuture = chatRepo?.getChatRooms();
 
     // 1. الجدول الخليجي (Gulf Schedule)
@@ -45,15 +47,15 @@ class StartSessionCubit extends Cubit<StartSessionState> {
         },
         (response) {
           final now = _nowIn(response.data.timezone);
-          final todayName = _weekdayName(now.weekday);
           for (final classroom in response.data.classrooms) {
             for (final entry in classroom.entries) {
-              final isDayMatch = entry.day.trim().toLowerCase() == todayName;
-              final isDue = ScheduleTimeUtils.isDueNow(
-                entry.startTime,
-                entry.endTime,
-                now: now,
+              final occurrenceDate = ScheduleTimeUtils.resolveOccurrenceDate(
+                dayOrDate: entry.day,
+                startTime: entry.startTime,
+                endTime: entry.endTime,
+                nowInTimezone: now,
               );
+              final isDue = occurrenceDate != null;
               final cr = entry.chatRoomId ?? classroom.chatRoomId;
               final csId =
                   entry.classroomSubjectId ?? classroom.classroomSubjectId;
@@ -63,19 +65,32 @@ class StartSessionCubit extends Cubit<StartSessionState> {
                 'classroomId: ${classroom.id}, '
                 'classroomSubjectId: $csId, '
                 'chatRoomId: $cr, '
-                'day: ${entry.day} (today: $todayName -> match: $isDayMatch), '
+                'day: ${entry.day}, '
                 'startTime: ${entry.startTime}, '
                 'endTime: ${entry.endTime}, '
                 'now: $now, '
-                'isDueNow: $isDue',
+                'occurrenceDate: $occurrenceDate, '
+                'isDue: $isDue',
               );
 
-              if (isDayMatch && isDue) {
-                dueGulfLessons.add((
-                  classroomId: classroom.id.trim(),
-                  classroomSubjectId: csId?.trim(),
-                  chatRoomId: cr?.trim(),
-                ));
+              if (isDue) {
+                dueClassroomIds.add(classroom.id.trim());
+                dueLessons.add(
+                  ScheduledLessonData(
+                    classroomId: classroom.id.trim(),
+                    classroomSubjectId: csId?.trim(),
+                    subjectId: classroom.subject?.id.trim(),
+                    chatRoomId: cr?.trim(),
+                    lessonId: null,
+                    occurrenceDate: occurrenceDate,
+                    occurrenceKey: entry.occurrenceKey?.trim(),
+                    weeklySlotKey: entry.weeklySlotKey?.trim(),
+                    startTime: entry.startTime,
+                    endTime: entry.endTime,
+                    day: entry.day,
+                    system: 'gulf',
+                  ),
+                );
               }
             }
           }
@@ -97,20 +112,17 @@ class StartSessionCubit extends Cubit<StartSessionState> {
         },
         (week) {
           final now = _nowIn(week.timezone);
-          final todayName = _weekdayName(now.weekday);
-          final todayIso = now.toIso8601String().split('T').first;
           for (final day in week.days) {
-            final dayLower = day.date.trim().toLowerCase();
-            final isDayMatch =
-                dayLower == todayName ||
-                dayLower == todayIso ||
-                _dayKey(day.date) == todayName;
             for (final lesson in day.lessons) {
-              final isDue = ScheduleTimeUtils.isDueNow(
-                lesson.startTime,
-                lesson.endTime,
-                now: now,
+              final dayOrDate =
+                  day.date.trim().isNotEmpty ? day.date : lesson.date;
+              final occurrenceDate = ScheduleTimeUtils.resolveOccurrenceDate(
+                dayOrDate: dayOrDate,
+                startTime: lesson.startTime,
+                endTime: lesson.endTime,
+                nowInTimezone: now,
               );
+              final isDue = occurrenceDate != null;
               final cr = lesson.chatRoomId;
 
               debugPrint(
@@ -118,15 +130,32 @@ class StartSessionCubit extends Cubit<StartSessionState> {
                 'classroomId: ${lesson.classroomId}, '
                 'classroomSubjectId: ${lesson.classroomSubjectId}, '
                 'chatRoomId: $cr, '
-                'date: ${day.date} (today: $todayName -> match: $isDayMatch), '
+                'date: $dayOrDate, '
                 'startTime: ${lesson.startTime}, '
                 'endTime: ${lesson.endTime}, '
                 'now: $now, '
-                'isDueNow: $isDue',
+                'occurrenceDate: $occurrenceDate, '
+                'isDue: $isDue',
               );
 
-              if (isDayMatch && isDue && cr != null && cr.isNotEmpty) {
-                egyptianChatRoomIds.add(cr);
+              if (isDue) {
+                dueClassroomIds.add(lesson.classroomId.trim());
+                dueLessons.add(
+                  ScheduledLessonData(
+                    classroomId: lesson.classroomId.trim(),
+                    classroomSubjectId: lesson.classroomSubjectId?.trim(),
+                    subjectId: lesson.subjectId.trim(),
+                    chatRoomId: cr?.trim(),
+                    lessonId: lesson.id.trim(),
+                    occurrenceDate: occurrenceDate,
+                    weeklySlotKey:
+                        lesson.activeSession?.weeklySlotKey?.trim(),
+                    startTime: lesson.startTime,
+                    endTime: lesson.endTime,
+                    day: dayOrDate,
+                    system: 'egyptian',
+                  ),
+                );
               }
             }
           }
@@ -149,33 +178,57 @@ class StartSessionCubit extends Cubit<StartSessionState> {
     }
 
     if (isClosed || requestId != _scheduleRequestId) return;
-    _emitScheduledChatRoomIds(
-      dueGulfLessons: dueGulfLessons,
-      egyptianChatRoomIds: egyptianChatRoomIds,
+    _emitScheduledLessons(
+      dueLessons: dueLessons,
+      dueClassroomIds: dueClassroomIds,
       rooms: rooms,
     );
   }
 
-  void _emitScheduledChatRoomIds({
-    required Set<_DueGulfLesson> dueGulfLessons,
-    required Set<String> egyptianChatRoomIds,
+  void _emitScheduledLessons({
+    required Set<ScheduledLessonData> dueLessons,
+    required Set<String> dueClassroomIds,
     required List<ChatRoomSummaryModel> rooms,
   }) {
-    final chatRoomIds = {...egyptianChatRoomIds};
-    for (final lesson in dueGulfLessons) {
+    final chatRoomIds = <String>{};
+    final dueByClassroom = <String, ScheduledLessonData>{};
+    final dueByChatRoom = <String, ScheduledLessonData>{};
+
+    for (final lesson in dueLessons) {
+      dueByClassroom[lesson.classroomId] = lesson;
       final directRoomId = lesson.chatRoomId?.trim() ?? '';
-      if (directRoomId.isNotEmpty) chatRoomIds.add(directRoomId);
+      if (directRoomId.isNotEmpty) {
+        chatRoomIds.add(directRoomId);
+        dueByChatRoom[directRoomId] = lesson;
+      }
       for (final room in rooms) {
-        if (_matchesGulfLesson(room, lesson)) chatRoomIds.add(room.id.trim());
+        if (_matchesLesson(room, lesson)) {
+          final rId = room.id.trim();
+          chatRoomIds.add(rId);
+          dueByChatRoom[rId] = lesson;
+        }
       }
     }
-    debugPrint('[DEBUG StartSession] Final scheduledChatRoomIds: $chatRoomIds');
-    if (!setEquals(state.scheduledChatRoomIds, chatRoomIds)) {
-      emit(state.copyWith(scheduledChatRoomIds: chatRoomIds));
+    debugPrint(
+      '[DEBUG StartSession] Final scheduledChatRoomIds: $chatRoomIds, '
+      'dueClassroomIds: $dueClassroomIds',
+    );
+    if (!setEquals(state.scheduledChatRoomIds, chatRoomIds) ||
+        !setEquals(state.scheduledClassroomIds, dueClassroomIds) ||
+        !mapEquals(state.dueLessonsByClassroom, dueByClassroom) ||
+        !mapEquals(state.dueLessonsByChatRoom, dueByChatRoom)) {
+      emit(
+        state.copyWith(
+          scheduledChatRoomIds: chatRoomIds,
+          scheduledClassroomIds: dueClassroomIds,
+          dueLessonsByClassroom: dueByClassroom,
+          dueLessonsByChatRoom: dueByChatRoom,
+        ),
+      );
     }
   }
 
-  bool _matchesGulfLesson(ChatRoomSummaryModel room, _DueGulfLesson lesson) {
+  bool _matchesLesson(ChatRoomSummaryModel room, ScheduledLessonData lesson) {
     final roomId = room.id.trim();
     final classroomId = room.classroomId?.trim() ?? '';
     if (roomId.isEmpty || classroomId != lesson.classroomId) return false;
@@ -213,32 +266,33 @@ class StartSessionCubit extends Cubit<StartSessionState> {
       ),
       (data) {
         final active = {...state.activeByClassroom};
-        if (data == null || !data.session.isActive) {
+        final scheduledRooms = {...state.scheduledChatRoomIds};
+        final scheduledClassrooms = {...state.scheduledClassroomIds};
+
+        if (data == null ||
+            (!data.session.isActive && !data.session.isScheduled)) {
           active.remove(classroom);
         } else {
           active[classroom] = data;
+          if (data.session.isScheduled &&
+              (data.session.isStartAvailable || data.session.isDueNow)) {
+            scheduledClassrooms.add(classroom);
+            final cr = data.session.chatRoomId.trim();
+            if (cr.isNotEmpty) scheduledRooms.add(cr);
+          }
         }
         emit(
           state.copyWith(
             checkingClassroomIds: checking,
             checkedClassroomIds: {...state.checkedClassroomIds, classroom},
             activeByClassroom: active,
+            scheduledClassroomIds: scheduledClassrooms,
+            scheduledChatRoomIds: scheduledRooms,
           ),
         );
       },
     );
   }
-
-  static String _weekdayName(int weekday) => switch (weekday) {
-    DateTime.saturday => 'saturday',
-    DateTime.sunday => 'sunday',
-    DateTime.monday => 'monday',
-    DateTime.tuesday => 'tuesday',
-    DateTime.wednesday => 'wednesday',
-    DateTime.thursday => 'thursday',
-    DateTime.friday => 'friday',
-    _ => '',
-  };
 
   static DateTime _nowIn(String? name) {
     final value = name?.trim();
@@ -254,39 +308,20 @@ class StartSessionCubit extends Cubit<StartSessionState> {
     }
   }
 
-  static String? _dayKey(String value) {
-    final day = value.trim().toLowerCase();
-    const validDays = [
-      'saturday',
-      'sunday',
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-    ];
-    if (validDays.contains(day)) return day;
-    return switch (DateTime.tryParse(value)?.weekday) {
-      DateTime.saturday => 'saturday',
-      DateTime.sunday => 'sunday',
-      DateTime.monday => 'monday',
-      DateTime.tuesday => 'tuesday',
-      DateTime.wednesday => 'wednesday',
-      DateTime.thursday => 'thursday',
-      DateTime.friday => 'friday',
-      _ => null,
-    };
-  }
-
   Future<bool> start({
     required String classroomId,
     required String subjectId,
+    String? classroomSubjectId,
+    String? lessonId,
+    String? occurrenceDate,
+    String? system,
   }) async {
     final classroom = classroomId.trim();
     final subject = subjectId.trim();
     if (classroom.isEmpty) return _reject(StartSessionIssue.missingClassroom);
     if (subject.isEmpty) return _reject(StartSessionIssue.missingSubject);
-    if (state.isLoading(classroom) || state.active(classroom) != null) {
+    if (state.isLoading(classroom) ||
+        state.active(classroom)?.session.isActive == true) {
       return false;
     }
     final requestId = (_requestIds[classroom] ?? 0) + 1;
@@ -305,16 +340,28 @@ class StartSessionCubit extends Cubit<StartSessionState> {
     final result = await repo.startSession(
       classroomId: classroom,
       subjectId: subject,
+      classroomSubjectId: classroomSubjectId,
+      lessonId: lessonId,
+      occurrenceDate: occurrenceDate,
+      system: system,
     );
     if (!_isCurrent(classroom, requestId)) return false;
     final loading = {...state.loadingClassroomIds}..remove(classroom);
     var succeeded = false;
     var refreshActive = false;
+    var refreshSchedule = false;
     result.fold(
       (failure) {
+        final code = (failure.code ?? '').trim().toUpperCase();
         refreshActive =
-            failure.code == 'CLASSROOM_SESSION_ALREADY_ACTIVE' ||
+            code == 'CLASSROOM_SESSION_ALREADY_ACTIVE' ||
+            code == 'SESSION_NOT_ACTIVE' ||
+            code == 'WEEKLY_ZOOM_SLOT_SESSION_NOT_ACTIVE' ||
+            failure.statusCode == 404 ||
             failure.message.contains('CLASSROOM_SESSION_ALREADY_ACTIVE');
+        refreshSchedule =
+            code == 'SCHEDULE_OCCURRENCE_NOT_FOUND' ||
+            code.startsWith('WEEKLY_ZOOM_ASSIGNMENT_');
         emit(
           state.copyWith(
             loadingClassroomIds: loading,
@@ -347,15 +394,34 @@ class StartSessionCubit extends Cubit<StartSessionState> {
         );
       },
     );
-    if (refreshActive) await loadActive(classroom);
+    if (refreshActive || refreshSchedule) await loadActive(classroom);
+    if (refreshSchedule) unawaited(loadScheduledLessons());
     return succeeded;
   }
 
-  Future<String?> join(String classroomId) async {
+  Future<String?> join(
+    String classroomId, {
+    String? weeklySlotKey,
+  }) async {
     final classroom = classroomId.trim();
-    if (isClosed || classroom.isEmpty || state.isLoading(classroom)) {
+    if (isClosed || state.isLoading(classroom)) {
       return null;
     }
+    if (classroom.isEmpty) {
+      debugPrint('[DEBUG StartSession] join rejected: classroomId is empty');
+      emit(
+        state.copyWith(
+          eventClassroomId: '',
+          eventError: 'معرّف الفصل غير صالح',
+          eventCode: 'INVALID_CLASSROOM_ID',
+          eventId: state.eventId + 1,
+        ),
+      );
+      return null;
+    }
+    debugPrint(
+      '[DEBUG StartSession] join requested for classroomId: "$classroom"',
+    );
     emit(
       state.copyWith(
         joiningClassroomIds: {...state.joiningClassroomIds, classroom},
@@ -364,29 +430,95 @@ class StartSessionCubit extends Cubit<StartSessionState> {
         eventStatusCode: null,
       ),
     );
-    final result = await repo.joinActiveSession(classroomId: classroom);
+    final result = await repo.joinActiveSession(
+      classroomId: classroom,
+      weeklySlotKey: weeklySlotKey,
+    );
     if (isClosed) return null;
     final joining = {...state.joiningClassroomIds}..remove(classroom);
     String? link;
+    var refreshActive = false;
+    var refreshSchedule = false;
+    result.fold(
+      (failure) {
+        debugPrint(
+          '[DEBUG StartSession] join failure for classroomId="$classroom": '
+          'message="${failure.message}", code="${failure.code}", statusCode=${failure.statusCode}',
+        );
+        final code = (failure.code ?? '').trim().toUpperCase();
+        refreshActive =
+            code == 'CLASSROOM_SESSION_ALREADY_ACTIVE' ||
+            code == 'SESSION_NOT_ACTIVE' ||
+            code == 'WEEKLY_ZOOM_SLOT_SESSION_NOT_ACTIVE' ||
+            failure.statusCode == 404;
+        refreshSchedule =
+            code == 'SCHEDULE_OCCURRENCE_NOT_FOUND' ||
+            code.startsWith('WEEKLY_ZOOM_ASSIGNMENT_');
+        emit(
+          state.copyWith(
+            joiningClassroomIds: joining,
+            eventClassroomId: classroom,
+            eventError: failure.statusCode == 404
+                ? 'SESSION_NOT_ACTIVE'
+                : failure.message,
+            eventCode: failure.code,
+            eventStatusCode: failure.statusCode,
+            eventId: state.eventId + 1,
+          ),
+        );
+      },
+      (value) {
+        debugPrint(
+          '[DEBUG StartSession] join succeeded for classroomId="$classroom", link="$value"',
+        );
+        link = value;
+        emit(state.copyWith(joiningClassroomIds: joining));
+      },
+    );
+    if (refreshActive || refreshSchedule) unawaited(loadActive(classroom));
+    if (refreshSchedule) unawaited(loadScheduledLessons());
+    return link;
+  }
+
+  Future<String?> getTeacherEntry({
+    required String classroomId,
+    required String sessionId,
+  }) async {
+    final classroom = classroomId.trim();
+    final session = sessionId.trim();
+    if (classroom.isEmpty || session.isEmpty) return null;
+    if (isClosed || state.isLoading(classroom)) return null;
+    emit(
+      state.copyWith(
+        loadingClassroomIds: {...state.loadingClassroomIds, classroom},
+        eventError: null,
+        eventCode: null,
+      ),
+    );
+    final result = await repo.getTeacherEntry(
+      classroomId: classroom,
+      sessionId: session,
+    );
+    if (isClosed) return null;
+    final loading = {...state.loadingClassroomIds}..remove(classroom);
+    String? url;
     result.fold(
       (failure) => emit(
         state.copyWith(
-          joiningClassroomIds: joining,
+          loadingClassroomIds: loading,
           eventClassroomId: classroom,
-          eventError: failure.statusCode == 404
-              ? 'SESSION_NOT_ACTIVE'
-              : failure.message,
+          eventError: failure.message,
           eventCode: failure.code,
           eventStatusCode: failure.statusCode,
           eventId: state.eventId + 1,
         ),
       ),
-      (value) {
-        link = value;
-        emit(state.copyWith(joiningClassroomIds: joining));
+      (link) {
+        url = link;
+        emit(state.copyWith(loadingClassroomIds: loading));
       },
     );
-    return link;
+    return url;
   }
 
   Future<bool> end(String classroomId) async {
@@ -448,9 +580,3 @@ class StartSessionCubit extends Cubit<StartSessionState> {
   bool _isCurrent(String classroomId, int requestId) =>
       !isClosed && _requestIds[classroomId] == requestId;
 }
-
-typedef _DueGulfLesson = ({
-  String classroomId,
-  String? classroomSubjectId,
-  String? chatRoomId,
-});

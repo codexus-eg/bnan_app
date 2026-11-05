@@ -266,6 +266,7 @@ class _FakeClassroomsRepo implements ClassroomsRepo {
     int? page,
     int? limit,
     String? curriculum,
+    String? keyword,
   }) =>
       pendingGet?.future ?? Future.value(Right(response!));
   @override
@@ -282,4 +283,7 @@ class _FakeClassroomsRepo implements ClassroomsRepo {
     String classroomId, {
     String? reason,
   }) => throw UnimplementedError();
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

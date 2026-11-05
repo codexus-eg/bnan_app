@@ -2,6 +2,7 @@ import 'package:bnan_app/bnan_app.dart';
 import 'package:bnan_app/core/cache/cache_data.dart';
 import 'package:bnan_app/core/cache/cache_helper.dart';
 import 'package:bnan_app/core/cache/secure_cache_helper.dart';
+import 'package:bnan_app/core/config/app_environment.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/utils/color_manager.dart';
@@ -15,6 +16,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AppEnvironment.validate();
   debugPaintBaselinesEnabled = false;
   debugPaintSizeEnabled = false;
   if (kDebugMode) {

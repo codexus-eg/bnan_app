@@ -1,4 +1,6 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
+import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/socket/socket_service.dart';
 import 'package:bnan_app/features/certificates_management/presentation/manager/get_classroom_students_cubit/get_classroom_students_cubit.dart';
@@ -75,6 +77,8 @@ import 'package:bnan_app/features/parent_subscriptions/data/store/renewal_paymen
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo.dart';
 import 'package:bnan_app/features/weekly_evaluations/data/read_only/repo/weekly_evaluations_read_repo_impl.dart';
 import 'package:bnan_app/features/weekly_evaluations/presentation/manager/read_only/read_only_weekly_evaluations_cubit.dart';
+import 'package:bnan_app/features/teacher_home/data/repo/teacher_session_statistics_repo.dart';
+import 'package:bnan_app/features/teacher_home/data/repo/teacher_session_statistics_repo_impl.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -162,6 +166,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<TeacherPayrollRepo>(
     () => TeacherPayrollRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<TeacherSessionStatisticsRepo>(
+    () => TeacherSessionStatisticsRepoImpl(getIt<ApiConsumer>()),
   );
   getIt.registerLazySingleton<TeacherRegistrationRequestsRepo>(
     () => TeacherRegistrationRequestsRepoImpl(getIt<ApiConsumer>()),
@@ -267,6 +274,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   );
   getIt.registerLazySingleton<GulfScheduleRepo>(
     () => GulfScheduleRepoImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<ScheduleSyncCoordinator>(
+    () => ScheduleSyncCoordinator(repo: getIt<GulfScheduleRepo>()),
   );
   getIt.registerLazySingleton<StartSessionRepo>(
     () => StartSessionRepoImpl(getIt<ApiConsumer>()),
@@ -461,6 +471,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
   getIt.registerFactory<TeacherMyPayrollsCubit>(
     () => TeacherMyPayrollsCubit(getIt<TeacherPayrollRepo>()),
   );
+  getIt.registerFactory<TeacherSessionStatisticsCubit>(
+    () => TeacherSessionStatisticsCubit(getIt<TeacherSessionStatisticsRepo>()),
+  );
   getIt.registerFactory<TeacherPayrollReportCubit>(
     () => TeacherPayrollReportCubit(getIt<TeacherPayrollRepo>()),
   );
@@ -541,6 +554,9 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
       getIt<SocketService>(),
     ),
   );
+  getIt.registerFactory<ClassroomSubjectsCubit>(
+    () => ClassroomSubjectsCubit(getIt<ClassroomsRepo>()),
+  );
   getIt.registerFactory<GetSubjectsCubit>(
     () => GetSubjectsCubit(getIt<SubjectsRepo>()),
   );
@@ -585,6 +601,7 @@ void setupServiceLocator({bool firebaseAvailable = false}) {
     () => TeacherCertificatesCubit(
       getIt<CertificatesManagementRepo>(),
       getIt<SupervisorIdealTeacherRepo>(),
+      mine: SessionManager.instance.role == UserRole.teacher,
     ),
   );
   getIt.registerFactory<GetEgyptianSchedulesCubit>(

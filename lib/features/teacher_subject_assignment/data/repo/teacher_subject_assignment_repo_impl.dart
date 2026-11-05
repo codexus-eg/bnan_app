@@ -17,10 +17,21 @@ class TeacherSubjectAssignmentRepoImpl implements TeacherSubjectAssignmentRepo {
 
   @override
   Future<Either<Failure, TeachingAssignmentsResponseModel>>
-  getTeacherTeachingAssignments() {
+  getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+  }) {
     return repoGuard(() async {
+      final trimmedKeyword = keyword?.trim();
+      final trimmedSubject = subject?.trim();
       final response = await apiConsumer.get(
         EndPoints.teachingAssignments,
+        queryParameter: {
+          if (trimmedKeyword != null && trimmedKeyword.isNotEmpty)
+            'teacher': trimmedKeyword,
+          if (trimmedSubject != null && trimmedSubject.isNotEmpty)
+            'subject': trimmedSubject,
+        },
         isProtected: true,
       );
 

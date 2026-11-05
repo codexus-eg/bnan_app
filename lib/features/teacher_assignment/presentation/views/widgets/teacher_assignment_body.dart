@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/add_new_topic_button.dart';
 import 'package:bnan_app/core/utils/assets.dart';
 import 'package:bnan_app/features/teacher_assignment/data/teacher_assignment_filter_type.dart';
@@ -49,6 +50,11 @@ class _TeacherAssignmentBodyState extends State<TeacherAssignmentBody> {
                   await TeacherAssignmentDialogs.showCreateAssignment(context);
 
               if (result == true && context.mounted) {
+                showCustomSnackBar(
+                  context,
+                  S.of(context).assignmentCreatedSuccessfully,
+                  true,
+                );
                 context.read<GetTeacherAssignmentsCubit>().getAssignments(
                   status: selectedStatus,
                 );

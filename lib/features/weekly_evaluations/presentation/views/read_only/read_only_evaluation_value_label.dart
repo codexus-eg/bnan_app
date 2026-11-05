@@ -17,3 +17,19 @@ String readOnlyEvaluationValueLabel(BuildContext context, String? raw) {
   final value = raw?.trim().toLowerCase() ?? '';
   return supported.contains(value) ? evaluationValueLabel(context, value) : '-';
 }
+
+String formatReadOnlyAttendance({
+  required BuildContext context,
+  String? attendanceStatus,
+  int? attended,
+  int? total,
+}) {
+  final statusLabel = readOnlyEvaluationValueLabel(context, attendanceStatus);
+  if (attended != null && total != null) {
+    if (statusLabel.isNotEmpty && statusLabel != '-') {
+      return '$statusLabel ($attended/$total)';
+    }
+    return '$attended/$total';
+  }
+  return statusLabel;
+}

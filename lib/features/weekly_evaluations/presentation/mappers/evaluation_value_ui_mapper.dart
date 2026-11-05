@@ -22,3 +22,19 @@ String evaluationStatusLabel(BuildContext context, bool isEvaluated) {
   final s = S.of(context);
   return isEvaluated ? s.evaluationEvaluated : s.evaluationNotEvaluated;
 }
+
+String formatAttendanceWithCount({
+  required BuildContext context,
+  required String attendanceStatus,
+  int? attended,
+  int? total,
+}) {
+  final statusLabel = evaluationValueLabel(context, attendanceStatus);
+  if (attended != null && total != null) {
+    if (statusLabel.isNotEmpty && statusLabel != '-') {
+      return '$statusLabel ($attended/$total)';
+    }
+    return '$attended/$total';
+  }
+  return statusLabel;
+}

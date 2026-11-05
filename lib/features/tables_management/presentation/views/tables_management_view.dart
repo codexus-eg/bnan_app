@@ -8,10 +8,12 @@ class TablesManagementView extends StatelessWidget {
     super.key,
     this.showBackButton = true,
     this.useSupervisorClassrooms = false,
+    this.initialClassId,
   });
 
   final bool? showBackButton;
   final bool? useSupervisorClassrooms;
+  final String? initialClassId;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class TablesManagementView extends StatelessWidget {
       ),
       body: TablesManagementBody(
         useSupervisorClassrooms: useSupervisorClassrooms ?? false,
+        initialClassId: initialClassId,
       ),
     );
   }

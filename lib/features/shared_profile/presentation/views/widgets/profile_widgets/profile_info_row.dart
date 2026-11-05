@@ -22,6 +22,9 @@ class ProfileInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final valueStyle = StylesManager.styleRegular14(
+      context,
+    ).copyWith(color: ColorManager.mainColor14);
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 8),
       child: Row(
@@ -33,28 +36,22 @@ class ProfileInfoRow extends StatelessWidget {
                 : null,
           ),
           const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: StylesManager.styleRegular12(context)),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: StylesManager.styleRegular14(
-                  context,
-                ).copyWith(color: ColorManager.mainColor14),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: StylesManager.styleRegular12(context)),
+                const SizedBox(height: 4),
+                Text(value, style: valueStyle),
+              ],
+            ),
           ),
-          const Spacer(),
           if (onEdit != null)
             IconButton(
               onPressed: onEdit,
               icon: SvgPicture.asset(ImageManager.edit),
               color: ColorManager.greyA8AF,
-            )
-          else
-            const SizedBox(width: 48),
+            ),
         ],
       ),
     );

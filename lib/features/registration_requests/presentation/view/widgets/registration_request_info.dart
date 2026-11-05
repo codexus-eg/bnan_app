@@ -45,6 +45,12 @@ class RegistrationRequestInfo extends StatelessWidget {
                 label: '${S.of(context).subjects}: ',
                 value: subjects,
               ),
+              if (requestModel.notes != null &&
+                  requestModel.notes!.trim().isNotEmpty)
+                ClassMetaRow(
+                  label: '${S.of(context).notesText}: ',
+                  value: requestModel.notes!.trim(),
+                ),
             ],
           ),
         ),

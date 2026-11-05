@@ -17,11 +17,38 @@ abstract final class IdealTeacherParser {
       .toSet()
       .toList(growable: false);
 
+  static num number(Object? value) =>
+      value is num ? value : num.tryParse(text(value)) ?? 0;
+
+  static num? nullableNumber(Object? value) {
+    if (value == null) return null;
+    if (value is num) return value;
+    return num.tryParse(text(value));
+  }
+
+  static int integer(Object? value) =>
+      value is num ? value.toInt() : int.tryParse(text(value)) ?? 0;
+
+  static bool boolean(Object? value) =>
+      value == true || value == 1 || text(value).toLowerCase() == 'true';
+
+  static List<Map<String, dynamic>> maps(Object? value) => value is List
+      ? value
+            .whereType<Map>()
+            .map((item) => Map<String, dynamic>.from(item))
+            .toList(growable: false)
+      : const [];
+
   static List<Object?> responseItems(Object? response) {
     final root = map(response);
     final data = root['data'];
     if (data is List) return data;
     final nested = map(data);
-    return list(nested['teachers'] ?? root['teachers']);
+    return list(
+      nested['teachers'] ??
+          root['teachers'] ??
+          nested['users'] ??
+          root['users'],
+    );
   }
 }

@@ -237,6 +237,13 @@ class _AcademicRepo implements AcademicLookupsRepo {
   }) async => const Right(unit);
 
   @override
+  Future<Either<Failure, Unit>> addSubjectToClassroom({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) async => const Right(unit);
+
+  @override
   Future<Either<Failure, List<AcademicGradeModel>>> getGrades({
     String? curriculumId,
   }) async => Right(grades);
@@ -257,6 +264,11 @@ class _AcademicRepo implements AcademicLookupsRepo {
     required String gradeId,
     String? classroomId,
   }) async => const Right([]);
+
+  @override
+  Future<Either<Failure, List<AcademicSubjectModel>>> getEligibleSubjects(
+    String classroomId,
+  ) async => const Right([]);
 }
 
 class _SupervisorRepo implements SupervisorAssignmentRepo {

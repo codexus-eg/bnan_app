@@ -47,6 +47,43 @@ void main() {
   });
 
   testWidgets(
+    'teacher sees Start Session even when active session is next occurrence with canStart=false',
+    (tester) async {
+      final cubit = _Cubit(
+        const StartSessionState(
+          scheduledChatRoomIds: {'room'},
+          scheduledClassroomIds: {'class'},
+          dueLessonsByClassroom: {
+            'class': ScheduledLessonData(
+              classroomId: 'class',
+              chatRoomId: 'room',
+              occurrenceDate: '2026-10-24',
+            ),
+          },
+          activeByClassroom: {
+            'class': StartSessionData(
+              session: StartedSession(
+                id: '',
+                status: 'scheduled',
+                activeOccurrence: false,
+                canStart: false,
+                startStatus: 'NOT_OPEN',
+                occurrenceKey: 'course:class:2026-10-26:monday:23:23',
+                chatRoomId: 'other-room',
+              ),
+              meetingLink: '',
+            ),
+          },
+        ),
+      );
+      await tester.pumpWidget(_app(cubit, _action(UserRole.teacher)));
+      expect(find.text(S.current.startSession), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+      await cubit.close();
+    },
+  );
+
+  testWidgets(
     'parent has no session action and narrow header does not overflow',
     (tester) async {
       await tester.binding.setSurfaceSize(const Size(320, 640));
@@ -94,7 +131,7 @@ StartSessionState _activeState() => const StartSessionState(
         id: 'session',
         status: 'live',
         activeOccurrence: true,
-        joinPermission: false,
+        joinPermission: true,
         chatRoomId: 'room',
       ),
       meetingLink: 'https://zoom.us/j/session',

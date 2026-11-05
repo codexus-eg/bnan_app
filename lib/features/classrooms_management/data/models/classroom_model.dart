@@ -1,3 +1,5 @@
+import 'package:bnan_app/features/classrooms_management/data/models/shared_academic_target.dart';
+
 class ClassroomModel {
   const ClassroomModel({
     required this.id,
@@ -10,6 +12,8 @@ class ClassroomModel {
     required this.assignedTeachersCount,
     this.supervisor,
     this.meetingLink = '',
+    this.classroomKind = 'standard',
+    this.sharedAcademicTargets = const [],
   });
 
   final String id;
@@ -22,6 +26,10 @@ class ClassroomModel {
   final int assignedTeachersCount;
   final ClassroomSupervisorModel? supervisor;
   final String meetingLink;
+  final String classroomKind;
+  final List<SharedAcademicTarget> sharedAcademicTargets;
+
+  bool get isShared => classroomKind == 'shared';
 
   static const List<ClassroomModel> skeletonClassrooms = [
     ClassroomModel(
@@ -84,6 +92,16 @@ class ClassroomModel {
       assignedTeachersCount: json['assignedTeachersCount'] ?? 0,
       supervisor: supervisor,
       meetingLink: json['meetingLink']?.toString() ?? '',
+      classroomKind: json['classroomKind']?.toString() ?? 'standard',
+      sharedAcademicTargets:
+          (json['sharedAcademicTargets'] as List<dynamic>? ?? [])
+              .whereType<Map>()
+              .map(
+                (e) => SharedAcademicTarget.fromJson(
+                  Map<String, dynamic>.from(e),
+                ),
+              )
+              .toList(),
     );
   }
 }

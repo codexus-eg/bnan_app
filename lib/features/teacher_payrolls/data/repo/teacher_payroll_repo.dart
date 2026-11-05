@@ -7,6 +7,7 @@ import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_mo
 import 'package:bnan_app/features/teacher_payrolls/data/models/payout_profile_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/save_payroll_request.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
+import 'package:bnan_app/features/teacher_payrolls/data/models/existing_statement_model.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_my_payrolls_model.dart';
 import 'package:dartz/dartz.dart';
 
@@ -23,6 +24,12 @@ abstract class TeacherPayrollRepo {
     required String from,
     required String to,
     String? teacherId,
+    String? curriculumId,
+  });
+  Future<Either<Failure, List<PayrollListItemModel>>> getStatementPreview({
+    required String curriculumId,
+    required String from,
+    required String to,
   });
   Future<Either<Failure, List<PayrollTeacherModel>>> getTeachers();
   Future<Either<Failure, TeacherPayrollModel>> getTeacherPreview({
@@ -52,4 +59,14 @@ abstract class TeacherPayrollRepo {
     String payrollId,
     PayrollPaymentRequest request,
   );
+  Future<Either<Failure, TeacherPayrollModel>> sendStatement(String statementId);
+  Future<Either<Failure, Unit>> deleteStatement(String statementId);
+  Future<Either<Failure, List<ExistingStatementModel>>> getStatements({
+    String? teacherId,
+    String? curriculumId,
+  });
+  Future<Either<Failure, List<int>>> getReceiptBytes({
+    required String statementId,
+    bool isTeacher = false,
+  });
 }

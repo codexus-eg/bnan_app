@@ -13,6 +13,9 @@ import 'package:bnan_app/features/parent_subscriptions/presentation/policies/sub
 import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
 import 'package:bnan_app/features/parent_children/data/models/parent_flow_result.dart';
 import 'package:bnan_app/features/student_auth/presentation/views/widgets/subscription_widgets/package_scope_badge.dart';
+import 'package:bnan_app/core/helper/subscription_hours_formatter.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/subscription_hours_summary_row.dart';
+import 'package:bnan_app/features/parent_subscriptions/presentation/widgets/subscription_progress_bar.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -68,15 +71,36 @@ class ParentSubscriptionCard extends StatelessWidget {
                   ).copyWith(color: ColorManager.mainColor14),
                 ),
               ),
-              if (subscription.isSingleSubject) const PackageScopeBadge(),
+              PackageScopeBadge(scope: subscription.accessScope),
             ],
           ),
+          if ((subscription.isHoursPlan || subscription.hasPurchasedHours) &&
+              subscription.purchasedHours > 0) ...[
+            const SizedBox(height: 10),
+            SubscriptionHoursSummaryRow(
+              purchasedHours: subscription.purchasedHours,
+              usedHours: subscription.usedHours,
+              remainingHours: subscription.remainingHours,
+            ),
+            const SizedBox(height: 10),
+            SubscriptionProgressBar(
+              usedHours: subscription.usedHours,
+              totalHours: subscription.purchasedHours,
+            ),
+          ],
           const SizedBox(height: 10),
-          if (subscription.isSingleSubject &&
-              subscription.subject?.name.trim().isNotEmpty == true)
+          if (subscription.coveredSubjects.isNotEmpty) ...[
+            _line(
+              context,
+              S.of(context).subjects,
+              subscription.coveredSubjects.map((s) => s.name).join('، '),
+            ),
+          ] else if (subscription.subject?.name.trim().isNotEmpty == true) ...[
             _line(context, S.of(context).subjects, subscription.subject!.name),
+          ],
           if (_typeLabel(context).isNotEmpty)
             _line(context, S.of(context).packageType, _typeLabel(context)),
+          _line(context, S.of(context).packageAccessScope, _scopeLabel(context)),
           if (subscription.effectiveStatus.trim().isNotEmpty)
             _line(context, S.of(context).status, _statusLabel(context)),
           if (subscription.isHoursPlan) ...[
@@ -84,19 +108,30 @@ class ParentSubscriptionCard extends StatelessWidget {
               _line(
                 context,
                 S.of(context).renewalPurchasedHours,
-                _number(subscription.purchasedHours),
+                SubscriptionHoursFormatter.formatTotalHours(
+                  subscription.purchasedHours,
+                  context: context,
+                ),
               ),
             if (subscription.hasUsedHours)
               _line(
                 context,
                 S.of(context).renewalUsedHours,
-                _number(subscription.usedHours),
+                SubscriptionHoursFormatter.formatHours(
+                  subscription.usedHours,
+                  context: context,
+                  isRemaining: false,
+                ),
               ),
             if (subscription.hasRemainingHours)
               _line(
                 context,
                 S.of(context).renewalRemainingHours,
-                _number(subscription.remainingHours),
+                SubscriptionHoursFormatter.formatHours(
+                  subscription.remainingHours,
+                  context: context,
+                  isRemaining: true,
+                ),
               ),
           ],
           if (subscription.startDate != null)
@@ -234,11 +269,20 @@ class ParentSubscriptionCard extends StatelessWidget {
     return value;
   }
 
+  String _scopeLabel(BuildContext context) =>
+      switch (subscription.accessScope.trim().toLowerCase()) {
+        'single_subject' => S.of(context).singleSubject,
+        'shared_subjects' => S.of(context).sharedSubjects,
+        'all_subjects' => S.of(context).allSubjects,
+        final value => value.isEmpty ? S.of(context).allSubjects : value,
+      };
+
   String _statusLabel(BuildContext context) =>
       switch (subscription.effectiveStatus.trim().toLowerCase()) {
         'active' => S.of(context).active,
         'grace_period' => S.of(context).active,
         'expired' || 'completed' => S.of(context).finished,
+        'pending' => S.of(context).subjectStatusPending,
         final value => value,
       };
 

@@ -15,7 +15,7 @@ class SubjectRequestSubjectsSection extends StatelessWidget {
   });
   final List<AvailableSubject> subjects;
   final String? selectedId;
-  final ValueChanged<String> onSelected;
+  final ValueChanged<AvailableSubject> onSelected;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -31,12 +31,12 @@ class SubjectRequestSubjectsSection extends StatelessWidget {
       ...subjects.map(
         (subject) => CustomOptionTile(
           title: subject.name,
-          subtitle: subject.isSelectable
-              ? null
-              : subjectRequestStatusLabel(S.of(context), subject.requestStatus),
+          subtitle: subject.requestStatus != null
+              ? subjectRequestStatusLabel(S.of(context), subject.requestStatus)
+              : null,
           isSelected: selectedId == subject.id,
           isEnabled: subject.isSelectable,
-          onTap: () => onSelected(subject.id),
+          onTap: () => onSelected(subject),
         ),
       ),
     ],

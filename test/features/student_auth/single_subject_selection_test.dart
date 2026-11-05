@@ -49,34 +49,70 @@ void main() {
     ['math', 'arabic'],
     ['math', 'arabic', 'english'],
   ]) {
-    test('Gulf private checkout accepts ${subjects.length} subjects', () {
-      final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
-        ..setRegisterFlowArgs(_gulfPrivateArgs)
-        ..setGrade(id: 'grade', name: 'Grade');
-      for (final subject in subjects) {
-        cubit.toggleSubject(subject);
-      }
+    test(
+      'Gulf single_subject checkout enforces single selection for ${subjects.length} toggles',
+      () {
+        final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+          ..setRegisterFlowArgs(_gulfPrivateArgs)
+          ..setGrade(id: 'grade', name: 'Grade');
+        for (final subject in subjects) {
+          cubit.toggleSubject(subject);
+        }
 
-      final request = cubit.buildTamaraRequest(validateForm: false);
-      if (subjects.isEmpty) {
-        expect(request, isNull);
-      } else {
-        expect(request?.student.subjects, subjects);
-        expect(request?.packageId, 'gulf-package');
-        final json = request!.toJson();
-        final items = (json['items'] as List).cast<Map<String, dynamic>>();
-        expect(json.containsKey('packageId'), isFalse);
-        expect(json.containsKey('purchaseItems'), isFalse);
-        expect(items, [
-          for (final subjectId in subjects)
-            {'subjectId': subjectId, 'packageId': 'gulf-package'},
-        ]);
-        expect(
-          items.map((item) => item['subjectId']),
-          (json['student'] as Map<String, dynamic>)['subjects'],
-        );
-      }
-    });
+        final request = cubit.buildTamaraRequest(validateForm: false);
+        if (subjects.isEmpty) {
+          expect(request, isNull);
+        } else {
+          expect(request?.student.subjects, [subjects.last]);
+          expect(request?.packageId, 'gulf-package');
+          final json = request!.toJson();
+          final items = (json['items'] as List).cast<Map<String, dynamic>>();
+          expect(json.containsKey('packageId'), isFalse);
+          expect(json.containsKey('purchaseItems'), isFalse);
+          expect(items, [
+            {'subjectId': subjects.last, 'packageId': 'gulf-package'},
+          ]);
+          expect(
+            items.map((item) => item['subjectId']),
+            (json['student'] as Map<String, dynamic>)['subjects'],
+          );
+        }
+      },
+    );
+  }
+
+  for (final subjects in const <List<String>>[
+    [],
+    ['math'],
+    ['math', 'arabic'],
+    ['math', 'arabic', 'english'],
+  ]) {
+    test(
+      'Gulf shared_subjects checkout accepts ${subjects.length} subjects and omits items',
+      () {
+        final cubit = RegisterCubit(_FakeAuthRepo(), _FakeGulfParentAuthRepo())
+          ..setRegisterFlowArgs(_gulfSharedArgs)
+          ..setGrade(id: 'grade', name: 'Grade');
+        for (final subject in subjects) {
+          cubit.toggleSubject(subject);
+        }
+
+        final request = cubit.buildTamaraRequest(validateForm: false);
+        if (subjects.isEmpty) {
+          expect(request, isNull);
+        } else {
+          expect(request?.student.subjects, subjects);
+          expect(request?.packageId, 'gulf-shared-package');
+          final json = request!.toJson();
+          expect(json.containsKey('items'), isFalse);
+          expect(json['packageId'], 'gulf-shared-package');
+          expect(
+            (json['student'] as Map<String, dynamic>)['subjects'],
+            subjects,
+          );
+        }
+      },
+    );
   }
 
   test(
@@ -273,6 +309,18 @@ const _gulfPrivateArgs = RegisterFlowArgsModel(
   packageCurrency: 'SAR',
   registrationMode: 'gulf',
   accessScope: 'single_subject',
+  packageType: 'hours',
+);
+
+const _gulfSharedArgs = RegisterFlowArgsModel(
+  curriculumId: 'gulf-curriculum',
+  curriculumName: 'Gulf',
+  packageId: 'gulf-shared-package',
+  packageName: 'Shared Hours',
+  packagePrice: '500',
+  packageCurrency: 'SAR',
+  registrationMode: 'gulf',
+  accessScope: 'shared_subjects',
   packageType: 'hours',
 );
 

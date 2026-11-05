@@ -16,6 +16,7 @@ import 'package:bnan_app/features/admin_subject_requests/presentation/manager/ad
 import 'package:bnan_app/features/registration_requests/data/models/confirm_registration_payment_request_model.dart';
 import 'package:bnan_app/features/registration_requests/data/models/get_registration_requests_response_model.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_request_action_response_model.dart';
+import 'package:bnan_app/features/registration_requests/data/models/registration_request_model.dart';
 import 'package:bnan_app/features/registration_requests/data/models/registration_requests_pagination_model.dart';
 import 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo.dart';
 import 'package:bnan_app/features/registration_requests/data/repo/registration_requests_repo_impl.dart';
@@ -45,6 +46,34 @@ void main() {
     });
 
     expect(request.subject, isNull);
+  });
+
+  test('AdminSubjectRequestModel parses notes and trims empty notes to null', () {
+    final withNotes = AdminSubjectRequestModel.fromJson({
+      'id': 'r-1',
+      'notes': 'أريد معلمة مصرية',
+    });
+    expect(withNotes.notes, 'أريد معلمة مصرية');
+
+    final emptyNotes = AdminSubjectRequestModel.fromJson({
+      'id': 'r-2',
+      'notes': '   ',
+    });
+    expect(emptyNotes.notes, isNull);
+  });
+
+  test('RegistrationRequestModel parses notes and trims empty notes to null', () {
+    final withNotes = RegistrationRequestModel.fromJson({
+      'studentId': 's-1',
+      'notes': 'ملاحظة خاصة بالتسجيل',
+    });
+    expect(withNotes.notes, 'ملاحظة خاصة بالتسجيل');
+
+    final emptyNotes = RegistrationRequestModel.fromJson({
+      'studentId': 's-2',
+      'notes': '   ',
+    });
+    expect(emptyNotes.notes, isNull);
   });
 
   test(

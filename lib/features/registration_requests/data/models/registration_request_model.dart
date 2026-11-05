@@ -17,6 +17,7 @@ class RegistrationRequestModel {
     required this.paymentStatus,
     this.payment,
     this.paymentAmount,
+    this.notes,
   }) : registrationDateValue = registrationDate;
 
   final String studentId;
@@ -31,9 +32,11 @@ class RegistrationRequestModel {
   final String paymentStatus;
   final RegistrationPaymentModel? payment;
   final num? paymentAmount;
+  final String? notes;
 
   factory RegistrationRequestModel.fromJson(Map<String, dynamic> json) {
     final payment = registrationMap(json['payment']);
+    final notesText = registrationString(json['notes']);
 
     return RegistrationRequestModel(
       studentId: registrationString(json['studentId']),
@@ -52,6 +55,7 @@ class RegistrationRequestModel {
       paymentAmount: registrationNum(
         json['amount'] ?? json['paymentAmount'] ?? payment?['amount'],
       ),
+      notes: notesText.isEmpty ? null : notesText,
     );
   }
 

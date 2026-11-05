@@ -38,9 +38,31 @@ class ClassroomStudentModel {
   factory ClassroomStudentModel.fromJson(
     Map<String, dynamic> json,
   ) {
+    final rawStudentId = json['studentId'];
+    final studentIdMap = rawStudentId is Map<String, dynamic>
+        ? rawStudentId
+        : null;
+    final studentMap = json['student'] is Map<String, dynamic>
+        ? json['student'] as Map<String, dynamic>
+        : (json['studentProfile'] is Map<String, dynamic>
+            ? json['studentProfile'] as Map<String, dynamic>
+            : (json['profile'] is Map<String, dynamic>
+                ? json['profile'] as Map<String, dynamic>
+                : studentIdMap));
     return ClassroomStudentModel(
-      id: (json['studentId'] ?? json['id'] ?? json['_id'])?.toString(),
-      fullName: json['fullName'] as String?,
+      id: (rawStudentId is String ? rawStudentId : null) ??
+          json['studentProfileId']?.toString() ??
+          studentMap?['studentId']?.toString() ??
+          studentMap?['id']?.toString() ??
+          studentMap?['_id']?.toString() ??
+          json['id']?.toString() ??
+          json['_id']?.toString(),
+      fullName: (json['fullName'] ??
+              json['name'] ??
+              studentMap?['fullName'] ??
+              studentMap?['name'] ??
+              json['user']?['fullName'])
+          as String?,
     );
   }
 }

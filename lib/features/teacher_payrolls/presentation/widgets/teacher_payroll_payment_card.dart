@@ -1,3 +1,4 @@
+import 'package:bnan_app/core/network/end_points.dart';
 import 'package:bnan_app/core/shared_widget/attachment_preview/network_attachment_preview.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/features/teacher_payrolls/data/models/teacher_payroll_model.dart';
@@ -16,6 +17,14 @@ class TeacherPayrollPaymentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context), payment = payroll.payment;
+    final hasReceipt = payment?.hasReceipt == true;
+    final receiptSource = hasReceipt
+        ? (payment!.receiptUrl.isNotEmpty
+            ? payment.receiptUrl
+            : (payroll.id.isNotEmpty
+                ? EndPoints.teacherMyPayrollStatementReceipt(payroll.id)
+                : ''))
+        : '';
     if (payroll.status != 'paid' || payment == null) {
       return PayrollSection(
         title: s.teacherPayrollPaymentDetails,
@@ -57,11 +66,11 @@ class TeacherPayrollPaymentCard extends StatelessWidget {
             ),
             PayoutProfileDetails(profile: payment.destinationSnapshot!),
           ],
-          if (payment.receiptUrl.isNotEmpty) ...[
+          if (hasReceipt && receiptSource.isNotEmpty) ...[
             const SizedBox(height: 12),
             CustomAppButton(
               text: s.teacherPayrollReceipt,
-              onPressed: () => _receipt(context, payment.receiptUrl),
+              onPressed: () => _receipt(context, receiptSource),
             ),
           ],
         ],

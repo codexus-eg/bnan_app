@@ -1,4 +1,5 @@
 import 'package:bnan_app/core/network/repos_and_cubit_exports.dart';
+import 'package:bnan_app/features/chats/presentation/models/classroom_documents_tab.dart';
 import 'package:bnan_app/core/app_routes/home_route_resolver.dart';
 import 'package:bnan_app/core/enums/user_role.dart';
 import 'package:bnan_app/core/session/session_manager.dart';
@@ -198,32 +199,49 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       ),
       GoRoute(
         path: Routes.studentRegistration,
-        redirect: (_, state) =>
-            state.extra is RegisterFlowArgsModel ? null : Routes.curriculum,
         pageBuilder: (context, state) {
-          final args = state.extra;
-          if (args is! RegisterFlowArgsModel) {
-            return buildTransitionPages(
-              child: const SizedBox.shrink(),
-              key: state.pageKey,
-            );
-          }
+          final args = state.extra is RegisterFlowArgsModel
+              ? state.extra as RegisterFlowArgsModel
+              : null;
           return buildTransitionPages(
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (_) => getIt<RegisterCubit>()
-                    ..setRegisterFlowArgs(args)
-                    ..restorePaymentProvider(
+                  create: (_) {
+                    final cubit = getIt<RegisterCubit>();
+                    if (args != null) {
+                      cubit.setRegisterFlowArgs(args);
+                    }
+                    cubit.restorePaymentProvider(
                       getIt<TamaraPaymentCubit>().draft?.provider,
-                    ),
+                    );
+                    return cubit;
+                  },
                 ),
                 BlocProvider(
-                  create: (_) => getIt<GetGradesCubit>()
-                    ..getCurriculumGrades(
-                      curriculumId: args.curriculumId,
-                      isGulf: args.isGulf,
-                    ),
+                  create: (_) =>
+                      getIt<GetCurriculumsCubit>()..getAllCurriculums(),
+                ),
+                BlocProvider(
+                  create: (_) {
+                    final cubit = getIt<GetGradesCubit>();
+                    if (args != null) {
+                      cubit.getCurriculumGrades(
+                        curriculumId: args.curriculumId,
+                        isGulf: args.isGulf,
+                      );
+                    }
+                    return cubit;
+                  },
+                ),
+                BlocProvider(
+                  create: (_) {
+                    final cubit = getIt<GetPackagesCubit>();
+                    if (args != null) {
+                      cubit.getPackagesByCurriculum(args.curriculumId);
+                    }
+                    return cubit;
+                  },
                 ),
                 BlocProvider(create: (_) => getIt<GetCurriculmSubjectsCubit>()),
                 BlocProvider(create: (_) => getIt<DiscountPreviewCubit>()),
@@ -368,7 +386,21 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: Routes.classroomDocuments,
         pageBuilder: (context, state) {
-          final args = state.extra as ClassroomDocumentsRouteArgs;
+          final extra = state.extra;
+          final args = extra is ClassroomDocumentsRouteArgs
+              ? extra
+              : ClassroomDocumentsRouteArgs(
+                  roomId: state.uri.queryParameters['roomId'] ??
+                      state.uri.queryParameters['classroomId'] ??
+                      '',
+                  roomType:
+                      state.uri.queryParameters['roomType'] ?? 'classroom',
+                  currentUserRole: state.uri.queryParameters['role'] ??
+                      SessionManager.instance.userRole,
+                  classroomId: state.uri.queryParameters['classroomId'],
+                  classroomName: state.uri.queryParameters['classroomName'],
+                  initialTab: ClassroomDocumentsTab.recordings,
+                );
           final canPrivileged =
               ClassroomDocumentsAccess.canRecordingsAndReports(
                 roomType: args.roomType,
@@ -383,6 +415,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               currentUserRole: args.currentUserRole,
               classroomId: args.classroomId,
               classroomName: args.classroomName,
+              initialTab: args.initialTab,
             ),
           );
           return buildTransitionPages(
@@ -571,6 +604,10 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               BlocProvider(create: (_) => getIt<TeacherMyPayrollsCubit>()),
               BlocProvider(
                 create: (_) =>
+                    getIt<TeacherSessionStatisticsCubit>()..load(),
+              ),
+              BlocProvider(
+                create: (_) =>
                     getIt<TeacherProfileCubit>()..getTeacherProfile(),
               ),
               BlocProvider(
@@ -639,8 +676,14 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         redirect: _adminOnly,
         pageBuilder: (context, state) => buildTransitionPages(
           key: state.pageKey,
-          child: BlocProvider(
-            create: (_) => getIt<TeacherPayrollsCubit>(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TeacherPayrollsCubit>()),
+              BlocProvider(
+                create: (_) =>
+                    getIt<AcademicLookupsCubit>()..loadCurriculums(),
+              ),
+            ],
             child: const TeacherPayrollsView(),
           ),
         ),
@@ -676,6 +719,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               teacherId: state.pathParameters['teacherId'],
               from: state.uri.queryParameters['from'],
               to: state.uri.queryParameters['to'],
+              curriculumId: state.uri.queryParameters['curriculumId'],
             ),
           ),
         ),
@@ -889,7 +933,12 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
       GoRoute(
         path: Routes.certificatesManagement,
         redirect: (context, state) {
-          if (SessionManager.instance.role == UserRole.supervisor) return null;
+          final role = SessionManager.instance.role;
+          if (role == UserRole.supervisor ||
+              role == UserRole.admin ||
+              role == UserRole.teacher) {
+            return null;
+          }
           return HomeRouteResolver.forRole(SessionManager.instance.userRole) ??
               Routes.splash;
         },
@@ -1022,8 +1071,21 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
               Routes.splash;
         },
         pageBuilder: (context, state) => buildTransitionPages(
-          child: BlocProvider(
-            create: (_) => getIt<SupervisorIdealTeacherCubit>(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<SupervisorIdealTeacherCubit>(),
+              ),
+              if (SessionManager.instance.role == UserRole.supervisor)
+                BlocProvider(
+                  create: (_) =>
+                      getIt<GetSupervisorClassroomsCubit>()..getMyClassrooms(),
+                ),
+              if (SessionManager.instance.role == UserRole.admin)
+                BlocProvider(
+                  create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
+                ),
+            ],
             child: const IdealTeacherView(),
           ),
           key: state.pageKey,
@@ -1282,19 +1344,27 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
         },
         pageBuilder: (context, state) {
           final isSupervisor = SessionManager.instance.isEgyptianSupervisor;
+          final extra = state.extra;
+          final initialClassId = switch (extra) {
+            LessonsManagementArgs args => args.initialClassId,
+            String id when id.trim().isNotEmpty => id.trim(),
+            Map<String, dynamic> map => map['initialClassId']?.toString(),
+            _ => state.uri.queryParameters['initialClassId'],
+          };
           return buildTransitionPages(
             child: isSupervisor
                 ? BlocProvider(
                     create: (_) =>
                         getIt<GetSupervisorClassroomsCubit>()
                           ..getMyClassrooms(),
-                    child: const TablesManagementView(
+                    child: TablesManagementView(
                       useSupervisorClassrooms: true,
+                      initialClassId: initialClassId,
                     ),
                   )
                 : BlocProvider(
                     create: (_) => getIt<ClassroomsCubit>()..getClassrooms(),
-                    child: const TablesManagementView(),
+                    child: TablesManagementView(initialClassId: initialClassId),
                   ),
             key: state.pageKey,
           );
@@ -1343,10 +1413,19 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) {
           }
           return HomeRouteResolver.forRole(session.userRole) ?? Routes.splash;
         },
-        pageBuilder: (context, state) => buildTransitionPages(
-          child: const LessonsManagementView(),
-          key: state.pageKey,
-        ),
+        pageBuilder: (context, state) {
+          final extra = state.extra;
+          final initialClassId = switch (extra) {
+            LessonsManagementArgs args => args.initialClassId,
+            String id when id.trim().isNotEmpty => id.trim(),
+            Map<String, dynamic> map => map['initialClassId']?.toString(),
+            _ => state.uri.queryParameters['initialClassId'],
+          };
+          return buildTransitionPages(
+            child: LessonsManagementView(initialClassId: initialClassId),
+            key: state.pageKey,
+          );
+        },
       ),
       GoRoute(
         path: Routes.teacherApplication,

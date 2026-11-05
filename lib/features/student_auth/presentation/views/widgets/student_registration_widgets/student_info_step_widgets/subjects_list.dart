@@ -8,6 +8,7 @@ import 'package:bnan_app/features/student_auth/presentation/manager/register_cub
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_state.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/discount_preview_cubit.dart';
+import 'package:bnan_app/features/student_auth/presentation/views/widgets/student_registration_widgets/academic_selection_widgets/subject_note_field.dart';
 import 'package:bnan_app/core/shared_widget/custom_option_tile.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -80,17 +81,29 @@ class SubjectsList extends StatelessWidget {
                     final isSelected = registerCubit.selectedSubjectIds
                         .contains(subject.id);
 
-                    return CustomOptionTile(
-                      title: subject.name,
-                      isSelected: isSelected,
-                      onTap: () {
-                        if (isLoading) return;
-                        context
-                            .read<TamaraPaymentCubit>()
-                            .invalidateAmountSummary();
-                        context.read<DiscountPreviewCubit>().invalidate();
-                        registerCubit.toggleSubject(subject.id);
-                      },
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        CustomOptionTile(
+                          title: subject.name,
+                          isSelected: isSelected,
+                          onTap: () {
+                            if (isLoading) return;
+                            context
+                                .read<TamaraPaymentCubit>()
+                                .invalidateAmountSummary();
+                            context.read<DiscountPreviewCubit>().invalidate();
+                            registerCubit.toggleSubject(subject.id);
+                          },
+                        ),
+                        if (isSelected && registerCubit.isGulf)
+                          SubjectNoteField(
+                            key: ValueKey('subject_note_${subject.id}'),
+                            subjectId: subject.id,
+                            subjectName: subject.name,
+                          ),
+                      ],
                     );
                   }),
                 ],

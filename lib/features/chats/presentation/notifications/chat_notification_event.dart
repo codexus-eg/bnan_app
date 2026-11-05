@@ -11,6 +11,7 @@ class ChatNotificationEvent {
     required this.message,
     required this.createdAt,
     this.roomName = '',
+    this.isDisplayable = true,
   });
 
   final String messageId;
@@ -21,9 +22,12 @@ class ChatNotificationEvent {
   final String message;
   final DateTime createdAt;
   final String roomName;
+  final bool isDisplayable;
 
   factory ChatNotificationEvent.fromMessage(ChatMessageModel message) {
     final attachmentName = message.attachments.firstOrNull?.fileName ?? '';
+    final isDisplayable =
+        !message.isNonDisplayableSessionEvent && !message.deletedForEveryone;
     return ChatNotificationEvent(
       messageId: message.id.trim(),
       roomId: message.roomId.trim(),
@@ -33,6 +37,7 @@ class ChatNotificationEvent {
           ? message.text.trim()
           : attachmentName,
       createdAt: message.createdAt ?? DateTime.now(),
+      isDisplayable: isDisplayable,
     );
   }
 

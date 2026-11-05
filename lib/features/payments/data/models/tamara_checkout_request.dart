@@ -40,6 +40,7 @@ class TamaraCheckoutRequest {
     if (provider == GulfPaymentProvider.tamara)
       'paymentAddress': address.toJson(),
     'locale': locale,
+    'isMobile': true,
   };
 }
 

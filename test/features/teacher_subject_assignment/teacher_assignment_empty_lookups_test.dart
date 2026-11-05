@@ -166,6 +166,13 @@ class _AcademicRepo implements AcademicLookupsRepo {
   }) async => const Right(unit);
 
   @override
+  Future<Either<Failure, Unit>> addSubjectToClassroom({
+    required String classroomId,
+    required String subjectId,
+    String? teacherId,
+  }) async => const Right(unit);
+
+  @override
   Future<Either<Failure, List<AcademicCurriculumModel>>>
   getCurriculums() async => const Right([
     AcademicCurriculumModel(id: 'curriculum-1', name: 'Curriculum one'),
@@ -196,12 +203,20 @@ class _AcademicRepo implements AcademicLookupsRepo {
   }) async => emptyAt == _EmptyAt.subjectFailure
       ? Left(Failure(message: 'subjects failed'))
       : const Right([]);
+
+  @override
+  Future<Either<Failure, List<AcademicSubjectModel>>> getEligibleSubjects(
+    String classroomId,
+  ) async => const Right([]);
 }
 
 class _TeacherRepo implements TeacherSubjectAssignmentRepo {
   @override
   Future<Either<Failure, TeachingAssignmentsResponseModel>>
-  getTeacherTeachingAssignments() async =>
+  getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+  }) async =>
       Right(TeachingAssignmentsResponseModel.fromJson(const {}));
 
   @override

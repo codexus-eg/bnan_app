@@ -30,8 +30,9 @@ class TeacherPayrollDetailsView extends StatefulWidget {
     this.teacherId,
     this.from,
     this.to,
+    this.curriculumId,
   });
-  final String? payrollId, teacherId, from, to;
+  final String? payrollId, teacherId, from, to, curriculumId;
   @override
   State<TeacherPayrollDetailsView> createState() =>
       _TeacherPayrollDetailsViewState();
@@ -90,7 +91,8 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
   );
   Widget _content(TeacherPayrollDetailsReady state) {
     final p = state.payroll;
-    final readOnly = p.status == 'paid' || p.status == 'cancelled';
+    final canEdit = p.id.isEmpty || p.isDraftEditable;
+    final readOnly = !canEdit;
     if (p.workItems.isEmpty) {
       return NoDataWidget(title: S.of(context).payrollNoWork);
     }
@@ -139,7 +141,7 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
               onChanged: (_) => setState(() {}),
             ),
           const SizedBox(height: 12),
-          if (!readOnly)
+          if (p.id.isEmpty)
             PayrollCurrencyField(
               value: currency,
               onChanged: (v) => setState(() => currency = v ?? currency),
@@ -157,32 +159,58 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
             backendTotal: readOnly ? p.totals.total : null,
           ),
           const SizedBox(height: 12),
-          if (p.status == 'draft')
+          if (p.status == 'draft' ||
+              p.status == 'sent' ||
+              p.status == 'payment_pending')
             PayrollPayoutSection(
               teacherId: p.teacher.id,
               profile: state.profile,
             ),
           if (p.payment != null) ...[
             const SizedBox(height: 12),
-            PayrollPaymentDetails(payment: p.payment!),
+            PayrollPaymentDetails(payment: p.payment!, statementId: p.id),
           ],
           const SizedBox(height: 16),
-          if (!readOnly)
+          if (canEdit)
             CustomAppButton(
               text: S.of(context).payrollSaveDraft,
               isLoading: state.saving,
               onPressed: _hasValidRates ? () => _save(p) : null,
             ),
-          if (p.status == 'draft') ...[
+          if (p.id.isNotEmpty && p.isDraftEditable) ...[
+            const SizedBox(height: 8),
+            CustomAppButton(
+              text: S.of(context).send,
+              isLoading: state.saving,
+              onPressed: () =>
+                  context.read<TeacherPayrollDetailsCubit>().sendStatement(),
+            ),
+          ],
+          if (p.id.isNotEmpty && p.isPayable) ...[
             const SizedBox(height: 8),
             CustomAppButton(
               text: S.of(context).payrollConfirmPayment,
               onPressed: state.profile == null
-                  ? null
+                  ? () => ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(S.of(context).payrollNoPayoutProfile),
+                        ),
+                      )
                   : () => MyNavigator.goTo(
-                      context,
-                      Routes.teacherPayrollPaymentPath(p.id),
-                    ),
+                        context,
+                        Routes.teacherPayrollPaymentPath(p.id),
+                      ),
+            ),
+          ],
+          if (p.id.isNotEmpty && p.isDeletable) ...[
+            const SizedBox(height: 8),
+            CustomAppButton(
+              text: S.of(context).deletePayrollStatement,
+              backgroundColor: Colors.white,
+              textColor: Colors.red,
+              borderColor: Colors.red,
+              isLoading: state.saving,
+              onPressed: _confirmDelete,
             ),
           ],
           const SizedBox(height: 24),
@@ -234,6 +262,10 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
     context.read<TeacherPayrollDetailsCubit>().save(
       SavePayrollRequest(
         teacherId: p.id.isEmpty ? p.teacher.id : null,
+        curriculumId:
+            p.id.isEmpty ? (widget.curriculumId ?? p.curriculumId) : null,
+        from: p.id.isEmpty ? p.period.from : null,
+        to: p.id.isEmpty ? p.period.to : null,
         period: p.id.isEmpty ? p.period : null,
         currency: currency,
         rates: mapped,
@@ -243,6 +275,38 @@ class _TeacherPayrollDetailsViewState extends State<TeacherPayrollDetailsView> {
         notes: notes.text,
       ),
     );
+  }
+
+  Future<void> _confirmDelete() async {
+    final s = S.of(context);
+    final cubit = context.read<TeacherPayrollDetailsCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+    final nav = Navigator.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(s.deletePayrollStatement),
+        content: Text(s.confirmDeletePayrollStatement),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(s.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(s.delete, style: const TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final ok = await cubit.deleteStatement();
+    if (ok && mounted) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(s.payrollStatementDeletedSuccessfully)),
+      );
+      nav.pop(true);
+    }
   }
 
   bool get _hasValidRates =>

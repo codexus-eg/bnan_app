@@ -94,7 +94,10 @@ class _CardRepo implements TeacherSubjectAssignmentRepo {
 
   @override
   Future<Either<Failure, TeachingAssignmentsResponseModel>>
-  getTeacherTeachingAssignments() async {
+  getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+  }) async {
     getCalls++;
     return const Right(
       TeachingAssignmentsResponseModel(success: true, length: 0, data: []),

@@ -33,7 +33,6 @@ abstract class ParentAddChildValidation {
     final count = state.selectedSubjectIds.length;
     if (state.isSingleSubject &&
         !state.isEgyptianPrivate &&
-        !state.isGulf &&
         count != 1) {
       return S.current.parentSingleSubjectRequired;
     }

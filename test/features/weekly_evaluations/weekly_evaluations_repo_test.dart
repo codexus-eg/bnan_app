@@ -113,6 +113,8 @@ void main() {
     expect(body['week'], 2);
     expect(body['behavior'], 'very_good');
     expect(body, isNot(contains('weekStart')));
+    expect(body, isNot(contains('attendance')));
+    expect(body, isNot(contains('homework')));
     expect(
       body.keys,
       unorderedEquals([
@@ -120,9 +122,7 @@ void main() {
         'classroom',
         'subject',
         'week',
-        'attendance',
         'participation',
-        'homework',
         'behavior',
         'bonus',
         'notes',
@@ -159,6 +159,21 @@ void main() {
       (_) => fail('Expected failure'),
     );
   });
+
+  test('publishWeeklyEvaluations sends POST to endpoint with week', () async {
+    final result = await repo.publishWeeklyEvaluations(
+      classroomId: 'classroom-1',
+      week: 3,
+    );
+
+    expect(result.isRight(), isTrue);
+    expect(
+      api.path,
+      '/classrooms/classroom-1/evaluations/weekly/3/publish',
+    );
+    expect(api.method, 'POST');
+    expect(api.isProtected, isTrue);
+  });
 }
 
 class _FakeApi implements ApiConsumer {
@@ -170,6 +185,22 @@ class _FakeApi implements ApiConsumer {
   String method = '';
   bool isProtected = false;
   AppException? error;
+
+  @override
+  Future<dynamic> post(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameter,
+    bool isFormData = false,
+    bool isProtected = false,
+  }) async {
+    if (error case final error?) throw error;
+    method = 'POST';
+    this.path = path;
+    this.data = data;
+    this.isProtected = isProtected;
+    return response;
+  }
 
   @override
   Future<dynamic> get(

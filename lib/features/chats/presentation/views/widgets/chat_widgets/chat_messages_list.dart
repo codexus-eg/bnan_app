@@ -23,6 +23,7 @@ class ChatMessagesList extends StatefulWidget {
     this.selectionMode = false,
     this.canSelect,
     this.onToggleSelection,
+    this.onMessageLongPress,
   });
 
   final List<ChatMessageModel> messages;
@@ -36,6 +37,7 @@ class ChatMessagesList extends StatefulWidget {
   final bool selectionMode;
   final bool Function(ChatMessageModel message)? canSelect;
   final ValueChanged<ChatMessageModel>? onToggleSelection;
+  final ValueChanged<ChatMessageModel>? onMessageLongPress;
 
   @override
   State<ChatMessagesList> createState() => ChatMessagesListState();
@@ -48,18 +50,19 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   final messageKeys = <String, GlobalKey>{};
   Timer? highlightTimer;
   String? highlightedMessageId;
+  List<ChatMessageModel> _cachedMessages = const [];
 
   @override
   void initState() {
     super.initState();
+    _cachedMessages = _displayMessages(widget.messages);
     if (!widget.isLoading) {
-      final messages = _displayMessages(widget.messages);
-      final target = _resolveInitialTarget(messages);
+      final target = _resolveInitialTarget(_cachedMessages);
       if (target != null) {
         _scroll.claimInitialPosition();
         _scrollToInitialTarget(target);
       } else {
-        _scroll.initialize(false, messages);
+        _scroll.initialize(false, _cachedMessages);
       }
     } else {
       _scroll.initialize(true, const []);
@@ -69,7 +72,9 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   @override
   void didUpdateWidget(covariant ChatMessagesList oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final oldMessages = _cachedMessages;
     final messages = _displayMessages(widget.messages);
+    _cachedMessages = messages;
     final search = widget.search;
     if (search?.targetMessageId != null &&
         (search!.targetMessageId != oldWidget.search?.targetMessageId ||
@@ -90,7 +95,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
         _scroll.update(
           wasLoading: oldWidget.isLoading,
           isLoading: widget.isLoading,
-          oldMessages: _displayMessages(oldWidget.messages),
+          oldMessages: oldMessages,
           newMessages: messages,
         );
       }
@@ -100,7 +105,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     _scroll.update(
       wasLoading: oldWidget.isLoading,
       isLoading: widget.isLoading,
-      oldMessages: _displayMessages(oldWidget.messages),
+      oldMessages: oldMessages,
       newMessages: messages,
     );
   }
@@ -124,9 +129,9 @@ class ChatMessagesListState extends State<ChatMessagesList> {
 
   @override
   Widget build(BuildContext context) {
-    final messages = _displayMessages(widget.messages);
+    final messages = _cachedMessages;
     _pruneMessageKeys(messages);
-    return SingleChildScrollView(
+    return ListView.separated(
       controller: _scroll.controller,
       padding: const EdgeInsetsDirectional.only(
         top: 16,
@@ -134,43 +139,50 @@ class ChatMessagesListState extends State<ChatMessagesList> {
         end: 16,
         bottom: 50,
       ),
-      child: Column(
-        children: [
-          for (var index = 0; index < messages.length; index++) ...[
-            if (index > 0) const SizedBox(height: 16),
-            if (messages[index].id.trim() ==
-                widget.firstUnreadMessageId?.trim())
+      itemCount: messages.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        final message = messages[index];
+        final isFirstUnread =
+            message.id.trim() == widget.firstUnreadMessageId?.trim();
+        final bubble = GestureDetector(
+          onLongPress: widget.selectionMode
+              ? (_canSelect(message)
+                  ? () => widget.onToggleSelection?.call(message)
+                  : null)
+              : () => widget.onMessageLongPress?.call(message),
+          onTap: widget.selectionMode && _canSelect(message)
+              ? () => widget.onToggleSelection?.call(message)
+              : null,
+          child: AbsorbPointer(
+            absorbing: widget.selectionMode,
+            child: ChatBubble(
+              key: _targetKey(message.id),
+              message: message,
+              currentUserId: widget.currentUserId,
+              searchQuery: widget.search?.searchQuery ?? '',
+              highlighted:
+                  message.id.trim() == highlightedMessageId ||
+                  message.id.trim() == widget.search?.targetMessageId,
+              selected: widget.selectedMessageIds.contains(message.id.trim()),
+            ),
+          ),
+        );
+
+        if (isFirstUnread) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               const Padding(
                 padding: EdgeInsetsDirectional.only(bottom: 16),
                 child: NewMessagesSeparator(),
               ),
-            GestureDetector(
-              onLongPress: _canSelect(messages[index])
-                  ? () => widget.onToggleSelection?.call(messages[index])
-                  : null,
-              onTap: widget.selectionMode && _canSelect(messages[index])
-                  ? () => widget.onToggleSelection?.call(messages[index])
-                  : null,
-              child: AbsorbPointer(
-                absorbing: widget.selectionMode,
-                child: ChatBubble(
-                  key: _targetKey(messages[index].id),
-                  message: messages[index],
-                  currentUserId: widget.currentUserId,
-                  searchQuery: widget.search?.searchQuery ?? '',
-                  highlighted:
-                      messages[index].id.trim() == highlightedMessageId ||
-                      messages[index].id.trim() ==
-                          widget.search?.targetMessageId,
-                  selected: widget.selectedMessageIds.contains(
-                    messages[index].id.trim(),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
+              bubble,
+            ],
+          );
+        }
+        return bubble;
+      },
     );
   }
 
@@ -193,7 +205,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   }) async {
     final targetId = messageId.trim();
     if (targetId.isEmpty) return;
-    final messages = _displayMessages(widget.messages);
+    final messages = _cachedMessages;
     final index = messages.indexWhere(
       (message) => message.id.trim() == targetId,
     );

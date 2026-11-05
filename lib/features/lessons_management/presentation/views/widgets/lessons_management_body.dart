@@ -1,3 +1,5 @@
+import 'package:bnan_app/core/enums/user_role.dart';
+import 'package:bnan_app/core/session/session_manager.dart';
 import 'package:bnan_app/core/shared_widget/app_skeletonizer.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
@@ -60,6 +62,10 @@ class LessonsManagementBody extends StatelessWidget {
     }
     final subjectUnavailable =
         readOnly && (classroom.hasSubjectConflict || classroom.subject == null);
+    final isTeacher = SessionManager.instance.role == UserRole.teacher;
+    final isEgyptianTeacher = isTeacher &&
+        classroom.curriculum?.registrationMode.toLowerCase() == 'egyptian';
+    final effectiveReadOnly = readOnly || isEgyptianTeacher;
     final uiClassrooms = state.classrooms.map(_classroomUi).toList();
     final lessons = subjectUnavailable
         ? <LessonUiModel>[]
@@ -74,10 +80,9 @@ class LessonsManagementBody extends StatelessWidget {
           classrooms: uiClassrooms,
           selectedClassroomId: state.selectedClassroomId,
           onClassroomChanged: context.read<GulfScheduleCubit>().selectClassroom,
-          showAddButton: !readOnly,
-          onAddTap: classroom.classroomSubjectId == null
-              ? null
-              : () => _openAdd(context, classroom),
+          showAddButton: !effectiveReadOnly,
+          onAddTap:
+              effectiveReadOnly ? null : () => _openAdd(context, classroom),
         ),
         const SizedBox(height: 16),
         LessonsWeekDaysSelector(
@@ -93,7 +98,7 @@ class LessonsManagementBody extends StatelessWidget {
           child: lessons.isNotEmpty
               ? LessonsList(
                   lessons: lessons,
-                  onTap: readOnly
+                  onTap: effectiveReadOnly
                       ? null
                       : (lesson) => _openEdit(context, classroom, lesson),
                 )
@@ -101,9 +106,7 @@ class LessonsManagementBody extends StatelessWidget {
                   title: subjectUnavailable
                       ? S.of(context).gulfClassroomSubjectUnavailable
                       : classroom.entries.isEmpty
-                      ? classroom.classroomSubjectId == null
-                            ? S.of(context).gulfClassroomSubjectUnavailable
-                            : S.of(context).noScheduleEntriesForClassroom
+                      ? S.of(context).noScheduleEntriesForClassroom
                       : S.of(context).noScheduledLessonForDay,
                 ),
         ),
@@ -111,16 +114,19 @@ class LessonsManagementBody extends StatelessWidget {
     );
   }
 
-  void _openAdd(BuildContext context, GulfClassroom classroom) {
+  Future<void> _openAdd(BuildContext context, GulfClassroom classroom) async {
     final cubit = context.read<GulfScheduleCubit>()..clearActionFeedback();
+    await cubit.ensureClassroomSubjectResolved(classroom.id);
+    if (!context.mounted) return;
+    final currentClassroom = cubit.state.selectedClassroom ?? classroom;
     showDialog<void>(
       context: context,
       builder: (_) => BlocProvider.value(
         value: cubit,
         child: AddLessonDialog(
-          classroom: _classroomUi(classroom),
+          classroom: _classroomUi(currentClassroom),
           initialDay: cubit.state.selectedDay,
-          blockedDays: classroom.entries.map((item) => item.day).toSet(),
+          blockedDays: currentClassroom.entries.map((item) => item.day).toSet(),
           onSave: ({required day, required startTime, required endTime}) =>
               cubit.saveEntry(day: day, startTime: startTime, endTime: endTime),
         ),
@@ -152,19 +158,36 @@ class LessonsManagementBody extends StatelessWidget {
                 startTime: startTime,
                 endTime: endTime,
               ),
-          onDelete: () => cubit.deleteEntry(lesson.day),
+          onDelete: () {
+            final entry = classroom.entries.firstWhere(
+              (e) => e.day == lesson.day,
+              orElse: () => const GulfScheduleEntry(day: '', startTime: ''),
+            );
+            return cubit.deleteEntry(
+              lesson.day,
+              entryId: entry.slotId ?? entry.id,
+            );
+          },
         ),
       ),
     );
   }
 
-  LessonClassroomUiModel _classroomUi(GulfClassroom item) =>
-      LessonClassroomUiModel(
-        id: item.id,
-        name: item.name,
-        subjectId: item.subject?.id ?? '',
-        subjectName: item.subject?.name ?? '',
-      );
+  LessonClassroomUiModel _classroomUi(GulfClassroom item) {
+    String subjectName = item.subject?.name ?? '';
+    if (subjectName.isEmpty && item.name.contains(' - ')) {
+      final parts = item.name.split(' - ');
+      if (parts.length > 1 && parts.last.trim().isNotEmpty) {
+        subjectName = parts.last.trim();
+      }
+    }
+    return LessonClassroomUiModel(
+      id: item.id,
+      name: item.name,
+      subjectId: item.subject?.id ?? '',
+      subjectName: subjectName,
+    );
+  }
 
   LessonUiModel _lessonUi(GulfClassroom classroom, GulfScheduleEntry entry) =>
       LessonUiModel(

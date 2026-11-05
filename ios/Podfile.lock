@@ -1,0 +1,58 @@
+PODS:
+  - Alamofire (5.12.2)
+  - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+  - Google-Maps-iOS-Utils (6.1.0):
+    - GoogleMaps (~> 9.0)
+  - google_maps_flutter_ios (0.0.1):
+    - Flutter
+    - Google-Maps-iOS-Utils (< 7.0, >= 5.0)
+    - GoogleMaps (< 11.0, >= 8.4)
+  - GoogleMaps (9.4.0):
+    - GoogleMaps/Maps (= 9.4.0)
+  - GoogleMaps/Maps (9.4.0)
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
+  - tamara_flutter_sdk (1.0.0):
+    - Flutter
+    - Moya
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
+  - tamara_flutter_sdk (from `.symlinks/plugins/tamara_flutter_sdk/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Google-Maps-iOS-Utils
+    - GoogleMaps
+    - Moya
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  google_maps_flutter_ios:
+    :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
+  tamara_flutter_sdk:
+    :path: ".symlinks/plugins/tamara_flutter_sdk/ios"
+
+SPEC CHECKSUMS:
+  Alamofire: c5f37d8f438dc1d7fd3ff767f2f80fd01ca381d7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
+  Google-Maps-iOS-Utils: 0a484b05ed21d88c9f9ebbacb007956edd508a96
+  google_maps_flutter_ios: 0cf046caf50b00d95071f79e8031fcd5ef902beb
+  GoogleMaps: 0608099d4870cac8754bdba9b6953db543432438
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  tamara_flutter_sdk: 81aa62af59597a796a251401625457006f6d01f8
+
+PODFILE CHECKSUM: ce2a4dd764e1c7aeed6a7cdc5e61d092b6dc6d32
+
+COCOAPODS: 1.16.2

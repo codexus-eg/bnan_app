@@ -12,7 +12,9 @@ class TeacherCertificatesState {
     this.lastPage = 1,
     this.loadingMore = false,
     this.loadingTeachers = false,
-    this.issuing = false,
+    this.creatingDraft = false,
+    this.issuingIds = const {},
+    this.selectedStatus,
     this.error = '',
     this.eventMessage = '',
     this.eventSuccess = false,
@@ -23,8 +25,12 @@ class TeacherCertificatesState {
   final List<TeacherCertificateModel> items;
   final List<SupervisorTeacherModel> teachers;
   final int page, lastPage, eventId;
-  final bool loadingMore, loadingTeachers, issuing, eventSuccess;
+  final bool loadingMore, loadingTeachers, creatingDraft, eventSuccess;
+  final Set<String> issuingIds;
+  final String? selectedStatus;
   final String error, eventMessage;
+
+  bool isIssuing(String id) => issuingIds.contains(id);
 
   TeacherCertificatesState copyWith({
     TeacherCertificatesStatus? status,
@@ -34,7 +40,10 @@ class TeacherCertificatesState {
     int? lastPage,
     bool? loadingMore,
     bool? loadingTeachers,
-    bool? issuing,
+    bool? creatingDraft,
+    Set<String>? issuingIds,
+    String? selectedStatus,
+    bool clearStatus = false,
     String? error,
     String? eventMessage,
     bool? eventSuccess,
@@ -47,7 +56,9 @@ class TeacherCertificatesState {
     lastPage: lastPage ?? this.lastPage,
     loadingMore: loadingMore ?? this.loadingMore,
     loadingTeachers: loadingTeachers ?? this.loadingTeachers,
-    issuing: issuing ?? this.issuing,
+    creatingDraft: creatingDraft ?? this.creatingDraft,
+    issuingIds: issuingIds ?? this.issuingIds,
+    selectedStatus: clearStatus ? null : (selectedStatus ?? this.selectedStatus),
     error: error ?? this.error,
     eventMessage: eventMessage ?? this.eventMessage,
     eventSuccess: eventSuccess ?? this.eventSuccess,

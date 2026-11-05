@@ -9,6 +9,8 @@ import 'package:bnan_app/features/push_notifications/data/models/chat_push_inten
 import 'package:bnan_app/features/push_notifications/presentation/push_messaging.dart';
 import 'package:bnan_app/features/push_notifications/presentation/push_token_registrar.dart';
 import 'package:bnan_app/features/push_notifications/presentation/local_push_notifications.dart';
+import 'package:bnan_app/core/network/dependency_injection.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bnan_app/generated/l10n.dart';
@@ -93,6 +95,10 @@ class PushNotificationService {
       _foregroundIds.remove(_foregroundIds.first);
     }
     if (notification != null) {
+      if (getIt.isRegistered<ScheduleSyncCoordinator>() &&
+          getIt<ScheduleSyncCoordinator>().isScheduleNotification(notification)) {
+        getIt<ScheduleSyncCoordinator>().handleNotification(notification);
+      }
       final accepted =
           _notifications?.ingest(notification, emitIncoming: false) ?? true;
       if (accepted && notification.key.trim().toUpperCase() != 'NEW_MESSAGE') {
@@ -143,7 +149,13 @@ class PushNotificationService {
   void _handleOpened(RemoteMessage? message, {required String appState}) {
     if (message != null) {
       _logChatRingReceived(message, appState);
-      _queueOrOpenNotification(_notification(message));
+      final notif = _notification(message);
+      if (notif != null &&
+          getIt.isRegistered<ScheduleSyncCoordinator>() &&
+          getIt<ScheduleSyncCoordinator>().isScheduleNotification(notif)) {
+        getIt<ScheduleSyncCoordinator>().handleNotification(notif);
+      }
+      _queueOrOpenNotification(notif);
       _queueOrOpen(_intent(message));
     }
   }

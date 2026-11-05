@@ -6,8 +6,11 @@ import 'package:bnan_app/features/chats/data/models/chat_message_model.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_cubit.dart';
 import 'package:bnan_app/features/chats/presentation/manager/get_room_messages_cubit/get_room_messages_state.dart';
 import 'package:bnan_app/features/chats/presentation/policies/chat_message_delete_policy.dart';
+import 'package:bnan_app/features/chats/presentation/policies/chat_message_edit_policy.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_delete_confirmation.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_edit_message_dialog.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_header.dart';
+import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_message_actions_sheet.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_input_bar/chat_input_bar.dart';
 import 'package:bnan_app/features/chats/presentation/views/widgets/chat_widgets/chat_messages_list.dart';
 import 'package:flutter/material.dart';
@@ -89,11 +92,19 @@ class _ChatBodyState extends State<ChatBody> {
                 onCloseSearch: cubit.closeSearch,
                 selectedCount: selectedMessageIds.length,
                 isDeleting: isDeleting,
+                canEditSelected: _canEditSelectedMessage(state),
                 onCancelSelection: _clearSelection,
                 onDeleteSelection: _deleteSelection,
+                onEditSelection: () => _editSelectedMessage(state),
               ),
               Expanded(child: _buildMessagesView(context, state, searchState)),
-              SafeArea(top: false, child: ChatInputBar(roomId: widget.roomId)),
+              SafeArea(
+                top: false,
+                child: ChatInputBar(
+                  key: ValueKey(widget.roomId),
+                  roomId: widget.roomId,
+                ),
+              ),
             ],
           );
         },
@@ -111,6 +122,7 @@ class _ChatBodyState extends State<ChatBody> {
     }
 
     if (state is GetRoomMessagesSuccess && state.messages.isEmpty) {
+      context.read<GetRoomMessagesCubit>().markCurrentRoomRead();
       return const NoDataWidget();
     }
 
@@ -140,6 +152,7 @@ class _ChatBodyState extends State<ChatBody> {
         selectionMode: selectedMessageIds.isNotEmpty,
         canSelect: _canDelete,
         onToggleSelection: _toggleSelection,
+        onMessageLongPress: _onMessageLongPress,
       ),
     );
   }
@@ -184,6 +197,80 @@ class _ChatBodyState extends State<ChatBody> {
     setState(() {
       isDeleting = false;
       if (error == null) selectedMessageIds.clear();
+    });
+    if (error != null) showCustomSnackBar(context, error, false);
+  }
+
+  bool _canEdit(ChatMessageModel message) =>
+      ChatMessageEditPolicy.canEdit(
+        message: message,
+        currentUserId: SessionManager.instance.userId ?? '',
+      );
+
+  bool _canEditSelectedMessage(GetRoomMessagesState state) {
+    if (selectedMessageIds.length != 1 || state is! GetRoomMessagesSuccess) {
+      return false;
+    }
+    final selectedId = selectedMessageIds.first;
+    final message = state.messages.firstWhere(
+      (m) => m.id.trim() == selectedId,
+      orElse: () => ChatMessageModel.placeholder,
+    );
+    return message.id.trim().isNotEmpty && _canEdit(message);
+  }
+
+  Future<void> _editSelectedMessage(GetRoomMessagesState state) async {
+    if (selectedMessageIds.length != 1 || state is! GetRoomMessagesSuccess) {
+      return;
+    }
+    final selectedId = selectedMessageIds.first;
+    final message = state.messages.firstWhere(
+      (m) => m.id.trim() == selectedId,
+      orElse: () => ChatMessageModel.placeholder,
+    );
+    if (message.id.trim().isEmpty || !_canEdit(message)) return;
+    final edited = await showEditChatMessageDialog(context, message);
+    if (edited && mounted) {
+      _clearSelection();
+    }
+  }
+
+  Future<void> _onMessageLongPress(ChatMessageModel message) async {
+    final canEdit = _canEdit(message);
+    final canDelete = _canDelete(message);
+    if (!canEdit && !canDelete) return;
+
+    final action = await showChatMessageActionsSheet(
+      context,
+      message: message,
+      canEdit: canEdit,
+      canDelete: canDelete,
+    );
+    if (!mounted || action == null) return;
+
+    switch (action) {
+      case ChatMessageMenuAction.edit:
+        final edited = await showEditChatMessageDialog(context, message);
+        if (edited && mounted) _clearSelection();
+      case ChatMessageMenuAction.delete:
+        await _deleteSingleMessage(message);
+      case ChatMessageMenuAction.select:
+        _toggleSelection(message);
+    }
+  }
+
+  Future<void> _deleteSingleMessage(ChatMessageModel message) async {
+    if (isDeleting) return;
+    if (!await showChatDeleteConfirmation(context, 1)) return;
+    if (!mounted) return;
+    setState(() => isDeleting = true);
+    final error = await context.read<GetRoomMessagesCubit>().deleteSingleMessage(
+      messageId: message.id,
+    );
+    if (!mounted) return;
+    setState(() {
+      isDeleting = false;
+      selectedMessageIds.remove(message.id.trim());
     });
     if (error != null) showCustomSnackBar(context, error, false);
   }

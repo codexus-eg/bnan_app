@@ -182,6 +182,36 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
           state.copyWith(
             isSubmitting: false,
             message: 'subject_request_submitted',
+            notes: '',
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> addToSharedSubscription(String subjectId) async {
+    if (isClosed || state.isSubmitting) return;
+    emit(state.copyWith(isSubmitting: true, clearMessage: true));
+    final result = await _repo.submitGulfSubjectRequest(
+      GulfSubjectRequestCreatePayload(
+        subjectIds: [subjectId],
+        addToSharedSubscription: true,
+        notes: state.notes,
+      ),
+    );
+    if (isClosed) return;
+    await result.fold(
+      (failure) async {
+        emit(state.copyWith(isSubmitting: false, message: failure.message));
+      },
+      (_) async {
+        await load(refresh: true);
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            message: 'subject_request_submitted',
+            notes: '',
           ),
         );
       },
@@ -192,7 +222,12 @@ class StudentSubjectRequestsCubit extends Cubit<StudentSubjectRequestsState> {
     if (isClosed) return;
     await load(refresh: true);
     if (isClosed) return;
-    emit(state.copyWith(message: 'subject_request_payment_completed'));
+    emit(
+      state.copyWith(
+        message: 'subject_request_payment_completed',
+        notes: '',
+      ),
+    );
   }
 }
 

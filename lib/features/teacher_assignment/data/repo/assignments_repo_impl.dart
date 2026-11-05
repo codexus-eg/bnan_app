@@ -47,10 +47,12 @@ class AssignmentsRepoImpl implements AssignmentsRepo {
     try {
       final formData = FormData.fromMap({
         'classroom': request.classroom,
-        'title': request.title,
-        'description': request.description,
-        'dueDate': request.dueDate,
         'subject': request.subject,
+        'title': request.title,
+        'dueDate': request.dueDate,
+        'totalPoints': request.totalPoints,
+        if (request.description.trim().isNotEmpty)
+          'description': request.description.trim(),
         if (request.attachment != null)
           'attachment': await MultipartFile.fromFile(
             request.attachment!.path,

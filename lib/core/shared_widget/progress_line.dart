@@ -5,9 +5,17 @@ class ProgressLine extends StatelessWidget {
   const ProgressLine({
     super.key,
     required this.value,
+    this.color,
+    this.gradient,
+    this.backgroundColor,
+    this.height = 7,
   });
 
   final double value;
+  final Color? color;
+  final Gradient? gradient;
+  final Color? backgroundColor;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -15,24 +23,31 @@ class ProgressLine extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          height: 7,
+          height: height,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: ColorManager.greyE8E9,
+            color: backgroundColor ?? ColorManager.greyE8E9,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Align(
             alignment: AlignmentDirectional.centerStart,
             child: Container(
-              height: 7,
+              height: height,
               width: constraints.maxWidth * progress,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [ColorManager.blue73B9, ColorManager.blue4260],
-              stops: [0.0, 1.0],
-            ),
+                color: color,
+                gradient: color != null
+                    ? null
+                    : (gradient ??
+                        const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            ColorManager.blue73B9,
+                            ColorManager.blue4260,
+                          ],
+                          stops: [0.0, 1.0],
+                        )),
                 borderRadius: BorderRadius.circular(20),
               ),
             ),

@@ -10,6 +10,7 @@ import 'package:bnan_app/features/lessons_management/presentation/views/widgets/
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lessons_management_body.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/widgets/lessons_week_days_selector.dart';
 import 'package:bnan_app/features/lessons_management/presentation/views/lessons_management_view.dart';
+import 'package:bnan_app/features/lessons_management/presentation/views/widgets/dialogs/add_lesson_dialog.dart';
 import 'package:bnan_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,7 +94,7 @@ void main() {
     expect(find.text('Edit schedule entry'), findsOneWidget);
   });
 
-  testWidgets('edit dialog saves with PUT and closes on success', (
+  testWidgets('edit dialog saves and closes on success', (
     tester,
   ) async {
     final repo = FakeGulfScheduleRepo(
@@ -101,6 +102,7 @@ void main() {
         gulfClassroom(
           entries: const [
             GulfScheduleEntry(
+              id: 'entry-sat-1',
               day: 'saturday',
               startTime: '18:00',
               endTime: '19:00',
@@ -119,7 +121,7 @@ void main() {
     expect(find.text('Edit schedule entry'), findsNothing);
   });
 
-  testWidgets('deleting the final entry uses DELETE and refreshes UI', (
+  testWidgets('deleting the final entry uses PUT with empty schedule and refreshes UI', (
     tester,
   ) async {
     final repo = FakeGulfScheduleRepo(
@@ -127,6 +129,7 @@ void main() {
         gulfClassroom(
           entries: const [
             GulfScheduleEntry(
+              id: 'entry-sat-2',
               day: 'saturday',
               startTime: '18:00',
               endTime: '19:00',
@@ -144,7 +147,8 @@ void main() {
     await tester.ensureVisible(find.byKey(const Key('deleteLessonIcon')));
     await tester.tap(find.byKey(const Key('deleteLessonIcon')));
     await tester.pumpAndSettle();
-    expect(repo.lastOperation, 'delete');
+    expect(repo.lastOperation, 'put');
+    expect(repo.lastRequest?.schedule, isEmpty);
     expect(find.text('Edit schedule entry'), findsNothing);
     expect(find.byType(LessonCard), findsNothing);
   });
@@ -164,8 +168,41 @@ void main() {
     await _pickTime(tester, 'End time', '07', '00');
     await tester.tap(find.text('Add schedule entry'));
     await tester.pumpAndSettle();
-    expect(repo.lastOperation, 'post');
+    expect(repo.lastOperation, 'put');
+    expect(repo.lastRequest?.schedule, hasLength(1));
     expect(find.byType(LessonCard), findsOneWidget);
+  });
+
+  testWidgets('add dialog pre-fills subject for newly accepted classroom with name pattern', (
+    tester,
+  ) async {
+    final repo = FakeGulfScheduleRepo(
+      classrooms: [
+        const GulfClassroom(
+          id: 'cr-ahmed',
+          name: 'Ahmed - لغتي',
+          curriculum: GulfCurriculum(id: '', name: '', registrationMode: 'gulf'),
+        ),
+      ],
+    );
+    await _pump(tester, repo);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Add Lesson'));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: find.byType(AddLessonDialog),
+        matching: find.text('Ahmed - لغتي'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(AddLessonDialog),
+        matching: find.text('لغتي'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('save failure keeps add dialog open with backend message', (
@@ -348,8 +385,9 @@ Future<void> _pump(
   WidgetTester tester,
   FakeGulfScheduleRepo repo, {
   Locale locale = const Locale('en'),
+  String? initialDay = 'saturday',
 }) async {
-  final cubit = GulfScheduleCubit(repo);
+  final cubit = GulfScheduleCubit(repo, initialDay: initialDay);
   addTearDown(cubit.close);
   await tester.pumpWidget(
     MaterialApp(

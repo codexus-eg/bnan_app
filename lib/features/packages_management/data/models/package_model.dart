@@ -7,6 +7,8 @@ class PackageModel {
   final String? type;
   final String accessScope;
   final int? hours;
+  final num? purchasedHours;
+  final num? remainingHours;
   final int? months;
   final num? oldPrice;
   final num? price;
@@ -25,6 +27,8 @@ class PackageModel {
     this.type,
     this.accessScope = PackageAccessScope.allSubjects,
     this.hours,
+    this.purchasedHours,
+    this.remainingHours,
     this.months,
     this.oldPrice,
     this.price,
@@ -37,6 +41,10 @@ class PackageModel {
     this.updatedAt,
   });
 
+  bool get isSingleSubject => accessScope == PackageAccessScope.singleSubject;
+  bool get isSharedSubjects => accessScope == PackageAccessScope.sharedSubjects;
+  bool get isAllSubjects => accessScope == PackageAccessScope.allSubjects;
+
   factory PackageModel.fromJson(Map<String, dynamic> json) {
     return PackageModel(
       id: (json['id'] ?? json['_id'])?.toString(),
@@ -46,6 +54,8 @@ class PackageModel {
       accessScope:
           _normalized(json['accessScope']) ?? PackageAccessScope.allSubjects,
       hours: _toInt(json['hours']),
+      purchasedHours: _toNum(json['purchasedHours']),
+      remainingHours: _toNum(json['remainingHours']),
       months: _toInt(json['months']),
       oldPrice: _toNum(json['oldPrice']),
       price: _toNum(json['price']),

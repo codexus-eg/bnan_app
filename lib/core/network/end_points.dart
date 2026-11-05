@@ -1,10 +1,9 @@
+import 'package:bnan_app/core/config/app_environment.dart';
 import 'package:bnan_app/features/payments/data/models/gulf_payment_provider.dart';
 
 abstract class EndPoints {
-  static String get baseUrl => 'https://api.bnanacademysa.com/api/v1';
-  static String get socketUrl => 'https://api.bnanacademysa.com';
-  // static String get baseUrl => 'https://bnan.0xcode7.xyz/api/v1';
-  // static String get socketUrl => 'https://bnan.0xcode7.xyz';
+  static String get baseUrl => AppEnvironment.baseUrl;
+  static String get socketUrl => AppEnvironment.socketUrl;
   static const String register = '/auth/register';
   static const String login = '/auth/login';
   static const String refreshToken = '/auth/refresh-token';
@@ -39,6 +38,9 @@ abstract class EndPoints {
   static const String myAssignments = '/students/me/assignments';
   static const String mySubjects = '/students/me/subjects';
   static const String studentHome = '/students/me/home';
+  static const String studentSubscription = '/students/me/subscription';
+  static const String studentSubscriptionHistory =
+      '/students/me/subscriptions/history';
   static const String myCertificates = '/certificates/my';
   static const String curriculums = '/curriculums';
   static const String myEnrollments = '/students/me/enrollments';
@@ -53,11 +55,30 @@ abstract class EndPoints {
       '/supervisors/me/teacher-certificates';
   static const String supervisorIdealTeachers =
       '/supervisors/me/ideal-teachers';
+  static String classroomIdealTeacher(String classroomId) =>
+      '$classrooms/$classroomId/ideal-teacher';
+  static String classroomIdealTeacherPointAdjustments(String classroomId) =>
+      '${classroomIdealTeacher(classroomId)}/point-adjustments';
+  static String classroomIdealTeacherPointAdjustment(
+    String classroomId,
+    String adjustmentId,
+  ) =>
+      '${classroomIdealTeacherPointAdjustments(classroomId)}/$adjustmentId';
   static const String teacherAssignedSubjects =
       '/teachers/me/assigned-subjects';
   static const String users = '/users';
   static const String teachingAssignments = '/teachers/teaching-assignments';
   static const String classrooms = '/classrooms';
+  static const String schedules = '/schedules';
+  static const String mySchedule = '$schedules/mySchedule';
+  static const String adminSchedule = '$schedules/adminSchedule';
+  static String classroomSchedule(String classroomId) =>
+      '$schedules/classroom/$classroomId';
+  static String classroomScheduleEntry(String classroomId, String entryId) =>
+      '$schedules/classroom/$classroomId/entries/$entryId';
+  static const String courses = '/courses';
+  static String courseClassroomSchedule(String classroomId) =>
+      '$courses/classrooms/$classroomId/schedule';
   static const String egyptianSchedules = '/egyptianSchedules';
   static const String myEgyptianSchedule = '$egyptianSchedules/mySchedule';
   static const String subjects = '/subjects';
@@ -67,7 +88,7 @@ abstract class EndPoints {
   static const String supervisors = '/supervisors';
   static const String adminIdealSupervisors = '/supervisors/ideal-supervisors';
   static const String studentMonthlyCertificates =
-      '/certificates/student-monthly/';
+      '/certificates/student-monthly';
   static const String issueMonthlyCertificates =
       '/certificates/student-monthly/issue';
   static const String egyptianRegistrationRequests =
@@ -78,8 +99,16 @@ abstract class EndPoints {
   static const String adminClassroomChangeRequests =
       '/admin/classroom-change-requests';
   static const String adminPayrollsPreview = '$adminPayrolls/preview';
+  static const String adminPayrollStatementPreview =
+      '$adminPayrolls/statement-preview';
+  static const String adminPayrollStatements = '$adminPayrolls/statements';
   static const String teacherMyPayrolls = '/teachers/me/payrolls';
+  static const String teacherMyPayrollStatements =
+      '/teachers/me/payroll-statements';
   static const String teacherMyPayoutProfile = '/teachers/me/payout-profile';
+  static const String adminCertificates = '/certificates/admin';
+  static const String teacherSessionStatistics =
+      '/teachers/me/statistics/sessions';
   // Chats - Rooms
   static const String createSupportRoom = '/chats/support-room';
   static const String supervisorStudentRoom = '/chats/supervisor-student-room';
@@ -179,6 +208,23 @@ abstract class EndPoints {
   static String payTeacherPayroll(String payrollId) =>
       '${adminPayroll(payrollId)}/pay';
 
+  static String adminPayrollStatement(String id) =>
+      '$adminPayrollStatements/$id';
+  static String sendAdminPayrollStatement(String id) =>
+      '${adminPayrollStatement(id)}/send';
+  static String payAdminPayrollStatement(String id) =>
+      '${adminPayrollStatement(id)}/payment';
+  static String adminPayrollStatementReceipt(String id) =>
+      '${adminPayrollStatement(id)}/payment/receipt';
+
+  static String teacherMyPayrollStatement(String id) =>
+      '$teacherMyPayrollStatements/$id';
+  static String teacherMyPayrollStatementReceipt(String id) =>
+      '${teacherMyPayrollStatement(id)}/payment/receipt';
+
+  static String issueGeneralTeacherCertificate(String certificateId) =>
+      '/certificates/$certificateId/general-teacher/issue';
+
   static String packagesByCurriculum(String curriculumId) {
     return '$packages/curriculum/$curriculumId';
   }
@@ -249,8 +295,12 @@ abstract class EndPoints {
     return '/certificates/$certificateId';
   }
 
+  static String monthlyCertificateById(String certificateId) {
+    return '/certificates/monthly/$certificateId';
+  }
+
   static String updateMonthlyCertificate(String certificateId) {
-    return '/certificates/$certificateId/student-monthly/';
+    return '/certificates/monthly/$certificateId';
   }
 
   static String teacherStatus(String teacherId) {
@@ -351,6 +401,13 @@ abstract class EndPoints {
     return '/classrooms/$classroomId/subjects';
   }
 
+  static String classroomSubjectDelete(
+    String classroomId,
+    String classroomSubjectId,
+  ) {
+    return '/classrooms/$classroomId/subjects/$classroomSubjectId';
+  }
+
   static String classroomSubjects(String classroomId) {
     return '/classroomsubjects?classroom=$classroomId';
   }
@@ -441,6 +498,17 @@ abstract class EndPoints {
     return '${activeClassroomSession(classroomId)}/join';
   }
 
+  static String teacherEntryClassroomSession(
+    String classroomId,
+    String sessionId,
+  ) {
+    return '${classroomSessions(classroomId)}/$sessionId/teacher-entry';
+  }
+
+  static String weeklySlotEntry(String classroomId, String weeklySlotKey) {
+    return '$classrooms/$classroomId/weekly-slots/${Uri.encodeComponent(weeklySlotKey)}/entry';
+  }
+
   static String endSession(String sessionId) => '/sessions/$sessionId/end';
 
   static String attendanceById(String attendanceId) {
@@ -473,7 +541,7 @@ abstract class EndPoints {
   }
 
   static String egyptianScheduleDay(String classroomId, String date) {
-    return '${egyptianSchedulesByClassroom(classroomId)}/days/$date';
+    return '${egyptianSchedulesByClassroom(classroomId)}/days/${date.toLowerCase().trim()}';
   }
 
   static String deleteEgyptianSchedule(String scheduleId) {
@@ -521,5 +589,12 @@ abstract class EndPoints {
 
   static String classroomWeeklyEvaluations(String classroomId) {
     return '$classrooms/$classroomId/evaluations/weekly';
+  }
+
+  static String publishWeeklyEvaluations({
+    required String classroomId,
+    required int week,
+  }) {
+    return '$classrooms/$classroomId/evaluations/weekly/$week/publish';
   }
 }

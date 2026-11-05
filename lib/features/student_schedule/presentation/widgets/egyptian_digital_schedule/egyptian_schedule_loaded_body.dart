@@ -3,6 +3,8 @@ import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_cubit.dart';
 import 'package:bnan_app/features/lessons_management/presentation/manager/start_session_state.dart';
 import 'package:bnan_app/features/lessons_management/presentation/utils/student_join_session_error.dart';
+import 'package:bnan_app/features/lessons_management/presentation/utils/zoom_session_error_handler.dart';
+import 'package:bnan_app/features/tables_management/data/models/egyptian_digital_schedule_models.dart';
 import 'package:bnan_app/features/student_schedule/presentation/manager/egyptian_schedule_state.dart';
 import 'package:bnan_app/features/student_schedule/presentation/models/egyptian_schedule_grid_adapter.dart';
 import 'package:bnan_app/features/student_schedule/presentation/widgets/digital_schedule_grid/digital_schedule_content.dart';
@@ -53,27 +55,38 @@ class EgyptianScheduleLoadedBody extends StatelessWidget {
 
   Future<void> _join(BuildContext context, String classroomId) async {
     final sessionCubit = context.read<StartSessionCubit>();
-    final link = await sessionCubit.join(classroomId);
+    String? slotKey;
+    for (final day in state.week?.days ?? const <EgyptianScheduleDay>[]) {
+      for (final lesson in day.lessons) {
+        if (lesson.classroomId == classroomId &&
+            lesson.activeSession?.weeklySlotKey != null) {
+          slotKey = lesson.activeSession!.weeklySlotKey;
+          break;
+        }
+      }
+    }
+    final link = await sessionCubit.join(classroomId, weeklySlotKey: slotKey);
     if (!context.mounted) return;
     if (link == null || link.isEmpty) {
       final joinError = studentJoinSessionErrorMessage(
         context,
         sessionCubit.state,
       );
-      final inactive =
-          sessionCubit.state.eventCode == 'SESSION_NOT_ACTIVE' ||
-          sessionCubit.state.eventError == 'SESSION_NOT_ACTIVE' ||
+      final message =
+          joinError ?? zoomSessionErrorMessage(context, sessionCubit.state);
+      showCustomSnackBar(context, message, false);
+      final code = (sessionCubit.state.eventCode ??
+              sessionCubit.state.eventError ??
+              '')
+          .trim()
+          .toUpperCase();
+      final shouldRefresh = code == 'SESSION_NOT_ACTIVE' ||
+          code == 'SCHEDULE_OCCURRENCE_NOT_FOUND' ||
+          code == 'WEEKLY_ZOOM_SLOT_SESSION_NOT_ACTIVE' ||
+          code == 'CLASSROOM_SESSION_ALREADY_ACTIVE' ||
+          code.startsWith('WEEKLY_ZOOM_ASSIGNMENT_') ||
           sessionCubit.state.eventStatusCode == 404;
-      showCustomSnackBar(
-        context,
-        joinError ??
-            (inactive
-                ? S.of(context).noActiveSessionNow
-                : sessionCubit.state.eventError ??
-                      S.of(context).unexpectedError),
-        false,
-      );
-      if (inactive) {
+      if (shouldRefresh) {
         await context.read<EgyptianScheduleCubit>().load();
       }
       return;

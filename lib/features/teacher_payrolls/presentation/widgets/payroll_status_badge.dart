@@ -19,6 +19,16 @@ class PayrollStatusBadge extends StatelessWidget {
         ColorManager.orangeFFE,
         ColorManager.orangeED,
       ),
+      'sent' => (
+        S.of(context).payrollSent,
+        ColorManager.blueE3,
+        ColorManager.mainColor15,
+      ),
+      'payment_pending' => (
+        S.of(context).payrollPaymentPending,
+        ColorManager.orangeFFE,
+        ColorManager.orangeED,
+      ),
       'paid' => (
         S.of(context).payrollPaid,
         ColorManager.greenE9,

@@ -15,7 +15,7 @@ class ClassroomsResponseModel {
 
   factory ClassroomsResponseModel.fromJson(Map<String, dynamic> json) {
     return ClassroomsResponseModel(
-      success: json['success'] ?? false,
+      success: json['success'] == true || json['status'] == 'success',
       results: json['results'] ?? 0,
       pagination: ClassroomsPaginationModel.fromJson(
         json['pagination'] is Map

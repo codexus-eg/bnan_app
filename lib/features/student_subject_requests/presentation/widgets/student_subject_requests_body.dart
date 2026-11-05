@@ -3,6 +3,8 @@ import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/helper/my_snack_bar.dart';
 import 'package:bnan_app/core/shared_widget/custom_app_button.dart';
 import 'package:bnan_app/core/shared_widget/custom_text_field.dart';
+import 'package:bnan_app/core/utils/color_manager.dart';
+import 'package:bnan_app/core/utils/styles_manager.dart';
 import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
 import 'package:bnan_app/features/payments/data/models/discount_preview_requests.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_checkout_request.dart';
@@ -14,6 +16,8 @@ import 'package:bnan_app/features/student_subject_requests/presentation/manager/
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/student_subject_requests_state.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_cubit.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/manager/subject_request_payment_state.dart';
+import 'package:bnan_app/features/student_subject_requests/data/models/subject_request_availability.dart';
+import 'package:bnan_app/features/student_subject_requests/presentation/widgets/add_subject_choice_bottom_sheet.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_subjects_section.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_package_dialog.dart';
 import 'package:bnan_app/features/student_subject_requests/presentation/widgets/subject_request_package_selector.dart';
@@ -32,11 +36,40 @@ class StudentSubjectRequestsBody extends StatefulWidget {
 class _StudentSubjectRequestsBodyState
     extends State<StudentSubjectRequestsBody> {
   String discountCode = '';
+  late final TextEditingController _notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _notesController = TextEditingController(
+      text: context.read<StudentSubjectRequestsCubit>().state.notes,
+    );
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
-        builder: _buildState,
+      BlocListener<StudentSubjectRequestsCubit, StudentSubjectRequestsState>(
+        listenWhen: (prev, curr) => prev.notes != curr.notes,
+        listener: (context, state) {
+          if (_notesController.text != state.notes) {
+            _notesController.value = TextEditingValue(
+              text: state.notes,
+              selection: TextSelection.collapsed(offset: state.notes.length),
+            );
+          }
+        },
+        child: BlocBuilder<
+          StudentSubjectRequestsCubit,
+          StudentSubjectRequestsState
+        >(
+          builder: _buildState,
+        ),
       );
 
   Widget _buildState(BuildContext context, StudentSubjectRequestsState state) {
@@ -52,12 +85,7 @@ class _StudentSubjectRequestsBodyState
           SubjectRequestSubjectsSection(
             subjects: availability.subjects,
             selectedId: state.selectedSubjectId,
-            onSelected: (id) {
-              context
-                  .read<SubjectRequestPaymentCubit>()
-                  .invalidateAmountSummary();
-              cubit.selectSubject(id);
-            },
+            onSelected: (subject) => _onSubjectSelected(state, subject),
           ),
           SubjectRequestPackageSelector(
             selectedName: _selectedPackageName(state),
@@ -67,16 +95,21 @@ class _StudentSubjectRequestsBodyState
           ),
           const SizedBox(height: 16),
           CustomTextField(
-            label: S.of(context).theRequiredLesson,
-            hintText: S.of(context).studentNotesExample,
+            controller: _notesController,
+            label: S.of(context).subjectRequestNotesLabel,
+            hintText: S.of(context).subjectRequestNotesHint,
             maxLine: 4,
             inputFormatters: [LengthLimitingTextInputFormatter(2000)],
             onChanged: cubit.updateNotes,
           ),
+          const SizedBox(height: 4),
           Align(
             alignment: AlignmentDirectional.centerEnd,
             child: Text(
               S.of(context).subjectRequestNotesCounter(state.notes.length),
+              style: StylesManager.styleRegular12(context).copyWith(
+                color: ColorManager.greyA8AF,
+              ),
               textDirection: TextDirection.ltr,
             ),
           ),
@@ -166,6 +199,37 @@ class _StudentSubjectRequestsBodyState
       'packageId': packageId,
       'discountCode': discountCode.trim(),
     });
+  }
+
+  Future<void> _onSubjectSelected(
+    StudentSubjectRequestsState state,
+    AvailableSubject subject,
+  ) async {
+    if (!subject.isSelectable) return;
+    context.read<SubjectRequestPaymentCubit>().invalidateAmountSummary();
+    final cubit = context.read<StudentSubjectRequestsCubit>();
+    if (state.availability?.registrationMode == RegistrationMode.gulf) {
+      final action = await AddSubjectChoiceBottomSheet.show(
+        context,
+        subject: subject,
+      );
+      if (!mounted || action == null) return;
+      if (action == AddSubjectAction.addToShared) {
+        await cubit.addToSharedSubscription(subject.id);
+        if (mounted) {
+          showCustomSnackBar(
+            context,
+            S.of(context).subjectRequestSubmitted,
+            true,
+          );
+        }
+        return;
+      }
+      cubit.selectSubject(subject.id);
+      await _selectPackage(state);
+      return;
+    }
+    cubit.selectSubject(subject.id);
   }
 
   Future<void> _selectPackage(StudentSubjectRequestsState state) async {

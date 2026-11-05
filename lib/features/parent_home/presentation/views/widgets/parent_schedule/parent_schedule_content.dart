@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:bnan_app/core/enums/registration_mode.dart';
 import 'package:bnan_app/core/network/dependency_injection.dart';
 import 'package:bnan_app/core/shared_widget/no_data_widget.dart';
 import 'package:bnan_app/features/lessons_management/data/repo/gulf_schedule_repo.dart';
+import 'package:bnan_app/features/lessons_management/domain/models/schedule_sync_event.dart';
+import 'package:bnan_app/features/lessons_management/domain/schedule_sync_coordinator.dart';
 import 'package:bnan_app/features/parent_home/data/models/parent_child_model.dart';
 import 'package:bnan_app/features/parent_home/presentation/manager/parent_gulf_schedule_cubit.dart';
 import 'package:bnan_app/features/parent_home/presentation/views/widgets/parent_schedule/parent_egyptian_schedule_body.dart';
@@ -26,12 +30,35 @@ class ParentScheduleContent extends StatefulWidget {
 }
 
 class _ParentScheduleContentState extends State<ParentScheduleContent> {
+  int _revision = 0;
+  StreamSubscription<ScheduleSyncEvent>? _syncSub;
+
+  @override
+  void initState() {
+    super.initState();
+    if (getIt.isRegistered<ScheduleSyncCoordinator>()) {
+      _syncSub = getIt<ScheduleSyncCoordinator>().syncStream.listen((event) {
+        if (!mounted) return;
+        final target = event.studentId?.trim();
+        if (target == null || target.isEmpty || target == widget.child.id.trim()) {
+          setState(() => _revision++);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    unawaited(_syncSub?.cancel());
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final studentId = widget.child.id.trim();
     if (studentId.isEmpty) return const NoDataWidget();
     return KeyedSubtree(
-      key: ValueKey('$studentId:${widget.child.registrationMode}'),
+      key: ValueKey('$studentId:${widget.child.registrationMode}:$_revision'),
       child: switch (widget.child.registrationMode) {
         RegistrationMode.egyptian => BlocProvider(
           create: (_) => GetEgyptianSchedulesCubit(

@@ -1,11 +1,20 @@
 import 'certificate_subject_request_model.dart';
 
 class UpdateMonthlyCertificateRequestModel {
-  const UpdateMonthlyCertificateRequestModel({required this.subjects});
+  const UpdateMonthlyCertificateRequestModel({
+    this.subjects,
+    this.signerName,
+  });
 
-  final List<CertificateSubjectRequestModel> subjects;
+  final List<CertificateSubjectRequestModel>? subjects;
+  final String? signerName;
 
   Map<String, dynamic> toJson() {
-    return {'subjects': subjects.map((subject) => subject.toJson()).toList()};
+    return {
+      if (subjects != null)
+        'subjects': subjects!.map((subject) => subject.toJson()).toList(),
+      if (signerName != null && signerName!.trim().isNotEmpty)
+        'signerName': signerName!.trim(),
+    };
   }
 }

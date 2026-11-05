@@ -14,6 +14,7 @@ class PackageCardModel {
   final bool isPopular;
   final num price;
   final String currency;
+  final String accessScope;
   final bool isSingleSubject;
   final bool hidePrices;
 
@@ -28,8 +29,12 @@ class PackageCardModel {
     required this.price,
     required this.currency,
     required this.isSingleSubject,
+    this.accessScope = PackageAccessScope.allSubjects,
     this.hidePrices = false,
   });
+
+  bool get isSharedSubjects => accessScope == PackageAccessScope.sharedSubjects;
+  bool get isAllSubjects => accessScope == PackageAccessScope.allSubjects;
 
   factory PackageCardModel.fromPackage({
     required BuildContext context,
@@ -57,6 +62,7 @@ class PackageCardModel {
       isPopular: package.isPopular ?? false,
       price: price,
       currency: package.currency ?? '',
+      accessScope: package.accessScope,
       isSingleSubject: package.accessScope == PackageAccessScope.singleSubject,
       hidePrices: hidePrices,
     );

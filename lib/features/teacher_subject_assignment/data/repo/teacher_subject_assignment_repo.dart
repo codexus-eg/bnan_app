@@ -8,7 +8,10 @@ import 'package:dartz/dartz.dart';
 
 abstract class TeacherSubjectAssignmentRepo {
   Future<Either<Failure, TeachingAssignmentsResponseModel>>
-  getTeacherTeachingAssignments();
+  getTeacherTeachingAssignments({
+    String? keyword,
+    String? subject,
+  });
 
   Future<Either<Failure, AssignCurriculumsResponseModel>>
   assignCurriculumsToTeacher({

@@ -16,8 +16,8 @@ class StudentRegistrationBody extends StatelessWidget {
     final cubit = context.read<RegisterCubit>();
     final stepHeaderText = [
       S.of(context).parentInfo,
-      S.of(context).curriculumSelection,
       S.of(context).studentInfo,
+      S.of(context).academicSelection,
       cubit.isGulf ? S.of(context).paymentMethod : S.of(context).reviewRequest,
     ];
     return SafeArea(

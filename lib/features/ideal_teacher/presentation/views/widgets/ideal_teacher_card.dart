@@ -10,10 +10,12 @@ class IdealTeacherCard extends StatelessWidget {
     required this.teacher,
     required this.selected,
     required this.onTap,
+    this.canSelect = true,
   });
   final SupervisorTeacherModel teacher;
   final bool selected;
   final VoidCallback? onTap;
+  final bool canSelect;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -21,8 +23,12 @@ class IdealTeacherCard extends StatelessWidget {
     child: CustomDetailsWidgetBackground(
       margin: const EdgeInsetsDirectional.only(bottom: 12),
       padding: const EdgeInsetsDirectional.all(12),
-      backgroundColor: selected ? ColorManager.blueE5 : ColorManager.greyF8F9,
-      child: IdealTeacherCardContent(teacher: teacher, selected: selected),
+      backgroundColor: (selected && canSelect) ? ColorManager.blueE5 : ColorManager.greyF8F9,
+      child: IdealTeacherCardContent(
+        teacher: teacher,
+        selected: selected,
+        canSelect: canSelect,
+      ),
     ),
   );
 }

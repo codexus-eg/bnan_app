@@ -7,6 +7,8 @@ import 'package:bnan_app/features/payments/data/models/payment_amount_summary.da
 import 'package:bnan_app/features/payments/data/models/discount_preview_request.dart';
 import 'package:bnan_app/features/payments/data/models/tamara_status_response.dart';
 import 'package:bnan_app/features/payments/data/payment_draft_store.dart';
+import 'package:bnan_app/features/packages_management/data/repo/packages_repo/packages_repo.dart';
+import 'package:bnan_app/features/packages_management/presentation/manager/get_packages_cubit/get_packages_cubit.dart';
 import 'package:bnan_app/features/payments/data/repo/tamara_payment_repo.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_cubit.dart';
 import 'package:bnan_app/features/payments/presentation/manager/tamara_payment_state.dart';
@@ -15,6 +17,7 @@ import 'package:bnan_app/features/payments/data/repo/discount_preview_repo.dart'
 import 'package:bnan_app/features/student_auth/data/models/register_flow_args_model.dart';
 import 'package:bnan_app/features/student_auth/data/repo/auth_repo.dart';
 import 'package:bnan_app/features/student_auth/data/repo/gulf_parent_auth_repo.dart';
+import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculums_cubit/get_curriculums_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_curriculm_subjects_cubit/get_curriculm_subjects_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/get_grades_cubit/get_grades_cubit.dart';
 import 'package:bnan_app/features/student_auth/presentation/manager/register_cubit/register_cubit.dart';
@@ -252,6 +255,8 @@ Widget _providers(
 ]) => MultiBlocProvider(
   providers: [
     BlocProvider.value(value: register),
+    BlocProvider(create: (_) => GetCurriculumsCubit(auth)),
+    BlocProvider(create: (_) => GetPackagesCubit(_UnusedPackagesRepo())),
     BlocProvider(create: (_) => GetGradesCubit(auth)),
     BlocProvider(create: (_) => GetCurriculmSubjectsCubit(auth)),
     BlocProvider(create: (_) => DiscountPreviewCubit(_UnusedPreviewRepo())),
@@ -322,4 +327,9 @@ class _UnusedPreviewRepo implements DiscountPreviewRepo {
       ),
     ),
   );
+}
+
+class _UnusedPackagesRepo implements PackagesRepo {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

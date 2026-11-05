@@ -9,14 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LessonsManagementView extends StatelessWidget {
-  const LessonsManagementView({super.key, this.showBackButton = true});
+  const LessonsManagementView({
+    super.key,
+    this.showBackButton = true,
+    this.initialClassId,
+  });
 
   final bool showBackButton;
+  final String? initialClassId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<GulfScheduleCubit>()..refresh(),
+      create: (_) =>
+          getIt<GulfScheduleCubit>()..refresh(initialClassId: initialClassId),
       child: Builder(
         builder: (context) =>
             BlocListener<GulfScheduleCubit, GulfScheduleState>(

@@ -79,6 +79,12 @@ Future<void> _pump(
   GlobalKey<_HarnessState> key,
   List<ChatMessageModel> messages,
 ) async {
+  tester.view.physicalSize = const Size(1200, 10000);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(() {
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
+  });
   await tester.pumpWidget(
     MaterialApp(
       home: _Harness(key: key, data: messages),

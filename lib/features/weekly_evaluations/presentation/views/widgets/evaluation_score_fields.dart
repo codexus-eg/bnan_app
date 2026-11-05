@@ -9,18 +9,20 @@ import 'package:flutter/material.dart';
 class EvaluationScoreFields extends StatelessWidget {
   const EvaluationScoreFields({
     super.key,
-    required this.attendance,
+    this.attendance,
     required this.participation,
-    required this.homework,
+    this.homework,
     required this.behavior,
-    required this.onAttendanceChanged,
+    this.onAttendanceChanged,
     required this.onParticipationChanged,
-    required this.onHomeworkChanged,
+    this.onHomeworkChanged,
     required this.onBehaviorChanged,
   });
   final String? attendance, participation, homework, behavior;
-  final ValueChanged<String> onAttendanceChanged, onParticipationChanged;
-  final ValueChanged<String> onHomeworkChanged, onBehaviorChanged;
+  final ValueChanged<String>? onAttendanceChanged;
+  final ValueChanged<String> onParticipationChanged;
+  final ValueChanged<String>? onHomeworkChanged;
+  final ValueChanged<String> onBehaviorChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +34,12 @@ class EvaluationScoreFields extends StatelessWidget {
           _field(
             context,
             s.attendance,
-            attendance,
-            EvaluationOptions.attendance,
-            onAttendanceChanged,
+            null,
+            const [],
+            null,
+            isRequired: false,
+            enabled: false,
+            hint: s.calculatedAutomatically,
           ),
           _field(
             context,
@@ -50,9 +55,12 @@ class EvaluationScoreFields extends StatelessWidget {
           _field(
             context,
             s.homeworkLabel,
-            homework,
-            EvaluationOptions.performance,
-            onHomeworkChanged,
+            null,
+            const [],
+            null,
+            isRequired: false,
+            enabled: false,
+            hint: s.calculatedAutomatically,
           ),
           _field(
             context,
@@ -88,8 +96,11 @@ class EvaluationScoreFields extends StatelessWidget {
     String label,
     String? value,
     List<String> options,
-    ValueChanged<String> onChanged,
-  ) {
+    ValueChanged<String>? onChanged, {
+    bool isRequired = true,
+    bool enabled = true,
+    String? hint,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -99,8 +110,9 @@ class EvaluationScoreFields extends StatelessWidget {
             style: StylesManager.styleBold14(
               context,
             ).copyWith(color: ColorManager.mainColor15),
-            children: const [
-              TextSpan(text: '*', style: TextStyle(color: Colors.red)),
+            children: [
+              if (isRequired)
+                const TextSpan(text: '*', style: TextStyle(color: Colors.red)),
             ],
           ),
         ),
@@ -108,17 +120,18 @@ class EvaluationScoreFields extends StatelessWidget {
         CustomDropdown(
           label: label,
           value: value,
-          hint: label,
+          hint: hint ?? label,
           items: options,
           itemsLabels: {
             for (final option in options)
               option: evaluationValueLabel(context, option),
           },
-          isRequired: true,
+          isRequired: isRequired,
+          enabled: enabled,
           showLabel: false,
           backgroundColor: ColorManager.white,
           onChanged: (value) {
-            if (value != null) onChanged(value);
+            if (value != null && onChanged != null) onChanged(value);
           },
         ),
       ],

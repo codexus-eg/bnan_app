@@ -36,7 +36,13 @@ class WeeklyEvaluationsDataModel {
   final List<WeeklyEvaluationStudentModel> students;
 
   factory WeeklyEvaluationsDataModel.fromJson(Map<String, dynamic> json) {
-    final classroom = EvaluationJsonParser.map(json['classroom']);
+    final classroomMap = json['classroom'];
+    final classroom = EvaluationJsonParser.map(
+      classroomMap ??
+          (json['evaluation'] is Map
+              ? {'id': json['evaluation']['classroom']}
+              : null),
+    );
     var students = EvaluationJsonParser.maps(json['students']);
     if (students.isEmpty) {
       final student = EvaluationJsonParser.map(json['student']);
@@ -50,6 +56,20 @@ class WeeklyEvaluationsDataModel {
       } else if (json['subjects'] is List &&
           (json.containsKey('id') || json.containsKey('fullName'))) {
         students = [json];
+      } else if (json['evaluation'] is Map) {
+        final eval = EvaluationJsonParser.map(json['evaluation']);
+        students = [
+          {
+            'id': eval['student'],
+            'subjects': [
+              {
+                'id': eval['subject'],
+                'evaluation': eval,
+                'status': 'evaluated',
+              },
+            ],
+          },
+        ];
       }
     }
     return WeeklyEvaluationsDataModel(
